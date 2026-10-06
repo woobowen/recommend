@@ -1,0 +1,295 @@
+[2026-10-03 10:00:47,131][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2026-10-03 10:00:47,136][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2026-10-03 10:00:47,399][src.utils.restart_job][INFO] - [rank: 0] Using metadata dir: /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata
+[2026-10-03 10:00:47,399][src.utils.restart_job][INFO] - [rank: 0] Starting job (attempt 1/4): /home/jcyin/Tiger/environments/grid/bin/python /home/jcyin/Tiger/repos/GRID/src/train.py experiment=tiger_train_flat data_dir=/home/jcyin/Tiger/data/amazon_data/beauty semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt num_hierarchies=4 sequence_length=30 seed=42 train=true test=false trainer.accelerator=gpu trainer.devices=1 trainer.max_steps=20 trainer.val_check_interval=10 +trainer.limit_val_batches=1 data_loading.train_dataloader_config.dataloader.batch_size_per_device=2 data_loading.train_dataloader_config.dataloader.num_workers=0 data_loading.val_dataloader_config.dataloader.batch_size_per_device=2 data_loading.val_dataloader_config.dataloader.num_workers=0 paths.root_dir=/home/jcyin/Tiger/repos/GRID paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty ++should_skip_retry=True
+[2026-10-03 10:00:54,705][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2026-10-03 10:00:54,710][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2026-10-03 10:00:54,970][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2026-10-03 10:00:54,977][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2026-10-03 10:00:55,042][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2026-10-03 10:00:55,307][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2026-10-03 10:00:55,308][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2026-10-03 10:00:55,311][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>
+[2026-10-03 10:00:55,313][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2026-10-03 10:00:55,314][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.restart_job.RestartAndLoadCheckpointCallback>
+[2026-10-03 10:00:55,316][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:00:55,316][src.utils.restart_job_utils][WARNING] - [rank: 0] Metadata file not found at /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json. Creating empty metadata.
+[2026-10-03 10:00:55,317][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json. {'start_time': '2026-10-03T10:00:55.317042', 'restarts': [], 'current_run': 0, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True']}
+[2026-10-03 10:00:55,317][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2026-10-03 10:00:55,317][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2026-10-03 10:00:55,319][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2026-10-03 10:00:55,321][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:00:55,321][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:00:55,322][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 0 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:00:55,385][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2026-10-03 10:00:55,624][__main__][INFO] - [rank: 0] Starting training!
+[2026-10-03 10:00:56,520][root][WARNING] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+[2026-10-03 10:00:56,522][src.utils.restart_job][ERROR] - [rank: 0] Exception caught: 
+[2026-10-03 10:00:56,525][src.utils.restart_job][ERROR] - [rank: 0] Stack trace: Traceback (most recent call last):
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+    return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+    return function(*args, **kwargs)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 575, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 982, in _run
+    results = self._run_stage()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1026, in _run_stage
+    self.fit_loop.run()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 208, in run
+    self.setup_data()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 275, in setup_data
+    iter(self._data_fetcher)  # creates the iterator inside the fetcher
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 105, in __iter__
+    super().__iter__()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 52, in __iter__
+    self.iterator = iter(self.combined_loader)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 351, in __iter__
+    iter(iterator)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 92, in __iter__
+    super().__iter__()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 43, in __iter__
+    self.iterators = [iter(iterable) for iterable in self.iterables]
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 43, in <listcomp>
+    self.iterators = [iter(iterable) for iterable in self.iterables]
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 491, in __iter__
+    return self._get_iterator()
+  File "/home/jcyin/Tiger/repos/GRID/src/data/loading/components/custom_dataloader.py", line 50, in _get_iterator
+    return _SingleProcessDataLoaderIter(self)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 743, in __init__
+    assert self._timeout == 0
+AssertionError
+
+[2026-10-03 10:00:56,526][src.utils.restart_job][INFO] - [rank: 0] Cleaning up and handling restart logic
+[2026-10-03 10:00:56,526][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:00:56,526][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:00:56,526][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 0 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:00:56,527][src.utils.restart_job][INFO] - [rank: 0] Restarting job. Current metadata: JobCheckpointMetadata(start_time='2026-10-03T10:00:55.317042', restarts=[{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}], current_run=1, used_ports=[], world_size=0, node_rank=0, master_addr='', original_args=['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True'])
+[2026-10-03 10:00:56,527][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json. {'start_time': '2026-10-03T10:00:55.317042', 'restarts': [{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}], 'current_run': 1, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True']}
+[2026-10-03 10:00:56,527][src.utils.restart_job_utils][INFO] - [rank: 0] Cleaning up distributed process group
+[2026-10-03 10:00:56,654][src.utils.restart_job_utils][INFO] - [rank: 0] Clearing CUDA cache
+[2026-10-03 10:00:56,654][src.utils.restart_job_utils][INFO] - [rank: 0] Tearing down trainer
+[2026-10-03 10:01:02,415][src.utils.restart_job][ERROR] - [rank: 0] Job failed with return code 1
+[2026-10-03 10:01:02,416][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:02,417][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:02,417][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 1 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:02,418][src.utils.restart_job][INFO] - [rank: 0] Retrying in 5 seconds. Attempt 2/4
+[2026-10-03 10:01:07,423][src.utils.restart_job][INFO] - [rank: 0] Starting job (attempt 2/4): /home/jcyin/Tiger/environments/grid/bin/python /home/jcyin/Tiger/repos/GRID/src/train.py experiment=tiger_train_flat data_dir=/home/jcyin/Tiger/data/amazon_data/beauty semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt num_hierarchies=4 sequence_length=30 seed=42 train=true test=false trainer.accelerator=gpu trainer.devices=1 trainer.max_steps=20 trainer.val_check_interval=10 +trainer.limit_val_batches=1 data_loading.train_dataloader_config.dataloader.batch_size_per_device=2 data_loading.train_dataloader_config.dataloader.num_workers=0 data_loading.val_dataloader_config.dataloader.batch_size_per_device=2 data_loading.val_dataloader_config.dataloader.num_workers=0 paths.root_dir=/home/jcyin/Tiger/repos/GRID paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty ++should_skip_retry=True
+[2026-10-03 10:01:14,391][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2026-10-03 10:01:14,396][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2026-10-03 10:01:14,660][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2026-10-03 10:01:14,665][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2026-10-03 10:01:14,723][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2026-10-03 10:01:14,948][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2026-10-03 10:01:14,949][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2026-10-03 10:01:14,952][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>
+[2026-10-03 10:01:14,954][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2026-10-03 10:01:14,955][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.restart_job.RestartAndLoadCheckpointCallback>
+[2026-10-03 10:01:14,957][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:14,957][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:14,958][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json. {'start_time': '2026-10-03T10:00:55.317042', 'restarts': [{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}], 'current_run': 1, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True']}
+[2026-10-03 10:01:14,958][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2026-10-03 10:01:14,959][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2026-10-03 10:01:14,960][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2026-10-03 10:01:14,962][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:14,963][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:14,963][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 1 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:15,056][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2026-10-03 10:01:15,211][__main__][INFO] - [rank: 0] Starting training!
+[2026-10-03 10:01:16,097][root][WARNING] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+[2026-10-03 10:01:16,098][src.utils.restart_job][ERROR] - [rank: 0] Exception caught: 
+[2026-10-03 10:01:16,099][src.utils.restart_job][ERROR] - [rank: 0] Stack trace: Traceback (most recent call last):
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+    return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+    return function(*args, **kwargs)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 575, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 982, in _run
+    results = self._run_stage()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1026, in _run_stage
+    self.fit_loop.run()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 208, in run
+    self.setup_data()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 275, in setup_data
+    iter(self._data_fetcher)  # creates the iterator inside the fetcher
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 105, in __iter__
+    super().__iter__()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 52, in __iter__
+    self.iterator = iter(self.combined_loader)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 351, in __iter__
+    iter(iterator)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 92, in __iter__
+    super().__iter__()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 43, in __iter__
+    self.iterators = [iter(iterable) for iterable in self.iterables]
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 43, in <listcomp>
+    self.iterators = [iter(iterable) for iterable in self.iterables]
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 491, in __iter__
+    return self._get_iterator()
+  File "/home/jcyin/Tiger/repos/GRID/src/data/loading/components/custom_dataloader.py", line 50, in _get_iterator
+    return _SingleProcessDataLoaderIter(self)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 743, in __init__
+    assert self._timeout == 0
+AssertionError
+
+[2026-10-03 10:01:16,099][src.utils.restart_job][INFO] - [rank: 0] Cleaning up and handling restart logic
+[2026-10-03 10:01:16,099][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:16,100][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:16,100][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 1 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:16,100][src.utils.restart_job][INFO] - [rank: 0] Restarting job. Current metadata: JobCheckpointMetadata(start_time='2026-10-03T10:00:55.317042', restarts=[{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}, {'time': '2026-10-03T10:01:16.100586', 'exception': '', 'run_number': 1}], current_run=2, used_ports=[], world_size=0, node_rank=0, master_addr='', original_args=['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True'])
+[2026-10-03 10:01:16,100][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json. {'start_time': '2026-10-03T10:00:55.317042', 'restarts': [{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}, {'time': '2026-10-03T10:01:16.100586', 'exception': '', 'run_number': 1}], 'current_run': 2, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True']}
+[2026-10-03 10:01:16,101][src.utils.restart_job_utils][INFO] - [rank: 0] Cleaning up distributed process group
+[2026-10-03 10:01:16,266][src.utils.restart_job_utils][INFO] - [rank: 0] Clearing CUDA cache
+[2026-10-03 10:01:16,266][src.utils.restart_job_utils][INFO] - [rank: 0] Tearing down trainer
+[2026-10-03 10:01:22,440][src.utils.restart_job][ERROR] - [rank: 0] Job failed with return code 1
+[2026-10-03 10:01:22,440][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:22,440][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:22,441][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 2 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:22,441][src.utils.restart_job][INFO] - [rank: 0] Retrying in 5 seconds. Attempt 3/4
+[2026-10-03 10:01:27,446][src.utils.restart_job][INFO] - [rank: 0] Starting job (attempt 3/4): /home/jcyin/Tiger/environments/grid/bin/python /home/jcyin/Tiger/repos/GRID/src/train.py experiment=tiger_train_flat data_dir=/home/jcyin/Tiger/data/amazon_data/beauty semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt num_hierarchies=4 sequence_length=30 seed=42 train=true test=false trainer.accelerator=gpu trainer.devices=1 trainer.max_steps=20 trainer.val_check_interval=10 +trainer.limit_val_batches=1 data_loading.train_dataloader_config.dataloader.batch_size_per_device=2 data_loading.train_dataloader_config.dataloader.num_workers=0 data_loading.val_dataloader_config.dataloader.batch_size_per_device=2 data_loading.val_dataloader_config.dataloader.num_workers=0 paths.root_dir=/home/jcyin/Tiger/repos/GRID paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty ++should_skip_retry=True
+[2026-10-03 10:01:34,763][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2026-10-03 10:01:34,768][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2026-10-03 10:01:35,033][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2026-10-03 10:01:35,035][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2026-10-03 10:01:35,095][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2026-10-03 10:01:35,322][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2026-10-03 10:01:35,323][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2026-10-03 10:01:35,326][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>
+[2026-10-03 10:01:35,328][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2026-10-03 10:01:35,329][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.restart_job.RestartAndLoadCheckpointCallback>
+[2026-10-03 10:01:35,331][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:35,331][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:35,331][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json. {'start_time': '2026-10-03T10:00:55.317042', 'restarts': [{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}, {'time': '2026-10-03T10:01:16.100586', 'exception': '', 'run_number': 1}], 'current_run': 2, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True']}
+[2026-10-03 10:01:35,332][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2026-10-03 10:01:35,332][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2026-10-03 10:01:35,334][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2026-10-03 10:01:35,336][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:35,336][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:35,337][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 2 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:35,426][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2026-10-03 10:01:35,593][__main__][INFO] - [rank: 0] Starting training!
+[2026-10-03 10:01:36,456][root][WARNING] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+[2026-10-03 10:01:36,458][src.utils.restart_job][ERROR] - [rank: 0] Exception caught: 
+[2026-10-03 10:01:36,459][src.utils.restart_job][ERROR] - [rank: 0] Stack trace: Traceback (most recent call last):
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+    return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+    return function(*args, **kwargs)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 575, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 982, in _run
+    results = self._run_stage()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1026, in _run_stage
+    self.fit_loop.run()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 208, in run
+    self.setup_data()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 275, in setup_data
+    iter(self._data_fetcher)  # creates the iterator inside the fetcher
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 105, in __iter__
+    super().__iter__()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 52, in __iter__
+    self.iterator = iter(self.combined_loader)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 351, in __iter__
+    iter(iterator)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 92, in __iter__
+    super().__iter__()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 43, in __iter__
+    self.iterators = [iter(iterable) for iterable in self.iterables]
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 43, in <listcomp>
+    self.iterators = [iter(iterable) for iterable in self.iterables]
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 491, in __iter__
+    return self._get_iterator()
+  File "/home/jcyin/Tiger/repos/GRID/src/data/loading/components/custom_dataloader.py", line 50, in _get_iterator
+    return _SingleProcessDataLoaderIter(self)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 743, in __init__
+    assert self._timeout == 0
+AssertionError
+
+[2026-10-03 10:01:36,459][src.utils.restart_job][INFO] - [rank: 0] Cleaning up and handling restart logic
+[2026-10-03 10:01:36,459][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:36,459][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:36,459][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 2 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:36,460][src.utils.restart_job][INFO] - [rank: 0] Restarting job. Current metadata: JobCheckpointMetadata(start_time='2026-10-03T10:00:55.317042', restarts=[{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}, {'time': '2026-10-03T10:01:16.100586', 'exception': '', 'run_number': 1}, {'time': '2026-10-03T10:01:36.460076', 'exception': '', 'run_number': 2}], current_run=3, used_ports=[], world_size=0, node_rank=0, master_addr='', original_args=['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True'])
+[2026-10-03 10:01:36,460][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json. {'start_time': '2026-10-03T10:00:55.317042', 'restarts': [{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}, {'time': '2026-10-03T10:01:16.100586', 'exception': '', 'run_number': 1}, {'time': '2026-10-03T10:01:36.460076', 'exception': '', 'run_number': 2}], 'current_run': 3, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True']}
+[2026-10-03 10:01:36,460][src.utils.restart_job_utils][INFO] - [rank: 0] Cleaning up distributed process group
+[2026-10-03 10:01:36,654][src.utils.restart_job_utils][INFO] - [rank: 0] Clearing CUDA cache
+[2026-10-03 10:01:36,654][src.utils.restart_job_utils][INFO] - [rank: 0] Tearing down trainer
+[2026-10-03 10:01:42,463][src.utils.restart_job][ERROR] - [rank: 0] Job failed with return code 1
+[2026-10-03 10:01:42,463][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:42,464][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:42,465][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 3 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:42,465][src.utils.restart_job][INFO] - [rank: 0] Retrying in 5 seconds. Attempt 4/4
+[2026-10-03 10:01:47,470][src.utils.restart_job][INFO] - [rank: 0] Starting job (attempt 4/4): /home/jcyin/Tiger/environments/grid/bin/python /home/jcyin/Tiger/repos/GRID/src/train.py experiment=tiger_train_flat data_dir=/home/jcyin/Tiger/data/amazon_data/beauty semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt num_hierarchies=4 sequence_length=30 seed=42 train=true test=false trainer.accelerator=gpu trainer.devices=1 trainer.max_steps=20 trainer.val_check_interval=10 +trainer.limit_val_batches=1 data_loading.train_dataloader_config.dataloader.batch_size_per_device=2 data_loading.train_dataloader_config.dataloader.num_workers=0 data_loading.val_dataloader_config.dataloader.batch_size_per_device=2 data_loading.val_dataloader_config.dataloader.num_workers=0 paths.root_dir=/home/jcyin/Tiger/repos/GRID paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty ++should_skip_retry=True
+[2026-10-03 10:01:54,662][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2026-10-03 10:01:54,666][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2026-10-03 10:01:54,925][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2026-10-03 10:01:54,927][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2026-10-03 10:01:54,983][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2026-10-03 10:01:55,206][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2026-10-03 10:01:55,206][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2026-10-03 10:01:55,209][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>
+[2026-10-03 10:01:55,212][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2026-10-03 10:01:55,212][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.restart_job.RestartAndLoadCheckpointCallback>
+[2026-10-03 10:01:55,214][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:55,215][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:55,215][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json. {'start_time': '2026-10-03T10:00:55.317042', 'restarts': [{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}, {'time': '2026-10-03T10:01:16.100586', 'exception': '', 'run_number': 1}, {'time': '2026-10-03T10:01:36.460076', 'exception': '', 'run_number': 2}], 'current_run': 3, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True']}
+[2026-10-03 10:01:55,215][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2026-10-03 10:01:55,216][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2026-10-03 10:01:55,217][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2026-10-03 10:01:55,219][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:55,220][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:55,220][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 3 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:55,306][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2026-10-03 10:01:55,460][__main__][INFO] - [rank: 0] Starting training!
+[2026-10-03 10:01:56,296][root][WARNING] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+[2026-10-03 10:01:56,297][src.utils.restart_job][ERROR] - [rank: 0] Exception caught: 
+[2026-10-03 10:01:56,298][src.utils.restart_job][ERROR] - [rank: 0] Stack trace: Traceback (most recent call last):
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+    return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+    return function(*args, **kwargs)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 575, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 982, in _run
+    results = self._run_stage()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1026, in _run_stage
+    self.fit_loop.run()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 208, in run
+    self.setup_data()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 275, in setup_data
+    iter(self._data_fetcher)  # creates the iterator inside the fetcher
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 105, in __iter__
+    super().__iter__()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 52, in __iter__
+    self.iterator = iter(self.combined_loader)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 351, in __iter__
+    iter(iterator)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 92, in __iter__
+    super().__iter__()
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 43, in __iter__
+    self.iterators = [iter(iterable) for iterable in self.iterables]
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 43, in <listcomp>
+    self.iterators = [iter(iterable) for iterable in self.iterables]
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 491, in __iter__
+    return self._get_iterator()
+  File "/home/jcyin/Tiger/repos/GRID/src/data/loading/components/custom_dataloader.py", line 50, in _get_iterator
+    return _SingleProcessDataLoaderIter(self)
+  File "/home/jcyin/Tiger/environments/grid/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 743, in __init__
+    assert self._timeout == 0
+AssertionError
+
+[2026-10-03 10:01:56,298][src.utils.restart_job][INFO] - [rank: 0] Cleaning up and handling restart logic
+[2026-10-03 10:01:56,298][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:56,299][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:56,299][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 3 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:01:56,299][src.utils.restart_job][INFO] - [rank: 0] Restarting job. Current metadata: JobCheckpointMetadata(start_time='2026-10-03T10:00:55.317042', restarts=[{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}, {'time': '2026-10-03T10:01:16.100586', 'exception': '', 'run_number': 1}, {'time': '2026-10-03T10:01:36.460076', 'exception': '', 'run_number': 2}, {'time': '2026-10-03T10:01:56.299363', 'exception': '', 'run_number': 3}], current_run=4, used_ports=[], world_size=0, node_rank=0, master_addr='', original_args=['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True'])
+[2026-10-03 10:01:56,299][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json. {'start_time': '2026-10-03T10:00:55.317042', 'restarts': [{'time': '2026-10-03T10:00:56.526998', 'exception': '', 'run_number': 0}, {'time': '2026-10-03T10:01:16.100586', 'exception': '', 'run_number': 1}, {'time': '2026-10-03T10:01:36.460076', 'exception': '', 'run_number': 2}, {'time': '2026-10-03T10:01:56.299363', 'exception': '', 'run_number': 3}], 'current_run': 4, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/home/jcyin/Tiger/repos/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt', 'num_hierarchies=4', 'sequence_length=30', 'seed=42', 'train=true', 'test=false', 'trainer.accelerator=gpu', 'trainer.devices=1', 'trainer.max_steps=20', 'trainer.val_check_interval=10', '+trainer.limit_val_batches=1', 'data_loading.train_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.train_dataloader_config.dataloader.num_workers=0', 'data_loading.val_dataloader_config.dataloader.batch_size_per_device=2', 'data_loading.val_dataloader_config.dataloader.num_workers=0', 'paths.root_dir=/home/jcyin/Tiger/repos/GRID', 'paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty', 'hydra.run.dir=/home/jcyin/Tiger/experiments/04_tiger_smoke/beauty', '++should_skip_retry=True']}
+[2026-10-03 10:01:56,300][src.utils.restart_job_utils][INFO] - [rank: 0] Cleaning up distributed process group
+[2026-10-03 10:01:56,474][src.utils.restart_job_utils][INFO] - [rank: 0] Clearing CUDA cache
+[2026-10-03 10:01:56,474][src.utils.restart_job_utils][INFO] - [rank: 0] Tearing down trainer
+[2026-10-03 10:02:02,487][src.utils.restart_job][ERROR] - [rank: 0] Job failed with return code 1
+[2026-10-03 10:02:02,488][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:02:02,489][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:02:02,489][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 4 from metadata /home/jcyin/Tiger/experiments/04_tiger_smoke/beauty/metadata/restart_metadata.json
+[2026-10-03 10:02:02,489][src.utils.restart_job][ERROR] - [rank: 0] Job failed after 3 retries.

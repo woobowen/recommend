@@ -1,0 +1,14 @@
+- experiment=tiger_inference_flat
+- data_dir=/home/jcyin/Tiger/data/amazon_data/beauty
+- semantic_id_path=/home/jcyin/Tiger/artifacts/beauty/semantic_ids.pt
+- num_hierarchies=5
+- ckpt_path=/home/jcyin/Tiger/artifacts/beauty/tiger_smoke.ckpt
+- sequence_length=30
+- trainer.accelerator=gpu
+- trainer.devices=1
+- +trainer.limit_predict_batches=1
+- data_loading.predict_dataloader_config.dataloader.batch_size_per_device=2
+- data_loading.predict_dataloader_config.dataloader.num_workers=0
+- data_loading.predict_dataloader_config.dataloader.timeout=0
+- paths.root_dir=/home/jcyin/Tiger/repos/GRID
+- paths.data_dir=/home/jcyin/Tiger/data/amazon_data/beauty
