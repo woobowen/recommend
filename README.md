@@ -1,3 +1,5 @@
+这是wangminhao学长的代码参考
+
 # Generative Recommendation with Semantic IDs (GRID)
 [![PyTorch](https://img.shields.io/badge/pytorch-2.0%2B-red)](https://pytorch.org/)
 [![Hydra](https://img.shields.io/badge/config-hydra-89b8cd)](https://hydra.cc/)
