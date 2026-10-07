@@ -1,0 +1,7 @@
+python -m src.inference experiment=sem_embeds_inference_flat data_dir=/data/mhwang/Rec/GRID/amazon_data/beauty # avaiable data includes 'beauty', 'sports', and 'toys'
+python -m src.train experiment=rkmeans_train_flat \
+    data_dir=/data/mhwang/Rec/GRID/amazon_data/beauty \
+    embedding_path=/data/mhwang/Rec/GRID/output_path_from_step_2/merged_predictions_tensor.pt \ # this can be found in the log dirs in step2
+    embedding_dim=2048 \ # the model dimension of the LLMs you use in step 2. 2048 for flan-t5-xl as used in this example.
+    num_hierarchies=3 \  # we train 3 codebooks
+    codebook_width=256 \ # each codebook has 256 rows of centroids  
