@@ -1,0 +1,73 @@
+[2025-11-12 16:26:37,790][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-11-12 16:26:37,803][src.utils.utils][WARNING] - [rank: 0] Config loss was not found in the config tree. Make sure this is expected.
+[2025-11-12 16:26:37,832][src.utils.utils][WARNING] - [rank: 0] Config optim was not found in the config tree. Make sure this is expected.
+[2025-11-12 16:26:37,833][src.utils.utils][WARNING] - [rank: 0] Config eval was not found in the config tree. Make sure this is expected.
+[2025-11-12 16:26:40,833][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-11-12 16:26:40,838][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2025-11-12 16:26:40,920][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2025-11-12 16:26:41,376][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] i am here
+[2025-11-12 16:26:42,192][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-11-12 16:26:42,194][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.inference_utils.LocalPickleWriter>
+[2025-11-12 16:26:42,572][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-11-12 16:26:42,573][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-11-12 16:26:42,579][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-11-12 16:26:42,751][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-11-12 16:26:43,117][__main__][INFO] - [rank: 0] Starting inference!
+[2025-11-12 16:27:19,550][src.utils.inference_utils][INFO] - Rank 0 initialized for inference.
+[2025-11-12 16:27:19,551][src.utils.inference_utils][INFO] - Rank 2 initialized for inference.
+[2025-11-12 16:27:19,564][src.utils.inference_utils][INFO] - Rank 1 initialized for inference.
+[2025-11-12 16:27:19,629][src.utils.inference_utils][INFO] - Rank 3 initialized for inference.
+[2025-11-12 16:27:32,054][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 开始统计训练集中的item流行度...
+[2025-11-12 16:27:32,056][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 训练集dataloader类型: <class 'tuple'>
+[2025-11-12 16:27:32,057][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 实际dataloader类型: <class 'src.data.loading.components.custom_dataloader.DataloaderWithIterationRetry'>
+[2025-11-12 16:28:20,183][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 1000 个batch，累计统计 48428 个item交互
+[2025-11-12 16:28:48,845][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 2000 个batch，累计统计 96209 个item交互
+[2025-11-12 16:29:09,039][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 3000 个batch，累计统计 143966 个item交互
+[2025-11-12 16:29:26,129][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 4000 个batch，累计统计 191900 个item交互
+[2025-11-12 16:29:42,858][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 5000 个batch，累计统计 239678 个item交互
+[2025-11-12 16:30:20,011][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 6000 个batch，累计统计 287712 个item交互
+[2025-11-12 16:30:46,987][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 7000 个batch，累计统计 335430 个item交互
+[2025-11-12 16:31:13,148][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 8000 个batch，累计统计 383025 个item交互
+[2025-11-12 16:31:31,059][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 9000 个batch，累计统计 431129 个item交互
+[2025-11-12 16:31:57,683][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 10000 个batch，累计统计 479130 个item交互
+[2025-11-12 16:31:57,685][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已达到最大batch限制(10000)，停止统计
+[2025-11-12 16:31:57,958][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 训练集统计完成：共 9405 个唯一item，总交互次数 479130
+[2025-11-12 16:31:57,974][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 流行度分组完成:
+[2025-11-12 16:31:57,983][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0]   Head组 (前20%): 1881 个item
+[2025-11-12 16:31:57,984][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0]   Body组 (20%-50%): 2821 个item
+[2025-11-12 16:31:57,985][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0]   Tail组 (后50%): 4703 个item
+[2025-11-12 16:31:57,985][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0]   Head组示例: item (3, 207, 124, 30, 21, 0) 出现 855 次
+[2025-11-12 16:31:57,986][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0]   Tail组示例: item (111, 116, 105, 243, 143, 0) 出现 15 次
+[2025-11-12 16:31:57,986][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已启用按流行度分组的评测（Head/Body/Tail）。
+[2025-11-12 16:38:35,361][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-12 16:38:35,363][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 生成的语义ID Embedding相似度矩阵 (平均自 304 个batch) ===
+[2025-11-12 16:38:35,365][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+[[ 1.          0.00527549  0.01520126  0.00906509  0.01535188 -0.02121683]
+ [ 0.00527549  1.          0.01398725  0.02057505  0.00425028 -0.01274427]
+ [ 0.01520126  0.01398725  1.          0.02494018  0.00326851 -0.02683813]
+ [ 0.00906509  0.02057505  0.02494018  1.          0.00753697 -0.00791002]
+ [ 0.01535188  0.00425028  0.00326851  0.00753697  1.         -0.01213341]
+ [-0.02121683 -0.01274427 -0.02683813 -0.00791002 -0.01213341  0.9999999 ]]
+[2025-11-12 16:38:35,366][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+
+[2025-11-12 16:38:35,367][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-12 16:38:35,368][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 输入序列中每个Item的Hierarchy Embedding相似度矩阵 (平均自 304 个batch) ===
+[2025-11-12 16:38:35,370][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+[[ 1.          0.00639659  0.01677707  0.01040922  0.00996508 -0.01870709]
+ [ 0.00639659  1.          0.0148524   0.01465689  0.0027469  -0.01540404]
+ [ 0.01677707  0.0148524   1.          0.02141192  0.00494204 -0.02378815]
+ [ 0.01040922  0.01465689  0.02141192  1.          0.0045311  -0.00714149]
+ [ 0.00996508  0.0027469   0.00494204  0.0045311   1.         -0.01311243]
+ [-0.01870709 -0.01540404 -0.02378815 -0.00714149 -0.01311243  1.        ]]
+[2025-11-12 16:38:35,371][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+
+[2025-11-12 16:38:35,613][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-12 16:38:35,614][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 按流行度分组的评测指标（累计到当前阶段）===
+[2025-11-12 16:38:35,615][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] [Tail] ndcg@5: 0.042782  ndcg@10: 0.050605  recall@5: 0.061325  recall@10: 0.085559
+[2025-11-12 16:38:35,616][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] [Body] ndcg@5: 0.029646  ndcg@10: 0.036252  recall@5: 0.042934  recall@10: 0.063297
+[2025-11-12 16:38:35,616][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] [Head] ndcg@5: 0.026493  ndcg@10: 0.031802  recall@5: 0.038855  recall@10: 0.055334
+[2025-11-12 16:38:35,617][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+

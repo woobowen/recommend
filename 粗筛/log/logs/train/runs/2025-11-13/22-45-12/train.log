@@ -1,0 +1,39 @@
+[2025-11-13 22:45:12,267][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-11-13 22:45:12,280][src.utils.utils][WARNING] - [rank: 0] Config loss was not found in the config tree. Make sure this is expected.
+[2025-11-13 22:45:15,281][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-11-13 22:45:15,282][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2025-11-13 22:45:15,287][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.ItemDataModule>
+[2025-11-13 22:45:15,949][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.modules.clustering.residual_quantization.ResidualQuantization>
+[2025-11-13 22:45:16,259][root][INFO] - Device cpu: Verbose mode enabled
+[2025-11-13 22:45:16,317][root][INFO] - Device cpu: Using custom training loop function
+[2025-11-13 22:45:16,326][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-11-13 22:45:16,344][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2025-11-13 22:45:16,365][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2025-11-13 22:45:16,367][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-11-13 22:45:16,369][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-11-13 22:45:16,372][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-11-13 22:45:16,479][pytorch_lightning.utilities.rank_zero][INFO] - Using bfloat16 Automatic Mixed Precision (AMP)
+[2025-11-13 22:45:16,482][pytorch_lightning.utilities.rank_zero][INFO] - Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.
+[2025-11-13 22:45:16,520][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2025-11-13 22:45:16,521][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2025-11-13 22:45:16,522][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+[2025-11-13 22:45:16,523][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-11-13 22:45:16,861][__main__][INFO] - [rank: 0] Starting training!
+[2025-11-13 22:45:36,586][root][INFO] - Device cpu: Verbose mode enabled
+[2025-11-13 22:45:36,661][root][INFO] - Device cpu: Using custom training loop function
+[2025-11-13 22:45:36,745][root][INFO] - Device cpu: Verbose mode enabled
+[2025-11-13 22:45:36,802][root][INFO] - Device cpu: Using custom training loop function
+[2025-11-13 22:45:37,771][root][INFO] - Device cpu: Verbose mode enabled
+[2025-11-13 22:45:37,859][root][INFO] - Device cpu: Using custom training loop function
+[2025-11-13 22:45:38,638][pytorch_lightning.utilities.rank_zero][INFO] - ----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 4 processes
+----------------------------------------------------------------------------------------------------
+
+[2025-11-13 22:46:25,394][root][INFO] - Device cuda:3: Training layers one-at-a-time, each for 30 steps. Ensure that early stopping callbacks are disabled.
+[2025-11-13 22:46:25,394][root][INFO] - Device cuda:2: Training layers one-at-a-time, each for 30 steps. Ensure that early stopping callbacks are disabled.
+[2025-11-13 22:46:25,397][root][INFO] - Device cuda:0: Training layers one-at-a-time, each for 30 steps. Ensure that early stopping callbacks are disabled.
+[2025-11-13 22:46:25,398][root][INFO] - Device cuda:1: Training layers one-at-a-time, each for 30 steps. Ensure that early stopping callbacks are disabled.
+[2025-11-13 22:47:14,421][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 30: 'train/loss' reached 0.05936 (best 0.05936), saving model to '/data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/22-45-12/checkpoints/checkpoint_000_000030.ckpt' as top 1
+[2025-11-13 22:47:23,550][pytorch_lightning.utilities.rank_zero][INFO] - `Trainer.fit` stopped: `max_steps=30` reached.
+[2025-11-13 22:47:25,547][__main__][INFO] - [rank: 0] Metrics: {'train/loss': tensor(2.5057), 'train/loss_step': tensor(0.0594), 'train/quantization_loss': tensor(2.5057), 'train/quantization_loss_step': tensor(0.0594), 'train/reconstruction_loss': tensor(0.), 'train/reconstruction_loss_step': tensor(0.), 'train/last_residuals_norm_ratio': tensor(0.0089), 'train/last_residuals_norm_ratio_step': tensor(0.0036), 'train/first_residuals_norm_ratio': tensor(0.0089), 'train/first_residuals_norm_ratio_step': tensor(0.0036), 'train/first_centroids_norm': tensor(9.4771), 'train/first_centroids_norm_step': tensor(15.6941), 'train/last_centroids_norm': tensor(9.4771), 'train/last_centroids_norm_step': tensor(15.6941), 'train/frac_unique_ids': tensor(0.0734), 'train/frac_unique_ids_step': tensor(0.1152), 'train/mse': tensor(0.0001), 'train/mse_step': tensor(1.1401e-05), 'train/layer_0/frac_layer_coverages': tensor(0.5869), 'train/layer_0/frac_layer_coverages_step': tensor(0.9219), 'train/layer_0/id_entropy': tensor(3.2812), 'train/layer_0/id_entropy_step': tensor(5.0963), 'train/loss_epoch': tensor(2.5057), 'train/quantization_loss_epoch': tensor(2.5057), 'train/reconstruction_loss_epoch': tensor(0.), 'train/last_residuals_norm_ratio_epoch': tensor(0.0089), 'train/first_residuals_norm_ratio_epoch': tensor(0.0089), 'train/first_centroids_norm_epoch': tensor(9.4771), 'train/last_centroids_norm_epoch': tensor(9.4771), 'train/frac_unique_ids_epoch': tensor(0.0734), 'train/mse_epoch': tensor(0.0001), 'train/layer_0/frac_layer_coverages_epoch': tensor(0.5869), 'train/layer_0/id_entropy_epoch': tensor(3.2812)}

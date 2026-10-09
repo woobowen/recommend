@@ -1,0 +1,63 @@
+﻿GRID 全项目粗筛说明
+整理日期：2026年10月9日
+
+一、来源与范围
+本目录的源文件直接从远程服务器 /data_a/mhwang/Rec/GRID 读取和复制。
+复制范围仅为该GRID目录内的全部项目，不包含Rec下其他仓库。
+服务器文件没有被修改，复制的源码内容也没有改写。
+
+二、保留的项目
+1. 标准GRID：文本嵌入、RQ-KMeans、RQ-VAE、RVQ、TIGER推荐。
+2. TIGER扩展：MLP聚合、shuffle、parallel、no_pos_embed及对应现有配置。
+3. SASRec基线：模型、train/inference/test入口、配置、启动脚本和说明。
+4. 上述项目共用的数据加载、训练启动、损失、评测、聚类和工具组件。
+
+项目代码保持原仓库的src/、configs/、sasrec_baseline/结构。
+模型变体是此次全项目分享范围中的必要代码，因此保留；它们并非标准TIGER的必需组件。
+
+三、日志集中归档
+所有实际日志集中放到log文件夹，并保留其原始来源层级：
+原 logs/...             → log/logs/...
+原 logs_qwen/...        → log/logs_qwen/...
+原 logs_T5_rqvae/...    → log/logs_T5_rqvae/...
+其他 logs_* 目录按相同规则移动。
+原 nohup.out           → log/nohup.out
+原 nohup1.out          → log/nohup1.out
+
+日志目录同时保留.hydra配置快照、hparams.yaml、metrics.csv、tags.log、restart_metadata.json等实验记录，便于其他使用者追踪参数与结果。
+此次按你的要求保留全部日志，作为上次“不必分发个人日志”建议的例外。
+历史checkpoint、预测pt/pkl、注意力张量及图片不属于本次日志保留范围，未复制。
+
+四、排除的内容
+Python缓存__pycache__和pyc；macOS元数据__MACOSX和.DS_Store；个人.vscode设置；根目录数学test.py；未完成的src/test.py；探索Notebook；历史注意力张量与图像；按需绘图脚本；个人cmd.txt和原phase_*.sh；历史权重及预测张量；Git内部对象；空目录占位文件。
+SASRec的src/test.py是实际测试入口，与主仓库未完成的src/test.py不同，已保留。
+Amazon数据集已于2026年10月9日按追加请求从服务器下载至amazon_data/，详见末尾更新。
+逐文件保留与排除理由见“筛选文件清单.md”。
+
+五、使用前注意
+本目录是按用途筛选的原仓库副本，不代表各项目已经运行验证通过。
+本次未安装环境、运行训练或加载checkpoint。
+现有源码仍可能含旧/data路径、GPU硬编码、T5与Qwen loader类型不匹配、getz拼写项、SASRec缺失函数等原始问题，复现前需单独修正。
+旧phase脚本依赖不同日期的历史产物，已排除；应按目标项目的experiment配置重新设置本次输入路径。
+历史配置仍记录原日志与产物路径，移动日志不会自动改写这些路径；原始历史权重和预测文件已排除，不可直接按旧配置恢复推理。
+本地数据可以通过data_dir指向已有amazon_data中的对应数据集。应确认其TFRecord格式和划分与目标实验一致。
+外部预训练文本模型需按所选模型和运行环境另行准备。
+训练会根据原配置生成新的logs目录；本次log目录是历史记录归档。
+
+六、复制校验
+每个源文件在服务器上计算SHA-256，在复制过程中再计算本地内容SHA-256；一致才作为成功文件写入目标目录。
+复制校验清单.json记录原路径、目标路径、大小、SHA-256及校验状态。
+Git基准提交仅作为来源标识；不代表所有本地修改或实验产物与该提交一致。
+
+代码与配置：112个文件。
+日志与实验记录：2225个文件。
+源文件合计：2337个，2903469184 bytes。
+排除文件：2901个。
+来源分支：main。
+来源HEAD：4d8387382bf8bdfa7973a8d49feaf05e6a16b312。
+
+
+七、Amazon数据集追加下载
+已从同一远程原仓库复制Beauty、Toys、Sports全部1902个TFRecord gzip分片，合计4.43 GiB。每个分片通过服务器与本地SHA-256校验。
+原“筛选文件清单.md”记录初次粗筛时的排除情况；此次数据集已按新请求纳入，不再属于最终副本的排除内容。
+代码与日志校验仍见复制校验清单.json，新增数据校验单独见Amazon数据复制校验清单.json。

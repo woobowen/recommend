@@ -1,0 +1,325 @@
+paths:
+  root_dir: .
+  data_dir: /data/mhwang/Rec/GRID/amazon_data/beauty
+  log_dir: ./logs
+  output_dir: /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/22-45-12
+  work_dir: /data/mhwang/Rec/GRID
+  profile_dir: ./logs/train/runs/2025-11-13/22-45-12/profile_output
+  metadata_dir: /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/22-45-12/metadata
+model:
+  _target_: src.modules.clustering.residual_quantization.ResidualQuantization
+  track_residuals: true
+  verbose: true
+  train_layer_wise: true
+  normalize_residuals: true
+  input_dim: 3584
+  n_layers: 1
+  init_buffer_size: 3072
+  quantization_layer:
+    _target_: src.models.modules.clustering.mini_batch_kmeans.MiniBatchKMeans
+    n_clusters: 256
+    n_features: 3584
+    distance_function:
+      _target_: src.components.distance_functions.SquaredEuclideanDistance
+    initializer:
+      _target_: src.components.clustering_initializers.KMeansPlusPlusInitInitializer
+      n_clusters: 256
+      distance_function:
+        _target_: src.components.distance_functions.SquaredEuclideanDistance
+      initialize_on_cpu: false
+    init_buffer_size: 3072
+    optimizer: null
+  optimizer:
+    _target_: torch.optim.SGD
+    _partial_: true
+    lr: 0.5
+  scheduler: null
+  quantization_layer_list: null
+  training_loop_function:
+    _target_: src.components.training_loop_functions.scale_loss_by_world_size_for_initialization_training_loop
+    _partial_: true
+model/params/total: 917504
+model/params/trainable: 917504
+model/params/non_trainable: 0
+data_loading:
+  features_config:
+    features:
+    - name: id
+      num_placeholder_tokens: 0
+      is_item_ids: true
+      embeddings:
+        _target_: torch.load
+        _args_:
+        - _target_: src.utils.file_utils.open_local_or_remote
+          file_path: /data/mhwang/Rec/GRID/logs/inference/runs/2025-11-12/23-14-12/pickle/merged_predictions_tensor.pt
+          mode: rb
+        weights_only: false
+      type:
+        _target_: torch.__dict__.get
+        _args_:
+        - int32
+  dataset_config:
+    dataset:
+      _target_: src.data.loading.components.interfaces.ItemDatasetConfig
+      item_id_field: id
+      keep_item_id: true
+      iterate_per_row: true
+      data_iterator:
+        _target_: src.data.loading.components.iterators.TFRecordIterator
+      features_to_consider:
+      - id
+      embedding_map:
+        id:
+          _target_: torch.load
+          _args_:
+          - _target_: src.utils.file_utils.open_local_or_remote
+            file_path: /data/mhwang/Rec/GRID/logs/inference/runs/2025-11-12/23-14-12/pickle/merged_predictions_tensor.pt
+            mode: rb
+          weights_only: false
+      num_placeholder_tokens_map:
+        id: 0
+      preprocessing_functions:
+      - _target_: src.data.loading.components.pre_processing.filter_features_to_consider
+        _partial_: true
+      - _target_: src.data.loading.components.pre_processing.convert_to_dense_numpy_array
+        _partial_: true
+      - _target_: src.data.loading.components.pre_processing.convert_fields_to_tensors
+        _partial_: true
+      - _target_: src.data.loading.components.pre_processing.map_sparse_id_to_embedding
+        _partial_: true
+        sparse_id_field: id
+        embedding_field_to_add: embedding
+      field_type_map:
+        id:
+          _target_: torch.__dict__.get
+          _args_:
+          - int32
+  datamodule:
+    _target_: src.data.loading.datamodules.sequence_datamodule.ItemDataModule
+    train_dataloader_config:
+      _target_: src.data.loading.components.interfaces.ItemDataloaderConfig
+      dataset_class:
+        _target_: src.data.loading.components.dataloading.UnboundedSequenceIterable
+        _partial_: true
+      data_folder: /data/mhwang/Rec/GRID/amazon_data/beauty/items
+      should_shuffle_rows: true
+      batch_size_per_device: 2048
+      num_workers: 12
+      assign_files_by_size: false
+      timeout: 60
+      drop_last: false
+      pin_memory: true
+      persistent_workers: true
+      collate_fn:
+        _target_: src.data.loading.components.collate_functions.collate_fn_items
+        _partial_: true
+        item_id_field: id
+        feature_to_input_name:
+          id: item_ids
+          text: text_tokens
+          text_mask: text_mask
+          embedding: input_embedding
+      dataset_config:
+        _target_: src.data.loading.components.interfaces.ItemDatasetConfig
+        item_id_field: id
+        keep_item_id: true
+        iterate_per_row: true
+        data_iterator:
+          _target_: src.data.loading.components.iterators.TFRecordIterator
+        features_to_consider:
+        - id
+        embedding_map:
+          id:
+            _target_: torch.load
+            _args_:
+            - _target_: src.utils.file_utils.open_local_or_remote
+              file_path: /data/mhwang/Rec/GRID/logs/inference/runs/2025-11-12/23-14-12/pickle/merged_predictions_tensor.pt
+              mode: rb
+            weights_only: false
+        num_placeholder_tokens_map:
+          id: 0
+        preprocessing_functions:
+        - _target_: src.data.loading.components.pre_processing.filter_features_to_consider
+          _partial_: true
+        - _target_: src.data.loading.components.pre_processing.convert_to_dense_numpy_array
+          _partial_: true
+        - _target_: src.data.loading.components.pre_processing.convert_fields_to_tensors
+          _partial_: true
+        - _target_: src.data.loading.components.pre_processing.map_sparse_id_to_embedding
+          _partial_: true
+          sparse_id_field: id
+          embedding_field_to_add: embedding
+        field_type_map:
+          id:
+            _target_: torch.__dict__.get
+            _args_:
+            - int32
+      limit_files: null
+      assign_all_files_per_worker: true
+    val_dataloader_config:
+      _target_: src.data.loading.components.interfaces.ItemDataloaderConfig
+      dataset_class:
+        _target_: src.data.loading.components.dataloading.UnboundedSequenceIterable
+        _partial_: true
+      data_folder: /data/mhwang/Rec/GRID/amazon_data/beauty/items
+      should_shuffle_rows: false
+      batch_size_per_device: 256
+      num_workers: 2
+      assign_files_by_size: true
+      timeout: 60
+      drop_last: false
+      pin_memory: false
+      persistent_workers: true
+      collate_fn:
+        _target_: src.data.loading.components.collate_functions.collate_fn_items
+        _partial_: true
+        item_id_field: id
+        feature_to_input_name:
+          id: item_ids
+          text: text_tokens
+          text_mask: text_mask
+          embedding: input_embedding
+      dataset_config:
+        _target_: src.data.loading.components.interfaces.ItemDatasetConfig
+        item_id_field: id
+        keep_item_id: true
+        iterate_per_row: true
+        data_iterator:
+          _target_: src.data.loading.components.iterators.TFRecordIterator
+        features_to_consider:
+        - id
+        embedding_map:
+          id:
+            _target_: torch.load
+            _args_:
+            - _target_: src.utils.file_utils.open_local_or_remote
+              file_path: /data/mhwang/Rec/GRID/logs/inference/runs/2025-11-12/23-14-12/pickle/merged_predictions_tensor.pt
+              mode: rb
+            weights_only: false
+        num_placeholder_tokens_map:
+          id: 0
+        preprocessing_functions:
+        - _target_: src.data.loading.components.pre_processing.filter_features_to_consider
+          _partial_: true
+        - _target_: src.data.loading.components.pre_processing.convert_to_dense_numpy_array
+          _partial_: true
+        - _target_: src.data.loading.components.pre_processing.convert_fields_to_tensors
+          _partial_: true
+        - _target_: src.data.loading.components.pre_processing.map_sparse_id_to_embedding
+          _partial_: true
+          sparse_id_field: id
+          embedding_field_to_add: embedding
+        field_type_map:
+          id:
+            _target_: torch.__dict__.get
+            _args_:
+            - int32
+      limit_files: null
+    test_dataloader_config:
+      _target_: src.data.loading.components.interfaces.ItemDataloaderConfig
+      dataset_class:
+        _target_: src.data.loading.components.dataloading.UnboundedSequenceIterable
+        _partial_: true
+      data_folder: /data/mhwang/Rec/GRID/amazon_data/beauty/items
+      should_shuffle_rows: false
+      batch_size_per_device: 256
+      num_workers: 2
+      assign_files_by_size: true
+      timeout: 60
+      drop_last: false
+      pin_memory: false
+      persistent_workers: true
+      collate_fn:
+        _target_: src.data.loading.components.collate_functions.collate_fn_items
+        _partial_: true
+        item_id_field: id
+        feature_to_input_name:
+          id: item_ids
+          text: text_tokens
+          text_mask: text_mask
+          embedding: input_embedding
+      dataset_config:
+        _target_: src.data.loading.components.interfaces.ItemDatasetConfig
+        item_id_field: id
+        keep_item_id: true
+        iterate_per_row: true
+        data_iterator:
+          _target_: src.data.loading.components.iterators.TFRecordIterator
+        features_to_consider:
+        - id
+        embedding_map:
+          id:
+            _target_: torch.load
+            _args_:
+            - _target_: src.utils.file_utils.open_local_or_remote
+              file_path: /data/mhwang/Rec/GRID/logs/inference/runs/2025-11-12/23-14-12/pickle/merged_predictions_tensor.pt
+              mode: rb
+            weights_only: false
+        num_placeholder_tokens_map:
+          id: 0
+        preprocessing_functions:
+        - _target_: src.data.loading.components.pre_processing.filter_features_to_consider
+          _partial_: true
+        - _target_: src.data.loading.components.pre_processing.convert_to_dense_numpy_array
+          _partial_: true
+        - _target_: src.data.loading.components.pre_processing.convert_fields_to_tensors
+          _partial_: true
+        - _target_: src.data.loading.components.pre_processing.map_sparse_id_to_embedding
+          _partial_: true
+          sparse_id_field: id
+          embedding_field_to_add: embedding
+        field_type_map:
+          id:
+            _target_: torch.__dict__.get
+            _args_:
+            - int32
+      limit_files: null
+trainer:
+  _target_: lightning.pytorch.trainer.Trainer
+  default_root_dir: /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/22-45-12
+  min_steps: 1
+  max_steps: 30
+  max_epochs: 10
+  accelerator: gpu
+  devices: -1
+  num_nodes: 1
+  precision: bf16-mixed
+  log_every_n_steps: 10
+  val_check_interval: 100000000
+  deterministic: false
+  accumulate_grad_batches: 1
+  profiler:
+    _target_: lightning.pytorch.profilers.PassThroughProfiler
+  strategy: ddp_find_unused_parameters_true
+  sync_batchnorm: true
+  num_sanity_val_steps: 0
+callbacks:
+  model_checkpoint:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/22-45-12/checkpoints
+    filename: checkpoint_{epoch:03d}_{step:06d}
+    monitor: train/loss
+    verbose: true
+    save_last: null
+    save_top_k: 1
+    mode: min
+    auto_insert_metric_name: false
+    save_weights_only: false
+    every_n_train_steps: 30
+    train_time_interval: null
+    every_n_epochs: null
+    save_on_train_epoch_end: null
+  early_stopping: null
+  model_summary:
+    _target_: lightning.pytorch.callbacks.RichModelSummary
+    max_depth: -1
+extras:
+  ignore_warnings: false
+  enforce_tags: true
+  print_config_warnings: true
+  print_config: true
+task_name: train
+tags:
+- amazon-assign-ids-train
+ckpt_path: null
+seed: 42

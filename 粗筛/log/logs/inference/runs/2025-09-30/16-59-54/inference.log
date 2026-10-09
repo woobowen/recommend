@@ -1,0 +1,24 @@
+[2025-09-30 16:59:54,933][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-09-30 16:59:54,937][src.utils.utils][WARNING] - [rank: 0] Config loss was not found in the config tree. Make sure this is expected.
+[2025-09-30 16:59:54,938][src.utils.utils][WARNING] - [rank: 0] Config optim was not found in the config tree. Make sure this is expected.
+[2025-09-30 16:59:54,938][src.utils.utils][WARNING] - [rank: 0] Config eval was not found in the config tree. Make sure this is expected.
+[2025-09-30 16:59:57,938][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-09-30 16:59:57,944][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2025-09-30 16:59:57,974][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2025-09-30 16:59:58,203][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] i am here
+[2025-09-30 16:59:58,451][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-09-30 16:59:58,452][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.inference_utils.LocalPickleWriter>
+[2025-09-30 16:59:58,847][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-09-30 16:59:58,848][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-09-30 16:59:58,850][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-09-30 16:59:58,930][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-09-30 16:59:59,271][__main__][INFO] - [rank: 0] Starting inference!
+[2025-09-30 17:00:14,566][src.utils.inference_utils][INFO] - Rank 1 initialized for inference.
+[2025-09-30 17:00:14,568][src.utils.inference_utils][INFO] - Rank 0 initialized for inference.
+[2025-09-30 17:00:42,349][src.utils.inference_utils][INFO] - Global Rank: 0 wrote 9684 rows to /data/mhwang/Rec/GRID/logs/inference/runs/2025-09-30/16-59-54/pickle/predictions_0_20250930T090042296.pkl.
+[2025-09-30 17:00:42,363][src.utils.inference_utils][INFO] - Rank 0 finished writing predictions.
+[2025-09-30 17:00:44,328][src.utils.inference_utils][INFO] - Global Rank: 1 wrote 9728 rows to /data/mhwang/Rec/GRID/logs/inference/runs/2025-09-30/16-59-54/pickle/predictions_1_20250930T090044272.pkl.
+[2025-09-30 17:00:44,342][src.utils.inference_utils][INFO] - Rank 1 finished writing predictions.
+[2025-09-30 17:00:44,344][src.utils.inference_utils][INFO] - Merging pickle files on main process.
+[2025-09-30 17:00:44,605][src.utils.inference_utils][INFO] - Merged 19412 rows into merged_predictions.pkl.
+[2025-09-30 17:00:45,110][src.utils.inference_utils][INFO] - Merged 19412 rows into merged_predictions_tensor.pt. as pytorch tensor

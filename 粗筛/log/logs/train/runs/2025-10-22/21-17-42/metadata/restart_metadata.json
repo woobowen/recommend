@@ -1,0 +1,25 @@
+{
+  "start_time": "2025-10-22T21:17:42.737567",
+  "restarts": [
+    {
+      "time": "2025-10-22T21:17:58.005724",
+      "exception": "Expected to have finished reduction in the prior iteration before starting a new one. This error indicates that your module has parameters that were not used in producing loss. You can enable unused parameter detection by passing the keyword argument `find_unused_parameters=True` to `torch.nn.parallel.DistributedDataParallel`, and by \nmaking sure all `forward` function outputs participate in calculating loss. \nIf you already have done the above, then the distributed data parallel module wasn't able to locate the output tensors in the return value of your module's `forward` function. Please include the loss function and the structure of the return value of `forward` of your module when reporting this issue (e.g. list, dict, iterable).\nParameter indices which did not receive grad for rank 0: 0\n In addition, you can set the environment variable TORCH_DISTRIBUTED_DEBUG to either INFO or DETAIL to print out information about which particular parameters did not receive gradient on this rank as part of this error",
+      "run_number": 0
+    }
+  ],
+  "current_run": 1,
+  "used_ports": [
+    "51827"
+  ],
+  "world_size": 3,
+  "node_rank": 0,
+  "master_addr": "127.0.0.1",
+  "original_args": [
+    "/data/mhwang/Rec/GRID/src/train.py",
+    "experiment=tiger_train_flat",
+    "data_dir=/data/mhwang/Rec/GRID/amazon_data/toys",
+    "semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt",
+    "num_hierarchies=4",
+    "++should_skip_retry=True"
+  ]
+}

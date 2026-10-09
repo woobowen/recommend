@@ -1,0 +1,56 @@
+[2025-10-22 21:02:38,092][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-10-22 21:02:38,097][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-10-22 21:02:38,098][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2025-10-22 21:02:38,120][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2025-10-22 21:02:38,176][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2025-10-22 21:02:38,329][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] i am here
+[2025-10-22 21:02:38,595][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-10-22 21:02:38,596][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2025-10-22 21:02:38,598][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>
+[2025-10-22 21:02:38,600][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2025-10-22 21:02:38,601][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.restart_job.RestartAndLoadCheckpointCallback>
+[2025-10-22 21:02:38,603][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-10-22/21-02-37/metadata/restart_metadata.json
+[2025-10-22 21:02:38,603][src.utils.restart_job_utils][WARNING] - [rank: 0] Metadata file not found at /data/mhwang/Rec/GRID/logs/train/runs/2025-10-22/21-02-37/metadata/restart_metadata.json. Creating empty metadata.
+[2025-10-22 21:02:38,603][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-10-22/21-02-37/metadata/restart_metadata.json. {'start_time': '2025-10-22T21:02:38.603363', 'restarts': [], 'current_run': 0, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt', 'ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt', 'num_hierarchies=4', '++should_skip_retry=True']}
+[2025-10-22 21:02:38,603][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-10-22 21:02:38,604][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-10-22 21:02:38,605][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-10-22 21:02:38,606][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-10-22/21-02-37/metadata/restart_metadata.json
+[2025-10-22 21:02:38,607][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /data/mhwang/Rec/GRID/logs/train/runs/2025-10-22/21-02-37/metadata/restart_metadata.json
+[2025-10-22 21:02:38,607][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-10-22/21-02-37/metadata/restart_metadata.json
+[2025-10-22 21:02:38,709][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-10-22 21:02:38,892][__main__][INFO] - [rank: 0] Starting training!
+[2025-10-22 21:02:53,686][src.utils.restart_job][ERROR] - [rank: 0] Exception caught: Error(s) in loading state_dict for SemanticIDEncoderDecoder:
+	Missing key(s) in state_dict: "item_aggregator.0.weight", "item_aggregator.0.bias", "item_aggregator.2.weight", "item_aggregator.2.bias". 
+[2025-10-22 21:02:53,690][src.utils.restart_job][ERROR] - [rank: 0] Stack trace: Traceback (most recent call last):
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+    return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 575, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 951, in _run
+    self._checkpoint_connector._restore_modules_and_callbacks(ckpt_path)
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/connectors/checkpoint_connector.py", line 398, in _restore_modules_and_callbacks
+    self.restore_model()
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/connectors/checkpoint_connector.py", line 275, in restore_model
+    self.trainer.strategy.load_model_state_dict(
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/strategies/strategy.py", line 372, in load_model_state_dict
+    self.lightning_module.load_state_dict(checkpoint["state_dict"], strict=strict)
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/torch/nn/modules/module.py", line 2581, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for SemanticIDEncoderDecoder:
+	Missing key(s) in state_dict: "item_aggregator.0.weight", "item_aggregator.0.bias", "item_aggregator.2.weight", "item_aggregator.2.bias". 
+
+[2025-10-22 21:02:53,691][src.utils.restart_job][INFO] - [rank: 0] Cleaning up and handling restart logic
+[2025-10-22 21:02:53,691][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-10-22/21-02-37/metadata/restart_metadata.json
+[2025-10-22 21:02:53,692][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /data/mhwang/Rec/GRID/logs/train/runs/2025-10-22/21-02-37/metadata/restart_metadata.json
+[2025-10-22 21:02:53,692][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-10-22/21-02-37/metadata/restart_metadata.json
+[2025-10-22 21:02:53,693][src.utils.restart_job][INFO] - [rank: 0] Restarting job. Current metadata: JobCheckpointMetadata(start_time='2025-10-22T21:02:38.603363', restarts=[{'time': '2025-10-22T21:02:53.693019', 'exception': 'Error(s) in loading state_dict for SemanticIDEncoderDecoder:\n\tMissing key(s) in state_dict: "item_aggregator.0.weight", "item_aggregator.0.bias", "item_aggregator.2.weight", "item_aggregator.2.bias". ', 'run_number': 0}], current_run=1, used_ports=[], world_size=0, node_rank=0, master_addr='', original_args=['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt', 'ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt', 'num_hierarchies=4', '++should_skip_retry=True'])
+[2025-10-22 21:02:53,693][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-10-22/21-02-37/metadata/restart_metadata.json. {'start_time': '2025-10-22T21:02:38.603363', 'restarts': [{'time': '2025-10-22T21:02:53.693019', 'exception': 'Error(s) in loading state_dict for SemanticIDEncoderDecoder:\n\tMissing key(s) in state_dict: "item_aggregator.0.weight", "item_aggregator.0.bias", "item_aggregator.2.weight", "item_aggregator.2.bias". ', 'run_number': 0}], 'current_run': 1, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt', 'ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt', 'num_hierarchies=4', '++should_skip_retry=True']}
+[2025-10-22 21:02:53,694][src.utils.restart_job_utils][INFO] - [rank: 0] Cleaning up distributed process group
+[2025-10-22 21:02:53,946][src.utils.restart_job_utils][INFO] - [rank: 0] Clearing CUDA cache
+[2025-10-22 21:02:53,946][src.utils.restart_job_utils][INFO] - [rank: 0] Tearing down trainer
+[2025-10-22 21:02:53,965][src.utils.restart_job][INFO] - [rank: 0] Resources cleaned up.

@@ -1,0 +1,504 @@
+2025-11-12 22:49:43.715968: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+[[36m2025-11-12 22:49:49,880[0m][[34msrc.utils.utils[0m][[32mINFO[0m] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>[0m
+[[36m2025-11-12 22:49:49,889[0m][[34msrc.utils.utils[0m][[33mWARNING[0m] - [rank: 0] Config loss was not found in the config tree. Make sure this is expected.[0m
+[[36m2025-11-12 22:49:49,890[0m][[34msrc.utils.utils[0m][[33mWARNING[0m] - [rank: 0] Config optim was not found in the config tree. Make sure this is expected.[0m
+[[36m2025-11-12 22:49:49,890[0m][[34msrc.utils.utils[0m][[33mWARNING[0m] - [rank: 0] Config eval was not found in the config tree. Make sure this is expected.[0m
+[[36m2025-11-12 22:49:52,891[0m][[34msrc.utils.utils[0m][[32mINFO[0m] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>[0m
+Seed set to 42
+[[36m2025-11-12 22:49:52,895[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>[0m
+[[36m2025-11-12 22:49:52,987[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>[0m
+[[36m2025-11-12 22:49:53,226[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] i am here[0m
+[[36m2025-11-12 22:49:53,581[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating callbacks...[0m
+[[36m2025-11-12 22:49:53,582[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <src.utils.inference_utils.LocalPickleWriter>[0m
+[[36m2025-11-12 22:49:53,819[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating loggers...[0m
+[[36m2025-11-12 22:49:53,820[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>[0m
+[[36m2025-11-12 22:49:53,824[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>[0m
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+[[36m2025-11-12 22:49:53,944[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Logging hyperparameters![0m
+[[36m2025-11-12 22:49:54,180[0m][[34m__main__[0m][[32mINFO[0m] - [rank: 0] Starting inference![0m
+You are using a CUDA device ('NVIDIA A800 80GB PCIe') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/4
+[rank: 2] Seed set to 42
+[rank: 1] Seed set to 42
+[rank: 3] Seed set to 42
+Initializing distributed: GLOBAL_RANK: 2, MEMBER: 3/4
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/4
+Initializing distributed: GLOBAL_RANK: 3, MEMBER: 4/4
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 4 processes
+----------------------------------------------------------------------------------------------------
+
+[[36m2025-11-12 22:50:15,452[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Rank 1 initialized for inference.[0m
+[[36m2025-11-12 22:50:15,452[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Rank 2 initialized for inference.[0m
+[[36m2025-11-12 22:50:15,452[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Rank 3 initialized for inference.[0m
+[[36m2025-11-12 22:50:15,453[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Rank 0 initialized for inference.[0m
+Restoring states from the checkpoint path at /data/mhwang/Rec/GRID/logs/train/runs/2025-11-12/02-21-10/checkpoints/checkpoint_epoch_000_step_005800.ckpt
+/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/call.py:277: Be aware that when using `ckpt_path`, callbacks used to create the checkpoint need to be provided during `Trainer` instantiation. Please add the following callbacks: ["ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}", "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}"].
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+Loaded model weights from the checkpoint at /data/mhwang/Rec/GRID/logs/train/runs/2025-11-12/02-21-10/checkpoints/checkpoint_epoch_000_step_005800.ckpt
+2025-11-12 22:50:22.242258: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:22.275096: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:22.279132: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:22.295769: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:22.298846: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:22.316315: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:22.320903: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:22.377695: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+
+Testing: |          | 0/? [00:00<?, ?it/s][[36m2025-11-12 22:50:22,638[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 开始统计训练集中的item流行度...[0m
+[[36m2025-11-12 22:50:22,640[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 训练集dataloader类型: <class 'tuple'>[0m
+[[36m2025-11-12 22:50:22,641[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 实际dataloader类型: <class 'src.data.loading.components.custom_dataloader.DataloaderWithIterationRetry'>[0m
+2025-11-12 22:50:23.238332: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:23.273822: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:23.281793: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:23.299730: I tensorflow/core/kernels/data/tf_record_dataset_op.cc:370] TFRecordDataset `buffer_size` is unspecified, default to 262144
+2025-11-12 22:50:28.408003: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:50:28.416061: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:50:28.827346: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:50:29.079753: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+[[36m2025-11-12 22:50:32,391[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已处理 1000 个batch，累计统计 44281 个item交互[0m
+2025-11-12 22:50:33.606696: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:50:33.610490: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:50:34.444238: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:50:34.833246: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+[[36m2025-11-12 22:50:41,414[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已处理 2000 个batch，累计统计 88199 个item交互[0m
+2025-11-12 22:50:44.800637: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:50:44.859801: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:50:50.589186: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:51:01.232188: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+[[36m2025-11-12 22:51:05,283[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已处理 3000 个batch，累计统计 132060 个item交互[0m
+[[36m2025-11-12 22:51:18,821[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已处理 4000 个batch，累计统计 176046 个item交互[0m
+2025-11-12 22:51:25.616167: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:51:25.628521: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:51:28.359317: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+[[36m2025-11-12 22:51:29,004[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已处理 5000 个batch，累计统计 219911 个item交互[0m
+2025-11-12 22:51:29.947376: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+[[36m2025-11-12 22:51:44,119[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已处理 6000 个batch，累计统计 263954 个item交互[0m
+[[36m2025-11-12 22:51:53,647[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已处理 7000 个batch，累计统计 307847 个item交互[0m
+[[36m2025-11-12 22:52:07,375[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已处理 8000 个batch，累计统计 351553 个item交互[0m
+[[36m2025-11-12 22:52:41,424[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已处理 9000 个batch，累计统计 395610 个item交互[0m
+2025-11-12 22:52:43.254277: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:52:43.261006: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2025-11-12 22:52:54.487340: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+[[36m2025-11-12 22:52:55,613[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已处理 10000 个batch，累计统计 439703 个item交互[0m
+[[36m2025-11-12 22:52:55,621[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已达到最大batch限制(10000)，停止统计[0m
+[[36m2025-11-12 22:52:55,754[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 训练集统计完成：共 9168 个唯一item，总交互次数 439703[0m
+[[36m2025-11-12 22:52:55,768[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 流行度分组完成:[0m
+[[36m2025-11-12 22:52:55,769[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0]   Head组 (前20%): 1833 个item[0m
+[[36m2025-11-12 22:52:55,769[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0]   Body组 (20%-50%): 2751 个item[0m
+[[36m2025-11-12 22:52:55,769[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0]   Tail组 (后50%): 4584 个item[0m
+[[36m2025-11-12 22:52:55,769[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0]   Head组示例: item (37, 238, 250, 154, 134, 189, 68, 117, 99, 0) 出现 855 次[0m
+[[36m2025-11-12 22:52:55,769[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0]   Tail组示例: item (79, 121, 247, 235, 108, 151, 152, 236, 231, 0) 出现 15 次[0m
+[[36m2025-11-12 22:52:55,770[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 已启用按流行度分组的评测（Head/Body/Tail）。[0m
+
+Testing: |          | 0/? [00:00<?, ?it/s]
+Testing DataLoader 0: |          | 0/? [00:00<?, ?it/s]
+Testing DataLoader 0: |          | 1/? [00:01<00:00,  0.75it/s]
+Testing DataLoader 0: |          | 2/? [00:01<00:00,  1.11it/s]
+Testing DataLoader 0: |          | 3/? [00:02<00:00,  1.37it/s]
+Testing DataLoader 0: |          | 4/? [00:02<00:00,  1.59it/s]
+Testing DataLoader 0: |          | 5/? [00:02<00:00,  1.82it/s]
+Testing DataLoader 0: |          | 6/? [00:03<00:00,  1.98it/s]
+Testing DataLoader 0: |          | 7/? [00:03<00:00,  2.12it/s]
+Testing DataLoader 0: |          | 8/? [00:03<00:00,  2.23it/s]
+Testing DataLoader 0: |          | 9/? [00:03<00:00,  2.33it/s]
+Testing DataLoader 0: |          | 10/? [00:04<00:00,  2.40it/s]
+Testing DataLoader 0: |          | 11/? [00:04<00:00,  2.48it/s]
+Testing DataLoader 0: |          | 12/? [00:04<00:00,  2.54it/s]
+Testing DataLoader 0: |          | 13/? [00:05<00:00,  2.60it/s]
+Testing DataLoader 0: |          | 14/? [00:05<00:00,  2.64it/s]
+Testing DataLoader 0: |          | 15/? [00:05<00:00,  2.66it/s]
+Testing DataLoader 0: |          | 16/? [00:05<00:00,  2.70it/s]
+Testing DataLoader 0: |          | 17/? [00:06<00:00,  2.73it/s]
+Testing DataLoader 0: |          | 18/? [00:06<00:00,  2.77it/s]
+Testing DataLoader 0: |          | 19/? [00:06<00:00,  2.79it/s]
+Testing DataLoader 0: |          | 20/? [00:07<00:00,  2.82it/s]
+Testing DataLoader 0: |          | 21/? [00:07<00:00,  2.76it/s]
+Testing DataLoader 0: |          | 22/? [00:08<00:00,  2.72it/s]
+Testing DataLoader 0: |          | 23/? [00:08<00:00,  2.71it/s]
+Testing DataLoader 0: |          | 24/? [00:08<00:00,  2.74it/s]
+Testing DataLoader 0: |          | 25/? [00:08<00:00,  2.78it/s]
+Testing DataLoader 0: |          | 26/? [00:09<00:00,  2.81it/s]
+Testing DataLoader 0: |          | 27/? [00:09<00:00,  2.83it/s]
+Testing DataLoader 0: |          | 28/? [00:09<00:00,  2.85it/s]
+Testing DataLoader 0: |          | 29/? [00:10<00:00,  2.86it/s]
+Testing DataLoader 0: |          | 30/? [00:10<00:00,  2.88it/s]
+Testing DataLoader 0: |          | 31/? [00:10<00:00,  2.91it/s]
+Testing DataLoader 0: |          | 32/? [00:10<00:00,  2.92it/s]
+Testing DataLoader 0: |          | 33/? [00:11<00:00,  2.93it/s]
+Testing DataLoader 0: |          | 34/? [00:11<00:00,  2.94it/s]
+Testing DataLoader 0: |          | 35/? [00:11<00:00,  2.95it/s]
+Testing DataLoader 0: |          | 36/? [00:12<00:00,  2.96it/s]
+Testing DataLoader 0: |          | 37/? [00:12<00:00,  2.96it/s]
+Testing DataLoader 0: |          | 38/? [00:12<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 39/? [00:13<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 40/? [00:13<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 41/? [00:13<00:00,  2.96it/s]
+Testing DataLoader 0: |          | 42/? [00:14<00:00,  2.93it/s]
+Testing DataLoader 0: |          | 43/? [00:14<00:00,  2.92it/s]
+Testing DataLoader 0: |          | 44/? [00:14<00:00,  2.94it/s]
+Testing DataLoader 0: |          | 45/? [00:15<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 46/? [00:15<00:00,  2.98it/s]
+Testing DataLoader 0: |          | 47/? [00:15<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 48/? [00:16<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 49/? [00:16<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 50/? [00:16<00:00,  3.01it/s]
+Testing DataLoader 0: |          | 51/? [00:16<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 52/? [00:17<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 53/? [00:17<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 54/? [00:17<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 55/? [00:18<00:00,  3.05it/s]
+Testing DataLoader 0: |          | 56/? [00:18<00:00,  3.06it/s]
+Testing DataLoader 0: |          | 57/? [00:18<00:00,  3.06it/s]
+Testing DataLoader 0: |          | 58/? [00:18<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 59/? [00:19<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 60/? [00:19<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 61/? [00:19<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 62/? [00:20<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 63/? [00:21<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 64/? [00:21<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 65/? [00:21<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 66/? [00:22<00:00,  2.98it/s]
+Testing DataLoader 0: |          | 67/? [00:22<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 68/? [00:22<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 69/? [00:23<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 70/? [00:23<00:00,  3.01it/s]
+Testing DataLoader 0: |          | 71/? [00:23<00:00,  3.01it/s]
+Testing DataLoader 0: |          | 72/? [00:23<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 73/? [00:24<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 74/? [00:24<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 75/? [00:24<00:00,  3.01it/s]
+Testing DataLoader 0: |          | 76/? [00:25<00:00,  3.01it/s]
+Testing DataLoader 0: |          | 77/? [00:25<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 78/? [00:25<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 79/? [00:26<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 80/? [00:26<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 81/? [00:26<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 82/? [00:26<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 83/? [00:27<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 84/? [00:27<00:00,  3.05it/s]
+Testing DataLoader 0: |          | 85/? [00:27<00:00,  3.05it/s]
+Testing DataLoader 0: |          | 86/? [00:28<00:00,  3.06it/s]
+Testing DataLoader 0: |          | 87/? [00:28<00:00,  3.06it/s]
+Testing DataLoader 0: |          | 88/? [00:28<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 89/? [00:28<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 90/? [00:29<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 91/? [00:29<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 92/? [00:29<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 93/? [00:30<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 94/? [00:30<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 95/? [00:30<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 96/? [00:31<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 97/? [00:31<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 98/? [00:31<00:00,  3.06it/s]
+Testing DataLoader 0: |          | 99/? [00:32<00:00,  3.06it/s]
+Testing DataLoader 0: |          | 100/? [00:32<00:00,  3.06it/s]
+Testing DataLoader 0: |          | 101/? [00:32<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 102/? [00:33<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 103/? [00:33<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 104/? [00:33<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 105/? [00:34<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 106/? [00:34<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 107/? [00:34<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 108/? [00:34<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 109/? [00:35<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 110/? [00:35<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 111/? [00:35<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 112/? [00:36<00:00,  3.11it/s]
+Testing DataLoader 0: |          | 113/? [00:36<00:00,  3.11it/s]
+Testing DataLoader 0: |          | 114/? [00:36<00:00,  3.11it/s]
+Testing DataLoader 0: |          | 115/? [00:36<00:00,  3.11it/s]
+Testing DataLoader 0: |          | 116/? [00:37<00:00,  3.12it/s]
+Testing DataLoader 0: |          | 117/? [00:37<00:00,  3.12it/s]
+Testing DataLoader 0: |          | 118/? [00:37<00:00,  3.12it/s]
+Testing DataLoader 0: |          | 119/? [00:38<00:00,  3.11it/s]
+Testing DataLoader 0: |          | 120/? [00:38<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 121/? [00:39<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 122/? [00:39<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 123/? [00:39<00:00,  3.11it/s]
+Testing DataLoader 0: |          | 124/? [00:39<00:00,  3.11it/s]
+Testing DataLoader 0: |          | 125/? [00:40<00:00,  3.11it/s]
+Testing DataLoader 0: |          | 126/? [00:40<00:00,  3.11it/s]
+Testing DataLoader 0: |          | 127/? [00:40<00:00,  3.12it/s]
+Testing DataLoader 0: |          | 128/? [00:41<00:00,  3.12it/s]
+Testing DataLoader 0: |          | 129/? [00:41<00:00,  3.12it/s]
+Testing DataLoader 0: |          | 130/? [00:41<00:00,  3.12it/s]
+Testing DataLoader 0: |          | 131/? [00:41<00:00,  3.13it/s]
+Testing DataLoader 0: |          | 132/? [00:42<00:00,  3.13it/s]
+Testing DataLoader 0: |          | 133/? [00:42<00:00,  3.13it/s]
+Testing DataLoader 0: |          | 134/? [00:42<00:00,  3.13it/s]
+Testing DataLoader 0: |          | 135/? [00:43<00:00,  3.13it/s]
+Testing DataLoader 0: |          | 136/? [00:43<00:00,  3.13it/s]
+Testing DataLoader 0: |          | 137/? [00:43<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 138/? [00:43<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 139/? [00:44<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 140/? [00:44<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 141/? [00:44<00:00,  3.13it/s]
+Testing DataLoader 0: |          | 142/? [00:45<00:00,  3.13it/s]
+Testing DataLoader 0: |          | 143/? [00:45<00:00,  3.12it/s]
+Testing DataLoader 0: |          | 144/? [00:46<00:00,  3.13it/s]
+Testing DataLoader 0: |          | 145/? [00:46<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 146/? [00:46<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 147/? [00:46<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 148/? [00:47<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 149/? [00:47<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 150/? [00:47<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 151/? [00:47<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 152/? [00:48<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 153/? [00:48<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 154/? [00:48<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 155/? [00:49<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 156/? [00:49<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 157/? [00:49<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 158/? [00:49<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 159/? [00:50<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 160/? [00:50<00:00,  3.17it/s]
+Testing DataLoader 0: |          | 161/? [00:50<00:00,  3.17it/s]
+Testing DataLoader 0: |          | 162/? [00:51<00:00,  3.17it/s]
+Testing DataLoader 0: |          | 163/? [00:51<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 164/? [00:51<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 165/? [00:52<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 166/? [00:52<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 167/? [00:52<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 168/? [00:53<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 169/? [00:53<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 170/? [00:53<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 171/? [00:54<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 172/? [00:54<00:00,  3.17it/s]
+Testing DataLoader 0: |          | 173/? [00:54<00:00,  3.17it/s]
+Testing DataLoader 0: |          | 174/? [00:54<00:00,  3.17it/s]
+Testing DataLoader 0: |          | 175/? [00:55<00:00,  3.17it/s]
+Testing DataLoader 0: |          | 176/? [00:55<00:00,  3.17it/s]
+Testing DataLoader 0: |          | 177/? [00:55<00:00,  3.17it/s]
+Testing DataLoader 0: |          | 178/? [00:56<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 179/? [00:56<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 180/? [00:57<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 181/? [00:57<00:00,  3.16it/s]
+Testing DataLoader 0: |          | 182/? [00:57<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 183/? [00:58<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 184/? [00:58<00:00,  3.15it/s]
+Testing DataLoader 0: |          | 185/? [00:58<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 186/? [00:59<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 187/? [00:59<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 188/? [00:59<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 189/? [01:00<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 190/? [01:00<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 191/? [01:00<00:00,  3.14it/s]
+Testing DataLoader 0: |          | 192/? [01:01<00:00,  3.12it/s]
+Testing DataLoader 0: |          | 193/? [01:01<00:00,  3.12it/s]
+Testing DataLoader 0: |          | 194/? [01:02<00:00,  3.11it/s]
+Testing DataLoader 0: |          | 195/? [01:02<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 196/? [01:03<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 197/? [01:03<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 198/? [01:03<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 199/? [01:04<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 200/? [01:04<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 201/? [01:04<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 202/? [01:05<00:00,  3.10it/s]
+Testing DataLoader 0: |          | 203/? [01:05<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 204/? [01:05<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 205/? [01:06<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 206/? [01:06<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 207/? [01:07<00:00,  3.09it/s]
+Testing DataLoader 0: |          | 208/? [01:07<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 209/? [01:07<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 210/? [01:08<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 211/? [01:08<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 212/? [01:08<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 213/? [01:09<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 214/? [01:09<00:00,  3.08it/s]
+Testing DataLoader 0: |          | 215/? [01:09<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 216/? [01:10<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 217/? [01:10<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 218/? [01:10<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 219/? [01:11<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 220/? [01:11<00:00,  3.07it/s]
+Testing DataLoader 0: |          | 221/? [01:12<00:00,  3.06it/s]
+Testing DataLoader 0: |          | 222/? [01:12<00:00,  3.05it/s]
+Testing DataLoader 0: |          | 223/? [01:13<00:00,  3.05it/s]
+Testing DataLoader 0: |          | 224/? [01:13<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 225/? [01:13<00:00,  3.05it/s]
+Testing DataLoader 0: |          | 226/? [01:14<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 227/? [01:14<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 228/? [01:14<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 229/? [01:15<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 230/? [01:15<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 231/? [01:16<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 232/? [01:16<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 233/? [01:16<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 234/? [01:17<00:00,  3.04it/s]
+Testing DataLoader 0: |          | 235/? [01:17<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 236/? [01:17<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 237/? [01:18<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 238/? [01:18<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 239/? [01:18<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 240/? [01:19<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 241/? [01:19<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 242/? [01:19<00:00,  3.03it/s]
+Testing DataLoader 0: |          | 243/? [01:20<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 244/? [01:20<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 245/? [01:21<00:00,  3.02it/s]2025-11-12 22:54:16.823572: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+Testing DataLoader 0: |          | 246/? [01:21<00:00,  3.02it/s]2025-11-12 22:54:17.200710: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+Testing DataLoader 0: |          | 247/? [01:21<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 248/? [01:22<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 249/? [01:22<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 250/? [01:22<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 251/? [01:23<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 252/? [01:23<00:00,  3.02it/s]
+Testing DataLoader 0: |          | 253/? [01:23<00:00,  3.01it/s]
+Testing DataLoader 0: |          | 254/? [01:24<00:00,  3.01it/s]
+Testing DataLoader 0: |          | 255/? [01:24<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 256/? [01:25<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 257/? [01:25<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 258/? [01:26<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 259/? [01:26<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 260/? [01:26<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 261/? [01:27<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 262/? [01:27<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 263/? [01:27<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 264/? [01:28<00:00,  3.00it/s]
+Testing DataLoader 0: |          | 265/? [01:28<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 266/? [01:28<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 267/? [01:29<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 268/? [01:29<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 269/? [01:29<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 270/? [01:30<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 271/? [01:30<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 272/? [01:30<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 273/? [01:31<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 274/? [01:31<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 275/? [01:32<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 276/? [01:32<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 277/? [01:32<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 278/? [01:33<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 279/? [01:33<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 280/? [01:33<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 281/? [01:34<00:00,  2.99it/s]
+Testing DataLoader 0: |          | 282/? [01:34<00:00,  2.98it/s]
+Testing DataLoader 0: |          | 283/? [01:35<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 284/? [01:35<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 285/? [01:35<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 286/? [01:36<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 287/? [01:36<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 288/? [01:36<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 289/? [01:37<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 290/? [01:37<00:00,  2.97it/s]2025-11-12 22:54:33.398328: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+Testing DataLoader 0: |          | 291/? [01:37<00:00,  2.97it/s]2025-11-12 22:54:33.734660: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+Testing DataLoader 0: |          | 292/? [01:38<00:00,  2.97it/s]2025-11-12 22:54:34.083878: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+Testing DataLoader 0: |          | 293/? [01:38<00:00,  2.97it/s]2025-11-12 22:54:34.422996: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+Testing DataLoader 0: |          | 294/? [01:38<00:00,  2.97it/s]2025-11-12 22:54:34.766413: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+Testing DataLoader 0: |          | 295/? [01:39<00:00,  2.97it/s]2025-11-12 22:54:35.127576: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+Testing DataLoader 0: |          | 296/? [01:39<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 297/? [01:40<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 298/? [01:40<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 299/? [01:40<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 300/? [01:41<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 301/? [01:41<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 302/? [01:41<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 303/? [01:42<00:00,  2.97it/s]
+Testing DataLoader 0: |          | 304/? [01:42<00:00,  2.96it/s]
+Testing DataLoader 0: |          | 304/? [06:18<00:00,  0.80it/s]
+[[36m2025-11-12 22:59:14,546[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 
+================================================================================[0m
+[[36m2025-11-12 22:59:14,547[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] === 生成的语义ID Embedding相似度矩阵 (平均自 304 个batch) ===[0m
+[[36m2025-11-12 22:59:14,554[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 
+[[ 1.0000000e+00  2.9761272e-02  1.5491448e-02  1.1778706e-02
+   1.2255474e-02  4.6274792e-03  2.2922608e-03  5.4841326e-03
+   8.8174399e-03  4.9439785e-03]
+ [ 2.9761272e-02  1.0000000e+00  1.1899464e-02  2.3055974e-02
+   6.3174171e-03 -6.3569553e-04  3.1042481e-03  1.1396581e-02
+  -6.7137729e-04 -5.4580709e-03]
+ [ 1.5491448e-02  1.1899464e-02  1.0000000e+00  1.2184186e-02
+   1.3474433e-02  9.4146309e-03  1.7930373e-03  1.1035689e-02
+  -1.2214698e-03 -2.2780099e-03]
+ [ 1.1778706e-02  2.3055974e-02  1.2184186e-02  1.0000000e+00
+   8.6539192e-03  3.8204065e-03 -1.0496117e-04  7.6997333e-04
+  -8.5954415e-03 -1.4418119e-02]
+ [ 1.2255474e-02  6.3174171e-03  1.3474433e-02  8.6539192e-03
+   1.0000000e+00  1.9269601e-02  1.0589212e-02  1.3839426e-02
+  -6.7611965e-03 -8.3763553e-03]
+ [ 4.6274792e-03 -6.3569553e-04  9.4146309e-03  3.8204065e-03
+   1.9269601e-02  1.0000000e+00 -9.9907175e-04  1.0171597e-02
+  -2.9134862e-03 -6.5142306e-04]
+ [ 2.2922608e-03  3.1042481e-03  1.7930373e-03 -1.0496117e-04
+   1.0589212e-02 -9.9907175e-04  1.0000000e+00  9.4888769e-03
+  -6.6822558e-03 -7.7646365e-03]
+ [ 5.4841326e-03  1.1396581e-02  1.1035689e-02  7.6997333e-04
+   1.3839426e-02  1.0171597e-02  9.4888769e-03  1.0000000e+00
+  -9.9809160e-03 -6.3560102e-03]
+ [ 8.8174399e-03 -6.7137729e-04 -1.2214698e-03 -8.5954415e-03
+  -6.7611965e-03 -2.9134862e-03 -6.6822558e-03 -9.9809160e-03
+   1.0000000e+00  7.0596561e-02]
+ [ 4.9439785e-03 -5.4580709e-03 -2.2780099e-03 -1.4418119e-02
+  -8.3763553e-03 -6.5142306e-04 -7.7646365e-03 -6.3560102e-03
+   7.0596561e-02  1.0000001e+00]][0m
+[[36m2025-11-12 22:59:14,554[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] ================================================================================
+[0m
+[[36m2025-11-12 22:59:14,555[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 
+================================================================================[0m
+[[36m2025-11-12 22:59:14,555[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] === 输入序列中每个Item的Hierarchy Embedding相似度矩阵 (平均自 304 个batch) ===[0m
+[[36m2025-11-12 22:59:14,557[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 
+[[ 1.00000000e+00  1.60753597e-02  1.49760321e-02  1.10602891e-02
+   9.17508639e-03  7.13002356e-03  1.19836407e-03  4.54863347e-03
+   7.37709488e-05 -2.30065221e-03]
+ [ 1.60753597e-02  1.00000000e+00  1.05458451e-02  1.17077455e-02
+   7.64503935e-03  8.19929317e-03  5.54173533e-03  6.14112150e-03
+  -8.70101899e-03 -4.54787211e-03]
+ [ 1.49760321e-02  1.05458451e-02  1.00000000e+00  1.06516788e-02
+   1.01573281e-02  7.22667668e-03  6.27564592e-03  8.19002092e-03
+  -6.01253286e-03 -5.52892778e-03]
+ [ 1.10602891e-02  1.17077455e-02  1.06516788e-02  1.00000000e+00
+   8.01946875e-03  6.81730779e-03  6.40811585e-03  8.50306544e-03
+  -9.83694103e-03 -1.33396108e-02]
+ [ 9.17508639e-03  7.64503935e-03  1.01573281e-02  8.01946875e-03
+   1.00000000e+00  1.06909042e-02  7.98060186e-03  8.08061287e-03
+  -6.63095945e-03 -1.01079978e-02]
+ [ 7.13002356e-03  8.19929317e-03  7.22667668e-03  6.81730779e-03
+   1.06909042e-02  1.00000000e+00  4.44583222e-03  7.85321463e-03
+  -8.28785542e-03 -1.11549231e-03]
+ [ 1.19836407e-03  5.54173533e-03  6.27564592e-03  6.40811585e-03
+   7.98060186e-03  4.44583222e-03  1.00000000e+00  7.19920918e-03
+  -1.04308501e-02 -1.11408606e-02]
+ [ 4.54863347e-03  6.14112150e-03  8.19002092e-03  8.50306544e-03
+   8.08061287e-03  7.85321463e-03  7.19920918e-03  1.00000000e+00
+  -1.21214604e-02 -3.83159681e-03]
+ [ 7.37709488e-05 -8.70101899e-03 -6.01253286e-03 -9.83694103e-03
+  -6.63095945e-03 -8.28785542e-03 -1.04308501e-02 -1.21214604e-02
+   1.00000000e+00  6.64344579e-02]
+ [-2.30065221e-03 -4.54787211e-03 -5.52892778e-03 -1.33396108e-02
+  -1.01079978e-02 -1.11549231e-03 -1.11408606e-02 -3.83159681e-03
+   6.64344579e-02  1.00000000e+00]][0m
+[[36m2025-11-12 22:59:14,557[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] ================================================================================
+[0m
+[[36m2025-11-12 22:59:14,749[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] 
+================================================================================[0m
+[[36m2025-11-12 22:59:14,750[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] === 按流行度分组的评测指标（累计到当前阶段）===[0m
+[[36m2025-11-12 22:59:14,750[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] [Head] ndcg@5: 0.032421  ndcg@10: 0.041394  recall@5: 0.049131  recall@10: 0.076872[0m
+[[36m2025-11-12 22:59:14,750[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] [Body] ndcg@5: 0.016126  ndcg@10: 0.021969  recall@5: 0.024274  recall@10: 0.042599[0m
+[[36m2025-11-12 22:59:14,750[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] [Tail] ndcg@5: 0.034660  ndcg@10: 0.043083  recall@5: 0.052823  recall@10: 0.078962[0m
+[[36m2025-11-12 22:59:14,750[0m][[34msrc.models.modules.semantic_id.tiger_generation_model[0m][[32mINFO[0m] - [rank: 0] ================================================================================
+[0m
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│         test/loss         │            0.0            │
+│       test/ndcg@10        │    0.03169194981455803    │
+│        test/ndcg@5        │    0.02480251155793667    │
+│      test/recall@10       │    0.0594477653503418     │
+│       test/recall@5       │   0.038069237023591995    │
+└───────────────────────────┴───────────────────────────┘

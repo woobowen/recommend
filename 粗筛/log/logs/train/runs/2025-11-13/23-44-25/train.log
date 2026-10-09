@@ -1,0 +1,187 @@
+[2025-11-13 23:44:25,492][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-11-13 23:44:25,506][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-11-13 23:44:25,507][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2025-11-13 23:44:25,512][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2025-11-13 23:44:25,607][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2025-11-13 23:44:25,927][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] i am here
+[2025-11-13 23:44:26,328][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-11-13 23:44:26,328][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2025-11-13 23:44:26,333][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>
+[2025-11-13 23:44:26,337][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2025-11-13 23:44:26,338][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.restart_job.RestartAndLoadCheckpointCallback>
+[2025-11-13 23:44:26,342][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json
+[2025-11-13 23:44:26,342][src.utils.restart_job_utils][WARNING] - [rank: 0] Metadata file not found at /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json. Creating empty metadata.
+[2025-11-13 23:44:26,342][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json. {'start_time': '2025-11-13T23:44:26.342825', 'restarts': [], 'current_run': 0, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/beauty', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-11-13/23-39-19/pickle/merged_predictions_tensor.pt', 'num_hierarchies=2', '++should_skip_retry=True']}
+[2025-11-13 23:44:26,343][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-11-13 23:44:26,344][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-11-13 23:44:26,346][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-11-13 23:44:26,349][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json
+[2025-11-13 23:44:26,350][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json
+[2025-11-13 23:44:26,351][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json
+[2025-11-13 23:44:26,501][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-11-13 23:44:26,845][__main__][INFO] - [rank: 0] Starting training!
+[2025-11-13 23:44:50,964][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json. {'start_time': '2025-11-13T23:44:26.342825', 'restarts': [], 'current_run': 0, 'used_ports': ['51427'], 'world_size': 2, 'node_rank': 0, 'master_addr': '127.0.0.1', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/beauty', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-11-13/23-39-19/pickle/merged_predictions_tensor.pt', 'num_hierarchies=2', '++should_skip_retry=True']}
+[2025-11-14 00:18:18,434][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 开始统计训练集中的item流行度...
+[2025-11-14 00:18:18,436][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 训练集dataloader类型: <class 'tuple'>
+[2025-11-14 00:18:18,436][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 实际dataloader类型: <class 'src.data.loading.components.custom_dataloader.DataloaderWithIterationRetry'>
+[2025-11-14 00:18:56,421][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 1000 个batch，累计统计 1442239 个item交互
+[2025-11-14 00:19:26,789][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 2000 个batch，累计统计 2882797 个item交互
+[2025-11-14 00:19:55,471][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 3000 个batch，累计统计 4440596 个item交互
+[2025-11-14 00:20:25,608][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 4000 个batch，累计统计 5966847 个item交互
+[2025-11-14 00:21:09,782][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 5000 个batch，累计统计 7553252 个item交互
+[2025-11-14 00:21:51,120][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 6000 个batch，累计统计 9155242 个item交互
+[2025-11-14 00:22:30,848][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 7000 个batch，累计统计 10466088 个item交互
+[2025-11-14 00:23:11,878][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 8000 个batch，累计统计 11833889 个item交互
+[2025-11-14 00:23:56,015][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 9000 个batch，累计统计 13425646 个item交互
+[2025-11-14 00:24:34,919][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已处理 10000 个batch，累计统计 14910208 个item交互
+[2025-11-14 00:24:34,925][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已达到最大batch限制(10000)，停止统计
+[2025-11-14 00:24:34,926][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 训练集统计完成：共 11998 个唯一item，总交互次数 14910208
+[2025-11-14 00:24:34,960][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 流行度分组完成:
+[2025-11-14 00:24:34,968][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0]   Head组 (前20%): 2399 个item
+[2025-11-14 00:24:34,968][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0]   Body组 (20%-50%): 3600 个item
+[2025-11-14 00:24:34,968][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0]   Tail组 (后50%): 5999 个item
+[2025-11-14 00:24:34,971][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0]   Head组示例: item (17, 8) 出现 52643 次
+[2025-11-14 00:24:34,971][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0]   Tail组示例: item (80, 21) 出现 3 次
+[2025-11-14 00:24:34,971][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 已启用按流行度分组的评测（Head/Body/Tail）。
+[2025-11-14 00:36:46,567][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-14 00:36:46,568][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 生成的语义ID Embedding相似度矩阵 (平均自 1404 个batch) ===
+[2025-11-14 00:36:46,570][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+[[1.0000072e+00 5.8922882e-04]
+ [5.8922882e-04 9.9999207e-01]]
+[2025-11-14 00:36:46,570][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+
+[2025-11-14 00:36:46,570][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-14 00:36:46,571][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 输入序列中每个Item的Hierarchy Embedding相似度矩阵 (平均自 1404 个batch) ===
+[2025-11-14 00:36:46,571][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+[[ 0.9999991  -0.00180673]
+ [-0.00180673  0.99999946]]
+[2025-11-14 00:36:46,572][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+
+[2025-11-14 00:36:46,713][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-14 00:36:46,713][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 按流行度分组的评测指标（累计到当前阶段）===
+[2025-11-14 00:36:46,714][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] [Tail] ndcg@5: 0.029438  ndcg@10: 0.037548  recall@5: 0.046060  recall@10: 0.071293
+[2025-11-14 00:36:46,714][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] [Head] ndcg@5: 0.035434  ndcg@10: 0.046183  recall@5: 0.053398  recall@10: 0.086868
+[2025-11-14 00:36:46,714][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] [Body] ndcg@5: 0.001766  ndcg@10: 0.003557  recall@5: 0.003359  recall@10: 0.008900
+[2025-11-14 00:36:46,714][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+
+[2025-11-14 01:28:57,054][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-14 01:28:57,055][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 生成的语义ID Embedding相似度矩阵 (平均自 1404 个batch) ===
+[2025-11-14 01:28:57,059][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+[[ 0.9999941  -0.00159526]
+ [-0.00159526  1.0000112 ]]
+[2025-11-14 01:28:57,060][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+
+[2025-11-14 01:28:57,060][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-14 01:28:57,060][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 输入序列中每个Item的Hierarchy Embedding相似度矩阵 (平均自 1404 个batch) ===
+[2025-11-14 01:28:57,061][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+[[ 0.99999887 -0.00377885]
+ [-0.00377885  0.9999973 ]]
+[2025-11-14 01:28:57,061][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+
+[2025-11-14 01:28:57,204][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-14 01:28:57,204][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 按流行度分组的评测指标（累计到当前阶段）===
+[2025-11-14 01:28:57,204][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] [Tail] ndcg@5: 0.034663  ndcg@10: 0.043663  recall@5: 0.054273  recall@10: 0.082480
+[2025-11-14 01:28:57,205][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] [Head] ndcg@5: 0.041958  ndcg@10: 0.052546  recall@5: 0.062532  recall@10: 0.095427
+[2025-11-14 01:28:57,205][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] [Body] ndcg@5: 0.003433  ndcg@10: 0.005380  recall@5: 0.005793  recall@10: 0.011923
+[2025-11-14 01:28:57,205][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+
+[2025-11-14 01:56:25,515][src.utils.restart_job][ERROR] - [rank: 0] Exception caught: DataLoader worker (pid(s) 206866) exited unexpectedly
+[2025-11-14 01:56:25,526][src.utils.restart_job][ERROR] - [rank: 0] Stack trace: Traceback (most recent call last):
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1251, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/multiprocessing/queues.py", line 113, in get
+    if not self._poll(timeout):
+           ^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/multiprocessing/connection.py", line 257, in poll
+    return self._poll(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/multiprocessing/connection.py", line 440, in _poll
+    r = wait([self], timeout)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/multiprocessing/connection.py", line 1135, in wait
+    ready = selector.select(timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/selectors.py", line 415, in select
+    fd_event_list = self._selector.poll(timeout)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/torch/utils/data/_utils/signal_handling.py", line 73, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 206866) is killed by signal: Aborted. 
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+    return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 575, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 982, in _run
+    results = self._run_stage()
+              ^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 1026, in _run_stage
+    self.fit_loop.run()
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/loops/fit_loop.py", line 216, in run
+    self.advance()
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/loops/fit_loop.py", line 455, in advance
+    self.epoch_loop.run(self._data_fetcher)
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 151, in run
+    self.on_advance_end(data_fetcher)
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 370, in on_advance_end
+    self.val_loop.run()
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/loops/utilities.py", line 179, in _decorator
+    return loop_run(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/loops/evaluation_loop.py", line 122, in run
+    self.reset()
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/loops/evaluation_loop.py", line 258, in reset
+    iter(data_fetcher)  # creates the iterator inside the fetcher
+    ^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/loops/fetchers.py", line 112, in __iter__
+    batch = super().__next__()
+            ^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/loops/fetchers.py", line 61, in __next__
+    batch = next(self.iterator)
+            ^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/utilities/combined_loader.py", line 341, in __next__
+    out = next(self._iterator)
+          ^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/utilities/combined_loader.py", line 142, in __next__
+    out = next(self.iterators[0])
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 708, in __next__
+    data = self._next_data()
+           ^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1458, in _next_data
+    idx, data = self._get_data()
+                ^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1401, in _get_data
+    success, data = self._try_get_data(self._timeout)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/data/loading/components/custom_dataloader.py", line 27, in _try_get_data
+    status, data = super()._try_get_data(timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1264, in _try_get_data
+    raise RuntimeError(
+RuntimeError: DataLoader worker (pid(s) 206866) exited unexpectedly
+
+[2025-11-14 01:56:25,526][src.utils.restart_job][INFO] - [rank: 0] Cleaning up and handling restart logic
+[2025-11-14 01:56:25,527][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json
+[2025-11-14 01:56:25,529][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json
+[2025-11-14 01:56:25,529][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json
+[2025-11-14 01:56:25,530][src.utils.restart_job][INFO] - [rank: 0] Restarting job. Current metadata: JobCheckpointMetadata(start_time='2025-11-13T23:44:26.342825', restarts=[{'time': '2025-11-14T01:56:25.530119', 'exception': 'DataLoader worker (pid(s) 206866) exited unexpectedly', 'run_number': 0}], current_run=1, used_ports=['51427'], world_size=2, node_rank=0, master_addr='127.0.0.1', original_args=['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/beauty', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-11-13/23-39-19/pickle/merged_predictions_tensor.pt', 'num_hierarchies=2', '++should_skip_retry=True'])
+[2025-11-14 01:56:25,531][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-11-13/23-44-25/metadata/restart_metadata.json. {'start_time': '2025-11-13T23:44:26.342825', 'restarts': [{'time': '2025-11-14T01:56:25.530119', 'exception': 'DataLoader worker (pid(s) 206866) exited unexpectedly', 'run_number': 0}], 'current_run': 1, 'used_ports': ['51427'], 'world_size': 2, 'node_rank': 0, 'master_addr': '127.0.0.1', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/beauty', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-11-13/23-39-19/pickle/merged_predictions_tensor.pt', 'num_hierarchies=2', '++should_skip_retry=True']}
+[2025-11-14 01:56:25,532][src.utils.restart_job_utils][INFO] - [rank: 0] Cleaning up distributed process group
+[2025-11-14 01:56:25,699][src.utils.restart_job_utils][INFO] - [rank: 0] Clearing CUDA cache
+[2025-11-14 01:56:25,731][src.utils.restart_job_utils][INFO] - [rank: 0] Tearing down trainer
+[2025-11-14 01:56:26,077][src.utils.restart_job][INFO] - [rank: 0] Resources cleaned up.

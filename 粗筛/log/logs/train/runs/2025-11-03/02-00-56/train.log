@@ -1,0 +1,23 @@
+[2025-11-03 02:00:56,621][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-11-03 02:00:56,630][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-11-03 02:00:56,631][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2025-11-03 02:00:56,635][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2025-11-03 02:00:56,726][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2025-11-03 02:00:56,994][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] i am here
+[2025-11-03 02:00:57,344][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-11-03 02:00:57,344][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2025-11-03 02:00:57,350][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>
+[2025-11-03 02:00:57,353][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2025-11-03 02:00:57,354][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.restart_job.RestartAndLoadCheckpointCallback>
+[2025-11-03 02:00:57,357][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-00-56/metadata/restart_metadata.json
+[2025-11-03 02:00:57,358][src.utils.restart_job_utils][WARNING] - [rank: 0] Metadata file not found at /data/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-00-56/metadata/restart_metadata.json. Creating empty metadata.
+[2025-11-03 02:00:57,358][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-00-56/metadata/restart_metadata.json. {'start_time': '2025-11-03T02:00:57.358451', 'restarts': [], 'current_run': 0, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-21/23-23-39/pickle/merged_predictions_tensor.pt', 'num_hierarchies=4', '++should_skip_retry=True']}
+[2025-11-03 02:00:57,359][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-11-03 02:00:57,359][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-11-03 02:00:57,362][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-11-03 02:00:57,364][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-00-56/metadata/restart_metadata.json
+[2025-11-03 02:00:57,365][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /data/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-00-56/metadata/restart_metadata.json
+[2025-11-03 02:00:57,365][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-00-56/metadata/restart_metadata.json
+[2025-11-03 02:00:57,492][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-11-03 02:00:57,830][__main__][INFO] - [rank: 0] Starting training!
+[2025-11-03 02:01:00,751][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-00-56/metadata/restart_metadata.json. {'start_time': '2025-11-03T02:00:57.358451', 'restarts': [], 'current_run': 0, 'used_ports': ['45289'], 'world_size': 1, 'node_rank': 0, 'master_addr': '127.0.0.1', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-21/23-23-39/pickle/merged_predictions_tensor.pt', 'num_hierarchies=4', '++should_skip_retry=True']}

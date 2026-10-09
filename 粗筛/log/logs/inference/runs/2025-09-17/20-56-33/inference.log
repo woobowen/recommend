@@ -1,0 +1,34 @@
+[2025-09-17 20:56:33,094][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-09-17 20:56:33,099][src.utils.utils][WARNING] - [rank: 0] Config loss was not found in the config tree. Make sure this is expected.
+[2025-09-17 20:56:33,099][src.utils.utils][WARNING] - [rank: 0] Config optim was not found in the config tree. Make sure this is expected.
+[2025-09-17 20:56:33,099][src.utils.utils][WARNING] - [rank: 0] Config eval was not found in the config tree. Make sure this is expected.
+[2025-09-17 20:56:36,100][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-09-17 20:56:36,106][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.ItemDataModule>
+[2025-09-17 20:56:36,162][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.modules.clustering.residual_quantization.ResidualQuantization>
+[2025-09-17 20:56:36,282][root][INFO] - Device cpu: Verbose mode enabled
+[2025-09-17 20:56:36,287][root][INFO] - Device cpu: Using custom training loop function
+[2025-09-17 20:56:36,294][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-09-17 20:56:36,295][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.inference_utils.LocalPickleWriter>
+[2025-09-17 20:56:36,423][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-09-17 20:56:36,423][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-09-17 20:56:36,425][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-09-17 20:56:36,509][pytorch_lightning.utilities.rank_zero][INFO] - Using bfloat16 Automatic Mixed Precision (AMP)
+[2025-09-17 20:56:36,543][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2025-09-17 20:56:36,544][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2025-09-17 20:56:36,544][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+[2025-09-17 20:56:36,544][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-09-17 20:56:36,664][__main__][INFO] - [rank: 0] Starting inference!
+[2025-09-17 20:56:36,766][pytorch_lightning.utilities.rank_zero][INFO] - You are using a CUDA device ('NVIDIA A800 80GB PCIe') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+[2025-09-17 20:56:47,776][root][INFO] - Device cpu: Verbose mode enabled
+[2025-09-17 20:56:47,781][root][INFO] - Device cpu: Using custom training loop function
+[2025-09-17 20:56:48,122][pytorch_lightning.utilities.rank_zero][INFO] - ----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 2 processes
+----------------------------------------------------------------------------------------------------
+
+[2025-09-17 20:56:49,438][src.utils.inference_utils][INFO] - Rank 1 initialized for inference.
+[2025-09-17 20:56:49,438][src.utils.inference_utils][INFO] - Rank 0 initialized for inference.
+[2025-09-17 20:56:49,439][pytorch_lightning.utilities.rank_zero][INFO] - Restoring states from the checkpoint path at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/20-52-51/checkpoints/checkpoint_000_000030.ckpt
+[2025-09-17 20:56:49,552][pytorch_lightning.utilities.rank_zero][INFO] - Loaded model weights from the checkpoint at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/20-52-51/checkpoints/checkpoint_000_000030.ckpt
+[2025-09-17 20:56:56,903][src.utils.inference_utils][INFO] - Global Rank: 1 wrote 6144 rows to /data/mhwang/Rec/GRID/logs/inference/runs/2025-09-17/20-56-33/pickle/predictions_1_20250917T125656898.pkl.
+[2025-09-17 20:56:56,905][src.utils.inference_utils][INFO] - Rank 1 finished writing predictions.

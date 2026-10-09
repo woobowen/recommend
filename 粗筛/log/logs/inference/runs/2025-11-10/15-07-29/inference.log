@@ -1,0 +1,68 @@
+[2025-11-10 15:07:29,860][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-11-10 15:07:29,870][src.utils.utils][WARNING] - [rank: 0] Config loss was not found in the config tree. Make sure this is expected.
+[2025-11-10 15:07:29,883][src.utils.utils][WARNING] - [rank: 0] Config optim was not found in the config tree. Make sure this is expected.
+[2025-11-10 15:07:29,884][src.utils.utils][WARNING] - [rank: 0] Config eval was not found in the config tree. Make sure this is expected.
+[2025-11-10 15:07:32,884][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-11-10 15:07:32,938][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2025-11-10 15:07:33,032][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2025-11-10 15:07:33,445][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] i am here
+[2025-11-10 15:07:34,008][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-11-10 15:07:34,009][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.inference_utils.LocalPickleWriter>
+[2025-11-10 15:07:35,006][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-11-10 15:07:35,007][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-11-10 15:07:35,011][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-11-10 15:07:35,147][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-11-10 15:07:35,791][__main__][INFO] - [rank: 0] Starting inference!
+[2025-11-10 15:07:58,630][src.utils.inference_utils][INFO] - Rank 1 initialized for inference.
+[2025-11-10 15:07:58,636][src.utils.inference_utils][INFO] - Rank 0 initialized for inference.
+[2025-11-10 15:08:11,960][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0] Failed to stack cross attentions: stack expects each tensor to be equal size, but got [32, 6, 150] at entry 0 and [32, 6, 2, 150] at entry 1
+[2025-11-10 15:08:11,961][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 0 shape: torch.Size([32, 6, 150])
+[2025-11-10 15:08:11,961][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 1 shape: torch.Size([32, 6, 2, 150])
+[2025-11-10 15:08:11,961][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 2 shape: torch.Size([32, 6, 150])
+[2025-11-10 15:08:11,962][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 3 shape: torch.Size([32, 6, 150])
+[2025-11-10 15:08:12,113][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] Saved decoder self-attention to ./attention_weights/decoder_self_attention_batch_0.pt
+[2025-11-10 15:08:12,113][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] Saved encoder attention to ./attention_weights/encoder_attention_batch_0.pt
+[2025-11-10 15:08:12,114][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] Saved cross attention to ./attention_weights/cross_attention_batch_0.pt
+[2025-11-10 15:08:12,255][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 当前batch的生成语义ID Embedding相似度矩阵:
+[[ 1.          0.0092807  -0.02690792 -0.02573376]
+ [ 0.0092807   1.         -0.00201818 -0.02121001]
+ [-0.02690792 -0.00201818  1.          0.01603348]
+ [-0.02573376 -0.02121001  0.01603348  1.        ]]
+[2025-11-10 15:08:12,387][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 当前batch的输入Item Embedding相似度矩阵:
+[[0.99999994 0.3236904  0.38157603 0.4097407  0.29292926]
+ [0.3236904  1.         0.37809667 0.31595612 0.28009796]
+ [0.38157603 0.37809667 1.         0.39342907 0.35441083]
+ [0.4097407  0.31595612 0.39342907 0.99999994 0.30112523]
+ [0.29292926 0.28009796 0.35441083 0.30112523 1.        ]]
+[2025-11-10 15:08:13,210][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0] Failed to stack cross attentions: stack expects each tensor to be equal size, but got [32, 6, 150] at entry 0 and [32, 6, 2, 150] at entry 1
+[2025-11-10 15:08:13,212][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 0 shape: torch.Size([32, 6, 150])
+[2025-11-10 15:08:13,212][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 1 shape: torch.Size([32, 6, 2, 150])
+[2025-11-10 15:08:13,212][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 2 shape: torch.Size([32, 6, 150])
+[2025-11-10 15:08:13,212][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 3 shape: torch.Size([32, 6, 150])
+[2025-11-10 15:08:13,445][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] Saved decoder self-attention to ./attention_weights/decoder_self_attention_batch_1.pt
+[2025-11-10 15:08:13,445][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] Saved encoder attention to ./attention_weights/encoder_attention_batch_1.pt
+[2025-11-10 15:08:13,445][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] Saved cross attention to ./attention_weights/cross_attention_batch_1.pt
+[2025-11-10 15:08:13,452][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 当前batch的生成语义ID Embedding相似度矩阵:
+[[ 1.         -0.00572033  0.00462922 -0.0103259 ]
+ [-0.00572033  1.          0.01190493 -0.00719726]
+ [ 0.00462922  0.01190493  1.         -0.00327766]
+ [-0.0103259  -0.00719726 -0.00327766  1.0000001 ]]
+[2025-11-10 15:08:13,578][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 当前batch的输入Item Embedding相似度矩阵:
+[[1.         0.41639525 0.3708458  0.37485033 0.37793797]
+ [0.41639525 1.         0.40735856 0.3925943  0.40667737]
+ [0.3708458  0.40735856 1.         0.36476845 0.38189855]
+ [0.37485033 0.3925943  0.36476845 1.         0.35678717]
+ [0.37793797 0.40667737 0.38189855 0.35678717 1.        ]]
+[2025-11-10 15:08:14,203][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0] Failed to stack cross attentions: stack expects each tensor to be equal size, but got [32, 6, 150] at entry 0 and [32, 6, 2, 150] at entry 1
+[2025-11-10 15:08:14,203][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 0 shape: torch.Size([32, 6, 150])
+[2025-11-10 15:08:14,203][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 1 shape: torch.Size([32, 6, 2, 150])
+[2025-11-10 15:08:14,204][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 2 shape: torch.Size([32, 6, 150])
+[2025-11-10 15:08:14,204][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0]   Hierarchy 3 shape: torch.Size([32, 6, 150])
+[2025-11-10 15:08:14,375][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] Saved decoder self-attention to ./attention_weights/decoder_self_attention_batch_2.pt
+[2025-11-10 15:08:14,375][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] Saved encoder attention to ./attention_weights/encoder_attention_batch_2.pt
+[2025-11-10 15:08:14,375][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] Saved cross attention to ./attention_weights/cross_attention_batch_2.pt
+[2025-11-10 15:08:14,380][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 当前batch的生成语义ID Embedding相似度矩阵:
+[[ 1.0000000e+00 -2.1466508e-03 -2.5634188e-05 -5.1125884e-02]
+ [-2.1466508e-03  1.0000000e+00  8.5082762e-03 -3.2023869e-02]
+ [-2.5634188e-05  8.5082762e-03  1.0000000e+00  2.3698263e-02]
+ [-5.1125884e-02 -3.2023869e-02  2.3698263e-02  1.0000000e+00]]

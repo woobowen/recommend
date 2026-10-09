@@ -1,0 +1,71 @@
+[2025-11-12 02:05:33,701][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-11-12 02:05:33,709][src.utils.utils][WARNING] - [rank: 0] Config loss was not found in the config tree. Make sure this is expected.
+[2025-11-12 02:05:36,709][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-11-12 02:05:36,710][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2025-11-12 02:05:36,714][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.ItemDataModule>
+[2025-11-12 02:05:37,289][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.modules.clustering.residual_quantization.ResidualQuantization>
+[2025-11-12 02:05:37,539][root][INFO] - Device cpu: Verbose mode enabled
+[2025-11-12 02:05:37,710][root][INFO] - Device cpu: Using custom training loop function
+[2025-11-12 02:05:37,728][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-11-12 02:05:37,728][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2025-11-12 02:05:37,734][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2025-11-12 02:05:37,735][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-11-12 02:05:37,736][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-11-12 02:05:37,739][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-11-12 02:05:37,823][pytorch_lightning.utilities.rank_zero][INFO] - Using bfloat16 Automatic Mixed Precision (AMP)
+[2025-11-12 02:05:37,824][pytorch_lightning.utilities.rank_zero][INFO] - Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.
+[2025-11-12 02:05:37,860][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2025-11-12 02:05:37,861][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2025-11-12 02:05:37,861][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+[2025-11-12 02:05:37,862][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-11-12 02:05:38,169][__main__][INFO] - [rank: 0] Starting training!
+[2025-11-12 02:05:57,195][root][INFO] - Device cpu: Verbose mode enabled
+[2025-11-12 02:05:57,538][root][INFO] - Device cpu: Verbose mode enabled
+[2025-11-12 02:05:57,721][root][INFO] - Device cpu: Using custom training loop function
+[2025-11-12 02:05:58,038][root][INFO] - Device cpu: Using custom training loop function
+[2025-11-12 02:05:59,045][root][INFO] - Device cpu: Verbose mode enabled
+[2025-11-12 02:05:59,466][root][INFO] - Device cpu: Using custom training loop function
+[2025-11-12 02:05:59,862][pytorch_lightning.utilities.rank_zero][INFO] - ----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 4 processes
+----------------------------------------------------------------------------------------------------
+
+[2025-11-12 02:06:42,969][root][INFO] - Device cuda:2: Training layers one-at-a-time, each for 3 steps. Ensure that early stopping callbacks are disabled.
+[2025-11-12 02:06:42,974][root][INFO] - Device cuda:3: Training layers one-at-a-time, each for 3 steps. Ensure that early stopping callbacks are disabled.
+[2025-11-12 02:06:42,987][root][INFO] - Device cuda:1: Training layers one-at-a-time, each for 3 steps. Ensure that early stopping callbacks are disabled.
+[2025-11-12 02:06:42,987][root][INFO] - Device cuda:0: Training layers one-at-a-time, each for 3 steps. Ensure that early stopping callbacks are disabled.
+[2025-11-12 02:07:02,037][root][INFO] - Device cuda:3: Finished training layer 0 of 9
+[2025-11-12 02:07:02,037][root][INFO] - Device cuda:0: Finished training layer 0 of 9
+[2025-11-12 02:07:02,037][root][INFO] - Device cuda:2: Finished training layer 0 of 9
+[2025-11-12 02:07:02,037][root][INFO] - Device cuda:1: Finished training layer 0 of 9
+[2025-11-12 02:07:15,984][root][INFO] - Device cuda:0: Finished training layer 1 of 9
+[2025-11-12 02:07:15,985][root][INFO] - Device cuda:2: Finished training layer 1 of 9
+[2025-11-12 02:07:15,990][root][INFO] - Device cuda:1: Finished training layer 1 of 9
+[2025-11-12 02:07:15,996][root][INFO] - Device cuda:3: Finished training layer 1 of 9
+[2025-11-12 02:07:31,564][root][INFO] - Device cuda:0: Finished training layer 2 of 9
+[2025-11-12 02:07:31,564][root][INFO] - Device cuda:2: Finished training layer 2 of 9
+[2025-11-12 02:07:31,565][root][INFO] - Device cuda:1: Finished training layer 2 of 9
+[2025-11-12 02:07:31,567][root][INFO] - Device cuda:3: Finished training layer 2 of 9
+[2025-11-12 02:07:48,217][root][INFO] - Device cuda:0: Finished training layer 3 of 9
+[2025-11-12 02:07:48,217][root][INFO] - Device cuda:3: Finished training layer 3 of 9
+[2025-11-12 02:07:48,217][root][INFO] - Device cuda:1: Finished training layer 3 of 9
+[2025-11-12 02:07:48,227][root][INFO] - Device cuda:2: Finished training layer 3 of 9
+[2025-11-12 02:08:01,301][root][INFO] - Device cuda:3: Finished training layer 4 of 9
+[2025-11-12 02:08:01,301][root][INFO] - Device cuda:0: Finished training layer 4 of 9
+[2025-11-12 02:08:01,301][root][INFO] - Device cuda:2: Finished training layer 4 of 9
+[2025-11-12 02:08:01,302][root][INFO] - Device cuda:1: Finished training layer 4 of 9
+[2025-11-12 02:08:16,613][root][INFO] - Device cuda:1: Finished training layer 5 of 9
+[2025-11-12 02:08:16,615][root][INFO] - Device cuda:0: Finished training layer 5 of 9
+[2025-11-12 02:08:16,626][root][INFO] - Device cuda:3: Finished training layer 5 of 9
+[2025-11-12 02:08:16,631][root][INFO] - Device cuda:2: Finished training layer 5 of 9
+[2025-11-12 02:08:27,417][root][INFO] - Device cuda:3: Finished training layer 6 of 9
+[2025-11-12 02:08:27,417][root][INFO] - Device cuda:1: Finished training layer 6 of 9
+[2025-11-12 02:08:27,417][root][INFO] - Device cuda:2: Finished training layer 6 of 9
+[2025-11-12 02:08:27,417][root][INFO] - Device cuda:0: Finished training layer 6 of 9
+[2025-11-12 02:08:37,322][root][INFO] - Device cuda:1: Finished training layer 7 of 9
+[2025-11-12 02:08:37,322][root][INFO] - Device cuda:3: Finished training layer 7 of 9
+[2025-11-12 02:08:37,322][root][INFO] - Device cuda:0: Finished training layer 7 of 9
+[2025-11-12 02:08:37,322][root][INFO] - Device cuda:2: Finished training layer 7 of 9
+[2025-11-12 02:08:47,587][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 30: 'train/loss' reached 6.18909 (best 6.18909), saving model to '/data/mhwang/Rec/GRID/logs/train/runs/2025-11-12/02-05-33/checkpoints/checkpoint_000_000030.ckpt' as top 1
+[2025-11-12 02:08:53,061][pytorch_lightning.utilities.rank_zero][INFO] - `Trainer.fit` stopped: `max_steps=30` reached.
+[2025-11-12 02:09:19,334][__main__][INFO] - [rank: 0] Metrics: {'train/loss': tensor(51.5849), 'train/loss_step': tensor(6.1891), 'train/quantization_loss': tensor(51.5849), 'train/quantization_loss_step': tensor(6.1891), 'train/reconstruction_loss': tensor(0.), 'train/reconstruction_loss_step': tensor(0.), 'train/last_residuals_norm_ratio': tensor(0.0178), 'train/last_residuals_norm_ratio_step': tensor(0.0179), 'train/first_residuals_norm_ratio': tensor(0.0088), 'train/first_residuals_norm_ratio_step': tensor(0.0035), 'train/first_centroids_norm': tensor(9.4908), 'train/first_centroids_norm_step': tensor(15.7269), 'train/last_centroids_norm': tensor(0.), 'train/last_centroids_norm_step': tensor(0.), 'train/frac_unique_ids': tensor(0.4281), 'train/frac_unique_ids_step': tensor(0.9980), 'train/mse': tensor(0.0003), 'train/mse_step': tensor(0.0003), 'train/layer_0/frac_layer_coverages': tensor(0.5859), 'train/layer_0/frac_layer_coverages_step': tensor(0.8359), 'train/layer_1/frac_layer_coverages': tensor(0.3717), 'train/layer_1/frac_layer_coverages_step': tensor(0.9375), 'train/layer_2/frac_layer_coverages': tensor(0.3855), 'train/layer_2/frac_layer_coverages_step': tensor(0.9414), 'train/layer_3/frac_layer_coverages': tensor(0.3885), 'train/layer_3/frac_layer_coverages_step': tensor(0.9492), 'train/layer_4/frac_layer_coverages': tensor(0.1957), 'train/layer_4/frac_layer_coverages_step': tensor(0.9805), 'train/layer_5/frac_layer_coverages': tensor(0.1922), 'train/layer_5/frac_layer_coverages_step': tensor(0.9727), 'train/layer_6/frac_layer_coverages': tensor(0.1939), 'train/layer_6/frac_layer_coverages_step': tensor(0.9766), 'train/layer_7/frac_layer_coverages': tensor(0.0039), 'train/layer_7/frac_layer_coverages_step': tensor(0.0039), 'train/layer_8/frac_layer_coverages': tensor(0.0039), 'train/layer_8/frac_layer_coverages_step': tensor(0.0039), 'train/layer_0/id_entropy': tensor(3.2817), 'train/layer_0/id_entropy_step': tensor(5.0085), 'train/layer_1/id_entropy': tensor(2.0410), 'train/layer_1/id_entropy_step': tensor(5.0918), 'train/layer_2/id_entropy': tensor(2.0643), 'train/layer_2/id_entropy_step': tensor(5.1347), 'train/layer_3/id_entropy': tensor(2.0745), 'train/layer_3/id_entropy_step': tensor(5.1953), 'train/layer_4/id_entropy': tensor(1.0438), 'train/layer_4/id_entropy_step': tensor(5.2801), 'train/layer_5/id_entropy': tensor(1.0324), 'train/layer_5/id_entropy_step': tensor(5.2303), 'train/layer_6/id_entropy': tensor(1.0445), 'train/layer_6/id_entropy_step': tensor(5.3180), 'train/layer_7/id_entropy': tensor(1.1921e-07), 'train/layer_7/id_entropy_step': tensor(1.1921e-07), 'train/layer_8/id_entropy': tensor(1.1921e-07), 'train/layer_8/id_entropy_step': tensor(1.1921e-07), 'train/loss_epoch': tensor(51.5849), 'train/quantization_loss_epoch': tensor(51.5849), 'train/reconstruction_loss_epoch': tensor(0.), 'train/last_residuals_norm_ratio_epoch': tensor(0.0178), 'train/first_residuals_norm_ratio_epoch': tensor(0.0088), 'train/first_centroids_norm_epoch': tensor(9.4908), 'train/last_centroids_norm_epoch': tensor(0.), 'train/frac_unique_ids_epoch': tensor(0.4281), 'train/mse_epoch': tensor(0.0003), 'train/layer_0/frac_layer_coverages_epoch': tensor(0.5859), 'train/layer_1/frac_layer_coverages_epoch': tensor(0.3717), 'train/layer_2/frac_layer_coverages_epoch': tensor(0.3855), 'train/layer_3/frac_layer_coverages_epoch': tensor(0.3885), 'train/layer_4/frac_layer_coverages_epoch': tensor(0.1957), 'train/layer_5/frac_layer_coverages_epoch': tensor(0.1922), 'train/layer_6/frac_layer_coverages_epoch': tensor(0.1939), 'train/layer_7/frac_layer_coverages_epoch': tensor(0.0039), 'train/layer_8/frac_layer_coverages_epoch': tensor(0.0039), 'train/layer_0/id_entropy_epoch': tensor(3.2817), 'train/layer_1/id_entropy_epoch': tensor(2.0410), 'train/layer_2/id_entropy_epoch': tensor(2.0643), 'train/layer_3/id_entropy_epoch': tensor(2.0745), 'train/layer_4/id_entropy_epoch': tensor(1.0438), 'train/layer_5/id_entropy_epoch': tensor(1.0324), 'train/layer_6/id_entropy_epoch': tensor(1.0445), 'train/layer_7/id_entropy_epoch': tensor(1.1921e-07), 'train/layer_8/id_entropy_epoch': tensor(1.1921e-07)}

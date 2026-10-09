@@ -1,0 +1,41 @@
+[2025-11-12 00:19:45,991][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-11-12 00:19:45,999][src.utils.utils][WARNING] - [rank: 0] Config loss was not found in the config tree. Make sure this is expected.
+[2025-11-12 00:19:46,000][src.utils.utils][WARNING] - [rank: 0] Config optim was not found in the config tree. Make sure this is expected.
+[2025-11-12 00:19:46,000][src.utils.utils][WARNING] - [rank: 0] Config eval was not found in the config tree. Make sure this is expected.
+[2025-11-12 00:19:49,001][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-11-12 00:19:49,005][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2025-11-12 00:19:49,096][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2025-11-12 00:19:49,360][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] i am here
+[2025-11-12 00:19:49,711][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-11-12 00:19:49,712][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.inference_utils.LocalPickleWriter>
+[2025-11-12 00:19:49,934][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-11-12 00:19:49,934][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-11-12 00:19:49,938][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-11-12 00:19:50,057][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-11-12 00:19:50,289][__main__][INFO] - [rank: 0] Starting inference!
+[2025-11-12 00:20:10,996][src.utils.inference_utils][INFO] - Rank 0 initialized for inference.
+[2025-11-12 00:20:10,997][src.utils.inference_utils][INFO] - Rank 1 initialized for inference.
+[2025-11-12 00:20:17,962][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 开始统计训练集中的item流行度...
+[2025-11-12 00:20:17,963][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 训练集dataloader类型: <class 'tuple'>
+[2025-11-12 00:20:17,963][src.models.modules.semantic_id.tiger_generation_model][ERROR] - [rank: 0] 遍历训练集时出错: object of type 'UnboundedSequenceIterable' has no len()
+[2025-11-12 00:20:17,964][src.models.modules.semantic_id.tiger_generation_model][WARNING] - [rank: 0] 跳过流行度分组功能
+[2025-11-12 00:23:57,783][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-12 00:23:57,783][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 生成的语义ID Embedding相似度矩阵 (平均自 702 个batch) ===
+[2025-11-12 00:23:57,785][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+[[ 1.0000000e+00 -7.8174956e-03  3.5880457e-03 -2.1411050e-02]
+ [-7.8174956e-03  1.0000000e+00  9.6909506e-03 -2.4151172e-02]
+ [ 3.5880457e-03  9.6909506e-03  1.0000000e+00  7.2655542e-04]
+ [-2.1411050e-02 -2.4151172e-02  7.2655542e-04  1.0000001e+00]]
+[2025-11-12 00:23:57,785][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+
+[2025-11-12 00:23:57,786][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+================================================================================
+[2025-11-12 00:23:57,786][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] === 输入序列中每个Item的Hierarchy Embedding相似度矩阵 (平均自 702 个batch) ===
+[2025-11-12 00:23:57,787][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] 
+[[ 1.0000000e+00 -3.8262103e-03 -1.8129485e-03 -1.0928203e-02]
+ [-3.8262103e-03  1.0000000e+00  5.5409846e-04 -1.2765567e-02]
+ [-1.8129485e-03  5.5409846e-04  1.0000000e+00 -5.0307964e-03]
+ [-1.0928203e-02 -1.2765567e-02 -5.0307964e-03  1.0000000e+00]]
+[2025-11-12 00:23:57,787][src.models.modules.semantic_id.tiger_generation_model][INFO] - [rank: 0] ================================================================================
+

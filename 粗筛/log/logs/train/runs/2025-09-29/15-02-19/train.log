@@ -1,0 +1,57 @@
+[2025-09-29 15:02:19,913][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-09-29 15:02:19,923][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-09-29 15:02:19,923][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2025-09-29 15:02:19,927][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2025-09-29 15:02:20,015][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2025-09-29 15:02:20,592][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-09-29 15:02:20,593][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2025-09-29 15:02:20,598][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>
+[2025-09-29 15:02:20,601][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2025-09-29 15:02:20,602][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.restart_job.RestartAndLoadCheckpointCallback>
+[2025-09-29 15:02:20,605][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-02-19/metadata/restart_metadata.json
+[2025-09-29 15:02:20,605][src.utils.restart_job_utils][WARNING] - [rank: 0] Metadata file not found at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-02-19/metadata/restart_metadata.json. Creating empty metadata.
+[2025-09-29 15:02:20,605][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-02-19/metadata/restart_metadata.json. {'start_time': '2025-09-29T15:02:20.605763', 'restarts': [], 'current_run': 0, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt', 'ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt', 'num_hierarchies=4', '++should_skip_retry=True']}
+[2025-09-29 15:02:20,606][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-09-29 15:02:20,606][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-09-29 15:02:20,609][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-09-29 15:02:20,611][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-02-19/metadata/restart_metadata.json
+[2025-09-29 15:02:20,612][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-02-19/metadata/restart_metadata.json
+[2025-09-29 15:02:20,612][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-02-19/metadata/restart_metadata.json
+[2025-09-29 15:02:20,712][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-09-29 15:02:21,020][__main__][INFO] - [rank: 0] Starting training!
+[2025-09-29 15:02:45,934][__main__][INFO] - [rank: 0] Starting testing!
+[2025-09-29 15:02:46,110][src.utils.restart_job][ERROR] - [rank: 0] Exception caught: Checkpoint file not found: /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch=000_step=003500.ckpt
+[2025-09-29 15:02:46,131][src.utils.restart_job][ERROR] - [rank: 0] Stack trace: Traceback (most recent call last):
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+    return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 789, in _test_impl
+    results = self._run(model, ckpt_path=ckpt_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 951, in _run
+    self._checkpoint_connector._restore_modules_and_callbacks(ckpt_path)
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/connectors/checkpoint_connector.py", line 397, in _restore_modules_and_callbacks
+    self.resume_start(checkpoint_path)
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/connectors/checkpoint_connector.py", line 79, in resume_start
+    loaded_checkpoint = self.trainer.strategy.load_checkpoint(checkpoint_path)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/strategies/strategy.py", line 368, in load_checkpoint
+    return self.checkpoint_io.load_checkpoint(checkpoint_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/fabric/plugins/io/torch_io.py", line 81, in load_checkpoint
+    raise FileNotFoundError(f"Checkpoint file not found: {path}")
+FileNotFoundError: Checkpoint file not found: /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch=000_step=003500.ckpt
+
+[2025-09-29 15:02:46,131][src.utils.restart_job][INFO] - [rank: 0] Cleaning up and handling restart logic
+[2025-09-29 15:02:46,131][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-02-19/metadata/restart_metadata.json
+[2025-09-29 15:02:46,132][src.utils.restart_job_utils][INFO] - [rank: 0] Metadata loaded successfully from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-02-19/metadata/restart_metadata.json
+[2025-09-29 15:02:46,132][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-02-19/metadata/restart_metadata.json
+[2025-09-29 15:02:46,133][src.utils.restart_job][INFO] - [rank: 0] Restarting job. Current metadata: JobCheckpointMetadata(start_time='2025-09-29T15:02:20.605763', restarts=[{'time': '2025-09-29T15:02:46.132935', 'exception': 'Checkpoint file not found: /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch=000_step=003500.ckpt', 'run_number': 0}], current_run=1, used_ports=[], world_size=0, node_rank=0, master_addr='', original_args=['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt', 'ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt', 'num_hierarchies=4', '++should_skip_retry=True'])
+[2025-09-29 15:02:46,133][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-02-19/metadata/restart_metadata.json. {'start_time': '2025-09-29T15:02:20.605763', 'restarts': [{'time': '2025-09-29T15:02:46.132935', 'exception': 'Checkpoint file not found: /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch=000_step=003500.ckpt', 'run_number': 0}], 'current_run': 1, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt', 'ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt', 'num_hierarchies=4', '++should_skip_retry=True']}
+[2025-09-29 15:02:46,134][src.utils.restart_job_utils][INFO] - [rank: 0] Cleaning up distributed process group
+[2025-09-29 15:02:46,664][src.utils.restart_job_utils][INFO] - [rank: 0] Clearing CUDA cache
+[2025-09-29 15:02:46,664][src.utils.restart_job_utils][INFO] - [rank: 0] Tearing down trainer
+[2025-09-29 15:02:46,672][src.utils.restart_job][INFO] - [rank: 0] Resources cleaned up.

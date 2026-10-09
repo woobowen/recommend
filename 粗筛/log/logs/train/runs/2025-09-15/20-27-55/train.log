@@ -1,0 +1,37 @@
+[2025-09-15 20:27:55,270][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-09-15 20:27:55,280][src.utils.utils][WARNING] - [rank: 0] Config loss was not found in the config tree. Make sure this is expected.
+[2025-09-15 20:27:58,280][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-09-15 20:27:58,281][src.utils.restart_job][INFO] - [rank: 0] should_skip_retry set to True. Skipping retry logic.
+[2025-09-15 20:27:58,285][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.ItemDataModule>
+[2025-09-15 20:27:58,430][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.modules.clustering.residual_quantization.ResidualQuantization>
+[2025-09-15 20:27:58,673][root][INFO] - Device cpu: Verbose mode enabled
+[2025-09-15 20:27:58,726][root][INFO] - Device cpu: Using custom training loop function
+[2025-09-15 20:27:58,738][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2025-09-15 20:27:58,739][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2025-09-15 20:27:58,744][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2025-09-15 20:27:58,745][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2025-09-15 20:27:58,745][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2025-09-15 20:27:58,748][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2025-09-15 20:27:58,835][pytorch_lightning.utilities.rank_zero][INFO] - Using bfloat16 Automatic Mixed Precision (AMP)
+[2025-09-15 20:27:58,836][pytorch_lightning.utilities.rank_zero][INFO] - Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.
+[2025-09-15 20:27:58,871][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2025-09-15 20:27:58,872][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2025-09-15 20:27:58,873][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+[2025-09-15 20:27:58,873][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2025-09-15 20:27:59,182][__main__][INFO] - [rank: 0] Starting training!
+[2025-09-15 20:28:17,202][root][INFO] - Device cpu: Verbose mode enabled
+[2025-09-15 20:28:17,271][root][INFO] - Device cpu: Using custom training loop function
+[2025-09-15 20:28:17,525][pytorch_lightning.utilities.rank_zero][INFO] - ----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 2 processes
+----------------------------------------------------------------------------------------------------
+
+[2025-09-15 20:28:41,700][root][INFO] - Device cuda:0: Training layers one-at-a-time, each for 10 steps. Ensure that early stopping callbacks are disabled.
+[2025-09-15 20:28:42,322][root][INFO] - Device cuda:1: Training layers one-at-a-time, each for 10 steps. Ensure that early stopping callbacks are disabled.
+[2025-09-15 20:29:00,581][root][INFO] - Device cuda:0: Finished training layer 0 of 3
+[2025-09-15 20:29:00,584][root][INFO] - Device cuda:1: Finished training layer 0 of 3
+[2025-09-15 20:29:18,895][root][INFO] - Device cuda:0: Finished training layer 1 of 3
+[2025-09-15 20:29:18,900][root][INFO] - Device cuda:1: Finished training layer 1 of 3
+[2025-09-15 20:29:40,065][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 30: 'train/loss' reached 3.56520 (best 3.56520), saving model to '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-15/20-27-55/checkpoints/checkpoint_000_000030.ckpt' as top 1
+[2025-09-15 20:29:41,232][pytorch_lightning.utilities.rank_zero][INFO] - `Trainer.fit` stopped: `max_steps=30` reached.
+[2025-09-15 20:29:45,132][__main__][INFO] - [rank: 0] Metrics: {'train/loss': tensor(25.0400), 'train/loss_step': tensor(3.5652), 'train/quantization_loss': tensor(25.0400), 'train/quantization_loss_step': tensor(3.5652), 'train/reconstruction_loss': tensor(0.), 'train/reconstruction_loss_step': tensor(0.), 'train/last_residuals_norm_ratio': tensor(0.6355), 'train/last_residuals_norm_ratio_step': tensor(0.7513), 'train/first_residuals_norm_ratio': tensor(0.2114), 'train/first_residuals_norm_ratio_step': tensor(0.1229), 'train/first_centroids_norm': tensor(12.2441), 'train/first_centroids_norm_step': tensor(15.6995), 'train/last_centroids_norm': tensor(1.7778), 'train/last_centroids_norm_step': tensor(16.), 'train/frac_unique_ids': tensor(0.4952), 'train/frac_unique_ids_step': tensor(0.9824), 'train/mse': tensor(0.0021), 'train/mse_step': tensor(0.0029), 'train/layer_0/frac_layer_coverages': tensor(0.7454), 'train/layer_0/frac_layer_coverages_step': tensor(0.8750), 'train/layer_1/frac_layer_coverages': tensor(0.4857), 'train/layer_1/frac_layer_coverages_step': tensor(0.9414), 'train/layer_2/frac_layer_coverages': tensor(0.1699), 'train/layer_2/frac_layer_coverages_step': tensor(1.), 'train/layer_0/id_entropy': tensor(4.2647), 'train/layer_0/id_entropy_step': tensor(5.1147), 'train/layer_1/id_entropy': tensor(2.6419), 'train/layer_1/id_entropy_step': tensor(5.2213), 'train/layer_2/id_entropy': tensor(0.9023), 'train/layer_2/id_entropy_step': tensor(5.4005), 'train/loss_epoch': tensor(25.0400), 'train/quantization_loss_epoch': tensor(25.0400), 'train/reconstruction_loss_epoch': tensor(0.), 'train/last_residuals_norm_ratio_epoch': tensor(0.6355), 'train/first_residuals_norm_ratio_epoch': tensor(0.2114), 'train/first_centroids_norm_epoch': tensor(12.2441), 'train/last_centroids_norm_epoch': tensor(1.7778), 'train/frac_unique_ids_epoch': tensor(0.4952), 'train/mse_epoch': tensor(0.0021), 'train/layer_0/frac_layer_coverages_epoch': tensor(0.7454), 'train/layer_1/frac_layer_coverages_epoch': tensor(0.4857), 'train/layer_2/frac_layer_coverages_epoch': tensor(0.1699), 'train/layer_0/id_entropy_epoch': tensor(4.2647), 'train/layer_1/id_entropy_epoch': tensor(2.6419), 'train/layer_2/id_entropy_epoch': tensor(0.9023)}

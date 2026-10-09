@@ -1,0 +1,37 @@
+﻿Amazon数据集下载与使用说明
+日期：2026年10月9日
+来源：远程服务器 /data_a/mhwang/Rec/GRID/amazon_data
+保存位置：C:\Users\Justin Yin\Desktop\粗筛\amazon_data
+
+本次复制全部Beauty、Toys、Sports的gzip TFRecord数据分片。数据内容保持服务器原样，每个文件均与服务器源文件的SHA-256一致。未复制macOS附属文件和探索Notebook。
+
+数据集分片数量：
+beauty：549个文件，1.29 GiB
+  evaluation：175个分片
+  items：24个分片
+  testing：175个分片
+  training：175个分片
+sports：873个文件，1.96 GiB
+  evaluation：279个分片
+  items：36个分片
+  testing：279个分片
+  training：279个分片
+toys：480个文件，1.18 GiB
+  evaluation：152个分片
+  items：24个分片
+  testing：152个分片
+  training：152个分片
+
+合计：1902个分片，4751747833 bytes（4.43 GiB）。
+
+目录用途：
+items：商品ID、文本和已有embedding记录，供文本嵌入与量化阶段使用。
+training：训练用户序列。
+evaluation：验证用户序列。
+testing：测试用户序列。
+
+从项目根目录运行时，设置data_dir=amazon_data/beauty、amazon_data/toys或amazon_data/sports。
+如果使用绝对路径，路径包含中文或空格时应按运行平台正确引用。
+数据下载完成不表示训练环境与模型配置已经修复或实验已经运行。
+外部T5/Qwen模型权重、量化checkpoint和TIGER checkpoint不包含在原始数据集内。
+详细复制信息见Amazon数据复制校验清单.json。

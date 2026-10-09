@@ -1,0 +1,83 @@
+[2025-09-17 21:19:20,081][src.utils.utils][INFO] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>
+[2025-09-17 21:19:20,086][src.utils.utils][INFO] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>
+[2025-09-17 21:19:20,089][src.utils.restart_job][INFO] - [rank: 0] Using metadata dir: /data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata
+[2025-09-17 21:19:20,090][src.utils.restart_job][INFO] - [rank: 0] Starting job (attempt 1/4): /data_sdc/mhwang/miniconda3/envs/GRs/bin/python /data/mhwang/Rec/GRID/src/train.py experiment=tiger_train_flat data_dir=/data/mhwang/Rec/GRID/amazon_data/beauty semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-17/19-44-50/pickle/merged_predictions_tensor.pt num_hierarchies=4 ++should_skip_retry=True
+[2025-09-17 21:19:35,091][src.utils.restart_job][ERROR] - [rank: 0] Job failed with return code 1
+[2025-09-17 21:19:35,091][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json
+[2025-09-17 21:19:35,092][src.utils.restart_job_utils][WARNING] - [rank: 0] Metadata file not found at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json. Creating empty metadata.
+[2025-09-17 21:19:35,092][src.utils.restart_job_utils][INFO] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json
+[2025-09-17 21:19:35,092][src.utils.restart_job][ERROR] - [rank: 0] Metadata run count 0 does not match current run count 1.This can happen if the exception does not trigger the callback on_exception. Cleaning up andupdating metadata before retrying.
+[2025-09-17 21:19:35,163][src.utils.restart_job_utils][INFO] - [rank: 0] Clearing CUDA cache
+[2025-09-17 21:19:35,163][src.utils.restart_job_utils][INFO] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json
+[2025-09-17 21:19:35,163][src.utils.restart_job_utils][WARNING] - [rank: 0] Metadata file not found at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json. Creating empty metadata.
+[2025-09-17 21:19:35,164][src.utils.restart_job_utils][INFO] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json. {'start_time': '2025-09-17T21:19:35.164105', 'restarts': [], 'current_run': 1, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/beauty', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-17/19-44-50/pickle/merged_predictions_tensor.pt', 'num_hierarchies=4']}
+[2025-09-17 21:19:35,164][src.utils.decorators][WARNING] - [rank: 0] [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json', Retrying src.utils.file_utils:open_local_or_remote in 3 seconds...
+[2025-09-17 21:19:38,165][src.utils.decorators][WARNING] - [rank: 0] [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json', Retrying src.utils.file_utils:open_local_or_remote in 6 seconds...
+[2025-09-17 21:19:44,166][src.utils.decorators][WARNING] - [rank: 0] [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json', Retrying src.utils.file_utils:open_local_or_remote in 12 seconds...
+[2025-09-17 21:19:56,166][src.utils.decorators][WARNING] - [rank: 0] [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json', Retrying src.utils.file_utils:open_local_or_remote in 24 seconds...
+[2025-09-17 21:20:20,167][src.utils.decorators][WARNING] - [rank: 0] [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json', Retrying src.utils.file_utils:open_local_or_remote in 48 seconds...
+[2025-09-17 21:21:08,168][src.utils.decorators][ERROR] - [rank: 0] Failed for the last time: [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json'
+Traceback (most recent call last):
+  File "/data/mhwang/Rec/GRID/src/utils/decorators.py", line 135, in f_retry
+    ret_val = fn(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/decorators.py", line 121, in fn
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/file_utils.py", line 40, in open_local_or_remote
+    return fs.open(file_path, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/spec.py", line 1291, in open
+    self.open(
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/spec.py", line 1303, in open
+    f = self._open(
+        ^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 195, in _open
+    return LocalFileOpener(path, mode, fs=self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 359, in __init__
+    self._open()
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 364, in _open
+    self.f = open(self.path, mode=self.mode)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json'
+[2025-09-17 21:21:08,174][src.utils.restart_job][ERROR] - [rank: 0] Error launching job. Exception Retry failed, permanently failing src.utils.file_utils:open_local_or_remote, see logs for [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json' Traceback (most recent call last):
+  File "/data/mhwang/Rec/GRID/src/utils/decorators.py", line 135, in f_retry
+    ret_val = fn(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/decorators.py", line 121, in fn
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/file_utils.py", line 40, in open_local_or_remote
+    return fs.open(file_path, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/spec.py", line 1291, in open
+    self.open(
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/spec.py", line 1303, in open
+    f = self._open(
+        ^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 195, in _open
+    return LocalFileOpener(path, mode, fs=self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 359, in __init__
+    self._open()
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 364, in _open
+    self.f = open(self.path, mode=self.mode)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/data/mhwang/Rec/GRID/src/utils/restart_job.py", line 332, in launch
+    return self.execute_job()
+           ^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/restart_job.py", line 232, in execute_job
+    save_metadata_to_local_or_remote(metadata, self.metadata_path)
+  File "/data/mhwang/Rec/GRID/src/utils/restart_job_utils.py", line 153, in save_metadata_to_local_or_remote
+    with open_local_or_remote(metadata_path, "w") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/decorators.py", line 145, in f_retry
+    raise RetriesFailedException(
+src.utils.decorators.RetriesFailedException: Retry failed, permanently failing src.utils.file_utils:open_local_or_remote, see logs for [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-17/21-19-19/metadata/restart_metadata.json'
+

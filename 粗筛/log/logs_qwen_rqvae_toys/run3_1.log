@@ -1,0 +1,412 @@
+2025-09-29 15:31:36.724463: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+[[36m2025-09-29 15:31:40,401[0m][[34msrc.utils.utils[0m][[32mINFO[0m] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>[0m
+[[36m2025-09-29 15:31:40,406[0m][[34msrc.utils.utils[0m][[32mINFO[0m] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>[0m
+[[36m2025-09-29 15:31:40,409[0m][[34msrc.utils.restart_job[0m][[32mINFO[0m] - [rank: 0] Using metadata dir: /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata[0m
+[[36m2025-09-29 15:31:40,409[0m][[34msrc.utils.restart_job[0m][[32mINFO[0m] - [rank: 0] Starting job (attempt 1/4): /data_sdc/mhwang/miniconda3/envs/GRs/bin/python /data/mhwang/Rec/GRID/src/train.py experiment=tiger_train_flat data_dir=/data/mhwang/Rec/GRID/amazon_data/toys semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt num_hierarchies=4 ++should_skip_retry=True[0m
+[[36m2025-09-29 15:31:48,802[0m][[34msrc.utils.utils[0m][[32mINFO[0m] - [rank: 0] Enforcing tags! <cfg.extras.enforce_tags=True>[0m
+[[36m2025-09-29 15:31:48,806[0m][[34msrc.utils.utils[0m][[32mINFO[0m] - [rank: 0] Printing config tree with Rich! <cfg.extras.print_config=True>[0m
+[[36m2025-09-29 15:31:48,807[0m][[34msrc.utils.restart_job[0m][[32mINFO[0m] - [rank: 0] should_skip_retry set to True. Skipping retry logic.[0m
+Seed set to 42
+[[36m2025-09-29 15:31:48,809[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>[0m
+[[36m2025-09-29 15:31:48,858[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>[0m
+[[36m2025-09-29 15:31:49,148[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating callbacks...[0m
+[[36m2025-09-29 15:31:49,149[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>[0m
+[[36m2025-09-29 15:31:49,151[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>[0m
+[[36m2025-09-29 15:31:49,153[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>[0m
+[[36m2025-09-29 15:31:49,154[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <src.utils.restart_job.RestartAndLoadCheckpointCallback>[0m
+[[36m2025-09-29 15:31:49,155[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/metadata/restart_metadata.json[0m
+[[36m2025-09-29 15:31:49,155[0m][[34msrc.utils.restart_job_utils[0m][[33mWARNING[0m] - [rank: 0] Metadata file not found at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/metadata/restart_metadata.json. Creating empty metadata.[0m
+[[36m2025-09-29 15:31:49,156[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/metadata/restart_metadata.json. {'start_time': '2025-09-29T15:31:49.156073', 'restarts': [], 'current_run': 0, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt', 'ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt', 'num_hierarchies=4', '++should_skip_retry=True']}[0m
+[[36m2025-09-29 15:31:49,156[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating loggers...[0m
+[[36m2025-09-29 15:31:49,156[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>[0m
+[[36m2025-09-29 15:31:49,158[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>[0m
+[[36m2025-09-29 15:31:49,159[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/metadata/restart_metadata.json[0m
+[[36m2025-09-29 15:31:49,159[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Metadata loaded successfully from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/metadata/restart_metadata.json[0m
+[[36m2025-09-29 15:31:49,159[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/metadata/restart_metadata.json[0m
+Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+[[36m2025-09-29 15:31:49,297[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Logging hyperparameters![0m
+[[36m2025-09-29 15:31:49,523[0m][[34m__main__[0m][[32mINFO[0m] - [rank: 0] Starting training![0m
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/3
+[rank: 2] Seed set to 42
+[rank: 1] Seed set to 42
+Initializing distributed: GLOBAL_RANK: 2, MEMBER: 3/3
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/3
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 3 processes
+----------------------------------------------------------------------------------------------------
+
+Restoring states from the checkpoint path at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt
+/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:362: The dirpath has changed from '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints' to '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/checkpoints', therefore `best_model_score`, `kth_best_model_path`, `kth_value`, `last_model_path` and `best_k_models` won't be reloaded. Only `best_model_path` will be reloaded.
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [1,2,3]
+/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:362: The dirpath has changed from '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints' to '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/checkpoints', therefore `best_model_score`, `kth_best_model_path`, `kth_value`, `last_model_path` and `best_k_models` won't be reloaded. Only `best_model_path` will be reloaded.
+LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [1,2,3]
+/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:362: The dirpath has changed from '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints' to '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/checkpoints', therefore `best_model_score`, `kth_best_model_path`, `kth_value`, `last_model_path` and `best_k_models` won't be reloaded. Only `best_model_path` will be reloaded.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1,2,3]
+┏━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━┳━┳┓
+┃ ┃ Name                                                                  ┃ ┃ ┃┃
+┡━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━╇━╇┩
+│ │ model                                                                 │ │ ││
+│ │ model.encoder                                                         │ │ ││
+│ │ model.encoder.block                                                   │ │ ││
+│ │ model.encoder.block.0                                                 │ │ ││
+│ │ model.encoder.block.0.layer                                           │ │ ││
+│ │ model.encoder.block.0.layer.0                                         │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention                           │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention.q                         │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention.k                         │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention.v                         │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention.o                         │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention.relative_attention_bias   │ │ ││
+│ │ model.encoder.block.0.layer.0.layer_norm                              │ │ ││
+│ │ model.encoder.block.0.layer.0.dropout                                 │ │ ││
+│ │ model.encoder.block.0.layer.1                                         │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp                                     │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model                               │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.0                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.1                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.2                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.3                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.4                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.5                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.6                             │ │ ││
+│ │ model.encoder.block.0.layer.1.layer_norm                              │ │ ││
+│ │ model.encoder.block.0.layer.1.dropout                                 │ │ ││
+│ │ model.encoder.block.1                                                 │ │ ││
+│ │ model.encoder.block.1.layer                                           │ │ ││
+│ │ model.encoder.block.1.layer.0                                         │ │ ││
+│ │ model.encoder.block.1.layer.0.SelfAttention                           │ │ ││
+│ │ model.encoder.block.1.layer.0.SelfAttention.q                         │ │ ││
+│ │ model.encoder.block.1.layer.0.SelfAttention.k                         │ │ ││
+│ │ model.encoder.block.1.layer.0.SelfAttention.v                         │ │ ││
+│ │ model.encoder.block.1.layer.0.SelfAttention.o                         │ │ ││
+│ │ model.encoder.block.1.layer.0.layer_norm                              │ │ ││
+│ │ model.encoder.block.1.layer.0.dropout                                 │ │ ││
+│ │ model.encoder.block.1.layer.1                                         │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp                                     │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model                               │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.0                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.1                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.2                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.3                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.4                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.5                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.6                             │ │ ││
+│ │ model.encoder.block.1.layer.1.layer_norm                              │ │ ││
+│ │ model.encoder.block.1.layer.1.dropout                                 │ │ ││
+│ │ model.encoder.block.2                                                 │ │ ││
+│ │ model.encoder.block.2.layer                                           │ │ ││
+│ │ model.encoder.block.2.layer.0                                         │ │ ││
+│ │ model.encoder.block.2.layer.0.SelfAttention                           │ │ ││
+│ │ model.encoder.block.2.layer.0.SelfAttention.q                         │ │ ││
+│ │ model.encoder.block.2.layer.0.SelfAttention.k                         │ │ ││
+│ │ model.encoder.block.2.layer.0.SelfAttention.v                         │ │ ││
+│ │ model.encoder.block.2.layer.0.SelfAttention.o                         │ │ ││
+│ │ model.encoder.block.2.layer.0.layer_norm                              │ │ ││
+│ │ model.encoder.block.2.layer.0.dropout                                 │ │ ││
+│ │ model.encoder.block.2.layer.1                                         │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp                                     │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model                               │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.0                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.1                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.2                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.3                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.4                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.5                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.6                             │ │ ││
+│ │ model.encoder.block.2.layer.1.layer_norm                              │ │ ││
+│ │ model.encoder.block.2.layer.1.dropout                                 │ │ ││
+│ │ model.encoder.block.3                                                 │ │ ││
+│ │ model.encoder.block.3.layer                                           │ │ ││
+│ │ model.encoder.block.3.layer.0                                         │ │ ││
+│ │ model.encoder.block.3.layer.0.SelfAttention                           │ │ ││
+│ │ model.encoder.block.3.layer.0.SelfAttention.q                         │ │ ││
+│ │ model.encoder.block.3.layer.0.SelfAttention.k                         │ │ ││
+│ │ model.encoder.block.3.layer.0.SelfAttention.v                         │ │ ││
+│ │ model.encoder.block.3.layer.0.SelfAttention.o                         │ │ ││
+│ │ model.encoder.block.3.layer.0.layer_norm                              │ │ ││
+│ │ model.encoder.block.3.layer.0.dropout                                 │ │ ││
+│ │ model.encoder.block.3.layer.1                                         │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp                                     │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model                               │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.0                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.1                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.2                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.3                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.4                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.5                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.6                             │ │ ││
+│ │ model.encoder.block.3.layer.1.layer_norm                              │ │ ││
+│ │ model.encoder.block.3.layer.1.dropout                                 │ │ ││
+│ │ model.encoder.final_layer_norm                                        │ │ ││
+│ │ model.encoder.dropout                                                 │ │ ││
+│ │ loss_function                                                         │ │ ││
+│ │ ndcg@5                                                                │ │ ││
+│ │ ndcg@10                                                               │ │ ││
+│ │ recall@5                                                              │ │ ││
+│ │ recall@10                                                             │ │ ││
+│ │ train_loss                                                            │ │ ││
+│ │ val_loss                                                              │ │ ││
+│ │ test_loss                                                             │ │ ││
+│ │ encoder                                                               │ │ ││
+│ │ decoder                                                               │ │ ││
+│ │ decoder.decoder                                                       │ │ ││
+│ │ decoder.decoder.block                                                 │ │ ││
+│ │ decoder.decoder.block.0                                               │ │ ││
+│ │ decoder.decoder.block.0.layer                                         │ │ ││
+│ │ decoder.decoder.block.0.layer.0                                       │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention                         │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention.q                       │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention.k                       │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention.v                       │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention.o                       │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention.relative_attention_bias │ │ ││
+│ │ decoder.decoder.block.0.layer.0.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.0.layer.0.dropout                               │ │ ││
+│ │ decoder.decoder.block.0.layer.1                                       │ │ ││
+│ │ decoder.decoder.block.0.layer.1.EncDecAttention                       │ │ ││
+│ │ decoder.decoder.block.0.layer.1.EncDecAttention.q                     │ │ ││
+│ │ decoder.decoder.block.0.layer.1.EncDecAttention.k                     │ │ ││
+│ │ decoder.decoder.block.0.layer.1.EncDecAttention.v                     │ │ ││
+│ │ decoder.decoder.block.0.layer.1.EncDecAttention.o                     │ │ ││
+│ │ decoder.decoder.block.0.layer.1.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.0.layer.1.dropout                               │ │ ││
+│ │ decoder.decoder.block.0.layer.2                                       │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp                                   │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model                             │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.0                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.1                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.2                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.3                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.4                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.5                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.6                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.0.layer.2.dropout                               │ │ ││
+│ │ decoder.decoder.block.1                                               │ │ ││
+│ │ decoder.decoder.block.1.layer                                         │ │ ││
+│ │ decoder.decoder.block.1.layer.0                                       │ │ ││
+│ │ decoder.decoder.block.1.layer.0.SelfAttention                         │ │ ││
+│ │ decoder.decoder.block.1.layer.0.SelfAttention.q                       │ │ ││
+│ │ decoder.decoder.block.1.layer.0.SelfAttention.k                       │ │ ││
+│ │ decoder.decoder.block.1.layer.0.SelfAttention.v                       │ │ ││
+│ │ decoder.decoder.block.1.layer.0.SelfAttention.o                       │ │ ││
+│ │ decoder.decoder.block.1.layer.0.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.1.layer.0.dropout                               │ │ ││
+│ │ decoder.decoder.block.1.layer.1                                       │ │ ││
+│ │ decoder.decoder.block.1.layer.1.EncDecAttention                       │ │ ││
+│ │ decoder.decoder.block.1.layer.1.EncDecAttention.q                     │ │ ││
+│ │ decoder.decoder.block.1.layer.1.EncDecAttention.k                     │ │ ││
+│ │ decoder.decoder.block.1.layer.1.EncDecAttention.v                     │ │ ││
+│ │ decoder.decoder.block.1.layer.1.EncDecAttention.o                     │ │ ││
+│ │ decoder.decoder.block.1.layer.1.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.1.layer.1.dropout                               │ │ ││
+│ │ decoder.decoder.block.1.layer.2                                       │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp                                   │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model                             │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.0                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.1                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.2                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.3                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.4                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.5                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.6                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.1.layer.2.dropout                               │ │ ││
+│ │ decoder.decoder.block.2                                               │ │ ││
+│ │ decoder.decoder.block.2.layer                                         │ │ ││
+│ │ decoder.decoder.block.2.layer.0                                       │ │ ││
+│ │ decoder.decoder.block.2.layer.0.SelfAttention                         │ │ ││
+│ │ decoder.decoder.block.2.layer.0.SelfAttention.q                       │ │ ││
+│ │ decoder.decoder.block.2.layer.0.SelfAttention.k                       │ │ ││
+│ │ decoder.decoder.block.2.layer.0.SelfAttention.v                       │ │ ││
+│ │ decoder.decoder.block.2.layer.0.SelfAttention.o                       │ │ ││
+│ │ decoder.decoder.block.2.layer.0.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.2.layer.0.dropout                               │ │ ││
+│ │ decoder.decoder.block.2.layer.1                                       │ │ ││
+│ │ decoder.decoder.block.2.layer.1.EncDecAttention                       │ │ ││
+│ │ decoder.decoder.block.2.layer.1.EncDecAttention.q                     │ │ ││
+│ │ decoder.decoder.block.2.layer.1.EncDecAttention.k                     │ │ ││
+│ │ decoder.decoder.block.2.layer.1.EncDecAttention.v                     │ │ ││
+│ │ decoder.decoder.block.2.layer.1.EncDecAttention.o                     │ │ ││
+│ │ decoder.decoder.block.2.layer.1.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.2.layer.1.dropout                               │ │ ││
+│ │ decoder.decoder.block.2.layer.2                                       │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp                                   │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model                             │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.0                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.1                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.2                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.3                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.4                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.5                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.6                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.2.layer.2.dropout                               │ │ ││
+│ │ decoder.decoder.block.3                                               │ │ ││
+│ │ decoder.decoder.block.3.layer                                         │ │ ││
+│ │ decoder.decoder.block.3.layer.0                                       │ │ ││
+│ │ decoder.decoder.block.3.layer.0.SelfAttention                         │ │ ││
+│ │ decoder.decoder.block.3.layer.0.SelfAttention.q                       │ │ ││
+│ │ decoder.decoder.block.3.layer.0.SelfAttention.k                       │ │ ││
+│ │ decoder.decoder.block.3.layer.0.SelfAttention.v                       │ │ ││
+│ │ decoder.decoder.block.3.layer.0.SelfAttention.o                       │ │ ││
+│ │ decoder.decoder.block.3.layer.0.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.3.layer.0.dropout                               │ │ ││
+│ │ decoder.decoder.block.3.layer.1                                       │ │ ││
+│ │ decoder.decoder.block.3.layer.1.EncDecAttention                       │ │ ││
+│ │ decoder.decoder.block.3.layer.1.EncDecAttention.q                     │ │ ││
+│ │ decoder.decoder.block.3.layer.1.EncDecAttention.k                     │ │ ││
+│ │ decoder.decoder.block.3.layer.1.EncDecAttention.v                     │ │ ││
+│ │ decoder.decoder.block.3.layer.1.EncDecAttention.o                     │ │ ││
+│ │ decoder.decoder.block.3.layer.1.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.3.layer.1.dropout                               │ │ ││
+│ │ decoder.decoder.block.3.layer.2                                       │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp                                   │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model                             │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.0                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.1                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.2                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.3                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.4                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.5                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.6                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.3.layer.2.dropout                               │ │ ││
+│ │ decoder.decoder.final_layer_norm                                      │ │ ││
+│ │ decoder.decoder.dropout                                               │ │ ││
+│ │ decoder.decoder_mlp                                                   │ │ ││
+│ │ decoder.decoder_mlp.0                                                 │ │ ││
+│ │ decoder.decoder_mlp.1                                                 │ │ ││
+│ │ decoder.decoder_mlp.2                                                 │ │ ││
+│ │ decoder.decoder_mlp.3                                                 │ │ ││
+│ │ item_sid_embedding_table_encoder                                      │ │ ││
+└─┴───────────────────────────────────────────────────────────────────────┴─┴─┴┘
+Trainable params: 13.1 M                                                        
+Non-trainable params: 0                                                         
+Total params: 13.1 M                                                            
+Total estimated model params size (MB): 52                                      
+Modules in train mode: 235                                                      
+Modules in eval mode: 0                                                         
+Restored all states from the checkpoint at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt
+`Trainer.fit` stopped: `max_steps=32` reached.
+[[36m2025-09-29 15:32:03,430[0m][[34m__main__[0m][[32mINFO[0m] - [rank: 0] Starting testing![0m
+Restoring states from the checkpoint path at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch=000_step=003500.ckpt
+[[36m2025-09-29 15:32:03,507[0m][[34msrc.utils.restart_job[0m][[31mERROR[0m] - [rank: 0] Exception caught: Checkpoint file not found: /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch=000_step=003500.ckpt[0m
+[[36m2025-09-29 15:32:03,508[0m][[34msrc.utils.restart_job[0m][[31mERROR[0m] - [rank: 0] Stack trace: Traceback (most recent call last):
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+    return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 789, in _test_impl
+    results = self._run(model, ckpt_path=ckpt_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 951, in _run
+    self._checkpoint_connector._restore_modules_and_callbacks(ckpt_path)
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/connectors/checkpoint_connector.py", line 397, in _restore_modules_and_callbacks
+    self.resume_start(checkpoint_path)
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/trainer/connectors/checkpoint_connector.py", line 79, in resume_start
+    loaded_checkpoint = self.trainer.strategy.load_checkpoint(checkpoint_path)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/pytorch/strategies/strategy.py", line 368, in load_checkpoint
+    return self.checkpoint_io.load_checkpoint(checkpoint_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/lightning/fabric/plugins/io/torch_io.py", line 81, in load_checkpoint
+    raise FileNotFoundError(f"Checkpoint file not found: {path}")
+FileNotFoundError: Checkpoint file not found: /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch=000_step=003500.ckpt
+[0m
+[[36m2025-09-29 15:32:03,508[0m][[34msrc.utils.restart_job[0m][[32mINFO[0m] - [rank: 0] Cleaning up and handling restart logic[0m
+[[36m2025-09-29 15:32:03,509[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/metadata/restart_metadata.json[0m
+[[36m2025-09-29 15:32:03,509[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Metadata loaded successfully from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/metadata/restart_metadata.json[0m
+[[36m2025-09-29 15:32:03,509[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/metadata/restart_metadata.json[0m
+[[36m2025-09-29 15:32:03,509[0m][[34msrc.utils.restart_job[0m][[32mINFO[0m] - [rank: 0] Restarting job. Current metadata: JobCheckpointMetadata(start_time='2025-09-29T15:31:49.156073', restarts=[{'time': '2025-09-29T15:32:03.509734', 'exception': 'Checkpoint file not found: /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch=000_step=003500.ckpt', 'run_number': 0}], current_run=1, used_ports=[], world_size=0, node_rank=0, master_addr='', original_args=['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt', 'ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt', 'num_hierarchies=4', '++should_skip_retry=True'])[0m
+[[36m2025-09-29 15:32:03,509[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-48/metadata/restart_metadata.json. {'start_time': '2025-09-29T15:31:49.156073', 'restarts': [{'time': '2025-09-29T15:32:03.509734', 'exception': 'Checkpoint file not found: /data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch=000_step=003500.ckpt', 'run_number': 0}], 'current_run': 1, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt', 'ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt', 'num_hierarchies=4', '++should_skip_retry=True']}[0m
+[[36m2025-09-29 15:32:03,510[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Cleaning up distributed process group[0m
+[[36m2025-09-29 15:32:03,715[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Clearing CUDA cache[0m
+[[36m2025-09-29 15:32:03,715[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Tearing down trainer[0m
+[[36m2025-09-29 15:32:03,723[0m][[34msrc.utils.restart_job[0m][[32mINFO[0m] - [rank: 0] Resources cleaned up.[0m
+[[36m2025-09-29 15:32:05,411[0m][[34msrc.utils.restart_job[0m][[31mERROR[0m] - [rank: 0] Job failed with return code 1[0m
+[[36m2025-09-29 15:32:05,411[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json[0m
+[[36m2025-09-29 15:32:05,412[0m][[34msrc.utils.restart_job_utils[0m][[33mWARNING[0m] - [rank: 0] Metadata file not found at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json. Creating empty metadata.[0m
+[[36m2025-09-29 15:32:05,412[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Retrieved current_run: 0 from metadata /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json[0m
+[[36m2025-09-29 15:32:05,413[0m][[34msrc.utils.restart_job[0m][[31mERROR[0m] - [rank: 0] Metadata run count 0 does not match current run count 1.This can happen if the exception does not trigger the callback on_exception. Cleaning up andupdating metadata before retrying.[0m
+[[36m2025-09-29 15:32:05,500[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Clearing CUDA cache[0m
+[[36m2025-09-29 15:32:05,500[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Trying to load metadata from /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json[0m
+[[36m2025-09-29 15:32:05,501[0m][[34msrc.utils.restart_job_utils[0m][[33mWARNING[0m] - [rank: 0] Metadata file not found at /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json. Creating empty metadata.[0m
+[[36m2025-09-29 15:32:05,501[0m][[34msrc.utils.restart_job_utils[0m][[32mINFO[0m] - [rank: 0] Saving metadata to /data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json. {'start_time': '2025-09-29T15:32:05.501634', 'restarts': [], 'current_run': 1, 'used_ports': [], 'world_size': 0, 'node_rank': 0, 'master_addr': '', 'original_args': ['/data/mhwang/Rec/GRID/src/train.py', 'experiment=tiger_train_flat', 'data_dir=/data/mhwang/Rec/GRID/amazon_data/toys', 'semantic_id_path=/data/mhwang/Rec/GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt', 'ckpt_path=/data/mhwang/Rec/GRID/logs/train/runs/2025-09-22/10-15-06/checkpoints/checkpoint_epoch_000_step_003500.ckpt', 'num_hierarchies=4']}[0m
+[[36m2025-09-29 15:32:05,502[0m][[34msrc.utils.decorators[0m][[33mWARNING[0m] - [rank: 0] [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json', Retrying src.utils.file_utils:open_local_or_remote in 3 seconds...[0m
+[[36m2025-09-29 15:32:08,503[0m][[34msrc.utils.decorators[0m][[33mWARNING[0m] - [rank: 0] [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json', Retrying src.utils.file_utils:open_local_or_remote in 6 seconds...[0m
+[[36m2025-09-29 15:32:14,503[0m][[34msrc.utils.decorators[0m][[33mWARNING[0m] - [rank: 0] [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json', Retrying src.utils.file_utils:open_local_or_remote in 12 seconds...[0m
+[[36m2025-09-29 15:32:26,504[0m][[34msrc.utils.decorators[0m][[33mWARNING[0m] - [rank: 0] [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json', Retrying src.utils.file_utils:open_local_or_remote in 24 seconds...[0m
+[[36m2025-09-29 15:32:50,505[0m][[34msrc.utils.decorators[0m][[33mWARNING[0m] - [rank: 0] [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json', Retrying src.utils.file_utils:open_local_or_remote in 48 seconds...[0m
+[[36m2025-09-29 15:33:38,506[0m][[34msrc.utils.decorators[0m][[31mERROR[0m] - [rank: 0] Failed for the last time: [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json'[0m
+Traceback (most recent call last):
+  File "/data/mhwang/Rec/GRID/src/utils/decorators.py", line 135, in f_retry
+    ret_val = fn(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/decorators.py", line 121, in fn
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/file_utils.py", line 40, in open_local_or_remote
+    return fs.open(file_path, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/spec.py", line 1291, in open
+    self.open(
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/spec.py", line 1303, in open
+    f = self._open(
+        ^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 195, in _open
+    return LocalFileOpener(path, mode, fs=self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 359, in __init__
+    self._open()
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 364, in _open
+    self.f = open(self.path, mode=self.mode)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json'
+[[36m2025-09-29 15:33:38,512[0m][[34msrc.utils.restart_job[0m][[31mERROR[0m] - [rank: 0] Error launching job. Exception Retry failed, permanently failing src.utils.file_utils:open_local_or_remote, see logs for [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json' Traceback (most recent call last):
+  File "/data/mhwang/Rec/GRID/src/utils/decorators.py", line 135, in f_retry
+    ret_val = fn(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/decorators.py", line 121, in fn
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/file_utils.py", line 40, in open_local_or_remote
+    return fs.open(file_path, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/spec.py", line 1291, in open
+    self.open(
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/spec.py", line 1303, in open
+    f = self._open(
+        ^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 195, in _open
+    return LocalFileOpener(path, mode, fs=self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 359, in __init__
+    self._open()
+  File "/data_sdc/mhwang/miniconda3/envs/GRs/lib/python3.12/site-packages/fsspec/implementations/local.py", line 364, in _open
+    self.f = open(self.path, mode=self.mode)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/data/mhwang/Rec/GRID/src/utils/restart_job.py", line 332, in launch
+    return self.execute_job()
+           ^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/restart_job.py", line 232, in execute_job
+    save_metadata_to_local_or_remote(metadata, self.metadata_path)
+  File "/data/mhwang/Rec/GRID/src/utils/restart_job_utils.py", line 153, in save_metadata_to_local_or_remote
+    with open_local_or_remote(metadata_path, "w") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/mhwang/Rec/GRID/src/utils/decorators.py", line 145, in f_retry
+    raise RetriesFailedException(
+src.utils.decorators.RetriesFailedException: Retry failed, permanently failing src.utils.file_utils:open_local_or_remote, see logs for [Errno 2] No such file or directory: '/data/mhwang/Rec/GRID/logs/train/runs/2025-09-29/15-31-40/metadata/restart_metadata.json'
+[0m
