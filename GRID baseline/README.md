@@ -6,7 +6,7 @@
 在本分支中，所有 `codex` 目录均按要求排除，因此先前放在其中的重测脚本、权重合并脚本和核验清单不在此目录。
 这些辅助文件仍可在 [main 分支的原基线目录](https://github.com/woobowen/recommend/tree/main/GRID%20baseline/codex) 查阅。
 
-数据和模型均使用 Git LFS；请参阅 [分支根目录说明](../README.md) 下载并还原 Qwen 权重。此目录中的模型权重分片与根目录的模型内容相同，也可按相同方式合并。
+数据和模型均使用 Git LFS；请参阅 [全部 SID 实验的下载说明](../All%20SID%20Experiments/README.md) 下载并还原 Qwen 权重。此目录中的模型权重分片与 `All SID Experiments/models/` 的模型内容相同，也可按相同方式合并。
 三个最佳 checkpoint 及对应 SID 位于各自的 `experiments/<run>/`，历史配置的绝对路径保留原样，跨机器使用需调整。
 
 | 数据集 | 实验目录 | 最佳 checkpoint |
