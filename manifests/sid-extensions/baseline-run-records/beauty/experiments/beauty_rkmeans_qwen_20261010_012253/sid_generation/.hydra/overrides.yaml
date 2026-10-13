@@ -1,0 +1,17 @@
+- experiment=rkmeans_inference_flat
+- ckpt_path=/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/experiments/beauty_rkmeans_qwen_20261010_012253/quantizer_train/checkpoints/checkpoint_000_000030.ckpt
+- callbacks.bq_writer=null
+- ++callbacks.restart_job=null
+- data_dir=/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/original_assets/data/amazon_data/beauty
+- paths.root_dir=/home/jcyin/GRID_wmh_Qwen_TIGER_20261009
+- trainer.devices=1
+- ++trainer.strategy=auto
+- trainer.precision=32-true
+- extras.print_config=false
+- embedding_path=/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/experiments/beauty_rkmeans_qwen_20261010_012253/item_embeddings.pt
+- embedding_dim=3584
+- num_hierarchies=3
+- codebook_width=256
+- ++data_loading.datamodule.predict_dataloader_config.num_workers=0
+- ++data_loading.datamodule.predict_dataloader_config.timeout=0
+- ++data_loading.datamodule.predict_dataloader_config.persistent_workers=false

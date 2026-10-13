@@ -1,0 +1,38 @@
+{
+  "reviewer": "/root/audit_publish",
+  "observed_at": "2026-10-14T01:58:09.118809+08:00",
+  "status": "PASS_DEPLOY_HELPER_RECOVERY_AND_SAFETY_FIXTURES",
+  "global_correction_round": 2,
+  "helper_sha256": "704f5c1846a664ccd67b102573af7bc9a83dadd52ecc16cb31278876824b9558",
+  "closed_findings": [
+    "Archive validation precedes visible target creation; initializing root carries fsynced ownership marker",
+    "New files written/hash-checked in job-specific staging outside code tree before no-overwrite publication"
+  ],
+  "tests": [
+    {
+      "case": "Bad archive identity rejected before visible target creation",
+      "result": "PASS"
+    },
+    {
+      "case": "Interruption before first file publication leaves owned target and external staged evidence; new attempt completes exact tree",
+      "result": "PASS"
+    },
+    {
+      "case": "C to D updates allowed metadata while preserving audited source bytes",
+      "result": "PASS"
+    },
+    {
+      "case": "Changed audited source rejected without source overwrite",
+      "result": "PASS"
+    },
+    {
+      "case": "Unrecorded extra code file prevents exact tree success and is not deleted",
+      "result": "PASS"
+    }
+  ],
+  "limits": [
+    "Private temporary root mapping and one simulated os.link interruption only",
+    "No Git hooks, real archive deployment, SSH/network, or source code execution invoked",
+    "Actual C/D archive plan/request and server terminal receipts still pending"
+  ]
+}

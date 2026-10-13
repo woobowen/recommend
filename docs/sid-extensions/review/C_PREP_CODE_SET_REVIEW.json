@@ -1,0 +1,275 @@
+{
+  "reviewer": "/root/audit_publish",
+  "observed_at": "2026-10-14T02:02:07.559408+08:00",
+  "status": "PASS_STATIC_PREPARATION_TOOL_SET",
+  "source_set_id_sha256": "8b3149a98731ba7857e446e0f488489be0715181b841f8c7f9f169d3c4e16ac3",
+  "tool_count": 12,
+  "tools": [
+    {
+      "path": "tools/sid-extensions-prep/assemble_lfs_chunks.py",
+      "bytes": 3272,
+      "sha256": "eb30b2e3e5a4fc108d3ca284e3b1edafb996294e709ccec9446756b95cc6b610",
+      "syntax": "PASS",
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sys"
+      ],
+      "earlier_independent_review": [
+        "C_RELAY_REQUEST_REVIEW.json"
+      ],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately"
+    },
+    {
+      "path": "tools/sid-extensions-prep/build_asset_manifest.py",
+      "bytes": 6621,
+      "sha256": "3d5a90a6f3a87651b900e1a3d2d00a17dfb5922a8a65f57ab2fe7dbf006c0f1d",
+      "syntax": "PASS",
+      "imports": [
+        "hashlib",
+        "json",
+        "pathlib"
+      ],
+      "earlier_independent_review": [
+        "C_ASSET_BUILDER_JOB_ID_REVIEW.json"
+      ],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately"
+    },
+    {
+      "path": "tools/sid-extensions-prep/build_static_catalog.py",
+      "bytes": 8550,
+      "sha256": "058b98bf6125ccc32d16991549eec544bb2b627a2b57f4fef0bc4d5f17e8e770",
+      "syntax": "PASS",
+      "imports": [
+        "ast",
+        "hashlib",
+        "json",
+        "pathlib",
+        "re",
+        "subprocess",
+        "sys",
+        "urllib.parse"
+      ],
+      "earlier_independent_review": [],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately"
+    },
+    {
+      "path": "tools/sid-extensions-prep/deploy_git_tree.py",
+      "bytes": 5862,
+      "sha256": "704f5c1846a664ccd67b102573af7bc9a83dadd52ecc16cb31278876824b9558",
+      "syntax": "PASS",
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sys",
+        "tarfile"
+      ],
+      "earlier_independent_review": [
+        "C_DEPLOY_HELPER_REVIEW.json"
+      ],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately"
+    },
+    {
+      "path": "tools/sid-extensions-prep/gridctl.py",
+      "bytes": 7203,
+      "sha256": "b6fa7f86472cba5e0c00398ccc0925940dd1524027dd827aac3e82bfc1105c13",
+      "syntax": "PASS",
+      "imports": [
+        "argparse",
+        "datetime",
+        "fcntl",
+        "hashlib",
+        "json",
+        "pathlib",
+        "re",
+        "shlex",
+        "tarfile",
+        "transport",
+        "zoneinfo"
+      ],
+      "earlier_independent_review": [
+        "C_PRECHECK.md"
+      ],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately",
+      "old_verified_runner_or_transport_sha256": "b6fa7f86472cba5e0c00398ccc0925940dd1524027dd827aac3e82bfc1105c13",
+      "reuse_relation": "BYTE_IDENTICAL"
+    },
+    {
+      "path": "tools/sid-extensions-prep/relay_lfs_chunks.py",
+      "bytes": 4935,
+      "sha256": "3494a299de61e86dce35984216e64cf9364b58649e5d25fb217e1160b09dcac3",
+      "syntax": "PASS",
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sys",
+        "transport",
+        "urllib.parse",
+        "urllib.request"
+      ],
+      "earlier_independent_review": [
+        "C_RELAY_REQUEST_REVIEW.json"
+      ],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately"
+    },
+    {
+      "path": "tools/sid-extensions-prep/relay_lfs_chunks_v2.py",
+      "bytes": 5931,
+      "sha256": "0997457891a427477b0cfd405406745d1bc0718fb28a3471da6786631fc682eb",
+      "syntax": "PASS",
+      "imports": [
+        "datetime",
+        "hashlib",
+        "http.client",
+        "json",
+        "os",
+        "pathlib",
+        "sys",
+        "transport",
+        "urllib.error",
+        "urllib.parse",
+        "urllib.request"
+      ],
+      "earlier_independent_review": [
+        "C_RELAY_V2_REQUEST_REVIEW.json"
+      ],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately"
+    },
+    {
+      "path": "tools/sid-extensions-prep/restore_selected.py",
+      "bytes": 7952,
+      "sha256": "7b9530b5de9c0eef4dc2931657be0538bbc9b5bc851dfb44228a8282a0c8a232",
+      "syntax": "PASS",
+      "imports": [
+        "datetime",
+        "hashlib",
+        "io",
+        "json",
+        "os",
+        "pathlib",
+        "stat",
+        "sys",
+        "tarfile"
+      ],
+      "earlier_independent_review": [
+        "C_HELPER_REVIEW.json",
+        "C_RESTORE_REQUEST_REVIEW.json",
+        "C_RESTORE_RESULT_REVIEW.json"
+      ],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately"
+    },
+    {
+      "path": "tools/sid-extensions-prep/runner.py",
+      "bytes": 24017,
+      "sha256": "398768a732bbfebde4308486a0cedd924595157fda6cbff6a88f0bfaa512beff",
+      "syntax": "PASS",
+      "imports": [
+        "argparse",
+        "contextlib",
+        "datetime",
+        "fcntl",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "pwd",
+        "re",
+        "signal",
+        "socket",
+        "subprocess",
+        "sys",
+        "tarfile",
+        "time",
+        "uuid"
+      ],
+      "earlier_independent_review": [
+        "C_PRECHECK.json"
+      ],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately",
+      "old_verified_runner_or_transport_sha256": "398768a732bbfebde4308486a0cedd924595157fda6cbff6a88f0bfaa512beff",
+      "reuse_relation": "BYTE_IDENTICAL"
+    },
+    {
+      "path": "tools/sid-extensions-prep/static_verify.py",
+      "bytes": 3778,
+      "sha256": "39deb169f7c777d71a821f33524551d3d9b94e42208e22cf2214416a1af6bb0a",
+      "syntax": "PASS",
+      "imports": [
+        "argparse",
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "re",
+        "urllib.parse"
+      ],
+      "earlier_independent_review": [],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately"
+    },
+    {
+      "path": "tools/sid-extensions-prep/transport.py",
+      "bytes": 7444,
+      "sha256": "eced9c0f87833aef91382fc037dd1b909e2d226fb0158147033921ad29f81d9a",
+      "syntax": "PASS",
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "shlex",
+        "shutil",
+        "subprocess",
+        "uuid",
+        "zoneinfo"
+      ],
+      "earlier_independent_review": [
+        "C_PRECHECK.json"
+      ],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately",
+      "old_verified_runner_or_transport_sha256": "772ba1e9af25ce0b7dcf1ea6381f6294f6b40bc9debae06a8cef47c3beaf5a2f",
+      "reuse_relation": "ONLY_STAGE_NAMESPACE_CHANGED"
+    },
+    {
+      "path": "tools/sid-extensions-prep/verify_server_delivery.py",
+      "bytes": 2581,
+      "sha256": "a338a59c1df1abda1a1ab93238a76bf0ec425fe3afda369805ac0db10d873b2a",
+      "syntax": "PASS",
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sys"
+      ],
+      "earlier_independent_review": [
+        "C_SERVER_VERIFY_HELPER_REVIEW.json"
+      ],
+      "scope": "Static safety review; compiler/AST only for this aggregate, file fixtures recorded separately"
+    }
+  ],
+  "static_read_additional": [
+    "build_static_catalog.py reads Git/file bytes, parses AST and YAML targets as text, writes indexes",
+    "static_verify.py reads identity/index/doc links, parses AST without imports; its actual final invocation is pending"
+  ],
+  "execution_boundary": [
+    "Only authored pure-file fixture subsets executed during reviewer tests",
+    "Generic runner can run arbitrary argv; published/requested pure-file inputs are separately audited",
+    "No research source imports, source execution, Hydra instantiate, pickle/tensor/model load"
+  ],
+  "limits": [
+    "Does not establish successful production jobs or final GitHub/deployment; those require independent receipts",
+    "Frozen C source-set identity must equal this set or be re-reviewed"
+  ]
+}

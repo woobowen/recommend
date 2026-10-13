@@ -1,0 +1,39 @@
+{
+  "reviewer": "/root/audit_publish",
+  "observed_at": "2026-10-14T01:31:29.133432+08:00",
+  "finding_id": "C-LICENSE-NOTICES-001",
+  "severity": "publication_documentation_gap",
+  "status": "CLOSED_DOCUMENTED_SAME_BYTE_INHERITANCE",
+  "facts": [
+    "Selected native LICENSE is retained and references notices.txt for third-party attribution",
+    "Native notices.txt was not among the 123 restore publication files",
+    "Fixed baseline contains same-byte notices.txt as LFS pointer; its actual payload is separately available by media URL"
+  ],
+  "original_notices": {
+    "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/notices.txt",
+    "bytes": 27047918,
+    "sha256": "dfe5a200babee2459c42f2fafe232d7d6a0c0637b8c413d4d1bc5aa79a7ca35e"
+  },
+  "baseline_pointer": {
+    "commit": "563dc50b1c7e9e2e05cdfddd13e91a3d1888001e",
+    "path": "GRID baseline/notices.txt",
+    "body": "version https://git-lfs.github.com/spec/v1\noid sha256:dfe5a200babee2459c42f2fafe232d7d6a0c0637b8c413d4d1bc5aa79a7ca35e\nsize 27047918\n"
+  },
+  "suggested_resolution": "Explicitly preserve native LICENSE and reference inherited same-byte notices payload using fixed commit media URL with identity; record provenance rather than presenting pointer as full notice text",
+  "limits": [
+    "This is a preservation/publication-documentation observation, not a legal compliance opinion",
+    "No extra large archive or model asset requested"
+  ],
+  "resolved_at": "2026-10-14T01:33:21.408541+08:00",
+  "resolution": {
+    "readme": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/README.md",
+    "readme_sha256": "abdc6dcbf12d6ccb73984ea3cfbc4172d8f646342dca8f7ab3eace174abbb754",
+    "same_byte_notices_fixed_media_url": "https://media.githubusercontent.com/media/woobowen/recommend/563dc50b1c7e9e2e05cdfddd13e91a3d1888001e/GRID%20baseline/notices.txt",
+    "head_probe": {
+      "status": 200,
+      "content_length": "27047918",
+      "body_downloaded": false
+    },
+    "original_native_LICENSE_retained": true
+  }
+}

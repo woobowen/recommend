@@ -1,0 +1,389 @@
+{
+  "stage_id": "sid-extensions-p0",
+  "rows": [
+    {
+      "id": "0.1",
+      "requirement": "一次性独立P0、继承旧成果，不重开全库审计",
+      "actual_action": "独立support/worktree/STATE，引用旧v6；仅3个相关batch",
+      "evidence": "STATE.json; OLD_AUDIT_INHERITANCE; OLD_V6_PACKAGE_RECEIPT",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "0.2",
+      "requirement": "成功只到READY_FOR_EXPLANATION，两个授权布尔值false",
+      "actual_action": "阶段状态与停止约束明确，未自动进入下一阶段",
+      "evidence": "STATE.json; docs/README; REPORT",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "1.1",
+      "requirement": "仅文件准备/传输/静态分析，禁止来源执行",
+      "actual_action": "隔离解释器/独立cwd；AST、JSON、字节hash；无模型/loader/import执行",
+      "evidence": "纯prep requests/helper; STATIC_DEPENDENCIES; A/B/C reviews",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "1.2",
+      "requirement": "禁止模型加载/前反向/生成/训练/测试/注意力采集",
+      "actual_action": "未调用torch.load/pickle/instantiate/Trainer/Notebook/test_saved_checkpoint，仅读正文",
+      "evidence": "job argv/inputs; helper reviews; CODE_READING_GUIDE",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "1.3",
+      "requirement": "禁止新embedding/SID/权重、划分/映射/指标重算",
+      "actual_action": "使用固定Qwen三域实体；历史结果标HISTORICAL_REPORTED_NOT_RERUN",
+      "evidence": "ASSET_MANIFEST; Baseline Results; experiments说明",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "1.4",
+      "requirement": "禁止改研究/接口逻辑及Parallel填空",
+      "actual_action": "123原件字节保持；PROPOSED_NOT_IMPLEMENTED明确",
+      "evidence": "SOURCE_MANIFEST; B_ROUND2; KNOWN_ISSUES",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "1.5",
+      "requirement": "不接A800/不重传78GB/不清理旧目录",
+      "actual_action": "只经WindowsSSH访问new-server；保留所有旧项目/失败证据",
+      "evidence": "remote-precheck; restore plan; OLD_AUDIT_INHERITANCE",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "1.6",
+      "requirement": "保护共享分支/设置/凭据/环境",
+      "actual_action": "新sid-extensions分支；无force/merge/visibility/SSH代理环境变更",
+      "evidence": "C_PRECHECK; LOCAL_HOOKS_REVIEW; Git操作日志",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "2.1",
+      "requirement": "读实际旧README/REPORT/STATE/矩阵/v6恢复及机制边界",
+      "actual_action": "主控+A/B分别读旧原文和选中ZIP成员；不改冻结结论",
+      "evidence": "A_INHERITANCE_READONLY; OLD_AUDIT_INHERITANCE",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "2.2",
+      "requirement": "固定完整baseline SHA、当前refs/观察时间、有界变化核对",
+      "actual_action": "GitHub current main与锚点相同，无版本漂移；API/ls-remote实际观测",
+      "evidence": "C_PRECHECK.json; STATE baseline_sha",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "2.3",
+      "requirement": "核身份/路径/权限/空间，保护已有工作树",
+      "actual_action": "bwwu/zwlab-01/uid1005，/data约3.6TB余量；已见旧未跟踪文件故隔离",
+      "evidence": "remote-precheck.json; C runner readback",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "3.1",
+      "requirement": "先ls/rules/同阶段状态，不覆盖已有阶段",
+      "actual_action": "首命令ls -la；适用祖先无规则文件；本地/远端同阶段不存在",
+      "evidence": "initial logs; remote-precheck existing_jobs; STATE",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "3.2",
+      "requirement": "STATE/PLAN/矩阵/改进账/阻碍/报告入口",
+      "actual_action": "支持根全创建；Git内实质说明/审核/矩阵按实际结果维护",
+      "evidence": "STATE.json; PLAN.md; IMPROVEMENT_LOG; REQUIREMENTS_MATRIX",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "3.3",
+      "requirement": "角色/依赖/作业/修正轮次/布尔值可恢复",
+      "actual_action": "真实A/B/C，固定job/request/sidecar，round0/1/2日志",
+      "evidence": "STATE; PREPARATION_JOB_SUMMARY; review/ROUND*",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "4.1",
+      "requirement": "独立本地/远端副本与无冲突新分支",
+      "actual_action": "本地独立clone固定锚点，目标sid-extensions；已有同学工作树保留",
+      "evidence": "DEPLOYMENT_MAP; C_PRECHECK",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "4.2",
+      "requirement": "完整可读结构，不重复baseline，不复制.git/env/归档",
+      "actual_action": "baseline沿原路径；native保留src/config/入口相对树；未复制Notebook/大张量",
+      "evidence": "SOURCE_MANIFEST; C_PREPUBLICATION_FILES",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "4.3",
+      "requirement": "原字节、换行/过滤属性、许可来源保护",
+      "actual_action": "新区域GRID/** -text -filter；基线属性不改；LICENSE+同SHA notices载荷继承",
+      "evidence": "C_ORIGINAL_SECRET_SCAN; C_LICENSE_NOTICES_FINDING; SOURCE_MANIFEST",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "5.1",
+      "requirement": "三域全部数据/划分/映射/SID/best checkpoint真实实体",
+      "actual_action": "1902数据已全hash；55固定LFS对象按需取得并服务器wholeOID验证",
+      "evidence": "ASSET_MANIFEST; ASSET_SUMMARY; restore/assembly结果; C_ASSEMBLY_RESULT_REVIEW",
+      "status": "PASS",
+      "remaining": "无工作必需payload缺口；MODEL_LOAD_NOT_RUN/SEMANTIC_BINDING_UNVERIFIED"
+    },
+    {
+      "id": "5.2",
+      "requirement": "按new-server同身份→归档匹配→固定LFS优先，不混T5",
+      "actual_action": "Beauty已有同SHA复用；Toys/Sports匹配旧数据归档；Qwen SID/权重只固定OID",
+      "evidence": "A_BASELINE_EXPECTED_IDENTITIES; A_DATA_AND_SOURCE; ASSET_MANIFEST",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "5.3",
+      "requirement": "最佳checkpoint与原有效配置/overrides/结果关系",
+      "actual_action": "固定test_results+stage_result和原command，43小记录真实载荷普通Git发布",
+      "evidence": "A_RUN_RECORDS_STATIC; baseline-run-records; CODE_READING_GUIDE",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "5.4",
+      "requirement": "区分字节/provenance/语义/未模型加载/未授权",
+      "actual_action": "逐资产五层标记，Qwen配对缺精确hash运行证明统一UNVERIFIED",
+      "evidence": "ASSET_MANIFEST semantic/model_load/experiment字段",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "5.5",
+      "requirement": "LFS指针不当payload，普通路径/只读链接受控",
+      "actual_action": "外部资产root普通实体；Beauty symlink目标664只读使用政策，其他444独立inode",
+      "evidence": "ASSET_MANIFEST; A_REMOTE_SELECTED_READBACK; C_ASSEMBLY_RESULT_REVIEW",
+      "status": "PASS",
+      "remaining": "无工作必需payload缺口；MODEL_LOAD_NOT_RUN/SEMANTIC_BINDING_UNVERIFIED"
+    },
+    {
+      "id": "5.6",
+      "requirement": "预算/固定分块/有界并发/已验不重复、不下载全Qwen",
+      "actual_action": "100GiB reserve；32MiB顺序Range/WindowsSCP回执恢复；固定SID无需上游完整权重",
+      "evidence": "C_RELAY*; PREPARATION_JOB_SUMMARY; ENVIRONMENT",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "6.1",
+      "requirement": "从new-server归档按需恢复原生模型及本地依赖配置",
+      "actual_action": "b01提取123原件/历史上下文，服务器打包回读，静态模块路径均可追",
+      "evidence": "SOURCE_MANIFEST; STATIC_DEPENDENCIES; C_SERVER_ORIGINALS_REHASH",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "6.2",
+      "requirement": "原件/工程派生区分，许可证/敏感信息、历史资料有界",
+      "actual_action": "不部署旧eval-v2，不伪装已适配；原件秘密模式无命中；不扩展图/tensor",
+      "evidence": "references/README; C_LICENSE/SECRET reports",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "7.shuffle",
+      "requirement": "共享表/双表、三重排、hook、mask/随机/YAML问题实际重定位",
+      "actual_action": "按原文/hash/行号解释，普通main保持原参数，后续建议未实施",
+      "evidence": "experiments/shuffle.md; B_ROUND2",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "7.mlp",
+      "requirement": "HE→2E→E/ReLU/Dropout、SEP/mask/user、3类MLP、AR/参数",
+      "actual_action": "原文定位及静态形状/参数推导，训练初始化/冻结/预算留待讨论",
+      "evidence": "experiments/mlp.md; B_ROUND2",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "7.parallel",
+      "requirement": "同字节AR；非AR NOT_RECOVERED/待讨论，不造实现",
+      "actual_action": "保存原件、4BOS历史上下文、已知/未知与设计问题清单",
+      "evidence": "experiments/parallel.md; B_ROUND2",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "7.attention",
+      "requirement": "cross轴/四步骤、真实采集绘图/beam/mask/33CRC边界",
+      "actual_action": "逐函数阅读；指出没有实际mask保存与最终祖先；引用旧528/33不重扫",
+      "evidence": "experiments/attention.md; B_ROUND2",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "7.history",
+      "requirement": "v6 CPU有界接口/历史配置不能唯一绑定Python/Qwen与T5区分",
+      "actual_action": "所有历史身份/限制分层标明，未重造指标",
+      "evidence": "OLD_AUDIT_INHERITANCE; 各实验历史入口",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "8.1",
+      "requirement": "总图+四说明，各含10项讲解要求/性质标识",
+      "actual_action": "入口/配置/数据/变体/shape/参数/历史/提案/未来验证/用户问题齐备",
+      "evidence": "CODE_READING_GUIDE; 四experiments; B_ROUND2",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "8.2",
+      "requirement": "源码事实绑定版本/path/symbol/行范围/完整hash；教学值非实测",
+      "actual_action": "65源码证据+完整AST索引+原CSV行；H4/E128/M30槽静态标注",
+      "evidence": "SOURCE_LINES; SOURCE_MANIFEST; B_ROUND2",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "9.1",
+      "requirement": "SOURCE_PROVENANCE/DEPLOYMENT_MAP不能只比HEAD",
+      "actual_action": "baseline逐Git blob、native捕获/member/server hash；全部source集合hash",
+      "evidence": "SOURCE_MANIFEST; DEPLOYMENT_MAP",
+      "status": "PENDING",
+      "remaining": "server最终Git树部署待核"
+    },
+    {
+      "id": "9.2",
+      "requirement": "有效配置/路径只映射不改写、环境只metadata、动态依赖诚实",
+      "actual_action": "43原配置文本；PATH_MAPPING/ENVIRONMENT，未导入/安装/instantiate",
+      "evidence": "baseline-run-records; STATIC_DEPENDENCIES; ENVIRONMENT_METADATA",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "9.3",
+      "requirement": "忽略/外部本地模块识别，实际import身份留预跑",
+      "actual_action": "显式src模块路径全找到；动态target/导出符号/runtime身份明确未确认",
+      "evidence": "STATIC_DEPENDENCIES; C prepublication",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "10.1",
+      "requirement": "真实multi-agent A/B/C、非作者复核实际原件/命令结果",
+      "actual_action": "A全部来源+远端抽核、B源码/文档、C工具/服务器全123重hash/发布",
+      "evidence": "review/A_* B_* C_*",
+      "status": "PASS_MATERIAL_NONAUTHOR_REVIEW",
+      "remaining": "实际发布/部署回读由C后续闭合，不能预宣"
+    },
+    {
+      "id": "10.2",
+      "requirement": "不并发改源码/index/STATE，Git由主控串行",
+      "actual_action": "代理只写自己的review，冲突按原证据解决",
+      "evidence": "review/README; Git操作记录",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "11.1",
+      "requirement": "整个P0最多3轮，失败保留、自主修正、不重置",
+      "actual_action": "round1文档六项；round2网络超时新attempt与精度；当前使用2/3",
+      "evidence": "IMPROVEMENT_LOG; ROUND1/ROUND2_CHANGE_RECORD",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "11.2",
+      "requirement": "外部硬阻碍停止依赖链，未知/源问题不能降门槛",
+      "actual_action": "源问题保留边界；当前恢复任务不标完成；认证不暴力重试",
+      "evidence": "BLOCKERS; REPORT; STATE",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "12.1",
+      "requirement": "复用runner，耗时任务请求/日志/状态/ID持久化与查询恢复",
+      "actual_action": "旧runner同字节新sidecar；local relay+remote restore/assembly全独立job",
+      "evidence": "C_HELPER/REQUEST reports; PREPARATION_JOB_SUMMARY",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "12.2",
+      "requirement": "回执丢失先查ID、不重跑/不覆盖、Windows路径/字节核验",
+      "actual_action": "transport STAGE新路径、SCP验证SHA，v1失败保留v2关联恢复",
+      "evidence": "C_RELAY_V2; 工具原文; job requests",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "12.3",
+      "requirement": "容量预算/每批空间/无本阶段训练队列/必要job最终终态",
+      "actual_action": "当前restore终态；relay进行中，结束需无live/结果取回",
+      "evidence": "PREPARATION_JOB_SUMMARY; STATE",
+      "status": "PENDING",
+      "remaining": "relay/assembly/最后部署作业尚未结束"
+    },
+    {
+      "id": "13.1",
+      "requirement": "发布前权限/具体文件/secret/自动化/hook审查",
+      "actual_action": "push权限，GitHub无workflow，hook无非sample，新增区无大载荷/secret",
+      "evidence": "C_PRECHECK; C_LOCAL_HOOKS; C_PREPUBLICATION_FILES",
+      "status": "PASS",
+      "remaining": "无；运行/理解仍未授权"
+    },
+    {
+      "id": "13.2",
+      "requirement": "实际CONTENT_COMMIT正常push并从GitHub取固定tree/blob字节",
+      "actual_action": "提交/推送后必须独立API回读全部必需source/config",
+      "evidence": "review/C_CONTENT_GITHUB_READBACK",
+      "status": "PENDING",
+      "remaining": "C尚未提交/回读"
+    },
+    {
+      "id": "13.3",
+      "requirement": "DELIVERY_COMMIT、C/D同source、最终D再回读与server对应",
+      "actual_action": "D仅元数据，source路径/blob/hash集合相等；D完整SHA/最终收据包外",
+      "evidence": "C/D比较; FINAL_DELIVERY_RECEIPT external",
+      "status": "PENDING",
+      "remaining": "D尚未提交/回读"
+    },
+    {
+      "id": "14.1",
+      "requirement": "10项最少交付齐全，小报告/清单/实质审核实际上GitHub",
+      "actual_action": "阅读/完整source/config/来源/资产/known issues/deploy/矩阵/审查/报告",
+      "evidence": "docs+manifests+references+tools; REPORT",
+      "status": "PENDING",
+      "remaining": "最终发布尚未完成"
+    },
+    {
+      "id": "14.2",
+      "requirement": "成功最低门槛：实体、原版、无实验、实际发布、独立复核、无在途job",
+      "actual_action": "不因Parallel缺失等约定边界降门槛；必需缺口始终PENDING",
+      "evidence": "ASSET_SUMMARY; review; STATE; GitHub回读",
+      "status": "PENDING",
+      "remaining": "等待全部必做闭合"
+    },
+    {
+      "id": "15.1",
+      "requirement": "最终中文A–G，固定版本入口/位置/真实审查轮次/限制/接手并停止",
+      "actual_action": "Codex最终消息提供D完整SHA/最终实际回读；两个布尔值false",
+      "evidence": "FINAL_DELIVERY_RECEIPT; STATE; 最终回复",
+      "status": "PENDING",
+      "remaining": "仅收尾时执行"
+    }
+  ]
+}

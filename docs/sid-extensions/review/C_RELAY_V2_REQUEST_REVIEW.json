@@ -1,0 +1,33 @@
+{
+  "reviewer": "/root/audit_publish",
+  "observed_at": "2026-10-14T01:43:14.757485+08:00",
+  "status": "PASS_RELAY_V2_REQUEST_AND_BOUNDED_RETRY_FIXTURES",
+  "global_correction_round": 2,
+  "job_id": "sid-extensions-p0-relay-lfs-v2",
+  "related_attempt": "sid-extensions-p0-relay-lfs-v1",
+  "request_file_sha256": "70014067e3c0622b4a5a23750f2578bcfcf91806013b6738b1d47c469d88e85c",
+  "helper_sha256": "0997457891a427477b0cfd405406745d1bc0718fb28a3471da6786631fc682eb",
+  "plan_sha256": "25ffa395f6b120ca2e1ca143d2057d8d6cb7bbf6a81c6491447dfb0d3d25195e",
+  "prior_attempt_terminal": "FAILED_EXIT_1_CLEANUP_VERIFIED_NO_LIVE",
+  "tests": [
+    {
+      "case": "Partial first Range timeout retained; second full Range uploads once; subsequent recovery verifies remote receipt with no HTTP",
+      "result": "PASS"
+    },
+    {
+      "case": "Three partial network failures stop after 3, retain separate evidence, no upload/promotion",
+      "result": "PASS"
+    }
+  ],
+  "recovery_limits": [
+    "Same job ID cannot rerun; completed receipts survive across distinct attempts",
+    "Only complete HTTP206 exact Content-Range transferred; final whole LFS OID pending server assembly",
+    "Network retries bounded to 3 per chunk, each 60-second I/O; runner total 7200 seconds",
+    "Failed local partial pieces remain evidence; each <=32MiB and storage checks continue; this is not byte-internal resumption"
+  ],
+  "limits": [
+    "Mock HTTP and fake transport only; no actual network/SSH run by this reviewer in fixture",
+    "Source/model execution not performed",
+    "Actual final server assembly and job terminal state still required"
+  ]
+}

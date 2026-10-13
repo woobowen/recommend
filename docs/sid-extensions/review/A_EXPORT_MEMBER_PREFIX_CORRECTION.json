@@ -1,0 +1,13 @@
+{
+  "reviewer": "/root/audit_assets",
+  "observed_at": "2026-10-14T01:30:25.256101+08:00",
+  "type": "AUDITOR_MAPPING_ASSUMPTION_CORRECTION_NO_MATERIAL_CHANGE",
+  "initial_report": "/home/addaswsw/recommend-support/sid-extensions-p0/review/A_DATA_AND_SOURCE_RESTORATION.initial-auditor-prefix-assumption.json",
+  "initial_report_sha256": "8747975fedc7969176fabe70524752114cc3ce87d747cbeceeaa9e2085a74bc1",
+  "reason": "Initial reviewer compared members against filenames relative to GRID while actual server export intentionally preserved GRID/ prefix. All 123 apparent unexpected members were the same expected sources with GRID/ prefix; this is an auditor path mapping error, not an asset, source, export or preparation failure.",
+  "fix": "Read actual TAR names, bind exact GRID/ prefix to recorded publication logical path, fully read every selected regular member and compare SHA/size to restore journal and capture.",
+  "actual_archive_members": 123,
+  "all_sha_size_match": true,
+  "source_or_material_changes": false,
+  "remaining_errors": []
+}

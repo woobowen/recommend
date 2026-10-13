@@ -1,0 +1,46 @@
+{
+  "reviewer": "/root/audit_publish",
+  "observed_at": "2026-10-14T01:09:20.205851+08:00",
+  "scope": "Own pure-file helpers only, no source project import/execution or SSH/model operation",
+  "files": [
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/scripts/restore_selected.py",
+      "sha256": "7b9530b5de9c0eef4dc2931657be0538bbc9b5bc851dfb44228a8282a0c8a232",
+      "bytes": 7952,
+      "syntax": "PASS"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/scripts/fetch_lfs_selected.py",
+      "sha256": "3a376cfa423a2dda9fc02499f0692e6a4b5c97b182f9b4ba704a8af3e7fd8820",
+      "bytes": 3965,
+      "syntax": "PASS"
+    }
+  ],
+  "tests": [
+    {
+      "case": "target outside allowed root rejected",
+      "result": "PASS"
+    },
+    {
+      "case": "symlink target ancestor rejected",
+      "result": "PASS"
+    },
+    {
+      "case": "split TAR streaming hashes and complete byte drain",
+      "result": "PASS",
+      "parts": 11,
+      "bytes": 10240
+    },
+    {
+      "case": "tampered chunk identity rejected",
+      "result": "PASS"
+    }
+  ],
+  "status": "PASS_HELPER_STATIC_AND_BOUNDED_FILE_FIXTURES",
+  "limits": [
+    "No full restore prepare() invoked by reviewer",
+    "No LFS HTTP request invoked by reviewer",
+    "Actual request plans/inputs and remote results must be checked separately",
+    "read_only_use for reused links is a usage declaration, not permission enforcement"
+  ]
+}

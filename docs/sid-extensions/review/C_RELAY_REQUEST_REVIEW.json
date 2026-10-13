@@ -1,0 +1,48 @@
+{
+  "reviewer": "/root/audit_publish",
+  "observed_at": "2026-10-14T01:15:48.766395+08:00",
+  "status": "PASS_RELAY_REQUEST_AND_HELPER_FILE_FIXTURES",
+  "job_id": "sid-extensions-p0-relay-lfs-v1",
+  "plan_sha256": "25ffa395f6b120ca2e1ca143d2057d8d6cb7bbf6a81c6491447dfb0d3d25195e",
+  "files": [
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/scripts/relay_lfs_chunks.py",
+      "bytes": 4935,
+      "sha256": "3494a299de61e86dce35984216e64cf9364b58649e5d25fb217e1160b09dcac3"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/scripts/assemble_lfs_chunks.py",
+      "bytes": 3272,
+      "sha256": "eb30b2e3e5a4fc108d3ca284e3b1edafb996294e709ccec9446756b95cc6b610"
+    }
+  ],
+  "objects": 55,
+  "total_bytes": 482736854,
+  "chunk_bytes": 33554432,
+  "concurrency": 1,
+  "tests": [
+    {
+      "case": "Request/sidecar/inputs/local identity/isolation flags",
+      "result": "PASS"
+    },
+    {
+      "case": "Two-chunk assembly/whole SHA/444 and independent inode",
+      "result": "PASS"
+    },
+    {
+      "case": "Tampered chunk rejected without final promotion",
+      "result": "PASS"
+    },
+    {
+      "case": "Mock HTTP206 Range -> transport -> receipt, second call reuses remote verified receipt without another HTTP read",
+      "result": "PASS"
+    }
+  ],
+  "limits": [
+    "Mock fixture does not prove actual HTTP/SSH works",
+    "No live network or SSH invoked by reviewer",
+    "Actual generated assembly plan/request and final whole LFS OID/terminal jobs require later review",
+    "No source/research code executed; fixture helpers are newly authored pure-file code"
+  ],
+  "request_file_sha256": "b6a8a52186b52f96065823e0aa674bb797db6ae2b69edfd1b5c434f1e8817443"
+}

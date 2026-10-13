@@ -1,0 +1,35 @@
+{
+  "reviewer": "/root/audit_publish",
+  "observed_at": "2026-10-14T02:08:58.333238+08:00",
+  "status": "PASS_ARCHIVED_REFERENCE_ASSET_INDEX",
+  "finding": "Previously generic upstream/history recovery mention now has exact small metadata identity index",
+  "rows": 19,
+  "source_labels": {
+    "A800_GRID": 3,
+    "A800_T5_SMALL": 4,
+    "A800_QWEN05": 4,
+    "A800_QWEN7": 8
+  },
+  "reference_index_sha256": "d5d06aadbf3d1c5e55e51949b1a9eff459f8ef699988077c2b4d4b6bd65d956a",
+  "old_external_mapping_sha256": "c6fa3e6fd02e20ccfb4f20a5b2278953f7c090291ea3b7cab6d29bcec86486b5",
+  "old_mechanism_document_byte_identical": true,
+  "old_mechanism_document_sha256": "ee706da1be36f9ebbc56a998cf00d4a31022c4e4373abb7d68048ed75bff6539",
+  "checks": [
+    "Each selected row identity and new-server recovery manifest/chunk/member equals old captured mapping",
+    "Explicit reference-only, not deployed/not loaded and not restored in P0 status on all rows",
+    "Mechanism evidence is exact old bytes and clearly inherited, not freshly parsed checkpoint",
+    "Environment links to exact published index and inherited mechanism evidence",
+    "Four archived Qwen7 complete weight identities exactly match fixed baseline weights_manifest full-file SHA/size and part identity metadata; no merging/downloading/loading"
+  ],
+  "limits": [
+    "No reference payload body rehash or extraction this phase",
+    "Working Qwen assets remain independent required LFS objects",
+    "Historical model/forward/mask/producer semantics remain UNKNOWN"
+  ],
+  "fixed_baseline_qwen7_complete_weight_manifest_rows_equal": [
+    "models/Qwen2.5-7B-Instruct/model-00001-of-00004.safetensors",
+    "models/Qwen2.5-7B-Instruct/model-00002-of-00004.safetensors",
+    "models/Qwen2.5-7B-Instruct/model-00003-of-00004.safetensors",
+    "models/Qwen2.5-7B-Instruct/model-00004-of-00004.safetensors"
+  ]
+}

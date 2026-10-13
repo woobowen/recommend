@@ -1,0 +1,220 @@
+{
+  "stage_id": "sid-extensions-p0",
+  "round": 0,
+  "status": "CHANGES_REQUIRED",
+  "reviewer": "/root/audit_code",
+  "non_author": true,
+  "observed_at": "2026-10-13T17:30:36.713490+00:00",
+  "baseline_commit": "563dc50b1c7e9e2e05cdfddd13e91a3d1888001e",
+  "candidate_documents": [
+    {
+      "path": "docs/sid-extensions/README.md",
+      "sha256": "0fdff181b0c0b4ee6500c5688a25950d6e13bbd6d829a4d00837fa2a59961194",
+      "size": 4117,
+      "lines": 39
+    },
+    {
+      "path": "docs/sid-extensions/CODE_READING_GUIDE.md",
+      "sha256": "3a0c0836c83153708191b886b6d450649c8bbd4f0b18ebb5ab7fbd22d789ecd2",
+      "size": 8143,
+      "lines": 71
+    },
+    {
+      "path": "docs/sid-extensions/experiments/shuffle.md",
+      "sha256": "11c94902abc95f43037ce9e4861ba1ff9af82c2f6a46457595eab10c7bd539da",
+      "size": 5910,
+      "lines": 47
+    },
+    {
+      "path": "docs/sid-extensions/experiments/mlp.md",
+      "sha256": "2d93ec8ec40a95c8b27417a787981c84c4d877f402e0ef36e0d663862dd2e21b",
+      "size": 5545,
+      "lines": 49
+    },
+    {
+      "path": "docs/sid-extensions/experiments/parallel.md",
+      "sha256": "8e7040b01852cc248d06e26a4e724e2064da8847cda51d49d4fdea7ac1d76ee4",
+      "size": 3818,
+      "lines": 38
+    },
+    {
+      "path": "docs/sid-extensions/experiments/attention.md",
+      "sha256": "12c6a7a0018d04b4bd9ee885755e48e2807d1e5ab9b3ec203580635eb1325416",
+      "size": 6094,
+      "lines": 45
+    }
+  ],
+  "direct_original_review": "B_PUBLISHED_ORIGINALS_DIRECT_READ.json",
+  "findings": [
+    {
+      "id": "B-R0-01",
+      "severity": "HIGH",
+      "document": "CODE_READING_GUIDE.md",
+      "document_lines": [
+        42,
+        42
+      ],
+      "claim": "验证 validation/、测试 evaluation/",
+      "evidence": [
+        {
+          "path": "GRID baseline/configs/experiment/tiger_train_flat.yaml",
+          "lines": [
+            134,
+            168
+          ],
+          "sha256": "d5a78dbbe25f39c894d34bc2d5b70e621cc8e45de41be5163da093a5ea37d890"
+        },
+        {
+          "path": "manifests/sid-extensions/baseline-run-records/beauty/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/.hydra/config.yaml",
+          "lines": [
+            208,
+            238
+          ],
+          "sha256": "790e0d16c67823c6cad403013ae0f152ef61cebcd548715c113376c7a0ecef33"
+        }
+      ],
+      "observation": "固定三域有效配置一致：训练training/、验证evaluation/、测试testing/。原文未声明validation/。",
+      "required_change": "仅改说明中的划分名称，保持原配置与数据不变，并指向有效config的对应位置。"
+    },
+    {
+      "id": "B-R0-02",
+      "severity": "HIGH",
+      "document": "experiments/attention.md",
+      "document_lines": [
+        14,
+        17
+      ],
+      "claim": "shuffle/MLP predict保存输入mask；predict写batch_mask_*.pt",
+      "evidence": [
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+          "lines": [
+            1121,
+            1212
+          ],
+          "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80"
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+          "lines": [
+            957,
+            1048
+          ],
+          "sha256": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9"
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py",
+          "lines": [
+            1451,
+            1527
+          ],
+          "sha256": "7561d2f494764a77efac1d71abff4ea15bc683eea0816c1e8fe067d7d5c78463"
+        }
+      ],
+      "observation": "三份正文的torch.save只保存attention，batch.mask只被传入generate或用于推断原batch大小；没有mask/SID/样本伴随文件保存代码。",
+      "required_change": "删除不存在的mask文件SOURCE_FACT，并把没有稳定样本/SID/mask/rank共同manifest作为当前生产链缺口；未来伴随记录仅标PROPOSED_NOT_IMPLEMENTED。"
+    },
+    {
+      "id": "B-R0-03",
+      "severity": "MEDIUM",
+      "document": "experiments/mlp.md",
+      "document_lines": [
+        16,
+        16
+      ],
+      "claim": "encoder654–658为mask view并取末位",
+      "evidence": [
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+          "lines": [
+            645,
+            658
+          ],
+          "sha256": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9"
+        }
+      ],
+      "observation": "实际mask view在649，末位切片在651；654–658为已取消SEP的注释/备选代码。",
+      "required_change": "改为精确的649–651或645–651，另将用户条件分支范围包含实际if在665。"
+    },
+    {
+      "id": "B-R0-04",
+      "severity": "MEDIUM",
+      "document": "CODE_READING_GUIDE.md",
+      "document_lines": [
+        61,
+        61
+      ],
+      "claim": "configure_optimizers把requires_grad参数交给配置优化器",
+      "evidence": [
+        {
+          "path": "GRID baseline/src/models/modules/base_module.py",
+          "lines": [
+            168,
+            189
+          ],
+          "sha256": "029dc55aa499147c55a915c9523291c6b331076afb5cd7a18459968aaff16b73"
+        }
+      ],
+      "observation": "177行传self.trainer.model.parameters()，没有requires_grad筛选。冻结参数是否更新与梯度产生不同，不应把理想冻结行为写成代码筛选。",
+      "required_change": "忠实写为传全部model.parameters；requires_grad/冻结和实际更新范围另列后续核实，不运行证明。"
+    },
+    {
+      "id": "B-R0-05",
+      "severity": "MEDIUM",
+      "document": "experiments/attention.md",
+      "document_lines": [
+        25,
+        25
+      ],
+      "claim": "encoder绘图处理mask/裁剪",
+      "evidence": [
+        {
+          "path": "references/wmh-original/GRID/visualize_encoder_attention.py",
+          "lines": [
+            16,
+            67
+          ],
+          "sha256": "25622305bddb1d93e93d960ee8263a26e2ca8f601e6ab6be13ad718af0e380c4"
+        }
+      ],
+      "observation": "detect_real_sequence_length依据attention行和/列和与threshold裁剪；visualize_encoder_attention不接收输入mask。",
+      "required_change": "明确这是启发式裁剪、未读取真实mask，不能当padding身份已核对。"
+    },
+    {
+      "id": "B-R0-06",
+      "severity": "MEDIUM",
+      "document": "experiments/attention.md",
+      "document_lines": [
+        17,
+        19
+      ],
+      "claim": "保存full cross堆为[B,H,A,Lenc]，未说明条件",
+      "evidence": [
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+          "lines": [
+            488,
+            519
+          ],
+          "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80"
+        }
+      ],
+      "observation": "保存器只squeeze(2)，不选择末query；try stack失败会记录warning，将full置None后不写full文件；原逐步cross另存。绘图器取末query是另一处理链。",
+      "required_change": "将full形状写为堆叠成功时，说明失败/文件可缺与原tuple另存；不将squeeze描述成末query选择。"
+    }
+  ],
+  "coverage": {
+    "SOURCE_FACT_STATIC_INFERENCE_boundaries": "Core AR/shared-table/aggregation/parameter formulas, no_pos and historical-UNKNOWN boundaries are generally accurately separated; errors above must close.",
+    "ten_explanation_requirements": "All four provide question, baseline/reference chain, data-flow references, changes, shapes/masks/parameters, proposals, future checks and user decisions; historical results need direct restored CSV/test-row or original evidence links in final candidate.",
+    "source_identity_tables": "SOURCE_MANIFEST, SOURCE_LINES and trailing source-evidence tables were announced as still generating; will inspect before final PASS, not assumed complete.",
+    "published_originals": "123 candidate original files match independent retained original bytes; all .py AST parse; explicit absolute src module paths present.",
+    "effective_configuration": "All three restored effective configs directly read: H4, sequence_length120, d_model128, num_user_bins null, train training/val evaluation/test testing. Beauty resume checkpoint; Toys/Sports fresh_model."
+  },
+  "limits": [
+    "No source project imports/execution, torch.load, pickle.loads, model construction or tests.",
+    "No assessment of baseline scientific metric quality; existing results only historical.",
+    "This is source/explanation candidate review, not asset/GitHub/deployment acceptance.",
+    "Source known issues retained rather than fixed."
+  ],
+  "dependency_installs": 0
+}

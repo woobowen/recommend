@@ -1,0 +1,77 @@
+{
+  "reviewer": "/root/audit_publish",
+  "role": "C_NONAUTHOR_PUBLISH_DEPLOYMENT",
+  "observed_at": "2026-10-14T01:02:43.209710+08:00",
+  "scope": "Static old runner/transport and GitHub API read-only precheck. No SSH submitted, source code run, environment installation, or Git modification.",
+  "repository": {
+    "full_name": "woobowen/recommend",
+    "private": false,
+    "default_branch": "main",
+    "permissions": {
+      "admin": true,
+      "maintain": true,
+      "push": true,
+      "triage": true,
+      "pull": true
+    },
+    "pushed_at": "2026-10-12T15:54:12Z",
+    "archived": false,
+    "disabled": false,
+    "size": 42733
+  },
+  "refs": [
+    {
+      "ref": "refs/heads/SID-Order-Invariance",
+      "sha": "800b5a49e97b96aa4d7ca64bcdf83a7f91e81f1c"
+    },
+    {
+      "ref": "refs/heads/main",
+      "sha": "563dc50b1c7e9e2e05cdfddd13e91a3d1888001e"
+    },
+    {
+      "ref": "refs/heads/wmh",
+      "sha": "7e943ea9a7d92f16eb10c6c1b27c27761d3f6c20"
+    },
+    {
+      "ref": "refs/heads/yinjingchen",
+      "sha": "c92e1576210b3daf2ce6f63f77b65f651f6f7127"
+    }
+  ],
+  "baseline_tree": {
+    "sha": "563dc50b1c7e9e2e05cdfddd13e91a3d1888001e",
+    "truncated": false,
+    "entries": 2316,
+    "automation_paths": []
+  },
+  "workflows": {
+    "total_count": 0,
+    "items": []
+  },
+  "attributes": {
+    "path": "GRID baseline/.gitattributes",
+    "git_blob_sha": "9a9afd2a2584bf8bb81bd27ba6482dc0a3298fc0",
+    "text": "original_assets/data/amazon_data/** filter=lfs diff=lfs merge=lfs -text\nmodels/Qwen2.5-7B-Instruct/weight_parts/** filter=lfs diff=lfs merge=lfs -text\nexperiments/** filter=lfs diff=lfs merge=lfs -text\nreconfigurations/** filter=lfs diff=lfs merge=lfs -text\nlaunches/** filter=lfs diff=lfs merge=lfs -text\nnotices.txt filter=lfs diff=lfs merge=lfs -text\n"
+  },
+  "old_transport_fingerprints": {
+    "scripts/transport.py": {
+      "bytes": 7450,
+      "sha256": "772ba1e9af25ce0b7dcf1ea6381f6294f6b40bc9debae06a8cef47c3beaf5a2f"
+    },
+    "scripts/runner.py": {
+      "bytes": 24017,
+      "sha256": "398768a732bbfebde4308486a0cedd924595157fda6cbff6a88f0bfaa512beff"
+    },
+    "profiles.json": {
+      "bytes": 1968,
+      "sha256": "37b3f3e4e93c0e85d2d8aacd2eae1648a3b742074f8211552fe140f93591f8e8"
+    }
+  },
+  "status": "PASS_PRECHECK_ONLY",
+  "remaining": [
+    "Verify actual new-server identity/capacity and task runner deployment hashes",
+    "Review new pure-file helper tools before execution/publication",
+    "Review candidate file set, raw source bytes, sensitive data",
+    "Independent fixed-commit GitHub readback and C/D equality",
+    "Final deployed server tree and all task job terminal results"
+  ]
+}

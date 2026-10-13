@@ -1,0 +1,2319 @@
+{
+  "stage_id": "sid-extensions-p0",
+  "reviewer": "/root/audit_assets",
+  "role": "A_SOURCE_AND_ASSET_NONAUTHOR_REVIEW",
+  "observed_at": "2026-10-14T01:30:25.256101+08:00",
+  "status": "PASS_NONAUTHOR_SELECTED_SOURCE_AND_1902_DATA_IDENTITY; LFS_SID_CHECKPOINT_REVIEW_PENDING",
+  "independence": "Reviewer did not author restore worker, plan, source export, data materialization, baseline outputs, manifests or Git preparation. Reviewer independently read all worker source, requests, all 2025 actual rows, 123 publication files and export bodies, fixed baseline manifests, and performed 37 fresh remote file rehashes.",
+  "baseline_sha": "563dc50b1c7e9e2e05cdfddd13e91a3d1888001e",
+  "checks": {
+    "request_same_semantics_local_and_remote": true,
+    "request_fingerprint_matches_accepted_and_query": true,
+    "worker_source_hash_matches_frozen_request": true,
+    "plan_hash_matches_frozen_request": true,
+    "all_result_and_journal_rows_equal": true,
+    "same_selected_identity_set": true,
+    "terminal_success_no_live_cleanup": true,
+    "model_execution_disallowed_in_plan": true,
+    "server_export_archive_transport_identity": true,
+    "export_regular_safe_unique_exact_123": true,
+    "independent_remote_sample_hash_and_readable": true,
+    "all_1902_data_match_fixed_baseline_manifest": true
+  },
+  "errors": [],
+  "evidence_inputs": [
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/scripts/restore_selected.py",
+      "bytes": 7952,
+      "sha256": "7b9530b5de9c0eef4dc2931657be0538bbc9b5bc851dfb44228a8282a0c8a232"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/requests/restore-selected-v1-plan.json",
+      "bytes": 1851832,
+      "sha256": "ffab7bb6ef902dbb72082b4aa6d52ee3dc8da8d40891b9038a4d06c9ffe34475"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/request.json",
+      "bytes": 1143,
+      "sha256": "306c39ad6f458fbf744b0416450f900405d25a1b7bb6e46b4db9ea58fc5b295a"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/last-query.json",
+      "bytes": 4358,
+      "sha256": "5f59229baaf8d258ae60a618f79856a74a9cdef485a8a06fcfd1ffee1861a5a6"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/retrieved/request.json",
+      "bytes": 1002,
+      "sha256": "28ac7f2342edd7e7d04b51d782ff6e869dcc481f0e5d9e0017fa6c6ba082f377"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/retrieved/accepted.json",
+      "bytes": 310,
+      "sha256": "5abd2166de6016099e76e7b80354f0e175f68828e70641a1fb3622dcddb3950a"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/retrieved/status.json",
+      "bytes": 2948,
+      "sha256": "7dd9bde9800e25d10245df4bf7f3a3716c5e661b5eea66150a437a332c3b34eb"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/retrieved/cleanup.json",
+      "bytes": 664,
+      "sha256": "e22b82334b5b70f1fec9687b90a370ad9fb57acd4a63c9e28d1f5709108fd0b1"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/retrieved/export-manifest.json",
+      "bytes": 1449,
+      "sha256": "606ddf7dd5568134dc80a070ddf406ac878f7be5bf505a22a1ba7bf5aa43ee17"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/retrieved/output/RESULT.json",
+      "bytes": 2967332,
+      "sha256": "9507538426f4508666af38297cc49c72a161819988af55b95016d3fe890a6519"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/retrieved/output/files.jsonl",
+      "bytes": 2689665,
+      "sha256": "6536b6c36ed06180c872eda80730ce414bccc7eb9b095595372fd295dae2092b"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/source-selected-v1.tar.gz.receipt.json",
+      "bytes": 395,
+      "sha256": "efd1e4b98ccace6a30833f730a95e6ca34d125953951eda29542adbc4f34bd60"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/review/A_REMOTE_SELECTED_READBACK.json",
+      "bytes": 26188,
+      "sha256": "be961fd61b722cbe1cc787e08078399ab7252d2ecc848cf8f259509e48862f66"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/retrieved/output/A800-grid-20261010-v1-b01.json",
+      "bytes": 1926,
+      "sha256": "6715902bed57f40f4ecee6ff0c9e9cc701b0a48f7ccfa40b7de0cd5530565636"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/retrieved/output/A800-grid-20261010-v1-b11.json",
+      "bytes": 2771,
+      "sha256": "4772f7be22a0bef755d3d9e65e07394ecbe27d37d3c7737c61dbbf92f376b184"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/sid-extensions-p0-restore-v1/retrieved/output/A800-grid-20261010-v1-b12.json",
+      "bytes": 664,
+      "sha256": "96cd4eb5d1a0d47268eb0709c38de7da3e2a816504982298777d2aa44c88b7b2"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/source-selected-v1.tar.gz",
+      "bytes": 172675,
+      "sha256": "3a96eb16160050a306de2024a472ef2898f5dfe7fd1a0e7c9ed9101a255a5b61"
+    }
+  ],
+  "archive_batch_checks": [
+    {
+      "batch": "A800-grid-20261010-v1/b01",
+      "manifest_sha256": "491c1d6fd8ada4593d32ed1e5743db4e1173413e7c6159de804901854fbcdeab",
+      "whole_tar_sha256": "5afcf29de1d4425cacbe8d82fee2b2bc8b3a92459382003a9f1ffb9f64ad0f8c",
+      "chunks_checked_in_production": 11,
+      "selected_members": 123,
+      "matches_old_capture_manifest": true
+    },
+    {
+      "batch": "A800-grid-20261010-v1/b11",
+      "manifest_sha256": "d00d917a4197e9bd8042ef21c27946a00b0a38e166929c80395d283b24d6b8ce",
+      "whole_tar_sha256": "6fc50d45da06f483df23a3555b077a832493c6da2a801a205bd62d487a1f1fd4",
+      "chunks_checked_in_production": 17,
+      "selected_members": 1174,
+      "matches_old_capture_manifest": true
+    },
+    {
+      "batch": "A800-grid-20261010-v1/b12",
+      "manifest_sha256": "409bc8ec60b1378aff587a73b17d7b4b2f31bfb26545b68b2c17891b1f31778a",
+      "whole_tar_sha256": "1a75e7e15c05d1ce830a6c6635bf01231f99ec1cad43e3b7ca5b173ae27ecdc3",
+      "chunks_checked_in_production": 2,
+      "selected_members": 179,
+      "matches_old_capture_manifest": true
+    }
+  ],
+  "selected_source_checks": [
+    {
+      "logical_path": "references/wmh-original/GRID/LICENSE",
+      "entry_id": "56d63bfc3af9bd5157549871a8a1d62e366bbffce127b52a2efcbe594d5abae7",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/LICENSE",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/LICENSE",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/LICENSE",
+      "bytes": 1202,
+      "sha256": "7805eedcc666e1526b4ad3dffb211a9f30b4d56c90ad979329003ed688c053bf",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/README.md",
+      "entry_id": "b0cddf9d86712a9dd5ff0b03c70d37a966156f7b0dcc6de04a53c80230ad8df3",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/README.md",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/README.md",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/README.md",
+      "bytes": 6483,
+      "sha256": "3c42de7e3a041aa8297bfd6e049fe235efc6ec94595fe7e89c570708560516d4",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/__init__.py",
+      "entry_id": "fc3287bfb15e6a9d22d85ac832eebb076720affb047f4bf4f48f1641e96494e8",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/cmd.txt",
+      "entry_id": "a6f59c00ce8063d854d69e7eee2a13eb4559b9c94313eb1db569a23977ce46b6",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/cmd.txt",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/cmd.txt",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/cmd.txt",
+      "bytes": 655,
+      "sha256": "8a401b57858898d586eba271781a2ac8d63521e7fbc476422136763211218b80",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/__init__.py",
+      "entry_id": "01bef220a84af70b4d5f619f08d9361a6cd46a46f74dcf3ce4fc5ebae4bbdb37",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/__init__.py",
+      "bytes": 81,
+      "sha256": "40afe33e9461a043b773aa939b3ec32715d0031bc64114839ffc1607af407fa8",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/callbacks/default.yaml",
+      "entry_id": "feab17b91ded967cfcad90e871fa426ef19456d770b3a69e68aa317c9d1b52d8",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/callbacks/default.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/callbacks/default.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/callbacks/default.yaml",
+      "bytes": 458,
+      "sha256": "5b172dacc4e48781310c7f78895b23a0d9d6d8904bdfcf7be2f17497556ad7bd",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/callbacks/early_stopping.yaml",
+      "entry_id": "b921a6f6ccd65a74bc4019da479f0ba98dc42ac8266fa69a37b2cd967f7142d4",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/callbacks/early_stopping.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/callbacks/early_stopping.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/callbacks/early_stopping.yaml",
+      "bytes": 1232,
+      "sha256": "a30fe6f24261597147fdd9e6d64c536d8fa23cca14a00cf3090a1387b895d17e",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/callbacks/local_pickle_writer.yaml",
+      "entry_id": "0cc4cdefda9cf649338577bc6fbb1de3ccc849fd0117892b5b1ac921d44fd58e",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/callbacks/local_pickle_writer.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/callbacks/local_pickle_writer.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/callbacks/local_pickle_writer.yaml",
+      "bytes": 259,
+      "sha256": "2e3ba713430bbab497e61bff211031f0acfb0b75ba53e850c5ac2c3c99d5e36f",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/callbacks/model_checkpoint.yaml",
+      "entry_id": "e6aa20eb64e25e8969090612e48b4d42dac6453366cb820a85d492effe1d43dd",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/callbacks/model_checkpoint.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/callbacks/model_checkpoint.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/callbacks/model_checkpoint.yaml",
+      "bytes": 1230,
+      "sha256": "6db81f9260af09a455677ceb41e03f5d4dfe7b568470adca448e3e8d77a5d66b",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/callbacks/model_summary.yaml",
+      "entry_id": "e48cf5848572f6397f88c9db2b77f9aae4aefb2c279dc9c33b2714ed38a295fb",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/callbacks/model_summary.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/callbacks/model_summary.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/callbacks/model_summary.yaml",
+      "bytes": 341,
+      "sha256": "4a9cba32da611920bb7e1a4429f47810e0e3840db83ff351f83bdcd72f9d55c3",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/callbacks/rich_progress_bar.yaml",
+      "entry_id": "a2e839a5e768de89c7b01daff99ee5cb36bbffc16580d07c31414fc34d19a033",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/callbacks/rich_progress_bar.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/callbacks/rich_progress_bar.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/callbacks/rich_progress_bar.yaml",
+      "bytes": 399,
+      "sha256": "f7979106008cd2b061bc46e9091bca5deea7508dd05abcf0777fb1159f9fedb3",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/experiment/rkmeans_inference_flat.yaml",
+      "entry_id": "ed2ac987c14aa96054660929465d66ac5cf24b68d7c93d5902f821224db164ca",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/experiment/rkmeans_inference_flat.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/experiment/rkmeans_inference_flat.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/experiment/rkmeans_inference_flat.yaml",
+      "bytes": 5587,
+      "sha256": "344d2e4dad207cdb74d6ec184797850ab546b3a3aef17b7d1fc9271ec170a64c",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/experiment/rkmeans_train_flat.yaml",
+      "entry_id": "4751aa730b93fef63786e2a9efa4bbd274bb02f1799774e06978b477eac808d5",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/experiment/rkmeans_train_flat.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/experiment/rkmeans_train_flat.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/experiment/rkmeans_train_flat.yaml",
+      "bytes": 7728,
+      "sha256": "0a42cb829d92b0c11d15d081a4772c582585e4410298a7338db5d0e9b5dd3ca7",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/experiment/rqvae_inference_flat.yaml",
+      "entry_id": "24ae10f321d78e72ee55f65466a5b78816d128acb19d7c1cba6119baa6a89574",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/experiment/rqvae_inference_flat.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/experiment/rqvae_inference_flat.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/experiment/rqvae_inference_flat.yaml",
+      "bytes": 7740,
+      "sha256": "500c3b2de2e754f54423948b5d043e60b7a4c7e46479cf60987cb5661ef139ba",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/experiment/rqvae_train_flat.yaml",
+      "entry_id": "49c88e90f61df5b2221b7f7024c3db6220abd9876e2f73d1ff52117f4bba2f04",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/experiment/rqvae_train_flat.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/experiment/rqvae_train_flat.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/experiment/rqvae_train_flat.yaml",
+      "bytes": 9709,
+      "sha256": "802518ff96bc42401ba3de35e083d96dadd187b3825025ed22ad9417152a67e7",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/experiment/rvq_train_flat.yaml",
+      "entry_id": "beb1b016ec01fdc0bee39bf94f733ec9305f011b6d7d7bca2eedd6c4c1f26e56",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/experiment/rvq_train_flat.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/experiment/rvq_train_flat.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/experiment/rvq_train_flat.yaml",
+      "bytes": 7958,
+      "sha256": "2405b15f39036ed7c0aa37133d7785569e4fb79e1529d2b4eb8449919ea3d79c",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/experiment/sem_embeds_inference_flat.yaml",
+      "entry_id": "36df3b7dd4c970c2405aebe78206acaca52f76b7a7a32386025a4cd5267a2274",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/experiment/sem_embeds_inference_flat.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/experiment/sem_embeds_inference_flat.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/experiment/sem_embeds_inference_flat.yaml",
+      "bytes": 5537,
+      "sha256": "23361b1ec89e8599c705969a4f65384c4a8d5bec29c327f9f5753f9259503d88",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/experiment/tiger_inference_flat.yaml",
+      "entry_id": "ed4edfb07575057226b4d1149f7fc2a9acdf0b4ae7d08c76d5ffc6b05c322a9e",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/experiment/tiger_inference_flat.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/experiment/tiger_inference_flat.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/experiment/tiger_inference_flat.yaml",
+      "bytes": 13317,
+      "sha256": "d3e9fa09a5e5fc15829c9bc45c96bbf3c5be297fea9dc49251184387903b8104",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/experiment/tiger_inference_flat_shuffle.yaml",
+      "entry_id": "b987edc3d1992c512e035258e17fcac78ae4232039c6b5b126eb71568a5ed17a",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/experiment/tiger_inference_flat_shuffle.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/experiment/tiger_inference_flat_shuffle.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/experiment/tiger_inference_flat_shuffle.yaml",
+      "bytes": 8289,
+      "sha256": "d60b73c5e502ab1ed105a550340b9e748adbcf181f19992e3a32c55038d768a6",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/experiment/tiger_train_flat.yaml",
+      "entry_id": "127bb05d37dbddfbef14256f0179e8069292790f4b17bb20d804e622699b918b",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/experiment/tiger_train_flat.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/experiment/tiger_train_flat.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/experiment/tiger_train_flat.yaml",
+      "bytes": 12140,
+      "sha256": "d5a78dbbe25f39c894d34bc2d5b70e621cc8e45de41be5163da093a5ea37d890",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/extras/default.yaml",
+      "entry_id": "cd1b6ab64dd247c11fb35a892bff3b5ef138538ac5b16735ecac6bd92a48c019",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/extras/default.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/extras/default.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/extras/default.yaml",
+      "bytes": 298,
+      "sha256": "29bce8a0bf644c1a1ab72d9eb1decbab31c575694a2e9a936842307a990a9aa6",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/hydra/default.yaml",
+      "entry_id": "f2a24cc81202419cf9c1b970d8fc4e5ccbc45ea19718a2e5171cbf41765bcdbc",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/hydra/default.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/hydra/default.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/hydra/default.yaml",
+      "bytes": 527,
+      "sha256": "55bed674fc423879add8e36729cd3cc13931a174b02e513329c02408ba25f0a8",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/inference.yaml",
+      "entry_id": "d0152ae243ce0259ff377f4b8e29356d894c77643f8260169775881d02a83716",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/inference.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/inference.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/inference.yaml",
+      "bytes": 601,
+      "sha256": "d731bd7a4544d4253ac5d3f4228ba1dbdb1de19bd439cf142f14ce0d71fe7f85",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/local/.gitkeep",
+      "entry_id": "4423edbca499a110985c55510ee661b41a8861e6d9b1de5ff97721605cd041c6",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/local/.gitkeep",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/local/.gitkeep",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/local/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/logger/csv.yaml",
+      "entry_id": "80398fd080e6475f06f324da7c927e05debd48363177b7bd16b8ec6027c4ed3e",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/logger/csv.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/logger/csv.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/logger/csv.yaml",
+      "bytes": 158,
+      "sha256": "710aff41ddf0915d2e3bf913fd17316d9a8145f5f9f70cf06a5c392e67556f10",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/paths/default.yaml",
+      "entry_id": "3cabf99630bd9e15c25a82cae42643877dba5dda1f87a6aa6d93d663a8fc36f3",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/paths/default.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/paths/default.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/paths/default.yaml",
+      "bytes": 906,
+      "sha256": "ce2e58cb8648eb11b7e27558b35b6ec306ebee0ed7b4a9682a49ee3a32944189",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/train.yaml",
+      "entry_id": "3a8a58b72784e94618a50d369c31c5d145fd390956562d01f1d94767a06c17ad",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/train.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/train.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/train.yaml",
+      "bytes": 1302,
+      "sha256": "358c400a26a9bf8cbb231470200e06f0e5b9e15dba3a301bbe48ad73c1ed19e7",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/trainer/ddp.yaml",
+      "entry_id": "6ec026298d258a1f7c0c2a3ab88295eb1b7a91cd796cc48a26cd05f8236d8e34",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/trainer/ddp.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/trainer/ddp.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/trainer/ddp.yaml",
+      "bytes": 435,
+      "sha256": "01036b37b3b52013a3c283d88a36554f3b7dea5b9ab4ff8b06093cbd315f3ef5",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/configs/trainer/default.yaml",
+      "entry_id": "cddee50848b102e7291aee1228b6544f40e0e5f6230058e593b0407a2d5acdfe",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/configs/trainer/default.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/configs/trainer/default.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/configs/trainer/default.yaml",
+      "bytes": 720,
+      "sha256": "b9a532af4c352c9e334d961d534e2fcae2b21280d8c02eb1936411d51d0fc45e",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/config.yaml",
+      "entry_id": "c72835b44198605c4cb2abce3e4c96344d38995ec58d72b70a4cd53473215c10",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/config.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/config.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/config.yaml",
+      "bytes": 8742,
+      "sha256": "2ef1c71862d1da06d3a959c9a0b144d158842486e54b9f5704738c19d133055a",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/hydra.yaml",
+      "entry_id": "dd18882a12507700ab2161c9e370a17404275811c21dbfd5de8c54d58673d2b4",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/hydra.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/hydra.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/hydra.yaml",
+      "bytes": 4582,
+      "sha256": "fb699a28d4cf5c4b9f744763a0e85dd6bad0c472efff651047fca16915265495",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/overrides.yaml",
+      "entry_id": "a1220c3a60a14f79c7ae527c091e06b1a25aa07fc697e597c9b5473e8b3aa6f6",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/overrides.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/overrides.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/overrides.yaml",
+      "bytes": 341,
+      "sha256": "9e132bd1078ae26090a5c00a9de58114402a76fccf3277d7df8b1f8fd5977dee",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-10-29/14-59-58/csv/version_0/metrics.csv",
+      "entry_id": "bfadf2fa6ef70420aee4a31050db08af408cd2dad9a924ece5a59194a29f3095",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-10-29/14-59-58/csv/version_0/metrics.csv",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-10-29/14-59-58/csv/version_0/metrics.csv",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-10-29/14-59-58/csv/version_0/metrics.csv",
+      "bytes": 184,
+      "sha256": "dde27b856c0345821d64bc2bf9b599b2c03c0359775df8ddb24ea31fa750c70e",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/config.yaml",
+      "entry_id": "5771a226ff01a4215604bfecb2860e1a0a071706ee595c31b1a8c4a5a96fdf2f",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/config.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/config.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/config.yaml",
+      "bytes": 8514,
+      "sha256": "c7c58df3dd7eaebca64bd316060540344a9cc7b81dd84bd5dbd94147c76f534f",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/hydra.yaml",
+      "entry_id": "5f020e5a01a8a47dad62b2f4d7291c5e377cbf04462f9915f8ba235d25b78217",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/hydra.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/hydra.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/hydra.yaml",
+      "bytes": 4582,
+      "sha256": "06a8d953d95893515765a733f6830342ee7e1b60917097b51775fc6abb65395d",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/overrides.yaml",
+      "entry_id": "cfd33aa1dace77bf6f69cac68ae16ca36027ac9b45aeff034085fa31d991fc57",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/overrides.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/overrides.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/overrides.yaml",
+      "bytes": 341,
+      "sha256": "9e132bd1078ae26090a5c00a9de58114402a76fccf3277d7df8b1f8fd5977dee",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/csv/version_0/metrics.csv",
+      "entry_id": "6747302d447d38f59010e6950edf5e1c7c617388f0d0e5a17b16e323fb2f0ed9",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-10-29/15-47-20/csv/version_0/metrics.csv",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/csv/version_0/metrics.csv",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-10-29/15-47-20/csv/version_0/metrics.csv",
+      "bytes": 179,
+      "sha256": "5dc99b63777675e2a5def3720d99d505e43cf9ba5e173ce3a1ab2fb7db85a222",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/config.yaml",
+      "entry_id": "b4386510a3bbd0966603e4458ce9c51286a56a6d79f15dcca596ecfe65c77b31",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/config.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/config.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/config.yaml",
+      "bytes": 13327,
+      "sha256": "2a9835f85e596f0a8d936ec96d8c782d53b99e5ff50b83f809fd26a6bf7453e2",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/hydra.yaml",
+      "entry_id": "4f29d9b91ed083754caf26c9218558dead96624d60586e7cb67a409fcbe81999",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/hydra.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/hydra.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/hydra.yaml",
+      "bytes": 4586,
+      "sha256": "f8fb4884ce4229e93aafdc6a7a59e85d6e3fb001205b1d0c3f9e3bcd5e78f0e5",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/overrides.yaml",
+      "entry_id": "9d838cbf7d8f803f7ac7adf42506cfa47200d79bc05c0513f7f386f40ecfa6c9",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/overrides.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/overrides.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/overrides.yaml",
+      "bytes": 343,
+      "sha256": "ad2543a65d2fca534e0f6a320376566141b88ab40b7e9683ba72f3b65cf9ac58",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/config.yaml",
+      "entry_id": "5e928942b95c8515f7dd7e7beaed024923bf17f9409b847097ba81e7005415a5",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/config.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/config.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/config.yaml",
+      "bytes": 12183,
+      "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/hydra.yaml",
+      "entry_id": "86aaeb9dc2c59928764bbc1e9a69ba26e93f3ca1c09e4b00a3baf10b6f934d81",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/hydra.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/hydra.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/hydra.yaml",
+      "bytes": 4449,
+      "sha256": "538a8822bbf50eec1aca150fd2765afbaca74452eb0a1006c69b730ebe23faec",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/overrides.yaml",
+      "entry_id": "5d8ba1ad548e9d890f9fb66ce83220ed6272b8fb62ceeb9e02493fc6dc3e1318",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/overrides.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/overrides.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/overrides.yaml",
+      "bytes": 244,
+      "sha256": "c11161dbcdfea5570fd2cbbd8637de2521e8ca2074e9557d898d5185320785b9",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/train/runs/2025-10-22/21-25-31/csv/version_0/metrics.csv",
+      "entry_id": "bd7f87ca02dc4ceb45b0c0dbe4c6c0a8a0497201bd6b0732e983c2a75e97e4e0",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/train/runs/2025-10-22/21-25-31/csv/version_0/metrics.csv",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/train/runs/2025-10-22/21-25-31/csv/version_0/metrics.csv",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-10-22/21-25-31/csv/version_0/metrics.csv",
+      "bytes": 7571,
+      "sha256": "a59494f88dddb851507bb1a56e7cfe4a185199fc47c3e37a469ab047612b1eb2",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/config.yaml",
+      "entry_id": "798d88c1440056f6b62728b78eb68b59b6ab81d98b63414f6506653ff72724b7",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/config.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/config.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/config.yaml",
+      "bytes": 12271,
+      "sha256": "a548943c6f1fca2a726b7daacaa8734a173f450cfc59c9dd526ef5dff0e538a3",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/hydra.yaml",
+      "entry_id": "295c62f1dc3aa3b95714efa23eb755387517c98d4f16cbe8875416c4af42d01b",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/hydra.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/hydra.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/hydra.yaml",
+      "bytes": 4453,
+      "sha256": "341242368a36b905579f57dcce1e766471be649701fdee01622636ec85712b4a",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/overrides.yaml",
+      "entry_id": "8ca870f2656bd5daa87ab01efbea3f3a3ed8e591fa08138ceac8e9ed91f923b1",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/overrides.yaml",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/overrides.yaml",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/overrides.yaml",
+      "bytes": 246,
+      "sha256": "173b1c88f8f4cc11d9acc2e65113a6bdf9e45c5967d9123e38f71b8b2c82814e",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/logs/train/runs/2025-12-02/00-47-41/csv/version_0/metrics.csv",
+      "entry_id": "3abf0d63af3119ec5dc7a176100088eaac83510468a8b03b8259d0543be851df",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/logs/train/runs/2025-12-02/00-47-41/csv/version_0/metrics.csv",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/logs/train/runs/2025-12-02/00-47-41/csv/version_0/metrics.csv",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-12-02/00-47-41/csv/version_0/metrics.csv",
+      "bytes": 6580,
+      "sha256": "c4f05515c558b50640a8558229ff29c1d28c06a73948488dfac950aa1cd06ebc",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/phase_1_1.sh",
+      "entry_id": "a0e658bd7a70bab9df64bc1d72388ddfdab176b2e36d9f41a5b90761092cceb3",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/phase_1_1.sh",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/phase_1_1.sh",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/phase_1_1.sh",
+      "bytes": 330,
+      "sha256": "baac62422f44cec4b68819f92d55a69c6b8835f5b9383885a17868d1d88b353d",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/phase_2_1.sh",
+      "entry_id": "2c24f3379ce8cfad1315e9dcd26a57cd7bbe60f59812dc8634d0fd0117d7c4c2",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/phase_2_1.sh",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/phase_2_1.sh",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/phase_2_1.sh",
+      "bytes": 524,
+      "sha256": "5f00af5c4c9c5c727d5d5b79d64a374ddf7b90ed32136a1e3169a47c54f67782",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/phase_2_2.sh",
+      "entry_id": "381aba2c3ee15c234ac601ea0e7f8fe71cf87e920164f18d9d84acd8376a2220",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/phase_2_2.sh",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/phase_2_2.sh",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/phase_2_2.sh",
+      "bytes": 642,
+      "sha256": "652f7f6e6060504cb9433aba607de9331729f97d0f682c7124165be7aff76601",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/phase_3_1.sh",
+      "entry_id": "438a323983d1060223f72107b1ca7e2042e5901dc65ff8503d25cc516a2b7acb",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/phase_3_1.sh",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/phase_3_1.sh",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/phase_3_1.sh",
+      "bytes": 458,
+      "sha256": "926e495a269de4e2ceb9f16427ec4a016ecbc7a12c1d6c37bd1b548af1f0ca82",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/phase_3_2.sh",
+      "entry_id": "abfdec7001c5cfd89bd4f778ad07b393c206062183c04e3595cd59b092c86669",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/phase_3_2.sh",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/phase_3_2.sh",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/phase_3_2.sh",
+      "bytes": 568,
+      "sha256": "ea75b83e967196a075d36785999d2faf7baf9984995b96ac26a110e5e0d097e5",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/requirements.txt",
+      "entry_id": "812a8237a976addcf4752a9280fb327e7f2a4c8a2ed0bf45c47906804f533402",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/requirements.txt",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/requirements.txt",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/requirements.txt",
+      "bytes": 17829,
+      "sha256": "dfa63fa6fedfddb6ae9643377882ba826a90f260e38247009859f97020809323",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/__init__.py",
+      "entry_id": "e1150630c5af74cabaf214f8d97b89f5419fef08d8c6502049d80bb9f61d5f30",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/__init__.py",
+      "entry_id": "af10e6515415830c2affa63756cb5c29fb012e4562ec40335085f4d13415e975",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/clustering_initializers.py",
+      "entry_id": "e547564d61f7c9e72bc6b546ba50d0000e6f323233b294b9a5e7ed05ed34d574",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/clustering_initializers.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/clustering_initializers.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/clustering_initializers.py",
+      "bytes": 9117,
+      "sha256": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/distance_functions.py",
+      "entry_id": "14f60d06eae7b81f878e90d06fff35d9e6707e60f645b389717497384e3ecea1",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/distance_functions.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/distance_functions.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/distance_functions.py",
+      "bytes": 5118,
+      "sha256": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/eval_metrics.py",
+      "entry_id": "9b15f66d99140b7ab1a45e17e505017867a790183a04ba410853c1ff31111be9",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/eval_metrics.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/eval_metrics.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/eval_metrics.py",
+      "bytes": 15241,
+      "sha256": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/loss_functions.py",
+      "entry_id": "8b7d1a54c401c73b5bc9fc40e689efb677a52b1b62a5a59098aaa2f275d40580",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/loss_functions.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/loss_functions.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/loss_functions.py",
+      "bytes": 4412,
+      "sha256": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/network_blocks/__init__.py",
+      "entry_id": "dc2c8745d9600dac1f376a76ee216299afb4f5808960f8fc3fd2d25c0ff1cffa",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/network_blocks/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/network_blocks/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/network_blocks/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/network_blocks/hf_language_model.py",
+      "entry_id": "5a9121a55a01ac12bb795c9b394177e40f7b1e36762706678bae13ea6c79e00a",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/network_blocks/hf_language_model.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/network_blocks/hf_language_model.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/network_blocks/hf_language_model.py",
+      "bytes": 2434,
+      "sha256": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/optimizer.py",
+      "entry_id": "7faddd5cd61990044089289944fbc6314ca4511eed695632b00f7574c39e63bb",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/optimizer.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/optimizer.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/optimizer.py",
+      "bytes": 1016,
+      "sha256": "d641316bf995f824b10d2499143b73333ae9bb4dfab1587c7c13c25d8ea46050",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/quantization_strategies.py",
+      "entry_id": "86fb7a4d6ba41710ef9231d95afe42f107363d8744267ab3232f8d31ce70474e",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/quantization_strategies.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/quantization_strategies.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/quantization_strategies.py",
+      "bytes": 8796,
+      "sha256": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/scheduler.py",
+      "entry_id": "edf54d465295901ce1a725105a8227bc919ca1cb42724a41ed7f5a8eb699b3f6",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/scheduler.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/scheduler.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/scheduler.py",
+      "bytes": 2523,
+      "sha256": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/components/training_loop_functions.py",
+      "entry_id": "ac83de7f3501da51e4bf71bac666999e819117608c08825ec4b6d59f4c039d4b",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/components/training_loop_functions.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/components/training_loop_functions.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/components/training_loop_functions.py",
+      "bytes": 3754,
+      "sha256": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/__init__.py",
+      "entry_id": "24f1c98c98d3ef451389503e401496b2f73d8d622212f81d5e0d2f654d951f14",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/components/__init__.py",
+      "entry_id": "243b23120f54433bcf34313291f939f38e8d0ebff2750584a634495de9859405",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/components/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/components/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/components/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/components/collate_functions.py",
+      "entry_id": "a9081aad81b2180b738fba7181b2fb6ebc88bb20d5c8eb074cb7a7934f30dd74",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/components/collate_functions.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/components/collate_functions.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/components/collate_functions.py",
+      "bytes": 16642,
+      "sha256": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/components/custom_dataloader.py",
+      "entry_id": "81d1e57fb7f507311adb39be167ff9fab8b14823e434404a03bf2d6b2ce6d121",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/components/custom_dataloader.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/components/custom_dataloader.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/components/custom_dataloader.py",
+      "bytes": 2266,
+      "sha256": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/components/dataloading.py",
+      "entry_id": "bbfd6c7709f3fc8a206808b273a369b93340cf689248edf31fd229b7ce627be4",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/components/dataloading.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/components/dataloading.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/components/dataloading.py",
+      "bytes": 7194,
+      "sha256": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/components/interfaces.py",
+      "entry_id": "12e03843ab5269e3325e8a01d8db6835d5e28141905e916d44a32dbe70a416ba",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/components/interfaces.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/components/interfaces.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/components/interfaces.py",
+      "bytes": 12625,
+      "sha256": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/components/iterators.py",
+      "entry_id": "9662f302cb713f6b9d3b3b8592145dfedadace95f69c7a8e733b57d42cde4e9b",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/components/iterators.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/components/iterators.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/components/iterators.py",
+      "bytes": 8557,
+      "sha256": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/components/label_function.py",
+      "entry_id": "f69da358d1c7ff2589f83af6a0da96c39d8de89041f13263d97cf072d5e5f83b",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/components/label_function.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/components/label_function.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/components/label_function.py",
+      "bytes": 9035,
+      "sha256": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/components/pre_processing.py",
+      "entry_id": "8a7b76b38c083847d803b8787ff7849f3c123a13f27e2d06af88c86b3d9946eb",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/components/pre_processing.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/components/pre_processing.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/components/pre_processing.py",
+      "bytes": 14995,
+      "sha256": "a69c88681760df22e37fb7e66961ad97ed0824af20eae415a543379e881d71c7",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/datamodules/__init__.py",
+      "entry_id": "b5ff40c9ac5fe175898bc4bffa5bc11ae05e48e547378aab82a4d4b19bd9801f",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/datamodules/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/datamodules/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/datamodules/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/datamodules/sequence_datamodule.py",
+      "entry_id": "44600234564f3a7bb0e518b0cb3ac49760f8b58936876239b9e5384344104936",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/datamodules/sequence_datamodule.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/datamodules/sequence_datamodule.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/datamodules/sequence_datamodule.py",
+      "bytes": 16142,
+      "sha256": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/data/loading/utils.py",
+      "entry_id": "88b66bfe553356b86245cfe769234eda08a1373f5df02fe44626a3564bf06099",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/data/loading/utils.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/data/loading/utils.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/data/loading/utils.py",
+      "bytes": 5860,
+      "sha256": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/inference.py",
+      "entry_id": "6120a0698f8af42d36fabd3d3898ed67eba4f5890122202b3c0df100f7fac386",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/inference.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/inference.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/inference.py",
+      "bytes": 7940,
+      "sha256": "f24892ed2d9777c6fd5d3eaf20cc0ea3d180a19a490519baa7ca2390a70c05ba",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/__init__.py",
+      "entry_id": "e83d53bc7e8b6bb4a5c3d394be2ec6f9b5a8eb37323a8b754868bd3fab1371d5",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/components/__init__.py",
+      "entry_id": "fd216711ca177655763adfc14a2c40e79f0c2382b8849864c7e5a808423a3bbc",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/components/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/components/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/components/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/components/interfaces.py",
+      "entry_id": "f0c7f278185ada63b9afa85f0d0331d4b871b242473dbba2f35e4fcb4ec74f2b",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/components/interfaces.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/components/interfaces.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/components/interfaces.py",
+      "bytes": 2785,
+      "sha256": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/components/network_blocks/aggregation_strategy.py",
+      "entry_id": "d520d9c4bbd8b736359a0e75a3e42c6c06cab9527fdf110d067deda3115ac84e",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/components/network_blocks/aggregation_strategy.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/components/network_blocks/aggregation_strategy.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/components/network_blocks/aggregation_strategy.py",
+      "bytes": 3465,
+      "sha256": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/components/network_blocks/embedding_aggregator.py",
+      "entry_id": "d8455317a914bc3a6fb4d52802746b1ec2b10de4bb346b19aea6150a73451da4",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/components/network_blocks/embedding_aggregator.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/components/network_blocks/embedding_aggregator.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/components/network_blocks/embedding_aggregator.py",
+      "bytes": 1735,
+      "sha256": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/components/network_blocks/mlp.py",
+      "entry_id": "2162708835a1d6835d332bdacacea8fd1cd89c92ccd2d1e9ff2184bd2719930a",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/components/network_blocks/mlp.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/components/network_blocks/mlp.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/components/network_blocks/mlp.py",
+      "bytes": 1720,
+      "sha256": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/components/network_blocks/normalize_layer.py",
+      "entry_id": "deb18085e82bc1903e816446a2e7bfa5f59d1fe5ecdc93f8e510dd9f2306540f",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/components/network_blocks/normalize_layer.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/components/network_blocks/normalize_layer.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/components/network_blocks/normalize_layer.py",
+      "bytes": 655,
+      "sha256": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/__init__.py",
+      "entry_id": "a35e933a67a83a1a25d040f212bdd1bb075ae362176fb209e36f41d47d4933da",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/base_module.py",
+      "entry_id": "51632e7842546fc54ce83378f85964614c67bc97c672af31bb2a028e9387391d",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/base_module.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/base_module.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/base_module.py",
+      "bytes": 7949,
+      "sha256": "7cfa9da5f73c0e666ab81f22440d04f04d6cc9624803de58cde3256dcae400b0",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/clustering/base_clustering_module.py",
+      "entry_id": "bb425e26f4986ff15ba4bba092aba372233f9c3affb0c0bbd98c5cc9176feefb",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/clustering/base_clustering_module.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/clustering/base_clustering_module.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/clustering/base_clustering_module.py",
+      "bytes": 11490,
+      "sha256": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/clustering/mini_batch_kmeans.py",
+      "entry_id": "705f93d28fd92475034bbdb8765f6d2f93ec771ec2f7f091db5be632a830e4c1",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/clustering/mini_batch_kmeans.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/clustering/mini_batch_kmeans.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/clustering/mini_batch_kmeans.py",
+      "bytes": 6013,
+      "sha256": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/huggingface/__init__.py",
+      "entry_id": "5c9ec423e4eac0a0d19a2402262d7e39d4c35649bc84eab544fb9ea19c3288e1",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/huggingface/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/huggingface/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/huggingface/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/huggingface/transformer_base_module.py",
+      "entry_id": "16190b0f2a08a6754573e2006b6ccb359de7b67ac55d837af281594d324ab708",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/huggingface/transformer_base_module.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/huggingface/transformer_base_module.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/huggingface/transformer_base_module.py",
+      "bytes": 6665,
+      "sha256": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/semantic_id/__init__.py",
+      "entry_id": "76af59fc60c262dd6d221e2c8ee9d283ecabd760f46c28805d457fd4ef415846",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/semantic_id/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/semantic_id/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/semantic_id/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model.py",
+      "entry_id": "ae8d5d42ee584801413fd66a56de07341d76c4d744e2de5e76dae6daec60345c",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/semantic_id/tiger_generation_model.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/semantic_id/tiger_generation_model.py",
+      "bytes": 44597,
+      "sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+      "entry_id": "dd6e681e2ec63703518ee655c8341f6e67edbe986ea438939c8fc778a47cd790",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+      "bytes": 53677,
+      "sha256": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py",
+      "entry_id": "0217a20f7d05cda3014d31d7edafbaa8732cf9cad05ba86eb88d6c376a2e4d11",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py",
+      "bytes": 83490,
+      "sha256": "7561d2f494764a77efac1d71abff4ea15bc683eea0816c1e8fe067d7d5c78463",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_parallel.py",
+      "entry_id": "5f5fe515aa300341739a9fa20f7484c3c74735147b09536e12622d57434d6b03",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/semantic_id/tiger_generation_model_parallel.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_parallel.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/semantic_id/tiger_generation_model_parallel.py",
+      "bytes": 61418,
+      "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "entry_id": "23ad6f4187f089986f925bdd7e6adbee8edddb5f4a2ce86a20abb8d58fdc3eee",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "bytes": 61418,
+      "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/modules/__init__.py",
+      "entry_id": "30ec0e243035fc1f07c402dbc648311ab43266eaedbfe9232e22bde67f45cf8c",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/modules/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/modules/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/modules/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/modules/clustering/__init__.py",
+      "entry_id": "986e02782badd16b6ca71e043f05efcc3d47999212541ff4fc60ba3cface4dd2",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/modules/clustering/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/modules/clustering/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/modules/clustering/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/modules/clustering/residual_quantization.py",
+      "entry_id": "bf2b3ec1f7f1d7c69887d7dc3054a0ab4fa45fa52816229e7034db30c0227bbf",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/modules/clustering/residual_quantization.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/modules/clustering/residual_quantization.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/modules/clustering/residual_quantization.py",
+      "bytes": 32525,
+      "sha256": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/modules/clustering/vector_quantization.py",
+      "entry_id": "9ddaa39ae7e66188e3156ab16176b6904872ca332a21645a123fea952416b089",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/modules/clustering/vector_quantization.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/modules/clustering/vector_quantization.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/modules/clustering/vector_quantization.py",
+      "bytes": 4939,
+      "sha256": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/modules/semantic_embedding_inference_module.py",
+      "entry_id": "50a0a6369b3ea4ee08ee1d03c8e0bf593742406e5d1066b81c6b6ef96ab12091",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/modules/semantic_embedding_inference_module.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/modules/semantic_embedding_inference_module.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/modules/semantic_embedding_inference_module.py",
+      "bytes": 3497,
+      "sha256": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/test.py",
+      "entry_id": "f81d684cb96289f887ab936c1642853fadfc5d04f57d66cfa64ed3e2c089f8f0",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/test.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/test.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/test.py",
+      "bytes": 388,
+      "sha256": "53f43b1c3e8c5549901aac4f8ee93eea92fc4123bc10439607de20f87be17d78",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/train.py",
+      "entry_id": "5a618ceb1245995ab7d9cdcfcec44f5d04815127ac30c3773003b9443579b481",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/train.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/train.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/train.py",
+      "bytes": 4415,
+      "sha256": "f78680593ba465d0716aaf44239a730b5b449a227a0e957f67c0781e9a0fa4ea",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/__init__.py",
+      "entry_id": "376caa62aa8f950efae1fbf9465e7df995c3428e6ff23b77e479f9b73586e9e7",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/__init__.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/__init__.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/__init__.py",
+      "bytes": 297,
+      "sha256": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/custom_hydra_resolvers.py",
+      "entry_id": "f53f54c39d28add9818829291c81c12b8beeb4c7eb959125bc559ece1b8ff8c6",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/custom_hydra_resolvers.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/custom_hydra_resolvers.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/custom_hydra_resolvers.py",
+      "bytes": 5867,
+      "sha256": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/decorators.py",
+      "entry_id": "ec64741fe71d89b73f86a2b8ade01a1e7e362c2d05092df33277ac5e27a4188f",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/decorators.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/decorators.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/decorators.py",
+      "bytes": 6611,
+      "sha256": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/file_utils.py",
+      "entry_id": "26d7a1de6c13a14c5eb58886ec5f668e845cd0f3fce255550f3be7c43cc4f02d",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/file_utils.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/file_utils.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/file_utils.py",
+      "bytes": 6281,
+      "sha256": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/inference_utils.py",
+      "entry_id": "be2f05fa0bb12d05048b11e9071d42210e7ed120603a3f9513af16571612b708",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/inference_utils.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/inference_utils.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/inference_utils.py",
+      "bytes": 11844,
+      "sha256": "a3fa7e388713e38c5d67824b0a51eb9a9395695df46571c645845efbf183d7bf",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/instantiators.py",
+      "entry_id": "ec7b6d2dccb5b864b42c79ccd57d7e1b537b830d812bf5afa44e4cfd41c28065",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/instantiators.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/instantiators.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/instantiators.py",
+      "bytes": 1908,
+      "sha256": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/launcher_utils.py",
+      "entry_id": "0b7f5bf279956423839a3452e3dcb87cd703e9c0b8773d87b0183207082ed84e",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/launcher_utils.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/launcher_utils.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/launcher_utils.py",
+      "bytes": 7789,
+      "sha256": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/logging_utils.py",
+      "entry_id": "22804682d7833e7b46b31d3cc9d772c0b21a4c85296999aef01a962cb000763a",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/logging_utils.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/logging_utils.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/logging_utils.py",
+      "bytes": 3052,
+      "sha256": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/masking_utils.py",
+      "entry_id": "ebf69eab430539639fd9bb8a01367d95cf61dd7780b2caac2acfc07eaec0785f",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/masking_utils.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/masking_utils.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/masking_utils.py",
+      "bytes": 1564,
+      "sha256": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/pylogger.py",
+      "entry_id": "e22f84cdb7f0ff079cd099cda5436b08495cbe49eb22055457ebe1b1ca3358ae",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/pylogger.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/pylogger.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/pylogger.py",
+      "bytes": 2468,
+      "sha256": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/restart_job.py",
+      "entry_id": "5360b28e883e566228f90bd94e492acc9328516a6942592dd08a64aacb60d344",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/restart_job.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/restart_job.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/restart_job.py",
+      "bytes": 13321,
+      "sha256": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/restart_job_utils.py",
+      "entry_id": "12182b5b62ae9b5dd759867eaa1528d6174218d82fb34113120a4291e1af58ad",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/restart_job_utils.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/restart_job_utils.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/restart_job_utils.py",
+      "bytes": 8199,
+      "sha256": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/rich_utils.py",
+      "entry_id": "4fdd5a9b69691becfc4381e347a37c3886c194f83df4bd8711441a931302ad3a",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/rich_utils.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/rich_utils.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/rich_utils.py",
+      "bytes": 3382,
+      "sha256": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/tensor_utils.py",
+      "entry_id": "2a2ed2f82730114b74948b087abfb350c0e38f720adc50b0cf74f7ef130d2008",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/tensor_utils.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/tensor_utils.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/tensor_utils.py",
+      "bytes": 7767,
+      "sha256": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/src/utils/utils.py",
+      "entry_id": "5f0393d81506d88bc9841c271f2ddc3eff52f0fda2fb0566dde52bc79e6f6fc4",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/src/utils/utils.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/src/utils/utils.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/src/utils/utils.py",
+      "bytes": 8359,
+      "sha256": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/test.py",
+      "entry_id": "478e2ec787893c4851afbc14f2a02c8f70b3ce2a5efee02a0fdd209838b6ae33",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/test.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/test.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/test.py",
+      "bytes": 1725,
+      "sha256": "4eebeb17ee4cd221ef48b0bdf5e1fd622bd6c85fc22060b0642833bfc49c7ec0",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/visualize_complete_decoder_attention.py",
+      "entry_id": "a7b6f3fcc4256ccb862dd47cd6b67d88e3edc6bc1acd5272861344e48ce6bfce",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/visualize_complete_decoder_attention.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/visualize_complete_decoder_attention.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/visualize_complete_decoder_attention.py",
+      "bytes": 14300,
+      "sha256": "531bbaf5ab118ffedb3b0fef32dd0fe26748298b64e3c7e92a68c911c673e177",
+      "matches_server_journal_and_capture": true
+    },
+    {
+      "logical_path": "references/wmh-original/GRID/visualize_encoder_attention.py",
+      "entry_id": "1e1c2d5105cef29c2d528d7644a742cfad05f2f82071a166b19ddef767eb22af",
+      "source_capture": "A800-grid-20261010-v1",
+      "source_member": "A800_GRID/visualize_encoder_attention.py",
+      "publication_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/references/wmh-original/GRID/visualize_encoder_attention.py",
+      "server_path": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/visualize_encoder_attention.py",
+      "bytes": 10055,
+      "sha256": "25622305bddb1d93e93d960ee8263a26e2ca8f601e6ab6be13ad718af0e380c4",
+      "matches_server_journal_and_capture": true
+    }
+  ],
+  "export_member_checks": [
+    {
+      "path": "GRID/LICENSE",
+      "bytes": 1202,
+      "sha256": "7805eedcc666e1526b4ad3dffb211a9f30b4d56c90ad979329003ed688c053bf",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/README.md",
+      "bytes": 6483,
+      "sha256": "3c42de7e3a041aa8297bfd6e049fe235efc6ec94595fe7e89c570708560516d4",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/cmd.txt",
+      "bytes": 655,
+      "sha256": "8a401b57858898d586eba271781a2ac8d63521e7fbc476422136763211218b80",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/__init__.py",
+      "bytes": 81,
+      "sha256": "40afe33e9461a043b773aa939b3ec32715d0031bc64114839ffc1607af407fa8",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/callbacks/default.yaml",
+      "bytes": 458,
+      "sha256": "5b172dacc4e48781310c7f78895b23a0d9d6d8904bdfcf7be2f17497556ad7bd",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/callbacks/early_stopping.yaml",
+      "bytes": 1232,
+      "sha256": "a30fe6f24261597147fdd9e6d64c536d8fa23cca14a00cf3090a1387b895d17e",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/callbacks/local_pickle_writer.yaml",
+      "bytes": 259,
+      "sha256": "2e3ba713430bbab497e61bff211031f0acfb0b75ba53e850c5ac2c3c99d5e36f",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/callbacks/model_checkpoint.yaml",
+      "bytes": 1230,
+      "sha256": "6db81f9260af09a455677ceb41e03f5d4dfe7b568470adca448e3e8d77a5d66b",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/callbacks/model_summary.yaml",
+      "bytes": 341,
+      "sha256": "4a9cba32da611920bb7e1a4429f47810e0e3840db83ff351f83bdcd72f9d55c3",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/callbacks/rich_progress_bar.yaml",
+      "bytes": 399,
+      "sha256": "f7979106008cd2b061bc46e9091bca5deea7508dd05abcf0777fb1159f9fedb3",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/experiment/rkmeans_inference_flat.yaml",
+      "bytes": 5587,
+      "sha256": "344d2e4dad207cdb74d6ec184797850ab546b3a3aef17b7d1fc9271ec170a64c",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/experiment/rkmeans_train_flat.yaml",
+      "bytes": 7728,
+      "sha256": "0a42cb829d92b0c11d15d081a4772c582585e4410298a7338db5d0e9b5dd3ca7",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/experiment/rqvae_inference_flat.yaml",
+      "bytes": 7740,
+      "sha256": "500c3b2de2e754f54423948b5d043e60b7a4c7e46479cf60987cb5661ef139ba",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/experiment/rqvae_train_flat.yaml",
+      "bytes": 9709,
+      "sha256": "802518ff96bc42401ba3de35e083d96dadd187b3825025ed22ad9417152a67e7",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/experiment/rvq_train_flat.yaml",
+      "bytes": 7958,
+      "sha256": "2405b15f39036ed7c0aa37133d7785569e4fb79e1529d2b4eb8449919ea3d79c",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/experiment/sem_embeds_inference_flat.yaml",
+      "bytes": 5537,
+      "sha256": "23361b1ec89e8599c705969a4f65384c4a8d5bec29c327f9f5753f9259503d88",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/experiment/tiger_inference_flat.yaml",
+      "bytes": 13317,
+      "sha256": "d3e9fa09a5e5fc15829c9bc45c96bbf3c5be297fea9dc49251184387903b8104",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/experiment/tiger_inference_flat_shuffle.yaml",
+      "bytes": 8289,
+      "sha256": "d60b73c5e502ab1ed105a550340b9e748adbcf181f19992e3a32c55038d768a6",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/experiment/tiger_train_flat.yaml",
+      "bytes": 12140,
+      "sha256": "d5a78dbbe25f39c894d34bc2d5b70e621cc8e45de41be5163da093a5ea37d890",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/extras/default.yaml",
+      "bytes": 298,
+      "sha256": "29bce8a0bf644c1a1ab72d9eb1decbab31c575694a2e9a936842307a990a9aa6",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/hydra/default.yaml",
+      "bytes": 527,
+      "sha256": "55bed674fc423879add8e36729cd3cc13931a174b02e513329c02408ba25f0a8",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/inference.yaml",
+      "bytes": 601,
+      "sha256": "d731bd7a4544d4253ac5d3f4228ba1dbdb1de19bd439cf142f14ce0d71fe7f85",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/local/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/logger/csv.yaml",
+      "bytes": 158,
+      "sha256": "710aff41ddf0915d2e3bf913fd17316d9a8145f5f9f70cf06a5c392e67556f10",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/paths/default.yaml",
+      "bytes": 906,
+      "sha256": "ce2e58cb8648eb11b7e27558b35b6ec306ebee0ed7b4a9682a49ee3a32944189",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/train.yaml",
+      "bytes": 1302,
+      "sha256": "358c400a26a9bf8cbb231470200e06f0e5b9e15dba3a301bbe48ad73c1ed19e7",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/trainer/ddp.yaml",
+      "bytes": 435,
+      "sha256": "01036b37b3b52013a3c283d88a36554f3b7dea5b9ab4ff8b06093cbd315f3ef5",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/configs/trainer/default.yaml",
+      "bytes": 720,
+      "sha256": "b9a532af4c352c9e334d961d534e2fcae2b21280d8c02eb1936411d51d0fc45e",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/config.yaml",
+      "bytes": 8742,
+      "sha256": "2ef1c71862d1da06d3a959c9a0b144d158842486e54b9f5704738c19d133055a",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/hydra.yaml",
+      "bytes": 4582,
+      "sha256": "fb699a28d4cf5c4b9f744763a0e85dd6bad0c472efff651047fca16915265495",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/overrides.yaml",
+      "bytes": 341,
+      "sha256": "9e132bd1078ae26090a5c00a9de58114402a76fccf3277d7df8b1f8fd5977dee",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-10-29/14-59-58/csv/version_0/metrics.csv",
+      "bytes": 184,
+      "sha256": "dde27b856c0345821d64bc2bf9b599b2c03c0359775df8ddb24ea31fa750c70e",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/config.yaml",
+      "bytes": 8514,
+      "sha256": "c7c58df3dd7eaebca64bd316060540344a9cc7b81dd84bd5dbd94147c76f534f",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/hydra.yaml",
+      "bytes": 4582,
+      "sha256": "06a8d953d95893515765a733f6830342ee7e1b60917097b51775fc6abb65395d",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/overrides.yaml",
+      "bytes": 341,
+      "sha256": "9e132bd1078ae26090a5c00a9de58114402a76fccf3277d7df8b1f8fd5977dee",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-10-29/15-47-20/csv/version_0/metrics.csv",
+      "bytes": 179,
+      "sha256": "5dc99b63777675e2a5def3720d99d505e43cf9ba5e173ce3a1ab2fb7db85a222",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/config.yaml",
+      "bytes": 13327,
+      "sha256": "2a9835f85e596f0a8d936ec96d8c782d53b99e5ff50b83f809fd26a6bf7453e2",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/hydra.yaml",
+      "bytes": 4586,
+      "sha256": "f8fb4884ce4229e93aafdc6a7a59e85d6e3fb001205b1d0c3f9e3bcd5e78f0e5",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/overrides.yaml",
+      "bytes": 343,
+      "sha256": "ad2543a65d2fca534e0f6a320376566141b88ab40b7e9683ba72f3b65cf9ac58",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/config.yaml",
+      "bytes": 12183,
+      "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/hydra.yaml",
+      "bytes": 4449,
+      "sha256": "538a8822bbf50eec1aca150fd2765afbaca74452eb0a1006c69b730ebe23faec",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/overrides.yaml",
+      "bytes": 244,
+      "sha256": "c11161dbcdfea5570fd2cbbd8637de2521e8ca2074e9557d898d5185320785b9",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/train/runs/2025-10-22/21-25-31/csv/version_0/metrics.csv",
+      "bytes": 7571,
+      "sha256": "a59494f88dddb851507bb1a56e7cfe4a185199fc47c3e37a469ab047612b1eb2",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/config.yaml",
+      "bytes": 12271,
+      "sha256": "a548943c6f1fca2a726b7daacaa8734a173f450cfc59c9dd526ef5dff0e538a3",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/hydra.yaml",
+      "bytes": 4453,
+      "sha256": "341242368a36b905579f57dcce1e766471be649701fdee01622636ec85712b4a",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/train/runs/2025-12-02/00-47-41/.hydra/overrides.yaml",
+      "bytes": 246,
+      "sha256": "173b1c88f8f4cc11d9acc2e65113a6bdf9e45c5967d9123e38f71b8b2c82814e",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/logs/train/runs/2025-12-02/00-47-41/csv/version_0/metrics.csv",
+      "bytes": 6580,
+      "sha256": "c4f05515c558b50640a8558229ff29c1d28c06a73948488dfac950aa1cd06ebc",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/phase_1_1.sh",
+      "bytes": 330,
+      "sha256": "baac62422f44cec4b68819f92d55a69c6b8835f5b9383885a17868d1d88b353d",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/phase_2_1.sh",
+      "bytes": 524,
+      "sha256": "5f00af5c4c9c5c727d5d5b79d64a374ddf7b90ed32136a1e3169a47c54f67782",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/phase_2_2.sh",
+      "bytes": 642,
+      "sha256": "652f7f6e6060504cb9433aba607de9331729f97d0f682c7124165be7aff76601",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/phase_3_1.sh",
+      "bytes": 458,
+      "sha256": "926e495a269de4e2ceb9f16427ec4a016ecbc7a12c1d6c37bd1b548af1f0ca82",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/phase_3_2.sh",
+      "bytes": 568,
+      "sha256": "ea75b83e967196a075d36785999d2faf7baf9984995b96ac26a110e5e0d097e5",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/requirements.txt",
+      "bytes": 17829,
+      "sha256": "dfa63fa6fedfddb6ae9643377882ba826a90f260e38247009859f97020809323",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/clustering_initializers.py",
+      "bytes": 9117,
+      "sha256": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/distance_functions.py",
+      "bytes": 5118,
+      "sha256": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/eval_metrics.py",
+      "bytes": 15241,
+      "sha256": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/loss_functions.py",
+      "bytes": 4412,
+      "sha256": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/network_blocks/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/network_blocks/hf_language_model.py",
+      "bytes": 2434,
+      "sha256": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/optimizer.py",
+      "bytes": 1016,
+      "sha256": "d641316bf995f824b10d2499143b73333ae9bb4dfab1587c7c13c25d8ea46050",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/quantization_strategies.py",
+      "bytes": 8796,
+      "sha256": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/scheduler.py",
+      "bytes": 2523,
+      "sha256": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/components/training_loop_functions.py",
+      "bytes": 3754,
+      "sha256": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/components/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/components/collate_functions.py",
+      "bytes": 16642,
+      "sha256": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/components/custom_dataloader.py",
+      "bytes": 2266,
+      "sha256": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/components/dataloading.py",
+      "bytes": 7194,
+      "sha256": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/components/interfaces.py",
+      "bytes": 12625,
+      "sha256": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/components/iterators.py",
+      "bytes": 8557,
+      "sha256": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/components/label_function.py",
+      "bytes": 9035,
+      "sha256": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/components/pre_processing.py",
+      "bytes": 14995,
+      "sha256": "a69c88681760df22e37fb7e66961ad97ed0824af20eae415a543379e881d71c7",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/datamodules/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/datamodules/sequence_datamodule.py",
+      "bytes": 16142,
+      "sha256": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/data/loading/utils.py",
+      "bytes": 5860,
+      "sha256": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/inference.py",
+      "bytes": 7940,
+      "sha256": "f24892ed2d9777c6fd5d3eaf20cc0ea3d180a19a490519baa7ca2390a70c05ba",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/components/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/components/interfaces.py",
+      "bytes": 2785,
+      "sha256": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/components/network_blocks/aggregation_strategy.py",
+      "bytes": 3465,
+      "sha256": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/components/network_blocks/embedding_aggregator.py",
+      "bytes": 1735,
+      "sha256": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/components/network_blocks/mlp.py",
+      "bytes": 1720,
+      "sha256": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/components/network_blocks/normalize_layer.py",
+      "bytes": 655,
+      "sha256": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/base_module.py",
+      "bytes": 7949,
+      "sha256": "7cfa9da5f73c0e666ab81f22440d04f04d6cc9624803de58cde3256dcae400b0",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/clustering/base_clustering_module.py",
+      "bytes": 11490,
+      "sha256": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/clustering/mini_batch_kmeans.py",
+      "bytes": 6013,
+      "sha256": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/huggingface/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/huggingface/transformer_base_module.py",
+      "bytes": 6665,
+      "sha256": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/semantic_id/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/semantic_id/tiger_generation_model.py",
+      "bytes": 44597,
+      "sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+      "bytes": 53677,
+      "sha256": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py",
+      "bytes": 83490,
+      "sha256": "7561d2f494764a77efac1d71abff4ea15bc683eea0816c1e8fe067d7d5c78463",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/semantic_id/tiger_generation_model_parallel.py",
+      "bytes": 61418,
+      "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "bytes": 61418,
+      "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/modules/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/modules/clustering/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/modules/clustering/residual_quantization.py",
+      "bytes": 32525,
+      "sha256": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/modules/clustering/vector_quantization.py",
+      "bytes": 4939,
+      "sha256": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/modules/semantic_embedding_inference_module.py",
+      "bytes": 3497,
+      "sha256": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/test.py",
+      "bytes": 388,
+      "sha256": "53f43b1c3e8c5549901aac4f8ee93eea92fc4123bc10439607de20f87be17d78",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/train.py",
+      "bytes": 4415,
+      "sha256": "f78680593ba465d0716aaf44239a730b5b449a227a0e957f67c0781e9a0fa4ea",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/__init__.py",
+      "bytes": 297,
+      "sha256": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/custom_hydra_resolvers.py",
+      "bytes": 5867,
+      "sha256": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/decorators.py",
+      "bytes": 6611,
+      "sha256": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/file_utils.py",
+      "bytes": 6281,
+      "sha256": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/inference_utils.py",
+      "bytes": 11844,
+      "sha256": "a3fa7e388713e38c5d67824b0a51eb9a9395695df46571c645845efbf183d7bf",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/instantiators.py",
+      "bytes": 1908,
+      "sha256": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/launcher_utils.py",
+      "bytes": 7789,
+      "sha256": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/logging_utils.py",
+      "bytes": 3052,
+      "sha256": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/masking_utils.py",
+      "bytes": 1564,
+      "sha256": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/pylogger.py",
+      "bytes": 2468,
+      "sha256": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/restart_job.py",
+      "bytes": 13321,
+      "sha256": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/restart_job_utils.py",
+      "bytes": 8199,
+      "sha256": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/rich_utils.py",
+      "bytes": 3382,
+      "sha256": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/tensor_utils.py",
+      "bytes": 7767,
+      "sha256": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/src/utils/utils.py",
+      "bytes": 8359,
+      "sha256": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/test.py",
+      "bytes": 1725,
+      "sha256": "4eebeb17ee4cd221ef48b0bdf5e1fd622bd6c85fc22060b0642833bfc49c7ec0",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/visualize_complete_decoder_attention.py",
+      "bytes": 14300,
+      "sha256": "531bbaf5ab118ffedb3b0fef32dd0fe26748298b64e3c7e92a68c911c673e177",
+      "matches_restore_and_capture": true
+    },
+    {
+      "path": "GRID/visualize_encoder_attention.py",
+      "bytes": 10055,
+      "sha256": "25622305bddb1d93e93d960ee8263a26e2ca8f601e6ab6be13ad718af0e380c4",
+      "matches_restore_and_capture": true
+    }
+  ],
+  "datasets": {
+    "beauty": {
+      "files": 549,
+      "bytes": 1385691766,
+      "splits": {
+        "evaluation": 175,
+        "items": 24,
+        "testing": 175,
+        "training": 175
+      },
+      "routes": {
+        "READ_ONLY_USE_SYMLINK_TO_EXISTING_MATCHED_ENTITY": 549
+      },
+      "actual_modes": {
+        "0o664": 549
+      },
+      "integrity": "PAYLOAD_PRESENT_HASH_MATCHED",
+      "provenance": "PROVENANCE_BOUND_TO_FIXED_BASELINE_MANIFEST_AND_ORIGINAL_CAPTURE",
+      "semantic_binding": "UNVERIFIED_FOR_NEW_QWEN_ITEM_SID_PAIRING",
+      "model_load": "MODEL_LOAD_NOT_RUN",
+      "experiment": "EXPERIMENT_NOT_AUTHORIZED"
+    },
+    "toys": {
+      "files": 480,
+      "bytes": 1263466388,
+      "splits": {
+        "evaluation": 152,
+        "items": 24,
+        "testing": 152,
+        "training": 152
+      },
+      "routes": {
+        "EXTRACTED_FROM_VERIFIED_ARCHIVE_SELECTED_MEMBER": 480
+      },
+      "actual_modes": {
+        "0o444": 480
+      },
+      "integrity": "PAYLOAD_PRESENT_HASH_MATCHED",
+      "provenance": "PROVENANCE_BOUND_TO_FIXED_BASELINE_MANIFEST_AND_ORIGINAL_CAPTURE",
+      "semantic_binding": "UNVERIFIED_FOR_NEW_QWEN_ITEM_SID_PAIRING",
+      "model_load": "MODEL_LOAD_NOT_RUN",
+      "experiment": "EXPERIMENT_NOT_AUTHORIZED"
+    },
+    "sports": {
+      "files": 873,
+      "bytes": 2102589679,
+      "splits": {
+        "evaluation": 279,
+        "items": 36,
+        "testing": 279,
+        "training": 279
+      },
+      "routes": {
+        "EXTRACTED_FROM_VERIFIED_ARCHIVE_SELECTED_MEMBER": 873
+      },
+      "actual_modes": {
+        "0o444": 873
+      },
+      "integrity": "PAYLOAD_PRESENT_HASH_MATCHED",
+      "provenance": "PROVENANCE_BOUND_TO_FIXED_BASELINE_MANIFEST_AND_ORIGINAL_CAPTURE",
+      "semantic_binding": "UNVERIFIED_FOR_NEW_QWEN_ITEM_SID_PAIRING",
+      "model_load": "MODEL_LOAD_NOT_RUN",
+      "experiment": "EXPERIMENT_NOT_AUTHORIZED"
+    }
+  },
+  "limits": [
+    "All 1902 file hashes were actually read by frozen production worker; independent reviewer rehashed 24 data files and 13 key original source files (61771232 bytes) remotely, not all 1902 a second time.",
+    "Beauty target files are symlinks to existing /data/bwwu/amazon_data/beauty entities with actual mode0664; read-only use is a recorded policy, not OS-enforced immutability. No writable hardlinks connect originals to work assets. Sports/Toys selected newly extracted files have0444 and nlink1.",
+    "Identity equality of TFRecord files does not establish current loader execution or new Qwen SID item-axis pairing. Old T5 SID semantic/CPU evidence is not used for Qwen.",
+    "SID, keyed SID mapping, checkpoint and small effective run configuration LFS payloads are pending final assembled whole-OID review. No current complete three-domain asset PASS or READY_FOR_EXPLANATION claim.",
+    "TAR reader traversed only required three original batches. Selected body hashes and whole TAR/chunk hashes were checked; no 302-chunk/full-library audit rerun.",
+    "No research source, model, loader, torch/pickle constructor was imported or executed; no runtime experiment or interface changes."
+  ],
+  "install_log": [],
+  "auditor_tool_correction": {
+    "reviewer": "/root/audit_assets",
+    "observed_at": "2026-10-14T01:30:25.256101+08:00",
+    "type": "AUDITOR_MAPPING_ASSUMPTION_CORRECTION_NO_MATERIAL_CHANGE",
+    "initial_report": "/home/addaswsw/recommend-support/sid-extensions-p0/review/A_DATA_AND_SOURCE_RESTORATION.initial-auditor-prefix-assumption.json",
+    "initial_report_sha256": "8747975fedc7969176fabe70524752114cc3ce87d747cbeceeaa9e2085a74bc1",
+    "reason": "Initial reviewer compared members against filenames relative to GRID while actual server export intentionally preserved GRID/ prefix. All 123 apparent unexpected members were the same expected sources with GRID/ prefix; this is an auditor path mapping error, not an asset, source, export or preparation failure.",
+    "fix": "Read actual TAR names, bind exact GRID/ prefix to recorded publication logical path, fully read every selected regular member and compare SHA/size to restore journal and capture.",
+    "actual_archive_members": 123,
+    "all_sha_size_match": true,
+    "source_or_material_changes": false,
+    "remaining_errors": []
+  }
+}
