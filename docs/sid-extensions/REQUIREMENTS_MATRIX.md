@@ -36,19 +36,19 @@
 |7.history v6 CPU有界接口/历史配置不能唯一绑定Python/Qwen与T5区分|所有历史身份/限制分层标明，未重造指标|`OLD_AUDIT_INHERITANCE; 各实验历史入口`|PASS|无；运行/理解仍未授权|
 |8.1 总图+四说明，各含10项讲解要求/性质标识|入口/配置/数据/变体/shape/参数/历史/提案/未来验证/用户问题齐备|`CODE_READING_GUIDE; 四experiments; B_ROUND2`|PASS|无；运行/理解仍未授权|
 |8.2 源码事实绑定版本/path/symbol/行范围/完整hash；教学值非实测|65源码证据+完整AST索引+原CSV行；H4/E128/M30槽静态标注|`SOURCE_LINES; SOURCE_MANIFEST; B_ROUND2`|PASS|无；运行/理解仍未授权|
-|9.1 SOURCE_PROVENANCE/DEPLOYMENT_MAP不能只比HEAD|baseline逐Git blob、native捕获/member/server hash；全部source集合hash|`SOURCE_MANIFEST; DEPLOYMENT_MAP`|PENDING|server最终Git树部署待核|
+|9.1 SOURCE_PROVENANCE/DEPLOYMENT_MAP不能只比HEAD|baseline逐Git blob、native捕获/member/server hash；C服务器2468逐文件部署核对，285受审集合固定|SOURCE_MANIFEST; DEPLOYMENT_MAP; C_DEPLOY_C_RESULT_REVIEW|PASS_C; FINAL_D_EXTERNAL|C完整树已核；D终验以外部最终回执闭合|
 |9.2 有效配置/路径只映射不改写、环境只metadata、动态依赖诚实|43原配置文本；PATH_MAPPING/ENVIRONMENT，未导入/安装/instantiate|`baseline-run-records; STATIC_DEPENDENCIES; ENVIRONMENT_METADATA`|PASS|无；运行/理解仍未授权|
 |9.3 忽略/外部本地模块识别，实际import身份留预跑|显式src模块路径全找到；动态target/导出符号/runtime身份明确未确认|`STATIC_DEPENDENCIES; C prepublication`|PASS|无；运行/理解仍未授权|
-|10.1 真实multi-agent A/B/C、非作者复核实际原件/命令结果|A全部来源+远端抽核、B源码/文档、C工具/服务器全123重hash/发布|`review/A_* B_* C_*`|PENDING|最终LFS/发布审核待闭合|
+|10.1 真实multi-agent A/B/C、非作者复核实际原件/命令结果|A全部1957身份/55LFS远端全hash；B原文/51固定链接/36raw；C工具/具体候选/377路径GitHub/C部署|review/A_FINAL_* B_FINAL_* C_CONTENT_GITHUB_READBACK C_DEPLOY_C_RESULT_REVIEW|PASS_CONTENT_NONAUTHOR|D最终回读/部署由提交后非作者外部终验闭合|
 |10.2 不并发改源码/index/STATE，Git由主控串行|代理只写自己的review，冲突按原证据解决|`review/README; Git操作记录`|PASS|无；运行/理解仍未授权|
 |11.1 整个P0最多3轮，失败保留、自主修正、不重置|round1文档六项；round2网络超时新attempt与精度；当前使用2/3|`IMPROVEMENT_LOG; ROUND1/ROUND2_CHANGE_RECORD`|PASS|无；运行/理解仍未授权|
-|11.2 外部硬阻碍停止依赖链，未知/源问题不能降门槛|源问题保留边界；当前恢复任务不标完成；认证不暴力重试|`BLOCKERS; REPORT; STATE`|PASS|无；运行/理解仍未授权|
+|11.2 外部硬阻碍停止依赖链，未知/源问题不能降门槛|原件问题保留边界；材料准备与C发布无阻碍，认证/主机异常不暴力尝试|BLOCKERS; REPORT; STATE|PASS|D最终证据尚须提交后取得，不预写成功|
 |12.1 复用runner，耗时任务请求/日志/状态/ID持久化与查询恢复|旧runner同字节新sidecar；local relay+remote restore/assembly全独立job|`C_HELPER/REQUEST reports; PREPARATION_JOB_SUMMARY`|PASS|无；运行/理解仍未授权|
 |12.2 回执丢失先查ID、不重跑/不覆盖、Windows路径/字节核验|transport STAGE新路径、SCP验证SHA，v1失败保留v2关联恢复|`C_RELAY_V2; 工具原文; job requests`|PASS|无；运行/理解仍未授权|
-|12.3 容量预算/每批空间/无本阶段训练队列/必要job最终终态|当前restore终态；relay进行中，结束需无live/结果取回|`PREPARATION_JOB_SUMMARY; STATE`|PENDING|relay/assembly/最后部署作业尚未结束|
+|12.3 容量预算/每批空间/无本阶段训练队列/必要job最终终态|restore/relay-v1失败终态/relay-v2成功/assembly/C部署均终态、取回/no-live；容量充足|PREPARATION_JOB_SUMMARY; C_DEPLOY_C_RESULT_REVIEW|PASS_AS_OF_C; FINAL_D_EXTERNAL|未记录每个内部TAR后的容量；完整job预算及批前/后容量有证据，最终D作业另见外部回执|
 |13.1 发布前权限/具体文件/secret/自动化/hook审查|push权限，GitHub无workflow，hook无非sample，新增区无大载荷/secret|`C_PRECHECK; C_LOCAL_HOOKS; C_PREPUBLICATION_FILES`|PASS|无；运行/理解仍未授权|
-|13.2 实际CONTENT_COMMIT正常push并从GitHub取固定tree/blob字节|提交/推送后必须独立API回读全部必需source/config|`review/C_CONTENT_GITHUB_READBACK`|PENDING|C尚未提交/回读|
-|13.3 DELIVERY_COMMIT、C/D同source、最终D再回读与server对应|D仅元数据，source路径/blob/hash集合相等；D完整SHA/最终收据包外|`C/D比较; FINAL_DELIVERY_RECEIPT external`|PENDING|D尚未提交/回读|
-|14.1 10项最少交付齐全，小报告/清单/实质审核实际上GitHub|阅读/完整source/config/来源/资产/known issues/deploy/矩阵/审查/报告|`docs+manifests+references+tools; REPORT`|PENDING|最终发布尚未完成|
-|14.2 成功最低门槛：实体、原版、无实验、实际发布、独立复核、无在途job|不因Parallel缺失等约定边界降门槛；必需缺口始终PENDING|`ASSET_SUMMARY; review; STATE; GitHub回读`|PENDING|等待全部必做闭合|
-|15.1 最终中文A–G，固定版本入口/位置/真实审查轮次/限制/接手并停止|Codex最终消息提供D完整SHA/最终实际回读；两个布尔值false|`FINAL_DELIVERY_RECEIPT; STATE; 最终回复`|PENDING|仅收尾时执行|
+|13.2 实际CONTENT_COMMIT正常push并从GitHub取固定tree/blob字节|C=84d4533fbdd6b010f54d671b433a9952608911ca已正常push；API完整2468tree、377路径/287blob实读核对|review/C_CONTENT_GITHUB_READBACK.json; GITHUB_C_PRIMARY_READBACK.json|PASS_C|无C发布缺口|
+|13.3 DELIVERY_COMMIT、C/D同source、最终D再回读与server对应|D仅说明/审核元数据；285源码配置/C原字节保持；D完整SHA、最终GitHub/server证据提交后外置避免自引用|C_TO_D_SOURCE_EQUIVALENCE.json; external FINAL_DELIVERY_RECEIPT.json|EXTERNAL_FINAL_RECEIPT_REQUIRED|本矩阵冻结于D提交前；不预写尚未执行的D终验|
+|14.1 10项最少交付齐全，小报告/清单/实质审核实际上GitHub|10项实质材料已随C网页可读；D补入最终C审核、部署/链接及报告，源集合不变|docs+manifests+references+tools; REPORT; C_CONTENT_GITHUB_READBACK|PASS_CONTENT; FINAL_METADATA_EXTERNAL|D发布与最终实读在外部终验闭合|
+|14.2 成功最低门槛：实体、原版、无实验、实际发布、独立复核、无在途job|必需实体/原字节/无实验/真实独立审核和C发布通过；D终验和全部必要作业终态需实际取得|ASSET_SUMMARY; A/B/C review; external FINAL_DELIVERY_RECEIPT|EXTERNAL_FINAL_RECEIPT_REQUIRED|最终成功门槛不降低；以最终回执补齐D/服务器/全部作业|
+|15.1 最终中文A–G，固定版本入口/位置/真实审查轮次/限制/接手并停止|最终中文A–G回复同时提供固定D链接、实际服务器路径、审核/修正和停止边界|external FINAL_DELIVERY_RECEIPT; Codex final reply|FINAL_RESPONSE_EXTERNAL|回复在全部终验后生成，不在仓库中预写|

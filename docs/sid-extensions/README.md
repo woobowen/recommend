@@ -2,6 +2,8 @@
 
 本入口属于 `sid-extensions-p0`。这是材料准备与解释交接阶段；`experiment_execution_authorized=false`，`user_understanding_confirmed=false`。完成本阶段不会授权模型加载、预跑或训练。
 
+受审 CONTENT_COMMIT 为 `84d4533fbdd6b010f54d671b433a9952608911ca`。C 已实际发布、全必需源码/配置从 GitHub 回读并部署核对；最终交付 D 的完整 SHA、最后回读时间及终态见 Codex 最终回复和外部支持目录回执。仓库内报告只记录已经发生的 C 事实，285项受审源码配置在 C/D 保持同字节。
+
 ## 三份身份不要混用
 
 |身份|固定来源|本阶段用途|

@@ -13,3 +13,11 @@
 旧审计包的非作者结论只用于旧阶段继承；本次A/B/C报告必须有实际新原文/字节/命令结果。重复主控摘要不算独立核验。Parallel原正文缺失、原件静态接口问题、未来运行/用户理解未完成属于明示边界；必需载荷/发布/最终服务器映射或本次非作者审核未闭合时不得称READY。
 
 最终CONTENT_COMMIT读回记录在本目录C发布审核中；DELIVERY_COMMIT及最终回读/服务器对应的完整SHA和收据保存在外部支持目录 `FINAL_DELIVERY_RECEIPT.json`，并由Codex最终回复给出。这避免报告自引用其自身commit，也避免预写未来读回成功。
+
+## 已取得的终审证据
+
+- [A_FINAL_ASSET_REVIEW](A_FINAL_ASSET_REVIEW.json) 与 [A_FINAL_REMOTE_LFS55_READBACK](A_FINAL_REMOTE_LFS55_READBACK.json)：全部1957来源/内容关系，实际服务器55个LFS实体重新全hash；运行语义与模型加载仍未核。
+- [B_ROUND2_EXPLANATION_REVIEW](B_ROUND2_EXPLANATION_REVIEW.json) 与 [B_FINAL_PUBLISH_BINDING_REVIEW](B_FINAL_PUBLISH_BINDING_REVIEW.json)：正文静态说明、273研究项/285完整source集合及51个固定C链接，另独立36个GitHub raw实体回读。
+- [C_CONTENT_CANDIDATE_REVIEW](C_CONTENT_CANDIDATE_REVIEW.json)、[C_CONTENT_GITHUB_READBACK](C_CONTENT_GITHUB_READBACK.json)、[C_DEPLOY_C_RESULT_REVIEW](C_DEPLOY_C_RESULT_REVIEW.json)：具体候选、固定C tree和全部必需source/config实际字节、服务器2468文件完整部署及直接现场抽核。
+
+本目录各PASS严格限定自己的范围；D最终回读与D服务器版本证明由提交后的外部终验报告给出，不从C成功推定D成功。全阶段集中修正当前2/3轮，初审失败及每轮原始证据保留。
