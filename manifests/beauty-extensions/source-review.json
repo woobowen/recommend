@@ -1,0 +1,1286 @@
+{
+  "schema_version": 1,
+  "task": "beauty-extensions-20261014",
+  "reviewer": "/root/source_conditions",
+  "review_date": "2026-10-14",
+  "review_type": "NONAUTHOR_SOURCE_AND_EFFECTIVE_CONFIGURATION",
+  "inspected_git_anchor": "5ed4e701c41d977e24c4c89db0ae1025f9faf701",
+  "status": "SOURCE_REVIEW_COMPLETE_FORMAL_CONDITIONS_REQUIRE_DECISION",
+  "gate_scope": "This source review is not PRECHECK_PASS, SEMANTIC_PAIRING_PASS, REAL_PREFLIGHT_PASS, or NONAUTHOR_GATE_PASS for any implemented route.",
+  "rule_source": "/home/addaswsw/recommend/{AGENTS.md,PROJECT_RULES.md,REMOTE_EXECUTION.md}",
+  "boundary": {
+    "only_written_file": "manifests/beauty-extensions/source-review.json",
+    "git_mutations": 0,
+    "remote_queries": 0,
+    "model_imports_or_loads": 0,
+    "gpu_jobs": 0,
+    "installations": [],
+    "evidence_class": "Current source/configuration reads plus explicitly inherited old identity/inert checkpoint metadata; no current checkpoint compatibility or numeric preflight claimed.",
+    "historical_python_binding": "UNKNOWN; use preserved implementation for new adaptation, not word-for-word historical reproduction."
+  },
+  "findings": [
+    {
+      "id": "A_B_ARE_DIFFERENT_MODEL_CONDITIONS",
+      "status": "SOURCE_FACT",
+      "evidence": [
+        "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py:740-748",
+        "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py:1097-1119",
+        "GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py:863-884",
+        "manifests/sid-extensions/OLD_A800_MECHANISMS.md:40-60"
+      ],
+      "conclusion": "A has independent encoder/decoder SID embedding tables. B has one shared table. Preserved dual-table checkpoints contain numerically different encoder and decoder tables. Copying the B encoder table into an A decoder is an unapproved parameter conversion, not ordinary interface adaptation. A/B deltas must be calculated within each model's Normal."
+    },
+    {
+      "id": "AUTHOR_BEAUTY_DUAL_TABLE_PAYLOADS_EXIST",
+      "status": "INHERITED_BYTE_IDENTITY_AND_PARAMETER_STRUCTURE_WITH_FRESH_CONFIG_READ",
+      "conclusion": "Four Beauty single-BOS dual-table candidates are identified in the targeted preserved 17-checkpoint context index. Absence from the short P0 ARCHIVED_REFERENCE_ASSETS index does not imply the archive lacks a matching structural candidate. Asset choice remains unconfirmed.",
+      "candidates": [
+        {
+          "run": "logs/train/runs/2025-10-29/23-40-40",
+          "checkpoint": "checkpoints/checkpoint_epoch=000_step=007600.ckpt",
+          "bytes": 160859238,
+          "sha256": "6839c042df45eddcc988efbfdeefd1b2193cb11541e931f2535ae1206c61d6b6",
+          "archive_batch": "b04",
+          "config_sha256": "524364f112271fc9115f20d552736f8339e6cd890f8151def9000b5018de401b",
+          "sid_run": "logs/inference/runs/2025-09-21/16-36-33",
+          "sid_sha256": "2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba",
+          "sid_archive_batch": "b02",
+          "upstream_condition": "T5 / RQ-VAE with STE and Beta quantization loss",
+          "rationale_if_selected": "Shares the exact declared SID source with the preserved genuine Beauty MLP run; useful for a matched author-asset model comparison. Not selected because of a high metric or newest timestamp."
+        },
+        {
+          "run": "logs/train/runs/2025-11-03/02-47-09",
+          "checkpoint": "checkpoints/checkpoint_epoch=000_step=004800.ckpt",
+          "bytes": 160859238,
+          "sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+          "archive_batch": "b05",
+          "config_sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d",
+          "sid_run": "logs/inference/runs/2025-09-15/20-54-16",
+          "sid_sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+          "sid_bytes": 388534,
+          "sid_archive_batch": "b00",
+          "upstream_condition": "T5-small MeanAggregation (512 dimensions) / layer-wise normalized residual MiniBatchKMeans, three quantizer codes plus collision disambiguation",
+          "effective_parameter_metadata": {
+            "num_embeddings_per_hierarchy": 256,
+            "top_k_for_generation": 10,
+            "should_check_prefix": false,
+            "should_add_sep_token": true,
+            "encoder_sid_table_shape": [
+              1024,
+              128
+            ],
+            "decoder_sid_table_shape": [
+              1024,
+              128
+            ],
+            "encoder_storage_sha256": "6ffbc79952a899c07efc205ec9b9e43e934ef028427b7baa188e562cf6849712",
+            "decoder_storage_sha256": "c2dd5f2ae068566cbb74fa9f67830ac2bfc67aedd2c2cd32bda8610c595b81a4"
+          },
+          "metadata_json_sha256": "288c0baca671fd0ca3b320029da960f192ceb11af147709082746521a2159c75",
+          "rationale_if_selected": "Preserves an actual author single-BOS dual-table checkpoint using R-Kmeans SID; no encoder-to-decoder copying or new baseline training needed. Must remain a different upstream/model condition from B Qwen."
+        },
+        {
+          "run": "logs/train/runs/2025-11-03/02-04-23",
+          "sha256": "780925df45dbb36b90619f4fc6781bb1aed692b55e9547ceabd4640019f99c3b",
+          "config_sha256": "64dcb4981e4f134b8db339c8518fa7b3311d7491e5f80b3560d1752d2d9f2fa3",
+          "sid_run": "logs/inference/runs/2025-09-21/16-36-33"
+        },
+        {
+          "run": "logs/train/runs/2025-11-03/02-45-07",
+          "sha256": "b17e59b16ce6c3cee219ac3eaa70f152c72a3bace37e6fbede8294c8fd5a39bd",
+          "config_sha256": "64dcb4981e4f134b8db339c8518fa7b3311d7491e5f80b3560d1752d2d9f2fa3",
+          "sid_run": "logs/inference/runs/2025-09-21/16-36-33"
+        }
+      ],
+      "non_candidate": "Beauty 2025-12-02/00-47-41 has four BOS rows and is excluded from this A AR single-BOS adaptation; not Parallel implementation scope."
+    },
+    {
+      "id": "B_QWEN_WORKING_PAIR",
+      "status": "PROVENANCE_BOUND_SEMANTIC_PAIRING_REQUIRES_REAL_CHECK",
+      "source_commit": "563dc50b1c7e9e2e05cdfddd13e91a3d1888001e",
+      "checkpoint": {
+        "actual_server_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt",
+        "sha256": "3d8f03cf042293f2f7f02132c9d072f573f671d9550d567edd1754f50e53e605",
+        "bytes": 159332142,
+        "manifest_line": 1903
+      },
+      "semantic_ids": {
+        "actual_server_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt",
+        "sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18",
+        "bytes": 388405,
+        "manifest_line": 1904
+      },
+      "keyed_sid_source": {
+        "actual_server_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/sid_generation/pickle/merged_predictions.pkl",
+        "sha256": "dcbfb61369cde2627cea50cc42bb80be753e2d9854b85f1825460174486bd590",
+        "bytes": 253952,
+        "manifest_line": 1920
+      },
+      "effective_config": "manifests/sid-extensions/baseline-run-records/beauty/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/.hydra/config.yaml",
+      "command": "manifests/sid-extensions/baseline-run-records/beauty/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/command_val1600.json",
+      "values_from_config_and_source": {
+        "seed": 42,
+        "num_hierarchies": 4,
+        "sequence_length_sid_tokens_including_hidden_target": 120,
+        "maximum_visible_history_items": 29,
+        "d_model": 128,
+        "num_heads": 6,
+        "d_kv": 64,
+        "d_ff": 1024,
+        "encoder_layers": 4,
+        "decoder_layers": 4,
+        "transformer_dropout": 0.15,
+        "internal_mlp_layers": 2,
+        "num_user_bins": null,
+        "top_k_for_generation": 10,
+        "should_check_prefix": false,
+        "sid_table_sharing": "encoder and decoder return the same table",
+        "test_raw_rows_per_batch": 8,
+        "test_num_workers": 0,
+        "test_drop_last": false,
+        "train_raw_rows_per_batch": 16,
+        "train_collate_cap": 128,
+        "precision": "32-true",
+        "evaluator_top_k_list": [
+          5,
+          10
+        ],
+        "checkpoint_selection": "val/recall@5 max"
+      },
+      "prior_claim_limit": "P0 ASSET_MANIFEST explicitly says SEMANTIC_BINDING_UNVERIFIED and MODEL_LOAD_NOT_RUN; byte/hash identity and path/config association alone are not semantic PASS.",
+      "authorization_limit": "Latest task explicitly accepts Qwen for engineering verification. Its formal role in the A/B/MLP matrix must not silently replace the author historical conditions."
+    },
+    {
+      "id": "GENUINE_BEAUTY_MLP_EFFECTIVE_RUN_FOUND",
+      "status": "EFFECTIVE_CONFIGURATION_FOUND_SINGLE_GPU_ADAPTATION_UNCONFIRMED",
+      "run": "logs/train/runs/2025-10-24/15-10-17",
+      "config_sha256": "31a51bd5d203acea823411068ed47ba64304bdd0fb35f89f8f4c887091153fa8",
+      "checkpoint_sha256": "095f97fb5c6add6c023dc0c4b746def9725757027dec95397d0d4de44135ec9a",
+      "checkpoint_bytes": 161257814,
+      "checkpoint_archive_batch": "b04",
+      "metadata_json_sha256": "363050e4fd3485f5694cb6d2f063439ebf957726b8b38ce32d57634082269c13",
+      "configuration": {
+        "ckpt_path": null,
+        "seed": 42,
+        "initializer": "Current preserved constructor default initialization; historical exact Python is not uniquely bound.",
+        "optimizer": "torch.optim.Adam",
+        "lr": 0.001,
+        "weight_decay": 0.0001,
+        "scheduler": null,
+        "monitor": "val/recall@5",
+        "mode": "max",
+        "patience_validation_checks": 10,
+        "min_delta": 0,
+        "save_top_k": 1,
+        "max_steps": 320000,
+        "max_epochs": 10,
+        "precision": "32-true",
+        "val_check_interval_train_batches": 1600,
+        "accumulate_grad_batches": 16,
+        "raw_train_rows_per_device": 32,
+        "train_collate_max_expanded_samples_per_microbatch": 512,
+        "train_num_workers": 8,
+        "train_assign_all_files_per_worker": true,
+        "val_test_raw_rows_per_device": 8,
+        "val_test_num_workers": 8,
+        "val_test_drop_last": false,
+        "devices": -1,
+        "strategy": "ddp",
+        "actual_world_size_from_train_log_line_24": 4,
+        "top_k_for_generation_from_checkpoint_hparams": 10,
+        "should_check_prefix_from_checkpoint_hparams": false,
+        "num_embeddings_per_hierarchy_from_checkpoint_hparams": 256,
+        "explicit_freeze_configuration": "No freeze setting in this effective config; not evidence that arbitrary future initialization/freezing is authorized.",
+        "semantic_id_run": "logs/inference/runs/2025-09-21/16-36-33",
+        "semantic_ids_sha256": "2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba"
+      },
+      "source_structure": {
+        "file": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+        "constructor_lines": "471-594",
+        "aggregate_lines": "614-650",
+        "mask_lines": "649-651",
+        "aggregation": "Linear(H*E,2*E,bias=True) -> ReLU -> Dropout(0.1) -> Linear(2*E,E,bias=True)",
+        "parameter_sharing": "One aggregation MLP shared across M independent item positions; SID encoder/decoder share one table",
+        "sep": "forced None",
+        "mask": "last code position of each item",
+        "decoder": "four-step autoregressive",
+        "internal_mlp_layers": "2; distinct from item_aggregation_mlp and decoder_mlp"
+      },
+      "conclusion": "Toys 2025-10-22/21-25-31 is not a Beauty training protocol. Genuine Beauty run has a complete config, but its four-GPU effective training distribution and batch/update protocol cannot be silently converted to this task's available one-GPU environment. Current user task requires a fresh approved MLP training run; re-evaluating this historical checkpoint cannot fulfill that obligation.",
+      "labels_warning": "Historical Beauty MLP table labeled R-Kmeans cannot override this run's SID configuration, which explicitly uses RQ-VAE/STE/Beta."
+    },
+    {
+      "id": "GENERATION_K_DEFAULT_CONFLICT",
+      "status": "SOURCE_AND_CHECKPOINT_METADATA_FACT",
+      "evidence": [
+        "GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py:469",
+        "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py:644",
+        "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py:473"
+      ],
+      "conclusion": "Working ordinary class default is K=10. Preserved shuffle/MLP classes currently default K=5. The inspected author A-RKmeans and Beauty MLP checkpoint hyperparameters store K=10 and should_check_prefix=false. Derived code must explicitly carry the effective K=10; changing the class target while relying on default 5 is not faithful adaptation."
+    },
+    {
+      "id": "SID_FOURTH_POSITION_RULE",
+      "status": "SOURCE_FACT_PENDING_SELECTED_PAYLOAD_SEMANTIC_CHECK",
+      "evidence": "GRID baseline/src/utils/tensor_utils.py:125-170",
+      "conclusion": "deduplicate_rows_in_tensor appends a collision indicator. Unique three-code rows get 0. Every member of a collision group gets 1..group_size in original index order. It is not a fourth learned quantization layer and not first-member-zero within collision groups. Compare selected SID payload to this rule using real item identities."
+    },
+    {
+      "id": "DATA_AND_RANDOMIZATION_CONTRACT",
+      "status": "SOURCE_FACT_AND_CURRENT_USER_CONFIRMED_METHOD",
+      "evidence": [
+        "GRID baseline/src/data/loading/components/pre_processing.py:120-149",
+        "GRID baseline/src/data/loading/components/collate_functions.py:20-116,188-279",
+        "GRID baseline/src/data/loading/components/label_function.py:120-196",
+        "GRID baseline/src/data/loading/utils.py:85-114",
+        "GRID baseline/src/data/loading/components/dataloading.py:69-80,109-163",
+        "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py:83-149"
+      ],
+      "values": {
+        "sid_axis": "H x item_count; id_map[:H].t()[item_indices] then item-major flatten",
+        "padding_and_masking": -1,
+        "sequence_length": "120 SID-token slots after trimming, including the four target slots subsequently hidden; not 120 items",
+        "shuffle": "post-offset/post-lookup, before SEP/user; torch.rand([B,M,N]).argsort per encoder call",
+        "permitted_identity_and_repeat_permutations": true,
+        "loss_and_generate": "separate encoder calls and separate draws; preserve this behavior",
+        "partial_item_mask": "Original shuffle uses any-valid group while MLP takes last code mask. Diagnose/reject unsupported partial groups; do not silently change semantics.",
+        "training_stream": "Infinite IterableDataset with window expansion. max_epochs does not bound a normal epoch; max_steps and validation/early stop are material.",
+        "loader_risk": "Original author MLP train assigns all files to each worker. Validation/test use worker file partitioning. Counts must be checked with the actual chosen worker config.",
+        "collate_risk": "torch.randint samples indices with replacement but membership-based emission collapses repeat selections. cap512/cap128 are upper bounds, not guaranteed actual microbatch sample counts.",
+        "repeat_count": "No authenticated multi-seed/repetition protocol found. One seed=42 run can be adopted with the selected effective condition; no extra repeats authorized by source alone."
+      }
+    },
+    {
+      "id": "ATTENTION_PRIMARY_PROTOCOL_OPEN",
+      "status": "NEEDS_USER_DECISION_FOR_FORMAL_ANALYSIS",
+      "evidence": [
+        "references/wmh-original/GRID/visualize_complete_decoder_attention.py:20-149",
+        "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py:446-523",
+        "docs/sid-extensions/experiments/attention.md"
+      ],
+      "preserved_reference": "Last layer, mean over heads, last query; local first beam at each step. Original plotting code assumes batch32 for sample0 and lacks stable sample/mask/beam ancestry mapping.",
+      "confirmed_semantics": "Four rows are target SID generation steps; columns are encoder historical input positions.",
+      "recommendation": "After explicit approval, fix 32 users before examining scores/attention, using a recorded deterministic test-row rule; primary display final Top-1 ancestor trajectory and secondary display the preserved local-first-beam reference. Keep last-layer/head-mean values and raw per-head tensors for this fixed small cohort. Do not call the primary graph a historical same-path reproduction.",
+      "cost": "One bounded capture group per approved model/condition; no all-user attention and no numeric success threshold.",
+      "engineering_work_allowed_now": "Save/validate both beam identities, parent indices, samples, positions, masks, generation and RNG identities; write and re-read a few preflight images.",
+      "row_similarity_statistics": "Not assumed approved; six pairwise values may be proposed separately with a fixed definition, no scientific pass threshold."
+    }
+  ],
+  "consolidated_decisions": [
+    {
+      "id": "FORMAL_ASSET_MATRIX",
+      "status": "NEEDS_USER_DECISION",
+      "recommendation": "Use an intact preserved author dual-table Beauty checkpoint with its exact declared SID for A; retain the matched working Qwen pair for B and label them separate model/upstream conditions. If R-Kmeans is the intended author condition, use the 2025-11-03/02-47-09 candidate. If matching author MLP SID is the priority, use the 2025-10-29/23-40-40 RQ-VAE candidate instead.",
+      "rationale": "Actual dual-table payloads avoid random decoder parameters, table copying or unauthorized baseline training; per-condition Normal controls distinguish model differences from shuffle adaptation.",
+      "required_confirmation": "Which author A checkpoint/SID condition and whether B Qwen is the approved formal condition; do not infer A=T5/B=Qwen from engineering convenience."
+    },
+    {
+      "id": "NEW_MLP_TRAINING_PROTOCOL",
+      "status": "NEEDS_USER_DECISION",
+      "recommendation": "Train the preserved item-level MLP as a fresh run using one explicitly selected SID/condition. Prefer fresh initialization and no freezing over unapproved fine-tuning of a shared ordinary checkpoint. Use the genuine Beauty effective run as the complete historical reference, then approve a concrete single-GPU batch/accumulation, validation-unit and stopping/budget adaptation after throughput preflight.",
+      "rationale": "Historical genuine Beauty MLP used four GPU ranks, microbatch32 expanded to at most512 samples and accumulation16. Matching a numerical effective sample count on one GPU would not prove historical sample/RNG equivalence, and the infinite stream makes 320000 steps a potentially large independent budget.",
+      "required_confirmation": "SID/upstream condition, fresh initialization/freeze state, single-GPU microbatch/accumulation, validation cadence, early stop, max_steps and hard timeout.",
+      "allowed_without_this_decision": "Original-class structure checks and <=10 optimizer updates, separate-process restore and <=2 updates, isolated from any formal run."
+    },
+    {
+      "id": "FORMAL_ATTENTION_COHORT_AND_PATH",
+      "status": "NEEDS_USER_DECISION",
+      "recommendation": "32 users fixed before looking at outputs; final Top-1 ancestor primary, local-first-beam secondary; last layer/head average; no similarity threshold.",
+      "rationale": "Preserves historical visual reference while giving four rows a single traceable generated item trajectory. Fixed selection prevents favorable-example picking.",
+      "required_confirmation": "Primary path and deterministic cohort rule/size; optional row-statistic definition if desired."
+    }
+  ],
+  "audit_recovery": {
+    "local_author_root": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID",
+    "local_author_context_index": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/analysis/a800-mechanisms/historical-parameter-context-v1/HISTORICAL_PARAMETER_RUN_CONTEXTS.jsonl",
+    "local_author_structure_index": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/analysis/a800-mechanisms/CHECKPOINT_MECHANISM_STRUCTURE_CATALOG.jsonl",
+    "local_checkpoint_metadata_root": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/analysis/a800-baseline",
+    "remote_archive_root": "/data/bwwu/archives/wmh-a800-audit-20261010",
+    "preserve_originals": true,
+    "note": "The controller owns remote entity rechecks, deployment, strict loading and final publication. This review does not claim these observations happened."
+  },
+  "restore_preparation": {
+    "status": "PLAN_ONLY_NO_REMOTE_EXECUTION",
+    "script": {
+      "repository_path": "tools/sid-extensions-prep/restore_selected.py",
+      "sha256": "7b9530b5de9c0eef4dc2931657be0538bbc9b5bc851dfb44228a8282a0c8a232",
+      "known_remote_bound_path": "/home/bwwu/grid-audits/sid-extensions-p0/scripts/restore_selected-7b9530b5de9c0eef.py",
+      "cli_argv_shape": [
+        "/usr/bin/python3",
+        "-I",
+        "-S",
+        "-B",
+        "/home/bwwu/grid-audits/sid-extensions-p0/scripts/restore_selected-7b9530b5de9c0eef.py",
+        "<new immutable hash-bound five-member plan.json>"
+      ],
+      "required_env": "GRID_JOB_DIR is supplied by the existing runner; its output/ directory must already exist",
+      "root_limit": "Only /home/bwwu/grid-audits/sid-extensions-p0/restored and /data/bwwu/sid-extensions-assets/563dc50b1c7e; do not silently edit the audited restore tool to add a new root",
+      "reserve_bytes": 107374182400
+    },
+    "maximum_new_bytes": 161660760,
+    "whole_selected_archive_read_bytes": 11665797120,
+    "explanation": "The existing sequential restore verifies all chunks and full TAR of each pending selected batch, but extracts only five members. Existing matching destinations/candidates skip archive reading. Read-only targeted local TAR-header scans obtained offsets and compared member names/sizes; this does not constitute a new full archive hash check. The local restored five entities exist and have independent read-only inodes; four small entity hashes were freshly checked, while the checkpoint whole hash inherits its bound restore mapping.",
+    "remote_live_presence": "UNKNOWN in this role; controller must query exactly the five intended destination paths before restore. Do not infer remote presence from local restored mappings.",
+    "entries": [
+      {
+        "purpose": "A matched author checkpoint for preflight; formal selection awaiting user",
+        "relative_path": "logs/train/runs/2025-11-03/02-47-09/checkpoints/checkpoint_epoch=000_step=004800.ckpt",
+        "batch": "A800-grid-20261010-v1/b05",
+        "sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+        "bytes": 160859238,
+        "tar_header_offset": 482520064,
+        "tar_data_offset": 482521600,
+        "chunk_index_at_data_start": 1,
+        "chunk_offset_at_data_start": 214086144,
+        "first_chunk_basename": "000001-76e545619ce59148d0878f62617ae0339c00c90025d9ab36d18515382bc32232.tar.part",
+        "entry_id": "ff52be7b45df798b29dff6f1227bda085b3e03b49278be95060147e4005ee695",
+        "member_path": "A800_GRID/logs/train/runs/2025-11-03/02-47-09/checkpoints/checkpoint_epoch=000_step=004800.ckpt",
+        "source_path": "/data_a/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-47-09/checkpoints/checkpoint_epoch=000_step=004800.ckpt",
+        "capture_version": "A800-grid-20261010-v1",
+        "destination": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-11-03/02-47-09/checkpoints/checkpoint_epoch=000_step=004800.ckpt",
+        "local_restored_path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/train/runs/2025-11-03/02-47-09/checkpoints/checkpoint_epoch=000_step=004800.ckpt",
+        "local_stat": {
+          "exists": true,
+          "symlink": false,
+          "mode": "0o444",
+          "nlink": 1
+        },
+        "candidate": null
+      },
+      {
+        "purpose": "A matched T5/R-Kmeans SID",
+        "relative_path": "logs/inference/runs/2025-09-15/20-54-16/pickle/merged_predictions_tensor.pt",
+        "batch": "A800-grid-20261010-v1/b00",
+        "sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+        "bytes": 388534,
+        "tar_header_offset": 81104896,
+        "tar_data_offset": 81106432,
+        "chunk_index_at_data_start": 0,
+        "chunk_offset_at_data_start": 81106432,
+        "first_chunk_basename": "000000-5289087faa4bdab9ed3d67fc603d299ec935db331713138e5196710e4179aa86.tar.part",
+        "entry_id": "9dcc06f3e21bbb6dd039b5f48b781fc81626f763c545d04ca612ad43e0493644",
+        "member_path": "A800_GRID/logs/inference/runs/2025-09-15/20-54-16/pickle/merged_predictions_tensor.pt",
+        "source_path": "/data_a/mhwang/Rec/GRID/logs/inference/runs/2025-09-15/20-54-16/pickle/merged_predictions_tensor.pt",
+        "capture_version": "A800-grid-20261010-v1",
+        "destination": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-09-15/20-54-16/pickle/merged_predictions_tensor.pt",
+        "local_restored_path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/inference/runs/2025-09-15/20-54-16/pickle/merged_predictions_tensor.pt",
+        "local_stat": {
+          "exists": true,
+          "symlink": false,
+          "mode": "0o444",
+          "nlink": 1
+        },
+        "candidate": null
+      },
+      {
+        "purpose": "A effective configuration",
+        "relative_path": "logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml",
+        "batch": "A800-grid-20261010-v1/b01",
+        "sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d",
+        "bytes": 12269,
+        "tar_header_offset": 119354368,
+        "tar_data_offset": 119355904,
+        "chunk_index_at_data_start": 0,
+        "chunk_offset_at_data_start": 119355904,
+        "first_chunk_basename": "000000-2b5f0d69aeba18d4dd0dc96398a4646532676b9e5e441f61112ada729060c7b0.tar.part",
+        "entry_id": "9dfb251538d1dc146fc1abc842724b274794bab9c6c2a242bb1531d39f0c684f",
+        "member_path": "A800_GRID/logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml",
+        "source_path": "/data_a/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml",
+        "capture_version": "A800-grid-20261010-v1",
+        "destination": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml",
+        "local_restored_path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml",
+        "local_stat": {
+          "exists": true,
+          "symlink": false,
+          "mode": "0o444",
+          "nlink": 1
+        },
+        "candidate": null
+      },
+      {
+        "purpose": "Beauty MLP complete historical effective configuration, short-training reference only",
+        "relative_path": "logs/train/runs/2025-10-24/15-10-17/.hydra/config.yaml",
+        "batch": "A800-grid-20261010-v1/b01",
+        "sha256": "31a51bd5d203acea823411068ed47ba64304bdd0fb35f89f8f4c887091153fa8",
+        "bytes": 12185,
+        "tar_header_offset": 117768192,
+        "tar_data_offset": 117769728,
+        "chunk_index_at_data_start": 0,
+        "chunk_offset_at_data_start": 117769728,
+        "first_chunk_basename": "000000-2b5f0d69aeba18d4dd0dc96398a4646532676b9e5e441f61112ada729060c7b0.tar.part",
+        "entry_id": "d5fa65d9cf002c1bd3e37ca704002145bdbc44b5268dc0ca57472f543fd94a7d",
+        "member_path": "A800_GRID/logs/train/runs/2025-10-24/15-10-17/.hydra/config.yaml",
+        "source_path": "/data_a/mhwang/Rec/GRID/logs/train/runs/2025-10-24/15-10-17/.hydra/config.yaml",
+        "capture_version": "A800-grid-20261010-v1",
+        "destination": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/train/runs/2025-10-24/15-10-17/.hydra/config.yaml",
+        "local_restored_path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/train/runs/2025-10-24/15-10-17/.hydra/config.yaml",
+        "local_stat": {
+          "exists": true,
+          "symlink": false,
+          "mode": "0o444",
+          "nlink": 1
+        },
+        "candidate": null
+      },
+      {
+        "purpose": "Beauty MLP matched historical SID, bounded preflight only",
+        "relative_path": "logs/inference/runs/2025-09-21/16-36-33/pickle/merged_predictions_tensor.pt",
+        "batch": "A800-grid-20261010-v1/b02",
+        "sha256": "2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba",
+        "bytes": 388534,
+        "tar_header_offset": 2351015936,
+        "tar_data_offset": 2351017472,
+        "chunk_index_at_data_start": 8,
+        "chunk_offset_at_data_start": 203533824,
+        "first_chunk_basename": "000008-7d4da04105f82cce9f4e0996685a2dd0d03e09d6825c2be11f4335f573ee97bc.tar.part",
+        "entry_id": "7d973da981ccec5f355510cce90e496b81e90b924c047cedcd94e84f380ed667",
+        "member_path": "A800_GRID/logs/inference/runs/2025-09-21/16-36-33/pickle/merged_predictions_tensor.pt",
+        "source_path": "/data_a/mhwang/Rec/GRID/logs/inference/runs/2025-09-21/16-36-33/pickle/merged_predictions_tensor.pt",
+        "capture_version": "A800-grid-20261010-v1",
+        "destination": "/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID/logs/inference/runs/2025-09-21/16-36-33/pickle/merged_predictions_tensor.pt",
+        "local_restored_path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/inference/runs/2025-09-21/16-36-33/pickle/merged_predictions_tensor.pt",
+        "local_stat": {
+          "exists": true,
+          "symlink": false,
+          "mode": "0o444",
+          "nlink": 1
+        },
+        "candidate": null
+      }
+    ],
+    "batches": [
+      {
+        "batch": "A800-grid-20261010-v1/b00",
+        "manifest_path": "/data/bwwu/archives/wmh-a800-audit-20261010/metadata/A800-grid-20261010-v1-b00-capture-manifest.json",
+        "manifest_sha256": "6373a030478bba06335e890941ec71f7d0787d30be7041a5ff0d380a348e9d8e",
+        "chunk_directory": "/data/bwwu/archives/wmh-a800-audit-20261010/A800-grid-20261010-v1/batches/b00/chunks",
+        "archive_bytes": 631152640,
+        "archive_sha256": "27d509aff6908fae7b4ed92b4199b6137090ad99112838a2bd278e2c97d21305",
+        "local_targeted_header_scan_bytes": 6147
+      },
+      {
+        "batch": "A800-grid-20261010-v1/b01",
+        "manifest_path": "/data/bwwu/archives/wmh-a800-audit-20261010/metadata/A800-grid-20261010-v1-b01-capture-manifest.json",
+        "manifest_sha256": "491c1d6fd8ada4593d32ed1e5743db4e1173413e7c6159de804901854fbcdeab",
+        "chunk_directory": "/data/bwwu/archives/wmh-a800-audit-20261010/A800-grid-20261010-v1/batches/b01/chunks",
+        "archive_bytes": 2931609600,
+        "archive_sha256": "5afcf29de1d4425cacbe8d82fee2b2bc8b3a92459382003a9f1ffb9f64ad0f8c",
+        "local_targeted_header_scan_bytes": 4924778
+      },
+      {
+        "batch": "A800-grid-20261010-v1/b02",
+        "manifest_path": "/data/bwwu/archives/wmh-a800-audit-20261010/metadata/A800-grid-20261010-v1-b02-capture-manifest.json",
+        "manifest_sha256": "fcd3e140d7e6951fb811f16f754fdac9450bf519359ddba13231905c04fe3cbf",
+        "chunk_directory": "/data/bwwu/archives/wmh-a800-audit-20261010/A800-grid-20261010-v1/batches/b02/chunks",
+        "archive_bytes": 4267243520,
+        "archive_sha256": "9f0442a5643719d80ddb891be0cecc588b8b78d2ad196026433f5f5ce749772d",
+        "local_targeted_header_scan_bytes": 47646
+      },
+      {
+        "batch": "A800-grid-20261010-v1/b05",
+        "manifest_path": "/data/bwwu/archives/wmh-a800-audit-20261010/metadata/A800-grid-20261010-v1-b05-capture-manifest.json",
+        "manifest_sha256": "a3507d7b7cbad957c9f52def5342525b1ddfc948e62ca2ba7575fa03915d5290",
+        "chunk_directory": "/data/bwwu/archives/wmh-a800-audit-20261010/A800-grid-20261010-v1/batches/b05/chunks",
+        "archive_bytes": 3835791360,
+        "archive_sha256": "090fe52d4df3caa9cd321093ff940eb11425376e9cebcc6fec62191dfee6f4d4",
+        "local_targeted_header_scan_bytes": 6147
+      }
+    ],
+    "reusable_plan_schema": {
+      "stage_id": "beauty-extensions-20261014",
+      "baseline_sha": "563dc50b1c7e9e2e05cdfddd13e91a3d1888001e",
+      "maximum_new_bytes": 161660760,
+      "reserve_bytes": 107374182400,
+      "entries": "Use restore_preparation.entries (offset fields are inert extras)",
+      "batches": "Use restore_preparation.batches (local header bytes field is inert extra)",
+      "model_execution": false
+    },
+    "lifecycle": "Use a new fixed job_id/request for this task and exact existing runner; never replay or overwrite the P0 job. Confirm the script byte identity, available disk reserve and five destination states. Same-hash existing entity is reused; different-hash destination causes fail, not overwrite.",
+    "optional_scp_alternative": "The five already-restored local files total 161660760 bytes and can be transported through the existing Windows SCP channel into a task-controlled staging directory, independently hash-verified, then used as explicit remote candidates. This avoids whole selected TAR reads but should be recorded as a different transfer path. Do not copy private keys or modify original archive content."
+  },
+  "configuration_contract_review": {
+    "review_type": "NONAUTHOR_STATIC_CONFIGURATION_AND_DATA_CONTRACT",
+    "reviewer": "/root/source_conditions",
+    "snapshot": {
+      "experiments/beauty_extensions/common.py": "e7d8e753874a4418c35859ce401e7a3f8423cea6be9e79d17f184615373985d2",
+      "experiments/beauty_extensions/cli.py": "49ba9de3afb1ee0eee4c8bb567d24f6a774134cbc7c94eda830175df116ae20f"
+    },
+    "status": "PRELIMINARY_FINDINGS_NOT_A_FORMAL_GATE",
+    "positive_source_checks": [
+      "Explicit route-specific source root and independent-process namespace policy.",
+      "Hash check of selected config/SID/checkpoint before model creation/load; strict state_dict load.",
+      "Relocated data_folder paths preserve training/evaluation/testing splits.",
+      "Explicit K=10 for the published B smoke spec, preserving ordinary generation and evaluator targets.",
+      "No source TFRecord rewrite; original SID mapped instead of embedding/text features.",
+      "H4 item groups, sequence_length120 including target slots, whole-group padding validation and last partial validation batch.",
+      "Preserved collision disambiguation source rule (unique=0, all collided group members=1..N).",
+      "Known checkpoint globals restricted by a checkpoint-local safe_globals context; unexpected names fail. Actual compatibility still requires execution."
+    ],
+    "pending_before_gate": [
+      {
+        "id": "DTYPE_EVIDENCE",
+        "evidence": "cli.py:45-46,69-72",
+        "finding": "SID integer dtype is not asserted; mapped dtype is reported only after .long(), which loses evidence of the configured original dtype.",
+        "recommendation": "Assert original SID/mapped/input/labels integer dtypes and save original values before any diagnostic cast."
+      },
+      {
+        "id": "EXACT_RAW_TARGET_PAIRING",
+        "evidence": "cli.py:62-74,89-91",
+        "finding": "Raw mapping is checked on eight first-file records, but collated labels are only checked for membership anywhere in the SID table.",
+        "recommendation": "For fixed validation rows, independently bind raw user/item sequence -> post-truncation history -> exact final item SID label and prove those target slots are hidden."
+      },
+      {
+        "id": "FULL_TEST_COUNTS",
+        "evidence": "cli.py:55-96",
+        "finding": "First-file sampling plus val19 does not establish total test targets/users or absence of duplicate/missing rows.",
+        "recommendation": "One lightweight full test TFRecord metadata pass, save expected row/key counts, compare with formal prediction records; no repeated model inference or broad archive hashing."
+      },
+      {
+        "id": "CHECKPOINT_SID_CONTENT",
+        "evidence": "common.py:153-157",
+        "finding": "Strict state_dict keys/shapes alone do not bind SID semantics.",
+        "recommendation": "When present, compare checkpoint hyper_parameters.codebooks with the exact selected SID tensor, then retain input item-axis evidence; preserve historical provenance limits."
+      },
+      {
+        "id": "FORMAL_CONFIG_OVERRIDES",
+        "evidence": "common.py:79-92",
+        "finding": "num_workers0/devices1/strategyauto are applied regardless of phase. They are suitable engineering overrides, but author workers8->0 changes formal shuffle batch order/RNG assignment; MLP four-card training cannot inherit these silently.",
+        "recommendation": "Make formal effective overrides explicit and approved where material, save the formal-vs-smoke diff whitelist, preserve B's already-published workers0 condition."
+      },
+      {
+        "id": "FORMAL_GATE_BINDING",
+        "evidence": "cli.py formal branch",
+        "finding": "Current gate uses truthy booleans in spec instead of checking the actual gate report bound to code/config/assets.",
+        "recommendation": "Before any formal run, verify the route's real nonauthor gate record identities and no pending important decisions. Snapshot changes should invalidate only affected checks."
+      }
+    ],
+    "already_revised_during_review": "The first read showed a bare weights_only=True checkpoint load. A later read showed explicit local safe_globals and checkpoint_protocol.json. The earlier bare-load warning is superseded; no claim of runtime loading success is made.",
+    "runtime_evidence": "None generated by this reviewer; parent owns remote preflight and subsequent nonauthor execution review."
+  },
+  "authorization_and_authorship_supplement": {
+    "recorded_by": "/root/source_conditions",
+    "source": "Controller /root follow-up delegated task in this session",
+    "statement": "Controller reports that the user has now confirmed separate A/B model assets and the two formal attention matters. This report's earlier NEEDS_USER_DECISION items describe the earlier evidence state and must not be interpreted as revoking that subsequent approval.",
+    "A_B_formal_asset_selection": "USER_CONFIRMATION_REPORTED_BY_CONTROLLER; final adopted values must be taken from the controller's bound specs/experiment card",
+    "attention_primary_path_and_cohort": "USER_CONFIRMATION_REPORTED_BY_CONTROLLER; fixed evaluation first32 distinct users requested by controller",
+    "MLP_formal_training": "NOT_NEWLY_AUTHORIZED_BY_THIS_SUPPLEMENT; bounded engineering short training only until its distinct formal protocol is confirmed",
+    "authored_file": {
+      "path": "experiments/beauty_extensions/data_checks.py",
+      "sha256": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+      "author": "/root/source_conditions",
+      "APIs": [
+        "prepare_fixed_attention_samples(cfg,spec,output)->Path",
+        "scan_test_coverage(cfg,spec,output)->dict"
+      ],
+      "local_checks": [
+        "Python syntax compiled in memory",
+        "Opaque sample keys matched existing common.batch_keys",
+        "Local path and item-range rejection",
+        "New JSON persistence reread and refuse-overwrite"
+      ],
+      "runtime_checks": "NOT_RUN_BY_AUTHOR; local torch/tensorflow/hydra unavailable. Controller must run on selected real assets in existing remote GRID environment and obtain a different reviewer.",
+      "test_fixture_correction": "First helper-only test contained an incorrect hand-written expected key; replaced with direct cross-check against the existing recorder's key algorithm. No model computation or data-contract failure was observed by this author.",
+      "independent_gate": "NOT_SELF_SIGNED"
+    }
+  },
+  "real_pairing_and_B_off_review": {
+    "reviewer": "/root/source_conditions",
+    "kind": "NONAUTHOR_REAL_SOURCE_PAIRING_AND_B_OFF_DIAGNOSTIC_REVIEW",
+    "status": "SOURCE_AND_BOUNDED_PAIRING_PASS_FULL_ROUTE_GATE_PENDING",
+    "sources": {
+      "original_beauty_capture_manifest_sha256": "d00d917a4197e9bd8042ef21c27946a00b0a38e166929c80395d283b24d6b8ce",
+      "working_asset_manifest": "manifests/sid-extensions/ASSET_MANIFEST.jsonl",
+      "actual_records_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server"
+    },
+    "data_byte_provenance": {
+      "comparison": "All working Beauty TFRecord entries compared by archive member/entry_id/bytes/SHA with original A800 b11 capture manifest.",
+      "matches": 549,
+      "splits": {
+        "training": 175,
+        "evaluation": 175,
+        "testing": 175,
+        "items": 24
+      },
+      "payload_read": "No new TFRecord/whole archive hash pass by this reviewer; reuses inherited matched body identities."
+    },
+    "A": {
+      "job": "beauty-a-inspect-r2",
+      "snapshot_sha256": "b38d1ebc918962668146afb1c5f41239f8d882384e1b9c65c948ef93a2eed4db",
+      "checkpoint_sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+      "sid_sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+      "loading_json_sha256": "5ec225d4d8897b04b4ff00d6683a8e03c89f0e7244ab3c5d0fb56e9c0821e961",
+      "data_check_json_sha256": "b480e8657fb1791b190cfffe020a18d651f4e3e22f70238838affaa4066cda90",
+      "invocation_json_sha256": "6d5d22af0dd534764a535b1b333358f455008e0bd942325ff6cb632c2681c3e3",
+      "result_json_sha256": "924016b83fef4ce5233815261e4413b7859dad794252fc2230001a0cd39d7a68",
+      "observed": {
+        "strict_missing_keys": [],
+        "strict_unexpected_keys": [],
+        "all_parameter_keys_shapes_values_equal": true,
+        "state_tensor_count": 178,
+        "checkpoint_embedded_sid_exact": true,
+        "shared_sid_table": false,
+        "parameter_count": 13259136,
+        "checkpoint_step": 4800,
+        "sid_shape": [
+          4,
+          12101
+        ],
+        "sid_dtype": "torch.int64",
+        "sid_range": [
+          0,
+          255
+        ],
+        "collision_rule_verified": true
+      },
+      "boundary": "Inspect PASS only. This observation does not sign A OFF/shuffle/Trainer GPU preflight; A adapter nonauthor review is separately owned by attention_audit."
+    },
+    "B": {
+      "jobs": [
+        "beauty-b-smoke-r2",
+        "beauty-b-cache-diagnosis-r2"
+      ],
+      "baseline_adapter_sha256": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+      "common_sha256": "9cdd17dfbab483037029616c35abb4848d288c6bf53703def706d61b34773478",
+      "diagnosis_cli_sha256": "a1902cb6c4562ff196c9b0904e172b24712b6af66478265e1c48f5e0144cf216",
+      "diagnosis_snapshot_sha256": "06414116d59216278435524700c58a9b65f78e3cf71314583d220b044542b6d8",
+      "checkpoint_sha256": "3d8f03cf042293f2f7f02132c9d072f573f671d9550d567edd1754f50e53e605",
+      "sid_sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18",
+      "loading_json_sha256": "a545a1b39778e6b35aeeb6745a0cb9211be05eb690505dc3d25b45ebccc912e5",
+      "data_check_json_sha256": "5dd7a7c583c2547fc1757077119b42e8d46bba68c44e36f50d3cf770e467b9bb",
+      "off_and_cache_json_sha256": "0fb54e9084f0dff7c7bccf416555bb46c9024a5f485d52ba0f5980c0deb43cb5",
+      "observed": {
+        "strict_missing_keys": [],
+        "strict_unexpected_keys": [],
+        "all_parameter_keys_shapes_values_equal": true,
+        "state_tensor_count": 177,
+        "checkpoint_embedded_sid_exact": true,
+        "shared_sid_table": true,
+        "parameter_count": 13128064,
+        "checkpoint_step": 12500,
+        "sid_shape": [
+          4,
+          12101
+        ],
+        "sid_dtype": "torch.int64",
+        "sid_range": [
+          0,
+          255
+        ],
+        "collision_rule_verified": true
+      },
+      "source_path_review": [
+        "Lookup hook scope exists only while original encoder_forward_pass runs; decoder shared-table lookup sees no encoder mask and returns the original output.",
+        "OFF returns the original tensor before any draw; parameter keys/values, SID table sharing, decoder/beam/evaluator remain the original working model.",
+        "ON invokes the preserved author's AST function after original offset/lookup and before SEP/user; per-occurrence torch.rand([B,M,N]).argsort is retained.",
+        "Trace reconstructs the same draw with an isolated generator; separate loss/generate roles and padding/N3 fourth-position checks are preserved.",
+        "Test/train/validation and exception/finally paths clear the testing state and encoder scope; actual Trainer ON/OFF evidence still required."
+      ],
+      "off_diagnostic": {
+        "full_model_precision": "32-true; saved medium matmul protocol",
+        "generation_k": 10,
+        "seed": 42,
+        "same_batch_original_vs_adapter_decoder_hidden_loss_head_logits_scores_max_absolute": 0,
+        "same_batch_predictions_exact": true,
+        "repeated_generation_scores_max_absolute": 0,
+        "reversed_sample_order_scores_max_absolute": 0,
+        "off_cpu_and_cuda_rng_unchanged": true,
+        "B8_vs_B1_scores_max_absolute": 0.000008335337042808533,
+        "B8_vs_B1_original_scores_max_absolute": 0.000008335337042808533,
+        "B1_adapter_vs_original_scores_max_absolute": 0,
+        "B1_adapter_vs_original_sid_exact": true,
+        "original_reference_tolerance": "rtol=1e-5,atol=1e-6; unchanged",
+        "conclusion": "Batch-size score differences also occur in the original model. The adapter equals the original at each tested shape, including B1, and repeat/reverse calls are stable. Evidence does not support adapter-specific cache leakage. Cross-shape allclose=false remains in raw diagnostics and must not be concealed or repaired by widening the tolerance.",
+        "limitation": "A specific low-level cause of the common cross-shape arithmetic difference is not proven by this evidence."
+      },
+      "bounded_input_coverage": {
+        "split_examples_each": 8,
+        "splits": [
+          "training",
+          "evaluation",
+          "testing"
+        ],
+        "validation_users": 19,
+        "validation_batch_shapes": [
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            3,
+            120
+          ]
+        ],
+        "max_visible_history_observed": 20
+      },
+      "remaining_for_formal_gate": [
+        "Real Trainer Normal/Shuffle3/Shuffle4 lifecycle and exact random events",
+        "Full testing row/target/key coverage from data_checks",
+        "A deterministic real truncated-history engineering example",
+        "Current code/config/gate identities after intervening CLI changes"
+      ],
+      "terminal_boundary": "Neither listed B output directory contained RESULT.json at review time; do not mark the entire smoke run PASS from partial diagnostics."
+    },
+    "own_authored_data_checks_boundary": "data_checks.py is authored by this reviewer, so its runtime/API independent approval must come from another agent. These B/source reviews do not self-approve it."
+  },
+  "mlp_budget_and_approval_supplement": {
+    "reviewer": "/root/source_conditions",
+    "review_kind": "NONAUTHOR_TARGETED_HISTORICAL_BEAUTY_MLP_BUDGET_AND_APPROVAL_UPDATE",
+    "recorded_date": "2026-10-14",
+    "status": "HISTORICAL_FACTS_VERIFIED_LATEST_MLP_OPTION1_APPROVAL_RECORDED_RESOURCE_GATE_STILL_REQUIRED",
+    "superseded": {
+      "historical_statuses_preserved": true,
+      "prior_decision_paths": [
+        "consolidated_decisions.NEW_MLP_TRAINING_PROTOCOL",
+        "findings.GENUINE_BEAUTY_MLP_EFFECTIVE_RUN_FOUND",
+        "authorization_and_authorship_supplement.MLP_formal_training"
+      ],
+      "resolution": "The former NEEDS_USER_DECISION/engineering-only statements describe the earlier authorization state. They are superseded for the exact latest option1 values below by the user's subsequent approval, reported by controller /root in this session. This update does not imply a resource preflight or formal training has passed.",
+      "original_source_and_history_limits_preserved": true
+    },
+    "latest_approved_new_training": {
+      "approval_source": "User approved option1; controller follow-up in this session",
+      "domain": "Beauty only",
+      "historical_reference_run": "logs/train/runs/2025-10-24/15-10-17",
+      "upstream_condition": "Original T5 / RQ-VAE with STE SID; no regenerated embeddings, quantizer or SID",
+      "semantic_ids_sha256": "2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba",
+      "initialization": "scratch; no ordinary-checkpoint fine-tuning or historical MLP re-evaluation as training substitute",
+      "trainable_scope": "full parameters, no freezing",
+      "GPUs": 1,
+      "raw_rows_per_training_microbatch": 32,
+      "gradient_accumulation_microbatches_per_optimizer_update": 64,
+      "validation_interval_training_microbatches": 6400,
+      "validation_interval_optimizer_updates": 100,
+      "dataloader_workers": 8,
+      "original_collate_expanded_sample_cap": 512,
+      "actual_expanded_microbatch_size": "Variable under the preserved collate; 512 is a cap, not a guaranteed number of samples",
+      "other_values": "Inherit the corresponding complete genuine Beauty MLP effective config and preserved source; no cross-run parameter mixing",
+      "max_steps_from_selected_effective_config": 320000,
+      "max_epochs_from_selected_effective_config": 10,
+      "hard_timeout_seconds": 43200,
+      "hard_timeout_hours": 12,
+      "required_cost_measurement": "At least one real optimizer update using accumulation64 and one complete validation with the selected full model, precision and generation K, plus practical I/O/checkpoint overhead",
+      "condition_before_formal_start": "If the measured cost makes the approved budget clearly insufficient, pause formal training and report the estimate. Approval does not authorize silently reducing the method or stop budget.",
+      "semantics_of_timeout": "A 12-hour timeout without the agreed training/selection completion is a partial/budget-stopped result, not successful formal MLP completion."
+    },
+    "exact_packaging_inputs": {
+      "original_run_root": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/train/runs/2025-10-24/15-10-17",
+      "metrics_csv": {
+        "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/train/runs/2025-10-24/15-10-17/csv/version_0/metrics.csv",
+        "sha256": "3fad51ba1c9a1738565c231978303c1556f6e276da6b7b48df7b44665e9ce08d",
+        "physical_lines_including_header": 73,
+        "data_rows": 72
+      },
+      "train_log": {
+        "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/train/runs/2025-10-24/15-10-17/train.log",
+        "sha256": "2b6258f4a734d1961b100c89839512e2ecf37d8791aa21589a31347c085477d2",
+        "decisive_lines": [
+          23,
+          24,
+          25,
+          26,
+          27
+        ]
+      },
+      "effective_config": {
+        "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/train/runs/2025-10-24/15-10-17/.hydra/config.yaml",
+        "sha256": "31a51bd5d203acea823411068ed47ba64304bdd0fb35f89f8f4c887091153fa8",
+        "decisive_lines": "14,25-36,53-62"
+      },
+      "restart_metadata": {
+        "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/train/runs/2025-10-24/15-10-17/metadata/restart_metadata.json",
+        "observed_world_size": 4,
+        "restarts": [],
+        "current_run": 0
+      },
+      "weight_identity_reference_only": {
+        "checkpoint_sha256": "095f97fb5c6add6c023dc0c4b746def9725757027dec95397d0d4de44135ec9a",
+        "best_checkpoint_global_step": 2500,
+        "large_checkpoint_need_not_be_packed": true
+      }
+    },
+    "historical_stop_and_selection": {
+      "validation_events": 35,
+      "validation_csv_steps": [
+        99,
+        199,
+        299,
+        399,
+        499,
+        599,
+        699,
+        799,
+        899,
+        999,
+        1099,
+        1199,
+        1299,
+        1399,
+        1499,
+        1599,
+        1699,
+        1799,
+        1899,
+        1999,
+        2099,
+        2199,
+        2299,
+        2399,
+        2499,
+        2599,
+        2699,
+        2799,
+        2899,
+        2999,
+        3099,
+        3199,
+        3299,
+        3399,
+        3499
+      ],
+      "validation_csv_lines": [
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        19,
+        21,
+        23,
+        25,
+        27,
+        29,
+        31,
+        33,
+        35,
+        37,
+        39,
+        41,
+        43,
+        45,
+        47,
+        49,
+        51,
+        53,
+        55,
+        57,
+        59,
+        61,
+        63,
+        65,
+        67,
+        69,
+        71
+      ],
+      "observed_validation_spacing_optimizer_updates": 100,
+      "configured_validation_interval_microbatches": 1600,
+      "configured_gradient_accumulation": 16,
+      "cadence_consistency": "1600 / 16 = 100 optimizer updates, consistent with every consecutive CSV validation step difference",
+      "best_monitor": "val/recall@5",
+      "best_csv_line": 51,
+      "best_csv_logging_step": 2499,
+      "best_val_recall5": 0.05871305242180824,
+      "best_checkpoint_global_step": 2500,
+      "terminal_training_csv_line": 70,
+      "terminal_validation_csv_line": 71,
+      "terminal_train_epoch_csv_line": 72,
+      "terminal_training_csv_logging_step": 3499,
+      "subsequent_test_csv_line": 73,
+      "subsequent_test_step": 3500,
+      "actual_fit_terminal_optimizer_updates": 3500,
+      "stop_evidence": "Last train/validation/epoch records are step3499 and the subsequent test on the same trainer records step3500. The best checkpoint is step2500. Do not substitute the selected best step for the completed training endpoint.",
+      "consecutive_post_best_validation_events": 10,
+      "post_best_csv_lines": [
+        53,
+        55,
+        57,
+        59,
+        61,
+        63,
+        65,
+        67,
+        69,
+        71
+      ],
+      "post_best_steps": [
+        2599,
+        2699,
+        2799,
+        2899,
+        2999,
+        3099,
+        3199,
+        3299,
+        3399,
+        3499
+      ],
+      "post_best_recall5": [
+        0.05799758434295654,
+        0.05790815129876137,
+        0.058489467948675156,
+        0.05853418633341789,
+        0.057952869683504105,
+        0.05683495104312897,
+        0.058310601860284805,
+        0.05857890099287033,
+        0.05625363439321518,
+        0.05611948296427727
+      ],
+      "all_post_best_monitor_values_strictly_below_best": true,
+      "early_stopping_config": {
+        "monitor": "val/recall@5",
+        "mode": "max",
+        "patience": 10,
+        "min_delta": 0,
+        "check_on_train_epoch_end": false
+      },
+      "early_stop_reason_evidence_class": "SUPPORTED_INFERENCE",
+      "early_stop_reason_limit": "The exact ten non-improvements and saved EarlyStopping(patience=10) strongly support early stopping. The preserved train.log does not explicitly report a terminal EarlyStopping trigger or final callback wait_count; do not claim such a line was read."
+    },
+    "historical_wall_clock": {
+      "timezone": "Original historical log timezone not established; intervals use the same log clock",
+      "starting_training_log_line": 23,
+      "starting_training": "2025-10-24 15:10:17.797",
+      "starting_testing_log_line": 25,
+      "starting_testing": "2025-10-24 17:08:17.058",
+      "best_path_report_log_line": 26,
+      "best_path_report_time": "2025-10-24 17:09:15.731",
+      "fit_including_validation_seconds": 7079.261,
+      "test_until_best_path_report_seconds": 58.673,
+      "observed_world_size": 4,
+      "average_fit_including_validation_seconds_per_optimizer_update": 2.022646,
+      "measurement_limit": "The fit interval includes 35 validations, startup/distributed behavior and other overhead. It is not a steady training-step benchmark and must not be transferred to one RTX4090 as its throughput."
+    },
+    "matmul_precision_source": {
+      "preserved_author_entrypoint": "references/wmh-original/GRID/src/train.py",
+      "source_sha256": "f78680593ba465d0716aaf44239a730b5b449a227a0e957f67c0781e9a0fa4ea",
+      "line": 34,
+      "actual_statement": "torch.set_float32_matmul_precision(\"medium\")",
+      "A_and_MLP_entrypoint_evidence": "Both selected author's A and genuine Beauty MLP original_args point to /data/mhwang/Rec/GRID/src/train.py.",
+      "conclusion": "The preserved author train entrypoint itself supports medium; the current common protocol is not justified only by the working Qwen baseline.",
+      "historical_limit": "No claim that the preserved Python is a uniquely bound byte-for-byte historical producer is added. This limit does not block using the confirmed preserved implementation for the newly approved run."
+    },
+    "stream_and_budget_boundary": {
+      "source": "references/wmh-original/GRID/src/data/loading/components/dataloading.py",
+      "source_sha256": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+      "lines": "138-159",
+      "behavior": "For training, finished_iteration remains false; after exhaustion setup() resets the iterator and the while loop continues. Epoch0 is an infinite training stream.",
+      "consequence": "max_epochs10 is not ten finite full passes through Beauty. max_steps320000, validation-driven stopping and the approved wall-clock cap are material boundaries.",
+      "historical_reference_cost_formula": "T_reference = 3500 * t_update_accum64 + 35 * t_complete_validation + t_best_checkpoint_test + t_import_save_IO",
+      "maximum_configured_cost_formula": "T_max = 320000 * t_update_accum64 + 3200 * t_complete_validation + other overhead, if early stopping does not trigger",
+      "twelve_hour_reference_requirement": "For a 3500-update/35-validation trajectory, t_update_accum64 + t_complete_validation/100 must be below about 12.342857 seconds, before deducting test/import/save/IO reserve.",
+      "reference_combined_seconds_per_update_ceiling_before_reserve": 12.342857142857143,
+      "earliest_normal_patience_only_stop_reference": "With first validation after100 updates and patience10, ten subsequent non-improvements imply approximately1100 updates and11 validations at the earliest under normal finite metrics. This is a configuration-based reference, not a guarantee.",
+      "prohibited_inference": "Historical stopping at3500 does not authorize setting a new max_steps3500, guarantee the new run stops at3500, or prove the max320000 upper bound fits12 hours.",
+      "final_resource_gate": "Use the new actual accumulation64 update and complete validation measurements; retain the independent review and report the practical budget decision honestly."
+    }
+  },
+  "mlp_fixed8_attention_independent_review": {
+    "reviewer": "/root/source_conditions",
+    "review_date": "2026-10-14",
+    "status": "REAL_ENGINEERING_ATTENTION_ENTRY_REVIEW_PASS",
+    "scope": "Independent targeted review of parent-authored mlp_attention.py, its fixed engineering8 specification, and the fetched actual-generation outputs. This is not a formal MLP model/result gate.",
+    "authorship": {
+      "entrypoint_author": "/root",
+      "attention_observer_author": "/root/attention_audit",
+      "reviewer_authored_entrypoint_or_observer": false,
+      "reviewer_authored_upstream_data_checks": true,
+      "data_checks_independent_review": "The fixed cohort data preparation was separately reviewed by /root/attention_audit; this supplement does not claim nonauthor review of that reviewer's own data_checks implementation."
+    },
+    "job": {
+      "job_id": "beauty-mlp-fixed8-attention-v1",
+      "local_output": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-mlp-fixed8-attention-v1/retrieved/output",
+      "phase": "engineering-check",
+      "formal": false,
+      "result_status": "PASS",
+      "elapsed_seconds": 17.312283045146614,
+      "gpu_peak_allocated_bytes": 102877184,
+      "source_commit_anchor": "5ed4e701c41d977e24c4c89db0ae1025f9faf701",
+      "snapshot_sha256": "a2978ebdcbc46826e952223884d02090db1201e30a90dd80c1efe5c35756cf2a",
+      "identity_kind": "source_commit_plus_exact_file_manifest; may contain preflight patch",
+      "manifest_file_count": 163,
+      "deployment_manifest_digest_independently_recomputed": true,
+      "source_is_claimed_as_committed_formal_implementation": false
+    },
+    "static_entrypoint_checks": {
+      "file": "experiments/beauty_extensions/mlp_attention.py",
+      "sha256": "5524148fcdca369c55925bffa24ae95dcc3994d3e2fd9009388a22a0b1e9dc86",
+      "spec_file": "experiments/beauty_extensions/specs/mlp-attention-engineering8.json",
+      "spec_sha256": "631f53694d9e36705f951a99323f68280a7026b0195c1ee781fdaf80555da619",
+      "fixed_cohort_checks_lines": "27-31",
+      "formal_training_result_gate_lines": "32-36",
+      "unchanged_cohort_slicing_lines": "48-57",
+      "generation_collection_lines": "58-68",
+      "formal_gate": "capture verifies the hash-bound training_result, formal/training_complete/test_complete fields, and exact best_checkpoint SHA against the strict-loaded checkpoint specification.",
+      "engineering_spec_has_training_result": false,
+      "consequence": "The engineering8 specification cannot become a valid formal capture merely by switching its phase. Formal first32 capture still requires the completed/tested new MLP best checkpoint and its matching training_result.",
+      "attention_policy": "Actual generation, final Top-1 complete ancestry as main path; independent per-step local first parent as historical comparison. Last decoder layer and actual last query, all six heads retained and head mean displayed.",
+      "enabled_model_condition": "Original MLP, no Shuffle, no user token because num_user_bins=null, K=10, FP32, medium matmul protocol with preserved author entrypoint evidence recorded separately.",
+      "snapshot_source_files_compared_exact": {
+        "experiments/beauty_extensions/mlp_attention.py": "5524148fcdca369c55925bffa24ae95dcc3994d3e2fd9009388a22a0b1e9dc86",
+        "experiments/beauty_extensions/common.py": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+        "experiments/beauty_extensions/observation.py": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+        "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+        "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+        "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+        "experiments/beauty_extensions/author/models.py": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4",
+        "experiments/beauty_extensions/author/bootstrap.py": "13b42af96b0a08bf8ac6636a1ff8bc7492e830692fedbd5b9890394eb6904c14",
+        "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9"
+      }
+    },
+    "identities": {
+      "checkpoint": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-resume-r2/output/checkpoints/engineering-final.ckpt",
+        "sha256": "49eb045c6346c32d87be3605f59a3bcf9504d7da87495e659ddd92b106958290",
+        "bytes": 161299736,
+        "global_step": 3,
+        "epoch": 2,
+        "status": "Short training/resume engineering checkpoint; never a formal best model",
+        "loading_evidence": "strict load; no missing or unexpected keys; all 180 state tensors' keys/shapes/values equal; embedded SID exact; shared SID table true",
+        "trusted_loading_protocol": "weights_only=True with checkpoint-local explicit safe_globals, not a global unrestricted pickle fallback"
+      },
+      "sid": {
+        "sha256": "2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba",
+        "shape": [
+          4,
+          12101
+        ],
+        "local_verified_source": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/inference/runs/2025-09-21/16-36-33/pickle/merged_predictions_tensor.pt",
+        "independent_numeric_inspection": "Source SHA verified; numeric LongStorage bytes decoded from the already inspected ZIP storage without executing pickle; every visible item_id matched the exact four-code SID column."
+      },
+      "cohort": {
+        "local_path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-mlp-smoke-r3/retrieved/output/fixed_attention_samples.json",
+        "sha256": "dbe80110171ef657bd861fc2aa2d50b657086d0abceb83b640f1079881b48aa8",
+        "split": "evaluation",
+        "selected_users": 32,
+        "used_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "rule": "Use the first eight of the previously fixed first32 distinct evaluation users in the actual single-GPU assigned-file/TFRecord-row order, chosen before examining outputs or attention.",
+        "raw_user_ids_exported": false,
+        "model_outputs_inspected_for_selection": false,
+        "sample_keys": [
+          "85e3d5e84ea2fc4160440501",
+          "7f9138bbdfc811f37daf94db",
+          "60e56f1e39fb7c2d3f2597fa",
+          "9082100c14ad222c707dc0f8",
+          "2eab12e922ad8b90787ffe8d",
+          "41ff5db10d61f3ef3009d217",
+          "0efe183b00c03f1e2909d921",
+          "a8e9f2863c957c8e2338463d"
+        ],
+        "independent_checks": "Keys, input_sids and input_mask exactly equal the hash-bound cohort first8. All 30 item groups per sample have homogeneous four-code masks; encoder_mask is exactly each group's last-code mask. Position map item IDs, SID vectors, original masks and slot positions match the fixed cohort and source SID. Targets match cohort sample records and belong to the source SID set.",
+        "visible_history_item_counts": [
+          7,
+          7,
+          3,
+          3,
+          11,
+          3,
+          4,
+          3
+        ],
+        "target_link": "Target labels remain available in the unchanged hash-bound fixed cohort. The attention bundle's input identity and opaque keys link to those targets; targets are not inferred from generated predictions."
+      }
+    },
+    "actual_output_checks": {
+      "numeric_npz_allow_pickle_false": true,
+      "numeric_array_count": 32,
+      "all_array_references_shapes_dtypes_checked": true,
+      "finite_nonnegative_attention": true,
+      "layer": "last decoder layer",
+      "raw_per_head_shape": [
+        8,
+        4,
+        6,
+        30
+      ],
+      "displayed_cross_shape": [
+        8,
+        4,
+        30
+      ],
+      "parent_layout": "sample-major then preselection parent beam; one parent at step0, ten at steps1-3",
+      "encoder_calls": 1,
+      "query_length_before_last_selection_by_step": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "last_query_index_by_step": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "parent_indices_independently_reconstructed": true,
+      "parent_verification": "For each selected child at all four steps, independently matched its complete previous prefix to exactly one previous beam, then compared recorded parent_indices. Independently backtracked final child rank0 and selected that step's preselection-parent attention.",
+      "final_top1_tokens_reconstructed_exact": true,
+      "local_parent_zero_path_independently_reconstructed_exact": true,
+      "head_means_exact": true,
+      "row_head_sum_min": 0.9999998807907104,
+      "row_head_sum_max": 1.0000001192092896,
+      "masked_cross_mass_max": 0,
+      "off_on": {
+        "generated_sid_exact": true,
+        "score_max_abs": 0,
+        "cpu_rng_same": true,
+        "cuda_rng_same": true,
+        "parameter_sha256_unchanged": true,
+        "model_overrides_restored": true,
+        "stack_hooks_restored": true,
+        "exception_cleanup_probe": true,
+        "parameter_sha256": "59b439add42ddc10a706ed68034e354a67c888b42d10c01c0661087ebadfd072"
+      },
+      "limits_and_diagnostics": {
+        "generated_candidate_count": 80,
+        "generated_full_sid_members_of_source_set": 0,
+        "generated_invalid_sid_count": 80,
+        "every_top1_sid": [
+          255,
+          26,
+          123,
+          0
+        ],
+        "interpretation": "All full candidates from this 3-update engineering model are absent from the fixed item SID set. Retain this diagnostic; do not filter, repair, use these images as a formal trained-model result, or claim recommendation quality.",
+        "final_top1_parent_indices": "All eight samples use parent rank0 at all four steps.",
+        "local_and_final_matrices_max_abs_difference": 0,
+        "ancestry_coverage_limit": "The two correctly labelled paths happen to coincide for this short-trained checkpoint. This real batch does not demonstrate a nonzero final ancestor; any nonzero-parent evidence must be cited from a different retained actual batch or the separate synthetic verification.",
+        "scientific_similarity_threshold": null,
+        "scientific_similarity_claim": null
+      }
+    },
+    "figures": {
+      "all_eight_viewed_visually": true,
+      "all_eight_reopened_with_pillow_full_decode": true,
+      "dimensions": [
+        2880,
+        1280
+      ],
+      "all_receipt_hashes_and_bytes_match": true,
+      "plot_scale_checked_against_raw_arrays": true,
+      "layout": "Two separately labelled four-row panels, all 30 encoder item-aggregation positions, shared scale for each sample's two panels; original raw values and masks retained.",
+      "products": [
+        {
+          "file": "sample_000_cross_attention.png",
+          "sha256": "f6866c4fceed09a73fc2cc8d70dfecf62dd6ec098237df4a03604065881015d5",
+          "bytes": 145449
+        },
+        {
+          "file": "sample_001_cross_attention.png",
+          "sha256": "9ca7d3601a68ae37eb118b92356419dd8d55d710eb377b04d862de5c34524198",
+          "bytes": 145185
+        },
+        {
+          "file": "sample_002_cross_attention.png",
+          "sha256": "0ab317ef821a526f5f61353b82163605e22cf2d36d12ee656532936ce61fd1aa",
+          "bytes": 144580
+        },
+        {
+          "file": "sample_003_cross_attention.png",
+          "sha256": "c01945210aacca203b6d213c84e768f60eea3d2da951583f29b1a9661dcf0b36",
+          "bytes": 144733
+        },
+        {
+          "file": "sample_004_cross_attention.png",
+          "sha256": "e75db806b1ca3d5369537e64696ca55088520e24a3a3791eb38b51fd12ba29fb",
+          "bytes": 142261
+        },
+        {
+          "file": "sample_005_cross_attention.png",
+          "sha256": "a2af4d4cc508ba72617b1cfa3666cda2d464820aec09291293f7ef521b9a443c",
+          "bytes": 143057
+        },
+        {
+          "file": "sample_006_cross_attention.png",
+          "sha256": "364dd69dbbf93df6957b4174d9801946613616e9ac36951fe2ae90ea36cfe30a",
+          "bytes": 142467
+        },
+        {
+          "file": "sample_007_cross_attention.png",
+          "sha256": "1e9c4e1b9d3f5d3ddd2d906d49a16fecdfa81cea761a0d2485e229ffcdf1d0ce",
+          "bytes": 143411
+        }
+      ]
+    },
+    "evidence_sha256": {
+      "RESULT.json": "6731251030ce2d129b6d279fe7c2b02eb9fb6de08bfeef5a41b826bd52aeb53b",
+      "invocation.json": "42b3727b14d457234a466f670141ee285e78ec24a3d8dc476b3402d455311af3",
+      "loading.json": "47fcfd5408016ec994b69f7df8c0b62102c712c3a8d6e51f11dddf1bac6870fa",
+      "checkpoint_protocol.json": "a6222ad3eb1ceed2f727c1f9fabdecd73dc995e9eca7cba993e5d840bb08ac1f",
+      "used_config.json": "40dd84db70914e79aa76213e6ac9a9482e2b10857c012945a1194ae87a83460c",
+      "effective_config.yaml": "f66a16e20054a8f6bb8b8753db88df0240a07dda77bb233160b3ceb717042624",
+      "batch-00/RESULT.json": "0e84950abf8667c8c238ce6224bfd26eb818715c36a461e691b13cb0eccd3133",
+      "batch-00/off_on_checks.json": "3e7e33ab62e0eed957b15b1f8799264ae3cb7cdcb5953d2ccc746f5d112617e1",
+      "batch-00/bundle/record.json": "bd7b3d7e3b78ae3420815e4ec05e99123d46cf99536cc67f18a813a1ca32b360",
+      "batch-00/bundle/arrays.npz": "3158f97f8c757821eae5053b84cb02bf45fb3d85582850d00593f0998f8d60c1",
+      "batch-00/figures/plot_receipt.json": "3fa3f38baf73580e6caf42b2806214eeb111b47d135ab290f29ac287fe2741e7"
+    },
+    "audit_correction": {
+      "type": "Reviewer reading-range mistake; no code correction",
+      "withdrawn_finding": "Initial claim that batch_keys requires a raw user_id tensor and rejects the new opaque user_id_list.",
+      "actual_bytes": "common.py lines183-186 already read user_id_list and return any nonempty list[str] before the raw user_id tensor branch. This branch existed at review time.",
+      "source_sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+      "corrective_review": "Reread the complete function and directly executed its extracted AST function with cohort list[str]; opaque keys are accepted unchanged. The fetched attention8 run confirms matching saved opaque keys.",
+      "changed_code": false,
+      "counts_as_implementation_correction_round": false
+    },
+    "disposition": "Engineering fixed8 MLP attention entry passes targeted nonauthor review with explicit invalid-SID and coincident-parent limitations. Formal fixed32 MLP attention remains pending the genuine newly trained and tested matching best checkpoint; no scientific similarity claim is signed."
+  },
+  "mlp_attention_capture_guard_review": {
+    "reviewer": "/root/source_conditions",
+    "status": "STATIC_AND_ISOLATED_COMPLETION_GUARD_REVIEW_PASS",
+    "scope": "Minimal parent-authored first-formal-capture completion/identity guard; no new GPU run and no scientific/model change.",
+    "source_file": "experiments/beauty_extensions/mlp_attention.py",
+    "prior_sha256": "5524148fcdca369c55925bffa24ae95dcc3994d3e2fd9009388a22a0b1e9dc86",
+    "reviewed_sha256": "b53aa3832a693bdcfa015393799a320b10fa804d7f351cc029e690c1df95f9fa",
+    "exact_diff_reference": "Compared current bytes to the retained snapshot-a2978ebdcbc46826.tar.gz member independently; the only functional additions precede bind_source and concern capture completion and invocation evidence.",
+    "required_capture_evidence": {
+      "lines": "32-43",
+      "training_result_asset": "verify_asset requires an existing non-LFS payload with the exact requested SHA; its status must be COMPLETE and formal/training_complete/test_complete must all hold.",
+      "training_job_status_asset": "Separately hash-verified; status SUCCEEDED, exit_code0, cleanup.verified true.",
+      "checkpoint_pairing": "training_result.best_checkpoint.sha256 equals spec.checkpoint.sha256, subsequently checked and strictly loaded by instantiate.",
+      "sid_pairing": "training_result.sid_asset.sha256 equals spec.sid.sha256 and the fixed cohort SID SHA.",
+      "config_pairing": "training_result.approved_config_asset.sha256 equals spec.config.sha256, which load_config also hash-verifies.",
+      "invocation": "Lines44-49 explicitly preserve both resolved/hash-bound training_result and training_job_status identities; engineering-check records these as null.",
+      "producer_contract": "Current mlp_formal.py lines504-517 and546-553 provide these result fields; COMPLETE is written after final testing, exact coverage checks and saved-prediction metric recomputation. A pending or interrupted result does not satisfy the guard."
+    },
+    "checks": {
+      "full_file_python_compile": "PASS without importing frameworks or creating pyc",
+      "isolated_actual_guard_ast": "Executed the exact current initialization/capture-branch AST against in-memory JSON/asset stubs; this is an interface guard test, not an actual completed formal run.",
+      "valid_capture_case": "PASS",
+      "invalid_capture_cases_rejected": [
+        "training.status",
+        "training.formal",
+        "training.training_complete",
+        "training.test_complete",
+        "training.best_checkpoint.sha256",
+        "training.sid_asset.sha256",
+        "training.approved_config_asset.sha256",
+        "job.status",
+        "job.exit_code",
+        "job.cleanup"
+      ],
+      "engineering_check_training_asset_calls": 0,
+      "model_binding_through_end_of_generation_and_result_code": "Byte-for-byte identical to the previous successful eight-user snapshot.",
+      "eight_other_previously_signed_model_observer_common_source_files": "Current bytes remain exact matches to the signed attention8 snapshot.",
+      "attention8_gpu_repetition": "Not required: sampling, model construction, actual-generation observer, RNG handling, masks, beam ancestry and plotting code are unchanged."
+    },
+    "limits": "This signs the completion guard implementation only. The formal spec must cite the actual matching training job's status/result assets; no completed formal training status or formal32 attention output is claimed by this supplement.",
+    "classification": "Engineering prerequisite for the already approved valid trained-MLP dependency, not a new method, observer change, or research correction round."
+  }
+}

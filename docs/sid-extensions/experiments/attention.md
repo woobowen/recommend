@@ -71,3 +71,14 @@
 
 - [logs/inference/runs/2025-11-14/18-26-28 原config](https://github.com/woobowen/recommend/blob/84d4533fbdd6b010f54d671b433a9952608911ca/references/wmh-original/GRID/logs/inference/runs/2025-11-14/18-26-28/.hydra/config.yaml)，SHA-256 `2a9835f85e596f0a8d936ec96d8c782d53b99e5ff50b83f809fd26a6bf7453e2`；同目录overrides/hydra原文保留。 该选中历史上下文没有对应已恢复CSV，不补造结果；attention原容器仍留旧档案。
 - [logs/inference/runs/2025-10-29/15-47-20 原config](https://github.com/woobowen/recommend/blob/84d4533fbdd6b010f54d671b433a9952608911ca/references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/config.yaml)，SHA-256 `c7c58df3dd7eaebca64bd316060540344a9cc7b81dd84bd5dbd94147c76f534f`；同目录overrides/hydra原文保留。 [完整CSV](https://github.com/woobowen/recommend/blob/84d4533fbdd6b010f54d671b433a9952608911ca/references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/csv/version_0/metrics.csv) 的原test行：2，SHA-256 `5dc99b63777675e2a5def3720d99d505e43cf9ba5e173ce3a1ab2fb7db85a222`。
+
+
+## 2026-10-14 本轮采集范围与边界
+
+批准方案：在查看attention/命中之前固定实际evaluation文件顺序前32不同用户；最终Top1完整祖先为主，局部首beam另标，最后层/head均值，保留逐head必要矩阵/beam父链/位置与mask，不定相似阈值。A/B/MLP各自32用户数值JSON与来源顺序已固定，见本轮机器证据；未执行32用户正式采集。
+
+真实工程采集仅A、B、3-update MLP各3用户，各4码位生成、K10。OFF/ON预测SID与score精确相等、CPU/CUDA RNG相同、参数hash相同、父链回溯等于最终Top1、正常/异常hook恢复、数值NPZ/SHA与PNG重读通过。矩阵分别150（A/B含SEP）和30（MLP逐物品）encoder位置，不拼成同一联合概率；全部位置保留、原值共用色标，不裁剪padding/热区。
+
+B早期工程图用旧首文件3用户；A/MLP工程图用后来核实的DataModule文件assignment首3。不要把这两组图当同用户配对比较。3-update MLP图仅验证链路，不能解释成有效正式MLP的现象。图流程通过不证明四行相似或SID顺序无用；本轮未作科学阈值统计或现象复现声明。完整本轮状态见 [执行记录](shuffle.md#2026-10-14-beauty-执行partial_blocked)。
+
+用户批准MLP独立单卡方案后，`beauty-mlp-fixed8-attention-v1` 又实际检查旧固定32用户的前8位（不是重新选择）：真实四步/K10生成、逐head矩阵、双路径与8张PNG重读通过，OFF/ON SID/score/RNG/参数/清理均精确一致。该3-update工程模型80/80候选不在完整SID表内，父链全部为beam0，因此本批双口径恰好相同，不能声称实测覆盖非零祖先或说明正式模型现象。正式 `mlp_attention.py capture` 只在训练结果status=COMPLETE、formal训练和完整test完成、runner SUCCEEDED/exit0/cleanup、checkpoint/SID/config hash均匹配后开放，保存这些身份；工程8人路径与采集器正文未改。32用户正式图仍等待有效新MLP模型。

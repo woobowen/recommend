@@ -1,0 +1,720 @@
+{
+  "schema": 1,
+  "status": "NONAUTHOR_GATE_PASS",
+  "reviewer": "/root/attention_audit",
+  "signed_at": "2026-10-15T00:06:45.796777+08:00",
+  "scope": "One fresh approved Beauty original MLP training/validation-selected-best/full test run only",
+  "plan_sha256": "7cb0519fd436dc73d53d857dede6866ecaade50e171c96010aee548140de068a",
+  "plan_canonicalization": "mlp_formal.plan_sha256: remove only nonauthor_gate; sort_keys=True,separators=(comma,colon),ensure_ascii=True,allow_nan=False",
+  "plan": {
+    "route": "MLP",
+    "seed": 42,
+    "generation_k": 10,
+    "shuffle_n": 0,
+    "formal_approved": true,
+    "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/beauty",
+    "config": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/31a51bd5d203acea823411068ed47ba64304bdd0fb35f89f8f4c887091153fa8/config.yaml",
+      "sha256": "31a51bd5d203acea823411068ed47ba64304bdd0fb35f89f8f4c887091153fa8"
+    },
+    "sid": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba/merged_predictions_tensor.pt",
+      "sha256": "2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba"
+    },
+    "purpose": "Approved new Beauty MLP formal fresh training; independent T5/RQ-VAE+STE condition",
+    "formal_protocol_user_approved": true,
+    "formal_training_allowed": true,
+    "hard_cap_hours": 12,
+    "approval": "User approvals in current task: original T5/RQ-VAE+STE, scratch, all params, raw32, accum64, val6400, one4090, original remaining settings, hard12h",
+    "evaluation_index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-evaluation-index-v1/output/evaluation_target_index.jsonl",
+      "sha256": "0a6ed5c8cc03730a850577e29a94c01871ed8529e24cd2eea84ad25463cc2837"
+    },
+    "min_free_bytes": 21474836480,
+    "test_index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-smoke-r3/output/test_target_index.jsonl",
+      "sha256": "c88d460609468ff194f69669016848353651f6cb5ae241c798807708113dd598"
+    },
+    "resource_check": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-accum64-fullval-v1/output/resource_check.json",
+      "sha256": "61966a844f0ebcd4102dc7fa70db573e2b1506f49bc375c4a26da50f90cbc1fc"
+    },
+    "attention_cohort": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-smoke-r3/output/fixed_attention_samples.json",
+      "sha256": "dbe80110171ef657bd861fc2aa2d50b657086d0abceb83b640f1079881b48aa8"
+    }
+  },
+  "PRECHECK_PASS": true,
+  "SEMANTIC_PAIRING_PASS": true,
+  "REAL_PREFLIGHT_PASS": true,
+  "NONAUTHOR_GATE_PASS": true,
+  "source_files": [
+    {
+      "path": "experiments/beauty_extensions/__init__.py",
+      "sha256": "537a1698c10f159802a56e0e8d153b53806ca62f7b7a8383242939fb2edd7c6f",
+      "bytes": 68
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/__init__.py",
+      "sha256": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+      "bytes": 385
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/capture.py",
+      "sha256": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+      "bytes": 21164
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/plot.py",
+      "sha256": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+      "bytes": 4378
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/records.py",
+      "sha256": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+      "bytes": 8911
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/selfcheck.py",
+      "sha256": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+      "bytes": 5037
+    },
+    {
+      "path": "experiments/beauty_extensions/author/__init__.py",
+      "sha256": "624d009dfbc652e17f3de47f768316c0eae386b67e6b87d83a1a8f4bc79ac457",
+      "bytes": 239
+    },
+    {
+      "path": "experiments/beauty_extensions/author/bootstrap.py",
+      "sha256": "13b42af96b0a08bf8ac6636a1ff8bc7492e830692fedbd5b9890394eb6904c14",
+      "bytes": 3039
+    },
+    {
+      "path": "experiments/beauty_extensions/author/checks.py",
+      "sha256": "044c475be6cd40ca419b2da83a1b3d8851b1aa3a2c62760953064334d36be907",
+      "bytes": 10319
+    },
+    {
+      "path": "experiments/beauty_extensions/author/models.py",
+      "sha256": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4",
+      "bytes": 15033
+    },
+    {
+      "path": "experiments/beauty_extensions/baseline.py",
+      "sha256": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+      "bytes": 7160
+    },
+    {
+      "path": "experiments/beauty_extensions/bundle_delivery.py",
+      "sha256": "38051a0e7d0f0ea9efbdf9d73cb71dd2c3473b4d628cd92c9c746085894327a9",
+      "bytes": 8784
+    },
+    {
+      "path": "experiments/beauty_extensions/checkpoint_info.py",
+      "sha256": "79edf46d9526e5298aff3ca56c619e9c8e21f41f3718b19e11b534d6b081736c",
+      "bytes": 1038
+    },
+    {
+      "path": "experiments/beauty_extensions/cli.py",
+      "sha256": "b4acb37888a0b365b055abd99da5158a962a747f8eb8c0dfd0571bd8c303cc9f",
+      "bytes": 20634
+    },
+    {
+      "path": "experiments/beauty_extensions/collect_evidence.py",
+      "sha256": "5a1ddcd221a01d1af8ccb5bc7b2aff96761f216f588afef8399aba19a3d4fcd7",
+      "bytes": 5080
+    },
+    {
+      "path": "experiments/beauty_extensions/common.py",
+      "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+      "bytes": 12084
+    },
+    {
+      "path": "experiments/beauty_extensions/data_checks.py",
+      "sha256": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+      "bytes": 18260
+    },
+    {
+      "path": "experiments/beauty_extensions/deploy.py",
+      "sha256": "f9cf91d6798e171d7b641434766895333a59b675ccbfec3bf76326e108ced081",
+      "bytes": 6563
+    },
+    {
+      "path": "experiments/beauty_extensions/mlp_attention.py",
+      "sha256": "b53aa3832a693bdcfa015393799a320b10fa804d7f351cc029e690c1df95f9fa",
+      "bytes": 4821
+    },
+    {
+      "path": "experiments/beauty_extensions/mlp_execution.py",
+      "sha256": "e22e22710ccf664109b4b3142cbc26911325dcaea37e6459bdffdb37528f393a",
+      "bytes": 18341
+    },
+    {
+      "path": "experiments/beauty_extensions/mlp_formal.py",
+      "sha256": "ac362b84f7a9a979bb7549ce1f817448fe172b9d32adc1a449180f5aa97d9e56",
+      "bytes": 37293
+    },
+    {
+      "path": "experiments/beauty_extensions/monitor.py",
+      "sha256": "770376df0aeebb7ff2d5d727bdffd83c514ae54af0e983a88a5709f31c8d10b2",
+      "bytes": 2843
+    },
+    {
+      "path": "experiments/beauty_extensions/observation.py",
+      "sha256": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+      "bytes": 5771
+    },
+    {
+      "path": "experiments/beauty_extensions/plot_training.py",
+      "sha256": "154cb13087b9f95b8c85024ad7548cf3a00c7183bbba6afe030e080208d51fe0",
+      "bytes": 3371
+    },
+    {
+      "path": "experiments/beauty_extensions/restore_assets.py",
+      "sha256": "5c8f8c7ae6e34289b4814e553345014f1d4de5d016ae46e935a89d3c0f94bf3f",
+      "bytes": 3623
+    },
+    {
+      "path": "experiments/beauty_extensions/results.py",
+      "sha256": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+      "bytes": 3339
+    },
+    {
+      "path": "experiments/beauty_extensions/summarize_delivery.py",
+      "sha256": "dab21879249c3f66d63c6e9db6d6fa986ffddfff431be3e79c9215235ea6ff6f",
+      "bytes": 10712
+    },
+    {
+      "path": "experiments/beauty_extensions/training.py",
+      "sha256": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3",
+      "bytes": 5646
+    },
+    {
+      "path": "experiments/beauty_extensions/verify_saved_predictions.py",
+      "sha256": "b6587fcebdbd86e6f21dcb25ce2d11b3a5c71895fe6660b6238571ba482972d0",
+      "bytes": 1147
+    },
+    {
+      "path": "references/wmh-original/GRID/src/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/clustering_initializers.py",
+      "sha256": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+      "bytes": 9117
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/distance_functions.py",
+      "sha256": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+      "bytes": 5118
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/eval_metrics.py",
+      "sha256": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+      "bytes": 15241
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/loss_functions.py",
+      "sha256": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+      "bytes": 4412
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/network_blocks/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/network_blocks/hf_language_model.py",
+      "sha256": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+      "bytes": 2434
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/optimizer.py",
+      "sha256": "d641316bf995f824b10d2499143b73333ae9bb4dfab1587c7c13c25d8ea46050",
+      "bytes": 1016
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/quantization_strategies.py",
+      "sha256": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+      "bytes": 8796
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/scheduler.py",
+      "sha256": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+      "bytes": 2523
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/training_loop_functions.py",
+      "sha256": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+      "bytes": 3754
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/collate_functions.py",
+      "sha256": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+      "bytes": 16642
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/custom_dataloader.py",
+      "sha256": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+      "bytes": 2266
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/dataloading.py",
+      "sha256": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+      "bytes": 7194
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/interfaces.py",
+      "sha256": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+      "bytes": 12625
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/iterators.py",
+      "sha256": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+      "bytes": 8557
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/label_function.py",
+      "sha256": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+      "bytes": 9035
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/pre_processing.py",
+      "sha256": "a69c88681760df22e37fb7e66961ad97ed0824af20eae415a543379e881d71c7",
+      "bytes": 14995
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/datamodules/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/datamodules/sequence_datamodule.py",
+      "sha256": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+      "bytes": 16142
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/utils.py",
+      "sha256": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+      "bytes": 5860
+    },
+    {
+      "path": "references/wmh-original/GRID/src/inference.py",
+      "sha256": "f24892ed2d9777c6fd5d3eaf20cc0ea3d180a19a490519baa7ca2390a70c05ba",
+      "bytes": 7940
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/components/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/components/interfaces.py",
+      "sha256": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+      "bytes": 2785
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/components/network_blocks/aggregation_strategy.py",
+      "sha256": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+      "bytes": 3465
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/components/network_blocks/embedding_aggregator.py",
+      "sha256": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+      "bytes": 1735
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/components/network_blocks/mlp.py",
+      "sha256": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+      "bytes": 1720
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/components/network_blocks/normalize_layer.py",
+      "sha256": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+      "bytes": 655
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/base_module.py",
+      "sha256": "7cfa9da5f73c0e666ab81f22440d04f04d6cc9624803de58cde3256dcae400b0",
+      "bytes": 7949
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/clustering/base_clustering_module.py",
+      "sha256": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+      "bytes": 11490
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/clustering/mini_batch_kmeans.py",
+      "sha256": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+      "bytes": 6013
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/huggingface/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/huggingface/transformer_base_module.py",
+      "sha256": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+      "bytes": 6665
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model.py",
+      "sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+      "bytes": 44597
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+      "sha256": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9",
+      "bytes": 53677
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py",
+      "sha256": "7561d2f494764a77efac1d71abff4ea15bc683eea0816c1e8fe067d7d5c78463",
+      "bytes": 83490
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_parallel.py",
+      "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+      "bytes": 61418
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+      "bytes": 61418
+    },
+    {
+      "path": "references/wmh-original/GRID/src/modules/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/modules/clustering/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "references/wmh-original/GRID/src/modules/clustering/residual_quantization.py",
+      "sha256": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+      "bytes": 32525
+    },
+    {
+      "path": "references/wmh-original/GRID/src/modules/clustering/vector_quantization.py",
+      "sha256": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+      "bytes": 4939
+    },
+    {
+      "path": "references/wmh-original/GRID/src/modules/semantic_embedding_inference_module.py",
+      "sha256": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+      "bytes": 3497
+    },
+    {
+      "path": "references/wmh-original/GRID/src/test.py",
+      "sha256": "53f43b1c3e8c5549901aac4f8ee93eea92fc4123bc10439607de20f87be17d78",
+      "bytes": 388
+    },
+    {
+      "path": "references/wmh-original/GRID/src/train.py",
+      "sha256": "f78680593ba465d0716aaf44239a730b5b449a227a0e957f67c0781e9a0fa4ea",
+      "bytes": 4415
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/__init__.py",
+      "sha256": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+      "bytes": 297
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/custom_hydra_resolvers.py",
+      "sha256": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+      "bytes": 5867
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/decorators.py",
+      "sha256": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+      "bytes": 6611
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/file_utils.py",
+      "sha256": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+      "bytes": 6281
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/inference_utils.py",
+      "sha256": "a3fa7e388713e38c5d67824b0a51eb9a9395695df46571c645845efbf183d7bf",
+      "bytes": 11844
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/instantiators.py",
+      "sha256": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+      "bytes": 1908
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/launcher_utils.py",
+      "sha256": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+      "bytes": 7789
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/logging_utils.py",
+      "sha256": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+      "bytes": 3052
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/masking_utils.py",
+      "sha256": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+      "bytes": 1564
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/pylogger.py",
+      "sha256": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+      "bytes": 2468
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/restart_job.py",
+      "sha256": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+      "bytes": 13321
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/restart_job_utils.py",
+      "sha256": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+      "bytes": 8199
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/rich_utils.py",
+      "sha256": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+      "bytes": 3382
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/tensor_utils.py",
+      "sha256": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+      "bytes": 7767
+    },
+    {
+      "path": "references/wmh-original/GRID/src/utils/utils.py",
+      "sha256": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788",
+      "bytes": 8359
+    }
+  ],
+  "source_commit_binding": "This gate binds exact source bytes. Controller must commit and deploy these bytes; formal deploy.py checks every file against the fixed commit and runtime checks the accepted request/DEPLOYMENT identity. No self-referential commit hash is invented here.",
+  "active_execution_paths_equal_to_real_lifecycle": [
+    "common.py",
+    "mlp_execution.py",
+    "mlp_formal.py",
+    "cli.py",
+    "results.py",
+    "author/bootstrap.py",
+    "author/models.py",
+    "author/checks.py"
+  ],
+  "preflight_snapshot_sha256": "30d913aeda0e2ce6e3ca8f42c5edd2b6b75f22d2d30a7b8850b8b61f19805cc5",
+  "author_originals_unchanged": {
+    "shuffle_sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+    "MLP_sha256": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9"
+  },
+  "independent_checks": [
+    "AUTHOR_ADAPTER_STATIC_SEMANTICS",
+    "MLP_REAL_TRAIN_VALIDATE_SAVE_RESTORE_TEST",
+    "MLP_REAL_AGGREGATION_AND_GRADIENT",
+    "MLP_RAW_ORIGINAL_OFF_CACHE_AND_TEST",
+    "MLP_APPROVED_PROTOCOL_CURRENT_AUTHORIZATION",
+    "MLP_EVALUATION_CPU_INDEX_IDENTITY",
+    "MLP_APPROVED_ACCUM64_RESOURCE_AND_FULL_VALIDATION_NONAUTHOR",
+    "MLP_FORMAL_ENTRY_STATIC_NONAUTHOR",
+    "MLP_ORIGINAL_CALLBACK_BEST_STRICT_TEST_LIFECYCLE_NONAUTHOR"
+  ],
+  "evidence_collection": {
+    "receipt": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collection-receipt.json",
+      "sha256": "4da73e67ed9578e7267ec24a5e8b2468026ccb747c9e58a63920c96f69c682b8",
+      "bytes": 652
+    },
+    "manifest": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/COLLECTION_MANIFEST.json",
+      "sha256": "8a3488ddb1ce503b09fdacbb86509258667225d42dd23ca3e6efddc36584415b",
+      "bytes": 56815
+    },
+    "archive": {
+      "local": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5.tar.gz",
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/evidence/collection-f6bab7578b4aead5.tar.gz",
+      "bytes": 5039582,
+      "sha256": "3fa874ada5e5ea980d704fcbf418cf29bb9cfeaed6b90288e1f92ad53585eb94"
+    },
+    "jobs": 19,
+    "small_members": 303,
+    "all_archive_and_member_hashes_independently_verified": true,
+    "large_checkpoint_payloads_excluded": true
+  },
+  "evidence_references": [
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/status.json",
+      "sha256": "85bbdb920021f71db90dd34487cae56f7f8c63b11721f3b3abe2f26212fd5e22",
+      "bytes": 9296
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/request.json",
+      "sha256": "1064aed806b0d1d2a6b1a2a4e4a20e1f1220386c246ce9cabdde6c99e03662b5",
+      "bytes": 1457
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/invocation.json",
+      "sha256": "6713d74d0da668cf02905672620ea49e003d8ea9aaef3b2b5e96c5184c48e980",
+      "bytes": 36665
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/RESULT.json",
+      "sha256": "738e2725813a5cf6b83b3b6ec631dba69c52d4d83ff629c8e995844343604538",
+      "bytes": 168
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/training_result.json",
+      "sha256": "e106aecdae7a7450960c8ad54956311ec3296477b0773227a46321ef3dbd9eec",
+      "bytes": 5097
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/best_checkpoint_load.json",
+      "sha256": "edb33a00fd077d019e9758dbe83f5e30f1282fdb14d0fcbaa8859ff4d1873436",
+      "bytes": 750
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/optimizer_updates.jsonl",
+      "sha256": "0ae3ad27a53974fe96439d3c0f3400f78c6324bcf0605475f09cfa20693fda8d",
+      "bytes": 2284
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/validations.jsonl",
+      "sha256": "6963c91073a780f33154de8591df86191ab254c418c652eb4a077ea4848183b4",
+      "bytes": 714
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/used_config.json",
+      "sha256": "cd1445da234c4da93ba25d9b09ee37334c1fa806c23a94491c024e2294bc18e5",
+      "bytes": 14295
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/actual_trainer.yaml",
+      "sha256": "95d083fd7f0fe6515d8df2d6ba444b5baf1de42e6b899829e1a79d696513d593",
+      "bytes": 528
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/preflight_formal_diff.json",
+      "sha256": "27c4d5a7c4dc355dfee7d29d2314aac769433569183688dd424561b123a690f5",
+      "bytes": 451
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/test/predictions.jsonl",
+      "sha256": "d2aab15db8fc55ade75aeb66b8b07f09eac3ba9304a535ce14c139b8d22d7a87",
+      "bytes": 8218
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/test/metrics.json",
+      "sha256": "00b43e29a7a5fe3973c45cd46456fadef44015d04ebb4098e71c6655e3d20348",
+      "bytes": 364
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/test/recomputed_metrics.json",
+      "sha256": "0eec1527fb3f088005003bf1a59863df78a898dbea4732d845acd95102259ce5",
+      "bytes": 669
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-lifecycle-v1/output/latest_recovery.json",
+      "sha256": "0735ee681f955ba708a2ed310bfb0fbe830a040b537b19881150d16014301c75",
+      "bytes": 1544
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-accum64-fullval-v1/output/resource_check.json",
+      "sha256": "61966a844f0ebcd4102dc7fa70db573e2b1506f49bc375c4a26da50f90cbc1fc",
+      "bytes": 4648
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-accum64-fullval-v1/output/validation_coverage_check.json",
+      "sha256": "ebe12c1b96e658200e701e19ee803793915cdbba6ef9ce8610734530d683bb83",
+      "bytes": 633
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/collected-f6bab7578b4aead5/beauty-mlp-evaluation-index-v1/output/evaluation_coverage.json",
+      "sha256": "ebe2048323b3af266a9af34408012413468e5254f697af7f494b249d5658f28d",
+      "bytes": 99274
+    }
+  ],
+  "resource_budget": {
+    "resource_warm_update_seconds": 4.364060149062425,
+    "resource_full_validation_outer_wall_seconds": 136.69701669877395,
+    "lifecycle_update_seconds": 4.768710534088314,
+    "lifecycle_full_validation_hook_seconds": 190.60053998604417,
+    "lifecycle_fit_wall_seconds": 199.0753957843408,
+    "historical3500_plus35_using_lifecycle_points_hours": 6.489307158005734,
+    "planning_range_hours": [
+      6.2,
+      7.0
+    ],
+    "configured_max_steps": 320000,
+    "configured_max_epochs": 10,
+    "original_early_stopping_patience": 10,
+    "hard_cap_hours": 12,
+    "cap_is_not_research_termination": true,
+    "historical_end_is_not_guaranteed": true,
+    "formal_timeout_or_safety_interruption_must_remain_incomplete": true,
+    "estimates_exclude_full_test_import_extra_saves_and_future_throughput_changes": true
+  },
+  "preflight_formal_whitelist": {
+    "engineering_only": true,
+    "formal_state_reuse_allowed": false,
+    "overrides": {
+      "trainer.max_steps": {
+        "preflight": 1,
+        "formal": 320000
+      },
+      "trainer.val_check_interval": {
+        "preflight": 64,
+        "formal": 6400
+      },
+      "trainer.limit_test_batches": {
+        "preflight": 2,
+        "formal": "absent; complete testing"
+      }
+    },
+    "same_callbacks_and_logger": true,
+    "validation_is_complete_in_both_phases": true
+  },
+  "formal_initial_state": "Fresh original constructor, seed42, no checkpoint/optimizer/callback/RNG/dataloader state from any engineering run",
+  "remaining_execution_risks": "Bounded preflight covers exercised interfaces and resources; future failures, different convergence and safety-cap interruption remain possible. No additional repair round or automatic resume is authorized.",
+  "excluded_approvals": [
+    "A or B Shuffle formal admission",
+    "new SID/embedding/quantizer generation",
+    "ordinary baseline retraining",
+    "hyperparameter search, extra seed, domain expansion or Parallel",
+    "independent approval of reviewer-authored attention collector; post-training fixed32 attention has a separate production-chain review"
+  ],
+  "formal_execution_started": false,
+  "scientific_conclusion": "No formal results or paper conclusions are certified by this readiness gate."
+}

@@ -1,0 +1,1133 @@
+{
+  "schema": "beauty-extensions-nonauthor-review/v1",
+  "reviewer_agent": "/root/author_adapters",
+  "review_date": "2026-10-14",
+  "scope": "Independent read-only review of parent-authored B/data/config/evaluation integration and peer-authored attention code; independent CPU recomputation of saved outputs from the named jobs. This reviewer authored author/ adapters and does not claim independent review of those adapters.",
+  "verdict": "BLOCKED_NOT_FORMAL_GATE",
+  "formal_admission": false,
+  "NONAUTHOR_GATE_PASS": false,
+  "per_scope": {
+    "B_intervention_semantics": "PASS_FOR_RECORDED_ENGINEERING_CASES",
+    "B_full_preflight_lifecycle": "BLOCKED",
+    "Normal_attention_recording_and_plotting": "PASS_FOR_NAMED_THREE_SAMPLE_ENGINEERING_CAPTURES",
+    "Shuffle_attention": "NOT_VALIDATED",
+    "fixed32_selection_metadata": "PASS_FOR_SAVED_SELECTION_RECORDS_ONLY",
+    "full_B_test_evaluation": "NOT_RUN",
+    "formal_MLP_training": "OUT_OF_SCOPE_NOT_RUN",
+    "formal_attention_collection": "NOT_RUN"
+  },
+  "authorization_update": {
+    "source": "Parent relay of latest user approval, received after EXECUTION_SUMMARY snapshot below",
+    "MLP_protocol": "USER_APPROVED_RESOURCE_AND_GATE_PENDING",
+    "user_requirements": [
+      "Actual accumulate_grad_batches=64 optimizer update",
+      "Full validation for cost and coverage",
+      "12 hours is an observation/pause allowance, not a research training stop condition",
+      "Existing B three-repair limit is not reset"
+    ],
+    "boundary": "This report neither approves the forthcoming MLP execution implementation nor signs its resource/formal gate. New stage evidence requires a separate review."
+  },
+  "method": {
+    "reviewer_environment": {
+      "interpreter": "/usr/bin/python3",
+      "numpy": "1.26.4",
+      "Pillow": "10.2.0",
+      "gpu_used_by_reviewer": false,
+      "installed_dependencies": []
+    },
+    "independent_actions": [
+      "Read original B model, base module, evaluator, original author Shuffle method and all integration sources listed below.",
+      "Read per-job request/status/export manifest and log; independently rehash every exported member in the named jobs.",
+      "Load numeric NPZ with allow_pickle=False; independently recover beam parents from unique exact prefixes and verify ancestry, selected rows, head means and output SIDs.",
+      "Reopen all nine generated PNGs with Pillow, check recorded SHA and nonconstant pixels, and visually inspect sample zero of each capture.",
+      "Recompute B engineering Recall/NDCG from saved 19-row predictions with NumPy and compare with original evaluator CPU recomputation; no model rerun.",
+      "Independently count saved full-test target indexes, user-key multiset, target multiset and saved fixed32 user/history identities across three asset conditions."
+    ],
+    "limits": [
+      "Remote TFRecords/checkpoints were not reloaded by this reviewer; raw-data semantic checks are reviewed source plus actual remote receipts, with independent saved-index/output verification.",
+      "The source_commit in early job requests is the prior repository base; new uncommitted implementation identity is the saved snapshot SHA and tested source hash map, not an assertion that these changes were already in that commit.",
+      "No new GPU run, dependency installation, original-file modification, Git operation or fourth B repair was performed by this reviewer."
+    ]
+  },
+  "source_files": [
+    {
+      "path": "experiments/beauty_extensions/baseline.py",
+      "sha256": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce"
+    },
+    {
+      "path": "experiments/beauty_extensions/common.py",
+      "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91"
+    },
+    {
+      "path": "experiments/beauty_extensions/cli.py",
+      "sha256": "b4acb37888a0b365b055abd99da5158a962a747f8eb8c0dfd0571bd8c303cc9f"
+    },
+    {
+      "path": "experiments/beauty_extensions/data_checks.py",
+      "sha256": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f"
+    },
+    {
+      "path": "experiments/beauty_extensions/observation.py",
+      "sha256": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d"
+    },
+    {
+      "path": "experiments/beauty_extensions/results.py",
+      "sha256": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917"
+    },
+    {
+      "path": "experiments/beauty_extensions/training.py",
+      "sha256": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3"
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/plot.py",
+      "sha256": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9"
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/records.py",
+      "sha256": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1"
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/capture.py",
+      "sha256": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113"
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/__init__.py",
+      "sha256": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2"
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/selfcheck.py",
+      "sha256": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e"
+    },
+    {
+      "path": "GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py",
+      "sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e"
+    },
+    {
+      "path": "GRID baseline/src/models/modules/base_module.py",
+      "sha256": "029dc55aa499147c55a915c9523291c6b331076afb5cd7a18459968aaff16b73"
+    },
+    {
+      "path": "GRID baseline/src/components/eval_metrics.py",
+      "sha256": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80"
+    }
+  ],
+  "job_identities": [
+    {
+      "job_id": "beauty-b-smoke-r3",
+      "status": "FAILED",
+      "exit_code": 1,
+      "local_evidence_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-b-smoke-r3/retrieved",
+      "server_job_root": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-b-smoke-r3",
+      "request_sha256": "542fb5e6c5530a4fb68d74535495976a4b5b5fbaefe15d84aadde535036af090",
+      "export_manifest_sha256": "004990d226c27593242fed932fe6dba947cd8c9c5032457bb7dfe0721c94384e",
+      "verified_export_files": 31,
+      "snapshot_sha256": "69293b6ec990954c8c350da492104f13230df1c3f5d2ae85c8b499b6be37797e",
+      "source_commit": "5ed4e701c41d977e24c4c89db0ae1025f9faf701",
+      "tested_source_sha256": {
+        "experiments/beauty_extensions/attention/__init__.py": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+        "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+        "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+        "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+        "experiments/beauty_extensions/attention/selfcheck.py": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+        "experiments/beauty_extensions/baseline.py": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+        "experiments/beauty_extensions/cli.py": "b4acb37888a0b365b055abd99da5158a962a747f8eb8c0dfd0571bd8c303cc9f",
+        "experiments/beauty_extensions/common.py": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+        "experiments/beauty_extensions/data_checks.py": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+        "experiments/beauty_extensions/observation.py": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+        "experiments/beauty_extensions/results.py": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+        "experiments/beauty_extensions/training.py": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3"
+      }
+    },
+    {
+      "job_id": "beauty-b-cache-diagnosis-r2",
+      "status": "FAILED",
+      "exit_code": 1,
+      "local_evidence_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-b-cache-diagnosis-r2/retrieved",
+      "server_job_root": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-b-cache-diagnosis-r2",
+      "request_sha256": "16b9b6a1871cdc040e8d848691c283318e04c49fda2da38935ed1a4fd62dff19",
+      "export_manifest_sha256": "05f273bffc7062d99352ec8d26231cb9815148d8c53efced250f95c1eb76fd00",
+      "verified_export_files": 15,
+      "snapshot_sha256": "06414116d59216278435524700c58a9b65f78e3cf71314583d220b044542b6d8",
+      "source_commit": "5ed4e701c41d977e24c4c89db0ae1025f9faf701",
+      "tested_source_sha256": {
+        "experiments/beauty_extensions/attention/__init__.py": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+        "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+        "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+        "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+        "experiments/beauty_extensions/attention/selfcheck.py": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+        "experiments/beauty_extensions/baseline.py": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+        "experiments/beauty_extensions/cli.py": "a1902cb6c4562ff196c9b0904e172b24712b6af66478265e1c48f5e0144cf216",
+        "experiments/beauty_extensions/common.py": "9cdd17dfbab483037029616c35abb4848d288c6bf53703def706d61b34773478",
+        "experiments/beauty_extensions/training.py": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3"
+      }
+    },
+    {
+      "job_id": "beauty-b-attention-r2",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "local_evidence_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-b-attention-r2/retrieved",
+      "server_job_root": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-b-attention-r2",
+      "request_sha256": "ce7c755cf619d988437df02e2cba21ba9327864e82200acfdfaf302a1a26504c",
+      "export_manifest_sha256": "97338bbc1d5780ab301f89f7e9b0b34278677ac82c68a895408aefaca22b7cb1",
+      "verified_export_files": 22,
+      "snapshot_sha256": "762750dd12adc68380bc0eaf602a0a86d90b1751ab1f12827be9c47db4718efb",
+      "source_commit": "5ed4e701c41d977e24c4c89db0ae1025f9faf701",
+      "tested_source_sha256": {
+        "experiments/beauty_extensions/attention/__init__.py": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+        "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+        "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+        "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+        "experiments/beauty_extensions/attention/selfcheck.py": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+        "experiments/beauty_extensions/baseline.py": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+        "experiments/beauty_extensions/cli.py": "e531bac436bf8d495bffc436041e47262033bb93981b26bdefab2f63ab3aae93",
+        "experiments/beauty_extensions/common.py": "9cdd17dfbab483037029616c35abb4848d288c6bf53703def706d61b34773478",
+        "experiments/beauty_extensions/data_checks.py": "6afec77eea50943c79a370132c172d5908c6c64fef2f7d99816c71d96ba47440",
+        "experiments/beauty_extensions/observation.py": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+        "experiments/beauty_extensions/results.py": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+        "experiments/beauty_extensions/training.py": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3"
+      }
+    },
+    {
+      "job_id": "beauty-a-attention-r3",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "local_evidence_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-a-attention-r3/retrieved",
+      "server_job_root": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-a-attention-r3",
+      "request_sha256": "1a1d1977a3fe41ddca99c3f885f77b84c0e4ce0c58b0a7df77d7013cc2554ad9",
+      "export_manifest_sha256": "6d9e2b76a48dce75ece21cfc7513c22e5b86b155cb9dbb21a781601258769dba",
+      "verified_export_files": 22,
+      "snapshot_sha256": "ee6a63bd6a0ebcd2137f88ce06b11c9545f9748166c7558832522840406516da",
+      "source_commit": "5ed4e701c41d977e24c4c89db0ae1025f9faf701",
+      "tested_source_sha256": {
+        "experiments/beauty_extensions/attention/__init__.py": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+        "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+        "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+        "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+        "experiments/beauty_extensions/attention/selfcheck.py": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+        "experiments/beauty_extensions/baseline.py": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+        "experiments/beauty_extensions/cli.py": "b4acb37888a0b365b055abd99da5158a962a747f8eb8c0dfd0571bd8c303cc9f",
+        "experiments/beauty_extensions/common.py": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+        "experiments/beauty_extensions/data_checks.py": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+        "experiments/beauty_extensions/observation.py": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+        "experiments/beauty_extensions/results.py": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+        "experiments/beauty_extensions/training.py": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3"
+      }
+    },
+    {
+      "job_id": "beauty-mlp-attention-engineering-r3",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "local_evidence_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-mlp-attention-engineering-r3/retrieved",
+      "server_job_root": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-attention-engineering-r3",
+      "request_sha256": "03c8eb7f977fdc1f6759fcc5e6092416ff191845ca8e23128d8d19ebfab7e085",
+      "export_manifest_sha256": "03cc617ebae474b76f3ea838d814676d5492e0e2660e2dc9bf1ea6ed5bb45ee8",
+      "verified_export_files": 22,
+      "snapshot_sha256": "ee6a63bd6a0ebcd2137f88ce06b11c9545f9748166c7558832522840406516da",
+      "source_commit": "5ed4e701c41d977e24c4c89db0ae1025f9faf701",
+      "tested_source_sha256": {
+        "experiments/beauty_extensions/attention/__init__.py": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+        "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+        "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+        "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+        "experiments/beauty_extensions/attention/selfcheck.py": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+        "experiments/beauty_extensions/baseline.py": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+        "experiments/beauty_extensions/cli.py": "b4acb37888a0b365b055abd99da5158a962a747f8eb8c0dfd0571bd8c303cc9f",
+        "experiments/beauty_extensions/common.py": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+        "experiments/beauty_extensions/data_checks.py": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+        "experiments/beauty_extensions/observation.py": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+        "experiments/beauty_extensions/results.py": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+        "experiments/beauty_extensions/training.py": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3"
+      }
+    },
+    {
+      "job_id": "beauty-a-metadata-r3",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "local_evidence_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-a-metadata-r3/retrieved",
+      "server_job_root": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-a-metadata-r3",
+      "request_sha256": "e3d153b4998e9ddacdef5605f50b1fb1be5f145ae950378389ff7d6bd0c26d98",
+      "export_manifest_sha256": "8cff63209591bbb6b8434ecc99b33768143dab86d897e9695b8b290ff18f9587",
+      "verified_export_files": 18,
+      "snapshot_sha256": "ee6a63bd6a0ebcd2137f88ce06b11c9545f9748166c7558832522840406516da",
+      "source_commit": "5ed4e701c41d977e24c4c89db0ae1025f9faf701",
+      "tested_source_sha256": {
+        "experiments/beauty_extensions/attention/__init__.py": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+        "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+        "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+        "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+        "experiments/beauty_extensions/attention/selfcheck.py": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+        "experiments/beauty_extensions/baseline.py": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+        "experiments/beauty_extensions/cli.py": "b4acb37888a0b365b055abd99da5158a962a747f8eb8c0dfd0571bd8c303cc9f",
+        "experiments/beauty_extensions/common.py": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+        "experiments/beauty_extensions/data_checks.py": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+        "experiments/beauty_extensions/observation.py": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+        "experiments/beauty_extensions/results.py": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+        "experiments/beauty_extensions/training.py": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3"
+      }
+    },
+    {
+      "job_id": "beauty-mlp-smoke-r3",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "local_evidence_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-mlp-smoke-r3/retrieved",
+      "server_job_root": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-smoke-r3",
+      "request_sha256": "004b40405ee41c45e8dd5359b26bb2c110031a4601d6c8f1ccd216432aac757c",
+      "export_manifest_sha256": "922fac542a11bdefd1445e712d48d1504fc3fbe279b3a3ac85c426d8ef05aca2",
+      "verified_export_files": 23,
+      "snapshot_sha256": "ee6a63bd6a0ebcd2137f88ce06b11c9545f9748166c7558832522840406516da",
+      "source_commit": "5ed4e701c41d977e24c4c89db0ae1025f9faf701",
+      "tested_source_sha256": {
+        "experiments/beauty_extensions/attention/__init__.py": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+        "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+        "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+        "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+        "experiments/beauty_extensions/attention/selfcheck.py": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+        "experiments/beauty_extensions/baseline.py": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+        "experiments/beauty_extensions/cli.py": "b4acb37888a0b365b055abd99da5158a962a747f8eb8c0dfd0571bd8c303cc9f",
+        "experiments/beauty_extensions/common.py": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+        "experiments/beauty_extensions/data_checks.py": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+        "experiments/beauty_extensions/observation.py": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+        "experiments/beauty_extensions/results.py": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+        "experiments/beauty_extensions/training.py": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3"
+      }
+    },
+    {
+      "job_id": "beauty-preflight-metrics-verification-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "local_evidence_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-preflight-metrics-verification-v1/retrieved",
+      "server_job_root": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-preflight-metrics-verification-v1",
+      "request_sha256": "cf10a2a779df7a7dcce5c4b78b6853b58a735efb045728fe8f839a1c3d262fab",
+      "export_manifest_sha256": "d2f07ff376571085712c0e7cb6c2050fb1bf132a8338ae528d1288610bdb2eda",
+      "verified_export_files": 14,
+      "snapshot_sha256": "ee6a63bd6a0ebcd2137f88ce06b11c9545f9748166c7558832522840406516da/bounded-prediction-verification",
+      "source_commit": null,
+      "tested_source_sha256": null
+    }
+  ],
+  "exported_member_hashes_checked": 167,
+  "B_semantics": {
+    "same_model_condition": "B preserves the Qwen working baseline shared encoder/decoder table; A uses a separate T5-RK dual-table model. Cross-route absolute metrics are not adapter-equivalence evidence.",
+    "original_model_sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+    "original_shuffle_sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+    "reviewed_implementation": [
+      "AST-extracted preserved author function; same [B,M,N] random argsort called once per encoder invocation.",
+      "Lookup hook is scoped to encoder_forward_pass after original lookup and before SEP/user; decoder lookup is outside this scope.",
+      "OFF path exits before random sampling; cloned lookup embeddings prevent original helper mutation from contaminating caller or successive conditions.",
+      "Complete padding groups checked; partial effective groups rejected rather than changing masks.",
+      "Independent local Generator reconstructs trace from pre-call state; global RNG is consumed only by the original shuffle function.",
+      "Strict state load and exact key/shape/value comparison, including embedded SID and shared-table identity; no random missing decoder table."
+    ],
+    "actual_OFF": {
+      "same_shape_original_vs_adapter": {
+        "decoder_hidden_max_absolute": 0,
+        "four_head_logits_max_absolute": 0,
+        "loss_max_absolute": 0,
+        "score_max_absolute": 0,
+        "predicted_sid_exact": true
+      },
+      "repeated_same_shape": {
+        "sid_exact": true,
+        "score_max_absolute": 0
+      },
+      "sample_order_permutation": {
+        "sid_exact": true,
+        "score_max_absolute": 0
+      },
+      "OFF_CPU_and_CUDA_RNG_unchanged": true,
+      "shared_sid_table_identity": true,
+      "changed_batch_shape": {
+        "r3_adapter_max_absolute": 0.00003007054328918457,
+        "r3_original_max_absolute": 0.00003007054328918457,
+        "adapter_vs_original_B1_max_absolute": 0,
+        "adapter_vs_original_B1_sid_exact": true,
+        "B8_to_B1_to_B8_sid_exact": true,
+        "B8_to_B1_to_B8_score_max_absolute": 0,
+        "old_r2_max_absolute": 0.000008335337042808533,
+        "interpretation": "The corresponding original and adapter match exactly at each shape; the original itself has the same cross-batch score drift. This supports an inherited shape-dependent numerical boundary rather than an intervention/cache discrepancy for these cases. It does not establish cross-batch score invariance or a unique numerical cause.",
+        "tolerance_was_not_enlarged": true
+      }
+    },
+    "true_Trainer_test": {
+      "conditions": [
+        0,
+        3,
+        4
+      ],
+      "rows_per_condition": 19,
+      "batches_per_condition": [
+        [
+          8,
+          120
+        ],
+        [
+          8,
+          120
+        ],
+        [
+          3,
+          120
+        ]
+      ],
+      "maximum_visible_history_items": 20,
+      "configured_history_item_limit": 29,
+      "truncated_history_example_tested": false,
+      "state_cleared_after_each_test": true,
+      "shuffled_generation_and_loss_each_use_separate_encoder_calls": true,
+      "raw_shuffle_events_saved_per_condition": 6,
+      "permutation_shapes_N3": [
+        [
+          8,
+          30,
+          3
+        ],
+        [
+          8,
+          30,
+          3
+        ],
+        [
+          8,
+          30,
+          3
+        ],
+        [
+          8,
+          30,
+          3
+        ],
+        [
+          3,
+          30,
+          3
+        ],
+        [
+          3,
+          30,
+          3
+        ]
+      ],
+      "permutation_shapes_N4": [
+        [
+          8,
+          30,
+          4
+        ],
+        [
+          8,
+          30,
+          4
+        ],
+        [
+          8,
+          30,
+          4
+        ],
+        [
+          8,
+          30,
+          4
+        ],
+        [
+          3,
+          30,
+          4
+        ],
+        [
+          3,
+          30,
+          4
+        ]
+      ],
+      "runtime_multiset_padding_and_Shuffle3_fourth_position_checks": true,
+      "changed_candidates": [
+        {
+          "n": 3,
+          "same_keys_and_targets_as_Normal": true,
+          "users_with_any_candidate_sid_changed": 19,
+          "total_users": 19
+        },
+        {
+          "n": 4,
+          "same_keys_and_targets_as_Normal": true,
+          "users_with_any_candidate_sid_changed": 19,
+          "total_users": 19
+        }
+      ],
+      "qualification": "Three completed test calls and their outputs are retained, but the enclosing smoke job failed afterwards and the entire lifecycle gate is not PASS."
+    },
+    "engineering_metrics": [
+      {
+        "n": 0,
+        "samples": 19,
+        "unique_keys": 19,
+        "metrics": {
+          "recall@5": 0,
+          "recall@10": 0,
+          "ndcg@5": 0,
+          "ndcg@10": 0
+        },
+        "prediction_sha256": "407481a6537802ee5bd9108cea768e9699d27716a4bdf310b72969b05cec9bff",
+        "independent_numpy_metric_recomputation": true,
+        "original_evaluator_recompute_reference": {
+          "status": "PASS",
+          "metrics": {
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "recall@5": 0,
+            "recall@10": 0
+          },
+          "samples": 19,
+          "unique_users": 19,
+          "prediction_sha256": "407481a6537802ee5bd9108cea768e9699d27716a4bdf310b72969b05cec9bff",
+          "invalid_candidate_count": 0,
+          "duplicate_candidate_count": 0,
+          "candidate_treatment": "original evaluator, no filtering, completion, rescoring, or reordering",
+          "coverage_exact": false,
+          "trainer_absolute_differences": {
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "recall@5": 0,
+            "recall@10": 0
+          },
+          "per_sample_metrics_sha256": "fd062c9571f4816a89e20a5d983f4878f7e01014c06d3f3ca410d76b9317af72"
+        },
+        "duplicate_candidates_independent": 0,
+        "exact_score_tie_pairs_or_repeats": 0,
+        "full_test_evaluation": false
+      },
+      {
+        "n": 3,
+        "samples": 19,
+        "unique_keys": 19,
+        "metrics": {
+          "recall@5": 0,
+          "recall@10": 0,
+          "ndcg@5": 0,
+          "ndcg@10": 0
+        },
+        "prediction_sha256": "f7e16a4232f6c75faedd844a1df0ca36367a27ef07c1322ddbf67cc0033eb2f8",
+        "independent_numpy_metric_recomputation": true,
+        "original_evaluator_recompute_reference": {
+          "status": "PASS",
+          "metrics": {
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "recall@5": 0,
+            "recall@10": 0
+          },
+          "samples": 19,
+          "unique_users": 19,
+          "prediction_sha256": "f7e16a4232f6c75faedd844a1df0ca36367a27ef07c1322ddbf67cc0033eb2f8",
+          "invalid_candidate_count": 0,
+          "duplicate_candidate_count": 0,
+          "candidate_treatment": "original evaluator, no filtering, completion, rescoring, or reordering",
+          "coverage_exact": false,
+          "trainer_absolute_differences": {
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "recall@5": 0,
+            "recall@10": 0
+          },
+          "per_sample_metrics_sha256": "fd062c9571f4816a89e20a5d983f4878f7e01014c06d3f3ca410d76b9317af72"
+        },
+        "duplicate_candidates_independent": 0,
+        "exact_score_tie_pairs_or_repeats": 0,
+        "full_test_evaluation": false
+      },
+      {
+        "n": 4,
+        "samples": 19,
+        "unique_keys": 19,
+        "metrics": {
+          "recall@5": 0,
+          "recall@10": 0,
+          "ndcg@5": 0,
+          "ndcg@10": 0
+        },
+        "prediction_sha256": "e08c28b3f8ec5b9c7777c365b57324f6568f74f9cbc428f661220057da2c5e97",
+        "independent_numpy_metric_recomputation": true,
+        "original_evaluator_recompute_reference": {
+          "status": "PASS",
+          "metrics": {
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "recall@5": 0,
+            "recall@10": 0
+          },
+          "samples": 19,
+          "unique_users": 19,
+          "prediction_sha256": "e08c28b3f8ec5b9c7777c365b57324f6568f74f9cbc428f661220057da2c5e97",
+          "invalid_candidate_count": 0,
+          "duplicate_candidate_count": 0,
+          "candidate_treatment": "original evaluator, no filtering, completion, rescoring, or reordering",
+          "coverage_exact": false,
+          "trainer_absolute_differences": {
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "recall@5": 0,
+            "recall@10": 0
+          },
+          "per_sample_metrics_sha256": "fd062c9571f4816a89e20a5d983f4878f7e01014c06d3f3ca410d76b9317af72"
+        },
+        "duplicate_candidates_independent": 0,
+        "exact_score_tie_pairs_or_repeats": 0,
+        "full_test_evaluation": false
+      }
+    ],
+    "metric_scope": "19 engineering samples only. All four metrics are zero and independently agree; they are neither full-Beauty formal results nor evidence for/against the scientific hypothesis."
+  },
+  "lifecycle_blocker": {
+    "job": "beauty-b-smoke-r3",
+    "job_status": "FAILED",
+    "exit_code": 1,
+    "cause": "Trainer.test teardown moved model parameters to CPU; tail manual validation reused CUDA arguments, raising CPU/CUDA embedding device mismatch.",
+    "failing_location": "experiments/beauty_extensions/cli.py:277 manual model.generate(**args)",
+    "not_reached": [
+      "Tail normal-validation OFF check",
+      "Tail intentional model exception cleanup check"
+    ],
+    "already_passed": [
+      "Three real Trainer.test calls Normal/Shuffle3/Shuffle4",
+      "Saved prediction/metric writes",
+      "Per-test shuffle state reset"
+    ],
+    "round_boundary": "Whole-task rounds 0,1,2,3 exhausted. No fourth B repair or rerun is authorized; leave this failure visible."
+  },
+  "data_helper_review": {
+    "implementation": "Real original preprocessing/collate + raw-item-to-SID/target comparisons; full-test metadata uses chunked CPU scan, not model evaluation; fixed32 follows actual single-GPU assigned-file order before inspecting attention/hits.",
+    "full_test_rows": 22363,
+    "unique_users": 22363,
+    "duplicate_users": 0,
+    "raw_items_per_record_range": [
+      5,
+      21
+    ],
+    "total_item_occurrences": 182329,
+    "raw_item_id_range": [
+      0,
+      12100
+    ],
+    "sid_shape": [
+      4,
+      12101
+    ],
+    "no_truncated_real_test_record_found": true,
+    "coverage_records": [
+      {
+        "route": "B",
+        "job": "beauty-b-smoke-r3",
+        "rows": 22363,
+        "unique_users": 22363,
+        "raw_items_per_record_range": [
+          5,
+          21
+        ],
+        "first_truncated_engineering_example": null,
+        "test_coverage_sha256": "58cfd4c5a3ffe7482a0026cd52f520a438f91038f19be8e3253f73339de5ac8b",
+        "target_index_sha256": "9ca3f5b45f57589815160b3f38fc2ccc48c4873ccd6a8f58c674913888f4b019",
+        "key_set_sha256": "1c072ec3f7ed3452d6730542e0ff1afe2ca6a974e5ce4f651f532f1385df4e28",
+        "independent_index_count_and_multiset_recomputation": true
+      },
+      {
+        "route": "A",
+        "job": "beauty-a-metadata-r3",
+        "rows": 22363,
+        "unique_users": 22363,
+        "raw_items_per_record_range": [
+          5,
+          21
+        ],
+        "first_truncated_engineering_example": null,
+        "test_coverage_sha256": "32774628614f19ad892e7d4062edce68249fc0adc32f250cb054f841f16c7f3d",
+        "target_index_sha256": "a2e7d74577d33c9d667733a25d438aec4fe2b6077d566c93d44c4f242d17d00d",
+        "key_set_sha256": "1c072ec3f7ed3452d6730542e0ff1afe2ca6a974e5ce4f651f532f1385df4e28",
+        "independent_index_count_and_multiset_recomputation": true
+      },
+      {
+        "route": "MLP",
+        "job": "beauty-mlp-smoke-r3",
+        "rows": 22363,
+        "unique_users": 22363,
+        "raw_items_per_record_range": [
+          5,
+          21
+        ],
+        "first_truncated_engineering_example": null,
+        "test_coverage_sha256": "62d125409c6c2cf6c405491538a7a56e066e17a2921eb35deda8e31de560a775",
+        "target_index_sha256": "c88d460609468ff194f69669016848353651f6cb5ae241c798807708113dd598",
+        "key_set_sha256": "1c072ec3f7ed3452d6730542e0ff1afe2ca6a974e5ce4f651f532f1385df4e28",
+        "independent_index_count_and_multiset_recomputation": true
+      }
+    ],
+    "fixed32_records": [
+      {
+        "route": "B",
+        "sha256": "1813a858d68a56c7f6cd72e977377d4320eab66e801f957aafa0eaee046a6fb0",
+        "users": 32,
+        "same_user_keys_file_order_and_visible_item_ids_as_B": true,
+        "sid_sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18"
+      },
+      {
+        "route": "A",
+        "sha256": "3c7272bb7427d11f20d8c1231347a873de1501c6e0d8f2a40656f59be9eb2e61",
+        "users": 32,
+        "same_user_keys_file_order_and_visible_item_ids_as_B": true,
+        "sid_sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68"
+      },
+      {
+        "route": "MLP",
+        "sha256": "dbe80110171ef657bd861fc2aa2d50b657086d0abceb83b640f1079881b48aa8",
+        "users": 32,
+        "same_user_keys_file_order_and_visible_item_ids_as_B": true,
+        "sid_sha256": "2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba"
+      }
+    ],
+    "common_key_set_sha256": "1c072ec3f7ed3452d6730542e0ff1afe2ca6a974e5ce4f651f532f1385df4e28",
+    "qualification": "Full metadata coverage is distinct from 19-sample model evaluation. The three fixed32 files share raw user/history identities but use different SID/checkpoint conditions."
+  },
+  "attention_review": {
+    "generation_observation": [
+      "Actual generation cross-attention, last decoder layer, last query, six retained heads; no generated-prefix replay and no attention backend switch.",
+      "Original beam step executes once. Saved parent identity uses exact unique selected prefix matching; final-Top1 traces preselection parent rows.",
+      "Step-zero has one parent; later steps have ten; observed decoder query lengths are [1,2,1,1].",
+      "Local-first parent rank zero at each step is labeled separately from the final-Top1 ancestor trajectory.",
+      "Raw head values and final head means saved as numeric tensors; four rows are four target-SID generation steps.",
+      "PNG uses raw head means, all encoder positions, separate padding mask, one shared color scale within each figure, no per-row normalization or selected-region crop.",
+      "Observer restores hooks/method overrides including its own exception probe. OFF/ON generation SID and score, CPU/CUDA RNG and parameters are exactly equal in each recorded Normal case."
+    ],
+    "A_B_Normal_captures": [
+      {
+        "job": "beauty-b-attention-r2",
+        "verified_export_files": 22,
+        "record_sha256": "b43a7ed7a2c54e5401312d8515af4be4e6896e069db1907dc198729c13157a1c",
+        "arrays_sha256": "d0d0e41443277cf173fee1be52eb09cf05d42da75de76cbaec576b454b79b94c",
+        "sample_keys": [
+          "8cf864058b2d2538d8935a0b",
+          "92d5afb4333817d4c70dbf98",
+          "0c5c2ac27df9c075229aabde"
+        ],
+        "visible_history_items": [
+          3,
+          5,
+          7
+        ],
+        "cross_shape": [
+          3,
+          4,
+          6,
+          150
+        ],
+        "normal_only": true,
+        "query_lengths": [
+          1,
+          2,
+          1,
+          1
+        ],
+        "independent_parent_prefix_check": true,
+        "final_ancestor_heads_exact": true,
+        "local_first_heads_exact": true,
+        "head_means_exact": true,
+        "backtracked_top1_sid_exact": true,
+        "masked_mass_exact_zero": true,
+        "float64_row_head_sum_range": [
+          0.9999999096617103,
+          1.0000000896957317
+        ],
+        "pngs": [
+          {
+            "file": "sample_000_cross_attention.png",
+            "sha256": "23343146d4bc19cca4841fc8789ec4c5cc8cc52c8de6dc5387bff357bc9fd9d4",
+            "bytes": 151795,
+            "size": [
+              2880,
+              1280
+            ],
+            "reopened_nonconstant": true
+          },
+          {
+            "file": "sample_001_cross_attention.png",
+            "sha256": "a9633255dae46469cb8fc44aa0f1a41ff17c304ff7aed7319e2fc35d4cf04003",
+            "bytes": 147180,
+            "size": [
+              2880,
+              1280
+            ],
+            "reopened_nonconstant": true
+          },
+          {
+            "file": "sample_002_cross_attention.png",
+            "sha256": "fd2f443fcef7e79f84dc08c1d36a5c3e3fc123d27bbd04880afd8fa52f2e08cb",
+            "bytes": 151564,
+            "size": [
+              2880,
+              1280
+            ],
+            "reopened_nonconstant": true
+          }
+        ],
+        "off_on": {
+          "sid_exact": true,
+          "scores": {
+            "max_absolute": 0,
+            "allclose": true,
+            "exact": true
+          },
+          "cpu_rng_same": true,
+          "cuda_rng_same": true,
+          "parameter_sha256_unchanged": true,
+          "model_overrides_restored": true,
+          "stack_hooks_restored": true
+        }
+      },
+      {
+        "job": "beauty-a-attention-r3",
+        "verified_export_files": 22,
+        "record_sha256": "281e9141396c9d00a00dfe0e6f28c1f6ca3a994f4f7f4f81e1c7664f77834482",
+        "arrays_sha256": "792ade1e6ac0f33b06055279fe13245332fc1c17894b78177cce6160c289f236",
+        "sample_keys": [
+          "85e3d5e84ea2fc4160440501",
+          "7f9138bbdfc811f37daf94db",
+          "60e56f1e39fb7c2d3f2597fa"
+        ],
+        "visible_history_items": [
+          7,
+          7,
+          3
+        ],
+        "cross_shape": [
+          3,
+          4,
+          6,
+          150
+        ],
+        "normal_only": true,
+        "query_lengths": [
+          1,
+          2,
+          1,
+          1
+        ],
+        "independent_parent_prefix_check": true,
+        "final_ancestor_heads_exact": true,
+        "local_first_heads_exact": true,
+        "head_means_exact": true,
+        "backtracked_top1_sid_exact": true,
+        "masked_mass_exact_zero": true,
+        "float64_row_head_sum_range": [
+          0.9999998984858394,
+          1.0000001266598701
+        ],
+        "pngs": [
+          {
+            "file": "sample_000_cross_attention.png",
+            "sha256": "7f79a1ef2c299418a7e0dfa736ab0a23ab85353e02613d1a5a32b19ca8d876fc",
+            "bytes": 154643,
+            "size": [
+              2880,
+              1280
+            ],
+            "reopened_nonconstant": true
+          },
+          {
+            "file": "sample_001_cross_attention.png",
+            "sha256": "5adc63a95cace97972e9f0d6b9b72f49490e84b0aecd9413ecdc74045108be47",
+            "bytes": 148998,
+            "size": [
+              2880,
+              1280
+            ],
+            "reopened_nonconstant": true
+          },
+          {
+            "file": "sample_002_cross_attention.png",
+            "sha256": "810254702710f311bf703c5887d6f48e73e8c3f5ca352c7b3930962972d7c0df",
+            "bytes": 147407,
+            "size": [
+              2880,
+              1280
+            ],
+            "reopened_nonconstant": true
+          }
+        ],
+        "off_on": {
+          "sid_exact": true,
+          "scores": {
+            "max_absolute": 0,
+            "allclose": true,
+            "exact": true
+          },
+          "cpu_rng_same": true,
+          "cuda_rng_same": true,
+          "parameter_sha256_unchanged": true,
+          "model_overrides_restored": true,
+          "stack_hooks_restored": true
+        }
+      }
+    ],
+    "MLP_engineering_Normal_capture": {
+      "job": "beauty-mlp-attention-engineering-r3",
+      "verified_export_files": 22,
+      "record_sha256": "ee3d26ffdb2e61c3fff454b7de0cff1e7ae3cab1577f08cb62ce573464e57543",
+      "arrays_sha256": "a1f7815a3cf99266c6bbdab3847debf5c0cfb5e9d2d289fcb832359c00756c26",
+      "sample_keys": [
+        "85e3d5e84ea2fc4160440501",
+        "7f9138bbdfc811f37daf94db",
+        "60e56f1e39fb7c2d3f2597fa"
+      ],
+      "visible_history_items": [
+        7,
+        7,
+        3
+      ],
+      "cross_shape": [
+        3,
+        4,
+        6,
+        30
+      ],
+      "normal_only": true,
+      "query_lengths": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "independent_parent_prefix_check": true,
+      "final_ancestor_heads_exact": true,
+      "head_means_exact": true,
+      "backtracked_top1_sid_exact": true,
+      "masked_mass_exact_zero": true,
+      "all_encoder_positions_are_items_no_SEP": true,
+      "engineering_checkpoint": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-resume-r2/output/checkpoints/engineering-final.ckpt",
+        "sha256": "49eb045c6346c32d87be3605f59a3bcf9504d7da87495e659ddd92b106958290",
+        "bytes": 161299736
+      },
+      "pngs": [
+        {
+          "file": "sample_000_cross_attention.png",
+          "sha256": "b46542a71a16408c7fbc602d589b7573f12851c6177032a36b1d6954843dedb7",
+          "bytes": 145320,
+          "size": [
+            2880,
+            1280
+          ],
+          "reopened_nonconstant": true
+        },
+        {
+          "file": "sample_001_cross_attention.png",
+          "sha256": "9bdc1b58bce3cffc96091bd758a0d88b2e21bd09bdf0b619541f0f637a1e356e",
+          "bytes": 145181,
+          "size": [
+            2880,
+            1280
+          ],
+          "reopened_nonconstant": true
+        },
+        {
+          "file": "sample_002_cross_attention.png",
+          "sha256": "0ab317ef821a526f5f61353b82163605e22cf2d36d12ee656532936ce61fd1aa",
+          "bytes": 144580,
+          "size": [
+            2880,
+            1280
+          ],
+          "reopened_nonconstant": true
+        }
+      ],
+      "off_on": {
+        "sid_exact": true,
+        "scores": {
+          "max_absolute": 0,
+          "allclose": true,
+          "exact": true
+        },
+        "cpu_rng_same": true,
+        "cuda_rng_same": true,
+        "parameter_sha256_unchanged": true,
+        "model_overrides_restored": true,
+        "stack_hooks_restored": true
+      }
+    },
+    "mass_bookkeeping": [
+      {
+        "job": "beauty-b-attention-r2",
+        "final_top1_head_mean_sep_mass_per_sample_per_step": [
+          [
+            0.40378135442733765,
+            0.4748038649559021,
+            0.5981011986732483,
+            0.5767439007759094
+          ],
+          [
+            0.3749619722366333,
+            0.5271028876304626,
+            0.5328885912895203,
+            0.5405173301696777
+          ],
+          [
+            0.43318575620651245,
+            0.500308632850647,
+            0.4831480383872986,
+            0.6037501692771912
+          ]
+        ],
+        "final_top1_head_mean_hidden_mass_per_sample_per_step": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "purpose": "Attention mass bookkeeping by actual token roles, not a row-similarity statistic"
+      },
+      {
+        "job": "beauty-a-attention-r3",
+        "final_top1_head_mean_sep_mass_per_sample_per_step": [
+          [
+            0.19451364874839783,
+            0.24299483001232147,
+            0.28452038764953613,
+            0.30420416593551636
+          ],
+          [
+            0.20195776224136353,
+            0.31421446800231934,
+            0.3489841818809509,
+            0.3512585759162903
+          ],
+          [
+            0.201011061668396,
+            0.25644180178642273,
+            0.3188360035419464,
+            0.3199569284915924
+          ]
+        ],
+        "final_top1_head_mean_hidden_mass_per_sample_per_step": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "purpose": "Attention mass bookkeeping by actual token roles, not a row-similarity statistic"
+      },
+      {
+        "job": "beauty-mlp-attention-engineering-r3",
+        "final_top1_head_mean_sep_mass_per_sample_per_step": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "final_top1_head_mean_hidden_mass_per_sample_per_step": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "purpose": "Attention mass bookkeeping by actual token roles, not a row-similarity statistic"
+      }
+    ],
+    "transformer_runtime_attention_source_sha256": "b7549e087cb919c198938cb5d2b198edc5a646f3982d504d15c790e43b66ea76",
+    "figure_interpretation": [
+      "Three small Normal captures and nine decoded PNGs validate production chain only; no scientific row-similarity threshold or conclusion is asserted.",
+      "B r2 uses old file enumeration and its first three users differ from A/MLP r3; it is not a matched-cohort A/B comparison.",
+      "A and B use different upstream/SID/checkpoint conditions. MLP uses a three-optimizer-update engineering checkpoint, not a validation-selected formally trained model.",
+      "MLP encoder has 30 item-aggregation slots without SEP; A/B have 150 item-code/SEP slots. No direct pixelwise comparison is licensed.",
+      "Approved fixed32 formal attention has not been collected. Actual Shuffle3/4 attention has not been collected or validated."
+    ],
+    "unadmitted_future_shuffle_capture_risks": [
+      {
+        "source": "experiments/beauty_extensions/observation.py",
+        "issue": "For A, permutation_trace_limit is set to existing_count+1 before the unobserved OFF generation. That consumes the one appended event; observed ON generation can then read the prior OFF event via permutation_events[-1]. Reset RNG makes permutations numerically equal but does not bind the record to the observed encoder-call identity.",
+        "affected_scope": "A shuffled attention call identity; current N=0 engineering captures are unaffected.",
+        "required_before_admission": "Bind full permutation and call identity to the actual observed generation, and verify without altering original random-call semantics."
+      },
+      {
+        "source": "experiments/beauty_extensions/observation.py",
+        "issue": "Outer capture_batch changes is_testing/capture flags without a try/finally restoring the prior values; only observer internal hooks/methods have demonstrated exception cleanup.",
+        "affected_scope": "Capture failures or reuse within a wider Trainer lifecycle; named successful isolated Normal captures are valid.",
+        "required_before_admission": "Demonstrate restoration of all outer runtime flags on failure and preserve prior state in the formal entrypoint."
+      }
+    ]
+  },
+  "formal_entrypoint_review_at_source_hashes_above": {
+    "cli_formal": "Existing branch only does Trainer.test. Truthy formal_approved/nonauthor_gate values are not identity-bound gate report verification.",
+    "formal_MLP_training_handler": "NOT_IMPLEMENTED_IN_REVIEWED_SOURCE",
+    "summarize_cli_handler": "NOT_IMPLEMENTED_IN_REVIEWED_SOURCE",
+    "results_recompute": "Implemented function and genuinely used by saved CPU verifier; this is not evidence that summarize CLI is connected.",
+    "verdict": "No READY_FOR_BEAUTY_RUN or formal NONAUTHOR_GATE_PASS can be signed from these files/evidence. A newly approved independent MLP stage may be reviewed separately when source/resource evidence exists."
+  },
+  "summary_readback": {
+    "path": "manifests/beauty-extensions/EXECUTION_SUMMARY.json",
+    "sha256_at_review": "d95b2897ab2091cdba2f616e154b3d9c620f8c56077d9f925ea96096dc473e01",
+    "observed_status": "PARTIAL_BLOCKED",
+    "formal_runs_started": 0,
+    "formal_runs_completed": 0,
+    "all_formal_nonauthor_gates": false,
+    "all_seven_formal_result_slots_NOT_RUN_with_null_metrics": true,
+    "later_authorization_correction": "The old MLP NEEDS_USER_DECISION/Decide budget text in this exact summary snapshot is superseded by the latest user approval. It must be updated to approved/resource-and-gate-pending before final publication; this report does not hash-bind future revised summaries."
+  },
+  "disposition": "Preserve true engineering passes and all failures; withhold B/formal attention admission. Stop B repairs at round 3. Review only the newly authorized independent MLP stage next, without reusing short-training/metric/RNG/callback state for formal training."
+}

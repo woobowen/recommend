@@ -73,3 +73,31 @@
 
 - [logs/inference/runs/2025-10-29/14-59-58 原config](https://github.com/woobowen/recommend/blob/84d4533fbdd6b010f54d671b433a9952608911ca/references/wmh-original/GRID/logs/inference/runs/2025-10-29/14-59-58/.hydra/config.yaml)，SHA-256 `2ef1c71862d1da06d3a959c9a0b144d158842486e54b9f5704738c19d133055a`；同目录overrides/hydra原文保留。 [完整CSV](https://github.com/woobowen/recommend/blob/84d4533fbdd6b010f54d671b433a9952608911ca/references/wmh-original/GRID/logs/inference/runs/2025-10-29/14-59-58/csv/version_0/metrics.csv) 的原test行：2，SHA-256 `dde27b856c0345821d64bc2bf9b599b2c03c0359775df8ddb24ea31fa750c70e`。
 - [logs/inference/runs/2025-10-29/15-47-20 原config](https://github.com/woobowen/recommend/blob/84d4533fbdd6b010f54d671b433a9952608911ca/references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/.hydra/config.yaml)，SHA-256 `c7c58df3dd7eaebca64bd316060540344a9cc7b81dd84bd5dbd94147c76f534f`；同目录overrides/hydra原文保留。 [完整CSV](https://github.com/woobowen/recommend/blob/84d4533fbdd6b010f54d671b433a9952608911ca/references/wmh-original/GRID/logs/inference/runs/2025-10-29/15-47-20/csv/version_0/metrics.csv) 的原test行：2，SHA-256 `5dc99b63777675e2a5def3720d99d505e43cf9ba5e173ce3a1ab2fb7db85a222`。
+
+
+## 2026-10-14 Beauty 执行：PARTIAL_BLOCKED
+
+本节记录本轮一次性授权，旧 P0 正文及禁跑记录保持历史含义。本轮已实际适配/加载/预跑；**六组 A/B Beauty 正式全量评测仍未启动。** A/B 三轮集中修正耗尽后停止追加修补，不能把小样本结果填进正式实验表。用户后来明确批准的独立 MLP 单卡方案已继续完成累积64、完整验证与原callbacks生命周期检查，其当前准入/正式状态单独见 [MLP说明](mlp.md) 和机器回执，不被 A/B 阻塞替代。
+
+|实验/路线|代码与资产|有效配置来源|采用值|原件/适配差异|确认依据|预跑/正式准入|
+|---|---|---|---|---|---|---|
+|A Normal/Shuffle3/4|author/models.py 继承冻结作者双表；T5/R-Kmeans SID 09-15/20-54-16 + 双表 step4800 11-03/02-47-09|manifests/beauty-extensions/effective-config-sources/a-t5-rkmeans.yaml|H4/E128/U256/K10、seed42、prefix=false、L120、独立 encoder/decoder SID 表|接口桥接、原重排函数加只读 trace/回放；不复制权重、不改正文|用户本轮明确批准，checkpoint 内嵌 SID exact，178 state tensors 键/shape/值 exact|配对及静态/输入通过，3用户真实生成 attention 通过；A 完整 OFF/Shuffle/Trainer 门未完成|
+|B Normal/Shuffle3/4|baseline.py 在原共享表 encoder lookup 后复用作者函数；Qwen/R-Kmeans SID + 共享表 step12500|effective-config-sources/b-qwen-rkmeans.yaml|H4/E128/U256/K10、seed42、prefix=false、L120、SEP、无用户表|仅 encoder 作用域 lookup hook；不改参数/decoder/beam/evaluator，OFF 无额外全局随机数|用户本轮明确批准，checkpoint 内嵌 SID exact，177 state tensors exact|同形状 OFF/缓存及三条件各19用户真实 test 完成；尾部验证设备错误使整条 smoke FAILED，正式门 BLOCKED|
+|Beauty MLP|author/models.py 继承原逐物品共享 MLP；真正 Beauty T5/RQ-VAE+STE SID 09-21/16-36-33|effective-config-sources/mlp-beauty-original.yaml|用户批准从零全参数、raw32/accum64/val6400、workers8/K10/FP32；原Adam/选模/早停/max320000/10epochs，硬12h|原聚合、共享SID表、无SEP、末码mask/AR loss保留；独立mlp_formal入口、hash绑定非作者门、预算中断保存边界|用户两次明确批准；原配置/源码/历史run记录；2次真实acc64更新及完整val、另1次更新的原callbacks→strict best→16用户test闭环已通过|资源/覆盖/生命周期通过；正式准入与运行结果见独立gate、MLP说明及EXECUTION_SUMMARY，预跑状态不流入新训练|
+|Cross-attention|attention/{capture,records,plot}.py，真实生成观测|用户批准的固定32用户、双路径方案|最终Top1祖先主口径 + 每步局部首beam对照，最后层、逐head保存/head均值展示|不重写beam，不换后端，不裁剪/逐行缩放；完整父链/位置/矩阵/图|用户明确批准；A/B/MLP 各自固定32已保存|只完成各3用户工程采集图；32用户正式采集 NOT_RUN，MLP图来自3 update工程cp|
+
+A/B 是不同训练模型和上游条件，各自 Normal 才是本组对照。MLP 采用另行批准的不同 SID 条件，不能声称相对于 A/B 的纯结构对照；无匹配Normal时不补训。具体资产、来源清单、同一 Beauty 数据物品轴继承和只读恢复证据见 [source-review](../../../manifests/beauty-extensions/source-review.json)。
+
+**真实范围。** 两套/三套 SID 均为 `[4,12101]` 整数表；第四位按原 producer 消歧（前三位唯一者0；碰撞组全部成员按索引次序1..组大小），不是第四层量化。完整 testing 元数据为22,363行/22,363不同用户、175文件、0重复，原物品→SID→目标/隐藏组逐条核验。testing 原始长度5..21物品，最长可见20；因此没有超过120-token窗口的真实样例，不声称测过真实截断边界。固定32 evaluation 用户的样本身份、输入/mask/目标、文件/行顺序都已保存，无原始 user_id 公开。
+
+**OFF 与数值边界。** B 同 batch 的原类/适配 hidden、四头logits、loss、SID/score精确相同；连续生成/反序及 B8→B1→B8 回环精确一致。不同 batch shape 的 score 有原模型共同漂移：旧r2首批8.335337e-6；按真实文件assignment的r3首批3.007054328918457e-5，原类与适配B1仍误差0。保留原容差/medium matmul设置与false诊断，不把跨shape偏差伪报为0，也没有据此证明唯一硬件根因。
+
+**修正额度与阻塞。** r0 checkpoint安全加载拒绝保存的partial元数据；r1用hash绑定、静态GLOBALS核查、局部safe_globals解决，随后版本记录误查tensorflow发行名；r2采用真实tensorflow-cpu发行名并核到跨batch原模型数值边界；r3保留该边界并完成真实test，但最后手动val复用CUDA输入时，Lightning Strategy.teardown已把模型移回CPU，发生device mismatch。该脚本设备管理错误未修，r3 job整体FAILED；不继续第四轮，不把已写预测/退出子项当全线PASS。完整日志、request/status与各版快照清单保留。
+
+**A/B未完成。** A路线内验收尚未齐全；B尾部验证/异常清理尚未通过；A正式8-worker生命周期未预跑；全部6组正式Normal/Shuffle NOT_RUN；A/B formal CLI原布尔门尚未升级为报告/代码/配置/资产hash绑定，其summarize子命令未接入（独立verify_saved_predictions与summarize_delivery入口已实测）。A/B不能标READY_FOR_BEAUTY_RUN。MLP的SID/初始化/训练预算已批准，独立正式handler及hash门已提供；其正式训练与32用户有效模型图必须按独立回执判断，不沿用本段早期未批准状态。
+
+**资源与保存。** 仅使用空闲物理GPU1，未抢占GPU0同学作业。必要5实体按归档索引恢复161,660,760 B，每member完整hash通过，未重审78GB原档案。现有GRID环境复用，新增系统/语言包/工具链安装=0，全局配置改动=0，未清理原件。服务器作业均由既有runner脱离SSH运行；完整job终态、用量和产物入口见 [EXECUTION_SUMMARY](../../../manifests/beauty-extensions/EXECUTION_SUMMARY.json)。
+
+恢复入口：`/home/bwwu/grid-audits/sid-extensions-p0/jobs/<job_id>/`；每个request的cwd绑定受控export快照和逐文件SHA，不假称Git checkout。最后交付Git提交只发布实际源码/配置/精简回执；大型checkpoint留服务器，必要外部矩阵与完整回执在轻量ZIP中。A/B需要新的修正额度后才能继续；MLP按已批准条件独立推进，不重复询问已批准的资产、attention或MLP协议。
+
+作者路线按已保全实现适配，非逐字历史运行复现；历史唯一Python绑定缺口继续保留。源码入口：[CLI](../../../experiments/beauty_extensions/cli.py)、[A/MLP派生](../../../experiments/beauty_extensions/author/models.py)、[B接入](../../../experiments/beauty_extensions/baseline.py)、[attention观测](../../../experiments/beauty_extensions/attention/capture.py)。
