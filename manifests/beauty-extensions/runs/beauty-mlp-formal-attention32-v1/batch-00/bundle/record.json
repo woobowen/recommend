@@ -1,0 +1,5251 @@
+{
+  "schema": "grid-beauty-cross-attention-v1",
+  "arrays_file": "arrays.npz",
+  "arrays_sha256": "0e6092826b68c6e0fe49fa46d016394e1cf19296be8d70a3fc591c7ce99bb06f",
+  "bundle": {
+    "capture": {
+      "source": "actual generation; no prefix/encoder replay",
+      "layer": "last decoder layer",
+      "heads": "all heads retained; mean used for display",
+      "query": "actual final query at each generation step",
+      "parent_mapping": "unique exact prefix identity from unchanged original beam routine",
+      "layout": "sample-major, then parent beam",
+      "batch_size": 8,
+      "beam_size": 10,
+      "selected_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "sample_keys": [
+        "85e3d5e84ea2fc4160440501",
+        "7f9138bbdfc811f37daf94db",
+        "60e56f1e39fb7c2d3f2597fa",
+        "9082100c14ad222c707dc0f8",
+        "2eab12e922ad8b90787ffe8d",
+        "41ff5db10d61f3ef3009d217",
+        "0efe183b00c03f1e2909d921",
+        "a8e9f2863c957c8e2338463d"
+      ],
+      "encoder_calls": 1,
+      "backend": {
+        "name": "eager",
+        "stack_class": "transformers.models.t5.modeling_t5.T5Stack",
+        "attention_forward_sha256": "b7549e087cb919c198938cb5d2b198edc5a646f3982d504d15c790e43b66ea76",
+        "attention_module_file": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py"
+      },
+      "captured_cross_head_bytes": 178560,
+      "normalization": "raw separately normalized cross-attention; no rescaling",
+      "local_first_path": "preselection parent rank 0 independently at each step; not one final SID trajectory",
+      "final_top1_path": "final child rank 0 backtracked through each preselection parent"
+    },
+    "metadata": {
+      "spec": {
+        "route": "MLP",
+        "seed": 42,
+        "generation_k": 10,
+        "shuffle_n": 0,
+        "formal_approved": true,
+        "formal_protocol_user_approved": true,
+        "purpose": "Approved fixed first32 evaluation users; completed new Beauty MLP best checkpoint; actual-generation final Top1 ancestry and separate local-first beam",
+        "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/beauty",
+        "config": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/31a51bd5d203acea823411068ed47ba64304bdd0fb35f89f8f4c887091153fa8/config.yaml",
+          "sha256": "31a51bd5d203acea823411068ed47ba64304bdd0fb35f89f8f4c887091153fa8"
+        },
+        "sid": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba/merged_predictions_tensor.pt",
+          "sha256": "2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba"
+        },
+        "checkpoint": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-formal-v1/output/checkpoints/checkpoint_epoch=000_step=002600.ckpt",
+          "sha256": "52f18292490825bc7e172e762600b428a8dcb8c511d2dfc3d8f4fe4621335891",
+          "bytes": 161258134
+        },
+        "attention_cohort": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-smoke-r3/output/fixed_attention_samples.json",
+          "sha256": "dbe80110171ef657bd861fc2aa2d50b657086d0abceb83b640f1079881b48aa8"
+        },
+        "training_result": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-formal-v1/output/training_result.json",
+          "sha256": "320147c08fec70379ffbb70985f59fa9c390bc558d9918fb27bfcb164b490653",
+          "bytes": 5210
+        },
+        "training_job_status": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-formal-v1/status.json",
+          "sha256": "7161a15fdf79f23ef6652b7f69053828c1dcaa062f1cb1519ae65b11e27fb69e",
+          "bytes": 47925
+        }
+      },
+      "engineering_only": false,
+      "shuffle_n": 0,
+      "source_permutations": null,
+      "source": "actual generation, identical RNG starting state for OFF/ON engineering comparison",
+      "parameter_sha256": "977a4f7ff578e35e2c88150f23ae608b965e77c9407c13aee07a0d6971adb3b0"
+    },
+    "input_sids": {
+      "__array__": "array_0000",
+      "shape": [
+        8,
+        120
+      ],
+      "dtype": "int64"
+    },
+    "input_mask": {
+      "__array__": "array_0001",
+      "shape": [
+        8,
+        120
+      ],
+      "dtype": "int64"
+    },
+    "encoder_mask": {
+      "__array__": "array_0002",
+      "shape": [
+        8,
+        30
+      ],
+      "dtype": "int64"
+    },
+    "position_map": [
+      [
+        {
+          "history_slot": 0,
+          "item_id": 531,
+          "role": "item_aggregation",
+          "original_sids": [
+            207,
+            106,
+            232,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 0
+        },
+        {
+          "history_slot": 1,
+          "item_id": 3476,
+          "role": "item_aggregation",
+          "original_sids": [
+            231,
+            164,
+            136,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 1
+        },
+        {
+          "history_slot": 2,
+          "item_id": 5107,
+          "role": "item_aggregation",
+          "original_sids": [
+            132,
+            78,
+            136,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 2
+        },
+        {
+          "history_slot": 3,
+          "item_id": 3568,
+          "role": "item_aggregation",
+          "original_sids": [
+            148,
+            180,
+            161,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 3
+        },
+        {
+          "history_slot": 4,
+          "item_id": 887,
+          "role": "item_aggregation",
+          "original_sids": [
+            57,
+            154,
+            91,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 4
+        },
+        {
+          "history_slot": 5,
+          "item_id": 2859,
+          "role": "item_aggregation",
+          "original_sids": [
+            231,
+            171,
+            133,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 5
+        },
+        {
+          "history_slot": 6,
+          "item_id": 8924,
+          "role": "item_aggregation",
+          "original_sids": [
+            188,
+            29,
+            8,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 6
+        },
+        {
+          "history_slot": 7,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 7
+        },
+        {
+          "history_slot": 8,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 8
+        },
+        {
+          "history_slot": 9,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 9
+        },
+        {
+          "history_slot": 10,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 10
+        },
+        {
+          "history_slot": 11,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 11
+        },
+        {
+          "history_slot": 12,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 12
+        },
+        {
+          "history_slot": 13,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 13
+        },
+        {
+          "history_slot": 14,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 14
+        },
+        {
+          "history_slot": 15,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 15
+        },
+        {
+          "history_slot": 16,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 16
+        },
+        {
+          "history_slot": 17,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 17
+        },
+        {
+          "history_slot": 18,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 18
+        },
+        {
+          "history_slot": 19,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 19
+        },
+        {
+          "history_slot": 20,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 20
+        },
+        {
+          "history_slot": 21,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 21
+        },
+        {
+          "history_slot": 22,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 22
+        },
+        {
+          "history_slot": 23,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 23
+        },
+        {
+          "history_slot": 24,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 24
+        },
+        {
+          "history_slot": 25,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 25
+        },
+        {
+          "history_slot": 26,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 26
+        },
+        {
+          "history_slot": 27,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 27
+        },
+        {
+          "history_slot": 28,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 28
+        },
+        {
+          "history_slot": 29,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 29
+        }
+      ],
+      [
+        {
+          "history_slot": 0,
+          "item_id": 280,
+          "role": "item_aggregation",
+          "original_sids": [
+            169,
+            70,
+            211,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 0
+        },
+        {
+          "history_slot": 1,
+          "item_id": 887,
+          "role": "item_aggregation",
+          "original_sids": [
+            57,
+            154,
+            91,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 1
+        },
+        {
+          "history_slot": 2,
+          "item_id": 833,
+          "role": "item_aggregation",
+          "original_sids": [
+            101,
+            126,
+            129,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 2
+        },
+        {
+          "history_slot": 3,
+          "item_id": 3410,
+          "role": "item_aggregation",
+          "original_sids": [
+            184,
+            86,
+            80,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 3
+        },
+        {
+          "history_slot": 4,
+          "item_id": 2925,
+          "role": "item_aggregation",
+          "original_sids": [
+            91,
+            176,
+            196,
+            1
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 4
+        },
+        {
+          "history_slot": 5,
+          "item_id": 3467,
+          "role": "item_aggregation",
+          "original_sids": [
+            207,
+            176,
+            219,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 5
+        },
+        {
+          "history_slot": 6,
+          "item_id": 8552,
+          "role": "item_aggregation",
+          "original_sids": [
+            30,
+            91,
+            180,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 6
+        },
+        {
+          "history_slot": 7,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 7
+        },
+        {
+          "history_slot": 8,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 8
+        },
+        {
+          "history_slot": 9,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 9
+        },
+        {
+          "history_slot": 10,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 10
+        },
+        {
+          "history_slot": 11,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 11
+        },
+        {
+          "history_slot": 12,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 12
+        },
+        {
+          "history_slot": 13,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 13
+        },
+        {
+          "history_slot": 14,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 14
+        },
+        {
+          "history_slot": 15,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 15
+        },
+        {
+          "history_slot": 16,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 16
+        },
+        {
+          "history_slot": 17,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 17
+        },
+        {
+          "history_slot": 18,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 18
+        },
+        {
+          "history_slot": 19,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 19
+        },
+        {
+          "history_slot": 20,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 20
+        },
+        {
+          "history_slot": 21,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 21
+        },
+        {
+          "history_slot": 22,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 22
+        },
+        {
+          "history_slot": 23,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 23
+        },
+        {
+          "history_slot": 24,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 24
+        },
+        {
+          "history_slot": 25,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 25
+        },
+        {
+          "history_slot": 26,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 26
+        },
+        {
+          "history_slot": 27,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 27
+        },
+        {
+          "history_slot": 28,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 28
+        },
+        {
+          "history_slot": 29,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 29
+        }
+      ],
+      [
+        {
+          "history_slot": 0,
+          "item_id": 4198,
+          "role": "item_aggregation",
+          "original_sids": [
+            23,
+            163,
+            222,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 0
+        },
+        {
+          "history_slot": 1,
+          "item_id": 4382,
+          "role": "item_aggregation",
+          "original_sids": [
+            54,
+            118,
+            146,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 1
+        },
+        {
+          "history_slot": 2,
+          "item_id": 6986,
+          "role": "item_aggregation",
+          "original_sids": [
+            174,
+            119,
+            23,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 2
+        },
+        {
+          "history_slot": 3,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 3
+        },
+        {
+          "history_slot": 4,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 4
+        },
+        {
+          "history_slot": 5,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 5
+        },
+        {
+          "history_slot": 6,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 6
+        },
+        {
+          "history_slot": 7,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 7
+        },
+        {
+          "history_slot": 8,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 8
+        },
+        {
+          "history_slot": 9,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 9
+        },
+        {
+          "history_slot": 10,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 10
+        },
+        {
+          "history_slot": 11,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 11
+        },
+        {
+          "history_slot": 12,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 12
+        },
+        {
+          "history_slot": 13,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 13
+        },
+        {
+          "history_slot": 14,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 14
+        },
+        {
+          "history_slot": 15,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 15
+        },
+        {
+          "history_slot": 16,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 16
+        },
+        {
+          "history_slot": 17,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 17
+        },
+        {
+          "history_slot": 18,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 18
+        },
+        {
+          "history_slot": 19,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 19
+        },
+        {
+          "history_slot": 20,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 20
+        },
+        {
+          "history_slot": 21,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 21
+        },
+        {
+          "history_slot": 22,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 22
+        },
+        {
+          "history_slot": 23,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 23
+        },
+        {
+          "history_slot": 24,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 24
+        },
+        {
+          "history_slot": 25,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 25
+        },
+        {
+          "history_slot": 26,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 26
+        },
+        {
+          "history_slot": 27,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 27
+        },
+        {
+          "history_slot": 28,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 28
+        },
+        {
+          "history_slot": 29,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 29
+        }
+      ],
+      [
+        {
+          "history_slot": 0,
+          "item_id": 531,
+          "role": "item_aggregation",
+          "original_sids": [
+            207,
+            106,
+            232,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 0
+        },
+        {
+          "history_slot": 1,
+          "item_id": 470,
+          "role": "item_aggregation",
+          "original_sids": [
+            69,
+            0,
+            44,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 1
+        },
+        {
+          "history_slot": 2,
+          "item_id": 4849,
+          "role": "item_aggregation",
+          "original_sids": [
+            4,
+            196,
+            165,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 2
+        },
+        {
+          "history_slot": 3,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 3
+        },
+        {
+          "history_slot": 4,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 4
+        },
+        {
+          "history_slot": 5,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 5
+        },
+        {
+          "history_slot": 6,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 6
+        },
+        {
+          "history_slot": 7,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 7
+        },
+        {
+          "history_slot": 8,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 8
+        },
+        {
+          "history_slot": 9,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 9
+        },
+        {
+          "history_slot": 10,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 10
+        },
+        {
+          "history_slot": 11,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 11
+        },
+        {
+          "history_slot": 12,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 12
+        },
+        {
+          "history_slot": 13,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 13
+        },
+        {
+          "history_slot": 14,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 14
+        },
+        {
+          "history_slot": 15,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 15
+        },
+        {
+          "history_slot": 16,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 16
+        },
+        {
+          "history_slot": 17,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 17
+        },
+        {
+          "history_slot": 18,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 18
+        },
+        {
+          "history_slot": 19,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 19
+        },
+        {
+          "history_slot": 20,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 20
+        },
+        {
+          "history_slot": 21,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 21
+        },
+        {
+          "history_slot": 22,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 22
+        },
+        {
+          "history_slot": 23,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 23
+        },
+        {
+          "history_slot": 24,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 24
+        },
+        {
+          "history_slot": 25,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 25
+        },
+        {
+          "history_slot": 26,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 26
+        },
+        {
+          "history_slot": 27,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 27
+        },
+        {
+          "history_slot": 28,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 28
+        },
+        {
+          "history_slot": 29,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 29
+        }
+      ],
+      [
+        {
+          "history_slot": 0,
+          "item_id": 2039,
+          "role": "item_aggregation",
+          "original_sids": [
+            169,
+            149,
+            241,
+            1
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 0
+        },
+        {
+          "history_slot": 1,
+          "item_id": 3822,
+          "role": "item_aggregation",
+          "original_sids": [
+            101,
+            167,
+            46,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 1
+        },
+        {
+          "history_slot": 2,
+          "item_id": 2553,
+          "role": "item_aggregation",
+          "original_sids": [
+            4,
+            156,
+            167,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 2
+        },
+        {
+          "history_slot": 3,
+          "item_id": 11927,
+          "role": "item_aggregation",
+          "original_sids": [
+            144,
+            149,
+            53,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 3
+        },
+        {
+          "history_slot": 4,
+          "item_id": 4289,
+          "role": "item_aggregation",
+          "original_sids": [
+            101,
+            67,
+            47,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 4
+        },
+        {
+          "history_slot": 5,
+          "item_id": 270,
+          "role": "item_aggregation",
+          "original_sids": [
+            169,
+            175,
+            103,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 5
+        },
+        {
+          "history_slot": 6,
+          "item_id": 7526,
+          "role": "item_aggregation",
+          "original_sids": [
+            129,
+            154,
+            22,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 6
+        },
+        {
+          "history_slot": 7,
+          "item_id": 487,
+          "role": "item_aggregation",
+          "original_sids": [
+            153,
+            84,
+            187,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 7
+        },
+        {
+          "history_slot": 8,
+          "item_id": 268,
+          "role": "item_aggregation",
+          "original_sids": [
+            101,
+            113,
+            246,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 8
+        },
+        {
+          "history_slot": 9,
+          "item_id": 9229,
+          "role": "item_aggregation",
+          "original_sids": [
+            169,
+            7,
+            229,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 9
+        },
+        {
+          "history_slot": 10,
+          "item_id": 325,
+          "role": "item_aggregation",
+          "original_sids": [
+            192,
+            245,
+            158,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 10
+        },
+        {
+          "history_slot": 11,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 11
+        },
+        {
+          "history_slot": 12,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 12
+        },
+        {
+          "history_slot": 13,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 13
+        },
+        {
+          "history_slot": 14,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 14
+        },
+        {
+          "history_slot": 15,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 15
+        },
+        {
+          "history_slot": 16,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 16
+        },
+        {
+          "history_slot": 17,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 17
+        },
+        {
+          "history_slot": 18,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 18
+        },
+        {
+          "history_slot": 19,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 19
+        },
+        {
+          "history_slot": 20,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 20
+        },
+        {
+          "history_slot": 21,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 21
+        },
+        {
+          "history_slot": 22,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 22
+        },
+        {
+          "history_slot": 23,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 23
+        },
+        {
+          "history_slot": 24,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 24
+        },
+        {
+          "history_slot": 25,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 25
+        },
+        {
+          "history_slot": 26,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 26
+        },
+        {
+          "history_slot": 27,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 27
+        },
+        {
+          "history_slot": 28,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 28
+        },
+        {
+          "history_slot": 29,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 29
+        }
+      ],
+      [
+        {
+          "history_slot": 0,
+          "item_id": 531,
+          "role": "item_aggregation",
+          "original_sids": [
+            207,
+            106,
+            232,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 0
+        },
+        {
+          "history_slot": 1,
+          "item_id": 10067,
+          "role": "item_aggregation",
+          "original_sids": [
+            187,
+            90,
+            202,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 1
+        },
+        {
+          "history_slot": 2,
+          "item_id": 4090,
+          "role": "item_aggregation",
+          "original_sids": [
+            85,
+            135,
+            48,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 2
+        },
+        {
+          "history_slot": 3,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 3
+        },
+        {
+          "history_slot": 4,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 4
+        },
+        {
+          "history_slot": 5,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 5
+        },
+        {
+          "history_slot": 6,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 6
+        },
+        {
+          "history_slot": 7,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 7
+        },
+        {
+          "history_slot": 8,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 8
+        },
+        {
+          "history_slot": 9,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 9
+        },
+        {
+          "history_slot": 10,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 10
+        },
+        {
+          "history_slot": 11,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 11
+        },
+        {
+          "history_slot": 12,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 12
+        },
+        {
+          "history_slot": 13,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 13
+        },
+        {
+          "history_slot": 14,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 14
+        },
+        {
+          "history_slot": 15,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 15
+        },
+        {
+          "history_slot": 16,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 16
+        },
+        {
+          "history_slot": 17,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 17
+        },
+        {
+          "history_slot": 18,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 18
+        },
+        {
+          "history_slot": 19,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 19
+        },
+        {
+          "history_slot": 20,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 20
+        },
+        {
+          "history_slot": 21,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 21
+        },
+        {
+          "history_slot": 22,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 22
+        },
+        {
+          "history_slot": 23,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 23
+        },
+        {
+          "history_slot": 24,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 24
+        },
+        {
+          "history_slot": 25,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 25
+        },
+        {
+          "history_slot": 26,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 26
+        },
+        {
+          "history_slot": 27,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 27
+        },
+        {
+          "history_slot": 28,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 28
+        },
+        {
+          "history_slot": 29,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 29
+        }
+      ],
+      [
+        {
+          "history_slot": 0,
+          "item_id": 531,
+          "role": "item_aggregation",
+          "original_sids": [
+            207,
+            106,
+            232,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 0
+        },
+        {
+          "history_slot": 1,
+          "item_id": 4801,
+          "role": "item_aggregation",
+          "original_sids": [
+            120,
+            164,
+            192,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 1
+        },
+        {
+          "history_slot": 2,
+          "item_id": 5153,
+          "role": "item_aggregation",
+          "original_sids": [
+            6,
+            65,
+            91,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 2
+        },
+        {
+          "history_slot": 3,
+          "item_id": 6644,
+          "role": "item_aggregation",
+          "original_sids": [
+            0,
+            64,
+            127,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 3
+        },
+        {
+          "history_slot": 4,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 4
+        },
+        {
+          "history_slot": 5,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 5
+        },
+        {
+          "history_slot": 6,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 6
+        },
+        {
+          "history_slot": 7,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 7
+        },
+        {
+          "history_slot": 8,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 8
+        },
+        {
+          "history_slot": 9,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 9
+        },
+        {
+          "history_slot": 10,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 10
+        },
+        {
+          "history_slot": 11,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 11
+        },
+        {
+          "history_slot": 12,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 12
+        },
+        {
+          "history_slot": 13,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 13
+        },
+        {
+          "history_slot": 14,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 14
+        },
+        {
+          "history_slot": 15,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 15
+        },
+        {
+          "history_slot": 16,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 16
+        },
+        {
+          "history_slot": 17,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 17
+        },
+        {
+          "history_slot": 18,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 18
+        },
+        {
+          "history_slot": 19,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 19
+        },
+        {
+          "history_slot": 20,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 20
+        },
+        {
+          "history_slot": 21,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 21
+        },
+        {
+          "history_slot": 22,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 22
+        },
+        {
+          "history_slot": 23,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 23
+        },
+        {
+          "history_slot": 24,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 24
+        },
+        {
+          "history_slot": 25,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 25
+        },
+        {
+          "history_slot": 26,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 26
+        },
+        {
+          "history_slot": 27,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 27
+        },
+        {
+          "history_slot": 28,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 28
+        },
+        {
+          "history_slot": 29,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 29
+        }
+      ],
+      [
+        {
+          "history_slot": 0,
+          "item_id": 4538,
+          "role": "item_aggregation",
+          "original_sids": [
+            211,
+            78,
+            183,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 0
+        },
+        {
+          "history_slot": 1,
+          "item_id": 2107,
+          "role": "item_aggregation",
+          "original_sids": [
+            103,
+            251,
+            218,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 1
+        },
+        {
+          "history_slot": 2,
+          "item_id": 531,
+          "role": "item_aggregation",
+          "original_sids": [
+            207,
+            106,
+            232,
+            0
+          ],
+          "original_code_mask": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "visible": 1,
+          "aggregation_axis": "H*E",
+          "encoder_position": 2
+        },
+        {
+          "history_slot": 3,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 3
+        },
+        {
+          "history_slot": 4,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 4
+        },
+        {
+          "history_slot": 5,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 5
+        },
+        {
+          "history_slot": 6,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 6
+        },
+        {
+          "history_slot": 7,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 7
+        },
+        {
+          "history_slot": 8,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 8
+        },
+        {
+          "history_slot": 9,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 9
+        },
+        {
+          "history_slot": 10,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 10
+        },
+        {
+          "history_slot": 11,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 11
+        },
+        {
+          "history_slot": 12,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 12
+        },
+        {
+          "history_slot": 13,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 13
+        },
+        {
+          "history_slot": 14,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 14
+        },
+        {
+          "history_slot": 15,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 15
+        },
+        {
+          "history_slot": 16,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 16
+        },
+        {
+          "history_slot": 17,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 17
+        },
+        {
+          "history_slot": 18,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 18
+        },
+        {
+          "history_slot": 19,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 19
+        },
+        {
+          "history_slot": 20,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 20
+        },
+        {
+          "history_slot": 21,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 21
+        },
+        {
+          "history_slot": 22,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 22
+        },
+        {
+          "history_slot": 23,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 23
+        },
+        {
+          "history_slot": 24,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 24
+        },
+        {
+          "history_slot": 25,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 25
+        },
+        {
+          "history_slot": 26,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 26
+        },
+        {
+          "history_slot": 27,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 27
+        },
+        {
+          "history_slot": 28,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 28
+        },
+        {
+          "history_slot": 29,
+          "item_id": -1,
+          "role": "item_aggregation",
+          "original_sids": [
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "original_code_mask": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "visible": 0,
+          "aggregation_axis": "H*E",
+          "encoder_position": 29
+        }
+      ]
+    ],
+    "steps": [
+      {
+        "cross_heads": {
+          "__array__": "array_0003",
+          "shape": [
+            8,
+            1,
+            6,
+            30
+          ],
+          "dtype": "float32"
+        },
+        "attention_dtype": "torch.float32",
+        "query_length_before_last_selection": 1,
+        "last_query_index": 0,
+        "parent_beams": 1,
+        "hierarchy": 0,
+        "query_identity": "BOS",
+        "local_first_prefix": {
+          "__array__": "array_0004",
+          "shape": [
+            8,
+            0
+          ],
+          "dtype": "int64"
+        },
+        "parent_indices": {
+          "__array__": "array_0005",
+          "shape": [
+            8,
+            10
+          ],
+          "dtype": "int64"
+        },
+        "generated_ids": {
+          "__array__": "array_0006",
+          "shape": [
+            8,
+            10,
+            1
+          ],
+          "dtype": "int64"
+        },
+        "scores": {
+          "__array__": "array_0007",
+          "shape": [
+            8,
+            10
+          ],
+          "dtype": "float32"
+        }
+      },
+      {
+        "cross_heads": {
+          "__array__": "array_0008",
+          "shape": [
+            8,
+            10,
+            6,
+            30
+          ],
+          "dtype": "float32"
+        },
+        "attention_dtype": "torch.float32",
+        "query_length_before_last_selection": 2,
+        "last_query_index": 1,
+        "parent_beams": 10,
+        "hierarchy": 1,
+        "query_identity": "last token in selected prefix of length 1",
+        "local_first_prefix": {
+          "__array__": "array_0009",
+          "shape": [
+            8,
+            1
+          ],
+          "dtype": "int64"
+        },
+        "parent_indices": {
+          "__array__": "array_0010",
+          "shape": [
+            8,
+            10
+          ],
+          "dtype": "int64"
+        },
+        "generated_ids": {
+          "__array__": "array_0011",
+          "shape": [
+            8,
+            10,
+            2
+          ],
+          "dtype": "int64"
+        },
+        "scores": {
+          "__array__": "array_0012",
+          "shape": [
+            8,
+            10
+          ],
+          "dtype": "float32"
+        }
+      },
+      {
+        "cross_heads": {
+          "__array__": "array_0013",
+          "shape": [
+            8,
+            10,
+            6,
+            30
+          ],
+          "dtype": "float32"
+        },
+        "attention_dtype": "torch.float32",
+        "query_length_before_last_selection": 1,
+        "last_query_index": 0,
+        "parent_beams": 10,
+        "hierarchy": 2,
+        "query_identity": "last token in selected prefix of length 2",
+        "local_first_prefix": {
+          "__array__": "array_0014",
+          "shape": [
+            8,
+            2
+          ],
+          "dtype": "int64"
+        },
+        "parent_indices": {
+          "__array__": "array_0015",
+          "shape": [
+            8,
+            10
+          ],
+          "dtype": "int64"
+        },
+        "generated_ids": {
+          "__array__": "array_0016",
+          "shape": [
+            8,
+            10,
+            3
+          ],
+          "dtype": "int64"
+        },
+        "scores": {
+          "__array__": "array_0017",
+          "shape": [
+            8,
+            10
+          ],
+          "dtype": "float32"
+        }
+      },
+      {
+        "cross_heads": {
+          "__array__": "array_0018",
+          "shape": [
+            8,
+            10,
+            6,
+            30
+          ],
+          "dtype": "float32"
+        },
+        "attention_dtype": "torch.float32",
+        "query_length_before_last_selection": 1,
+        "last_query_index": 0,
+        "parent_beams": 10,
+        "hierarchy": 3,
+        "query_identity": "last token in selected prefix of length 3",
+        "local_first_prefix": {
+          "__array__": "array_0019",
+          "shape": [
+            8,
+            3
+          ],
+          "dtype": "int64"
+        },
+        "parent_indices": {
+          "__array__": "array_0020",
+          "shape": [
+            8,
+            10
+          ],
+          "dtype": "int64"
+        },
+        "generated_ids": {
+          "__array__": "array_0021",
+          "shape": [
+            8,
+            10,
+            4
+          ],
+          "dtype": "int64"
+        },
+        "scores": {
+          "__array__": "array_0022",
+          "shape": [
+            8,
+            10
+          ],
+          "dtype": "float32"
+        }
+      }
+    ],
+    "final_generated_ids": {
+      "__array__": "array_0023",
+      "shape": [
+        8,
+        10,
+        4
+      ],
+      "dtype": "int64"
+    },
+    "final_scores": {
+      "__array__": "array_0024",
+      "shape": [
+        8,
+        10
+      ],
+      "dtype": "float32"
+    },
+    "paths": {
+      "local_first_heads": {
+        "__array__": "array_0025",
+        "shape": [
+          8,
+          4,
+          6,
+          30
+        ],
+        "dtype": "float32"
+      },
+      "final_top1_heads": {
+        "__array__": "array_0026",
+        "shape": [
+          8,
+          4,
+          6,
+          30
+        ],
+        "dtype": "float32"
+      },
+      "local_first_cross": {
+        "__array__": "array_0027",
+        "shape": [
+          8,
+          4,
+          30
+        ],
+        "dtype": "float32"
+      },
+      "final_top1_cross": {
+        "__array__": "array_0028",
+        "shape": [
+          8,
+          4,
+          30
+        ],
+        "dtype": "float32"
+      },
+      "final_parent_indices": {
+        "__array__": "array_0029",
+        "shape": [
+          8,
+          4
+        ],
+        "dtype": "int64"
+      },
+      "final_child_indices": {
+        "__array__": "array_0030",
+        "shape": [
+          8,
+          4
+        ],
+        "dtype": "int64"
+      },
+      "backtracked_top1_sid": {
+        "__array__": "array_0031",
+        "shape": [
+          8,
+          4
+        ],
+        "dtype": "int64"
+      }
+    },
+    "quality": {
+      "local_first_heads": {
+        "shape": [
+          8,
+          4,
+          6,
+          30
+        ],
+        "min_value": 0.0,
+        "max_value": 0.9964943528175354,
+        "row_head_sum_min": 0.9999998807907104,
+        "row_head_sum_max": 1.0000001192092896,
+        "masked_mass_min": 0.0,
+        "masked_mass_max": 0.0
+      },
+      "final_top1_heads": {
+        "shape": [
+          8,
+          4,
+          6,
+          30
+        ],
+        "min_value": 0.0,
+        "max_value": 0.9964943528175354,
+        "row_head_sum_min": 0.9999998807907104,
+        "row_head_sum_max": 1.0000001192092896,
+        "masked_mass_min": 0.0,
+        "masked_mass_max": 0.0
+      }
+    }
+  }
+}

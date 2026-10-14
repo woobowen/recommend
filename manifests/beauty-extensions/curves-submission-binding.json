@@ -1,0 +1,984 @@
+{
+  "rejection": [
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/evidence/transport/new-server/2026-10-15T061900.753107_0800-b732c8aa.json",
+      "sha256": "335b5de1e87088fbf952ada014ba244ab4ed5f2744f804460b9f38436e58f141",
+      "receipt": {
+        "started": "2026-10-15T06:19:00.753107+08:00",
+        "target": "new-server",
+        "args": [
+          "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+          "-F",
+          "C:/Users/lenovo/.ssh/config",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "StrictHostKeyChecking=yes",
+          "-o",
+          "ConnectTimeout=15",
+          "-o",
+          "ClearAllForwardings=yes",
+          "-o",
+          "PermitLocalCommand=no",
+          "-l",
+          "bwwu",
+          "-T",
+          "new-server",
+          "/usr/bin/python3 -I -S -B /home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py submit /home/bwwu/grid-audits/sid-extensions-p0/jobs /home/bwwu/grid-audits/sid-extensions-p0/requests/beauty-mlp-training-curves-v1.json"
+        ],
+        "returncode": 2,
+        "stdout": "",
+        "stderr": "{\n  \"error\": \"AssertionError('input changed: /home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/snapshots/52258f6a7f60c292/DEPLOYMENT.json')\"\n}\n"
+      }
+    }
+  ],
+  "rejected_request": {
+    "schema": 1,
+    "job_id": "beauty-mlp-training-curves-v1",
+    "host": "zwlab-01",
+    "user": "bwwu",
+    "uid": 1005,
+    "namespace": "sid-extensions-p0/new-server",
+    "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+    "capture_version": "f6e8591f7e6c34ed3de0f58f2d398ac660e07ad4/52258f6a7f60c292d290e1a777aee3f42e649623cce6fe711242b4963543dd64",
+    "argv": [
+      "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+      "-B",
+      "-m",
+      "experiments.beauty_extensions.plot_training",
+      "plot",
+      "--spec",
+      "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/specs/e656d81c26bde2f0.json"
+    ],
+    "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/snapshots/52258f6a7f60c292",
+    "timeout_seconds": 1200,
+    "env": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "OMP_NUM_THREADS": "4",
+      "TF_CPP_MIN_LOG_LEVEL": "3",
+      "TF_NUM_INTRAOP_THREADS": "2",
+      "TF_NUM_INTEROP_THREADS": "2",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/snapshots/52258f6a7f60c292",
+      "HF_HUB_OFFLINE": "1",
+      "WANDB_MODE": "disabled",
+      "TOKENIZERS_PARALLELISM": "false"
+    },
+    "inputs": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/specs/e656d81c26bde2f0.json",
+        "sha256": "e656d81c26bde2f02c6dfea21eb52ca7580280ddca7ff8970aafbca1c29e3453"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/snapshots/52258f6a7f60c292/DEPLOYMENT.json",
+        "sha256": "93583b17635d3942089da74f5abc4abc0e350f7f3285f883311ea87334d3a6e5"
+      }
+    ]
+  },
+  "actual_snapshot": {
+    "rejected_job_dir_exists": true,
+    "accepted_exists": false,
+    "request_exists": false,
+    "status_exists": false,
+    "work_log_exists": false,
+    "deployment_sha256": "7cac1325eb325ac6e0d94737a6e6e802bfc26b2ece9a934f605279d7970db717",
+    "manifest": {
+      "source_commit": "f6e8591f7e6c34ed3de0f58f2d398ac660e07ad4",
+      "snapshot_sha256": "52258f6a7f60c292d290e1a777aee3f42e649623cce6fe711242b4963543dd64",
+      "files": [
+        {
+          "path": "GRID baseline/.project-root",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1
+        },
+        {
+          "path": "GRID baseline/src/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/components/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/components/clustering_initializers.py",
+          "sha256": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+          "bytes": 9117
+        },
+        {
+          "path": "GRID baseline/src/components/distance_functions.py",
+          "sha256": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+          "bytes": 5118
+        },
+        {
+          "path": "GRID baseline/src/components/eval_metrics.py",
+          "sha256": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+          "bytes": 15241
+        },
+        {
+          "path": "GRID baseline/src/components/loss_functions.py",
+          "sha256": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+          "bytes": 4412
+        },
+        {
+          "path": "GRID baseline/src/components/network_blocks/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/components/network_blocks/hf_language_model.py",
+          "sha256": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+          "bytes": 2434
+        },
+        {
+          "path": "GRID baseline/src/components/quantization_strategies.py",
+          "sha256": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+          "bytes": 8796
+        },
+        {
+          "path": "GRID baseline/src/components/scheduler.py",
+          "sha256": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+          "bytes": 2523
+        },
+        {
+          "path": "GRID baseline/src/components/training_loop_functions.py",
+          "sha256": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+          "bytes": 3754
+        },
+        {
+          "path": "GRID baseline/src/data/loading/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/data/loading/components/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/data/loading/components/collate_functions.py",
+          "sha256": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+          "bytes": 16642
+        },
+        {
+          "path": "GRID baseline/src/data/loading/components/custom_dataloader.py",
+          "sha256": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+          "bytes": 2266
+        },
+        {
+          "path": "GRID baseline/src/data/loading/components/dataloading.py",
+          "sha256": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+          "bytes": 7194
+        },
+        {
+          "path": "GRID baseline/src/data/loading/components/interfaces.py",
+          "sha256": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+          "bytes": 12625
+        },
+        {
+          "path": "GRID baseline/src/data/loading/components/iterators.py",
+          "sha256": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+          "bytes": 8557
+        },
+        {
+          "path": "GRID baseline/src/data/loading/components/label_function.py",
+          "sha256": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+          "bytes": 9035
+        },
+        {
+          "path": "GRID baseline/src/data/loading/components/pre_processing.py",
+          "sha256": "31f89a77b4881c1130f83e1572b25fe273de1e641855d6a199cd0b9a84984391",
+          "bytes": 15333
+        },
+        {
+          "path": "GRID baseline/src/data/loading/datamodules/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/data/loading/datamodules/sequence_datamodule.py",
+          "sha256": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+          "bytes": 16142
+        },
+        {
+          "path": "GRID baseline/src/data/loading/utils.py",
+          "sha256": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+          "bytes": 5860
+        },
+        {
+          "path": "GRID baseline/src/inference.py",
+          "sha256": "b24358c9089bccfcc9384a3b3df894bf1dc94761f30dbbb26ba85d5245a500d2",
+          "bytes": 7974
+        },
+        {
+          "path": "GRID baseline/src/models/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/models/components/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/models/components/interfaces.py",
+          "sha256": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+          "bytes": 2785
+        },
+        {
+          "path": "GRID baseline/src/models/components/network_blocks/aggregation_strategy.py",
+          "sha256": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+          "bytes": 3465
+        },
+        {
+          "path": "GRID baseline/src/models/components/network_blocks/embedding_aggregator.py",
+          "sha256": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+          "bytes": 1735
+        },
+        {
+          "path": "GRID baseline/src/models/components/network_blocks/mlp.py",
+          "sha256": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+          "bytes": 1720
+        },
+        {
+          "path": "GRID baseline/src/models/components/network_blocks/normalize_layer.py",
+          "sha256": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+          "bytes": 655
+        },
+        {
+          "path": "GRID baseline/src/models/modules/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/models/modules/base_module.py",
+          "sha256": "029dc55aa499147c55a915c9523291c6b331076afb5cd7a18459968aaff16b73",
+          "bytes": 7758
+        },
+        {
+          "path": "GRID baseline/src/models/modules/clustering/base_clustering_module.py",
+          "sha256": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+          "bytes": 11490
+        },
+        {
+          "path": "GRID baseline/src/models/modules/clustering/mini_batch_kmeans.py",
+          "sha256": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+          "bytes": 6013
+        },
+        {
+          "path": "GRID baseline/src/models/modules/huggingface/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/models/modules/huggingface/transformer_base_module.py",
+          "sha256": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+          "bytes": 6665
+        },
+        {
+          "path": "GRID baseline/src/models/modules/semantic_id/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py",
+          "sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+          "bytes": 44597
+        },
+        {
+          "path": "GRID baseline/src/modules/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/modules/clustering/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "GRID baseline/src/modules/clustering/residual_quantization.py",
+          "sha256": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+          "bytes": 32525
+        },
+        {
+          "path": "GRID baseline/src/modules/clustering/vector_quantization.py",
+          "sha256": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+          "bytes": 4939
+        },
+        {
+          "path": "GRID baseline/src/modules/semantic_embedding_inference_module.py",
+          "sha256": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+          "bytes": 3497
+        },
+        {
+          "path": "GRID baseline/src/train.py",
+          "sha256": "7bf26a7cc027783b99cc7f81c37a9f237cfb504df76dcbc202072ba5fc9565d5",
+          "bytes": 4422
+        },
+        {
+          "path": "GRID baseline/src/utils/__init__.py",
+          "sha256": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+          "bytes": 297
+        },
+        {
+          "path": "GRID baseline/src/utils/custom_hydra_resolvers.py",
+          "sha256": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+          "bytes": 5867
+        },
+        {
+          "path": "GRID baseline/src/utils/decorators.py",
+          "sha256": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+          "bytes": 6611
+        },
+        {
+          "path": "GRID baseline/src/utils/file_utils.py",
+          "sha256": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+          "bytes": 6281
+        },
+        {
+          "path": "GRID baseline/src/utils/inference_utils.py",
+          "sha256": "8a498d5fa77196b28ea9328cd7c31ccece241e24c0be1934fdee27abb299252a",
+          "bytes": 11988
+        },
+        {
+          "path": "GRID baseline/src/utils/instantiators.py",
+          "sha256": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+          "bytes": 1908
+        },
+        {
+          "path": "GRID baseline/src/utils/launcher_utils.py",
+          "sha256": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+          "bytes": 7789
+        },
+        {
+          "path": "GRID baseline/src/utils/logging_utils.py",
+          "sha256": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+          "bytes": 3052
+        },
+        {
+          "path": "GRID baseline/src/utils/masking_utils.py",
+          "sha256": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+          "bytes": 1564
+        },
+        {
+          "path": "GRID baseline/src/utils/pylogger.py",
+          "sha256": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+          "bytes": 2468
+        },
+        {
+          "path": "GRID baseline/src/utils/restart_job.py",
+          "sha256": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+          "bytes": 13321
+        },
+        {
+          "path": "GRID baseline/src/utils/restart_job_utils.py",
+          "sha256": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+          "bytes": 8199
+        },
+        {
+          "path": "GRID baseline/src/utils/rich_utils.py",
+          "sha256": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+          "bytes": 3382
+        },
+        {
+          "path": "GRID baseline/src/utils/tensor_utils.py",
+          "sha256": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+          "bytes": 7767
+        },
+        {
+          "path": "GRID baseline/src/utils/utils.py",
+          "sha256": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788",
+          "bytes": 8359
+        },
+        {
+          "path": "experiments/beauty_extensions/__init__.py",
+          "sha256": "537a1698c10f159802a56e0e8d153b53806ca62f7b7a8383242939fb2edd7c6f",
+          "bytes": 68
+        },
+        {
+          "path": "experiments/beauty_extensions/attention/__init__.py",
+          "sha256": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+          "bytes": 385
+        },
+        {
+          "path": "experiments/beauty_extensions/attention/capture.py",
+          "sha256": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+          "bytes": 21164
+        },
+        {
+          "path": "experiments/beauty_extensions/attention/plot.py",
+          "sha256": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+          "bytes": 4378
+        },
+        {
+          "path": "experiments/beauty_extensions/attention/records.py",
+          "sha256": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+          "bytes": 8911
+        },
+        {
+          "path": "experiments/beauty_extensions/attention/selfcheck.py",
+          "sha256": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+          "bytes": 5037
+        },
+        {
+          "path": "experiments/beauty_extensions/author/__init__.py",
+          "sha256": "624d009dfbc652e17f3de47f768316c0eae386b67e6b87d83a1a8f4bc79ac457",
+          "bytes": 239
+        },
+        {
+          "path": "experiments/beauty_extensions/author/bootstrap.py",
+          "sha256": "13b42af96b0a08bf8ac6636a1ff8bc7492e830692fedbd5b9890394eb6904c14",
+          "bytes": 3039
+        },
+        {
+          "path": "experiments/beauty_extensions/author/checks.py",
+          "sha256": "044c475be6cd40ca419b2da83a1b3d8851b1aa3a2c62760953064334d36be907",
+          "bytes": 10319
+        },
+        {
+          "path": "experiments/beauty_extensions/author/models.py",
+          "sha256": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4",
+          "bytes": 15033
+        },
+        {
+          "path": "experiments/beauty_extensions/baseline.py",
+          "sha256": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+          "bytes": 7160
+        },
+        {
+          "path": "experiments/beauty_extensions/bundle_delivery.py",
+          "sha256": "38051a0e7d0f0ea9efbdf9d73cb71dd2c3473b4d628cd92c9c746085894327a9",
+          "bytes": 8784
+        },
+        {
+          "path": "experiments/beauty_extensions/checkpoint_info.py",
+          "sha256": "79edf46d9526e5298aff3ca56c619e9c8e21f41f3718b19e11b534d6b081736c",
+          "bytes": 1038
+        },
+        {
+          "path": "experiments/beauty_extensions/cli.py",
+          "sha256": "b4acb37888a0b365b055abd99da5158a962a747f8eb8c0dfd0571bd8c303cc9f",
+          "bytes": 20634
+        },
+        {
+          "path": "experiments/beauty_extensions/collect_evidence.py",
+          "sha256": "5a1ddcd221a01d1af8ccb5bc7b2aff96761f216f588afef8399aba19a3d4fcd7",
+          "bytes": 5080
+        },
+        {
+          "path": "experiments/beauty_extensions/common.py",
+          "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+          "bytes": 12084
+        },
+        {
+          "path": "experiments/beauty_extensions/data_checks.py",
+          "sha256": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+          "bytes": 18260
+        },
+        {
+          "path": "experiments/beauty_extensions/deploy.py",
+          "sha256": "f9cf91d6798e171d7b641434766895333a59b675ccbfec3bf76326e108ced081",
+          "bytes": 6563
+        },
+        {
+          "path": "experiments/beauty_extensions/mlp_attention.py",
+          "sha256": "b53aa3832a693bdcfa015393799a320b10fa804d7f351cc029e690c1df95f9fa",
+          "bytes": 4821
+        },
+        {
+          "path": "experiments/beauty_extensions/mlp_execution.py",
+          "sha256": "e22e22710ccf664109b4b3142cbc26911325dcaea37e6459bdffdb37528f393a",
+          "bytes": 18341
+        },
+        {
+          "path": "experiments/beauty_extensions/mlp_formal.py",
+          "sha256": "ac362b84f7a9a979bb7549ce1f817448fe172b9d32adc1a449180f5aa97d9e56",
+          "bytes": 37293
+        },
+        {
+          "path": "experiments/beauty_extensions/monitor.py",
+          "sha256": "770376df0aeebb7ff2d5d727bdffd83c514ae54af0e983a88a5709f31c8d10b2",
+          "bytes": 2843
+        },
+        {
+          "path": "experiments/beauty_extensions/observation.py",
+          "sha256": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+          "bytes": 5771
+        },
+        {
+          "path": "experiments/beauty_extensions/plot_training.py",
+          "sha256": "154cb13087b9f95b8c85024ad7548cf3a00c7183bbba6afe030e080208d51fe0",
+          "bytes": 3371
+        },
+        {
+          "path": "experiments/beauty_extensions/restore_assets.py",
+          "sha256": "5c8f8c7ae6e34289b4814e553345014f1d4de5d016ae46e935a89d3c0f94bf3f",
+          "bytes": 3623
+        },
+        {
+          "path": "experiments/beauty_extensions/results.py",
+          "sha256": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+          "bytes": 3339
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/a-smoke.json",
+          "sha256": "cc0999b09014a0a77ec4e10bac3d35c7d945dd9d04cbab4f2016581fabc3b0e8",
+          "bytes": 1158
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/b-smoke.json",
+          "sha256": "839b1fb79419f445d0db1a5de2d86c29e1b42b798adadb2890dc905b80ac6eab",
+          "bytes": 1060
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-approved-resource-indexed.json",
+          "sha256": "201bb41871398cbe08480ed1fdc7d45ffd55f9d25de75e61c5e4c1c8d9653015",
+          "bytes": 1390
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-approved-resource.json",
+          "sha256": "ed66cc57499d09c93e52df40b55bb4cfa92a1c25343d6463666945da41e014d1",
+          "bytes": 1151
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-attention-engineering8.json",
+          "sha256": "631f53694d9e36705f951a99323f68280a7026b0195c1ee781fdaf80555da619",
+          "bytes": 1393
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-attention-formal32.json",
+          "sha256": "f6cb0e8a949983a7ac97726ef05de8064f246a2006933eeeb3b84ddd0fd5a619",
+          "bytes": 1902
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-curves-engineering.json",
+          "sha256": "e965d5aa84a24c787547f321180c3949d8fb4b118cc22ded4c3c14222fd255c9",
+          "bytes": 325
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-curves-formal.json",
+          "sha256": "e656d81c26bde2f02c6dfea21eb52ca7580280ddca7ff8970aafbca1c29e3453",
+          "bytes": 366
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-formal.json",
+          "sha256": "1b5f2d735624c06d81b88ad12f80eff986c9f43f222a25a363fd4466b49556a2",
+          "bytes": 2298
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-lifecycle.json",
+          "sha256": "83faea21df19b4217d85cc2a9a5dc203ca345799bd6fb8d48d4b3486d05fef98",
+          "bytes": 2069
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-resume.json",
+          "sha256": "a722d517a1f6a0edf63b9a4d0b1fc55a7f559e7b2a8a4970e811b285a7cb027d",
+          "bytes": 1101
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-short.json",
+          "sha256": "4ba5f25fc052487e11224b5d5cf83e26625c39fe3c51c1ffb1a2ec2a6f648c4d",
+          "bytes": 867
+        },
+        {
+          "path": "experiments/beauty_extensions/specs/mlp-smoke.json",
+          "sha256": "44c42794793bbfca21234b57d9389208d71f47d84f3a707c72c05826879b19c4",
+          "bytes": 1134
+        },
+        {
+          "path": "experiments/beauty_extensions/summarize_delivery.py",
+          "sha256": "dab21879249c3f66d63c6e9db6d6fa986ffddfff431be3e79c9215235ea6ff6f",
+          "bytes": 10712
+        },
+        {
+          "path": "experiments/beauty_extensions/training.py",
+          "sha256": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3",
+          "bytes": 5646
+        },
+        {
+          "path": "experiments/beauty_extensions/verify_saved_predictions.py",
+          "sha256": "b6587fcebdbd86e6f21dcb25ce2d11b3a5c71895fe6660b6238571ba482972d0",
+          "bytes": 1147
+        },
+        {
+          "path": "references/wmh-original/GRID/src/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/clustering_initializers.py",
+          "sha256": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+          "bytes": 9117
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/distance_functions.py",
+          "sha256": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+          "bytes": 5118
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/eval_metrics.py",
+          "sha256": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+          "bytes": 15241
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/loss_functions.py",
+          "sha256": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+          "bytes": 4412
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/network_blocks/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/network_blocks/hf_language_model.py",
+          "sha256": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+          "bytes": 2434
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/optimizer.py",
+          "sha256": "d641316bf995f824b10d2499143b73333ae9bb4dfab1587c7c13c25d8ea46050",
+          "bytes": 1016
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/quantization_strategies.py",
+          "sha256": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+          "bytes": 8796
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/scheduler.py",
+          "sha256": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+          "bytes": 2523
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/training_loop_functions.py",
+          "sha256": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+          "bytes": 3754
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/components/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/components/collate_functions.py",
+          "sha256": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+          "bytes": 16642
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/components/custom_dataloader.py",
+          "sha256": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+          "bytes": 2266
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/components/dataloading.py",
+          "sha256": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+          "bytes": 7194
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/components/interfaces.py",
+          "sha256": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+          "bytes": 12625
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/components/iterators.py",
+          "sha256": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+          "bytes": 8557
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/components/label_function.py",
+          "sha256": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+          "bytes": 9035
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/components/pre_processing.py",
+          "sha256": "a69c88681760df22e37fb7e66961ad97ed0824af20eae415a543379e881d71c7",
+          "bytes": 14995
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/datamodules/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/datamodules/sequence_datamodule.py",
+          "sha256": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+          "bytes": 16142
+        },
+        {
+          "path": "references/wmh-original/GRID/src/data/loading/utils.py",
+          "sha256": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+          "bytes": 5860
+        },
+        {
+          "path": "references/wmh-original/GRID/src/inference.py",
+          "sha256": "f24892ed2d9777c6fd5d3eaf20cc0ea3d180a19a490519baa7ca2390a70c05ba",
+          "bytes": 7940
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/components/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/components/interfaces.py",
+          "sha256": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+          "bytes": 2785
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/components/network_blocks/aggregation_strategy.py",
+          "sha256": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+          "bytes": 3465
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/components/network_blocks/embedding_aggregator.py",
+          "sha256": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+          "bytes": 1735
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/components/network_blocks/mlp.py",
+          "sha256": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+          "bytes": 1720
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/components/network_blocks/normalize_layer.py",
+          "sha256": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+          "bytes": 655
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/base_module.py",
+          "sha256": "7cfa9da5f73c0e666ab81f22440d04f04d6cc9624803de58cde3256dcae400b0",
+          "bytes": 7949
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/clustering/base_clustering_module.py",
+          "sha256": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+          "bytes": 11490
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/clustering/mini_batch_kmeans.py",
+          "sha256": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+          "bytes": 6013
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/huggingface/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/huggingface/transformer_base_module.py",
+          "sha256": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+          "bytes": 6665
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model.py",
+          "sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+          "bytes": 44597
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+          "sha256": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9",
+          "bytes": 53677
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py",
+          "sha256": "7561d2f494764a77efac1d71abff4ea15bc683eea0816c1e8fe067d7d5c78463",
+          "bytes": 83490
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_parallel.py",
+          "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+          "bytes": 61418
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+          "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+          "bytes": 61418
+        },
+        {
+          "path": "references/wmh-original/GRID/src/modules/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/modules/clustering/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "references/wmh-original/GRID/src/modules/clustering/residual_quantization.py",
+          "sha256": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+          "bytes": 32525
+        },
+        {
+          "path": "references/wmh-original/GRID/src/modules/clustering/vector_quantization.py",
+          "sha256": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+          "bytes": 4939
+        },
+        {
+          "path": "references/wmh-original/GRID/src/modules/semantic_embedding_inference_module.py",
+          "sha256": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+          "bytes": 3497
+        },
+        {
+          "path": "references/wmh-original/GRID/src/test.py",
+          "sha256": "53f43b1c3e8c5549901aac4f8ee93eea92fc4123bc10439607de20f87be17d78",
+          "bytes": 388
+        },
+        {
+          "path": "references/wmh-original/GRID/src/train.py",
+          "sha256": "f78680593ba465d0716aaf44239a730b5b449a227a0e957f67c0781e9a0fa4ea",
+          "bytes": 4415
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/__init__.py",
+          "sha256": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+          "bytes": 297
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/custom_hydra_resolvers.py",
+          "sha256": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+          "bytes": 5867
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/decorators.py",
+          "sha256": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+          "bytes": 6611
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/file_utils.py",
+          "sha256": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+          "bytes": 6281
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/inference_utils.py",
+          "sha256": "a3fa7e388713e38c5d67824b0a51eb9a9395695df46571c645845efbf183d7bf",
+          "bytes": 11844
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/instantiators.py",
+          "sha256": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+          "bytes": 1908
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/launcher_utils.py",
+          "sha256": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+          "bytes": 7789
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/logging_utils.py",
+          "sha256": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+          "bytes": 3052
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/masking_utils.py",
+          "sha256": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+          "bytes": 1564
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/pylogger.py",
+          "sha256": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+          "bytes": 2468
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/restart_job.py",
+          "sha256": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+          "bytes": 13321
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/restart_job_utils.py",
+          "sha256": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+          "bytes": 8199
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/rich_utils.py",
+          "sha256": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+          "bytes": 3382
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/tensor_utils.py",
+          "sha256": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+          "bytes": 7767
+        },
+        {
+          "path": "references/wmh-original/GRID/src/utils/utils.py",
+          "sha256": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788",
+          "bytes": 8359
+        }
+      ],
+      "identity_kind": "git_commit_and_exact_file_manifest"
+    }
+  },
+  "new_request": {
+    "schema": 1,
+    "job_id": "beauty-mlp-training-curves-v2",
+    "host": "zwlab-01",
+    "user": "bwwu",
+    "uid": 1005,
+    "namespace": "sid-extensions-p0/new-server",
+    "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+    "capture_version": "f6e8591f7e6c34ed3de0f58f2d398ac660e07ad4/52258f6a7f60c292d290e1a777aee3f42e649623cce6fe711242b4963543dd64",
+    "argv": [
+      "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+      "-B",
+      "-m",
+      "experiments.beauty_extensions.plot_training",
+      "plot",
+      "--spec",
+      "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/specs/e656d81c26bde2f0.json"
+    ],
+    "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/snapshots/52258f6a7f60c292",
+    "timeout_seconds": 1200,
+    "env": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "OMP_NUM_THREADS": "4",
+      "TF_CPP_MIN_LOG_LEVEL": "3",
+      "TF_NUM_INTRAOP_THREADS": "2",
+      "TF_NUM_INTEROP_THREADS": "2",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/snapshots/52258f6a7f60c292",
+      "HF_HUB_OFFLINE": "1",
+      "WANDB_MODE": "disabled",
+      "TOKENIZERS_PARALLELISM": "false"
+    },
+    "inputs": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/specs/e656d81c26bde2f0.json",
+        "sha256": "e656d81c26bde2f02c6dfea21eb52ca7580280ddca7ff8970aafbca1c29e3453"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/snapshots/52258f6a7f60c292/DEPLOYMENT.json",
+        "sha256": "7cac1325eb325ac6e0d94737a6e6e802bfc26b2ece9a934f605279d7970db717"
+      }
+    ]
+  },
+  "method_or_source_change": false,
+  "reason": "Use actual already verified immutable snapshot manifest identity, without modifying phase-generated identity_kind or code",
+  "new_job": "beauty-mlp-training-curves-v2"
+}

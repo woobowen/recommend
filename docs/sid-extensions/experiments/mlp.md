@@ -94,3 +94,25 @@
 `beauty-mlp-lifecycle-v1` 首跑已成功：独立从零1次acc64更新、64 microbatch/25,490展开窗口，完整val同样22,363目标；实际原ModelCheckpoint、EarlyStopping(patience10/min_delta0)、RichModelSummary、CSV logger全部启用。原val/recall@5最大值规则实际保存工程best，随后weights_only+局部safe_globals strict加载，键/shape/值、内嵌SID、共享表和optimizer/callback存在性均核验；同一Trainer真实test16用户/2 batch，预测与原evaluator CPU复算精确一致。工程四项指标均0，160/160候选SID无效（原should_check_prefix=False，未过滤或补齐），不是新正式模型结论。工程best/global_step1、r2/r3及resource状态均禁止流入正式。
 
 这次含原回调/完整覆盖检查的完整validation hook实测190.601秒，fit含一次更新/验证/保存为199.075秒，单次更新4.769秒。比最初136.697秒资源验证多出的观测/检查成本保留；以4.36–4.77秒/update及约191秒/validation估计，历史3500/35场景约6.1–6.5小时，再留测试/保存余量，预计约6.2–7小时。仍需真实早停，不保证完成于12小时。正式入口为 `mlp_formal.py formal --spec specs/mlp-formal.json`，实际必须经deploy保存runner request调用；非作者gate绑定canonical计划和所有部署研究Python hash，正式部署要求全部源码/配置来自已提交HEAD字节。
+
+## 2026-10-15 正式新训练结果
+
+`beauty-mlp-formal-v1` 已 SUCCEEDED/exit0，worker组退出并核验。运行源码提交 `89b6d961c81333b0a44c4eb17527ced11897849f`，服务器为无.git的固定export快照 `12e70793731a8329504a50e854e467be64af230a4ce7f9d46014b17b1bc16299`。准入gate绑定实际MLP路径的95份Python；部署清单另包含工作baseline等共167文件/155份Python，两者范围不同。后续提交只增加报告、结果和采集输入，研究源码及正式训练spec保持逐字不变。
+
+从零、全参数、单4090/raw32/accum64/val6400及其余已批准原配置实际执行。第3600次optimizer update按原patience10早停，230400 microbatch、95287516个collate窗口、36次完整验证；每次2796 batch精确覆盖22363个目标。验证Recall@5唯一最佳为step2600的0.05871305242180824，之后10次均未改善；未使用test选模、未延长预算。fit实测20815.297秒，完整runner时长20993.907秒（约5小时50分），在12小时硬上限内自然结束。allocated峰值2092865536 B，reserved峰值3351248896 B。
+
+最佳checkpoint为 `checkpoint_epoch=000_step=002600.ckpt`，161258134 B，SHA-256 `52f18292490825bc7e172e762600b428a8dcb8c511d2dfc3d8f4fe4621335891`。weights_only/局部safe_globals严格加载180个state tensor，键/shape/值、内嵌SID和共享表核验通过。另存训练终点step3600的完整optimizer/callback/RNG恢复状态SHA `60823ff3aabf363d843f7679d719541cc1558a3eba60492616e8ac45c66df403`，未将best权重和终点优化器混称一个可精确续跑状态；IterableDataset worker游标/预取队列未保存，不宣称恢复轨迹等同不中断运行。
+
+完整真实test为22363用户/目标、每人K10、四码位AR生成。指标为比例值：
+
+|本次新MLP独立条件|Recall@5|NDCG@5|Recall@10|NDCG@10|
+|---|---:|---:|---:|---:|
+|T5 / RQ-VAE+STE|0.04333050176501274|0.030580179765820503|0.061709072440862656|0.036571044474840164|
+
+完整预测与目标multiset精确一致，969个Top5命中、1380个Top10命中。原evaluator CPU复算与Trainer四项差为0；非作者独立stdlib公式复算最大差8.73e-10，逐样本最大差2.14e-8（浮点累加差）。223630候选中24个SID不在完整物品SID集合，重复候选0；保留原should_check_prefix=False及评价行为，没有过滤/补齐/重排。纯数字SID审核导出支持独立合法性复核，没有执行pickle或重新生成SID。
+
+本结果是本次新训练，工程step3模型和旧历史MLP重评均不替代它。与Shuffle A的T5/R-Kmeans、B的Qwen/R-Kmeans条件不同；本轮没有匹配Normal，不报告跨SID严格结构delta，也不额外训练baseline。A/B六个正式评测仍NOT_RUN，故整个一次性任务为PARTIAL_BLOCKED。
+
+核验入口：[训练结果](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-v1/training_result.json)、[严格best加载](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-v1/best_checkpoint_load.json)、[原始CSV](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-v1/csv/version_0/metrics.csv)、[完整验证记录](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-v1/validations.jsonl)、[正式曲线](../../../manifests/beauty-extensions/runs/beauty-mlp-training-curves-v2/training_validation_curves.png)、[非作者审核](../../../manifests/beauty-extensions/final-review.json)。全量预测/逐样本指标/原日志/终态回执在最终轻量ZIP；大型权重保留new-server原job输出目录。
+
+CPU曲线v1的请求因plot/capture阶段生成不同manifest身份串而被runner在接受前拒绝，未启动worker。保留原拒绝请求/回执，v2只绑定已核不可变快照的真实manifest SHA，调用同一冻结绘图脚本和完整CSV成功，PNG实际重读。此为提交身份处理，未修改研究源码、训练/评价设置或重跑模型；[完整依据](../../../manifests/beauty-extensions/curves-submission-binding.json)随交付保留。

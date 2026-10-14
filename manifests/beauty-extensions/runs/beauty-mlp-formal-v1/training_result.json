@@ -1,0 +1,124 @@
+{
+  "status": "COMPLETE",
+  "formal": true,
+  "engineering_only": false,
+  "training_complete": true,
+  "test_complete": true,
+  "fresh_initialization": true,
+  "full_parameter_training": true,
+  "termination": "original_patience10_validation_early_stop",
+  "safety_allowance_is_not_training_endpoint": true,
+  "global_step": 3600,
+  "current_epoch": 1,
+  "actual_microbatches": 230400,
+  "expanded_windows": 95287516,
+  "completed_full_validations": 36,
+  "fit_wall_seconds": 20815.29714396363,
+  "early_stopping": {
+    "wait_count": 10,
+    "patience": 10,
+    "stopped_epoch": 0,
+    "trainer_should_stop": true
+  },
+  "best_checkpoint": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-formal-v1/output/checkpoints/checkpoint_epoch=000_step=002600.ckpt",
+    "sha256": "52f18292490825bc7e172e762600b428a8dcb8c511d2dfc3d8f4fe4621335891",
+    "bytes": 161258134,
+    "monitor": "val/recall@5",
+    "mode": "max",
+    "score": 0.05871305242180824,
+    "engineering_only": false
+  },
+  "final_recovery": {
+    "reason": "Fit reached original_patience10_validation_early_stop",
+    "stage": "validation",
+    "formal": true,
+    "global_step": 3600,
+    "epoch": 1,
+    "microbatches_completed": 230400,
+    "microbatches_into_unfinished_accumulation": 0,
+    "partial_parameter_gradients_in_checkpoint": false,
+    "explicit_rng_capture": "immediately before checkpoint serialization",
+    "datamodule_state_dict": {},
+    "datamodule_state_is_empty": true,
+    "infinite_worker_cursor_saved": false,
+    "worker_process_RNG_and_prefetch_queue_saved": false,
+    "exact_uninterrupted_resume_claim": false,
+    "automatic_resume_allowed": false,
+    "weights_source": "current training state",
+    "optimizer_source": "final/current training optimizer; not rewound to validation best",
+    "resume_requires_explicit_decision": true,
+    "checkpoint_error": null,
+    "checkpoint": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-formal-v1/output/recovery/training-final-1/full-state.ckpt",
+      "sha256": "60823ff3aabf363d843f7679d719541cc1558a3eba60492616e8ac45c66df403",
+      "bytes": 161251542
+    },
+    "rng_files": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-formal-v1/output/recovery/training-final-1/python_numpy_rng.json",
+        "sha256": "bbf8c8f1385441c579d53447ae736f5d77fb89bcf3532a19d513a4f18f7eb0e4"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-formal-v1/output/recovery/training-final-1/torch_rng.pt",
+        "sha256": "fd447e01d3883df09f870e72abacc00821b2651a1c082b32de3f11c1f3eff64b"
+      }
+    ]
+  },
+  "mlp_parameter_max_abs_updates": {
+    "0.weight": 0.3316618800163269,
+    "0.bias": 0.04573288559913635,
+    "3.weight": 0.30480194091796875,
+    "3.bias": 0.050130445510149
+  },
+  "formal_state_reuse_allowed": false,
+  "approved_config_asset": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/31a51bd5d203acea823411068ed47ba64304bdd0fb35f89f8f4c887091153fa8/config.yaml",
+    "sha256": "31a51bd5d203acea823411068ed47ba64304bdd0fb35f89f8f4c887091153fa8"
+  },
+  "sid_asset": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba/merged_predictions_tensor.pt",
+    "sha256": "2a9513a5d7c2a45ee8ccbd923647699350bffe41c804379d6c48e3ddd27645ba"
+  },
+  "evaluation_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-evaluation-index-v1/output/evaluation_target_index.jsonl",
+    "sha256": "0a6ed5c8cc03730a850577e29a94c01871ed8529e24cd2eea84ad25463cc2837",
+    "bytes": 2331096,
+    "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-evaluation-index-v1/output/evaluation_target_index.jsonl"
+  },
+  "test_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-smoke-r3/output/test_target_index.jsonl",
+    "sha256": "c88d460609468ff194f69669016848353651f6cb5ae241c798807708113dd598",
+    "bytes": 3308815,
+    "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-mlp-smoke-r3/output/test_target_index.jsonl"
+  },
+  "engineering_test_complete": false,
+  "test_target_count": 22363,
+  "test_exact_key_target_multiset": true,
+  "test_metrics": {
+    "status": "PASS",
+    "metrics": {
+      "ndcg@5": 0.030580179765820503,
+      "ndcg@10": 0.036571044474840164,
+      "recall@5": 0.04333050176501274,
+      "recall@10": 0.061709072440862656
+    },
+    "samples": 22363,
+    "unique_users": 22363,
+    "prediction_sha256": "81906804a5ff438e278ad4386d7539e458e08731c282be08b9f482ba2f43ad26",
+    "invalid_candidate_count": 24,
+    "duplicate_candidate_count": 0,
+    "candidate_treatment": "original evaluator, no filtering, completion, rescoring, or reordering",
+    "coverage_exact": true,
+    "trainer_absolute_differences": {
+      "ndcg@5": 0.0,
+      "ndcg@10": 0.0,
+      "recall@5": 0.0,
+      "recall@10": 0.0
+    },
+    "per_sample_metrics_sha256": "797981161fa27cf3f84c69afdae38cdca2a5f48725f39bcd75996c38f607180d"
+  },
+  "gpu_peak_allocated_bytes": 2092865536,
+  "gpu_peak_reserved_bytes": 3351248896,
+  "attention_collected": false
+}

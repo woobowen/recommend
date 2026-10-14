@@ -84,7 +84,7 @@
 |A Normal/Shuffle3/4|author/models.py 继承冻结作者双表；T5/R-Kmeans SID 09-15/20-54-16 + 双表 step4800 11-03/02-47-09|manifests/beauty-extensions/effective-config-sources/a-t5-rkmeans.yaml|H4/E128/U256/K10、seed42、prefix=false、L120、独立 encoder/decoder SID 表|接口桥接、原重排函数加只读 trace/回放；不复制权重、不改正文|用户本轮明确批准，checkpoint 内嵌 SID exact，178 state tensors 键/shape/值 exact|配对及静态/输入通过，3用户真实生成 attention 通过；A 完整 OFF/Shuffle/Trainer 门未完成|
 |B Normal/Shuffle3/4|baseline.py 在原共享表 encoder lookup 后复用作者函数；Qwen/R-Kmeans SID + 共享表 step12500|effective-config-sources/b-qwen-rkmeans.yaml|H4/E128/U256/K10、seed42、prefix=false、L120、SEP、无用户表|仅 encoder 作用域 lookup hook；不改参数/decoder/beam/evaluator，OFF 无额外全局随机数|用户本轮明确批准，checkpoint 内嵌 SID exact，177 state tensors exact|同形状 OFF/缓存及三条件各19用户真实 test 完成；尾部验证设备错误使整条 smoke FAILED，正式门 BLOCKED|
 |Beauty MLP|author/models.py 继承原逐物品共享 MLP；真正 Beauty T5/RQ-VAE+STE SID 09-21/16-36-33|effective-config-sources/mlp-beauty-original.yaml|用户批准从零全参数、raw32/accum64/val6400、workers8/K10/FP32；原Adam/选模/早停/max320000/10epochs，硬12h|原聚合、共享SID表、无SEP、末码mask/AR loss保留；独立mlp_formal入口、hash绑定非作者门、预算中断保存边界|用户两次明确批准；原配置/源码/历史run记录；2次真实acc64更新及完整val、另1次更新的原callbacks→strict best→16用户test闭环已通过|资源/覆盖/生命周期通过；正式准入与运行结果见独立gate、MLP说明及EXECUTION_SUMMARY，预跑状态不流入新训练|
-|Cross-attention|attention/{capture,records,plot}.py，真实生成观测|用户批准的固定32用户、双路径方案|最终Top1祖先主口径 + 每步局部首beam对照，最后层、逐head保存/head均值展示|不重写beam，不换后端，不裁剪/逐行缩放；完整父链/位置/矩阵/图|用户明确批准；A/B/MLP 各自固定32已保存|只完成各3用户工程采集图；32用户正式采集 NOT_RUN，MLP图来自3 update工程cp|
+|Cross-attention|attention/{capture,records,plot}.py，真实生成观测|用户批准的固定32用户、双路径方案|最终Top1祖先主口径 + 每步局部首beam对照，最后层、逐head保存/head均值展示|不重写beam，不换后端，不裁剪/逐行缩放；完整父链/位置/矩阵/图|用户明确批准；A/B/MLP 各自固定32已保存|A/B各3用户Normal工程采集；新MLP正式best2600的固定32用户已采集，须与3-update工程图分开；A/B正式Normal/Shuffle图未运行|
 
 A/B 是不同训练模型和上游条件，各自 Normal 才是本组对照。MLP 采用另行批准的不同 SID 条件，不能声称相对于 A/B 的纯结构对照；无匹配Normal时不补训。具体资产、来源清单、同一 Beauty 数据物品轴继承和只读恢复证据见 [source-review](../../../manifests/beauty-extensions/source-review.json)。
 
@@ -101,3 +101,5 @@ A/B 是不同训练模型和上游条件，各自 Normal 才是本组对照。ML
 恢复入口：`/home/bwwu/grid-audits/sid-extensions-p0/jobs/<job_id>/`；每个request的cwd绑定受控export快照和逐文件SHA，不假称Git checkout。最后交付Git提交只发布实际源码/配置/精简回执；大型checkpoint留服务器，必要外部矩阵与完整回执在轻量ZIP中。A/B需要新的修正额度后才能继续；MLP按已批准条件独立推进，不重复询问已批准的资产、attention或MLP协议。
 
 作者路线按已保全实现适配，非逐字历史运行复现；历史唯一Python绑定缺口继续保留。源码入口：[CLI](../../../experiments/beauty_extensions/cli.py)、[A/MLP派生](../../../experiments/beauty_extensions/author/models.py)、[B接入](../../../experiments/beauty_extensions/baseline.py)、[attention观测](../../../experiments/beauty_extensions/attention/capture.py)。
+
+2026-10-15终验补充：独立MLP正式从零训练已按原patience10在3600次更新结束，验证选中best2600，完整test22363用户/目标及CPU/非作者预测复算通过；其固定32用户真实生成双口径注意力和完整训练曲线已经写出。具体指标、权重、资源与比较限制见 [MLP正式结果](mlp.md#2026-10-15-正式新训练结果)。该完成不补足A/B的缺失门禁：A-Normal/Shuffle3/Shuffle4、B-Normal/Shuffle3/Shuffle4六组正式指标及各自Normal的delta均为空值。没有现象重现失败后的调参，没有第四轮研究代码修补，整体交付仍为PARTIAL_BLOCKED。

@@ -82,3 +82,15 @@
 B早期工程图用旧首文件3用户；A/MLP工程图用后来核实的DataModule文件assignment首3。不要把这两组图当同用户配对比较。3-update MLP图仅验证链路，不能解释成有效正式MLP的现象。图流程通过不证明四行相似或SID顺序无用；本轮未作科学阈值统计或现象复现声明。完整本轮状态见 [执行记录](shuffle.md#2026-10-14-beauty-执行partial_blocked)。
 
 用户批准MLP独立单卡方案后，`beauty-mlp-fixed8-attention-v1` 又实际检查旧固定32用户的前8位（不是重新选择）：真实四步/K10生成、逐head矩阵、双路径与8张PNG重读通过，OFF/ON SID/score/RNG/参数/清理均精确一致。该3-update工程模型80/80候选不在完整SID表内，父链全部为beam0，因此本批双口径恰好相同，不能声称实测覆盖非零祖先或说明正式模型现象。正式 `mlp_attention.py capture` 只在训练结果status=COMPLETE、formal训练和完整test完成、runner SUCCEEDED/exit0/cleanup、checkpoint/SID/config hash均匹配后开放，保存这些身份；工程8人路径与采集器正文未改。32用户正式图仍等待有效新MLP模型。
+
+## 2026-10-15 新MLP正式32用户采集
+
+上述工程图之后，`beauty-mlp-formal-attention32-v1` 已用本次完成的新MLP best2600严格加载并成功采集固定32用户（四批×8），exit0/worker组退出已核验。训练/完整test完成回执、checkpoint SHA `52f18292490825bc7e172e762600b428a8dcb8c511d2dfc3d8f4fe4621335891`、T5/RQ-VAE+STE SID和原配置逐一绑定，未使用step3工程权重。采集源码提交 `f6e8591f7e6c34ed3de0f58f2d398ac660e07ad4`，快照 `52258f6a7f60c292d290e1a777aee3f42e649623cce6fe711242b4963543dd64`；研究Python与正式训练提交逐字相同，仅增加实际完成结果的采集/曲线输入JSON。
+
+事前固定的evaluation用户文件SHA `dbe80110171ef657bd861fc2aa2d50b657086d0abceb83b640f1079881b48aa8` 未变。全部32顺序、input SID/mask、item/位置和target引用核验一致，没有按attention或命中筛选。保存实际四码位AR生成、beam父索引/前缀/query身份、最后decoder层逐head cross-attention原值、head均值双口径图和完整30个encoder位置；只保存cross-attention，未与decoder self-attention拼接，padding mask单列。主口径为最终Top1完整祖先，历史口径是每步局部首parent beam，不拼接成一条虚构候选轨迹。没有生成后重放或重新随机化历史。
+
+非作者逐原矩阵/前缀/父链审核：21/32样本出现非零Top1祖先，父索引表共796个非零项；若误用选择后的child序号，29个步骤会取到不同的原矩阵，因而这批真实覆盖了工程模型全beam0未覆盖的风险。四批采集OFF/ON回执的SID/score误差均0、CPU/CUDA RNG/参数/hook恢复相同；OFF原矩阵未额外存盘，审计明确区分运行时比较回执与可离线重算的ON原矩阵。32张PNG均核hash并实际重读，共用原始色标、无逐行归一化、裁剪热区或padding插值。
+
+网页精简展示规则固定为第一批原矩阵/记录及sample index0的图，全部32图与矩阵保留在轻量ZIP。图中sample index是批内0..7；全局序号为8×batch+批内index，身份以record.json的sample key为准，四批的index0是四个人。这张固定首样例的四步均主要关注encoder位置0和5，权重大小仍不同，逐步峰值约0.2645/0.3973/0.4436/0.4645。原矩阵的描述性核查中25/32样本四行峰位相同，但峰位相同不等于整行分布相同，也不等于总体遵循某个相似规律。未设置科学相似阈值、未追加六对行间差异统计、不据图宣称SID顺序无用。图生产链成功与现象是否具有普遍性分开报告。
+
+入口：[正式采集结果](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-attention32-v1/RESULT.json)、[第一批位置/身份/父链记录](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-attention32-v1/batch-00/bundle/record.json)、[第一批数值NPZ](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-attention32-v1/batch-00/bundle/arrays.npz)（allow_pickle=False）、[固定首图](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-attention32-v1/batch-00/figures/sample_000_cross_attention.png)、[非作者独立审核](../../../manifests/beauty-extensions/b-attention-review.json)。A/B的正式Normal/Shuffle32人图仍未运行；不同SID/模型/encoder长度的图不作像素级或严格配对比较。整体仍为PARTIAL_BLOCKED。
