@@ -71,14 +71,26 @@ for digest in DIGESTS:
 print(json.dumps(results))
 '''.replace('ROOT', repr(REMOTE+'/snapshots')).replace('DIGESTS', repr(snapshots))
     exports = json.loads(t.python(code, timeout=60))
+    export_map = {row['manifest']['snapshot_sha256']: row for row in exports}
     for export in exports:
         manifest = export['manifest']
+        subprocess.run(['git', 'merge-base', '--is-ancestor', manifest['source_commit'], a.commit], cwd=REPO, check=True)
         for record in manifest['files']:
             data = subprocess.check_output(['git', 'show', manifest['source_commit']+':'+record['path']], cwd=REPO)
             assert len(data) == record['bytes'] and hashlib.sha256(data).hexdigest() == record['sha256'], record['path']
         # Historical failed CPU entry retains its old run.py. Each actual run
         # is checked against its own fixed commit, not relabelled final HEAD.
         export['matches_own_fixed_run_commit'] = True
+        export['original_run_commit_is_ancestor_of_final_commit'] = True
+    for job in summary['jobs']:
+        export = export_map[job['snapshot_sha256']]
+        assert job['source_commit'] == export['manifest']['source_commit']
+        directory = Path(job.get('selective_export_local') or job['full_export_local'])
+        request = json.loads((directory/'request.json').read_text())
+        assert request['capture_version'] == job['source_commit']+'/'+job['snapshot_sha256']
+        assert request['cwd'] == export['root']
+        inputs = {row['path']: row['sha256'] for row in request['inputs']}
+        assert inputs[export['root']+'/DEPLOYMENT.json'] == export['manifest_sha256']
     result = {'commit': a.commit, 'branch': 'wbw', 'remote_ref_verified': True,
         'github_ref_verified': True, 'key_file_bytes_verified': True,
         'github_actual_blob_readbacks': blobs, 'server_snapshot_mapping_verified': True,

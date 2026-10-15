@@ -12,11 +12,19 @@ SUPPORT = Path('/home/addaswsw/recommend-support/grid-formal-20261015')
 JOBS = Path('/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server')
 BASE = '93567ea7f61e970c448838443595242d0b9beef0'
 FORBIDDEN = {'.ckpt', '.pt', '.pth', '.pkl', '.pyc', '.tfrecord', '.tar', '.gz', '.zip'}
+ALLOWED_EVIDENCE = {'.py', '.json', '.jsonl', '.yaml', '.yml', '.md', '.csv', '.log', '.npz', '.png', '.txt'}
 SECRET = re.compile(rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{25,}|github_pat_[A-Za-z0-9_]{30,}|sk-[A-Za-z0-9]{30,}')
 
 
 def git_bytes(commit, path):
     return subprocess.check_output(['git', 'show', commit+':'+path], cwd=REPO)
+
+
+def selected_raw(name):
+    path = Path(name)
+    assert not path.is_absolute() and '..' not in path.parts, name
+    return (path.suffix in ALLOWED_EVIDENCE and 'checkpoints' not in path.parts
+        and not any(part.endswith(('.tmp', '.partial', '.lock')) for part in path.parts))
 
 
 def main():
@@ -65,12 +73,49 @@ def main():
         assert directory.is_dir() and not directory.is_symlink()
         status = json.loads((directory/'status.json').read_text())
         assert status['status'] == job['status'] and status['cleanup']['verified']
+        assert status['exit_code'] == job['exit_code']
+        request = json.loads((directory/'request.json').read_text())
+        accepted = json.loads((directory/'accepted.json').read_text())
+        fingerprint = hashlib.sha256(json.dumps(request, sort_keys=True, ensure_ascii=False,
+            separators=(',', ':')).encode()).hexdigest()
+        assert request['job_id'] == status['job_id'] == job['job_id']
+        assert accepted['request_sha256'] == fingerprint
+        assert request['capture_version'] == job['source_commit']+'/'+job['snapshot_sha256']
+        if job.get('selective_export_local'):
+            original_manifest = directory.parent/'COLLECTION_MANIFEST.json'
+            manifest = json.loads(original_manifest.read_text())
+            assert job['job_id'] in manifest['jobs']
+            prefix = job['job_id']+'/'
+            originals = {r['path'][len(prefix):]: r for r in manifest['files'] if r['path'].startswith(prefix)}
+            file('evidence/'+job['job_id']+'/COLLECTION_MANIFEST.json', original_manifest)
+        else:
+            original_manifest = directory/'export-manifest.json'
+            manifest = json.loads(original_manifest.read_text())
+            originals = {r['path']: r for r in manifest['files']}
+        assert len(originals) > 0
+        expected = {name for name in originals if selected_raw(name)}
+        if not job.get('selective_export_local'):
+            expected.add('export-manifest.json')
+        actual = {str(f.relative_to(directory)) for f in directory.rglob('*')
+            if f.is_file() and selected_raw(str(f.relative_to(directory)))}
+        assert actual == expected, {'job': job['job_id'], 'missing': sorted(expected-actual),
+            'unlisted': sorted(actual-expected)}
+        checked = 0
         for f in sorted(directory.rglob('*')):
             assert not f.is_symlink(), f
-            if f.is_file() and f.suffix not in FORBIDDEN and 'checkpoints' not in f.relative_to(directory).parts:
-                file('evidence/'+job['job_id']+'/'+str(f.relative_to(directory)), f)
+            relative = str(f.relative_to(directory))
+            if f.is_file() and selected_raw(relative):
+                data = f.read_bytes()
+                if relative != 'export-manifest.json' or job.get('selective_export_local'):
+                    record = originals[relative]
+                    assert len(data) == record['bytes'] and hashlib.sha256(data).hexdigest() == record['sha256'], f
+                    checked += 1
+                add('evidence/'+job['job_id']+'/'+relative, data)
         evidence.append({'job_id': job['job_id'], 'local_evidence': str(directory),
-            'collection_kind': 'selective-no-weights' if job.get('selective_export_local') else 'full-export'})
+            'collection_kind': 'selective-no-weights' if job.get('selective_export_local') else 'full-export',
+            'original_manifest': str(original_manifest), 'original_manifest_sha256': hashlib.sha256(original_manifest.read_bytes()).hexdigest(),
+            'raw_files_verified_against_original_manifest': checked,
+            'request_fingerprint_verified': True})
     for job in ('beauty-a-metadata-r3', 'beauty-b-smoke-r3'):
         for name in ('fixed_attention_samples.json', 'test_target_index.jsonl'):
             file('inherited-cohorts/'+job+'/'+name, JOBS/job/'retrieved/output'/name)
