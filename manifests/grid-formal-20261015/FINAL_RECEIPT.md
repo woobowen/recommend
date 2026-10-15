@@ -1,61 +1,46 @@
-# GRID formal stage receipt — 2026-10-15
+# GRID 正式阶段回执（进行中）
 
-## A. Overall status
+## A. 总体状态
 
-**PARTIAL — authorized exception repair undergoing CPU regression.** No new formal evaluation, training or attention job has started. The original three correction rounds remain exhausted; the user explicitly approved one strictly scoped additional round, and its one-line serialization fix has now been applied. This receipt records completed preparation and an actual failed CPU entry check, rather than completed formal experiments.
+PARTIAL：Beauty A/B六组正式全量评测及独立结果验收已经完成；Toys/Sports正式训练与新正式注意力图尚未完成。本文件会在本轮获授权工作终验后更新，当前不声称完整交付。
 
-## B. Work completed and inherited
+## B. 本轮完成摘要
 
-The stage resumed `wbw` at `93567ea7f61e970c448838443595242d0b9beef0`, with no unpublished commits or tracked modifications. Existing untracked Python caches were retained. The server source directory was confirmed to be an export without `.git`; no related old worker was active. Existing A/B preflight, Beauty MLP formal best2600/full test/fixed32 attention and original failure history were inherited without rerunning them. The previous temporary cleanup and the user's verified preflight ZIP remain valid.
+继承93567预跑与Beauty MLP正式训练/best2600/fulltest/fixed32，不重跑。接管时wbw干净、无未推送提交或活动旧worker，只有原有未跟踪Python缓存；服务器代码是无.git export。
 
-The new formal orchestration and approved domain specifications were committed and pushed as `ab056ffbb16f2303fe048c668ad275368ccc7237`. Its immutable server deployment is `/home/bwwu/grid-audits/sid-extensions-p0/grid-formal-20261015/snapshots/73074010b1acf951`, full snapshot identity `73074010b1acf9510e2acf7ecfcdf9ba0931a22c1b176c144d3c4c6c17ce5db1`. All 207 deployment files, including 171 Python files, were verified. Model, Shuffle sampler, beam search and evaluator source remained unchanged from the approved preflight.
+新正式编排首次CPU身份检查在未构造模型时失败。用户在原3/3之外明确批准一次限定例外，仅修复whole-cfg保存resolve=False；四组真实CPU保存/重载/实际使用子树解析exact与A/B入口identity均成功，非作者已复核。原失败保留，没有重置预算。
 
-Toys and Sports research settings and their separate 12-hour total allowances, including full testing, are explicitly approved by the user. They do not need renewed research approval. Toys uses the paired author RQ-VAE+STE bundle, scratch/all parameters, raw32/acc48/val4800. Sports uses its own Qwen/R-Kmeans SID plus the author's per-item MLP, scratch/all parameters, raw16/acc16/val1600, explicitly a new structure experiment rather than a recovered historical Sports MLP.
+六正式评测固定源码提交 `2cf4c793c2e0b2e9dc7e7a9269f5e54d5c667896`、不可变export `3870cb40eb8d040a`，每组22363个目标，全部原始预测已fetch。模型/Shuffle sampler/beam/evaluator源与预跑未变。[完整指标与逐项输入](EXECUTION_SUMMARY.json)、[六条件非作者总验收](results-review/beauty-six-formal-results-independent-summary.json)、[方法与指标表](../../docs/sid-extensions/experiments/shuffle.md)。不从相近图像或小指标差异推断普遍顺序不变性。
 
-## C. Results by line
+## C. 当前逐项状态
 
-| Task | Actual action and result | Evidence | Status / remaining dependency |
-|---|---|---|---|
-| Beauty Shuffle A | Three exact plans, asset bindings and independent admission reviews prepared. CPU identity entry failed before model construction. | [Approval records](approval/), [failed job](runs/gf-20261015-a-identity-v1/), [diagnosis](a-identity-v1-failure-diagnosis.json) | Formal Normal/Shuffle3/Shuffle4 NOT_RUN; requires authorized serialization repair and CPU recheck. |
-| Beauty Shuffle B | Three exact plans, asset bindings and independent admission reviews prepared; old shared-table lifecycle PASS inherited. | [Six-condition review index](beauty-six-gate-review-index.json), [specifications](../../experiments/formal_20261015/specs/) | Formal Normal/Shuffle3/Shuffle4 NOT_RUN; same new wrapper dependency. |
-| Toys MLP | Approved original bundle/protocol, saved training driver and nonauthor source review. Current asset/complete split identity and cost scenarios checked. | [Source admission](source-formal-admission.json), [resource review](source-resource-review.json) | Research conditions CONFIRMED; full multiset metadata index and formal training NOT_RUN. |
-| Sports MLP | Approved new structure experiment/protocol, same independently reviewed training driver; own assets and full split identity checked. | [Source admission](source-formal-admission.json), [resource review](source-resource-review.json) | Research conditions CONFIRMED; full multiset metadata index and formal training NOT_RUN. |
-| Beauty baseline attention | Main baseline is B Qwen/R-Kmeans/shared table; existing fixed32 cohort retained. | [Attention protocol](../../docs/sid-extensions/experiments/attention.md), [formal wrapper](../../experiments/formal_20261015/run.py) | New formal figure NOT_RUN; shared wrapper dependency. |
-| Beauty Shuffle attention | Separate capture path prepared, requiring corresponding completed formal evaluation identity; no preflight figure relabeled formal. | [Formal wrapper](../../experiments/formal_20261015/run.py) | A/B formal fixed32 NOT_RUN; evaluation prerequisites unmet. |
-| MLP attention | Existing completed Beauty MLP fixed32 inherited without recollection. | [Existing formal result](../beauty-extensions/runs/beauty-mlp-formal-attention32-v1/RESULT.json) | Toys/Sports NOT_RUN because formal training has not started. |
+|任务|真实结果|剩余事项|
+|---|---|---|
+|Beauty Shuffle A|Normal/Shuffle3/Shuffle4正式全量与独立复算PASS|对应正式attention待采|
+|Beauty Shuffle B|Normal/Shuffle3/Shuffle4正式全量与独立复算PASS|主baseline B Normal及对应Shuffle attention待采|
+|Toys MLP|用户批准作者RQ-VAE+STE整套、scratch全参数、raw32/acc48/val4800、12h总额度；真实CPU全val/test19412索引及fixed32生成PASS|精确新plan准入绑定、正式训练/选best/完整test|
+|Sports MLP|用户批准本域Qwen/RK+作者逐物品MLP新结构实验、scratch全参数、raw16/acc16/val1600、12h总额度；真实CPU全val/test35598索引及fixed32生成PASS|精确新plan准入绑定、正式训练/选best/完整test|
+|普通/Shuffle注意力|六份独立捕获计划绑定各自已审核正式eval RESULT/status/review及既有fixed32|单独准入与正式采集/绘图；B Normal同时作为主baseline，不重复采集|
+|MLP注意力|Beauty正式fixed32继承，不重采|Toys/Sports正式训练成功且剩余额度足够后再采|
 
-No new Recall/NDCG result, best checkpoint or formal attention matrix is claimed. No test-set configuration search occurred.
+## D. 作业与资源
 
-## D. Actual new job and failure
+完整job_id、输入commit/snapshot、status、exit及fetch位置见 [EXECUTION_SUMMARY.json](EXECUTION_SUMMARY.json)。六次GPU请求作业worker wall合计1230.993362秒，即0.341942600556 GPU小时；包含CPU准备/复算，不是GPU忙碌计时。原预跑0.254719263611小时单列继承，不重置。
 
-| Job | Phase | Input commit / snapshot | Status | Exit | Fetch |
-|---|---|---|---|---:|---|
-| `gf-20261015-a-identity-v1` | CPU identity check, not formal evaluation | `ab056ffbb16f2303fe048c668ad275368ccc7237` / `73074010b1acf951` | FAILED | 1 | All nine export members verified and included [here](runs/gf-20261015-a-identity-v1/). |
+首失败 `gf-20261015-a-identity-v1` FAILED/1，无模型/GPU；其完整九成员原始export保留。配置回归 `gf-20261015-config-roundtrip-r4`、A/B两次CPU identity以及Toys/Sports两次full metadata均SUCCEEDED/0，cleanup已确认，不算正式模型评价。
 
-Request fingerprint `8cf2fe1e425c839b6210ca836a21c2bbb0515636714562359f12155d156208a5` matched acceptance. Runner wall time was 8.784242 seconds, `CUDA_VISIBLE_DEVICES` was empty, cleanup was verified and no worker remained. Only invocation output was written. Source, manifest and request identities closed correctly: this failure was neither the old deployment-manifest conflict nor a CPU/CUDA model fault.
+正式前资源证据见 [domain-prelaunch-resources.json](domain-prelaunch-resources.json)。[来源/成本review](source-resource-review.json)仅以旧Beauty实际3600更新/36完整验证作规划情景，保守约Toys7.381h/Sports9.092h；不把3600设为停止步数，不保证12h早停，原max_steps320000保持。每域12h包含完整测试，耗尽须保存INCOMPLETE且不延长。
 
-The new wrapper attempted `OmegaConf.save(..., resolve=True)` on the entire source configuration, including an unused Hydra `${now:...}` run-id field. Without a Hydra runtime this raised `UnsupportedInterpolationType: now` before the mode-specific model or index path. The concrete proposed repair changes only this whole-config save to `resolve=False`, matching the existing successful common/MLP entries; actual computation subtrees continue to be resolved through the original code. See the [exact unapplied patch](proposed-config-serialization-fix.patch) and [independent review](config-serialization-review.json). Original FAILED records are preserved.
+## E. 独立审核与版本
 
-## E. Resource and review evidence
+来源与训练源码：`/root/source_conditions_review`；root编排/CPU配置回归：`/root/implementation_review`；六正式结果原始预测/指标/身份：`/root/results_publication_review`。本人编写train.py的代理未对其自签。每份review保存真实范围与未运行边界：[source](source-formal-admission.json)、[CPU真实回归](config-roundtrip-runtime-review.json)、[六正式结果](results-review/beauty-six-formal-results-independent-summary.json)。后续attention和MLP正式结果须另审，未预签PASS。
 
-Toys evaluation/testing each have 19,412 rows in 152 files; Sports each have 35,598 rows in 279 files. The 862 files match the already completed full CRC/schema/hash evidence. This stage refreshed directory names/sizes/readability and small SID/config hashes, without rescanning 2.3 GB of TFRecords or loading models. Full target multisets still require one saved CPU metadata job per domain.
+## F. 未决事项
 
-Using the earlier Beauty formal run only as a 3,600-update/36-full-validation planning scenario, the conservative scenarios are about 7.381 hours for Toys and 9.092 hours for Sports, including one complete test, a stated 25% engineering allowance and startup time. These are assumptions, not statistical bounds or new stopping steps. Early stopping is not predictable; original max_steps320000 remains unchanged. No evidence currently shows that this reference scenario clearly exceeds 12 hours. The total hard limit will not be extended; exhaustion must remain INCOMPLETE. No new GPU job was started and no package/environment configuration was installed or changed.
+Toys/Sports的研究条件与12h预算已正式批准，不需再次决定。当前运行准备仅剩新增完整输入的精确准入绑定；未发现新的研究决策阻塞。原3/3与单轮例外事实保留，不能继续扩大返工。正式训练和注意力尚未启动，不将准备进度冒称实验完成。
 
-Real review roles and limits:
+## G. 交付材料
 
-- `/root/source_conditions_review`: approved domain source/configuration, user protocol and training-driver review; current asset/split and cost evidence. Did not sign missing runtime indexes or formal results. [Source](source-formal-admission.json), [resources](source-resource-review.json).
-- `/root/implementation_review`: reviewed root-authored wrapper/deployment and the exact configuration serialization failure/proposal. Its own training-driver implementation was independently reviewed by the source reviewer. The proposal has static approval only, no runtime PASS. [Initial scope](implementation-formal-admission.json), [failure/proposal](config-serialization-review.json).
-- `/root/results_publication_review`: six exact admission plans/source maps/assets/indexes and actual failed request/manifest/output identity. Did not sign unrun formal evaluation or attention. [Admission index](beauty-six-gate-review-index.json), [actual failure](identity-v1-failure-review.json).
+必要原始全预测与逐样本指标当前保留于WSL `.../sid-extensions-p0/jobs/new-server/<job>/retrieved` 和服务器原job目录；Git发布小回执/配置/指标/源码与身份。最终统一轻量ZIP将在本轮终验时生成、实际校验并给出大小/SHA/路径，当前尚未生成新ZIP。原已审核预跑ZIP及SHA不变并继续保留。
 
-## F. Only current blocking decision
-
-The inherited preflight used all three concentrated correction rounds. The user subsequently explicitly approved one additional focused repair: apply the linked one-line configuration serialization patch, regenerate exact source/gate bindings and verify CPU-only save/reload/actual-interpolation/effective-configuration consistency followed by a new identity attempt. No request is made to reconsider the already approved Toys/Sports research conditions or 12-hour budgets. The patch has been applied only after this explicit exception approval. The original three rounds are not reset; no further exception is assumed.
-
-The independent work above is preserved. Runtime work shares the new wrapper dependency, so submitting it through this known failing entry would waste jobs. After authorization, the old failed job must remain FAILED, and the new attempt must have a fresh immutable source/request identity. Existing successful preflights must not be rerun.
-
-## G. Publication and delivery
-
-All necessary evidence for this partial receipt, including the original failed export, is included in this publication on `wbw`. The actual delivery commit and remote readback are recorded outside Git in `/home/addaswsw/recommend-support/grid-formal-20261015/FINAL_PUBLICATION_RECEIPT.json`, avoiding a self-referential commit. The initial execution commit remains `ab056ffbb16f2303fe048c668ad275368ccc7237`; publication of additional evidence does not change the immutable failed deployment.
-
-`GPT_UPLOAD_REQUIRED: NO` for this partial receipt. The already verified prior preflight ZIP remains at `/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/deliveries/grid-shuffle-mlp-preflight-20261015.zip`, SHA-256 `956b7488296f14fb5cb446f46ca482949b8296ba9f346a6dc444328b7f17c8e3`; it is not rebuilt or replaced. No cleanup, Parallel, additional method, baseline retraining or other experiment was performed.
+`GPT_UPLOAD_REQUIRED: YES`（最终包待本轮终验；本文件是进行中的真实状态，尚非完整交付）。没有新增安装/环境配置、清理正式资产、Parallel、额外训练或测试集调参。

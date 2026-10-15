@@ -1,0 +1,53 @@
+{
+  "schema": "grid-independent-reviewer-invocation-v1",
+  "reviewer": "/root/source_conditions_review",
+  "recorded_at_utc": "2026-10-15T16:53:14.158070+00:00",
+  "successful_command": {
+    "argv": [
+      "python3",
+      "-B",
+      "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/review_metadata.py"
+    ],
+    "cwd": "/home/addaswsw/recommend",
+    "exit_code": 0,
+    "tool_exec_chunk": "b6d4fe",
+    "exec_session_id": 64224,
+    "completion_chunk": "88c7e9",
+    "script_sha256": "c04cef2064ded83ee97abb0ce62644f9815bd7b6bddb06da62a93e186432c69d",
+    "script_saved_before_successful_invocation": true
+  },
+  "reports": {
+    "toys": {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/toys-gate-review.json",
+      "bytes": 37476,
+      "sha256": "3b1663b1e24a3f3aeb3785ee7821eedd0c30eff02e1e786c4f8398d872272323",
+      "status": "PREFLIGHT_GATE_PASS",
+      "plan_sha256": "89476297e31746b0db1e0709c0aa9b4a75290c3a9b6da8e20b447f1b80e3669b"
+    },
+    "sports": {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/sports-gate-review.json",
+      "bytes": 37502,
+      "sha256": "b15b2415ab43124615a14b63a22a65110af08db28868db8c57d6a3f27b741802",
+      "status": "PREFLIGHT_GATE_PASS",
+      "plan_sha256": "e7273c5b4d9bf45ef822321a7d4ec2f7ea602c9614508ee402b77f90869f7ce6"
+    }
+  },
+  "reviewer_command_diagnostics": [
+    {
+      "tool_exec_chunk": "a08a9a",
+      "phase": "Python syntax parse, before any audit/file write",
+      "error": "SyntaxError in final output expression: else35598 lacked whitespace",
+      "project_source_or_run_failure": false
+    },
+    {
+      "tool_exec_chunk": "f494ab",
+      "phase": "read-only review assertion before gate writes",
+      "error": "Review initially compared used_config_sha256 with whole-file SHA; producer actually hashes sorted JSON content using its documented serialization",
+      "resolution": "Read actual config_roundtrip.py encoded/hash lines; compare same canonical content encoding. Actual before/after content equality and independent file SHA evidence retained.",
+      "project_source_or_run_failure": false
+    }
+  ],
+  "no_research_or_configuration_changes": true,
+  "no_models_GPU_workers_or_raw_data_rescans": true,
+  "repair_budget_unchanged": "Old3/3 plus the previously explicitly approved one-line project configuration-save exception; reviewer command diagnostics add no project repair round."
+}

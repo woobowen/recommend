@@ -1,0 +1,469 @@
+{
+  "schema": "grid-formal-independent-MLP-admission-v1",
+  "status": "PREFLIGHT_GATE_PASS",
+  "reviewer": "/root/source_conditions_review",
+  "domain": "toys",
+  "stage_id": "grid-formal-20261015",
+  "reviewed_at_utc": "2026-10-15T16:51:56.905896+00:00",
+  "plan_sha256": "89476297e31746b0db1e0709c0aa9b4a75290c3a9b6da8e20b447f1b80e3669b",
+  "canonical_plan_excluded_fields": [
+    "nonauthor_gate",
+    "formal_approved"
+  ],
+  "plan": {
+    "route": "MLP",
+    "seed": 42,
+    "generation_k": 10,
+    "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/toys",
+    "config": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd/toys-source.yaml",
+      "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd"
+    },
+    "sid": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0/toys-semantic-ids.pt",
+      "sha256": "26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0"
+    },
+    "domain": "toys",
+    "stage": "grid-formal-20261015",
+    "shuffle_n": 0,
+    "formal_training_allowed": true,
+    "formal_protocol_user_approved": true,
+    "initialization": "scratch; all parameters trainable; no engineering checkpoint reuse",
+    "approved_protocol": {
+      "raw_microbatch": 32,
+      "accumulate_grad_batches": 48,
+      "val_check_interval": 4800,
+      "collate_window_cap": 512
+    },
+    "hard_cap_hours": 12,
+    "user_approval_reference": "2026-10-15 user: 两个问题均批准方案1；12小时总硬资源上限，含完整测试，耗尽保存并如实未完成",
+    "research_identity": "author Toys RQ-VAE+STE bundle with approved single-card adaptation",
+    "evaluation_index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/evaluation_target_index.jsonl",
+      "sha256": "d25c0ca3db2ad98bf72d4c4d8900fbfbba3496501d16e8ba725b743c2fd149aa",
+      "bytes": 2023819
+    },
+    "test_index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/test_target_index.jsonl",
+      "sha256": "3e876c25ba53d513a4006a05b578694bcf59395fac973d5ecbc3e16b6fd80140",
+      "bytes": 2870565
+    },
+    "attention_cohort": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/fixed_attention_samples.json",
+      "sha256": "33faa4b89ea4b4fd1df1cdeb614167c61fdb13811ec63116c416d740d8fcbf89",
+      "bytes": 186395
+    }
+  },
+  "reviewed_spec": {
+    "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/specs/toys-mlp.json",
+    "bytes": 2178,
+    "sha256": "ce091b9f245808083d8b165042afa3d9f1ba6d25baa0abbda25eebc4be38333c"
+  },
+  "source_python_sha256": {
+    "GRID baseline/src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/components/clustering_initializers.py": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+    "GRID baseline/src/components/distance_functions.py": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+    "GRID baseline/src/components/eval_metrics.py": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+    "GRID baseline/src/components/loss_functions.py": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+    "GRID baseline/src/components/network_blocks/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/components/network_blocks/hf_language_model.py": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+    "GRID baseline/src/components/quantization_strategies.py": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+    "GRID baseline/src/components/scheduler.py": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+    "GRID baseline/src/components/training_loop_functions.py": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+    "GRID baseline/src/data/loading/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/data/loading/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/data/loading/components/collate_functions.py": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+    "GRID baseline/src/data/loading/components/custom_dataloader.py": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+    "GRID baseline/src/data/loading/components/dataloading.py": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+    "GRID baseline/src/data/loading/components/interfaces.py": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+    "GRID baseline/src/data/loading/components/iterators.py": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+    "GRID baseline/src/data/loading/components/label_function.py": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+    "GRID baseline/src/data/loading/components/pre_processing.py": "31f89a77b4881c1130f83e1572b25fe273de1e641855d6a199cd0b9a84984391",
+    "GRID baseline/src/data/loading/datamodules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/data/loading/datamodules/sequence_datamodule.py": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+    "GRID baseline/src/data/loading/utils.py": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+    "GRID baseline/src/inference.py": "b24358c9089bccfcc9384a3b3df894bf1dc94761f30dbbb26ba85d5245a500d2",
+    "GRID baseline/src/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/components/interfaces.py": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+    "GRID baseline/src/models/components/network_blocks/aggregation_strategy.py": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+    "GRID baseline/src/models/components/network_blocks/embedding_aggregator.py": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+    "GRID baseline/src/models/components/network_blocks/mlp.py": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+    "GRID baseline/src/models/components/network_blocks/normalize_layer.py": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+    "GRID baseline/src/models/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/modules/base_module.py": "029dc55aa499147c55a915c9523291c6b331076afb5cd7a18459968aaff16b73",
+    "GRID baseline/src/models/modules/clustering/base_clustering_module.py": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+    "GRID baseline/src/models/modules/clustering/mini_batch_kmeans.py": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+    "GRID baseline/src/models/modules/huggingface/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/modules/huggingface/transformer_base_module.py": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+    "GRID baseline/src/models/modules/semantic_id/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+    "GRID baseline/src/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/modules/clustering/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/modules/clustering/residual_quantization.py": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+    "GRID baseline/src/modules/clustering/vector_quantization.py": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+    "GRID baseline/src/modules/semantic_embedding_inference_module.py": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+    "GRID baseline/src/train.py": "7bf26a7cc027783b99cc7f81c37a9f237cfb504df76dcbc202072ba5fc9565d5",
+    "GRID baseline/src/utils/__init__.py": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+    "GRID baseline/src/utils/custom_hydra_resolvers.py": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+    "GRID baseline/src/utils/decorators.py": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+    "GRID baseline/src/utils/file_utils.py": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+    "GRID baseline/src/utils/inference_utils.py": "8a498d5fa77196b28ea9328cd7c31ccece241e24c0be1934fdee27abb299252a",
+    "GRID baseline/src/utils/instantiators.py": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+    "GRID baseline/src/utils/launcher_utils.py": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+    "GRID baseline/src/utils/logging_utils.py": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+    "GRID baseline/src/utils/masking_utils.py": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+    "GRID baseline/src/utils/pylogger.py": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+    "GRID baseline/src/utils/restart_job.py": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+    "GRID baseline/src/utils/restart_job_utils.py": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+    "GRID baseline/src/utils/rich_utils.py": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+    "GRID baseline/src/utils/tensor_utils.py": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+    "GRID baseline/src/utils/utils.py": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788",
+    "experiments/beauty_extensions/__init__.py": "537a1698c10f159802a56e0e8d153b53806ca62f7b7a8383242939fb2edd7c6f",
+    "experiments/beauty_extensions/attention/__init__.py": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+    "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+    "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+    "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+    "experiments/beauty_extensions/attention/selfcheck.py": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+    "experiments/beauty_extensions/author/__init__.py": "624d009dfbc652e17f3de47f768316c0eae386b67e6b87d83a1a8f4bc79ac457",
+    "experiments/beauty_extensions/author/bootstrap.py": "13b42af96b0a08bf8ac6636a1ff8bc7492e830692fedbd5b9890394eb6904c14",
+    "experiments/beauty_extensions/author/checks.py": "044c475be6cd40ca419b2da83a1b3d8851b1aa3a2c62760953064334d36be907",
+    "experiments/beauty_extensions/author/models.py": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4",
+    "experiments/beauty_extensions/authorization.py": "5291e37397f21f9ddb2b3e0c0844aa0176ccfdd046f9050249661fb088c2d6ee",
+    "experiments/beauty_extensions/baseline.py": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+    "experiments/beauty_extensions/bundle_delivery.py": "38051a0e7d0f0ea9efbdf9d73cb71dd2c3473b4d628cd92c9c746085894327a9",
+    "experiments/beauty_extensions/checkpoint_info.py": "79edf46d9526e5298aff3ca56c619e9c8e21f41f3718b19e11b534d6b081736c",
+    "experiments/beauty_extensions/cli.py": "1a7805c778d27f2f5f551398ba81679e036d0e2d4746650063226788e41b239a",
+    "experiments/beauty_extensions/collect_evidence.py": "5a1ddcd221a01d1af8ccb5bc7b2aff96761f216f588afef8399aba19a3d4fcd7",
+    "experiments/beauty_extensions/common.py": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+    "experiments/beauty_extensions/data_checks.py": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+    "experiments/beauty_extensions/deploy.py": "f9cf91d6798e171d7b641434766895333a59b675ccbfec3bf76326e108ced081",
+    "experiments/beauty_extensions/mlp_attention.py": "b53aa3832a693bdcfa015393799a320b10fa804d7f351cc029e690c1df95f9fa",
+    "experiments/beauty_extensions/mlp_execution.py": "e22e22710ccf664109b4b3142cbc26911325dcaea37e6459bdffdb37528f393a",
+    "experiments/beauty_extensions/mlp_formal.py": "ac362b84f7a9a979bb7549ce1f817448fe172b9d32adc1a449180f5aa97d9e56",
+    "experiments/beauty_extensions/monitor.py": "770376df0aeebb7ff2d5d727bdffd83c514ae54af0e983a88a5709f31c8d10b2",
+    "experiments/beauty_extensions/observation.py": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+    "experiments/beauty_extensions/plot_training.py": "154cb13087b9f95b8c85024ad7548cf3a00c7183bbba6afe030e080208d51fe0",
+    "experiments/beauty_extensions/restore_assets.py": "5c8f8c7ae6e34289b4814e553345014f1d4de5d016ae46e935a89d3c0f94bf3f",
+    "experiments/beauty_extensions/results.py": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+    "experiments/beauty_extensions/summarize_delivery.py": "dab21879249c3f66d63c6e9db6d6fa986ffddfff431be3e79c9215235ea6ff6f",
+    "experiments/beauty_extensions/training.py": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3",
+    "experiments/beauty_extensions/verify_saved_predictions.py": "b6587fcebdbd86e6f21dcb25ce2d11b3a5c71895fe6660b6238571ba482972d0",
+    "experiments/formal_20261015/__init__.py": "f8a812be45c1741ccbc6ef90967b700c95d2109341c67067436efb672d0d7517",
+    "experiments/formal_20261015/deploy.py": "70210a765984c095ab14925c4801f38c913cb5c790d59483a88a294e10998a0c",
+    "experiments/formal_20261015/run.py": "15d4f7b280df8bb05200049ed643bf499038125d43529760c170c70dd6e2bc14",
+    "experiments/formal_20261015/train.py": "af7ec5159e0fbe9f7330d1172b81356920a1c626db9e15a6b339e6b074c79a1e",
+    "experiments/preflight_20261015/__init__.py": "3e6844d8f37f1cb69ff58e7800c646db95b80fbe5a9c70229575e70d5f289896",
+    "experiments/preflight_20261015/assets.py": "9a676809ae3673bac7ff48657d5777b3efca6104447892f7535809f4d8439538",
+    "experiments/preflight_20261015/bundle.py": "8e0322353c6f489fe2cf9bfa3717f2c8f0071deaad1a0863a4c22ce50d64244a",
+    "experiments/preflight_20261015/candidates.py": "b20a0c28448c043b96bb9db74881025562f3c065d644ac1eba77f8893e33142b",
+    "experiments/preflight_20261015/collect.py": "de3c57d83b52b17b8dbb94066543f1930c3ddf8e34413d42124d346ec5984511",
+    "experiments/preflight_20261015/deploy.py": "fd9abb949f9365acc6a93fb716f1e4290b84138547bd0b7465a66cf0da7a8b81",
+    "experiments/preflight_20261015/finalize.py": "06a4d92b4fadf4bd816c144fbdb1c286b88af74d79104fc5f96e1ba8e34cfe15",
+    "experiments/preflight_20261015/publish.py": "7c6d1c7b3068a76c0999e92394822c64726b5d800b6f445968201532d27e4977",
+    "experiments/preflight_20261015/resources.py": "40e260a298902752190d791470e8d927d782ad5c8e2f845a3517fc42526e0597",
+    "experiments/preflight_20261015/resume_plan.py": "dc656cc4fddbd204865f4650f991e71151f84e29f821de9568911bba70ee5f45",
+    "experiments/preflight_20261015/run.py": "4712b017a7d5bdf1c5f5da3db87eced96303115a69dd12e88c8b9aff4327fcd6",
+    "references/wmh-original/GRID/src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/components/clustering_initializers.py": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+    "references/wmh-original/GRID/src/components/distance_functions.py": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+    "references/wmh-original/GRID/src/components/eval_metrics.py": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+    "references/wmh-original/GRID/src/components/loss_functions.py": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+    "references/wmh-original/GRID/src/components/network_blocks/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/components/network_blocks/hf_language_model.py": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+    "references/wmh-original/GRID/src/components/optimizer.py": "d641316bf995f824b10d2499143b73333ae9bb4dfab1587c7c13c25d8ea46050",
+    "references/wmh-original/GRID/src/components/quantization_strategies.py": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+    "references/wmh-original/GRID/src/components/scheduler.py": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+    "references/wmh-original/GRID/src/components/training_loop_functions.py": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+    "references/wmh-original/GRID/src/data/loading/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/data/loading/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/data/loading/components/collate_functions.py": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+    "references/wmh-original/GRID/src/data/loading/components/custom_dataloader.py": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+    "references/wmh-original/GRID/src/data/loading/components/dataloading.py": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+    "references/wmh-original/GRID/src/data/loading/components/interfaces.py": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+    "references/wmh-original/GRID/src/data/loading/components/iterators.py": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+    "references/wmh-original/GRID/src/data/loading/components/label_function.py": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+    "references/wmh-original/GRID/src/data/loading/components/pre_processing.py": "a69c88681760df22e37fb7e66961ad97ed0824af20eae415a543379e881d71c7",
+    "references/wmh-original/GRID/src/data/loading/datamodules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/data/loading/datamodules/sequence_datamodule.py": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+    "references/wmh-original/GRID/src/data/loading/utils.py": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+    "references/wmh-original/GRID/src/inference.py": "f24892ed2d9777c6fd5d3eaf20cc0ea3d180a19a490519baa7ca2390a70c05ba",
+    "references/wmh-original/GRID/src/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/components/interfaces.py": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+    "references/wmh-original/GRID/src/models/components/network_blocks/aggregation_strategy.py": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+    "references/wmh-original/GRID/src/models/components/network_blocks/embedding_aggregator.py": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+    "references/wmh-original/GRID/src/models/components/network_blocks/mlp.py": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+    "references/wmh-original/GRID/src/models/components/network_blocks/normalize_layer.py": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+    "references/wmh-original/GRID/src/models/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/modules/base_module.py": "7cfa9da5f73c0e666ab81f22440d04f04d6cc9624803de58cde3256dcae400b0",
+    "references/wmh-original/GRID/src/models/modules/clustering/base_clustering_module.py": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+    "references/wmh-original/GRID/src/models/modules/clustering/mini_batch_kmeans.py": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+    "references/wmh-original/GRID/src/models/modules/huggingface/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/modules/huggingface/transformer_base_module.py": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model.py": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py": "7561d2f494764a77efac1d71abff4ea15bc683eea0816c1e8fe067d7d5c78463",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_parallel.py": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+    "references/wmh-original/GRID/src/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/modules/clustering/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/modules/clustering/residual_quantization.py": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+    "references/wmh-original/GRID/src/modules/clustering/vector_quantization.py": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+    "references/wmh-original/GRID/src/modules/semantic_embedding_inference_module.py": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+    "references/wmh-original/GRID/src/test.py": "53f43b1c3e8c5549901aac4f8ee93eea92fc4123bc10439607de20f87be17d78",
+    "references/wmh-original/GRID/src/train.py": "f78680593ba465d0716aaf44239a730b5b449a227a0e957f67c0781e9a0fa4ea",
+    "references/wmh-original/GRID/src/utils/__init__.py": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+    "references/wmh-original/GRID/src/utils/custom_hydra_resolvers.py": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+    "references/wmh-original/GRID/src/utils/decorators.py": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+    "references/wmh-original/GRID/src/utils/file_utils.py": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+    "references/wmh-original/GRID/src/utils/inference_utils.py": "a3fa7e388713e38c5d67824b0a51eb9a9395695df46571c645845efbf183d7bf",
+    "references/wmh-original/GRID/src/utils/instantiators.py": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+    "references/wmh-original/GRID/src/utils/launcher_utils.py": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+    "references/wmh-original/GRID/src/utils/logging_utils.py": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+    "references/wmh-original/GRID/src/utils/masking_utils.py": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+    "references/wmh-original/GRID/src/utils/pylogger.py": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+    "references/wmh-original/GRID/src/utils/restart_job.py": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+    "references/wmh-original/GRID/src/utils/restart_job_utils.py": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+    "references/wmh-original/GRID/src/utils/rich_utils.py": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+    "references/wmh-original/GRID/src/utils/tensor_utils.py": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+    "references/wmh-original/GRID/src/utils/utils.py": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788"
+  },
+  "source_python_count": 171,
+  "source_python_map_sha256": "492acce5a9bd41e6a051f0e2cc3ffe458a82684f626cf6e74a8ff712356a03d0",
+  "assets": {
+    "config": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd/toys-source.yaml",
+      "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd"
+    },
+    "sid": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0/toys-semantic-ids.pt",
+      "sha256": "26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0"
+    }
+  },
+  "metadata_execution": {
+    "job_id": "gf-20261015-toys-metadata-v1",
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "cleanup_verified": true,
+    "worker_may_be_live": false,
+    "CUDA_VISIBLE_DEVICES": "",
+    "model_loaded": false,
+    "request_fingerprint_sha256": "745f5ba0c00b62e39d1fe04caaf8747e168028a94f11ae919d318c746e643da2",
+    "request_capture_version": "2cf4c793c2e0b2e9dc7e7a9269f5e54d5c667896/3870cb40eb8d040a468ff3509e91703da7e833f90f8c279772b35d296b60d04a",
+    "source_commit": "2cf4c793c2e0b2e9dc7e7a9269f5e54d5c667896",
+    "snapshot_sha256": "3870cb40eb8d040a468ff3509e91703da7e833f90f8c279772b35d296b60d04a",
+    "deployment_manifest_sha256": "3a281b615b0aa6266c343681294d1061e2d28932e7963f18aadcd64fa7b2de73",
+    "all171Python_exact_to_admitted_current_source": true,
+    "exported_members_hash_verified": 15,
+    "prototype_protocol_exact_before_only_new_output_refs": true,
+    "started_at": "2026-10-15T16:31:16.790947+00:00",
+    "ended_at": "2026-10-15T16:32:11.322818+00:00"
+  },
+  "full_indexes": {
+    "evaluation": {
+      "asset": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/evaluation_target_index.jsonl",
+        "sha256": "d25c0ca3db2ad98bf72d4c4d8900fbfbba3496501d16e8ba725b743c2fd149aa",
+        "bytes": 2023819
+      },
+      "rows": 19412,
+      "unique_user_keys": 19412,
+      "unique_key_target_pairs": 19412,
+      "files": 152,
+      "per_file_contiguous_row_positions_and_counts_exact": true,
+      "targets_H4_integer_range": true,
+      "independent_key_target_multiset_sha256": "08c9df843dd7fc73f9af03a878fb0dca179dba312539c6cfd14d1ee3936dd4f6"
+    },
+    "testing": {
+      "asset": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/test_target_index.jsonl",
+        "sha256": "3e876c25ba53d513a4006a05b578694bcf59395fac973d5ecbc3e16b6fd80140",
+        "bytes": 2870565
+      },
+      "rows": 19412,
+      "unique_user_keys": 19412,
+      "unique_key_target_pairs": 19412,
+      "files": 152,
+      "per_file_contiguous_row_positions_and_counts_exact": true,
+      "targets_H4_integer_range": true,
+      "independent_key_target_multiset_sha256": "47d25c127dd352a3f1767272e7974bc02f8f17b8cd84900dd8643268673db7a5"
+    }
+  },
+  "evaluation_and_test_user_key_sets_exact": true,
+  "cohort": {
+    "asset": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/fixed_attention_samples.json",
+      "sha256": "33faa4b89ea4b4fd1df1cdeb614167c61fdb13811ec63116c416d740d8fcbf89",
+      "bytes": 186395
+    },
+    "users": 32,
+    "unique_keys": 32,
+    "exact_complete_evaluation_index_prefix": true,
+    "selected_before_model_outputs": true,
+    "input_shape": [
+      32,
+      120
+    ],
+    "mask_shape": [
+      32,
+      120
+    ],
+    "target_shape": [
+      32,
+      4
+    ],
+    "complete_item_groups_and_target_hiding_verified": true,
+    "visible_item_axis_and_padding_verified": true,
+    "original_metadata_item_to_SID_checks": "Actual metadata execution invokes original NextKTokenMasking and selected-SID last-item comparison; source hashes exact. Reviewer does not rerun raw TFRecord decode/SID deserialization."
+  },
+  "CPU_approved_training_configuration": {
+    "job_id": "gf-20261015-config-roundtrip-r4",
+    "case": 2,
+    "actual_used_subtrees_save_reload_exact": true,
+    "raw_microbatch": 32,
+    "accumulate_grad_batches": 48,
+    "val_microbatches": 4800,
+    "collate_window_cap": 512,
+    "workers_train_val_test": 8,
+    "scratch_full_parameter_training": true,
+    "engineering_checkpoint_reuse": false,
+    "optimizer": "Adam lr.001/wd.0001/no scheduler",
+    "seed": 42,
+    "K": 10,
+    "prefix_constraint": false,
+    "selection": "full val/recall@5 max; patience10/min_delta0",
+    "max_steps": 320000,
+    "max_epochs": 10,
+    "precision": "32-true",
+    "hard_resource_cap_total_seconds_including_test": 43200
+  },
+  "metadata_config_boundary": "Metadata reads val/test using the source base template, train=False. Its unused Toys trainacc16/val1600 fields do not supersede the admitted train.configure overlay48/4800, actually executed by the successful CPU roundtrip case.",
+  "research_identity": "author Toys RQ-VAE+STE bundle with approved single-card adaptation",
+  "inherited_engineering": "Fixed93567ea7f61e970c448838443595242d0b9beef0 passed real2+1updates/domain, gradients, strict restore and bounded evaluator; no preflight rerun. Source train.py remains the separately nonauthor-reviewed af7ec5159e0fbe9f7330d1172b81356920a1c626db9e15a6b339e6b074c79a1e.",
+  "provenance_limits_retained": "Toys upper-stage factory/path contradiction and unique historical producer gap remain disclosed; Sports is an approved new Qwen/RK+original itemMLP experiment, not an invented historical Sports reproduction.",
+  "resource_admission": {
+    "actual_full_counts_match_prior_resource_scenarios": true,
+    "reference_scenario_only_updates": 3600,
+    "reference_scenario_full_validations": 36,
+    "reference_scenario_complete_tests": 1,
+    "linear_scenario_hours": 4.624978884551949,
+    "conservative_planning_scenario_hours": 7.3807857250066995,
+    "assumptions": "No training speedup; largest observed Beauty full validation scaled by domain counts; explicit25percent planning overhead and600s startup/cleanup, not statistical bounds.",
+    "obviously_exceeds12h_in_reference_scenario": false,
+    "completion_by12h_guaranteed": false,
+    "3600_is_not_stop_setting": true,
+    "source_max_steps320000_is_not_predicted_endpoint": true,
+    "hard_cap_behavior": "Runner-start12h total includes all full validations, strict best/test/recompute and saving;180s checkpoint reserve; exhaustionINCOMPLETE, no autoextension or reduction of full coverage.",
+    "prelaunch_snapshot": {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/domain-prelaunch-resources.json",
+      "bytes": 297,
+      "sha256": "25b3f3217694ea416bb95b304af3dbecb1a131e45433b6f2c91dd8baa64157c4"
+    },
+    "launch_refresh": "Controller/deployer must refresh actual GPU/disk availability at submission."
+  },
+  "budget": "Inherit original3/3 correction budget; separate single user-approved configuration-save exception passed real4case CPU regression. No reset or new repair granted.",
+  "scope": "Independent technical preflight admission only; not a user authorization token or claim of formal training completion. Root separately binds user token, immutable commit/deployment and starts approved worker.",
+  "reviewer_actions": {
+    "models_or_GPU_runs": 0,
+    "workers_submitted": 0,
+    "raw_TFRecord_rescans": 0,
+    "repository_or_asset_edits": 0,
+    "user_token_signed": false
+  },
+  "evidence": [
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/request.json",
+      "bytes": 2027,
+      "sha256": "eb320a6c54336780eae12030470b373e6bc5f13e7aaa68f3100abb2a10da7df6"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/status.json",
+      "bytes": 3374,
+      "sha256": "5cea760da2edc16b99533d04374065e5a00a8130ce379109cda230caf837eb01"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/accepted.json",
+      "bytes": 310,
+      "sha256": "d0d4078aec13f8b7923d5dbbc625002af71fe01d831d9579a84689f6c4342927"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/cleanup.json",
+      "bytes": 664,
+      "sha256": "d8ebb2cd6fa008a5b06f5e0cbe104d3cd2589d545724b394a251e96a6ca34f3d"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/export-manifest.json",
+      "bytes": 1839,
+      "sha256": "b821e8b728be66a38020726a9bf08cddeea8a2eebac8f0b0b463dea451568888"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/output/invocation.json",
+      "bytes": 43566,
+      "sha256": "c0f0a56113a580d248186c3a1f9e60cdaaac810d722d311262723f66b78fe833"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/output/RESULT.json",
+      "bytes": 186989,
+      "sha256": "8bdfd2af18a8bc65946eced503afe56f8151069e2060995d062090bd6e5581a5"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/output/evaluation_coverage.json",
+      "bytes": 85444,
+      "sha256": "93e103b02c9dc0eb578851e50f250f75e2abd2bbbd5e7a3dc4121400ae33e41f"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/output/test_coverage.json",
+      "bytes": 94377,
+      "sha256": "da9ee9d5428576d00c11fd0e6c0c1861ec16e09621eb3c1e2dfdf44261c3ed3d"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/output/fixed_attention_samples.json",
+      "bytes": 186395,
+      "sha256": "33faa4b89ea4b4fd1df1cdeb614167c61fdb13811ec63116c416d740d8fcbf89"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/output/evaluation_target_index.jsonl",
+      "bytes": 2023819,
+      "sha256": "d25c0ca3db2ad98bf72d4c4d8900fbfbba3496501d16e8ba725b743c2fd149aa"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved/output/test_target_index.jsonl",
+      "bytes": 2870565,
+      "sha256": "3e876c25ba53d513a4006a05b578694bcf59395fac973d5ecbc3e16b6fd80140"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-config-roundtrip-r4/retrieved/output/config-02/RESULT.json",
+      "bytes": 2964,
+      "sha256": "84cce383de728a49f6d30d514cfed07fbe3d135a2bf7240d1a39ccc9fa89d39e"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-config-roundtrip-r4/retrieved/output/config-02/domain_protocol.json",
+      "bytes": 1222,
+      "sha256": "efa9691774c01d4cce49fbdd1087f1d20753b64a5c64d22362c47178936cc543"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-config-roundtrip-r4/retrieved/output/config-02/used_config_before.json",
+      "bytes": 14361,
+      "sha256": "69f54601499bcce309284c1ba98dd22d7ee1075d0e2abfd57ca3878f46a204fe"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-config-roundtrip-r4/retrieved/output/config-02/used_config_after_reload.json",
+      "bytes": 14361,
+      "sha256": "69f54601499bcce309284c1ba98dd22d7ee1075d0e2abfd57ca3878f46a204fe"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/source-formal-admission.json",
+      "bytes": 14478,
+      "sha256": "207d718e5aef0f37fe7e8fc15a54bb1c72816a2f161b5b380a6d1b58a190f5e2"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/source-resource-review.json",
+      "bytes": 16143,
+      "sha256": "e64cd508a4141458dc4821369c84af03e9793864ba7c8081de265bee0f3787b8"
+    }
+  ]
+}

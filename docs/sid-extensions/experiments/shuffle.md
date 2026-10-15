@@ -139,3 +139,22 @@ A/B 是不同训练模型和上游条件，各自 Normal 才是本组对照。ML
 A/B分别对自己的Normal作delta，不把不同SID/模型的绝对值当同条件对照。注意力独立job，依赖对应正式结果成功/身份审核；继承同用户/物品的既有固定32 cohort，每路线使用自己的SID/target。显示最后decoder层head均值，保留所有raw heads与actual final-Top1 ancestry/local-first两路径，横轴是encoder位置。观测OFF/ON一致性不等于Shuffle OFF/ON对照。
 
 原预跑3/3修正与0.254719GPUh历史不重置；新增正式入口是本轮授权的初始编排，运行失败不据此自动获得第4轮修正。每正式评测job硬限1800秒；作业由已有runner脱离SSH独立运行，按原ID查询，无成功任务重跑。当前逐job状态与后续结果见 [正式阶段记录](../../../manifests/grid-formal-20261015/EXECUTION_SUMMARY.json)。
+
+## 2026-10-16 Beauty 六组正式评测完成
+
+六组正式全量 `Trainer.test()` 均 SUCCEEDED/0、worker清理确认，并经 `/root/results_publication_review` 直接对原预测/完整目标索引/原evaluator/逐样本指标独立验收。每组22363个用户与目标精确覆盖，全部原候选保留，未按测试调参。运行固定提交 `2cf4c793c2e0b2e9dc7e7a9269f5e54d5c667896`，复用不可变export `3870cb40eb8d040a`。
+
+|路线/条件|Recall@5|Recall@10|NDCG@5|NDCG@10|实际Shuffle调用|
+|---|---:|---:|---:|---:|---:|
+|A-normal|0.046237089|0.066449046|0.031252529|0.037725352|0|
+|A-shuffle3|0.046371236|0.066359609|0.031076979|0.037486158|5592|
+|A-shuffle4|0.045968786|0.065733574|0.030933077|0.037285861|5592|
+|B-normal|0.043151636|0.065867729|0.029169954|0.036434427|0|
+|B-shuffle3|0.043285783|0.065018110|0.029069517|0.036036659|5592|
+|B-shuffle4|0.042793900|0.064481512|0.028868502|0.035842434|5592|
+
+Shuffle均为loss2796/generate2796分别采样；实际原生排列记录、全调用数、参数加载和全2796 batch的设备/清理记录保留。A/B分别只与自己的Normal作条件比较，不把两路不同SID/共享结构的绝对指标当同模型对照。单seed结果未提供显著性或普遍顺序不变性结论。
+
+新正式入口的CPU配置保存首次失败保持FAILED：whole-cfg resolve=True误解析未用Hydra now:id。用户明确追加一次严格限定例外后，仅改为与旧成功入口一致的resolve=False；四组真实CPU保存/重载/有效子树解析exact及A/B正式入口identity均实际通过，模型/优化器/训练/评价配置未变。原3/3修正不重置，此例外不授予继续扩大返工。
+
+完整精度/每job输入与结果见 [正式阶段记录](../../../manifests/grid-formal-20261015/EXECUTION_SUMMARY.json)；[六组独立总验收](../../../manifests/grid-formal-20261015/results-review/beauty-six-formal-results-independent-summary.json)。原始全预测与逐样本指标将纳入最终轻量ZIP，正式注意力是后续独立job，不与这六次评测混记。

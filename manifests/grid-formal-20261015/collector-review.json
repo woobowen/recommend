@@ -1,0 +1,41 @@
+{
+  "schema": "grid-formal-independent-collector-review-v1",
+  "stage_id": "grid-formal-20261015",
+  "reviewer": "/root/source_conditions_review",
+  "status": "PASS_STATIC_COLLECTION_SAFETY",
+  "reviewed_input": {
+    "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collect_evidence.py",
+    "bytes": 5214,
+    "sha256": "0f1e4f334b7bb52bfeefeb5deea1249f4f5de4a8770c9ca171f78ef070825407"
+  },
+  "reference_input": {
+    "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/collect_evidence.py",
+    "bytes": 5080,
+    "sha256": "5a1ddcd221a01d1af8ccb5bc7b2aff96761f216f588afef8399aba19a3d4fcd7"
+  },
+  "review_method": "Previously completed direct read, in-memory AST parsing/compilation, exact source diff and standard-library input hashes. This receipt records that review without repeating it or executing the collector.",
+  "observed_diff_scope": [
+    "Use grid-formal-20261015 local/remote stage directories",
+    "Restrict job prefix to gf-20261015-",
+    "Add accepted.json, attempt.json, cleanup.json and export-manifest.json to existing top-level receipt/log selection"
+  ],
+  "verified_source_contract": {
+    "job_selection": "Only explicit supplied job list; fixed task job root; gf-20261015- prefix and no slash/dot-dot",
+    "terminal_states": ["SUCCEEDED", "FAILED", "TIMED_OUT", "CANCELLED"],
+    "before_collection": "Local query requires terminal state, cleanup_verified=true and workgroup_live=false; remote independently requires terminal status",
+    "selected_output_suffixes": [".json", ".jsonl", ".yaml", ".csv", ".npz", ".png"],
+    "excluded_payloads": "Checkpoint directories, symlink files, .ckpt/.pt/.pkl/.tfrecord.gz; does not traverse source data directories",
+    "training_evidence": "Collect recovery/state JSON, checkpoint identities and prediction/metric logs without checkpoint or RNG.pt payloads",
+    "output_file_max_bytes": 67108864,
+    "collection_uncompressed_bytes_strictly_less_than": 134217728,
+    "archive_and_extraction": "Refuse existing remote archive; local extraction requires unique names, relative paths without dot-dot, regular-file members only and tar filter=data",
+    "manifest": "Exact archive member set equals manifest files plus COLLECTION_MANIFEST.json; verify each file size and SHA256",
+    "transport": "Remote archive SHA256 and existing verified transfer mechanism retained"
+  },
+  "operational_boundary": "Collect completed jobs in bounded groups, including separate domain training collections as needed under the existing per-collection limit. This review does not authorize collecting running jobs or weakening size/identity checks.",
+  "actual_collection_executed_by_reviewer": false,
+  "GPU_or_worker_submitted_by_reviewer": false,
+  "repository_or_asset_modified_by_reviewer": false,
+  "receipt_only_mutation": true,
+  "actual_archive_validation_claimed": false
+}
