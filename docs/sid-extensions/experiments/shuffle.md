@@ -103,3 +103,29 @@ A/B 是不同训练模型和上游条件，各自 Normal 才是本组对照。ML
 作者路线按已保全实现适配，非逐字历史运行复现；历史唯一Python绑定缺口继续保留。源码入口：[CLI](../../../experiments/beauty_extensions/cli.py)、[A/MLP派生](../../../experiments/beauty_extensions/author/models.py)、[B接入](../../../experiments/beauty_extensions/baseline.py)、[attention观测](../../../experiments/beauty_extensions/attention/capture.py)。
 
 2026-10-15终验补充：独立MLP正式从零训练已按原patience10在3600次更新结束，验证选中best2600，完整test22363用户/目标及CPU/非作者预测复算通过；其固定32用户真实生成双口径注意力和完整训练曲线已经写出。具体指标、权重、资源与比较限制见 [MLP正式结果](mlp.md#2026-10-15-正式新训练结果)。该完成不补足A/B的缺失门禁：A-Normal/Shuffle3/Shuffle4、B-Normal/Shuffle3/Shuffle4六组正式指标及各自Normal的delta均为空值。没有现象重现失败后的调参，没有第四轮研究代码修补，整体交付仍为PARTIAL_BLOCKED。
+
+## 2026-10-15 接续预跑：工程通过，正式实验未授权
+
+本阶段 `grid-shuffle-mlp-preflight-20261015` 从 Beauty 固定提交 `6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c` 接续。接管时本地 HEAD 为 `01dbaf2e10dfaeb8215048c33493e732e32a25a2`，已有9个未推送提交、3个修改文件及预跑/审核记录。旧 CPU-only 摘要已落后现场；A/B GPU 作业已成功，直接继承，不重新计算。现行总体状态 **PARTIAL_PREFLIGHT**：四条工程线已完成，Toys/Sports 正式研究条件与预算仍未批准。旧 Beauty 的 PARTIAL_BLOCKED、正式 MLP 成果和失败记录保持原样。
+
+|门禁|A：T5/R-Kmeans + 双表 step4800|B：Qwen/R-Kmeans + 共享表 step12500|
+|---|---|---|
+|严格加载|178 state tensors，13,259,136参数，双表数值各自保留，内嵌SID exact|177 state tensors，13,128,064参数，encoder/decoder共享对象，内嵌SID exact|
+|OFF与对应原类|同形状 hidden/logits/loss/SID/beam score exact|同形状 hidden/logits/loss/SID/beam score exact|
+|真实 Normal/Shuffle3/Shuffle4|各31条，4批8/8/8/7；原evaluator复算通过|各31条，4批8/8/8/7；原evaluator复算通过|
+|生命周期与尾检|普通val11、train OFF、真实Trainer异常后同实例恢复、cache检查通过；另原8-worker datamodule有界4批32用户|普通val11、train OFF、真实Trainer异常后同实例恢复、cache检查通过；原worker0|
+|采样|每物品每次出现独立，先offset/lookup再排列；Shuffle3/4各8次调用（loss4/generate4），实际包含6/24种排列及恒等排列|同左；共享表hook仅encoder scope，decoder不触发|
+|工程/研究条件/正式审核准备|ENGINEERING_PREFLIGHT_PASS / RESEARCH_CONDITIONS_CONFIRMED / READY_FOR_FORMAL_REVIEW|同左|
+|正式执行|FORMAL_TECHNICALLY_READY_PENDING_USER_AUTHORIZATION；未批准、未启动|同左|
+
+**设备错误已通过真实预跑验证修复。** 旧 `beauty-b-smoke-r3` 的三次 Trainer.test 后，Lightning 2.5.0 `Strategy.teardown()` 将模型移至 CPU，尾部输入仍为 CUDA。现有 `cli.smoke` 仅在尾检恢复同一模型 `.to(device).eval()`、普通 validation hook，并从干净 batch 重建输入。两线 `post_test_off.json` 实测模型/输入同为 CUDA、is_testing=false、得分误差0；正常结束及 callback 注入的真实异常都恢复 OFF，普通 train/val 不增加 Shuffle 调用。没有更改原推荐分数、共享关系、生成或评价。
+
+保留数值边界：跨 batch-size 得分漂移 A `7.991213e-6`、B `1.936033e-5`，原模型与适配版相同；同形状 OFF 精确一致，不宣称任意 batch-size 得分完全一致。固定子集最长可见历史20物品，不能冒称覆盖29物品截断上界。A/B 模型、SID和上游不同，只能各自对比 Normal，不以绝对指标主张同模型工程等价。
+
+原 GPU job 为 `gsp-20261015-a-shared-r1`、`gsp-20261015-b-shared-r1`，均 SUCCEEDED/0/cleanup verified；执行 commit `afbd2336fda5d5f87210b342ff3744bee2156c02`、snapshot `bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4`。非作者核对当前计算源码字节/函数AST，只有 MLP callback JSON报告、部署身份和交付收集代码变化，旧A/B证据继续有效；最终源码绑定另附当前审核，未篡改原部署记录。
+
+**第3轮部署身份修复。** 旧 snapshot `5227c1a77ee4fd85` 只对文件清单取摘要，在 commit变化但文件字节相同时复用了旧 DEPLOYMENT.json。实际旧manifest SHA `a84bafbac6ab3adbc6b5c978bae066ecfd1df8ab9d6a27205b68e638c901338e`，r2新请求期望 `94ab4341a159c3804b02e08c175edff9cecbac16bff8c963e668f0727be121bf`，runner因此正确拒绝，未启动模型。接管继承的补丁将commit+文件记录共同绑定快照身份，固定为 `59c42a213f2c3f4b90d0c069d4d3b98a2d8a398b`；纯文件校验及两个独立恢复job接受/执行均通过。旧r2请求与拒绝原始输出保留，新r3仅验证已完成的round3，不绕过runner、不增加第4轮。
+
+任务累计14个已接收job：12成功、2失败；另r2接受前拒绝。7个GPU请求的walltime（含初始化及失败恢复）合计0.254719264 GPU·h，其中本次新增两恢复0.036208736 GPU·h；不是纯GPU计算时长。原预算2h目标/6h修正上限未重置，修正3/3。原CPU资源拒绝是历史事实；本次GPU1经连续两次轻量观察有充足余量后串行使用，无外部进程终止，无活动本任务job遗留。
+
+四份正式candidate均未签署，formal_approved=false；不含工程row/step overlay。A/B须网页二审和用户另行正式批准后，绑定当前独立审核/计划/代码/资产生成新的授权gate。本轮未调用正式handler、全量测试或注意力采集。逐job版本、产物、来源缺口、恢复边界和非作者审核见 [EXECUTION_SUMMARY.json](../../../manifests/grid-shuffle-mlp-preflight-20261015/EXECUTION_SUMMARY.json)；原日志、预测、采样与部署回执在实际校验的轻量ZIP。

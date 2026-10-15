@@ -1,0 +1,57 @@
+{
+  "probes": [
+    {
+      "input": "empty",
+      "original": {
+        "returned": false,
+        "error_type": "IndexError",
+        "error": "index -1 is out of bounds for dimension 0 with size 0"
+      },
+      "adapter": {
+        "returned": false,
+        "error_type": "IndexError",
+        "error": "index -1 is out of bounds for dimension 0 with size 0"
+      },
+      "same_behavior": true,
+      "invalid_history_probe_only": true
+    },
+    {
+      "input": "all_padding",
+      "original": {
+        "returned": true,
+        "shapes": [
+          [
+            1,
+            30,
+            128
+          ],
+          [
+            1,
+            30
+          ]
+        ],
+        "finite": true
+      },
+      "adapter": {
+        "returned": true,
+        "shapes": [
+          [
+            1,
+            30,
+            128
+          ],
+          [
+            1,
+            30
+          ]
+        ],
+        "finite": true
+      },
+      "same_behavior": true,
+      "invalid_history_probe_only": true
+    }
+  ],
+  "semantic_change": false,
+  "scientific_input_support_claimed": false,
+  "rng_restored_after_engineering_probe": true
+}

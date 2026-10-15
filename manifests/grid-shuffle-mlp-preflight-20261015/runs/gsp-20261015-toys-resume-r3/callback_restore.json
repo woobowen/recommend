@@ -1,0 +1,52 @@
+{
+  "callbacks": [
+    {
+      "key": "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}",
+      "exact": true,
+      "prior": {
+        "wait_count": 1,
+        "stopped_epoch": 0,
+        "best_score": 0.0,
+        "patience": 10
+      },
+      "current": {
+        "wait_count": 1,
+        "stopped_epoch": 0,
+        "best_score": 0.0,
+        "patience": 10
+      },
+      "difference_boundary": null
+    },
+    {
+      "key": "ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}",
+      "exact": false,
+      "prior": {
+        "monitor": "val/recall@5",
+        "best_model_score": 0.0,
+        "best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/engineering-step=000001.ckpt",
+        "current_score": 0.0,
+        "dirpath": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints",
+        "best_k_models": {
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/engineering-step=000001.ckpt": 0.0
+        },
+        "kth_best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/engineering-step=000001.ckpt",
+        "kth_value": 0.0,
+        "last_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/last.ckpt"
+      },
+      "current": {
+        "monitor": "val/recall@5",
+        "best_model_score": null,
+        "best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/engineering-step=000001.ckpt",
+        "current_score": null,
+        "dirpath": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-resume-r3/output/checkpoints",
+        "best_k_models": {},
+        "kth_best_model_path": "",
+        "kth_value": "-inf",
+        "last_model_path": ""
+      },
+      "difference_boundary": "ModelCheckpoint output dir changed; Lightning restores best_model_path but resets directory-bound ranking state; not exact uninterrupted selection continuation"
+    }
+  ],
+  "all_callback_keys_accounted": true,
+  "exact_full_callback_restore_claimed": false
+}

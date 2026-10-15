@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "probe_only": true,
+  "input_lookup_shape": [
+    8,
+    30,
+    4,
+    128
+  ],
+  "mlp_input_shape": [
+    8,
+    30,
+    512
+  ],
+  "mlp_output_shape": [
+    8,
+    30,
+    128
+  ],
+  "unaffected_items_equal": true,
+  "variable_output_shapes": [
+    [
+      1,
+      1,
+      128
+    ],
+    [
+      8,
+      2,
+      128
+    ],
+    [
+      8,
+      30,
+      128
+    ]
+  ],
+  "mask_rule": "last SID code of each item; complete-group contract checked",
+  "dropout_for_independence_check": "eval only; prior state restored"
+}

@@ -1,0 +1,919 @@
+{
+  "status": "PARTIAL_PREFLIGHT",
+  "stage": "grid-shuffle-mlp-preflight-20261015",
+  "conclusion": "All four engineering preflight lines complete; future Toys/Sports formal research conditions/budgets require user decision.",
+  "scope": "ENGINEERING_PREFLIGHT_ONLY; no formal training, full evaluation or attention",
+  "starting_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+  "round3_fixed_code_commit": "59c42a213f2c3f4b90d0c069d4d3b98a2d8a398b",
+  "takeover": {
+    "observed_at": "2026-10-15T09:57:14.229748+00:00",
+    "head": "01dbaf2e10dfaeb8215048c33493e732e32a25a2",
+    "branch": "wbw",
+    "ahead_of_origin": 9,
+    "modified_files": [
+      "docs/sid-extensions/experiments/mlp.md",
+      "docs/sid-extensions/experiments/shuffle.md",
+      "experiments/preflight_20261015/deploy.py"
+    ],
+    "old_local_writer_found": false,
+    "git_operation_or_lock_found": false,
+    "live_accepted_jobs": [],
+    "prior_cpu_only_summary_superseded": true,
+    "correction_rounds_used": 3,
+    "correction_maximum": 3,
+    "progress_matrix": [
+      {
+        "line": "B",
+        "code": "inherited committed lifecycle implementation",
+        "preflight_job": "gsp-20261015-b-shared-r1",
+        "latest_status": "SUCCEEDED",
+        "remaining": [
+          "targeted independent result/code review",
+          "publish fixed evidence"
+        ],
+        "direct_continuation": "PASS; no rerun"
+      },
+      {
+        "line": "A",
+        "code": "inherited author adapter and independent bounded suite",
+        "preflight_job": "gsp-20261015-a-shared-r1",
+        "latest_status": "SUCCEEDED",
+        "remaining": [
+          "targeted independent result/code review",
+          "publish fixed evidence"
+        ],
+        "direct_continuation": "PASS; no rerun"
+      },
+      {
+        "line": "Toys-MLP",
+        "code": "inherited author MLP and round2 callback-report patch",
+        "preflight_job": "gsp-20261015-toys-short-r1",
+        "latest_status": "SUCCEEDED",
+        "remaining": [
+          "verify existing round3 deployment identity patch",
+          "independent strict restore plus one authorized update",
+          "nonauthor review",
+          "formal source/config choice remains unapproved"
+        ],
+        "direct_continuation": "PARTIAL; own step2 checkpoint retained"
+      },
+      {
+        "line": "Sports-MLP",
+        "code": "inherited engineering domain adapter and own resume spec",
+        "preflight_job": "gsp-20261015-sports-short-r1",
+        "latest_status": "SUCCEEDED",
+        "remaining": [
+          "independent strict restore plus one authorized update",
+          "nonauthor review",
+          "formal research conditions unapproved"
+        ],
+        "direct_continuation": "PARTIAL; own step2 checkpoint retained"
+      }
+    ]
+  },
+  "lines": [
+    {
+      "line": "A",
+      "loading": {
+        "assets": [
+          {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68/merged_predictions_tensor.pt",
+            "sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+            "bytes": 388534,
+            "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68/merged_predictions_tensor.pt"
+          },
+          {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00/checkpoint_epoch=000_step=004800.ckpt",
+            "sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+            "bytes": 160859238,
+            "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00/checkpoint_epoch=000_step=004800.ckpt"
+          }
+        ],
+        "strict_load": {
+          "missing_keys": [],
+          "unexpected_keys": [],
+          "global_step": 4800,
+          "epoch": 0,
+          "all_parameter_keys_shapes_values_equal": true,
+          "state_tensor_count": 178,
+          "embedded_sid_exact": true
+        },
+        "model_class": "experiments.beauty_extensions.author.models.AuthorShuffleModel",
+        "parameter_count": 13259136,
+        "shared_sid_table": false
+      },
+      "sid_shape": [
+        4,
+        12101
+      ],
+      "sid_range": [
+        0,
+        255
+      ],
+      "generation_k": 10,
+      "ENGINEERING_PREFLIGHT_PASS": true,
+      "REAL_PREFLIGHT_PASS": true,
+      "RESEARCH_CONDITIONS_CONFIRMED": true,
+      "READY_FOR_FORMAL_REVIEW": true,
+      "technical_status": "FORMAL_TECHNICALLY_READY_PENDING_USER_AUTHORIZATION",
+      "formal_approved": false,
+      "formal_run_started": false,
+      "bounded_preflight_job": "gsp-20261015-a-shared-r1",
+      "test_rows_per_condition": 31,
+      "test_batch_sizes": [
+        8,
+        8,
+        8,
+        7
+      ],
+      "validation_rows": 11,
+      "tested_conditions": [
+        "Normal",
+        "Shuffle3",
+        "Shuffle4"
+      ],
+      "source_worker_extra_scope": "A only: original 8-worker datamodule, 4 batches / 32 unique users",
+      "post_test_off": {
+        "same_model_instance": true,
+        "parameter_devices": [
+          "cuda:0"
+        ],
+        "input_device": "cuda:0",
+        "is_testing": false,
+        "sid_exact": true,
+        "scores": {
+          "max_absolute": 0.0,
+          "allclose": true,
+          "exact": true
+        },
+        "model_eval": true,
+        "encoder_eval": true,
+        "decoder_eval": true
+      },
+      "GPU_optimizer_updates": 0,
+      "inherited_execution_code_validity": "Current computation sources unchanged; run.py changes only MLP callback report serialization. Independent AST/byte comparison recorded.",
+      "numerical_boundary": "Same-shape OFF is exact. Original and adapter share observed cross-batch-size score drift; no universal batch-size equality claimed.",
+      "maximum_tested_visible_history_items": 20,
+      "independent_review_files": [
+        "shuffle-a-execution-review.json",
+        "continuation-independent-review.json"
+      ]
+    },
+    {
+      "line": "B",
+      "loading": {
+        "assets": [
+          {
+            "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt",
+            "sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18",
+            "bytes": 388405,
+            "resolved": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt"
+          },
+          {
+            "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt",
+            "sha256": "3d8f03cf042293f2f7f02132c9d072f573f671d9550d567edd1754f50e53e605",
+            "bytes": 159332142,
+            "resolved": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt"
+          }
+        ],
+        "strict_load": {
+          "missing_keys": [],
+          "unexpected_keys": [],
+          "global_step": 12500,
+          "epoch": 0,
+          "all_parameter_keys_shapes_values_equal": true,
+          "state_tensor_count": 177,
+          "embedded_sid_exact": true
+        },
+        "model_class": "experiments.beauty_extensions.baseline.BaselineShuffleModel",
+        "parameter_count": 13128064,
+        "shared_sid_table": true
+      },
+      "sid_shape": [
+        4,
+        12101
+      ],
+      "sid_range": [
+        0,
+        255
+      ],
+      "generation_k": 10,
+      "ENGINEERING_PREFLIGHT_PASS": true,
+      "REAL_PREFLIGHT_PASS": true,
+      "RESEARCH_CONDITIONS_CONFIRMED": true,
+      "READY_FOR_FORMAL_REVIEW": true,
+      "technical_status": "FORMAL_TECHNICALLY_READY_PENDING_USER_AUTHORIZATION",
+      "formal_approved": false,
+      "formal_run_started": false,
+      "bounded_preflight_job": "gsp-20261015-b-shared-r1",
+      "test_rows_per_condition": 31,
+      "test_batch_sizes": [
+        8,
+        8,
+        8,
+        7
+      ],
+      "validation_rows": 11,
+      "tested_conditions": [
+        "Normal",
+        "Shuffle3",
+        "Shuffle4"
+      ],
+      "source_worker_extra_scope": "source num_workers=0",
+      "post_test_off": {
+        "same_model_instance": true,
+        "parameter_devices": [
+          "cuda:0"
+        ],
+        "input_device": "cuda:0",
+        "is_testing": false,
+        "sid_exact": true,
+        "scores": {
+          "max_absolute": 0.0,
+          "allclose": true,
+          "exact": true
+        },
+        "model_eval": true,
+        "encoder_eval": true,
+        "decoder_eval": true
+      },
+      "GPU_optimizer_updates": 0,
+      "inherited_execution_code_validity": "Current computation sources unchanged; run.py changes only MLP callback report serialization. Independent AST/byte comparison recorded.",
+      "numerical_boundary": "Same-shape OFF is exact. Original and adapter share observed cross-batch-size score drift; no universal batch-size equality claimed.",
+      "maximum_tested_visible_history_items": 20,
+      "independent_review_files": [
+        "shuffle-b-review.json",
+        "continuation-independent-review.json"
+      ]
+    },
+    {
+      "line": "Toys-MLP",
+      "ENGINEERING_PREFLIGHT_PASS": true,
+      "REAL_PREFLIGHT_PASS": true,
+      "RESEARCH_CONDITIONS_CONFIRMED": false,
+      "READY_FOR_FORMAL_REVIEW": false,
+      "technical_status": "ENGINEERING_PREFLIGHT_PASS_RESEARCH_DECISION_PENDING",
+      "formal_approved": false,
+      "formal_run_started": false,
+      "short_job": "gsp-20261015-toys-short-r1",
+      "independent_resume_job": "gsp-20261015-toys-resume-r3",
+      "optimizer_updates": {
+        "scratch": 2,
+        "resume": 1,
+        "total": 3
+      },
+      "microbatches": {
+        "scratch": 32,
+        "resume": 16
+      },
+      "gradient_accumulation": 16,
+      "actual_collate_windows": {
+        "scratch": 13463,
+        "resume": 6726
+      },
+      "raw_microbatch": 32,
+      "validation_rows": 11,
+      "test_rows": 19,
+      "test_batch_sizes": [
+        8,
+        8,
+        3
+      ],
+      "strict_restore": {
+        "status": "PASS",
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "all_keys_shapes_values_equal": true,
+        "initial_step": 2,
+        "optimizer_state_sha256": "7abb377d363a3e43e553ffd1293a7bc484e6af0672495412b81e7a659e96482f",
+        "callback_keys": [
+          "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}",
+          "ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}"
+        ],
+        "independent_process": true,
+        "protocol": "hash-verified own engineering checkpoint; local safe_globals/weights_only for inspection; Lightning restores this trusted own file"
+      },
+      "restored_prediction_parity": {
+        "samples": 19,
+        "sid_exact": true,
+        "target_and_order_exact": true,
+        "maximum_score_absolute_error": 0.0
+      },
+      "all_four_mlp_parameters_updated_scratch_and_resume": true,
+      "short_checkpoint": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/engineering-final.ckpt",
+        "bytes": 160059100,
+        "sha256": "63370c4a19456df431dbbb31a8ed8adda58b9c35bad8623005079d60e58cea4d"
+      },
+      "resumed_checkpoint": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-resume-r3/output/checkpoints/engineering-final.ckpt",
+        "bytes": 160059100,
+        "sha256": "334cbc831c6203e0bf55d766838970bfcd79bb56b1372bce0314f8392a1233a8"
+      },
+      "formal_state_reuse_allowed": false,
+      "measured_training_validation_save_test_seconds": {
+        "scratch": 10.376204973086715,
+        "resume": 7.043485251720995
+      },
+      "engineering_metrics": {
+        "ndcg@5": 0.0,
+        "ndcg@10": 0.0,
+        "recall@5": 0.0,
+        "recall@10": 0.0
+      },
+      "invalid_candidates": {
+        "scratch": 190,
+        "resume": 190,
+        "candidates_per_test": 190
+      },
+      "evaluation_boundary": "Original evaluator unchanged, prefix constraint false, no candidate filtering; zero engineering metrics are not formal recommendation results.",
+      "restore_boundary": "Model/optimizer/global_step and EarlyStopping exact; changed-output-directory ModelCheckpoint ranking state resets per installed Lightning. RNG/data cursor are not uninterrupted continuations.",
+      "dropout_evidence_boundary": "Original Dropout0.1 and Lightning fit/eval lifecycle inspected; no per-phase Dropout.training field log was recorded.",
+      "budget_estimation_boundary": "Measured same-model peak memory and short fit/validation/save/test cost support bounded resource planning, not a reliable full-training ETA; formal protocol and budget remain unapproved.",
+      "independent_review_files": [
+        "source-conditions-review.json",
+        "continuation-independent-review.json"
+      ]
+    },
+    {
+      "line": "Sports-MLP",
+      "ENGINEERING_PREFLIGHT_PASS": true,
+      "REAL_PREFLIGHT_PASS": true,
+      "RESEARCH_CONDITIONS_CONFIRMED": false,
+      "READY_FOR_FORMAL_REVIEW": false,
+      "technical_status": "ENGINEERING_PREFLIGHT_PASS_RESEARCH_DECISION_PENDING",
+      "formal_approved": false,
+      "formal_run_started": false,
+      "short_job": "gsp-20261015-sports-short-r1",
+      "independent_resume_job": "gsp-20261015-sports-resume-r1",
+      "optimizer_updates": {
+        "scratch": 2,
+        "resume": 1,
+        "total": 3
+      },
+      "microbatches": {
+        "scratch": 32,
+        "resume": 16
+      },
+      "gradient_accumulation": 16,
+      "actual_collate_windows": {
+        "scratch": 3744,
+        "resume": 1879
+      },
+      "raw_microbatch": 16,
+      "validation_rows": 11,
+      "test_rows": 19,
+      "test_batch_sizes": [
+        8,
+        8,
+        3
+      ],
+      "strict_restore": {
+        "status": "PASS",
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "all_keys_shapes_values_equal": true,
+        "initial_step": 2,
+        "optimizer_state_sha256": "a60913cead4ea66ba89b539b1c6a1fc0ae6aafbe15816d0b8188b3ed06521099",
+        "callback_keys": [
+          "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}",
+          "ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}"
+        ],
+        "independent_process": true,
+        "protocol": "hash-verified own engineering checkpoint; local safe_globals/weights_only for inspection; Lightning restores this trusted own file"
+      },
+      "restored_prediction_parity": {
+        "samples": 19,
+        "sid_exact": true,
+        "target_and_order_exact": true,
+        "maximum_score_absolute_error": 0.0
+      },
+      "all_four_mlp_parameters_updated_scratch_and_resume": true,
+      "short_checkpoint": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-short-r1/output/checkpoints/engineering-final.ckpt",
+        "bytes": 160277276,
+        "sha256": "ec41936a0d3c54dd7915ee23b1eb785e5a0c3512dcb3dd923599f058abbfdc41"
+      },
+      "resumed_checkpoint": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-resume-r1/output/checkpoints/engineering-final.ckpt",
+        "bytes": 160277276,
+        "sha256": "603cceb9303168805de2c422a51ca58ef6ef7cf2ae9bf8b9b96e6eaa74b28dd4"
+      },
+      "formal_state_reuse_allowed": false,
+      "measured_training_validation_save_test_seconds": {
+        "scratch": 9.149928777944297,
+        "resume": 6.209688481874764
+      },
+      "engineering_metrics": {
+        "ndcg@5": 0.0,
+        "ndcg@10": 0.0,
+        "recall@5": 0.0,
+        "recall@10": 0.0
+      },
+      "invalid_candidates": {
+        "scratch": 190,
+        "resume": 190,
+        "candidates_per_test": 190
+      },
+      "evaluation_boundary": "Original evaluator unchanged, prefix constraint false, no candidate filtering; zero engineering metrics are not formal recommendation results.",
+      "restore_boundary": "Model/optimizer/global_step and EarlyStopping exact; changed-output-directory ModelCheckpoint ranking state resets per installed Lightning. RNG/data cursor are not uninterrupted continuations.",
+      "dropout_evidence_boundary": "Original Dropout0.1 and Lightning fit/eval lifecycle inspected; no per-phase Dropout.training field log was recorded.",
+      "budget_estimation_boundary": "Measured same-model peak memory and short fit/validation/save/test cost support bounded resource planning, not a reliable full-training ETA; formal protocol and budget remain unapproved.",
+      "independent_review_files": [
+        "source-conditions-review.json",
+        "continuation-independent-review.json"
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "job_id": "gsp-20261015-b-prepare-r0",
+      "phase": "prepare",
+      "status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T05:41:23.710376+00:00",
+      "ended_at": "2026-10-15T05:41:29.282571+00:00",
+      "request_wall_seconds_including_initialization": 5.572195,
+      "source_commit": null,
+      "snapshot_sha256": null,
+      "request_sha256": "0c5563793ef6f495bdfa3ae9985a93059fed1165fda824ac9c31be91fbc2ab41",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/30b080a174585685",
+      "physical_gpu_uuid": null,
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-b-prepare-r0/output",
+      "request_file": "evidence/gsp-20261015-b-prepare-r0/request.json",
+      "log_file": "evidence/gsp-20261015-b-prepare-r0/work.log",
+      "result": null
+    },
+    {
+      "job_id": "gsp-20261015-b-prepare-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T05:42:26.738213+00:00",
+      "ended_at": "2026-10-15T05:50:58.351107+00:00",
+      "request_wall_seconds_including_initialization": 511.612894,
+      "source_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+      "snapshot_sha256": "c8cf51405fd5140b0cf10f78f745e1a9f42eae34c69f7073e218e8a26af91f4e",
+      "request_sha256": "aa1830def447318526da033eaf32a8d5b7bdcef04ca644cfb60c9f6c4c5a9cc5",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/c8cf51405fd5140b",
+      "physical_gpu_uuid": null,
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-b-prepare-r1/output",
+      "request_file": "evidence/gsp-20261015-b-prepare-r1/request.json",
+      "log_file": "evidence/gsp-20261015-b-prepare-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "prepare",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 491.34054746711627,
+        "peak_gpu_allocated_bytes": 0,
+        "peak_gpu_reserved_bytes": 0
+      }
+    },
+    {
+      "job_id": "gsp-20261015-toys-prepare-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T05:49:31.707859+00:00",
+      "ended_at": "2026-10-15T05:51:03.671280+00:00",
+      "request_wall_seconds_including_initialization": 91.963421,
+      "source_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+      "snapshot_sha256": "5c72de25b81a4b86d256c82c98e063b19bb7a692ea0d73fed0839d8e63a06a35",
+      "request_sha256": "c599ff193f72c4a8deb8968590a664b72acd137da3df88ad4868c9456202687c",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/5c72de25b81a4b86",
+      "physical_gpu_uuid": null,
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-prepare-r1/output",
+      "request_file": "evidence/gsp-20261015-toys-prepare-r1/request.json",
+      "log_file": "evidence/gsp-20261015-toys-prepare-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "prepare",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 87.82202931819484,
+        "peak_gpu_allocated_bytes": 0,
+        "peak_gpu_reserved_bytes": 0
+      }
+    },
+    {
+      "job_id": "gsp-20261015-a-prepare-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T05:51:06.168565+00:00",
+      "ended_at": "2026-10-15T05:52:05.457975+00:00",
+      "request_wall_seconds_including_initialization": 59.28941,
+      "source_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+      "snapshot_sha256": "43aefff0f79f832f466229108e116f4243f1fb2535c885e16164e15edf2a1102",
+      "request_sha256": "23aa5a4631a279fc80c9d6513c012aa84e6282123ec305e7267b03b0781000e1",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/43aefff0f79f832f",
+      "physical_gpu_uuid": null,
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-a-prepare-r1/output",
+      "request_file": "evidence/gsp-20261015-a-prepare-r1/request.json",
+      "log_file": "evidence/gsp-20261015-a-prepare-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "prepare",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 55.5068210340105,
+        "peak_gpu_allocated_bytes": 0,
+        "peak_gpu_reserved_bytes": 0
+      }
+    },
+    {
+      "job_id": "gsp-20261015-sports-prepare-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T05:51:39.613389+00:00",
+      "ended_at": "2026-10-15T05:52:05.030532+00:00",
+      "request_wall_seconds_including_initialization": 25.417143,
+      "source_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+      "snapshot_sha256": "43aefff0f79f832f466229108e116f4243f1fb2535c885e16164e15edf2a1102",
+      "request_sha256": "f5346c22cba55b6b47e89aebe51922ee396cd075b1603f1eb4ce1db67387a503",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/43aefff0f79f832f",
+      "physical_gpu_uuid": null,
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-prepare-r1/output",
+      "request_file": "evidence/gsp-20261015-sports-prepare-r1/request.json",
+      "log_file": "evidence/gsp-20261015-sports-prepare-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "prepare",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 23.955611834768206,
+        "peak_gpu_allocated_bytes": 0,
+        "peak_gpu_reserved_bytes": 0
+      }
+    },
+    {
+      "job_id": "gsp-20261015-b-prepare-long-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T05:58:39.213045+00:00",
+      "ended_at": "2026-10-15T06:05:05.994655+00:00",
+      "request_wall_seconds_including_initialization": 386.78161,
+      "source_commit": "a71ba06fe9d722dd236d340b4eaaec6b9b3e600e",
+      "snapshot_sha256": "f7002a85350880be3b74d986d6fe5592244c43f1aba016a63d6ffa7d3b0d4417",
+      "request_sha256": "320c09e14887ed79a060678514e97354fe2515c8f761caac76ac6593b02d00b4",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/f7002a85350880be",
+      "physical_gpu_uuid": null,
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-b-prepare-long-r1/output",
+      "request_file": "evidence/gsp-20261015-b-prepare-long-r1/request.json",
+      "log_file": "evidence/gsp-20261015-b-prepare-long-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "prepare",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 370.2974629192613,
+        "peak_gpu_allocated_bytes": 0,
+        "peak_gpu_reserved_bytes": 0
+      }
+    },
+    {
+      "job_id": "gsp-20261015-a-prepare-long-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T06:00:07.374304+00:00",
+      "ended_at": "2026-10-15T06:05:05.996509+00:00",
+      "request_wall_seconds_including_initialization": 298.622205,
+      "source_commit": "a71ba06fe9d722dd236d340b4eaaec6b9b3e600e",
+      "snapshot_sha256": "f7002a85350880be3b74d986d6fe5592244c43f1aba016a63d6ffa7d3b0d4417",
+      "request_sha256": "52c1bc182f1fa270ae6b42479fb24f99efb4a1ee08ffdec7b39bac651c19e75d",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/f7002a85350880be",
+      "physical_gpu_uuid": null,
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-a-prepare-long-r1/output",
+      "request_file": "evidence/gsp-20261015-a-prepare-long-r1/request.json",
+      "log_file": "evidence/gsp-20261015-a-prepare-long-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "prepare",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 284.9430902842432,
+        "peak_gpu_allocated_bytes": 0,
+        "peak_gpu_reserved_bytes": 0
+      }
+    },
+    {
+      "job_id": "gsp-20261015-b-shared-r1",
+      "phase": "shuffle",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T06:37:22.356390+00:00",
+      "ended_at": "2026-10-15T06:42:40.283438+00:00",
+      "request_wall_seconds_including_initialization": 317.927048,
+      "source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+      "snapshot_sha256": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+      "request_sha256": "a4284e674641e533274a5c7bafd833f9444fe2c2a322b83e9b4f04424f217422",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/bcba4952e2830e13",
+      "physical_gpu_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-b-shared-r1/output",
+      "request_file": "evidence/gsp-20261015-b-shared-r1/request.json",
+      "log_file": "evidence/gsp-20261015-b-shared-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "shuffle",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 308.179068162106,
+        "peak_gpu_allocated_bytes": 295276544,
+        "peak_gpu_reserved_bytes": 322961408
+      }
+    },
+    {
+      "job_id": "gsp-20261015-a-shared-r1",
+      "phase": "shuffle",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T07:00:40.907900+00:00",
+      "ended_at": "2026-10-15T07:03:05.689216+00:00",
+      "request_wall_seconds_including_initialization": 144.781316,
+      "source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+      "snapshot_sha256": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+      "request_sha256": "1a9c1b4acf2e7852e069d931ff52da5b9c34c56e7ae6104fbfcc97621ffd6a49",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/bcba4952e2830e13",
+      "physical_gpu_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-a-shared-r1/output",
+      "request_file": "evidence/gsp-20261015-a-shared-r1/request.json",
+      "log_file": "evidence/gsp-20261015-a-shared-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "shuffle",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 140.77123280474916,
+        "peak_gpu_allocated_bytes": 311746048,
+        "peak_gpu_reserved_bytes": 322961408
+      }
+    },
+    {
+      "job_id": "gsp-20261015-toys-short-r1",
+      "phase": "mlp-short",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T07:04:40.720293+00:00",
+      "ended_at": "2026-10-15T07:06:43.064245+00:00",
+      "request_wall_seconds_including_initialization": 122.343952,
+      "source_commit": "10208eb4f6ad812a0f3bf38030134a0e164ff890",
+      "snapshot_sha256": "18848b6601cddac996537075373a9f51f08f4212d310843efbe78a22c6cf8ff9",
+      "request_sha256": "9ee6fc8309ef6f5254c03c048f641695f134b63769b9787afe8b6de1e1bd1e36",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/18848b6601cddac9",
+      "physical_gpu_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output",
+      "request_file": "evidence/gsp-20261015-toys-short-r1/request.json",
+      "log_file": "evidence/gsp-20261015-toys-short-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "mlp-short",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 118.18469363078475,
+        "peak_gpu_allocated_bytes": 1996942336,
+        "peak_gpu_reserved_bytes": 3806330880
+      }
+    },
+    {
+      "job_id": "gsp-20261015-sports-short-r1",
+      "phase": "mlp-short",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T07:12:46.510296+00:00",
+      "ended_at": "2026-10-15T07:14:24.618166+00:00",
+      "request_wall_seconds_including_initialization": 98.10787,
+      "source_commit": "49c02e5d6c40a5b899b3c118f82b19190d7d02fb",
+      "snapshot_sha256": "5227c1a77ee4fd85a9f69b45c6e804bbd0ad1e21b9013228f6988ff35bc6eade",
+      "request_sha256": "147e463df52594108dda219788d89d334325e213b7901862836783aef055d45c",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/5227c1a77ee4fd85",
+      "physical_gpu_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-short-r1/output",
+      "request_file": "evidence/gsp-20261015-sports-short-r1/request.json",
+      "log_file": "evidence/gsp-20261015-sports-short-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "mlp-short",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 95.09295689314604,
+        "peak_gpu_allocated_bytes": 693331456,
+        "peak_gpu_reserved_bytes": 750780416
+      }
+    },
+    {
+      "job_id": "gsp-20261015-toys-resume-r1",
+      "phase": "mlp-resume",
+      "status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "origin": "inherited_execution",
+      "started_at": "2026-10-15T07:09:01.247059+00:00",
+      "ended_at": "2026-10-15T07:10:44.724772+00:00",
+      "request_wall_seconds_including_initialization": 103.477713,
+      "source_commit": "49c02e5d6c40a5b899b3c118f82b19190d7d02fb",
+      "snapshot_sha256": "b73d8afd46882f6f3208d927c3bcf27248d5c8b13e0384e4aa2a354ff896091a",
+      "request_sha256": "9fa14fe3a159e53db68e812e9b31ab70cc3a1b3b489e5d6cdc8ad590ee8c9849",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/b73d8afd46882f6f",
+      "physical_gpu_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-resume-r1/output",
+      "request_file": "evidence/gsp-20261015-toys-resume-r1/request.json",
+      "log_file": "evidence/gsp-20261015-toys-resume-r1/work.log",
+      "result": null
+    },
+    {
+      "job_id": "gsp-20261015-toys-resume-r3",
+      "phase": "mlp-resume",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "continuation_new_execution",
+      "started_at": "2026-10-15T10:00:18.849122+00:00",
+      "ended_at": "2026-10-15T10:01:57.852772+00:00",
+      "request_wall_seconds_including_initialization": 99.00365,
+      "source_commit": "59c42a213f2c3f4b90d0c069d4d3b98a2d8a398b",
+      "snapshot_sha256": "c42c3fcc9bba292f2077e9840a11657563681fc177f33a8ee9d534f318967603",
+      "request_sha256": "e1d9f3ba94b347320d8fbe61579d2d10776674b520d802d42dff6ae7638b6cd3",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/c42c3fcc9bba292f",
+      "physical_gpu_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-resume-r3/output",
+      "request_file": "evidence/gsp-20261015-toys-resume-r3/request.json",
+      "log_file": "evidence/gsp-20261015-toys-resume-r3/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "mlp-resume",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 96.24969646101817,
+        "peak_gpu_allocated_bytes": 1967117312,
+        "peak_gpu_reserved_bytes": 3026190336
+      }
+    },
+    {
+      "job_id": "gsp-20261015-sports-resume-r1",
+      "phase": "mlp-resume",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "origin": "continuation_new_execution",
+      "started_at": "2026-10-15T10:02:58.149749+00:00",
+      "ended_at": "2026-10-15T10:03:29.497549+00:00",
+      "request_wall_seconds_including_initialization": 31.3478,
+      "source_commit": "59c42a213f2c3f4b90d0c069d4d3b98a2d8a398b",
+      "snapshot_sha256": "c42c3fcc9bba292f2077e9840a11657563681fc177f33a8ee9d534f318967603",
+      "request_sha256": "cb5daac672178ec0ddd0100cdb1156be76b96b59ca83d086e4b29353cc59b3f5",
+      "deployment_root": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/c42c3fcc9bba292f",
+      "physical_gpu_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "server_output": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-resume-r1/output",
+      "request_file": "evidence/gsp-20261015-sports-resume-r1/request.json",
+      "log_file": "evidence/gsp-20261015-sports-resume-r1/work.log",
+      "result": {
+        "status": "PASS",
+        "phase": "mlp-resume",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 29.25507721118629,
+        "peak_gpu_allocated_bytes": 681316864,
+        "peak_gpu_reserved_bytes": 742391808
+      }
+    }
+  ],
+  "job_counts": {
+    "FAILED": 2,
+    "SUCCEEDED": 12,
+    "accepted": 14,
+    "CPU": 7,
+    "GPU": 7,
+    "new_GPU_jobs": 2,
+    "formal_jobs": 0
+  },
+  "rejected_submissions": [
+    {
+      "job_id": "gsp-20261015-toys-resume-r2",
+      "status": "REJECTED_BEFORE_ACCEPTANCE",
+      "worker_started": false,
+      "GPU_seconds": 0,
+      "replacement_validation": "gsp-20261015-toys-resume-r3",
+      "evidence": "external-receipts/manifest-rejection-diagnosis.json"
+    }
+  ],
+  "correction_rounds": {
+    "task_level_correction_rounds_used": 3,
+    "maximum": 3,
+    "round0": {
+      "job": "gsp-20261015-b-prepare-r0",
+      "failure": "FileExistsError: accepted runner already creates output; failed before model/import/forward",
+      "gpu_seconds": 0
+    },
+    "round1": {
+      "changes": [
+        "Respect runner-created output, retain invocation identity guard",
+        "Preserve original (loader,) training protocol per SequenceDataModule and TransformerBaseModule source",
+        "Complete A condition-specific sampler count/events and last small batch tracing; observer-only"
+      ]
+    },
+    "old_beauty_rounds_unchanged": true,
+    "round2": {
+      "job": "gsp-20261015-toys-resume-r1",
+      "failure": "Callback restore report JSON refused tensor -inf sentinel after nonrecursive tolist; before any extra optimizer update",
+      "change": "Recursively encode only callback state tensor.tolist to explicit nonfinite strings; exact state comparisons and finite model/gradient/loss assertions unchanged",
+      "affected_regression": "Independent Toys resume1, Sports resume1; prior scratch short/source/Shuffle checks unaffected",
+      "additional_optimizer_updates_in_failed_job": 0
+    },
+    "round3": {
+      "job_attempt": "gsp-20261015-toys-resume-r2",
+      "failure": "Runner rejected before accepting worker: same file-only snapshot reused an old source_commit DEPLOYMENT.json but request supplied newly constructed manifest SHA",
+      "change": "New snapshot identity binds source_commit plus exact file records; old snapshots/manifests untouched",
+      "affected_regression": "New deployment/request hash acceptance; independent Toys/Sports resumes; no prior model computation affected",
+      "gpu_seconds": 0,
+      "optimizer_updates": 0,
+      "continuation_validation": {
+        "fixed_code_commit": "59c42a213f2c3f4b90d0c069d4d3b98a2d8a398b",
+        "pure_file_manifest_closure": "PASS; round3-file-identity-validation.json",
+        "rejected_request_preserved": "gsp-20261015-toys-resume-r2",
+        "next_validation_attempt": "gsp-20261015-toys-resume-r3",
+        "reason_for_distinct_attempt": "r2 has immutable local/remote rejected request with old manifest SHA; preserve it after proving no accepted worker. New request uses new identity-bound snapshot; no new code repair.",
+        "status": "PASS",
+        "accepted_validation_jobs": [
+          "gsp-20261015-toys-resume-r3",
+          "gsp-20261015-sports-resume-r1"
+        ],
+        "gpu_jobs_added": 2,
+        "subsequent_delivery_only_changes": [
+          "finalize terminal evidence and current experiment descriptions",
+          "include required raw receipts/source references in review ZIP"
+        ]
+      }
+    }
+  },
+  "gpu_budget": {
+    "initial_target_hours": 2,
+    "all_corrections_max_hours": 6,
+    "accepted_GPU_job_wall_hours_including_initialization_and_failed_attempt": 0.25471926361111114,
+    "inherited_GPU_job_wall_hours": 0.21851052750000002,
+    "new_GPU_job_wall_hours": 0.03620873611111111,
+    "accounting": "Conservative single-card request wall duration, not pure GPU compute time. CPU prepares and preacceptance rejections excluded.",
+    "monitoring_boundary": "Resource samples cover each actual GPU section at 10-second cadence with initial/final probes, not all import/initialization wall time."
+  },
+  "bounded_plan_limits": {
+    "per_job_timeout_seconds": 1200,
+    "initial_target_gpu_hours": 2,
+    "correction_total_max_gpu_hours": 6,
+    "shuffle_test_rows": 31,
+    "source_worker_extra_max_test_batches": 4,
+    "MLP_updates_per_domain": {
+      "scratch": 2,
+      "independent_resume": 1
+    }
+  },
+  "collection": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/evidence/collection-e8211c6f53d3a04c.tar.gz",
+    "bytes": 407001,
+    "sha256": "cc67bac41ce3938c87c7b6e5926b6b8987174c83ed04ba3ca19a674b14c77d8f",
+    "local": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collection-e8211c6f53d3a04c.tar.gz",
+    "remote": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/evidence/collection-e8211c6f53d3a04c.tar.gz",
+    "resumed": false,
+    "verified": true,
+    "directory": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-e8211c6f53d3a04c",
+    "members_verified": true,
+    "collector_snapshot_sha256": "c42c3fcc9bba292f2077e9840a11657563681fc177f33a8ee9d534f318967603"
+  },
+  "active_stage_jobs": [],
+  "remaining_engineering_checks": [],
+  "future_research_decisions": [
+    "Toys: choose between two genuine author SID candidates and approve single-GPU formal effective batch/validation interval/termination/resource budget; preserve producer-binding uncertainty",
+    "Sports: historical author MLP condition absent; explicitly approve an own-domain SID and original-MLP research plan/initialization/budget before any formal run"
+  ],
+  "prior_Beauty_delivery_status_unchanged": "PARTIAL_BLOCKED",
+  "prior_Beauty_results_or_checkpoints_modified": false,
+  "formal_authorization_tokens_created": false,
+  "new_dependencies": [],
+  "system_config_changes": [],
+  "cleanup_performed": false,
+  "publication_verification": "Post-commit publication.json and zip-receipt.json are external receipts; they bind the actual fixed GitHub ref/blobs and server export after publication."
+}

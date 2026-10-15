@@ -1,0 +1,810 @@
+{
+  "schema": "grid-preflight-independent-results-continuation-v1",
+  "reviewer": "/root/results_publication_review",
+  "reviewed_at_utc": "2026-10-15T10:14:16.173478+00:00",
+  "non_author_of": [
+    "Shuffle implementation",
+    "MLP implementation",
+    "deployment identity fix",
+    "callback serialization fix",
+    "preflight training/generation/evaluator",
+    "delivery helpers"
+  ],
+  "reviewer_actions": "Read-only actual code/raw evidence review and standard-library byte/AST/metric checks; wrote only these support receipts. No model/GPU run, Git operation, or install.",
+  "status": "ENGINEERING_PREFLIGHT_PASS_RESEARCH_DECISION_PENDING",
+  "overall_delivery_recommendation": "PARTIAL_PREFLIGHT",
+  "collection": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-e8211c6f53d3a04c/COLLECTION_MANIFEST.json",
+    "bytes": 76158,
+    "sha256": "2bc937ad90475d773d3229884c781afe07374540ee2040120195702bf6c393e7"
+  },
+  "collection_members_verified": 400,
+  "accepted_job_fingerprints_verified": 14,
+  "invocation_identity_closures_verified": 13,
+  "invocation_missing_reason": "round0 mkdir fails before invocation/model import",
+  "prediction_paths_order_coverage_fourcode_finite_verified": 14,
+  "independent_standard_library_metric_recomputations": 11,
+  "maximum_accepted_metric_difference": 1e-07,
+  "lines": {
+    "Shuffle A": {
+      "ENGINEERING_PREFLIGHT_PASS": true,
+      "RESEARCH_CONDITIONS_CONFIRMED": true,
+      "READY_FOR_FORMAL_REVIEW": true,
+      "FORMAL_RUN_AUTHORIZED": false,
+      "technical_status": "FORMAL_TECHNICALLY_READY_PENDING_USER_AUTHORIZATION",
+      "job_id": "gsp-20261015-a-shared-r1",
+      "loading": {
+        "assets": [
+          {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68/merged_predictions_tensor.pt",
+            "sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+            "bytes": 388534,
+            "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68/merged_predictions_tensor.pt"
+          },
+          {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00/checkpoint_epoch=000_step=004800.ckpt",
+            "sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+            "bytes": 160859238,
+            "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00/checkpoint_epoch=000_step=004800.ckpt"
+          }
+        ],
+        "strict_load": {
+          "missing_keys": [],
+          "unexpected_keys": [],
+          "global_step": 4800,
+          "epoch": 0,
+          "all_parameter_keys_shapes_values_equal": true,
+          "state_tensor_count": 178,
+          "embedded_sid_exact": true
+        },
+        "model_class": "experiments.beauty_extensions.author.models.AuthorShuffleModel",
+        "parameter_count": 13259136,
+        "shared_sid_table": false
+      },
+      "test_rows_per_condition": 31,
+      "test_batch_sizes": [
+        8,
+        8,
+        8,
+        7
+      ],
+      "validation_rows": 11,
+      "source_worker_extra_scope": "A only: original8 workers, hard4 test batches,32unique users",
+      "same_shape_OFF_exact": true,
+      "original_cross_batch_score_drift_max": 7.991213351488113e-06,
+      "cross_batch_drift_boundary": "original and adapter have equal observed batch-size-dependent drift; same-shape and roundtrip exact, no universal cross-size allclose claimed",
+      "actual_expected_exception_recovery": {
+        "status": "PASS",
+        "actual_trainer_exception": true,
+        "events": [
+          {
+            "hook": "on_test_batch_start",
+            "batch": 0,
+            "input_device": "cuda:0",
+            "parameter_devices": [
+              "cuda:0"
+            ],
+            "flag": true
+          },
+          {
+            "hook": "on_exception",
+            "exception_type": "InjectedPreflightError",
+            "flag_after_cleanup_callback": false
+          }
+        ],
+        "same_model_instance": true,
+        "evaluator_restored": true,
+        "state_digest_before_after": "566f363649043dfe3a5cd4a2a629a00cea089856daa89a327600dcf8c6a18ba6",
+        "off_sid_exact": true,
+        "off_scores": {
+          "max_absolute": 0.0,
+          "allclose": true,
+          "exact": true
+        },
+        "validation_after_exception": "ordinary_validation.json",
+        "exception_was_expected_and_caught_by_type_only": true
+      },
+      "post_test_OFF": {
+        "same_model_instance": true,
+        "parameter_devices": [
+          "cuda:0"
+        ],
+        "input_device": "cuda:0",
+        "is_testing": false,
+        "sid_exact": true,
+        "scores": {
+          "max_absolute": 0.0,
+          "allclose": true,
+          "exact": true
+        },
+        "model_eval": true,
+        "encoder_eval": true,
+        "decoder_eval": true
+      },
+      "normal_and_shuffle_test_lifecycle_cleanup": true,
+      "four_code_original_evaluator_saved_predictions_recomputed": true,
+      "source_inheritance": {
+        "base_execution_source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+        "base_execution_snapshot_sha256": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+        "changed_python_files": [
+          "experiments/preflight_20261015/bundle.py",
+          "experiments/preflight_20261015/deploy.py",
+          "experiments/preflight_20261015/run.py"
+        ],
+        "added_python_files": [
+          "experiments/preflight_20261015/finalize.py",
+          "experiments/preflight_20261015/resume_plan.py"
+        ],
+        "old_run_module_AST_equal_after_removing_only_nested_callback_reporting_plain_function": true,
+        "old_deploy_module_AST_equal_after_removing_snapshot_function": true,
+        "interpretation": [
+          "run.py change recursively serializes callback report tensor nonfinite sentinels; Shuffle functions and main AST unchanged.",
+          "deploy.py snapshot function binds commit plus exact file records to immutable directory identity; model and runner computations unchanged.",
+          "bundle.py and new finalize.py only delivery records, evidence and ZIP; new resume_plan.py binds Toys/Sports own short checkpoint/predictions without model execution.",
+          "All existing original model, adapter, CLI, common loader/generator/evaluator and resource-guard Python bytes remain equal to the executed A/B snapshot."
+        ],
+        "all_167_current_python_AST_parsed_without_imports": true,
+        "current_source_map_receipt": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/results-publication-review/source-python-current.json",
+          "bytes": 22139,
+          "sha256": "8cb4456ae0dce58d9a9826ca162bb63afaecedd79cb312b877f7e3073eeb9e1d"
+        }
+      }
+    },
+    "Shuffle B": {
+      "ENGINEERING_PREFLIGHT_PASS": true,
+      "RESEARCH_CONDITIONS_CONFIRMED": true,
+      "READY_FOR_FORMAL_REVIEW": true,
+      "FORMAL_RUN_AUTHORIZED": false,
+      "technical_status": "FORMAL_TECHNICALLY_READY_PENDING_USER_AUTHORIZATION",
+      "job_id": "gsp-20261015-b-shared-r1",
+      "loading": {
+        "assets": [
+          {
+            "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt",
+            "sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18",
+            "bytes": 388405,
+            "resolved": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt"
+          },
+          {
+            "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt",
+            "sha256": "3d8f03cf042293f2f7f02132c9d072f573f671d9550d567edd1754f50e53e605",
+            "bytes": 159332142,
+            "resolved": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt"
+          }
+        ],
+        "strict_load": {
+          "missing_keys": [],
+          "unexpected_keys": [],
+          "global_step": 12500,
+          "epoch": 0,
+          "all_parameter_keys_shapes_values_equal": true,
+          "state_tensor_count": 177,
+          "embedded_sid_exact": true
+        },
+        "model_class": "experiments.beauty_extensions.baseline.BaselineShuffleModel",
+        "parameter_count": 13128064,
+        "shared_sid_table": true
+      },
+      "test_rows_per_condition": 31,
+      "test_batch_sizes": [
+        8,
+        8,
+        8,
+        7
+      ],
+      "validation_rows": 11,
+      "source_worker_extra_scope": "Original source workers0",
+      "same_shape_OFF_exact": true,
+      "original_cross_batch_score_drift_max": 1.9360333681106567e-05,
+      "cross_batch_drift_boundary": "original and adapter have equal observed batch-size-dependent drift; same-shape and roundtrip exact, no universal cross-size allclose claimed",
+      "actual_expected_exception_recovery": {
+        "status": "PASS",
+        "actual_trainer_exception": true,
+        "events": [
+          {
+            "hook": "on_test_batch_start",
+            "batch": 0,
+            "input_device": "cuda:0",
+            "parameter_devices": [
+              "cuda:0"
+            ],
+            "flag": true
+          },
+          {
+            "hook": "on_exception",
+            "exception_type": "InjectedPreflightError",
+            "flag_after_cleanup_callback": false
+          }
+        ],
+        "same_model_instance": true,
+        "evaluator_restored": true,
+        "state_digest_before_after": "698a0acb8cfe266b4aac82d96d75883955fc522c5e205b8c81670dff1f753276",
+        "off_sid_exact": true,
+        "off_scores": {
+          "max_absolute": 0.0,
+          "allclose": true,
+          "exact": true
+        },
+        "validation_after_exception": "ordinary_validation.json",
+        "exception_was_expected_and_caught_by_type_only": true
+      },
+      "post_test_OFF": {
+        "same_model_instance": true,
+        "parameter_devices": [
+          "cuda:0"
+        ],
+        "input_device": "cuda:0",
+        "is_testing": false,
+        "sid_exact": true,
+        "scores": {
+          "max_absolute": 0.0,
+          "allclose": true,
+          "exact": true
+        },
+        "model_eval": true,
+        "encoder_eval": true,
+        "decoder_eval": true
+      },
+      "normal_and_shuffle_test_lifecycle_cleanup": true,
+      "four_code_original_evaluator_saved_predictions_recomputed": true,
+      "source_inheritance": {
+        "base_execution_source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+        "base_execution_snapshot_sha256": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+        "changed_python_files": [
+          "experiments/preflight_20261015/bundle.py",
+          "experiments/preflight_20261015/deploy.py",
+          "experiments/preflight_20261015/run.py"
+        ],
+        "added_python_files": [
+          "experiments/preflight_20261015/finalize.py",
+          "experiments/preflight_20261015/resume_plan.py"
+        ],
+        "old_run_module_AST_equal_after_removing_only_nested_callback_reporting_plain_function": true,
+        "old_deploy_module_AST_equal_after_removing_snapshot_function": true,
+        "interpretation": [
+          "run.py change recursively serializes callback report tensor nonfinite sentinels; Shuffle functions and main AST unchanged.",
+          "deploy.py snapshot function binds commit plus exact file records to immutable directory identity; model and runner computations unchanged.",
+          "bundle.py and new finalize.py only delivery records, evidence and ZIP; new resume_plan.py binds Toys/Sports own short checkpoint/predictions without model execution.",
+          "All existing original model, adapter, CLI, common loader/generator/evaluator and resource-guard Python bytes remain equal to the executed A/B snapshot."
+        ],
+        "all_167_current_python_AST_parsed_without_imports": true,
+        "current_source_map_receipt": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/results-publication-review/source-python-current.json",
+          "bytes": 22139,
+          "sha256": "8cb4456ae0dce58d9a9826ca162bb63afaecedd79cb312b877f7e3073eeb9e1d"
+        }
+      }
+    },
+    "Toys MLP": {
+      "ENGINEERING_PREFLIGHT_PASS": true,
+      "RESEARCH_CONDITIONS_CONFIRMED": false,
+      "READY_FOR_FORMAL_REVIEW": false,
+      "FORMAL_RUN_AUTHORIZED": false,
+      "technical_status": "ENGINEERING_PREFLIGHT_PASS_RESEARCH_DECISION_PENDING",
+      "scratch_job": "gsp-20261015-toys-short-r1",
+      "independent_resume_job": "gsp-20261015-toys-resume-r3",
+      "scratch_updates": 2,
+      "resume_updates": 1,
+      "scratch_microbatches": 32,
+      "resume_microbatches": 16,
+      "gradient_accumulation": 16,
+      "raw_rows_per_microbatch": 32,
+      "actual_collate_windows_scratch_resume": [
+        13463,
+        6726
+      ],
+      "all_four_MLP_parameter_gradients_and_updates_positive_finite": true,
+      "strict_restore": {
+        "status": "PASS",
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "all_keys_shapes_values_equal": true,
+        "initial_step": 2,
+        "optimizer_state_sha256": "7abb377d363a3e43e553ffd1293a7bc484e6af0672495412b81e7a659e96482f",
+        "callback_keys": [
+          "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}",
+          "ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}"
+        ],
+        "independent_process": true,
+        "protocol": "hash-verified own engineering checkpoint; local safe_globals/weights_only for inspection; Lightning restores this trusted own file"
+      },
+      "restored19_predictions_bytevalue_exact_after_JSON_parse": true,
+      "callback_restore": {
+        "callbacks": [
+          {
+            "key": "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}",
+            "exact": true,
+            "prior": {
+              "wait_count": 1,
+              "stopped_epoch": 0,
+              "best_score": 0.0,
+              "patience": 10
+            },
+            "current": {
+              "wait_count": 1,
+              "stopped_epoch": 0,
+              "best_score": 0.0,
+              "patience": 10
+            },
+            "difference_boundary": null
+          },
+          {
+            "key": "ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}",
+            "exact": false,
+            "prior": {
+              "monitor": "val/recall@5",
+              "best_model_score": 0.0,
+              "best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/engineering-step=000001.ckpt",
+              "current_score": 0.0,
+              "dirpath": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints",
+              "best_k_models": {
+                "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/engineering-step=000001.ckpt": 0.0
+              },
+              "kth_best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/engineering-step=000001.ckpt",
+              "kth_value": 0.0,
+              "last_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/last.ckpt"
+            },
+            "current": {
+              "monitor": "val/recall@5",
+              "best_model_score": null,
+              "best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-short-r1/output/checkpoints/engineering-step=000001.ckpt",
+              "current_score": null,
+              "dirpath": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-toys-resume-r3/output/checkpoints",
+              "best_k_models": {},
+              "kth_best_model_path": "",
+              "kth_value": "-inf",
+              "last_model_path": ""
+            },
+            "difference_boundary": "ModelCheckpoint output dir changed; Lightning restores best_model_path but resets directory-bound ranking state; not exact uninterrupted selection continuation"
+          }
+        ],
+        "all_callback_keys_accounted": true,
+        "exact_full_callback_restore_claimed": false
+      },
+      "evaluation_scope": "19test,11val,tail3 kept,10four-code candidates; original evaluator and no candidate filtering",
+      "invalid_candidates_scratch_resume": [
+        190,
+        190
+      ],
+      "engineering_metrics": {
+        "ndcg@5": 0.0,
+        "ndcg@10": 0.0,
+        "recall@5": 0.0,
+        "recall@10": 0.0
+      },
+      "scientific_boundary": "Only three engineering optimizer updates.190/190 unregistered candidates and zero metrics are retained and are not formal recommendation results.",
+      "dropout_boundary": "Original0.1 structure and normal Lightning fit/eval execution chain reviewed; no per-phase Dropout.training field was recorded.",
+      "restore_boundary": "Model/optimizer/global_step and EarlyStopping exact; changed-dir ModelCheckpoint ranking resets; no uninterrupted RNG/data cursor trajectory claimed.",
+      "formal_checkpoint_reuse_allowed": false,
+      "peak_allocated_scratch_resume": [
+        1996942336,
+        1967117312
+      ],
+      "peak_reserved_scratch_resume": [
+        3806330880,
+        3026190336
+      ],
+      "measured_fit_val_save_test_seconds": [
+        10.376204973086715,
+        7.043485251720995
+      ],
+      "budget_estimate_boundary": "Actual short measurements and peak memory support planning; formal protocol/budget unresolved, no reliable full-training ETA."
+    },
+    "Sports MLP": {
+      "ENGINEERING_PREFLIGHT_PASS": true,
+      "RESEARCH_CONDITIONS_CONFIRMED": false,
+      "READY_FOR_FORMAL_REVIEW": false,
+      "FORMAL_RUN_AUTHORIZED": false,
+      "technical_status": "ENGINEERING_PREFLIGHT_PASS_RESEARCH_DECISION_PENDING",
+      "scratch_job": "gsp-20261015-sports-short-r1",
+      "independent_resume_job": "gsp-20261015-sports-resume-r1",
+      "scratch_updates": 2,
+      "resume_updates": 1,
+      "scratch_microbatches": 32,
+      "resume_microbatches": 16,
+      "gradient_accumulation": 16,
+      "raw_rows_per_microbatch": 16,
+      "actual_collate_windows_scratch_resume": [
+        3744,
+        1879
+      ],
+      "all_four_MLP_parameter_gradients_and_updates_positive_finite": true,
+      "strict_restore": {
+        "status": "PASS",
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "all_keys_shapes_values_equal": true,
+        "initial_step": 2,
+        "optimizer_state_sha256": "a60913cead4ea66ba89b539b1c6a1fc0ae6aafbe15816d0b8188b3ed06521099",
+        "callback_keys": [
+          "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}",
+          "ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}"
+        ],
+        "independent_process": true,
+        "protocol": "hash-verified own engineering checkpoint; local safe_globals/weights_only for inspection; Lightning restores this trusted own file"
+      },
+      "restored19_predictions_bytevalue_exact_after_JSON_parse": true,
+      "callback_restore": {
+        "callbacks": [
+          {
+            "key": "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}",
+            "exact": true,
+            "prior": {
+              "wait_count": 1,
+              "stopped_epoch": 0,
+              "best_score": 0.0,
+              "patience": 10
+            },
+            "current": {
+              "wait_count": 1,
+              "stopped_epoch": 0,
+              "best_score": 0.0,
+              "patience": 10
+            },
+            "difference_boundary": null
+          },
+          {
+            "key": "ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}",
+            "exact": false,
+            "prior": {
+              "monitor": "val/recall@5",
+              "best_model_score": 0.0,
+              "best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-short-r1/output/checkpoints/engineering-step=000001.ckpt",
+              "current_score": 0.0,
+              "dirpath": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-short-r1/output/checkpoints",
+              "best_k_models": {
+                "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-short-r1/output/checkpoints/engineering-step=000001.ckpt": 0.0
+              },
+              "kth_best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-short-r1/output/checkpoints/engineering-step=000001.ckpt",
+              "kth_value": 0.0,
+              "last_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-short-r1/output/checkpoints/last.ckpt"
+            },
+            "current": {
+              "monitor": "val/recall@5",
+              "best_model_score": null,
+              "best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-short-r1/output/checkpoints/engineering-step=000001.ckpt",
+              "current_score": null,
+              "dirpath": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-resume-r1/output/checkpoints",
+              "best_k_models": {},
+              "kth_best_model_path": "",
+              "kth_value": "-inf",
+              "last_model_path": ""
+            },
+            "difference_boundary": "ModelCheckpoint output dir changed; Lightning restores best_model_path but resets directory-bound ranking state; not exact uninterrupted selection continuation"
+          }
+        ],
+        "all_callback_keys_accounted": true,
+        "exact_full_callback_restore_claimed": false
+      },
+      "evaluation_scope": "19test,11val,tail3 kept,10four-code candidates; original evaluator and no candidate filtering",
+      "invalid_candidates_scratch_resume": [
+        190,
+        190
+      ],
+      "engineering_metrics": {
+        "ndcg@5": 0.0,
+        "ndcg@10": 0.0,
+        "recall@5": 0.0,
+        "recall@10": 0.0
+      },
+      "scientific_boundary": "Only three engineering optimizer updates.190/190 unregistered candidates and zero metrics are retained and are not formal recommendation results.",
+      "dropout_boundary": "Original0.1 structure and normal Lightning fit/eval execution chain reviewed; no per-phase Dropout.training field was recorded.",
+      "restore_boundary": "Model/optimizer/global_step and EarlyStopping exact; changed-dir ModelCheckpoint ranking resets; no uninterrupted RNG/data cursor trajectory claimed.",
+      "formal_checkpoint_reuse_allowed": false,
+      "peak_allocated_scratch_resume": [
+        693331456,
+        681316864
+      ],
+      "peak_reserved_scratch_resume": [
+        750780416,
+        742391808
+      ],
+      "measured_fit_val_save_test_seconds": [
+        9.149928777944297,
+        6.209688481874764
+      ],
+      "budget_estimate_boundary": "Actual short measurements and peak memory support planning; formal protocol/budget unresolved, no reliable full-training ETA."
+    }
+  },
+  "jobs": [
+    {
+      "job_id": "gsp-20261015-b-prepare-r0",
+      "phase": "prepare",
+      "status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "0c5563793ef6f495bdfa3ae9985a93059fed1165fda824ac9c31be91fbc2ab41",
+      "identity": null,
+      "request_wall_seconds": 5.572195
+    },
+    {
+      "job_id": "gsp-20261015-b-prepare-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "aa1830def447318526da033eaf32a8d5b7bdcef04ca644cfb60c9f6c4c5a9cc5",
+      "identity": {
+        "source_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+        "snapshot_sha256": "c8cf51405fd5140b0cf10f78f745e1a9f42eae34c69f7073e218e8a26af91f4e",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 511.612894
+    },
+    {
+      "job_id": "gsp-20261015-toys-prepare-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "c599ff193f72c4a8deb8968590a664b72acd137da3df88ad4868c9456202687c",
+      "identity": {
+        "source_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+        "snapshot_sha256": "5c72de25b81a4b86d256c82c98e063b19bb7a692ea0d73fed0839d8e63a06a35",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 91.963421
+    },
+    {
+      "job_id": "gsp-20261015-a-prepare-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "23aa5a4631a279fc80c9d6513c012aa84e6282123ec305e7267b03b0781000e1",
+      "identity": {
+        "source_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+        "snapshot_sha256": "43aefff0f79f832f466229108e116f4243f1fb2535c885e16164e15edf2a1102",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 59.28941
+    },
+    {
+      "job_id": "gsp-20261015-sports-prepare-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "f5346c22cba55b6b47e89aebe51922ee396cd075b1603f1eb4ce1db67387a503",
+      "identity": {
+        "source_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+        "snapshot_sha256": "43aefff0f79f832f466229108e116f4243f1fb2535c885e16164e15edf2a1102",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 25.417143
+    },
+    {
+      "job_id": "gsp-20261015-b-prepare-long-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "320c09e14887ed79a060678514e97354fe2515c8f761caac76ac6593b02d00b4",
+      "identity": {
+        "source_commit": "a71ba06fe9d722dd236d340b4eaaec6b9b3e600e",
+        "snapshot_sha256": "f7002a85350880be3b74d986d6fe5592244c43f1aba016a63d6ffa7d3b0d4417",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 386.78161
+    },
+    {
+      "job_id": "gsp-20261015-a-prepare-long-r1",
+      "phase": "prepare",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "52c1bc182f1fa270ae6b42479fb24f99efb4a1ee08ffdec7b39bac651c19e75d",
+      "identity": {
+        "source_commit": "a71ba06fe9d722dd236d340b4eaaec6b9b3e600e",
+        "snapshot_sha256": "f7002a85350880be3b74d986d6fe5592244c43f1aba016a63d6ffa7d3b0d4417",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 298.622205
+    },
+    {
+      "job_id": "gsp-20261015-b-shared-r1",
+      "phase": "shuffle",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "a4284e674641e533274a5c7bafd833f9444fe2c2a322b83e9b4f04424f217422",
+      "identity": {
+        "source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+        "snapshot_sha256": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 317.927048
+    },
+    {
+      "job_id": "gsp-20261015-a-shared-r1",
+      "phase": "shuffle",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "1a9c1b4acf2e7852e069d931ff52da5b9c34c56e7ae6104fbfcc97621ffd6a49",
+      "identity": {
+        "source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+        "snapshot_sha256": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 144.781316
+    },
+    {
+      "job_id": "gsp-20261015-toys-short-r1",
+      "phase": "mlp-short",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "9ee6fc8309ef6f5254c03c048f641695f134b63769b9787afe8b6de1e1bd1e36",
+      "identity": {
+        "source_commit": "10208eb4f6ad812a0f3bf38030134a0e164ff890",
+        "snapshot_sha256": "18848b6601cddac996537075373a9f51f08f4212d310843efbe78a22c6cf8ff9",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 122.343952
+    },
+    {
+      "job_id": "gsp-20261015-sports-short-r1",
+      "phase": "mlp-short",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "147e463df52594108dda219788d89d334325e213b7901862836783aef055d45c",
+      "identity": {
+        "source_commit": "49c02e5d6c40a5b899b3c118f82b19190d7d02fb",
+        "snapshot_sha256": "5227c1a77ee4fd85a9f69b45c6e804bbd0ad1e21b9013228f6988ff35bc6eade",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 98.10787
+    },
+    {
+      "job_id": "gsp-20261015-toys-resume-r1",
+      "phase": "mlp-resume",
+      "status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "new_in_this_continuation": false,
+      "request_fingerprint": "9fa14fe3a159e53db68e812e9b31ab70cc3a1b3b489e5d6cdc8ad590ee8c9849",
+      "identity": {
+        "source_commit": "49c02e5d6c40a5b899b3c118f82b19190d7d02fb",
+        "snapshot_sha256": "b73d8afd46882f6f3208d927c3bcf27248d5c8b13e0384e4aa2a354ff896091a",
+        "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 103.477713
+    },
+    {
+      "job_id": "gsp-20261015-toys-resume-r3",
+      "phase": "mlp-resume",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": true,
+      "request_fingerprint": "e1d9f3ba94b347320d8fbe61579d2d10776674b520d802d42dff6ae7638b6cd3",
+      "identity": {
+        "source_commit": "59c42a213f2c3f4b90d0c069d4d3b98a2d8a398b",
+        "snapshot_sha256": "c42c3fcc9bba292f2077e9840a11657563681fc177f33a8ee9d534f318967603",
+        "identity_kind": "commit_plus_file_manifest_v2; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 99.00365
+    },
+    {
+      "job_id": "gsp-20261015-sports-resume-r1",
+      "phase": "mlp-resume",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "new_in_this_continuation": true,
+      "request_fingerprint": "cb5daac672178ec0ddd0100cdb1156be76b96b59ca83d086e4b29353cc59b3f5",
+      "identity": {
+        "source_commit": "59c42a213f2c3f4b90d0c069d4d3b98a2d8a398b",
+        "snapshot_sha256": "c42c3fcc9bba292f2077e9840a11657563681fc177f33a8ee9d534f318967603",
+        "identity_kind": "commit_plus_file_manifest_v2; engineering patch may be uncommitted",
+        "formal_approved": false
+      },
+      "request_wall_seconds": 31.3478
+    }
+  ],
+  "job_counts": {
+    "FAILED": 2,
+    "SUCCEEDED": 12
+  },
+  "GPU_budget": {
+    "accepted_single_card_request_wall_seconds": 916.9893490000001,
+    "accepted_single_card_request_wall_hours": 0.25471926361111114,
+    "inherited_wall_seconds": 786.6378990000001,
+    "new_wall_seconds": 130.35145,
+    "inherited_wall_hours": 0.21851052750000002,
+    "new_wall_hours": 0.03620873611111111,
+    "initial_target_hours": 2,
+    "all_corrections_max_hours": 6,
+    "counting": "Includes initialization and failed acceptedGPU resume; excludes CPU prepares and unaccepted rejection. Not pure compute time."
+  },
+  "scope_and_failure_preservation": {
+    "full_test_or_formal_training_or_attention_started": false,
+    "three_task_level_corrections_used": 3,
+    "maximum": 3,
+    "fourth_repair_started": false,
+    "round0_mkdir_failure": "FAILED preserved",
+    "toys_resume_r1": "FAILED preserved: strict model restore,optimizer fingerprint and19prediction parity passed; callback report -inf JSON failed in on_train_start before extra update.",
+    "toys_resume_r2": "REJECTED_BEFORE_ACCEPTANCE: no accepted/status/worker; directory .submit.lock only; distinct original request preserved in diagnosis.",
+    "round3_validation": "Toys resume-r3 and Sports resume-r1 succeed at fixed59c42a2/c42c3fcc; existing repair verification, no new research change.",
+    "Beauty_formal_MLP_and_old_failed_records_modified": false
+  },
+  "current_source_inheritance": {
+    "base_execution_source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+    "base_execution_snapshot_sha256": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+    "changed_python_files": [
+      "experiments/preflight_20261015/bundle.py",
+      "experiments/preflight_20261015/deploy.py",
+      "experiments/preflight_20261015/run.py"
+    ],
+    "added_python_files": [
+      "experiments/preflight_20261015/finalize.py",
+      "experiments/preflight_20261015/resume_plan.py"
+    ],
+    "old_run_module_AST_equal_after_removing_only_nested_callback_reporting_plain_function": true,
+    "old_deploy_module_AST_equal_after_removing_snapshot_function": true,
+    "interpretation": [
+      "run.py change recursively serializes callback report tensor nonfinite sentinels; Shuffle functions and main AST unchanged.",
+      "deploy.py snapshot function binds commit plus exact file records to immutable directory identity; model and runner computations unchanged.",
+      "bundle.py and new finalize.py only delivery records, evidence and ZIP; new resume_plan.py binds Toys/Sports own short checkpoint/predictions without model execution.",
+      "All existing original model, adapter, CLI, common loader/generator/evaluator and resource-guard Python bytes remain equal to the executed A/B snapshot."
+    ],
+    "all_167_current_python_AST_parsed_without_imports": true,
+    "current_source_map_receipt": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/results-publication-review/source-python-current.json",
+      "bytes": 22139,
+      "sha256": "8cb4456ae0dce58d9a9826ca162bb63afaecedd79cb312b877f7e3073eeb9e1d"
+    }
+  },
+  "reviewed_delivery_helpers": {
+    "experiments/preflight_20261015/finalize.py": {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/preflight_20261015/finalize.py",
+      "bytes": 12753,
+      "sha256": "06a4d92b4fadf4bd816c144fbdb1c286b88af74d79104fc5f96e1ba8e34cfe15"
+    },
+    "experiments/preflight_20261015/bundle.py": {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/preflight_20261015/bundle.py",
+      "bytes": 8543,
+      "sha256": "8e0322353c6f489fe2cf9bfa3717f2c8f0071deaad1a0863a4c22ce50d64244a"
+    },
+    "experiments/preflight_20261015/publish.py": {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/preflight_20261015/publish.py",
+      "bytes": 3277,
+      "sha256": "7c6d1c7b3068a76c0999e92394822c64726b5d800b6f445968201532d27e4977"
+    },
+    "experiments/preflight_20261015/collect.py": {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/preflight_20261015/collect.py",
+      "bytes": 5090,
+      "sha256": "de3c57d83b52b17b8dbb94066543f1930c3ddf8e34413d42124d346ec5984511"
+    }
+  },
+  "publication_review_status": "PENDING_ACTUAL_FIXED_GITHUB_REF_BLOB_AND_SERVER_EXPORT_RECEIPT",
+  "ZIP_review_status": "PENDING_ACTUAL_ZIP_CRC_MEMBERS_SHA_SECRET_SCOPE",
+  "formal_approved": false,
+  "formal_authorization_token_created": false
+}

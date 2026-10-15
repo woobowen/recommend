@@ -1,0 +1,3197 @@
+{
+  "schema": "grid-shuffle-mlp-preflight-20261015-shuffle-a-independent-review-v1",
+  "stage_id": "grid-shuffle-mlp-preflight-20261015",
+  "reviewer": {
+    "agent": "/root/attention_audit",
+    "independent_of": [
+      "A runtime bridge author",
+      "A/MLP model adapter author",
+      "new stage primary implementer"
+    ],
+    "ownership_exclusion": "Reviewer authored the previous attention observer; no independent observer correctness or scientific attention signature is issued here."
+  },
+  "reviewed_at_utc": "2026-10-15T07:24:08.304146+00:00",
+  "status": "PREFLIGHT_GATE_PASS",
+  "authorization": {
+    "preflight_only": true,
+    "formal_approved": false,
+    "formal_run_authorized": false,
+    "formal_admission_token": null,
+    "preflight_gate_pass": true,
+    "scope_excludes": [
+      "formal training",
+      "full test",
+      "full validation",
+      "32-user attention capture",
+      "Parallel",
+      "new SID/embedding/quantizer generation"
+    ],
+    "historical_beauty_status_preserved": "PARTIAL_BLOCKED; A/B six formal groups NOT_RUN; historical failed smoke remains FAILED"
+  },
+  "anchor_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+  "new_stage_round": {
+    "task_level_correction_rounds_used": 3,
+    "maximum": 3,
+    "round2_scope": {
+      "job": "gsp-20261015-toys-resume-r1",
+      "failure": "Callback restore report JSON refused tensor -inf sentinel after nonrecursive tolist; before any extra optimizer update",
+      "change": "Recursively encode only callback state tensor.tolist to explicit nonfinite strings; exact state comparisons and finite model/gradient/loss assertions unchanged",
+      "affected_regression": "Independent Toys resume1, Sports resume1; prior scratch short/source/Shuffle checks unaffected",
+      "additional_optimizer_updates_in_failed_job": 0
+    },
+    "old_Beauty_rounds_unchanged": true,
+    "A_rerun_for_MLP_receipt_fix_required": false
+  },
+  "instructions_read": {
+    "root": "/home/addaswsw/recommend",
+    "files": [
+      "AGENTS.md",
+      "PROJECT_RULES.md",
+      "REMOTE_EXECUTION.md",
+      "GRID_Shuffle_AB_MLP_Toys_Sports_Preflight_Codex_20261015.txt"
+    ],
+    "catalog_or_filename_not_used_as_method_evidence": true
+  },
+  "reviewed_source_identity": [
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+      "bytes": 61418,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/base_module.py",
+      "sha256": "7cfa9da5f73c0e666ab81f22440d04f04d6cc9624803de58cde3256dcae400b0",
+      "bytes": 7949,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/huggingface/transformer_base_module.py",
+      "sha256": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+      "bytes": 6665,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/collate_functions.py",
+      "sha256": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+      "bytes": 16642,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/label_function.py",
+      "sha256": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+      "bytes": 9035,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/components/dataloading.py",
+      "sha256": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+      "bytes": 7194,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/data/loading/datamodules/sequence_datamodule.py",
+      "sha256": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+      "bytes": 16142,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/eval_metrics.py",
+      "sha256": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+      "bytes": 15241,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "experiments/beauty_extensions/author/models.py",
+      "sha256": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4",
+      "bytes": 15033,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "experiments/beauty_extensions/author/checks.py",
+      "sha256": "044c475be6cd40ca419b2da83a1b3d8851b1aa3a2c62760953064334d36be907",
+      "bytes": 10319,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "experiments/beauty_extensions/author/bootstrap.py",
+      "sha256": "13b42af96b0a08bf8ac6636a1ff8bc7492e830692fedbd5b9890394eb6904c14",
+      "bytes": 3039,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "experiments/beauty_extensions/cli.py",
+      "sha256": "b4acb37888a0b365b055abd99da5158a962a747f8eb8c0dfd0571bd8c303cc9f",
+      "bytes": 20634,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "experiments/beauty_extensions/common.py",
+      "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+      "bytes": 12084,
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "experiments/beauty_extensions/specs/a-smoke.json",
+      "sha256": "cc0999b09014a0a77ec4e10bac3d35c7d945dd9d04cbab4f2016581fabc3b0e8",
+      "bytes": 1158,
+      "syntax_parse": "NOT_APPLICABLE"
+    }
+  ],
+  "route_A_research_condition": {
+    "upstream": "T5 / R-Kmeans",
+    "sid_sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+    "checkpoint_sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+    "checkpoint_step": 4800,
+    "effective_source_config_sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d",
+    "sid_axis": "[H=4,item_id=12101]",
+    "fourth_code": "collision discriminator for duplicate first-three SID prefixes; not a fourth quantization layer",
+    "H": 4,
+    "E": 128,
+    "vocabulary_per_position": 256,
+    "generation_K": 10,
+    "should_check_prefix": false,
+    "history_window": "120 SID tokens including hidden four-token target; at most 29 visible history items",
+    "separate_encoder_decoder_sid_tables": true,
+    "SEP": true,
+    "conditional_user_token": null,
+    "parameters": 13259136,
+    "A_B_same_model_claim": false,
+    "A_B_comparison_rule": "Within-route Normal contrasts only; B uses a different shared-table Qwen/SID/checkpoint condition."
+  },
+  "static_findings": [
+    {
+      "id": "A-SOURCE-STRUCTURE",
+      "status": "PASS_BOUNDED_ENGINEERING_REVIEW",
+      "evidence": "Original constructor creates two independent item_sid_embedding_table_encoder/decoder embeddings. Bridge adds no Parameter and no state-dict migration. Original T5 wrappers, four decoder output heads, FF structure, target loss and beam scoring are inherited unchanged.",
+      "historical_initial_static_status": "PASS_STATIC",
+      "runtime_followup": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-SHUFFLE-ALGORITHM",
+      "status": "PASS_BOUNDED_ENGINEERING_REVIEW",
+      "evidence": "Original encoder offsets positions then uses encoder SID lookup, invokes native helper only when is_testing and shuffle_embedding_on_test, and injects SEP/user after helper. Native torch.rand([B,M,N]).argsort(dim=2) is redrawn per encoder invocation, independently per occurrence; identity/repeat permutations allowed, N=3 preserves fourth vector, N=4 includes it.",
+      "historical_initial_static_status": "PASS_STATIC",
+      "runtime_followup": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-INPUT-MASK",
+      "status": "PASS_BOUNDED_ENGINEERING_REVIEW",
+      "evidence": "Bridge rejects nonbinary, incomplete or partial-valid H-sized groups. For supported complete groups original sum>0 convention is retained. Clone before original helper prevents shared-storage mutation of caller embeddings. Label construction/offset/codebook mapping and SEP last-code mask are unchanged.",
+      "historical_initial_static_status": "PASS_STATIC",
+      "runtime_followup": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-RNG-TRACE",
+      "status": "PASS_BOUNDED_ENGINEERING_REVIEW",
+      "evidence": "Bridge snapshots the device RNG immediately before exact native helper; bounded trace is rebuilt with a separate Generator seeded from that state. It does not consume/reset default RNG. Replay is a separate explicit engineering context; formal/native path never silently reuses it. OFF bypasses helper.",
+      "historical_initial_static_status": "PASS_STATIC_AWAITING_RUNTIME_PARITY",
+      "runtime_followup": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-CACHE",
+      "status": "PASS_BOUNDED_ENGINEERING_REVIEW",
+      "evidence": "Original generate explicitly allocates a fresh EncoderDecoderCache each invocation and replaces it after initial beam expansion. Decoder forward receives an explicit cache/None from decoder_forward_pass; its mutable DynamicCache default is not used on these normal paths. Actual repeat/reverse/B8-B1-B8 results remain required.",
+      "historical_initial_static_status": "PASS_STATIC_AWAITING_REAL_REPEATED_AND_SHAPE_CHECKS",
+      "runtime_followup": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-LIFECYCLE",
+      "status": "PASS_BOUNDED_ENGINEERING_REVIEW",
+      "evidence": "Bridge invokes original test/validation/train/predict hooks and resets is_testing on test end/finally/clear_runtime_state. Original test-end returns internal T5 stacks to train mode; post-test inference must explicitly restore device/eval. Module on_exception alone is not proof of real Trainer exception callback execution.",
+      "historical_initial_static_status": "STATIC_CONTRACT_PRESENT_REAL_STAGE_NOT_RUN",
+      "runtime_followup": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-EVALUATOR",
+      "status": "PASS_BOUNDED_ENGINEERING_REVIEW",
+      "evidence": "Runtime eval preserves loss then separate generate then original SIDRetrievalEvaluator then loss aggregation. Four target labels are reshaped by original code, candidate probabilities are not rescaled, filtered, padded or reordered by the recorder.",
+      "historical_initial_static_status": "PASS_STATIC_AWAITING_REAL_OUTPUT_RECOMPUTE",
+      "runtime_followup": "actual_A_GPU_preflight_independent_review"
+    }
+  ],
+  "old_evidence_reuse": {
+    "archive_path": "/home/addaswsw/recommend-support/sid-extensions-p0/beauty-extensions/deliveries/beauty-extensions-partial-20261014.zip",
+    "archive_bytes": 17564668,
+    "archive_sha256": "a0ec709db33c5176639ff4bf8bac83d1e1d37394f5012a746d38b06f84438f99",
+    "access": "ZIP member reads only; no full extraction, no remote job, no model load",
+    "verified_jobs": [
+      {
+        "job_id": "beauty-a-inspect-r2",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "request_member": "evidence/beauty-a-inspect-r2/request.json",
+        "request_sha256": "dadbfb96280877ce3355e842c59107def578627ca860619b56ea4f573a0a2b48",
+        "status_member": "evidence/beauty-a-inspect-r2/status.json",
+        "status_sha256": "d998beff70f5b5dd1c7803cd8f87311c27b744fe607ba3e36e826a31f239e4fd",
+        "all_listed_artifact_hashes_independently_verified": true,
+        "artifacts": [
+          {
+            "zip_member": "evidence/beauty-a-inspect-r2/output/RESULT.json",
+            "bytes": 137,
+            "sha256": "924016b83fef4ce5233815261e4413b7859dad794252fc2230001a0cd39d7a68"
+          },
+          {
+            "zip_member": "evidence/beauty-a-inspect-r2/output/checkpoint_protocol.json",
+            "bytes": 1964,
+            "sha256": "cea974659234b831ffbbb9cc54c0426467e393061c4ab8ed1027737e384a5f06"
+          },
+          {
+            "zip_member": "evidence/beauty-a-inspect-r2/output/data_check.json",
+            "bytes": 15252,
+            "sha256": "b480e8657fb1791b190cfffe020a18d651f4e3e22f70238838affaa4066cda90"
+          },
+          {
+            "zip_member": "evidence/beauty-a-inspect-r2/output/effective_config.yaml",
+            "bytes": 14827,
+            "sha256": "88cacb51ebec18202271f9efc0b3902356b895c4954a61dbf520b72d6e140852"
+          },
+          {
+            "zip_member": "evidence/beauty-a-inspect-r2/output/environment.json",
+            "bytes": 756,
+            "sha256": "0f59656b78da686d519ddd084d0a4fe710c53308aa6e79240f6a5bc60150842a"
+          },
+          {
+            "zip_member": "evidence/beauty-a-inspect-r2/output/invocation.json",
+            "bytes": 31694,
+            "sha256": "6d5d22af0dd534764a535b1b333358f455008e0bd942325ff6cb632c2681c3e3"
+          },
+          {
+            "zip_member": "evidence/beauty-a-inspect-r2/output/loading.json",
+            "bytes": 1369,
+            "sha256": "5ec225d4d8897b04b4ff00d6683a8e03c89f0e7244ab3c5d0fb56e9c0821e961"
+          },
+          {
+            "zip_member": "evidence/beauty-a-inspect-r2/output/used_config.json",
+            "bytes": 12961,
+            "sha256": "b6275ad17ce70bddf838c376d655db9612980208e0930827a1e337d45d91ac0b"
+          }
+        ]
+      },
+      {
+        "job_id": "beauty-a-metadata-r3",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "request_member": "evidence/beauty-a-metadata-r3/request.json",
+        "request_sha256": "e3d153b4998e9ddacdef5605f50b1fb1be5f145ae950378389ff7d6bd0c26d98",
+        "status_member": "evidence/beauty-a-metadata-r3/status.json",
+        "status_sha256": "62c97b2f7d4eb27d19993abf495bdf9886e5bf3073eba130b69b1512a5ceab71",
+        "all_listed_artifact_hashes_independently_verified": true,
+        "artifacts": [
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/RESULT.json",
+            "bytes": 137,
+            "sha256": "8c25d6b6d2aaec5da205e803063c9b5ac6cbde961883985c3ee7e7ba13c8593c"
+          },
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/checkpoint_protocol.json",
+            "bytes": 1964,
+            "sha256": "cea974659234b831ffbbb9cc54c0426467e393061c4ab8ed1027737e384a5f06"
+          },
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/data_check.json",
+            "bytes": 15251,
+            "sha256": "30f821ec71933cf455ff0feb8e67e181447828e28460cfd5c24326fa0904b024"
+          },
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/effective_config.yaml",
+            "bytes": 14831,
+            "sha256": "275a9c34131c75a68c4149cd9e3e69f71127a745ed195812ce85067aecdf8fc9"
+          },
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/environment.json",
+            "bytes": 1490,
+            "sha256": "ab96579f59cf76097bf3ef0ef4b2e0d09f39c728846b570819876f121f21a761"
+          },
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/fixed_attention_samples.json",
+            "bytes": 200137,
+            "sha256": "3c7272bb7427d11f20d8c1231347a873de1501c6e0d8f2a40656f59be9eb2e61"
+          },
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/invocation.json",
+            "bytes": 32649,
+            "sha256": "33285dbd2639eef906b5e8e0019b7c7f5c4ce51eda844082a575ffe1b296dbb1"
+          },
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/loading.json",
+            "bytes": 1369,
+            "sha256": "5ec225d4d8897b04b4ff00d6683a8e03c89f0e7244ab3c5d0fb56e9c0821e961"
+          },
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/test_coverage.json",
+            "bytes": 109439,
+            "sha256": "32774628614f19ad892e7d4062edce68249fc0adc32f250cb054f841f16c7f3d"
+          },
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/test_target_index.jsonl",
+            "bytes": 3307470,
+            "sha256": "a2e7d74577d33c9d667733a25d438aec4fe2b6077d566c93d44c4f242d17d00d"
+          },
+          {
+            "zip_member": "evidence/beauty-a-metadata-r3/output/used_config.json",
+            "bytes": 12962,
+            "sha256": "a7d955b001c5e7c9b34e645eeb6fa30a5d45955682deacb893232ed567bd649a"
+          }
+        ]
+      },
+      {
+        "job_id": "beauty-a-attention-r3",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "request_member": "evidence/beauty-a-attention-r3/request.json",
+        "request_sha256": "1a1d1977a3fe41ddca99c3f885f77b84c0e4ce0c58b0a7df77d7013cc2554ad9",
+        "status_member": "evidence/beauty-a-attention-r3/status.json",
+        "status_sha256": "4101e01d753db379057f4fa0d523bc37a82eac31530a2132a1d4661a58aa79ec",
+        "all_listed_artifact_hashes_independently_verified": true,
+        "artifacts": [
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/RESULT.json",
+            "bytes": 148,
+            "sha256": "f3dc903c07193bd61e647c60e82813c509123f65cc82b674fa158228565d3f8e"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/checkpoint_protocol.json",
+            "bytes": 1964,
+            "sha256": "cea974659234b831ffbbb9cc54c0426467e393061c4ab8ed1027737e384a5f06"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/effective_config.yaml",
+            "bytes": 14835,
+            "sha256": "7d32ce34a4f25763eb25340641e31e7255ad4122938816b23d153a0f61e18869"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/environment.json",
+            "bytes": 1490,
+            "sha256": "ab96579f59cf76097bf3ef0ef4b2e0d09f39c728846b570819876f121f21a761"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/invocation.json",
+            "bytes": 32651,
+            "sha256": "902101d4c9585cdd35cdc41c8ff03fa65b277533db77be1825c653dfe7b6b95e"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/loading.json",
+            "bytes": 1369,
+            "sha256": "5ec225d4d8897b04b4ff00d6683a8e03c89f0e7244ab3c5d0fb56e9c0821e961"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/small-attention/RESULT.json",
+            "bytes": 606,
+            "sha256": "882ff0ae5cdf7aee29a1aeb47b5e91a052b1f6655f64931c424c83fe21b234a4"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/small-attention/bundle/arrays.npz",
+            "bytes": 85387,
+            "sha256": "792ade1e6ac0f33b06055279fe13245332fc1c17894b78177cce6160c289f236"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/small-attention/bundle/record.json",
+            "bytes": 175749,
+            "sha256": "281e9141396c9d00a00dfe0e6f28c1f6ca3a994f4f7f4f81e1c7664f77834482"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/small-attention/figures/plot_receipt.json",
+            "bytes": 1393,
+            "sha256": "953835f457457b15a4d2444e77c5b69dd609c163320400ecdd4e44d512e29af3"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/small-attention/figures/sample_000_cross_attention.png",
+            "bytes": 154643,
+            "sha256": "7f79a1ef2c299418a7e0dfa736ab0a23ab85353e02613d1a5a32b19ca8d876fc"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/small-attention/figures/sample_001_cross_attention.png",
+            "bytes": 148998,
+            "sha256": "5adc63a95cace97972e9f0d6b9b72f49490e84b0aecd9413ecdc74045108be47"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/small-attention/figures/sample_002_cross_attention.png",
+            "bytes": 147407,
+            "sha256": "810254702710f311bf703c5887d6f48e73e8c3f5ca352c7b3930962972d7c0df"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/small-attention/off_on_checks.json",
+            "bytes": 263,
+            "sha256": "3e7e33ab62e0eed957b15b1f8799264ae3cb7cdcb5953d2ccc746f5d112617e1"
+          },
+          {
+            "zip_member": "evidence/beauty-a-attention-r3/output/used_config.json",
+            "bytes": 12963,
+            "sha256": "7dd698b053fb0d4fe856c019579264dc4479681f5005140bc914e46ebf7e4a6d"
+          }
+        ]
+      }
+    ],
+    "strict_pairing": {
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "global_step": 4800,
+      "epoch": 0,
+      "all_parameter_keys_shapes_values_equal": true,
+      "state_tensor_count": 178,
+      "embedded_sid_exact": true
+    },
+    "shared_sid_table": false,
+    "model_class": "experiments.beauty_extensions.author.models.AuthorShuffleModel",
+    "test_metadata_only": {
+      "rows": 22363,
+      "targets": 22363,
+      "unique_users": 22363,
+      "duplicate_user_rows": 0,
+      "raw_items_per_record_range": [
+        5,
+        21
+      ],
+      "item_range": [
+        0,
+        12100
+      ],
+      "first_truncated_engineering_example": null,
+      "original_label_targets_verified": true,
+      "complete_target_hidden_groups_verified": true,
+      "model_execution": false,
+      "coverage_is_not_model_evaluation": true
+    },
+    "old_attention_off_on_receipt": {
+      "sid_exact": true,
+      "scores": {
+        "max_absolute": 0.0,
+        "allclose": true,
+        "exact": true
+      },
+      "cpu_rng_same": true,
+      "cuda_rng_same": true,
+      "parameter_sha256_unchanged": true,
+      "model_overrides_restored": true,
+      "stack_hooks_restored": true
+    },
+    "scope_limits": [
+      "Old inspect verifies matched strict loading, not numerical OFF/evaluator parity with original A.",
+      "Old full CPU metadata proves rows/target construction but is not a full model test.",
+      "Old 3-user Normal attention is an engineering observation receipt only, not this stage Trainer lifecycle/Shuffle acceptance or observer-independent reapproval.",
+      "Old data_check bounded model batches came from validation, not this stage fixed testing subset.",
+      "Old test metadata max raw history is 21 items versus configured 30-item window; no real beyond-window case exists in that preserved source metadata."
+    ]
+  },
+  "required_new_stage_evidence": [
+    {
+      "id": "A-OFF",
+      "status": "PASS_A_BOUNDED_PREFLIGHT_ONLY",
+      "requirement": "Same strict-loaded A state, same true testing batch: bridge versus original A decoder hidden/head logits/loss/SID/scores/evaluator at unchanged engineering tolerances; OFF consumes no extra RNG.",
+      "evidence_reference": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-TRAINER-0-3-4",
+      "status": "PASS_A_BOUNDED_PREFLIGHT_ONLY",
+      "requirement": "Real Trainer.test for Normal/Shuffle3/Shuffle4 on fixed bounded test batches including last short batch, with input/label immutability, per-condition independent real loss/generate permutation traces and encoder-call deltas.",
+      "evidence_reference": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-CACHE-DEVICE-TAIL",
+      "status": "PASS_A_BOUNDED_PREFLIGHT_ONLY",
+      "requirement": "Repeated/reordered/changed-batch-size original versus bridge and B8-B1-B8 cache check; after test teardown reconcile model/input device and eval mode before retained ordinary validation/generation tail; report original-only shape drift without widening tolerance.",
+      "evidence_reference": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-TRUE-EXCEPTION",
+      "status": "PASS_A_BOUNDED_PREFLIGHT_ONLY",
+      "requirement": "Controlled exception through actual Trainer callback/step lifecycle; verify runtime cleanup/evaluator restoration, original source and weights unchanged, then a succeeding next evaluation call. Direct model.on_exception invocation is insufficient.",
+      "evidence_reference": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-FORMAL-CANDIDATE",
+      "status": "PASS_A_BOUNDED_PREFLIGHT_ONLY",
+      "requirement": "Candidate configs remain formal_approved=false and no usable formal admission token. Independently exercise parse/dispatch/gate rejection plus bounded shared core path; no formal/full evaluation execution.",
+      "evidence": "Four candidate false specs and pure guard rejection verified independently; A/B actual legacy CLI formal rejects before output/env/model; preflight entrypoint still has no formal or attention command.",
+      "evidence_reference": "actual_A_GPU_preflight_independent_review"
+    },
+    {
+      "id": "A-INPUT-CONTRACT",
+      "status": "PASS_A_BOUNDED_PREFLIGHT_ONLY",
+      "requirement": "Save selected real testing source/file-order/key/target/SID identity, complete padding groups and last short batch. Long-history coverage can only describe actual available data; no invented beyond-window sample.",
+      "evidence": "Actual31testingkeys, four batch shapes8/8/8/7, each target digest and raw_count-1 valid history count independently agree with protected old metadata; row29visible20 verified. Real CUDA test remains NOT_RUN.",
+      "evidence_reference": "actual_A_GPU_preflight_independent_review"
+    }
+  ],
+  "necessary_implementation_feedback_sent_to_parent": [
+    {
+      "id": "OLD-A-TRACE-CONDITION-MIXING",
+      "status": "RESOLVED_IN_NEW_ENTRYPOINT_STATIC_REVIEW_AWAITING_REAL_EVIDENCE",
+      "finding": "Existing old cli clears only B shuffle_events. A permutation_events default limit4 is not reset between conditions, so N4 lacks its own real trace; role counters are cumulative. New entrypoint must retain independent bounded real trace per condition and before/after counts."
+    },
+    {
+      "id": "OLD-SYNTHETIC-EXCEPTION",
+      "status": "RESOLVED_IN_NEW_ENTRYPOINT_STATIC_REVIEW_AWAITING_REAL_EVIDENCE",
+      "finding": "Existing old smoke manually calls on_exception rather than an exception raised inside Trainer. New gate must use a bounded real lifecycle exception and verify a subsequent successful call."
+    },
+    {
+      "id": "OLD-VAL-SUBSET",
+      "status": "RESOLVED_IN_NEW_ENTRYPOINT_STATIC_REVIEW_AWAITING_REAL_EVIDENCE",
+      "finding": "Existing old check_data/make_loader smoke materializes validation19. New prompt explicitly requires true testing subset and preserved selection/identity."
+    },
+    {
+      "id": "OLD-DEVICE-TAIL",
+      "status": "RESOLVED_IN_NEW_ENTRYPOINT_STATIC_REVIEW_AWAITING_REAL_EVIDENCE",
+      "finding": "Original retained post-test validation/generation tail reuses CUDA args after Trainer may move model CPU; root is authorized to fix lifecycle/device management only, keeping original scoring and assertions."
+    }
+  ],
+  "admission": {
+    "PRECHECK_PASS": true,
+    "SEMANTIC_PAIRING_PASS": true,
+    "REAL_PREFLIGHT_PASS": true,
+    "NONAUTHOR_GATE_PASS": true,
+    "PREFLIGHT_GATE_PASS": true,
+    "FORMAL_RUN_AUTHORIZED": false,
+    "formal_approved": false,
+    "reason": "Independent real source/trace/numeric/prediction/resource/lifecycle checks passed; formal not authorized.",
+    "semantic_pairing_bound_assets": {
+      "sid_sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+      "checkpoint_sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+      "effective_source_config_sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d"
+    },
+    "P1_CPU_PASS": true,
+    "pass_scope": "A bounded engineering only, executed afbd233/bcba source and85b878 spec; inspected unrelated source inheritance."
+  },
+  "remaining": "A bounded preflight complete; await final publication/ref/ZIP checks. Whole-stage B/Toys/Sports require their own reviews. Formal plans unsigned/formal_approved=false; no automatic full test, training or attention.",
+  "new_entrypoint_static_review": {
+    "status": "PASS_STATIC_ONLY",
+    "reviewed_current_sources": [
+      {
+        "path": "experiments/preflight_20261015/run.py",
+        "bytes": 33610,
+        "sha256": "55890b1c908158fc7d25ad83689f3c7d48732098a009f34dd58a205d566a1355"
+      },
+      {
+        "path": "experiments/preflight_20261015/deploy.py",
+        "bytes": 6730,
+        "sha256": "f5ee92c1b5442ac447a87ca6929129e50cc05f247f5706bc82f483558624c1e1"
+      },
+      {
+        "path": "experiments/beauty_extensions/cli.py",
+        "bytes": 24348,
+        "sha256": "8cda941564321bab44aa698f5342296c2eae11bc1104a57d06177c9795af25af"
+      },
+      {
+        "path": "experiments/beauty_extensions/authorization.py",
+        "bytes": 2434,
+        "sha256": "5291e37397f21f9ddb2b3e0c0844aa0176ccfdd046f9050249661fb088c2d6ee"
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/beauty-a.json",
+        "bytes": 2282,
+        "sha256": "85b878d095c0fbbc3de84ae770f2fab90d4691f5d19fccff4a1de9b11a868924"
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/beauty-a-candidate.json",
+        "bytes": 2055,
+        "sha256": "c2654b61d5b3f94676986aee81b883c65d5bf0f891efbdf321d8f8bf2e1d7371"
+      }
+    ],
+    "framework_receipt": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/framework-lifecycle-source.txt",
+      "bytes": 4482,
+      "sha256": "f8d8fd37b1c19fb9b2fea8cea8aca31e066d4b4d8f096eb6cc2c3e189a988360"
+    },
+    "framework_evidence": {
+      "protocol": "read installed files with AST; no heavy imports",
+      "interpreter": "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+      "strategy_teardown": "Installed Strategy.teardown explicitly calls lightning_module.cpu(); retained manual GPU inference must restore placement after Trainer.test.",
+      "exception_dispatch": "Installed _interrupt calls callback on_exception, datamodule hook, strategy hook and logger finalize; it does not call LightningModule.on_exception. New runner uses the actual callback path."
+    },
+    "minimal_cli_delta": {
+      "comparison_source": "Original cli.py ZIP repository member from preserved old Beauty delivery",
+      "change_scope": [
+        "Optional injected callbacks accepted only with explicit bounded batches",
+        "Exception type/message and parameter/device/runtime cleanup receipt added; evaluator restoration still in finally",
+        "A and B condition traces reset per n with per-condition encoder/shuffle role deltas",
+        "A scalar shuffle_call_count delta and bounded encoder event slice retained",
+        "Same model is explicitly placed on CUDA and set eval, new args rebuilt from clean CPU input after final Trainer.test",
+        "Old direct model.on_exception synthetic probe replaced by stage real Trainer injected failure"
+      ],
+      "research_computation_changes": false,
+      "original_OFF_numerical_comparison_and_generation_assertions_retained": true,
+      "ordinary_validation_tail_retained": true
+    },
+    "A_trace_coverage": "Current planned test31 has four batches8/8/8/7. permutation_trace_limit=2*len(test_batches)=8, condition-specific reset and scalar count/encoder_events must record each loss/generate call including last short batch. Actual GPU trace not yet run.",
+    "real_exception_static_path": "Fault raises a dedicated InjectedPreflightError after one completed real test batch. Keys cleanup callback runs first, Fault callback records cleaned flag, test_lifecycle finally restores evaluator. Stage catches only that dedicated type, requires callback receipt, resets device/eval, compares same-instance recovered Normal generation and unchanged state digest, then actual bounded Trainer.validate.",
+    "dataset_path": "Current A/B plan uses actual testing first31 rows plus evaluation11 via original make_loader/collate. Old executed CPU prepare19 is separately retained. check_data itself remains bounded eight raw rows per split plus validation19, and current stage does not invoke full scan/fixed32 attention helpers.",
+    "phase_surface": [
+      "prepare",
+      "shuffle",
+      "mlp-short",
+      "mlp-resume"
+    ],
+    "formal_or_attention_phase_present": false,
+    "row_and_update_caps": "Explicit formal_approved=false required; row cap<=64, shuffle/MLP route checks, MLP only toys/sports and exactly2+1 optimizer updates. Phase route checks occur before model instantiate.",
+    "runner_output_directory": "round0 output.mkdir(exist_ok=False) conflict with runner precreated output has been corrected to exist_ok=True plus invocation identity guard; old failed request/status retained. Static read of accepted runner confirms precreate at line311.",
+    "CPU_actual_contract_checks": {
+      "interpreter": "/usr/bin/python3",
+      "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "model_or_checkpoint_loaded": false,
+      "valid_A_spec_accepted_as_preflight_only": true,
+      "formal_approved_true_rejected": true,
+      "nonauthor_gate_token_rejected": true,
+      "approval_token_rejected": true,
+      "row65_rejected": true,
+      "formal_cli_phase_exit": 2,
+      "attention_cli_phase_exit": 2,
+      "run_help_choices_verified": true
+    },
+    "limitations": [
+      "Actual installed framework source receipt is read-only remote evidence; this reviewer did not execute a remote model.",
+      "Module on_exception remains outside installed Lightning exception dispatch; actual callback path is the verified design.",
+      "test_lifecycle finally protects the Trainer.test call and later execution, but trainer constructor runs before that try. No claim is issued that every construction-time failure cleans an already-installed evaluator recorder.",
+      "No independent attention observer signature is issued; no new attention capture is requested."
+    ],
+    "train_and_validation_OFF_checks": {
+      "static_status": "PASS_STATIC_REAL_FORWARD_NOT_YET_RUN",
+      "validation": "ordinary_validation captures sampler_count before/after and asserts delta0 plus actual Trainer.validate flagfalse.",
+      "train": "After real tests and injected exception recovery, same model .to(cuda).train();on_train_start(); one real model_step under no_grad with existing test batch, requires finite loss, flagfalse and sampler delta0. It performs zero optimizer updates and allows training Dropout RNG draws.",
+      "scope": "Real model forward through train hook is a preflight mode check, not A baseline retraining."
+    },
+    "source_workers_status": "New source-workers datamodule path statically read in round1 supplement; no real GPU execution yet."
+  },
+  "round1_frozen_source_review": {
+    "status": "PASS_BYTES_AND_STATIC_BOUNDARIES",
+    "freeze_manifest": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/round1-source-freeze.json",
+      "sha256": "03e4686b2f9d19f21ce4fbee7c12f2089b3175915d1418140da73f79b03a6d3e",
+      "bytes": 3778
+    },
+    "all_members_verified": 20,
+    "source_and_config_members": 18,
+    "local_python_cache_members": 2,
+    "local_cache_paths": [
+      "experiments/preflight_20261015/__pycache__/__init__.cpython-312.pyc",
+      "experiments/preflight_20261015/__pycache__/run.cpython-312.pyc"
+    ],
+    "deployment_boundary": "deploy.snapshot excludes __pycache__ and accepts only .py/.json/.yaml plus markers. The two local .pyc are not server research source; final deployment mapping must verify the 18 source/config members separately.",
+    "changes_after_freeze_reviewed": true,
+    "historical_freeze_only": true
+  },
+  "candidate_gate_review": {
+    "status": "PASS_UNSIGNED_CANDIDATE_REJECTION_ONLY",
+    "source": {
+      "path": "experiments/beauty_extensions/authorization.py",
+      "bytes": 2434,
+      "sha256": "5291e37397f21f9ddb2b3e0c0844aa0176ccfdd046f9050249661fb088c2d6ee"
+    },
+    "candidate_generator_source": {
+      "path": "experiments/preflight_20261015/candidates.py",
+      "sha256": "4b843535ab9ece7b9eea2a9f3e8c25ff785aa62b8f0e53f2c9305885624482e7",
+      "bytes": 2577
+    },
+    "candidate_checks_receipt": {
+      "path": "manifests/grid-shuffle-mlp-preflight-20261015/candidate-checks.json",
+      "sha256": "b71b91d7cefe7e775431bd6cb9b3dc22017598e5e4e178dabf2eaed19f3abf93",
+      "bytes": 7874
+    },
+    "actual_independent_CPU_negative_checks": {
+      "four_false_candidates_rejected_by_shared_gate": [
+        "beauty-a",
+        "beauty-b",
+        "toys-mlp",
+        "sports-mlp"
+      ],
+      "four_candidates_no_usable_nonauthor_token": true,
+      "A_B_legacy_CLI_formal_dispatch_rejected_before_GRID_JOB_DIR_and_model": {
+        "beauty-a": 1,
+        "beauty-b": 1
+      },
+      "A_B_boolean_nonauthor_gate_rejected_even_with_formal_true": true,
+      "this_hash_verified_independent_preflight_report_cannot_be_used_as_formal_gate": true,
+      "model_loading_or_data_iteration_performed_by_guard_tests": false
+    },
+    "hash_binding_static_checks": [
+      "canonical plan excludes only formal_approved and nonauthor_gate",
+      "token is a hash-verified report file and must carry kind FORMAL_RUN_AUTHORIZED plus explicit approval reference",
+      "source_python_sha256 exactly equals deployment Python records, then each deployed file bytes are verified",
+      "config/SID/checkpoint source paths and hashes match gate and real asset hashes",
+      "independent hash-verified report must carry PREFLIGHT_GATE_PASS and identical plan hash"
+    ],
+    "no_formal_token_emitted": true,
+    "formal_approved": false,
+    "formal_handler_executed": false,
+    "positive_formal_gate_path_tested": false,
+    "limitations": [
+      "Only guards/rejection were executed. A/B bounded shared computation and test lifecycle require actual GPU evidence before preflight readiness.",
+      "This validator documents a future separately authorized A/B run, not a runnable new Toys/Sports MLP formal trainer. All MLP candidate research conditions and budgets remain unapproved."
+    ]
+  },
+  "round1_supplement_static_review": {
+    "status": "PASS_STATIC_ONLY",
+    "parent_declared_source_commit": "55fd80da1c56f5f70e3b19be578c758734f6c9c6",
+    "commit_ref_independently_read_from_Git": false,
+    "current_source_records": [
+      {
+        "path": "experiments/preflight_20261015/run.py",
+        "bytes": 33610,
+        "sha256": "55890b1c908158fc7d25ad83689f3c7d48732098a009f34dd58a205d566a1355"
+      },
+      {
+        "path": "experiments/preflight_20261015/deploy.py",
+        "bytes": 6730,
+        "sha256": "f5ee92c1b5442ac447a87ca6929129e50cc05f247f5706bc82f483558624c1e1"
+      },
+      {
+        "path": "experiments/beauty_extensions/cli.py",
+        "bytes": 24348,
+        "sha256": "8cda941564321bab44aa698f5342296c2eae11bc1104a57d06177c9795af25af"
+      },
+      {
+        "path": "experiments/beauty_extensions/authorization.py",
+        "bytes": 2434,
+        "sha256": "5291e37397f21f9ddb2b3e0c0844aa0176ccfdd046f9050249661fb088c2d6ee"
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/beauty-a.json",
+        "bytes": 2282,
+        "sha256": "85b878d095c0fbbc3de84ae770f2fab90d4691f5d19fccff4a1de9b11a868924"
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/beauty-a-candidate.json",
+        "bytes": 2055,
+        "sha256": "c2654b61d5b3f94676986aee81b883c65d5bf0f891efbdf321d8f8bf2e1d7371"
+      }
+    ],
+    "research_original_and_bridge_unchanged": {
+      "original_sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+      "bridge_sha256": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4"
+    },
+    "fixed_subset": "A/B first31 real testing rows, four batches8/8/8/7; deterministic first31 selection fixed before new predictions and includes historical raw max21 at row29. No change to source TFRecords, target construction or history window.",
+    "trace_capacity": "A permutation_trace_limit and B trace_limit are set to2*number_of_test_batches; four batches require eight loss/generate trace records per shuffled condition.",
+    "source_workers_path": "Reads original source worker count; when nonzero, builds an actual original SequenceDataModule with source num_workers/timeout, persistent_workers=False engineering overlay and Trainer.limit_test_batches=4. Normal-only, recompute requires32 samples/32 unique users. bounded_datamodule marker requires an integer1..4 limit and saves formal=false. GPU execution remains NOT_RUN.",
+    "device_and_dtype_receipts": "Actual Keys callback records every test batch input/parameter device and dtype; cleanup also checks author _replay_queue and flags.",
+    "second_GPU_conflict_check": "After CPU prepare and before model placement, records nvidia-smi processes for one explicit visible UUID, excludes own worker PID and rejects any other task on same card. This supplements pre-submit resource check; it does not grant resource preemption.",
+    "formal_gate_strengthening": "Hash-verified independent report must also contain exact source_python_sha256 equal to token/deployment code map. The guard is still unusable without new explicit authorization."
+  },
+  "actual_A_CPU_prepare_review": {
+    "status": "PASS_CPU_PREPARATION_AND_SEMANTIC_PAIRING_ONLY",
+    "job_id": "gsp-20261015-a-prepare-r1",
+    "runner_status": "SUCCEEDED",
+    "exit_code": 0,
+    "cleanup_verified": true,
+    "scope": "Original19-user engineering CPU prepare snapshot; not current31-user GPU preflight.",
+    "evidence_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-a-prepare-r1/retrieved",
+    "export_manifest": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-a-prepare-r1/retrieved/export-manifest.json",
+      "bytes": 2037,
+      "sha256": "1236282763c2595f209b653fe1f0018677815cda1c2b36c07e2bebfa21200c17"
+    },
+    "all_export_members_size_and_SHA_verified": 17,
+    "export_members_total_bytes": 98062,
+    "status_listed_outputs_size_and_SHA_verified": 10,
+    "binding": {
+      "invocation": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-a-prepare-r1/retrieved/output/invocation.json",
+        "bytes": 39851,
+        "sha256": "8c659318edf19da733046dc558ea580fcad697ac8a9f077e4965c2c5ddf2c2fd"
+      },
+      "spec_sha256": "f69a9dfb48080f24d3a2d9c9a061ff8a5541a7ec414c764b33290f3eeeaf39ac",
+      "source_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+      "snapshot_sha256": "43aefff0f79f832f466229108e116f4243f1fb2535c885e16164e15edf2a1102",
+      "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+      "deployment_file_count": 186,
+      "GPU_visible": "",
+      "interpreter": "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+      "model_imports_in_protected_author_namespace": true
+    },
+    "loading": {
+      "assets": [
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68/merged_predictions_tensor.pt",
+          "sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+          "bytes": 388534,
+          "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68/merged_predictions_tensor.pt"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00/checkpoint_epoch=000_step=004800.ckpt",
+          "sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+          "bytes": 160859238,
+          "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00/checkpoint_epoch=000_step=004800.ckpt"
+        }
+      ],
+      "strict_load": {
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "global_step": 4800,
+        "epoch": 0,
+        "all_parameter_keys_shapes_values_equal": true,
+        "state_tensor_count": 178,
+        "embedded_sid_exact": true
+      },
+      "model_class": "experiments.beauty_extensions.author.models.AuthorShuffleModel",
+      "parameter_count": 13259136,
+      "shared_sid_table": false
+    },
+    "input_checks": {
+      "test_rows": 19,
+      "test_batch_shapes": [
+        [
+          8,
+          120
+        ],
+        [
+          8,
+          120
+        ],
+        [
+          3,
+          120
+        ]
+      ],
+      "all_test_keys_exact_old_testing_first19": true,
+      "test_visible_item_range": [
+        4,
+        12
+      ],
+      "val_rows": 11,
+      "val_batch_shapes": [
+        [
+          8,
+          120
+        ],
+        [
+          3,
+          120
+        ]
+      ],
+      "test_and_val_all_batches_have_padding": true,
+      "data_sid_shape": [
+        4,
+        12101
+      ],
+      "data_sid_dtype": "torch.int64",
+      "fourth_collision_rule_verified": true,
+      "source_data_modified": false,
+      "target_semantics": "check_data directly compares raw item_id→SID and original NextKTokenMasking labels on eight real records each split; original target positions hidden by mask."
+    },
+    "resource": {
+      "status": "PASS",
+      "phase": "prepare",
+      "engineering_only": true,
+      "formal_approved": false,
+      "elapsed_seconds": 55.5068210340105,
+      "peak_gpu_allocated_bytes": 0,
+      "peak_gpu_reserved_bytes": 0
+    },
+    "framework_strategy": {
+      "file": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py",
+      "resolved": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py",
+      "sha256": "5f3a8ef94dfb07dc7f8debc2523b52720fe98e346cc75004f0ccf254fe8fdda9"
+    },
+    "limits": [
+      "No model.forward/generate/Trainer.test/Trainer.validate or GPU placement occurs in prepare.",
+      "Source config retains original long training max_steps/max_epochs as archival effective fields but no fitting is dispatched in prepare.",
+      "Rows19 do not include the longest row29; current31-row prepare must be separately verified."
+    ]
+  },
+  "long_history_selection_independent_review": {
+    "status": "PASS_HISTORICAL_SELECTION_AND_ACTUAL_CPU_LONG31_INPUTS",
+    "old_index_member": "evidence/beauty-a-metadata-r3/output/test_target_index.jsonl",
+    "old_index_sha256": "a2e7d74577d33c9d667733a25d438aec4fe2b6077d566c93d44c4f242d17d00d",
+    "all_metadata_rows": 22363,
+    "max_raw_item_count": 21,
+    "first_max_global_index": 29,
+    "first_max_row": {
+      "sample_key": "0b79fa899b81340405a5e24b",
+      "target": [
+        12,
+        194,
+        32,
+        0
+      ],
+      "source_file_index": 0,
+      "row_index": 29,
+      "global_row_index": 29,
+      "raw_item_count": 21
+    },
+    "planned_visible_items": 20,
+    "expected_case_matches_current_spec": true,
+    "predictions_or_attention_inspected_for_selection": false,
+    "no_beyond_window_claim": "Raw21 is below30-item configured window including target. Beyond-window real cases absent in preserved complete test metadata."
+  },
+  "actual_A_long_prepare_last_known": {
+    "query": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-a-prepare-long-r1/last-query.json",
+      "bytes": 5348,
+      "sha256": "52fe630bd091ec3fcd820a669558e932528820f56671b902f1a6b733266b5528"
+    },
+    "runner_status": "SUCCEEDED",
+    "exit_code": 0,
+    "cleanup_verified": true,
+    "output_artifacts_reported": 11,
+    "independent_local_output_bytes_verified": true,
+    "reason": "Terminal query reports SUCCEEDED; detailed output retrieval not yet present at review time.",
+    "superseded_by": "actual_A_long31_CPU_prepare_review"
+  },
+  "execution_status": "A_BOUNDED_CUDA_PREFLIGHT_COMPLETE",
+  "collection_terminal_review": {
+    "status": "PASS_TERMINAL_AND_BYTES_ONLY",
+    "collection_manifest": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/COLLECTION_MANIFEST.json",
+      "bytes": 20150,
+      "sha256": "40e2c177404d022ae150b59251298be38c2d55df7ab169e15f757d43081bef3f"
+    },
+    "collection_archive": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collection-d2dfb159fe0747dd.tar.gz",
+      "bytes": 120735,
+      "sha256": "c92a1ac0d2eff7073adb0c433aaf672442329e6aea04cfc40daaa4f5226a5bc3"
+    },
+    "archive_members_reopened_verified": 110,
+    "payload_file_records_verified": 109,
+    "payload_bytes_verified": 625792,
+    "receipt": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collection-receipt.json",
+      "bytes": 771,
+      "sha256": "b817481c0bf0c65bd04afaf0a606a83a5663d70fbca95c7ad010ffd753122cb7"
+    },
+    "jobs": [
+      {
+        "job_id": "gsp-20261015-b-prepare-r0",
+        "status": "FAILED",
+        "exit_code": 1,
+        "cleanup_verified": true,
+        "started_at": "2026-10-15T05:41:23.710376+00:00",
+        "ended_at": "2026-10-15T05:41:29.282571+00:00",
+        "output_artifacts_verified": 0,
+        "status_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-r0/status.json",
+          "bytes": 2327,
+          "sha256": "4eaa41a964916252184e6b809b15d473330d598c8c620c7d324b132093ecf054"
+        },
+        "request_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-r0/request.json",
+          "bytes": 1591,
+          "sha256": "c5802517054fdf4cee0288b692c80b06f9d25594324cf5105aeafaa3a8c55856"
+        }
+      },
+      {
+        "job_id": "gsp-20261015-b-prepare-r1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "started_at": "2026-10-15T05:42:26.738213+00:00",
+        "ended_at": "2026-10-15T05:50:58.351107+00:00",
+        "output_artifacts_verified": 10,
+        "status_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-r1/status.json",
+          "bytes": 3573,
+          "sha256": "fa3b286da741fd6808ca3480c540fae11627a778f9aee3c2530278f977ec9919"
+        },
+        "request_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-r1/request.json",
+          "bytes": 1591,
+          "sha256": "90ad421292a6d584b39a5fdc465b952026451b72930b628cd91888efe84dbd39"
+        }
+      },
+      {
+        "job_id": "gsp-20261015-toys-prepare-r1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "started_at": "2026-10-15T05:49:31.707859+00:00",
+        "ended_at": "2026-10-15T05:51:03.671280+00:00",
+        "output_artifacts_verified": 9,
+        "status_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-toys-prepare-r1/status.json",
+          "bytes": 3455,
+          "sha256": "484ef4bbcb786a2c8df4998a184f0314f3af3f210350f0a77a6c8109b1a47495"
+        },
+        "request_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-toys-prepare-r1/request.json",
+          "bytes": 1594,
+          "sha256": "d4bfbe87a94bab2fd3ef9d0aeec8252d94572b92b3a2aff50793836d0c00ee13"
+        }
+      },
+      {
+        "job_id": "gsp-20261015-a-prepare-r1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "started_at": "2026-10-15T05:51:06.168565+00:00",
+        "ended_at": "2026-10-15T05:52:05.457975+00:00",
+        "output_artifacts_verified": 10,
+        "status_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-r1/status.json",
+          "bytes": 3573,
+          "sha256": "b4ccedf3d804885650b0661b7d7c00cf203e0890621ad38cc151dd9bbffcc3c9"
+        },
+        "request_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-r1/request.json",
+          "bytes": 1591,
+          "sha256": "e44a9a2ac3e4bdd6ae4a9243ee5372f3c249969db612d8a3c430535d8b2a5039"
+        }
+      },
+      {
+        "job_id": "gsp-20261015-sports-prepare-r1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "started_at": "2026-10-15T05:51:39.613389+00:00",
+        "ended_at": "2026-10-15T05:52:05.030532+00:00",
+        "output_artifacts_verified": 9,
+        "status_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-sports-prepare-r1/status.json",
+          "bytes": 3465,
+          "sha256": "4d534691a374edaccea4d5e03ed00d070e07c79c3f2747577d4bc58c9c41c326"
+        },
+        "request_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-sports-prepare-r1/request.json",
+          "bytes": 1596,
+          "sha256": "89184c95658de8bd9b32480d0079701ef9c2c15612943e1e89bc98497e5c5558"
+        }
+      },
+      {
+        "job_id": "gsp-20261015-b-prepare-long-r1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "started_at": "2026-10-15T05:58:39.213045+00:00",
+        "ended_at": "2026-10-15T06:05:05.994655+00:00",
+        "output_artifacts_verified": 11,
+        "status_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/status.json",
+          "bytes": 3727,
+          "sha256": "4615853aa74a3ed4a138dfb6eac5d5dd2e56028daa5e14649a61bfacb477880f"
+        },
+        "request_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/request.json",
+          "bytes": 1596,
+          "sha256": "ce92a8b9c75ccc77b01072b8cf8368d12aee9ea25821534e928645f9faf6ed8a"
+        }
+      },
+      {
+        "job_id": "gsp-20261015-a-prepare-long-r1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "started_at": "2026-10-15T06:00:07.374304+00:00",
+        "ended_at": "2026-10-15T06:05:05.996509+00:00",
+        "output_artifacts_verified": 11,
+        "status_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/status.json",
+          "bytes": 3727,
+          "sha256": "9bee591d107327c42ebd4d5ef02d7a6ea96da53f10e88fbfc54cd285ca310b1b"
+        },
+        "request_record": {
+          "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/request.json",
+          "bytes": 1596,
+          "sha256": "753fbc38cdb814e3db0d4a18b91fe1d30a1193d3600af214b311ff6ef6258285"
+        }
+      }
+    ],
+    "terminal_counts": {
+      "SUCCEEDED": 6,
+      "FAILED": 1,
+      "RUNNING": 0
+    },
+    "failed_round0_not_hidden": true,
+    "all_jobs_CPU_prepare_only": true,
+    "reviewer_performed_no_new_fetch_or_model_run": true
+  },
+  "actual_A_long31_CPU_prepare_review": {
+    "status": "PASS_CPU_P1_AND_SEMANTIC_PAIRING_ONLY",
+    "job_id": "gsp-20261015-a-prepare-long-r1",
+    "runner_status": "SUCCEEDED",
+    "exit_code": 0,
+    "cleanup_verified": true,
+    "inputs": {
+      "split": "testing",
+      "rows": 31,
+      "unique_users": 31,
+      "batch_shapes": [
+        [
+          8,
+          120
+        ],
+        [
+          8,
+          120
+        ],
+        [
+          8,
+          120
+        ],
+        [
+          7,
+          120
+        ]
+      ],
+      "selection_matches_old_index_first31_exact": true,
+      "independent_target_digest_and_history_checks": [
+        {
+          "global_row_start": 0,
+          "shape": [
+            8,
+            120
+          ],
+          "target_sha256_independently_recomputed_from_old_index": "acbf1bb3b5603ed1565d62299871a159e2f163de767d6d35d644743e14efaa56",
+          "all_targets_exact": true,
+          "visible_history_counts_exact_raw_count_minus_one": true,
+          "has_padding": true
+        },
+        {
+          "global_row_start": 8,
+          "shape": [
+            8,
+            120
+          ],
+          "target_sha256_independently_recomputed_from_old_index": "4c323aaa7cb42a9500be424b01d142198d1676bf742e56e8545764b565643ef3",
+          "all_targets_exact": true,
+          "visible_history_counts_exact_raw_count_minus_one": true,
+          "has_padding": true
+        },
+        {
+          "global_row_start": 16,
+          "shape": [
+            8,
+            120
+          ],
+          "target_sha256_independently_recomputed_from_old_index": "2b7b17e3199423760ffd8f6cf5aebf93d6b9efa037cc8190cdefb0d8da4a161a",
+          "all_targets_exact": true,
+          "visible_history_counts_exact_raw_count_minus_one": true,
+          "has_padding": true
+        },
+        {
+          "global_row_start": 24,
+          "shape": [
+            7,
+            120
+          ],
+          "target_sha256_independently_recomputed_from_old_index": "29fb0028a903c5ccd562ba899d469707f98f94130a445be1616a46eab28b0300",
+          "all_targets_exact": true,
+          "visible_history_counts_exact_raw_count_minus_one": true,
+          "has_padding": true
+        }
+      ],
+      "raw_index_sha256": "a2e7d74577d33c9d667733a25d438aec4fe2b6077d566c93d44c4f242d17d00d",
+      "raw_index_member": "evidence/beauty-a-metadata-r3/output/test_target_index.jsonl",
+      "all_complete_group_masks_checked_by_real_saved_entrypoint": true,
+      "last_batch_is_short": true,
+      "val_rows": 11,
+      "val_batch_shapes": [
+        [
+          8,
+          120
+        ],
+        [
+          3,
+          120
+        ]
+      ]
+    },
+    "long_case": {
+      "source": "previous reviewed metadata only; selection based on longest raw history, before new predictions",
+      "reviewed_zip_sha256": "a0ec709db33c5176639ff4bf8bac83d1e1d37394f5012a746d38b06f84438f99",
+      "target_index_sha256": "a2e7d74577d33c9d667733a25d438aec4fe2b6077d566c93d44c4f242d17d00d",
+      "data_file": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/beauty/testing/partition_123.tfrecord.gz",
+      "row_index": 29,
+      "sample_key": "0b79fa899b81340405a5e24b",
+      "raw_item_count": 21,
+      "visible_items": 20,
+      "previous_global_row_index": 29,
+      "verified_in_actual_subset": true
+    },
+    "long_case_location": {
+      "global_index": 29,
+      "batch_index": 3,
+      "within_batch_index": 5,
+      "visible_items": 20,
+      "raw_items": 21,
+      "target_from_independently_verified_old_index": [
+        12,
+        194,
+        32,
+        0
+      ],
+      "selection_used_new_model_outputs": false,
+      "beyond_window_case_claimed": false
+    },
+    "strict_loading": {
+      "assets": [
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68/merged_predictions_tensor.pt",
+          "sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+          "bytes": 388534,
+          "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68/merged_predictions_tensor.pt"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00/checkpoint_epoch=000_step=004800.ckpt",
+          "sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+          "bytes": 160859238,
+          "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00/checkpoint_epoch=000_step=004800.ckpt"
+        }
+      ],
+      "strict_load": {
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "global_step": 4800,
+        "epoch": 0,
+        "all_parameter_keys_shapes_values_equal": true,
+        "state_tensor_count": 178,
+        "embedded_sid_exact": true
+      },
+      "model_class": "experiments.beauty_extensions.author.models.AuthorShuffleModel",
+      "parameter_count": 13259136,
+      "shared_sid_table": false
+    },
+    "CPU_resource_and_phase_result": {
+      "status": "PASS",
+      "phase": "prepare",
+      "engineering_only": true,
+      "formal_approved": false,
+      "elapsed_seconds": 284.9430902842432,
+      "peak_gpu_allocated_bytes": 0,
+      "peak_gpu_reserved_bytes": 0
+    },
+    "actual_import_locations": {
+      "src": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/f7002a85350880be/references/wmh-original/GRID/src/__init__.py",
+      "src.models.modules.base_module": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/f7002a85350880be/references/wmh-original/GRID/src/models/modules/base_module.py",
+      "src.models.modules.semantic_id.tiger_generation_model_mlp": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/f7002a85350880be/references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+      "src.models.modules.semantic_id.tiger_generation_model_shuffle": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/f7002a85350880be/references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "src.data.loading.components.collate_functions": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/snapshots/f7002a85350880be/references/wmh-original/GRID/src/data/loading/components/collate_functions.py"
+    },
+    "artifact_records": [
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/invocation.json",
+        "bytes": 40894,
+        "sha256": "59c3392099c1a8b06a05b88b3d80fdd0ef0e79acb5ba008418234827b9687b1b"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/loading.json",
+        "bytes": 1369,
+        "sha256": "5ec225d4d8897b04b4ff00d6683a8e03c89f0e7244ab3c5d0fb56e9c0821e961"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/test_subset.json",
+        "bytes": 3011,
+        "sha256": "0ac9dc29416ec7af918be554f3cc58da5f1aad1e5c22248c05c7bb7a20100857"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/val_subset.json",
+        "bytes": 1417,
+        "sha256": "1dbca8d16ab5e92bed667e7ed5296c373deb4d8f14bdceb009d7d2785ea5ac06"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/long_history_case.json",
+        "bytes": 620,
+        "sha256": "c0108bb90f1d6cbfb1564807fb940384ddbf4bbf6d757e543c05a3cfd0065a7c"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/environment.json",
+        "bytes": 1743,
+        "sha256": "e023d2d4de2a06d02d6db6660aafe61c52e9ff585f7f85db16d798c690cd294d"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/RESULT.json",
+        "bytes": 206,
+        "sha256": "e44379aac384145f07dbb83923bf1add5fb3c9b13a7a1fadfc2efb3059cae37d"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/used_config.json",
+        "bytes": 12972,
+        "sha256": "dde287f601524e78f3e8a92f7e885c195f2888fc35c03abe4ec3eaa096917676"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/effective_config.yaml",
+        "bytes": 14907,
+        "sha256": "f4381516f00b2d80112b0afa959dfdafe0ee5176aa172b11955fb9b0376f6d32"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/checkpoint_protocol.json",
+        "bytes": 1964,
+        "sha256": "cea974659234b831ffbbb9cc54c0426467e393061c4ab8ed1027737e384a5f06"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/data_check.json",
+        "bytes": 15251,
+        "sha256": "30f821ec71933cf455ff0feb8e67e181447828e28460cfd5c24326fa0904b024"
+      }
+    ],
+    "identity": {
+      "actual_run_source_commit": "a71ba06fe9d722dd236d340b4eaaec6b9b3e600e",
+      "snapshot_sha256": "f7002a85350880be3b74d986d6fe5592244c43f1aba016a63d6ffa7d3b0d4417",
+      "identity_kind": "source_commit_plus_exact_manifest; engineering patch may be uncommitted",
+      "snapshot_file_count": 187,
+      "snapshot_python_file_count": 161,
+      "request_capture_version_exact": true,
+      "reconstructed_DEPLOYMENT_JSON_sha256": "7adac5712868bb40bdda6c586adeaef49cc035f99d27ac637063dd6ea9ab7b47",
+      "deployment_input_hash_exact": true,
+      "actual_plan_sha256": "85b878d095c0fbbc3de84ae770f2fab90d4691f5d19fccff4a1de9b11a868924",
+      "actual_plan_equals_current_A_spec": true,
+      "request": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/request.json",
+        "bytes": 1596,
+        "sha256": "753fbc38cdb814e3db0d4a18b91fe1d30a1193d3600af214b311ff6ef6258285"
+      },
+      "invocation": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-a-prepare-long-r1/output/invocation.json",
+        "bytes": 40894,
+        "sha256": "59c3392099c1a8b06a05b88b3d80fdd0ef0e79acb5ba008418234827b9687b1b"
+      },
+      "CUDA_visible_empty": true
+    },
+    "current_source_continuity": {
+      "records_still_byte_identical": 185,
+      "records_changed_since_CPU_snapshot": [
+        "experiments/beauty_extensions/cli.py",
+        "experiments/preflight_20261015/run.py"
+      ],
+      "changes_reviewer_read_from_exact_old_snapshot": true,
+      "CPU_prepare_main_excluding_GPU_branch_AST_unchanged": true,
+      "require_preflight_bounded_batches_check_batches_AST_unchanged": true,
+      "check_data_AST_unchanged": true,
+      "original_model_bridge_common_data_source_unchanged": true,
+      "new_worker_path_and_GPU_start_conflict_branch_executed": false
+    },
+    "independent_review_limits": [
+      "This is CPU structure/config/data evidence and not a CUDA forward, generate, Trainer test, validation, exception, train hook or worker execution.",
+      "The source anchor is the parent commit at snapshot creation plus exact export manifest; it is not a Git checkout of the later55fd/490d report commits.",
+      "The11saved outputs are independently verified from terminal status and collection records; original large checkpoint and source TFRecords were not downloaded."
+    ]
+  },
+  "resource_block_review": {
+    "status": "HISTORICAL_EXCLUSIVE_RESOURCE_BUSY_SUPERSEDED_BY_NEW_SHARED_AUTHORIZATION",
+    "records": [
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/resource-process-check.json",
+        "bytes": 328,
+        "sha256": "a4170ecb98cc4dececa3444193454c2db40fa75366b3135126cd4a5ffedc0189"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/resource-check-after-cpu.json",
+        "bytes": 327,
+        "sha256": "12b714b2e90601d1e56d942445e03a57055cb1c7c4373d8b5b9564d86ddeeac2"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/gsp-20261015-b-shuffle-r1-resource-check.json",
+        "bytes": 315,
+        "sha256": "8646e65b84bca0e3671da9b9c57fd963896d33f3a3e5598c0a436a2d45e97210"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/resource-check-0610.json",
+        "bytes": 327,
+        "sha256": "2aac94893bede7631c65b185ea1ae8288f485d968bdf7627810d1638c1c88015"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/b-shuffle-submission-attempt.json",
+        "bytes": 1005,
+        "sha256": "cb1f66c6fac8504cfd1a4ecce0becc4381fddc71cea4123c91de40334c309698"
+      }
+    ],
+    "latest_saved_observation_time": "2026-10-15T06:10:35.250531+00:00",
+    "owner_receipt": "resource-process-check.json identifies yychen for observed GPU process IDs1490646/1490653/1490665. No signal or resource preemption was performed.",
+    "latest_active_UUID_PID_pairs": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 1490646, 1904 MiB\nGPU-59cac3bd-3645-668b-79c8-839e0d878893, 1490665, 1498 MiB\n",
+    "real_submission_guard_result": {
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "experiments.preflight_20261015.deploy",
+        "shuffle",
+        "--spec",
+        "experiments/preflight_20261015/specs/beauty-b.json",
+        "--job",
+        "gsp-20261015-b-shuffle-r1",
+        "--gpu",
+        "1"
+      ],
+      "time": "2026-10-15T06:00:03.236058+00:00",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/preflight_20261015/deploy.py\", line 106, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/preflight_20261015/deploy.py\", line 84, in main\n    raise RuntimeError('RESOURCE_BUSY: no job submitted; card has an existing compute process')\nRuntimeError: RESOURCE_BUSY: no job submitted; card has an existing compute process\n"
+    },
+    "resource_observations_are_last_known_not_live_guarantee": true,
+    "new_GPU_job_submitted": false,
+    "new_GPU_measurement_or_throughput_claim": false,
+    "historical_only_after_new_user_authorization": true
+  },
+  "shared_GPU_resource_static_review": {
+    "status": "PASS_STATIC_AND_CPU_ASSESSMENT_ONLY",
+    "parent_declared_source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+    "authorization_record": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/shared-preflight-authorization.json",
+      "bytes": 499,
+      "sha256": "4ed1ffe8197bd0f8dce5998811168d98b8df12594852fef03ad7107fe53f2257"
+    },
+    "explicit_authorization_scope": {
+      "user_explicitly_authorized_shared_gpu": true,
+      "scope": "only bounded preflight; serialize on one card; no formal run",
+      "conservative_expected_peak_gib": 6,
+      "initial_extra_reserve_gib": 8,
+      "runtime_free_floor_gib": 8,
+      "basis": "completed Beauty original MLP same scale measured allocated2092865536B/reserved3351248896B; conservative margin",
+      "research_parameters_changed": false,
+      "stopping": "only our Trainer raises on memory margin/observation failure; no foreign PID signals"
+    },
+    "current_source_records": [
+      {
+        "path": "experiments/preflight_20261015/resources.py",
+        "bytes": 4565,
+        "sha256": "40e260a298902752190d791470e8d927d782ad5c8e2f845a3517fc42526e0597"
+      },
+      {
+        "path": "experiments/preflight_20261015/run.py",
+        "bytes": 33310,
+        "sha256": "8d715e3359b78f2c50b00fb48c3c6f9207437a5133750ee73916a2064698b370"
+      },
+      {
+        "path": "experiments/preflight_20261015/deploy.py",
+        "bytes": 7688,
+        "sha256": "50d21c8d0329c2b0cc664ddb06a60a8de0eb77537324d83404abfb0fb772488d"
+      },
+      {
+        "path": "experiments/beauty_extensions/cli.py",
+        "bytes": 24542,
+        "sha256": "1a7805c778d27f2f5f551398ba81679e036d0e2d4746650063226788e41b239a"
+      }
+    ],
+    "baseline_record": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/shared-resource-baseline.json",
+      "bytes": 3705,
+      "sha256": "2a2f647f986acdbb2e9d5f83ae9bd370f0646a418adef5985696f60fefc1d9f2"
+    },
+    "baseline_GPU1_summary": {
+      "physical_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "samples": 4,
+      "free_bytes_range": [
+        24100470784,
+        24100470784
+      ],
+      "utilization_percent_range": [
+        1,
+        9
+      ],
+      "foreign_PIDs_observed": [
+        1490665
+      ],
+      "timestamps": [
+        "2026-10-15T06:35:25.358934+00:00",
+        "2026-10-15T06:35:30.461787+00:00",
+        "2026-10-15T06:35:35.571213+00:00",
+        "2026-10-15T06:35:40.685029+00:00"
+      ]
+    },
+    "calibration_read_independently_from_preserved_ZIP": {
+      "member": "evidence/beauty-mlp-formal-v1/output/training_result.json",
+      "bytes": 5210,
+      "sha256": "320147c08fec70379ffbb70985f59fa9c390bc558d9918fb27bfcb164b490653",
+      "allocated_bytes": 2092865536,
+      "reserved_bytes": 3351248896,
+      "scope": "Prior full-sized Beauty MLP observation, used only for conservative resource estimate; not a new stage measurement or equal-speed claim."
+    },
+    "CPU_actual_assess_checks": {
+      "four_real_baseline_observations_shared_initial_accept": true,
+      "same_observations_exclusive_reject": true,
+      "initial_14GiB_boundary_accept_1byte_below_reject": true,
+      "runtime_8GiB_boundary_accept_1byte_below_reject": true,
+      "no_GPU_model_or_observe_command_executed_by_this_reviewer": true
+    },
+    "static_integration": {
+      "pre_submit": "Explicit --share-gpu obtains detailed standard-library observation; assess requires >=14GiB free before submission, foreign processes permitted only in shared mode.",
+      "server_start_and_runtime": "Main wraps existing bounded run in ResourceMonitor after CPU preparation, with one explicit physical CUDA UUID and one visible card. Initial sample independently checks margin again; thread samples nominally each10seconds; resource/observation failure sets sticky reason.",
+      "callbacks": "CLI Trainer.test adds ResourceGuard when shared flag active; stage validation/MLP fit also include it. Guard checks at each train/val/test batch start. Context exit joins monitor, samples again, writes summary and rethrows failure if no prior exception.",
+      "foreign_process_management": "No kill, signal, priority adjustment, device reset, pause or restart of yychen tasks. Guard raises within own Python/Trainer; accepted runner owns only its recorded task group.",
+      "research_identity": "No parameter, model, SID/checkpoint, batch size, precision, generation K, candidate scoring, label or shuffle sampler change; standard-library monitoring uses no torch RNG.",
+      "serialization": "Parent orchestration runs bounded GPU jobs serially on GPU1; this resource helper does not itself implement a cross-job lock."
+    },
+    "engineering_limits": [
+      "Monitor is not an asynchronous CUDA-kernel interrupter. A sticky failure stops at the next installed callback or context exit; direct generation sections are bounded by existing entrypoint/timeouts.",
+      "The checks preserve observed memory margin and do not prove zero performance interference with another shared GPU job.",
+      "This independent static review is not an A numerical/lifecycle runtime pass."
+    ],
+    "research_repair_round_budget_not_reset": true,
+    "formal_approved": false
+  },
+  "other_route_B_shared_last_known": {
+    "query_record": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/last-query.json",
+      "bytes": 11546,
+      "sha256": "e6cecc16f39a055a8216a6261996cbcc4ff9a1a6487c5433fc3dd641c35d632a"
+    },
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "started_at": "2026-10-15T06:37:22.356390+00:00",
+    "ended_at": "2026-10-15T06:42:40.283438+00:00",
+    "cleanup_verified": true,
+    "scope": "Execution terminal observation only; independent B algorithm and prediction review belongs to its nonauthor reviewer."
+  },
+  "actual_A_GPU_preflight_independent_review": {
+    "status": "PREFLIGHT_GATE_PASS",
+    "scope": "A engineering preflight only",
+    "reviewer": "/root/attention_audit",
+    "not_model_or_runner_author": true,
+    "archive": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-a-shared-r1/evidence.tar.gz",
+      "bytes": 76084,
+      "sha256": "3d2985c275d848475fa9a26b21656ccbddfa76f90b4f6480d99a261aa3b59cb7"
+    },
+    "tar_members": 63,
+    "manifest_verified": 62,
+    "terminal_outputs_verified": 55,
+    "artifact_records": [
+      {
+        "archive_member": "output/RESULT.json",
+        "bytes": 223,
+        "sha256": "5581a9d04357fd15578e114aba843d187d24d64e93459d36041d22bcedc1cb85"
+      },
+      {
+        "archive_member": "output/after-three-tests/ordinary_validation.json",
+        "bytes": 681,
+        "sha256": "8ee76aecf3f58086064e30f487bbea38c236c6092d360ea60eee0ddb403a7a8c"
+      },
+      {
+        "archive_member": "output/author_sampler_parity.json",
+        "bytes": 2737,
+        "sha256": "83b84ec2cba0036cbab3c0411de291e29eefa7a27cb2df2f20713001ee6718ab"
+      },
+      {
+        "archive_member": "output/author_structure.json",
+        "bytes": 15778,
+        "sha256": "51cf83f0d46757f60df291ffe4d55418d798bbe2f483e04f416c19c296371a05"
+      },
+      {
+        "archive_member": "output/checkpoint_protocol.json",
+        "bytes": 1964,
+        "sha256": "cea974659234b831ffbbb9cc54c0426467e393061c4ab8ed1027737e384a5f06"
+      },
+      {
+        "archive_member": "output/data_check.json",
+        "bytes": 15251,
+        "sha256": "30f821ec71933cf455ff0feb8e67e181447828e28460cfd5c24326fa0904b024"
+      },
+      {
+        "archive_member": "output/effective_config.yaml",
+        "bytes": 14883,
+        "sha256": "1624d222a28f02c6056119bb383f41d09b49813b7538e002ee2a1206a0cc58b8"
+      },
+      {
+        "archive_member": "output/environment.json",
+        "bytes": 1818,
+        "sha256": "5715de532d5e3be522332186e23dfc768e6d2ae1412f1ac78da1992cb8ceb6dc"
+      },
+      {
+        "archive_member": "output/exception_recovery.json",
+        "bytes": 778,
+        "sha256": "5f5771ba0bc4fae346f97bb6172197f3ab207a693c52d0dade24f41c6b7df3ae"
+      },
+      {
+        "archive_member": "output/injected-test-failure/expected_traceback.txt",
+        "bytes": 2696,
+        "sha256": "51e9d192078ade5af18cf99bcb8454a3dd4b5575ca94e0acc493afcbf2edcbec"
+      },
+      {
+        "archive_member": "output/injected-test-failure/lifecycle_cleanup.json",
+        "bytes": 659,
+        "sha256": "1af30cca99bd00f32f6bb87bb981785adc4a80fd9d70fa089e3f6924d0f1e4ed"
+      },
+      {
+        "archive_member": "output/injected-test-failure/predictions.jsonl",
+        "bytes": 3984,
+        "sha256": "9f48cde4b1b14de3fbfbc2e04a361760124e45e39df7438e5a7f83b32adc9615"
+      },
+      {
+        "archive_member": "output/injected-test-failure/progress.json",
+        "bytes": 52,
+        "sha256": "b0712a525f010506bbac7fc1cd1de13d564ccd10579329c0ab8f35f53c81bc82"
+      },
+      {
+        "archive_member": "output/invocation.json",
+        "bytes": 41679,
+        "sha256": "1b4fd63353bf1418e20055bc03c0935e3f1d176e4f1bd482c2e29daaf3a28d2b"
+      },
+      {
+        "archive_member": "output/loading.json",
+        "bytes": 1369,
+        "sha256": "5ec225d4d8897b04b4ff00d6683a8e03c89f0e7244ab3c5d0fb56e9c0821e961"
+      },
+      {
+        "archive_member": "output/long_history_case.json",
+        "bytes": 620,
+        "sha256": "c0108bb90f1d6cbfb1564807fb940384ddbf4bbf6d757e543c05a3cfd0065a7c"
+      },
+      {
+        "archive_member": "output/off_and_cache.json",
+        "bytes": 1753,
+        "sha256": "b8d7c7dbc63126d6b56c0e33422c813c2b844a9546544a2ae8b4e98cf45b51f1"
+      },
+      {
+        "archive_member": "output/ordinary_validation.json",
+        "bytes": 681,
+        "sha256": "8ee76aecf3f58086064e30f487bbea38c236c6092d360ea60eee0ddb403a7a8c"
+      },
+      {
+        "archive_member": "output/post_test_off.json",
+        "bytes": 303,
+        "sha256": "90a1f33ea86390fc9ebecd68b0d6e8d25f9a33f1aea3822d391ccf9202ae7552"
+      },
+      {
+        "archive_member": "output/resource-monitor.jsonl",
+        "bytes": 2039,
+        "sha256": "2516a55023bc4824ac28561c5dfc539583a057a87de2f6fa7b85e40b5309cd8d"
+      },
+      {
+        "archive_member": "output/resource-summary.json",
+        "bytes": 285,
+        "sha256": "8299d2db0aa63405313a7ef7ad1c8993fb74e54156430aed41b7d7be1e58cc31"
+      },
+      {
+        "archive_member": "output/shuffle_result.json",
+        "bytes": 506,
+        "sha256": "a80ae565e7cc5590b19be5917f4dc1a53cd17f09395bc99eeb8383753bd26cfe"
+      },
+      {
+        "archive_member": "output/shuffle_trace.json",
+        "bytes": 185741,
+        "sha256": "3203086211ac24580eca79fc9103b4b2cc15ded9d9ba20daf3d0a40e2546d670"
+      },
+      {
+        "archive_member": "output/source-workers-bounded-test/lifecycle_cleanup.json",
+        "bytes": 1287,
+        "sha256": "335e7f7140f71f7134db321932537ba9aea21fdddbc9e3718f027419584e1b22"
+      },
+      {
+        "archive_member": "output/source-workers-bounded-test/metrics.json",
+        "bytes": 328,
+        "sha256": "9b998de735dadeb07aa3a6f6ccb11f557380ef90f213168a8c96117d31023a43"
+      },
+      {
+        "archive_member": "output/source-workers-bounded-test/per_sample_metrics.jsonl",
+        "bytes": 3904,
+        "sha256": "4d1f7b722706b3b05db59c2e5813908a7af1896d843a474629d851b150cb4884"
+      },
+      {
+        "archive_member": "output/source-workers-bounded-test/predictions.jsonl",
+        "bytes": 15941,
+        "sha256": "5cbb1e7e8a4be771cb695216b4d05b0c4fe40280fc945302c1a46e9e73e5bc1f"
+      },
+      {
+        "archive_member": "output/source-workers-bounded-test/progress.json",
+        "bytes": 52,
+        "sha256": "b0712a525f010506bbac7fc1cd1de13d564ccd10579329c0ab8f35f53c81bc82"
+      },
+      {
+        "archive_member": "output/source-workers-bounded-test/recomputed_metrics.json",
+        "bytes": 667,
+        "sha256": "0ad707e8f9b55904c0aee1dd0cd76c69e655c3a683a420a9a9715a65e9cce5ac"
+      },
+      {
+        "archive_member": "output/source-workers-bounded-test/worker_contract.json",
+        "bytes": 217,
+        "sha256": "a87b04d102ef987e53b24ee6aca9fa4de66d8143814e08e5c806e797480e5e10"
+      },
+      {
+        "archive_member": "output/test_subset.json",
+        "bytes": 3011,
+        "sha256": "0ac9dc29416ec7af918be554f3cc58da5f1aad1e5c22248c05c7bb7a20100857"
+      },
+      {
+        "archive_member": "output/train_off_forward.json",
+        "bytes": 228,
+        "sha256": "6e2da6b7a1628fe87b318c6bd02c53048281513deacb691f7daab9c9be4a35f8"
+      },
+      {
+        "archive_member": "output/trainer-test-0/intervention_trace.json",
+        "bytes": 2000,
+        "sha256": "a9614082eb43042edf47ff45008abb05d8a932399f55289cad05afe983988811"
+      },
+      {
+        "archive_member": "output/trainer-test-0/lifecycle_cleanup.json",
+        "bytes": 1290,
+        "sha256": "db93cb5cfe19960e56a15ca9f82cd5af341b55751404aaaaae7ec2767cd83a08"
+      },
+      {
+        "archive_member": "output/trainer-test-0/metrics.json",
+        "bytes": 394,
+        "sha256": "27d12fc8895aec1236356de0bbbe9fc0ff792d7ba143d0ce64f13e04364cf6e5"
+      },
+      {
+        "archive_member": "output/trainer-test-0/per_sample_metrics.jsonl",
+        "bytes": 3798,
+        "sha256": "7cd2bb7f28b3f395c6a088751fc20150f7fd16aa1c21c4a2ce58ed71f12a6209"
+      },
+      {
+        "archive_member": "output/trainer-test-0/predictions.jsonl",
+        "bytes": 15452,
+        "sha256": "43ff0f2083e6f25c6be880af575b01bec214a8ec479cd6c36e5e9ff5eecfcaaf"
+      },
+      {
+        "archive_member": "output/trainer-test-0/progress.json",
+        "bytes": 52,
+        "sha256": "b0712a525f010506bbac7fc1cd1de13d564ccd10579329c0ab8f35f53c81bc82"
+      },
+      {
+        "archive_member": "output/trainer-test-0/recomputed_metrics.json",
+        "bytes": 733,
+        "sha256": "49fe742cf710d0d702ef9142acc9f08aba147bde54d44189244aacca35ac1bf9"
+      },
+      {
+        "archive_member": "output/trainer-test-3/intervention_trace.json",
+        "bytes": 159566,
+        "sha256": "8afa755fd89f378d05dc8f778a60ac0fb17c4bd5dee5d1298e64367a34a5c6bb"
+      },
+      {
+        "archive_member": "output/trainer-test-3/lifecycle_cleanup.json",
+        "bytes": 1287,
+        "sha256": "335e7f7140f71f7134db321932537ba9aea21fdddbc9e3718f027419584e1b22"
+      },
+      {
+        "archive_member": "output/trainer-test-3/metrics.json",
+        "bytes": 393,
+        "sha256": "2dca592a51db3d41b3cf0968dcd8758d7d78004a457361d2fd3d087096e59cdf"
+      },
+      {
+        "archive_member": "output/trainer-test-3/per_sample_metrics.jsonl",
+        "bytes": 3798,
+        "sha256": "7cd2bb7f28b3f395c6a088751fc20150f7fd16aa1c21c4a2ce58ed71f12a6209"
+      },
+      {
+        "archive_member": "output/trainer-test-3/predictions.jsonl",
+        "bytes": 15432,
+        "sha256": "dfd3e0be224de61c615338e3271d5c9d333fcc8d88223faa54917a9851484962"
+      },
+      {
+        "archive_member": "output/trainer-test-3/progress.json",
+        "bytes": 52,
+        "sha256": "b0712a525f010506bbac7fc1cd1de13d564ccd10579329c0ab8f35f53c81bc82"
+      },
+      {
+        "archive_member": "output/trainer-test-3/recomputed_metrics.json",
+        "bytes": 733,
+        "sha256": "c594f800750c18442cb27ebc4b290564ad2f603d4a9feb34a41467227a605980"
+      },
+      {
+        "archive_member": "output/trainer-test-4/intervention_trace.json",
+        "bytes": 187467,
+        "sha256": "2e2ce7e71b8318fb74c509017c108ccdd0d0794969a8d3dd8469406c7b85da6c"
+      },
+      {
+        "archive_member": "output/trainer-test-4/lifecycle_cleanup.json",
+        "bytes": 1287,
+        "sha256": "335e7f7140f71f7134db321932537ba9aea21fdddbc9e3718f027419584e1b22"
+      },
+      {
+        "archive_member": "output/trainer-test-4/metrics.json",
+        "bytes": 394,
+        "sha256": "8b3f5e1ecabfc330f5b783b0ae0b8cff7b0aef299518ebbf3b8dcd39c9a3caf1"
+      },
+      {
+        "archive_member": "output/trainer-test-4/per_sample_metrics.jsonl",
+        "bytes": 3798,
+        "sha256": "7cd2bb7f28b3f395c6a088751fc20150f7fd16aa1c21c4a2ce58ed71f12a6209"
+      },
+      {
+        "archive_member": "output/trainer-test-4/predictions.jsonl",
+        "bytes": 15439,
+        "sha256": "d6621b087cc95779a4d23de9625521b479d69218e699d64574a0401b0a36a245"
+      },
+      {
+        "archive_member": "output/trainer-test-4/progress.json",
+        "bytes": 52,
+        "sha256": "b0712a525f010506bbac7fc1cd1de13d564ccd10579329c0ab8f35f53c81bc82"
+      },
+      {
+        "archive_member": "output/trainer-test-4/recomputed_metrics.json",
+        "bytes": 733,
+        "sha256": "28613118921c942c9a80a8bdfb9ecdd5cd09f5a1c328888303382367042c82a1"
+      },
+      {
+        "archive_member": "output/used_config.json",
+        "bytes": 12966,
+        "sha256": "4a9a016157cc5571091663f7abe7c09277b1a915543213bc44b3a774e30b0e5f"
+      },
+      {
+        "archive_member": "output/val_subset.json",
+        "bytes": 1417,
+        "sha256": "1dbca8d16ab5e92bed667e7ed5296c373deb4d8f14bdceb009d7d2785ea5ac06"
+      }
+    ],
+    "terminal": {
+      "job_id": "gsp-20261015-a-shared-r1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "started_at": "2026-10-15T07:00:40.907900+00:00",
+      "ended_at": "2026-10-15T07:03:05.689216+00:00"
+    },
+    "cleanup_verified": true,
+    "identity": {
+      "source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+      "snapshot": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+      "files": 191,
+      "python_files": 165,
+      "deployment_json_SHA": "930fd04ae161bb3e86bafbd899773d2c0ff052d61dcd4a94608d2242bf6e7f64",
+      "request_manifest_binding_exact": true,
+      "spec_sha256": "85b878d095c0fbbc3de84ae770f2fab90d4691f5d19fccff4a1de9b11a868924",
+      "plan_sha256": "4fd5be1a246521d8fe812d319839b41deefeb89ca0cd4f4c26d8716dcd0737b0",
+      "request": {
+        "archive_member": "request.json",
+        "bytes": 1658,
+        "sha256": "c013cb27e27eeea5c2fedf567d80a0a846189bf1ac958e77e0fbf6a5c8ceeb6c"
+      },
+      "invocation": {
+        "archive_member": "output/invocation.json",
+        "bytes": 41679,
+        "sha256": "1b4fd63353bf1418e20055bc03c0935e3f1d176e4f1bd482c2e29daaf3a28d2b"
+      }
+    },
+    "current_source_inheritance": {
+      "changed_files_at_review": [
+        "experiments/preflight_20261015/bundle.py",
+        "experiments/preflight_20261015/deploy.py",
+        "experiments/preflight_20261015/run.py"
+      ],
+      "A_reachable_run_functions_all_AST_exact": true,
+      "protected_A_original_bridge_cli_common_resources_and_config_bytes_exact": true,
+      "known_changes": "run.py round2 changes only MLP callback sentinel JSON receipt; deploy.py changes future snapshot directory identity to bind source_commit+files; bundle.py changes packaging README. These do not alter executed A computation.",
+      "executed_source_is_bound_even_while_other_route_edits_continue": true
+    },
+    "strict_loading": {
+      "assets": [
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68/merged_predictions_tensor.pt",
+          "sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+          "bytes": 388534,
+          "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68/merged_predictions_tensor.pt"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00/checkpoint_epoch=000_step=004800.ckpt",
+          "sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+          "bytes": 160859238,
+          "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/beauty-extensions/assets/21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00/checkpoint_epoch=000_step=004800.ckpt"
+        }
+      ],
+      "strict_load": {
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "global_step": 4800,
+        "epoch": 0,
+        "all_parameter_keys_shapes_values_equal": true,
+        "state_tensor_count": 178,
+        "embedded_sid_exact": true
+      },
+      "model_class": "experiments.beauty_extensions.author.models.AuthorShuffleModel",
+      "parameter_count": 13259136,
+      "shared_sid_table": false
+    },
+    "OFF_and_cache": {
+      "decoder_hidden": {
+        "max_absolute": 0.0,
+        "allclose": true,
+        "exact": true
+      },
+      "loss": {
+        "max_absolute": 0.0,
+        "allclose": true,
+        "exact": true
+      },
+      "scores": {
+        "max_absolute": 0.0,
+        "allclose": true,
+        "exact": true
+      },
+      "sid_exact": true,
+      "repeat_sid_exact": true,
+      "repeat_scores": {
+        "max_absolute": 0.0,
+        "allclose": true,
+        "exact": true
+      },
+      "sample_order_sid_exact": true,
+      "sample_order_scores": {
+        "max_absolute": 0.0,
+        "allclose": true,
+        "exact": true
+      },
+      "batch_size_sid_exact": true,
+      "batch_size_scores": {
+        "max_absolute": 7.991213351488113e-06,
+        "allclose": false,
+        "exact": false
+      },
+      "off_rng_unchanged": true,
+      "off_cpu_rng_unchanged": true,
+      "shared_sid_object": false,
+      "finite_loss": true,
+      "head_logits": [
+        {
+          "max_absolute": 0.0,
+          "allclose": true,
+          "exact": true
+        },
+        {
+          "max_absolute": 0.0,
+          "allclose": true,
+          "exact": true
+        },
+        {
+          "max_absolute": 0.0,
+          "allclose": true,
+          "exact": true
+        },
+        {
+          "max_absolute": 0.0,
+          "allclose": true,
+          "exact": true
+        }
+      ],
+      "original_batch_size_scores": {
+        "max_absolute": 7.991213351488113e-06,
+        "allclose": false,
+        "exact": false
+      },
+      "adapter_vs_original_single_scores": {
+        "max_absolute": 0.0,
+        "allclose": true,
+        "exact": true
+      },
+      "adapter_vs_original_single_sid_exact": true,
+      "batch_size_roundtrip_sid_exact": true,
+      "batch_size_roundtrip_scores": {
+        "max_absolute": 0.0,
+        "allclose": true,
+        "exact": true
+      },
+      "cross_batch_numeric_boundary": "Retained original-model shape-dependent drift; fixed-shape adapter/original and batch-size roundtrip required at original tolerances"
+    },
+    "cross_batch_boundary": "B8-to-B1 score drift7.991213351488113e-6 occurs equally in raw original and fails original engineering allclose; same-shape original/adapter and B8-to-B1-to-B8 are exact. No tolerance or model change.",
+    "identifiable_helper_RNG_parity": {
+      "status": "PASS",
+      "probe_only": true,
+      "checks": [
+        {
+          "n": 3,
+          "original_equals_adapter": true,
+          "global_rng_equals_original": true,
+          "caller_input_unchanged": true,
+          "padding_unchanged": true,
+          "unshuffled_codes_unchanged": true,
+          "trace_matches_moved_vectors": true,
+          "random_permutation": [
+            [
+              [
+                1,
+                2,
+                0
+              ],
+              [
+                1,
+                2,
+                0
+              ],
+              [
+                1,
+                2,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                2,
+                1
+              ],
+              [
+                1,
+                0,
+                2
+              ],
+              [
+                2,
+                1,
+                0
+              ]
+            ]
+          ],
+          "nonidentity_replay": [
+            [
+              [
+                2,
+                0,
+                1
+              ],
+              [
+                2,
+                1,
+                0
+              ],
+              [
+                2,
+                0,
+                1
+              ]
+            ],
+            [
+              [
+                2,
+                0,
+                1
+              ],
+              [
+                2,
+                0,
+                1
+              ],
+              [
+                2,
+                0,
+                1
+              ]
+            ]
+          ]
+        },
+        {
+          "n": 4,
+          "original_equals_adapter": true,
+          "global_rng_equals_original": true,
+          "caller_input_unchanged": true,
+          "padding_unchanged": true,
+          "unshuffled_codes_unchanged": true,
+          "trace_matches_moved_vectors": true,
+          "random_permutation": [
+            [
+              [
+                1,
+                2,
+                3,
+                0
+              ],
+              [
+                0,
+                1,
+                3,
+                2
+              ],
+              [
+                1,
+                3,
+                2,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                0,
+                2,
+                3
+              ],
+              [
+                2,
+                3,
+                1,
+                0
+              ],
+              [
+                1,
+                3,
+                2,
+                0
+              ]
+            ]
+          ],
+          "nonidentity_replay": [
+            [
+              [
+                3,
+                0,
+                1,
+                2
+              ],
+              [
+                3,
+                2,
+                1,
+                0
+              ],
+              [
+                3,
+                0,
+                1,
+                2
+              ]
+            ],
+            [
+              [
+                3,
+                0,
+                1,
+                2
+              ],
+              [
+                3,
+                0,
+                1,
+                2
+              ],
+              [
+                3,
+                0,
+                1,
+                2
+              ]
+            ]
+          ]
+        }
+      ]
+    },
+    "real_trace_checks": {
+      "0": {
+        "events": 0,
+        "loss_calls": 4,
+        "generate_calls": 4,
+        "call_ids": [
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
+        ],
+        "input_shapes": [
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            7,
+            120
+          ],
+          [
+            7,
+            120
+          ]
+        ],
+        "shuffle_call_delta": 0,
+        "state_cleared": true
+      },
+      "3": {
+        "events": 8,
+        "loss_calls": 4,
+        "generate_calls": 4,
+        "call_ids": [
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "input_shapes": [
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            7,
+            120
+          ],
+          [
+            7,
+            120
+          ]
+        ],
+        "shuffle_call_delta": 8,
+        "state_cleared": true,
+        "active_group_draws": 416,
+        "masked_group_draws_not_applied": 1444,
+        "identity_active": 65,
+        "unique_permutations": 6,
+        "histogram": {
+          "0,1,2": 65,
+          "0,2,1": 69,
+          "1,0,2": 64,
+          "1,2,0": 83,
+          "2,0,1": 64,
+          "2,1,0": 71
+        },
+        "loss_vs_generate_different_active_groups": 173,
+        "all_permutations_role_shape_call_bindings_exact": true
+      },
+      "4": {
+        "events": 8,
+        "loss_calls": 4,
+        "generate_calls": 4,
+        "call_ids": [
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "input_shapes": [
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            8,
+            120
+          ],
+          [
+            7,
+            120
+          ],
+          [
+            7,
+            120
+          ]
+        ],
+        "shuffle_call_delta": 8,
+        "state_cleared": true,
+        "active_group_draws": 416,
+        "masked_group_draws_not_applied": 1444,
+        "identity_active": 23,
+        "unique_permutations": 24,
+        "histogram": {
+          "0,1,2,3": 23,
+          "0,1,3,2": 17,
+          "0,2,1,3": 21,
+          "0,2,3,1": 11,
+          "0,3,1,2": 18,
+          "0,3,2,1": 17,
+          "1,0,2,3": 15,
+          "1,0,3,2": 19,
+          "1,2,0,3": 17,
+          "1,2,3,0": 21,
+          "1,3,0,2": 17,
+          "1,3,2,0": 15,
+          "2,0,1,3": 13,
+          "2,0,3,1": 20,
+          "2,1,0,3": 12,
+          "2,1,3,0": 25,
+          "2,3,0,1": 24,
+          "2,3,1,0": 10,
+          "3,0,1,2": 21,
+          "3,0,2,1": 18,
+          "3,1,0,2": 15,
+          "3,1,2,0": 17,
+          "3,2,0,1": 18,
+          "3,2,1,0": 12
+        },
+        "loss_vs_generate_different_active_groups": 202,
+        "all_permutations_role_shape_call_bindings_exact": true
+      }
+    },
+    "input_target_model_state_unchanged": {
+      "status": "PASS",
+      "route": "A",
+      "engineering_only": true,
+      "formal_approved": false,
+      "real_test_split": true,
+      "state_digest_unchanged": "566f363649043dfe3a5cd4a2a629a00cea089856daa89a327600dcf8c6a18ba6",
+      "input_and_target_digest_unchanged": "b909fbd0442637a97b8dfdd189bff64388013c95cb7d0180c3c88a68f10cae28",
+      "three_real_trainer_tests": [
+        0,
+        3,
+        4
+      ],
+      "post_test_validation": true,
+      "actual_exception_recovery": true,
+      "original_failed_job_retained": "beauty-b-smoke-r3"
+    },
+    "independent_predictions": {
+      "trainer-test-0": {
+        "samples": 31,
+        "unique_users": 31,
+        "prediction": {
+          "archive_member": "output/trainer-test-0/predictions.jsonl",
+          "bytes": 15452,
+          "sha256": "43ff0f2083e6f25c6be880af575b01bec214a8ec479cd6c36e5e9ff5eecfcaaf"
+        },
+        "target_subset_exact": true,
+        "expected_subset": "protected first31 test rows",
+        "float64_metrics": {
+          "recall@5": 0.03225806451612903,
+          "recall@10": 0.06451612903225806,
+          "ndcg@5": 0.03225806451612903,
+          "ndcg@10": 0.041582736332835095
+        },
+        "original_evaluator": {
+          "ndcg@5": 0.032258063554763794,
+          "ndcg@10": 0.04158273711800575,
+          "recall@5": 0.032258063554763794,
+          "recall@10": 0.06451612710952759
+        },
+        "absolute_error": {
+          "recall@5": 9.613652374174109e-10,
+          "recall@10": 1.9227304748348217e-09,
+          "ndcg@5": 9.613652374174109e-10,
+          "ndcg@10": 7.851706576578188e-10
+        },
+        "maximum_per_sample_error": 1.7367416393909707e-09,
+        "invalid": 0,
+        "duplicates": 0,
+        "score_ties": 0,
+        "filtered": false,
+        "formal": false,
+        "cleanup": {
+          "parameter_devices_before": [
+            "cuda:0"
+          ],
+          "parameter_devices_after": [
+            "cpu"
+          ],
+          "is_testing_after": false,
+          "encoder_mask_cleared": true,
+          "replay_cleared": true,
+          "evaluator_restored": true,
+          "exception": null,
+          "real_batch_devices": [
+            {
+              "batch_index": 0,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 1,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 2,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 3,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            }
+          ],
+          "author_replay_queue_cleared": true
+        }
+      },
+      "trainer-test-3": {
+        "samples": 31,
+        "unique_users": 31,
+        "prediction": {
+          "archive_member": "output/trainer-test-3/predictions.jsonl",
+          "bytes": 15432,
+          "sha256": "dfd3e0be224de61c615338e3271d5c9d333fcc8d88223faa54917a9851484962"
+        },
+        "target_subset_exact": true,
+        "expected_subset": "protected first31 test rows",
+        "float64_metrics": {
+          "recall@5": 0.03225806451612903,
+          "recall@10": 0.06451612903225806,
+          "ndcg@5": 0.03225806451612903,
+          "ndcg@10": 0.041582736332835095
+        },
+        "original_evaluator": {
+          "ndcg@5": 0.032258063554763794,
+          "ndcg@10": 0.04158273711800575,
+          "recall@5": 0.032258063554763794,
+          "recall@10": 0.06451612710952759
+        },
+        "absolute_error": {
+          "recall@5": 9.613652374174109e-10,
+          "recall@10": 1.9227304748348217e-09,
+          "ndcg@5": 9.613652374174109e-10,
+          "ndcg@10": 7.851706576578188e-10
+        },
+        "maximum_per_sample_error": 1.7367416393909707e-09,
+        "invalid": 0,
+        "duplicates": 0,
+        "score_ties": 0,
+        "filtered": false,
+        "formal": false,
+        "cleanup": {
+          "parameter_devices_before": [
+            "cpu"
+          ],
+          "parameter_devices_after": [
+            "cpu"
+          ],
+          "is_testing_after": false,
+          "encoder_mask_cleared": true,
+          "replay_cleared": true,
+          "evaluator_restored": true,
+          "exception": null,
+          "real_batch_devices": [
+            {
+              "batch_index": 0,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 1,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 2,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 3,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            }
+          ],
+          "author_replay_queue_cleared": true
+        }
+      },
+      "trainer-test-4": {
+        "samples": 31,
+        "unique_users": 31,
+        "prediction": {
+          "archive_member": "output/trainer-test-4/predictions.jsonl",
+          "bytes": 15439,
+          "sha256": "d6621b087cc95779a4d23de9625521b479d69218e699d64574a0401b0a36a245"
+        },
+        "target_subset_exact": true,
+        "expected_subset": "protected first31 test rows",
+        "float64_metrics": {
+          "recall@5": 0.03225806451612903,
+          "recall@10": 0.06451612903225806,
+          "ndcg@5": 0.03225806451612903,
+          "ndcg@10": 0.041582736332835095
+        },
+        "original_evaluator": {
+          "ndcg@5": 0.032258063554763794,
+          "ndcg@10": 0.04158273711800575,
+          "recall@5": 0.032258063554763794,
+          "recall@10": 0.06451612710952759
+        },
+        "absolute_error": {
+          "recall@5": 9.613652374174109e-10,
+          "recall@10": 1.9227304748348217e-09,
+          "ndcg@5": 9.613652374174109e-10,
+          "ndcg@10": 7.851706576578188e-10
+        },
+        "maximum_per_sample_error": 1.7367416393909707e-09,
+        "invalid": 0,
+        "duplicates": 0,
+        "score_ties": 0,
+        "filtered": false,
+        "formal": false,
+        "cleanup": {
+          "parameter_devices_before": [
+            "cpu"
+          ],
+          "parameter_devices_after": [
+            "cpu"
+          ],
+          "is_testing_after": false,
+          "encoder_mask_cleared": true,
+          "replay_cleared": true,
+          "evaluator_restored": true,
+          "exception": null,
+          "real_batch_devices": [
+            {
+              "batch_index": 0,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 1,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 2,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 3,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            }
+          ],
+          "author_replay_queue_cleared": true
+        }
+      },
+      "source-workers-bounded-test": {
+        "samples": 32,
+        "unique_users": 32,
+        "prediction": {
+          "archive_member": "output/source-workers-bounded-test/predictions.jsonl",
+          "bytes": 15941,
+          "sha256": "5cbb1e7e8a4be771cb695216b4d05b0c4fe40280fc945302c1a46e9e73e5bc1f"
+        },
+        "target_subset_exact": true,
+        "expected_subset": "first8 rows of each first4 assigned files, original8-worker round-robin",
+        "float64_metrics": {
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "ndcg@5": 0.0,
+          "ndcg@10": 0.0
+        },
+        "original_evaluator": {
+          "ndcg@5": 0.0,
+          "ndcg@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0
+        },
+        "absolute_error": {
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "ndcg@5": 0.0,
+          "ndcg@10": 0.0
+        },
+        "maximum_per_sample_error": 0.0,
+        "invalid": 0,
+        "duplicates": 0,
+        "score_ties": 0,
+        "filtered": false,
+        "formal": false,
+        "cleanup": {
+          "parameter_devices_before": [
+            "cpu"
+          ],
+          "parameter_devices_after": [
+            "cpu"
+          ],
+          "is_testing_after": false,
+          "encoder_mask_cleared": true,
+          "replay_cleared": true,
+          "evaluator_restored": true,
+          "exception": null,
+          "real_batch_devices": [
+            {
+              "batch_index": 0,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 1,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 2,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            },
+            {
+              "batch_index": 3,
+              "input_device": "cuda:0",
+              "input_dtype": "torch.int64",
+              "parameter_devices": [
+                "cuda:0"
+              ],
+              "parameter_dtypes": [
+                "torch.float32"
+              ],
+              "is_testing": true
+            }
+          ],
+          "author_replay_queue_cleared": true
+        }
+      }
+    },
+    "output_changes_vs_Normal": {
+      "3": {
+        "any_generated_SID_changed_users": 30,
+        "top1_SID_changed_users": 7,
+        "any_score_changed_users": 31,
+        "max_score_change": 0.029942747205495834
+      },
+      "4": {
+        "any_generated_SID_changed_users": 30,
+        "top1_SID_changed_users": 8,
+        "any_score_changed_users": 31,
+        "max_score_change": 0.031050123274326324
+      }
+    },
+    "metric_interpretation": "Three31-user groups share four metric values but30users change generated SIDs and all31score vectors change. Engineering evidence only, no full-data conclusion or score-driven sample/model selection.",
+    "post_test_OFF": {
+      "same_model_instance": true,
+      "parameter_devices": [
+        "cuda:0"
+      ],
+      "input_device": "cuda:0",
+      "is_testing": false,
+      "sid_exact": true,
+      "scores": {
+        "max_absolute": 0.0,
+        "allclose": true,
+        "exact": true
+      },
+      "model_eval": true,
+      "encoder_eval": true,
+      "decoder_eval": true
+    },
+    "validation_after_tests": {
+      "metrics": [
+        {
+          "val/loss": 9.139482498168945,
+          "val/ndcg@5": 0.0,
+          "val/ndcg@10": 0.0,
+          "val/recall@5": 0.0,
+          "val/recall@10": 0.0
+        }
+      ],
+      "batch_devices": [
+        {
+          "batch_index": 0,
+          "input_device": "cuda:0",
+          "parameter_devices": [
+            "cuda:0"
+          ],
+          "is_testing": false,
+          "training": false
+        },
+        {
+          "batch_index": 1,
+          "input_device": "cuda:0",
+          "parameter_devices": [
+            "cuda:0"
+          ],
+          "is_testing": false,
+          "training": false
+        }
+      ],
+      "parameter_devices_after": [
+        "cpu"
+      ],
+      "test_flag_after": false,
+      "engineering_only": true,
+      "shuffle_call_delta": 0
+    },
+    "real_exception_recovery": {
+      "status": "PASS",
+      "actual_trainer_exception": true,
+      "events": [
+        {
+          "hook": "on_test_batch_start",
+          "batch": 0,
+          "input_device": "cuda:0",
+          "parameter_devices": [
+            "cuda:0"
+          ],
+          "flag": true
+        },
+        {
+          "hook": "on_exception",
+          "exception_type": "InjectedPreflightError",
+          "flag_after_cleanup_callback": false
+        }
+      ],
+      "same_model_instance": true,
+      "evaluator_restored": true,
+      "state_digest_before_after": "566f363649043dfe3a5cd4a2a629a00cea089856daa89a327600dcf8c6a18ba6",
+      "off_sid_exact": true,
+      "off_scores": {
+        "max_absolute": 0.0,
+        "allclose": true,
+        "exact": true
+      },
+      "validation_after_exception": "ordinary_validation.json",
+      "exception_was_expected_and_caught_by_type_only": true
+    },
+    "expected_exception_cleanup": {
+      "parameter_devices_before": [
+        "cuda:0"
+      ],
+      "parameter_devices_after": [
+        "cpu"
+      ],
+      "is_testing_after": false,
+      "encoder_mask_cleared": true,
+      "replay_cleared": true,
+      "evaluator_restored": true,
+      "exception": {
+        "type": "InjectedPreflightError",
+        "message": "expected bounded failure after one real test batch"
+      },
+      "real_batch_devices": [
+        {
+          "batch_index": 0,
+          "input_device": "cuda:0",
+          "input_dtype": "torch.int64",
+          "parameter_devices": [
+            "cuda:0"
+          ],
+          "parameter_dtypes": [
+            "torch.float32"
+          ],
+          "is_testing": true
+        }
+      ],
+      "author_replay_queue_cleared": true
+    },
+    "real_Trainer_traceback": {
+      "archive_member": "output/injected-test-failure/expected_traceback.txt",
+      "bytes": 2696,
+      "sha256": "51e9d192078ade5af18cf99bcb8454a3dd4b5575ca94e0acc493afcbf2edcbec"
+    },
+    "validation_after_exception": {
+      "metrics": [
+        {
+          "val/loss": 9.139482498168945,
+          "val/ndcg@5": 0.0,
+          "val/ndcg@10": 0.0,
+          "val/recall@5": 0.0,
+          "val/recall@10": 0.0
+        }
+      ],
+      "batch_devices": [
+        {
+          "batch_index": 0,
+          "input_device": "cuda:0",
+          "parameter_devices": [
+            "cuda:0"
+          ],
+          "is_testing": false,
+          "training": false
+        },
+        {
+          "batch_index": 1,
+          "input_device": "cuda:0",
+          "parameter_devices": [
+            "cuda:0"
+          ],
+          "is_testing": false,
+          "training": false
+        }
+      ],
+      "parameter_devices_after": [
+        "cpu"
+      ],
+      "test_flag_after": false,
+      "engineering_only": true,
+      "shuffle_call_delta": 0
+    },
+    "train_hook_zero_update_OFF": {
+      "training_hook_and_real_forward": true,
+      "is_testing": false,
+      "loss": 9.09178638458252,
+      "shuffle_call_delta": 0,
+      "optimizer_updates": 0,
+      "rng_note": "training Dropout may consume RNG; Shuffle sampler remains OFF"
+    },
+    "source8worker_contract": {
+      "original_workers": 8,
+      "trainer_limit_test_batches": 4,
+      "metrics_are_engineering_only": true,
+      "full_datamodule_entry_used": true,
+      "source_data_changed": false,
+      "prefetch_is_not_model_evaluation": true
+    },
+    "SID_legality_audit": {
+      "source": {
+        "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/inference/runs/2025-09-15/20-54-16/pickle/merged_predictions_tensor.pt",
+        "bytes": 388534,
+        "sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68"
+      },
+      "shape": [
+        4,
+        12101
+      ],
+      "stride": [
+        1,
+        4
+      ],
+      "offset": 0,
+      "item_axis": 1,
+      "byteorder": "little",
+      "storage_bytes": 387232,
+      "storage_SHA": "e50a063cbfa0d5d6aca4e2e44122fcce799624c5a0a2931e5899667eb9f11b8c",
+      "static_pickle_globals": [
+        "torch._utils _rebuild_tensor_v2",
+        "torch LongStorage",
+        "collections OrderedDict"
+      ],
+      "decode": "zipfile+pickletools static inspection, struct.unpack<48404q, item i=storage[4*i:4*i+4],12101unique legal rows",
+      "pickle_executed": false,
+      "reviewer_loaded_torch_or_model": false,
+      "source_not_copied_or_regenerated": true
+    },
+    "resource": {
+      "summary": {
+        "shared_authorized": true,
+        "physical_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "expected_peak_gib": 6,
+        "initial_reserve_gib": 8,
+        "runtime_free_floor_gib": 8,
+        "samples": 3,
+        "stop_reason": null,
+        "other_processes_signaled": false,
+        "own_worker_pid": 1510266
+      },
+      "observed_free_bytes_range": [
+        23329767424,
+        24100470784
+      ],
+      "foreign_PID1490665_used_bytes": [
+        1646264320,
+        1646264320,
+        1646264320
+      ],
+      "timestamps": [
+        "2026-10-15T07:02:51.365865+00:00",
+        "2026-10-15T07:03:01.474333+00:00",
+        "2026-10-15T07:03:02.166225+00:00"
+      ],
+      "RESULT": {
+        "status": "PASS",
+        "phase": "shuffle",
+        "engineering_only": true,
+        "formal_approved": false,
+        "elapsed_seconds": 140.77123280474916,
+        "peak_gpu_allocated_bytes": 311746048,
+        "peak_gpu_reserved_bytes": 322961408
+      },
+      "no_foreign_signals_in_management_source": true,
+      "no_zero_performance_interference_claim": true,
+      "prior_B_ended_before_A_started": true
+    },
+    "limitations": [
+      "Bounded31+32users only; formal full Beauty groups remain NOT_RUN. A/B conditions differ.",
+      "Partial-valid masks fail closed in inspected source, actual groups are complete; no new invalid-history support claim.",
+      "Real Trainer step exception cleanup tested, constructor-before-try errors not covered by that probe.",
+      "No attention collection or scientific attention signature.",
+      "Whole-stage B/Toys/Sports and publication have separate review requirements."
+    ]
+  },
+  "kind": "ENGINEERING_PREFLIGHT_REVIEW",
+  "route": "A",
+  "domain": "beauty",
+  "gate_scope": "A_ENGINEERING_PREFLIGHT_ONLY",
+  "plan_sha256": "4fd5be1a246521d8fe812d319839b41deefeb89ca0cd4f4c26d8716dcd0737b0",
+  "source_python_sha256": {
+    "GRID baseline/src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/components/clustering_initializers.py": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+    "GRID baseline/src/components/distance_functions.py": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+    "GRID baseline/src/components/eval_metrics.py": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+    "GRID baseline/src/components/loss_functions.py": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+    "GRID baseline/src/components/network_blocks/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/components/network_blocks/hf_language_model.py": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+    "GRID baseline/src/components/quantization_strategies.py": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+    "GRID baseline/src/components/scheduler.py": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+    "GRID baseline/src/components/training_loop_functions.py": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+    "GRID baseline/src/data/loading/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/data/loading/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/data/loading/components/collate_functions.py": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+    "GRID baseline/src/data/loading/components/custom_dataloader.py": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+    "GRID baseline/src/data/loading/components/dataloading.py": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+    "GRID baseline/src/data/loading/components/interfaces.py": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+    "GRID baseline/src/data/loading/components/iterators.py": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+    "GRID baseline/src/data/loading/components/label_function.py": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+    "GRID baseline/src/data/loading/components/pre_processing.py": "31f89a77b4881c1130f83e1572b25fe273de1e641855d6a199cd0b9a84984391",
+    "GRID baseline/src/data/loading/datamodules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/data/loading/datamodules/sequence_datamodule.py": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+    "GRID baseline/src/data/loading/utils.py": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+    "GRID baseline/src/inference.py": "b24358c9089bccfcc9384a3b3df894bf1dc94761f30dbbb26ba85d5245a500d2",
+    "GRID baseline/src/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/components/interfaces.py": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+    "GRID baseline/src/models/components/network_blocks/aggregation_strategy.py": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+    "GRID baseline/src/models/components/network_blocks/embedding_aggregator.py": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+    "GRID baseline/src/models/components/network_blocks/mlp.py": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+    "GRID baseline/src/models/components/network_blocks/normalize_layer.py": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+    "GRID baseline/src/models/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/modules/base_module.py": "029dc55aa499147c55a915c9523291c6b331076afb5cd7a18459968aaff16b73",
+    "GRID baseline/src/models/modules/clustering/base_clustering_module.py": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+    "GRID baseline/src/models/modules/clustering/mini_batch_kmeans.py": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+    "GRID baseline/src/models/modules/huggingface/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/modules/huggingface/transformer_base_module.py": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+    "GRID baseline/src/models/modules/semantic_id/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+    "GRID baseline/src/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/modules/clustering/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/modules/clustering/residual_quantization.py": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+    "GRID baseline/src/modules/clustering/vector_quantization.py": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+    "GRID baseline/src/modules/semantic_embedding_inference_module.py": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+    "GRID baseline/src/train.py": "7bf26a7cc027783b99cc7f81c37a9f237cfb504df76dcbc202072ba5fc9565d5",
+    "GRID baseline/src/utils/__init__.py": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+    "GRID baseline/src/utils/custom_hydra_resolvers.py": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+    "GRID baseline/src/utils/decorators.py": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+    "GRID baseline/src/utils/file_utils.py": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+    "GRID baseline/src/utils/inference_utils.py": "8a498d5fa77196b28ea9328cd7c31ccece241e24c0be1934fdee27abb299252a",
+    "GRID baseline/src/utils/instantiators.py": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+    "GRID baseline/src/utils/launcher_utils.py": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+    "GRID baseline/src/utils/logging_utils.py": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+    "GRID baseline/src/utils/masking_utils.py": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+    "GRID baseline/src/utils/pylogger.py": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+    "GRID baseline/src/utils/restart_job.py": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+    "GRID baseline/src/utils/restart_job_utils.py": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+    "GRID baseline/src/utils/rich_utils.py": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+    "GRID baseline/src/utils/tensor_utils.py": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+    "GRID baseline/src/utils/utils.py": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788",
+    "experiments/beauty_extensions/__init__.py": "537a1698c10f159802a56e0e8d153b53806ca62f7b7a8383242939fb2edd7c6f",
+    "experiments/beauty_extensions/attention/__init__.py": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+    "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+    "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+    "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+    "experiments/beauty_extensions/attention/selfcheck.py": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+    "experiments/beauty_extensions/author/__init__.py": "624d009dfbc652e17f3de47f768316c0eae386b67e6b87d83a1a8f4bc79ac457",
+    "experiments/beauty_extensions/author/bootstrap.py": "13b42af96b0a08bf8ac6636a1ff8bc7492e830692fedbd5b9890394eb6904c14",
+    "experiments/beauty_extensions/author/checks.py": "044c475be6cd40ca419b2da83a1b3d8851b1aa3a2c62760953064334d36be907",
+    "experiments/beauty_extensions/author/models.py": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4",
+    "experiments/beauty_extensions/authorization.py": "5291e37397f21f9ddb2b3e0c0844aa0176ccfdd046f9050249661fb088c2d6ee",
+    "experiments/beauty_extensions/baseline.py": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+    "experiments/beauty_extensions/bundle_delivery.py": "38051a0e7d0f0ea9efbdf9d73cb71dd2c3473b4d628cd92c9c746085894327a9",
+    "experiments/beauty_extensions/checkpoint_info.py": "79edf46d9526e5298aff3ca56c619e9c8e21f41f3718b19e11b534d6b081736c",
+    "experiments/beauty_extensions/cli.py": "1a7805c778d27f2f5f551398ba81679e036d0e2d4746650063226788e41b239a",
+    "experiments/beauty_extensions/collect_evidence.py": "5a1ddcd221a01d1af8ccb5bc7b2aff96761f216f588afef8399aba19a3d4fcd7",
+    "experiments/beauty_extensions/common.py": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+    "experiments/beauty_extensions/data_checks.py": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+    "experiments/beauty_extensions/deploy.py": "f9cf91d6798e171d7b641434766895333a59b675ccbfec3bf76326e108ced081",
+    "experiments/beauty_extensions/mlp_attention.py": "b53aa3832a693bdcfa015393799a320b10fa804d7f351cc029e690c1df95f9fa",
+    "experiments/beauty_extensions/mlp_execution.py": "e22e22710ccf664109b4b3142cbc26911325dcaea37e6459bdffdb37528f393a",
+    "experiments/beauty_extensions/mlp_formal.py": "ac362b84f7a9a979bb7549ce1f817448fe172b9d32adc1a449180f5aa97d9e56",
+    "experiments/beauty_extensions/monitor.py": "770376df0aeebb7ff2d5d727bdffd83c514ae54af0e983a88a5709f31c8d10b2",
+    "experiments/beauty_extensions/observation.py": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+    "experiments/beauty_extensions/plot_training.py": "154cb13087b9f95b8c85024ad7548cf3a00c7183bbba6afe030e080208d51fe0",
+    "experiments/beauty_extensions/restore_assets.py": "5c8f8c7ae6e34289b4814e553345014f1d4de5d016ae46e935a89d3c0f94bf3f",
+    "experiments/beauty_extensions/results.py": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+    "experiments/beauty_extensions/summarize_delivery.py": "dab21879249c3f66d63c6e9db6d6fa986ffddfff431be3e79c9215235ea6ff6f",
+    "experiments/beauty_extensions/training.py": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3",
+    "experiments/beauty_extensions/verify_saved_predictions.py": "b6587fcebdbd86e6f21dcb25ce2d11b3a5c71895fe6660b6238571ba482972d0",
+    "experiments/preflight_20261015/__init__.py": "3e6844d8f37f1cb69ff58e7800c646db95b80fbe5a9c70229575e70d5f289896",
+    "experiments/preflight_20261015/assets.py": "9a676809ae3673bac7ff48657d5777b3efca6104447892f7535809f4d8439538",
+    "experiments/preflight_20261015/bundle.py": "822abe1f1886f2dd1afbe6856d1834181c8be6905bba6039747ad095ece84dd5",
+    "experiments/preflight_20261015/candidates.py": "b20a0c28448c043b96bb9db74881025562f3c065d644ac1eba77f8893e33142b",
+    "experiments/preflight_20261015/collect.py": "de3c57d83b52b17b8dbb94066543f1930c3ddf8e34413d42124d346ec5984511",
+    "experiments/preflight_20261015/deploy.py": "50d21c8d0329c2b0cc664ddb06a60a8de0eb77537324d83404abfb0fb772488d",
+    "experiments/preflight_20261015/publish.py": "7c6d1c7b3068a76c0999e92394822c64726b5d800b6f445968201532d27e4977",
+    "experiments/preflight_20261015/resources.py": "40e260a298902752190d791470e8d927d782ad5c8e2f845a3517fc42526e0597",
+    "experiments/preflight_20261015/run.py": "8d715e3359b78f2c50b00fb48c3c6f9207437a5133750ee73916a2064698b370",
+    "references/wmh-original/GRID/src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/components/clustering_initializers.py": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+    "references/wmh-original/GRID/src/components/distance_functions.py": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+    "references/wmh-original/GRID/src/components/eval_metrics.py": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+    "references/wmh-original/GRID/src/components/loss_functions.py": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+    "references/wmh-original/GRID/src/components/network_blocks/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/components/network_blocks/hf_language_model.py": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+    "references/wmh-original/GRID/src/components/optimizer.py": "d641316bf995f824b10d2499143b73333ae9bb4dfab1587c7c13c25d8ea46050",
+    "references/wmh-original/GRID/src/components/quantization_strategies.py": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+    "references/wmh-original/GRID/src/components/scheduler.py": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+    "references/wmh-original/GRID/src/components/training_loop_functions.py": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+    "references/wmh-original/GRID/src/data/loading/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/data/loading/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/data/loading/components/collate_functions.py": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+    "references/wmh-original/GRID/src/data/loading/components/custom_dataloader.py": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+    "references/wmh-original/GRID/src/data/loading/components/dataloading.py": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+    "references/wmh-original/GRID/src/data/loading/components/interfaces.py": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+    "references/wmh-original/GRID/src/data/loading/components/iterators.py": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+    "references/wmh-original/GRID/src/data/loading/components/label_function.py": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+    "references/wmh-original/GRID/src/data/loading/components/pre_processing.py": "a69c88681760df22e37fb7e66961ad97ed0824af20eae415a543379e881d71c7",
+    "references/wmh-original/GRID/src/data/loading/datamodules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/data/loading/datamodules/sequence_datamodule.py": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+    "references/wmh-original/GRID/src/data/loading/utils.py": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+    "references/wmh-original/GRID/src/inference.py": "f24892ed2d9777c6fd5d3eaf20cc0ea3d180a19a490519baa7ca2390a70c05ba",
+    "references/wmh-original/GRID/src/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/components/interfaces.py": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+    "references/wmh-original/GRID/src/models/components/network_blocks/aggregation_strategy.py": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+    "references/wmh-original/GRID/src/models/components/network_blocks/embedding_aggregator.py": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+    "references/wmh-original/GRID/src/models/components/network_blocks/mlp.py": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+    "references/wmh-original/GRID/src/models/components/network_blocks/normalize_layer.py": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+    "references/wmh-original/GRID/src/models/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/modules/base_module.py": "7cfa9da5f73c0e666ab81f22440d04f04d6cc9624803de58cde3256dcae400b0",
+    "references/wmh-original/GRID/src/models/modules/clustering/base_clustering_module.py": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+    "references/wmh-original/GRID/src/models/modules/clustering/mini_batch_kmeans.py": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+    "references/wmh-original/GRID/src/models/modules/huggingface/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/modules/huggingface/transformer_base_module.py": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model.py": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py": "7561d2f494764a77efac1d71abff4ea15bc683eea0816c1e8fe067d7d5c78463",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_parallel.py": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+    "references/wmh-original/GRID/src/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/modules/clustering/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/modules/clustering/residual_quantization.py": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+    "references/wmh-original/GRID/src/modules/clustering/vector_quantization.py": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+    "references/wmh-original/GRID/src/modules/semantic_embedding_inference_module.py": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+    "references/wmh-original/GRID/src/test.py": "53f43b1c3e8c5549901aac4f8ee93eea92fc4123bc10439607de20f87be17d78",
+    "references/wmh-original/GRID/src/train.py": "f78680593ba465d0716aaf44239a730b5b449a227a0e957f67c0781e9a0fa4ea",
+    "references/wmh-original/GRID/src/utils/__init__.py": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+    "references/wmh-original/GRID/src/utils/custom_hydra_resolvers.py": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+    "references/wmh-original/GRID/src/utils/decorators.py": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+    "references/wmh-original/GRID/src/utils/file_utils.py": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+    "references/wmh-original/GRID/src/utils/inference_utils.py": "a3fa7e388713e38c5d67824b0a51eb9a9395695df46571c645845efbf183d7bf",
+    "references/wmh-original/GRID/src/utils/instantiators.py": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+    "references/wmh-original/GRID/src/utils/launcher_utils.py": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+    "references/wmh-original/GRID/src/utils/logging_utils.py": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+    "references/wmh-original/GRID/src/utils/masking_utils.py": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+    "references/wmh-original/GRID/src/utils/pylogger.py": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+    "references/wmh-original/GRID/src/utils/restart_job.py": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+    "references/wmh-original/GRID/src/utils/restart_job_utils.py": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+    "references/wmh-original/GRID/src/utils/rich_utils.py": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+    "references/wmh-original/GRID/src/utils/tensor_utils.py": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+    "references/wmh-original/GRID/src/utils/utils.py": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788"
+  },
+  "formal_approved": false,
+  "formal_gate_pending_user": true
+}

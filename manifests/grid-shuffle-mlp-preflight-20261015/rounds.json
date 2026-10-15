@@ -1,0 +1,49 @@
+{
+  "task_level_correction_rounds_used": 3,
+  "maximum": 3,
+  "round0": {
+    "job": "gsp-20261015-b-prepare-r0",
+    "failure": "FileExistsError: accepted runner already creates output; failed before model/import/forward",
+    "gpu_seconds": 0
+  },
+  "round1": {
+    "changes": [
+      "Respect runner-created output, retain invocation identity guard",
+      "Preserve original (loader,) training protocol per SequenceDataModule and TransformerBaseModule source",
+      "Complete A condition-specific sampler count/events and last small batch tracing; observer-only"
+    ]
+  },
+  "old_beauty_rounds_unchanged": true,
+  "round2": {
+    "job": "gsp-20261015-toys-resume-r1",
+    "failure": "Callback restore report JSON refused tensor -inf sentinel after nonrecursive tolist; before any extra optimizer update",
+    "change": "Recursively encode only callback state tensor.tolist to explicit nonfinite strings; exact state comparisons and finite model/gradient/loss assertions unchanged",
+    "affected_regression": "Independent Toys resume1, Sports resume1; prior scratch short/source/Shuffle checks unaffected",
+    "additional_optimizer_updates_in_failed_job": 0
+  },
+  "round3": {
+    "job_attempt": "gsp-20261015-toys-resume-r2",
+    "failure": "Runner rejected before accepting worker: same file-only snapshot reused an old source_commit DEPLOYMENT.json but request supplied newly constructed manifest SHA",
+    "change": "New snapshot identity binds source_commit plus exact file records; old snapshots/manifests untouched",
+    "affected_regression": "New deployment/request hash acceptance; independent Toys/Sports resumes; no prior model computation affected",
+    "gpu_seconds": 0,
+    "optimizer_updates": 0,
+    "continuation_validation": {
+      "fixed_code_commit": "59c42a213f2c3f4b90d0c069d4d3b98a2d8a398b",
+      "pure_file_manifest_closure": "PASS; round3-file-identity-validation.json",
+      "rejected_request_preserved": "gsp-20261015-toys-resume-r2",
+      "next_validation_attempt": "gsp-20261015-toys-resume-r3",
+      "reason_for_distinct_attempt": "r2 has immutable local/remote rejected request with old manifest SHA; preserve it after proving no accepted worker. New request uses new identity-bound snapshot; no new code repair.",
+      "status": "PASS",
+      "accepted_validation_jobs": [
+        "gsp-20261015-toys-resume-r3",
+        "gsp-20261015-sports-resume-r1"
+      ],
+      "gpu_jobs_added": 2,
+      "subsequent_delivery_only_changes": [
+        "finalize terminal evidence and current experiment descriptions",
+        "include required raw receipts/source references in review ZIP"
+      ]
+    }
+  }
+}

@@ -1,0 +1,1661 @@
+{
+  "schema": "grid-shuffle-mlp-preflight-20261015/shuffle-b-review-v1",
+  "stage": "grid-shuffle-mlp-preflight-20261015",
+  "reviewer": "/root/author_adapters",
+  "role": "I: independent B failure/root-cause, algorithm and lifecycle review",
+  "review_date": "2026-10-15",
+  "status": "PREFLIGHT_GATE_PASS",
+  "PREFLIGHT_GATE_PASS": true,
+  "FORMAL_RUN_AUTHORIZED": false,
+  "engineering_only": true,
+  "independence": "Reviewer did not author B, cli/common or this stage's repair. Reviewer authored historical A/MLP adapters and does not sign A.",
+  "authorization": {
+    "prompt": "/home/addaswsw/recommend/GRID_Shuffle_AB_MLP_Toys_Sports_Preflight_Codex_20261015.txt",
+    "sha256": "7b2c643045bc611faea3fded4e654a9dae023b9cf4faade68ed6bba29b925c5e",
+    "scope": "Read-only B review, bounded new preflight receipts; no formal evaluation/training/attention32, no remote work or downloads by reviewer, no modification of old Beauty reports.",
+    "rules_explicitly_read_from": "/home/addaswsw/recommend/{AGENTS.md,PROJECT_RULES.md,REMOTE_EXECUTION.md} v1.1",
+    "new_stage_round": "round 0; stage allows at most three concentrated repairs, without changing prior exhausted-round Beauty status"
+  },
+  "original_failure": {
+    "job_id": "beauty-b-smoke-r3",
+    "status": "FAILED",
+    "exit_code": 1,
+    "cleanup_verified": true,
+    "original_code_base_commit": "5ed4e701c41d977e24c4c89db0ae1025f9faf701",
+    "original_snapshot_sha256": "69293b6ec990954c8c350da492104f13230df1c3f5d2ae85c8b499b6be37797e",
+    "latest_prior_Beauty_delivery_anchor": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+    "local_original_byte_excerpts": [
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/prior-failure/work.log",
+        "bytes": 10468,
+        "sha256": "e05926f75d970d279dab6a009e52e64c3db1bed7996e4ef09f4bfb4bb7d2eccd"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/prior-failure/request.json",
+        "bytes": 1434,
+        "sha256": "542fb5e6c5530a4fb68d74535495976a4b5b5fbaefe15d84aadde535036af090"
+      },
+      {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/prior-failure/status.json",
+        "bytes": 5421,
+        "sha256": "50bf92ae97872f09820f3d4d1601fe60582c45bf32a575e7734293801ec44af9"
+      }
+    ],
+    "original_trace_lines": "work.log:47-72, repeated at 73-102",
+    "failing_call_path": [
+      "cli.main -> smoke",
+      "cli.smoke:277 -> model.generate(**args), after all three Trainer.test calls",
+      "baseline.BaselineShuffleModel.generate -> original SemanticIDEncoderDecoder.generate:755",
+      "BaselineShuffleModel.encoder_forward_pass -> original encoder_forward_pass:607",
+      "get_embedding_table('encoder')(shifted_sids)",
+      "torch.nn.Embedding.forward -> F.embedding -> torch.embedding -> wrapper_CUDA__index_select"
+    ],
+    "actual_error": "Expected all tensors to be on the same device; cpu and cuda:0; argument index in wrapper_CUDA__index_select",
+    "physical_to_logical_GPU": "CUDA_VISIBLE_DEVICES=GPU-59cac3bd-3645-668b-79c8-839e0d878893; input device in failing operation cuda:0",
+    "completed_before_failure": "Three bounded Trainer.test calls printed normal metric tables; existing records have 19 rows each. Their input batches came from old check_data make_loader(cfg,'val',limit_rows=19), not a full or actual testing-split evaluation.",
+    "old_state_is_immutable": "Old FAILED exit1 and prior overall PARTIAL_BLOCKED are preserved; this new stage cannot retroactively turn them into PASS."
+  },
+  "causal_reconstruction": {
+    "actual_source_facts": [
+      "smoke moves the model to cuda:0, recursively moves a first real batch to cuda:0, and constructs args once before the test loop.",
+      "The same model instance is passed to three separate Trainers in test_lifecycle; no post-test model/input device alignment is performed by that function.",
+      "The final args references remain the original CUDA tensors. Offset arange is explicitly created on input_sids.device, so shifted SID indices retain cuda:0.",
+      "The failed embedding operation is before the B lookup forward_hook runs; normal on_validation_start also clears is_testing.",
+      "generate invokes its encoder before creating its fresh local EncoderDecoderCache, so this particular exception cannot originate from an old decoder KV cache.",
+      "clear_runtime restores the testing flag and evaluator wrapper but does not restore model device.",
+      "The original model on_test_end sets inner encoder/decoder back to training mode. The old tail's model.eval plus on_validation_start restores inference mode; it does not migrate parameters."
+    ],
+    "root_cause_from_trace_and_dataflow": "A model/parameter device lifecycle boundary was crossed by Trainer.test while retained manual-generation inputs stayed on cuda:0. The embedding index is CUDA from explicit dataflow; its weight is therefore the CPU counterpart in the failing lookup. Most likely transition is Lightning strategy teardown moving the attached model to CPU.",
+    "remaining_causal_evidence": "New preflight must record actual module/parameter/argument devices immediately before and after Trainer.test, and capture the installed Lightning teardown source/module identity. This review has not remotely loaded the framework or inferred its exact version from memory.",
+    "ruled_out_for_this_failure": [
+      "Shuffle native function execution",
+      "Decoder KV cache creation/reordering",
+      "Evaluator metric computation",
+      "Any failure within the three completed Trainer.test model loops"
+    ]
+  },
+  "recommended_minimal_repair": {
+    "scope": "Post-Trainer device/object lifecycle at the auxiliary validation boundary",
+    "preferred": "Explicitly restore the existing model to the originally selected target device, set eval and normal-validation state, then construct fresh model arguments from an unchanged original batch on that same device before manual generation.",
+    "rationale": "Preserves the trained instance, parameter values, shared-table identity, intended CUDA precision/dispatch and RNG. Avoids constructor initialization or changing evaluation computation.",
+    "required_proof": [
+      "Parameter key/shape/value hash unchanged across migration",
+      "Encoder and decoder return the same SID table object before/after",
+      "Parameter/args/mask/user device alignment",
+      "No RNG advance by migration alone",
+      "Original tail checks executed instead of deleted"
+    ],
+    "alternatives_not_required": [
+      "A new random model instance would add initialization/RNG/state risks",
+      "Running this tail on CPU would change numerical dispatch against the stored CUDA reference",
+      "torch.cuda.empty_cache is allocator cleanup and does not repair device or logical KV-cache contracts"
+    ],
+    "author_choice": "Main agent owns implementation; this reviewer has not applied a patch."
+  },
+  "B_algorithm_review": {
+    "native_source_sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+    "same_model_condition": "Qwen/R-Kmeans Beauty working shared-table checkpoint step12500; separate from A's T5/R-Kmeans dual-table model",
+    "source_semantics": [
+      "Original offset and shared SID lookup run first; hook is active only within encoder_forward_pass before SEP/user insertion.",
+      "The same embedding table's decoder calls see _encoder_mask=None and are not permuted.",
+      "OFF returns the original lookup output before any random draw; counters alone do not change parameters or scores.",
+      "Original unbound function samples torch.rand[B,M,N].argsort(2) per call, including padding groups; valid-item vectors are rearranged and padding groups remain unchanged.",
+      "Trace uses a local Generator copied from global pre-call RNG; it must not consume extra global random draws.",
+      "Original native method mutates its fresh embedding lookup output through reshape; this does not mutate SID integer inputs or embedding weights. Each condition must use an independent untouched input batch.",
+      "Complete-group validation prevents the original helper's unsupported partial-group behavior from being mistaken for a successful shuffle.",
+      "Normal loss and generation use separate encoder calls; shuffled loss/generation must retain separate sampling rather than sharing an encoder result."
+    ],
+    "evaluator": "Original full H4 SID match, score-ranked Recall/NDCG@5,@10, no additional filtering/completion/rescoring. Preserve existing CPU target allocation/metric transfer semantics unless separately justified.",
+    "cache_source": "generate creates a new local EncoderDecoderCache each call and resets the hierarchy-zero cache after beam expansion. Real repeat/order/batch-roundtrip checks remain required.",
+    "numerical_boundary": "Prior approximately 3e-5 cross-batch score drift is not to be removed by changing precision/cache or widening tolerance. Require original/adapter equality at corresponding shapes and batch-size roundtrip; preserve exact observed drift and ties as diagnostics."
+  },
+  "new_stage_required_checks": [
+    {
+      "item": "Fresh strict checkpoint/SID/config/import identity",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    },
+    {
+      "item": "OFF original/adapter hidden, head logits, loss, SID, scores and original evaluator at same shape; no Shuffle RNG",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    },
+    {
+      "item": "Repeat generation, order permutation, B8->B1->B8 cache and original-model shape drift diagnosis",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    },
+    {
+      "item": "Known vector replay plus actual N3/N4 per-occurrence permutations; fourth-code/pad/vector multiset/label/SEP/user invariants",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    },
+    {
+      "item": "Normal/Shuffle3/Shuffle4 actual Trainer.test on bounded testing-split records including long history, padding, short final batch and exact keys",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    },
+    {
+      "item": "Every test's before/after device/model mode and installed framework teardown identity",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    },
+    {
+      "item": "Tail normal-validation/manual generate after device restoration, repeated cold process and same-instance calls",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    },
+    {
+      "item": "True deliberate Trainer exception callback/finally cleanup, then successful same-instance normal generation/validation; no unexpected exception swallowed",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    },
+    {
+      "item": "Train and ordinary validation remain Shuffle OFF; allow ordinary training Dropout RNG and inspect actual shuffle call count instead",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    },
+    {
+      "item": "Formal candidate spec has formal_approved=false, no effective authorization token; bounded path shares actual evaluation core",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    },
+    {
+      "item": "Engineering metrics/predictions finite and independently checked; no formal/full-data/attention32 run",
+      "status": "PASS_AT_AFBD233_BCBA_BOUNDED_PREFLIGHT",
+      "binding": "real_B_shared_gpu_round1_review"
+    }
+  ],
+  "source_identity_at_initial_read": [
+    {
+      "path": "experiments/beauty_extensions/cli.py",
+      "sha256": "b4acb37888a0b365b055abd99da5158a962a747f8eb8c0dfd0571bd8c303cc9f"
+    },
+    {
+      "path": "experiments/beauty_extensions/baseline.py",
+      "sha256": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce"
+    },
+    {
+      "path": "experiments/beauty_extensions/common.py",
+      "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91"
+    },
+    {
+      "path": "GRID baseline/src/models/modules/base_module.py",
+      "sha256": "029dc55aa499147c55a915c9523291c6b331076afb5cd7a18459968aaff16b73"
+    },
+    {
+      "path": "GRID baseline/src/models/modules/huggingface/transformer_base_module.py",
+      "sha256": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5"
+    },
+    {
+      "path": "GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py",
+      "sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e"
+    },
+    {
+      "path": "GRID baseline/src/components/eval_metrics.py",
+      "sha256": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80"
+    }
+  ],
+  "new_preflight_jobs": [
+    {
+      "job_id": "gsp-20261015-b-prepare-r1",
+      "status": "SUCCEEDED",
+      "review_scope": "CPU_PREPARATION_PASS_ONLY",
+      "snapshot_sha256": "c8cf51405fd5140b0cf10f78f745e1a9f42eae34c69f7073e218e8a26af91f4e",
+      "PREFLIGHT_GATE_PASS": false
+    },
+    {
+      "job_id": "gsp-20261015-b-prepare-long-r1",
+      "status": "SUCCEEDED",
+      "review_scope": "CPU_PREPARATION_PASS_ONLY",
+      "snapshot_sha256": "f7002a85350880be3b74d986d6fe5592244c43f1aba016a63d6ffa7d3b0d4417",
+      "PREFLIGHT_GATE_PASS": false
+    },
+    {
+      "job_id": "gsp-20261015-b-shared-r1",
+      "status": "SUCCEEDED",
+      "source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+      "snapshot_sha256": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+      "review_scope": "REAL_B_BOUNDED_CUDA_PREFLIGHT_PASS",
+      "PREFLIGHT_GATE_PASS": true,
+      "exit_code": 0,
+      "cleanup_verified": true
+    }
+  ],
+  "reviewer_actions": {
+    "remote_jobs_started": 0,
+    "GPU_model_runs": 0,
+    "downloads": 0,
+    "code_or_spec_changes": 0,
+    "Git_operations": 0,
+    "dependencies_installed": []
+  },
+  "disposition": "B bounded engineering preflight independently passes at actual afbd233/bcba and paired Qwen/R-Kmeans checkpoint, including former failed device boundary and genuine exception recovery. Gate grants no formal run and no claim for A. Original shared cross-batch score drift, old Beauty FAILED/PARTIAL and new-stage mkdir FAILED remain explicit historical evidence.",
+  "static_repair_review_round0": {
+    "status": "STATIC_READ_WITH_TARGETED_FEEDBACK_PENDING_AUTHOR_FREEZE_AND_REAL_RUN",
+    "reviewed_date": "2026-10-15",
+    "reviewed_source_snapshots": [
+      {
+        "path": "experiments/beauty_extensions/cli.py",
+        "sha256": "e227260ea0a0a241accdafc5ed4eae6d52c0131a9a38defd15c95008914c5809",
+        "bytes": 23141
+      },
+      {
+        "path": "experiments/preflight_20261015/run.py",
+        "sha256": "36508f3061295b70fcb46ae04fed9cedb50a968d1f228dd71c7dd70294c05d14",
+        "bytes": 23588
+      },
+      {
+        "path": "experiments/preflight_20261015/deploy.py",
+        "sha256": "f5ee92c1b5442ac447a87ca6929129e50cc05f247f5706bc82f483558624c1e1",
+        "bytes": 6730
+      }
+    ],
+    "source_snapshot_limit": "These are intermediate bytes read before the author consolidated all reviewers' static feedback, not a final deployment or GPU preflight claim.",
+    "verified_static_changes": [
+      "cli restores the same trained model to its original CUDA device, restores eval/validation mode and rebuilds arguments from untouched batches before the old failing post-test generate.",
+      "Each test condition clears its own trace list before execution and records per-condition count deltas instead of presenting a cumulative trace as new sampling.",
+      "test_lifecycle accepts injected callbacks only when explicit bounded batches are supplied; unexpected BaseException is recorded and rethrown, cleanup is persisted in finally, and metrics success is written only after successful test completion.",
+      "Stage shuffle reads testing-split 19 rows and evaluation-split 11 rows, with real original loader/collate; it does not invoke old main's full metadata scan or fixed32 attention path.",
+      "Fault callback raises a dedicated InjectedPreflightError after one real test batch; the caller catches only that exact class, requires actual on_exception callback evidence, restores the evaluator and runtime state, then compares same-instance normal generation and bounded validation.",
+      "State/input digests require all model state tensors and integer inputs/labels to remain unchanged throughout evaluation.",
+      "The stage parser has only prepare/shuffle/mlp-short/mlp-resume; formal_approved must be explicit false and approval tokens are rejected.",
+      "Deployment chooses one explicit physical GPU only after checking live compute processes; CPU prepare hides CUDA. Busy yychen cards cannot be used by this submission path."
+    ],
+    "installed_framework_evidence": {
+      "remote_precheck": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/remote-precheck.json",
+        "sha256": "da8b5578ea9dcd0cd5097ebdad293ff777102035c1db2416ebf450f5de8deed6"
+      },
+      "source_capture": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/framework-lifecycle-source.txt",
+        "sha256": "f8d8fd37b1c19fb9b2fea8cea8aca31e066d4b4d8f096eb6cc2c3e189a988360"
+      },
+      "strategy_source_sha256": "5f3a8ef94dfb07dc7f8debc2523b52720fe98e346cc75004f0ccf254fe8fdda9",
+      "trainer_source_sha256": "58b2ffc1661c678991610d8effd193372d8d6cf64f1529a01816b4523829c4a5",
+      "exception_call_source_sha256": "22c584d3c8b3d595414948218b3cdca07288a97e05084efe8feded81da73b79b",
+      "source_body_conclusion": "Trainer._teardown calls Strategy.teardown, which calls lightning_module.cpu(). The interrupt path dispatches callback on_exception before teardown and rethrows unexpected exceptions; it does not dispatch the user model's custom on_exception hook.",
+      "provenance_to_verify": "The capture names lib/python3.1/site-packages while the original traceback names lib/python3.10/site-packages. Require actual grid interpreter import __file__/resolved-path evidence or a verified alias before attributing this AST capture to the imported framework. Exact before/after runtime device receipts are still required."
+    },
+    "targeted_feedback_to_author": [
+      {
+        "id": "B_SHUFFLE_ROLE_COUNTS",
+        "priority": "acceptance coverage",
+        "finding": "Stage asserted encoder loss/generate deltas but did not yet assert B shuffle_role_counts delta per condition.",
+        "requested": "N0 shuffle delta zero; N3/N4 loss and generate each equal real batch count; preserve raw per-occurrence traces."
+      },
+      {
+        "id": "TRAIN_AND_VALIDATION_OFF",
+        "priority": "acceptance coverage",
+        "finding": "Normal validation checks is_testing=False, but Shuffle sampler counts across validation and actual train-hook/forward phase were not recorded.",
+        "requested": "Record no sampler-count increase for ordinary validation and a single bounded train-mode forward after real train hook; allow ordinary Dropout RNG changes, then restore eval/OFF."
+      },
+      {
+        "id": "FAULT_CALLBACK_STATE",
+        "priority": "review actual receipt",
+        "finding": "Fault appends flag_after_cleanup_callback, while the enclosing function checks final flags after finally cleanup.",
+        "requested": "Review the actual callback receipt as false, not only the final flag; do not mark unexpected exceptions as expected."
+      },
+      {
+        "id": "MLP_LOADER_CONTRACT_SHARED_ENTRY",
+        "priority": "forwarded to MLP reviewer",
+        "finding": "Intermediate mlp_check passed a bare training DataLoader, but preserved TransformerBase.training_step unwraps batch[0].",
+        "requested": "Use the original equivalent tuple-of-loaders contract; this is outside B admission and must be reviewed by the MLP nonauthor."
+      }
+    ],
+    "research_computation_changes_observed": "None in B baseline, original model, native shuffle, offsets, labels, beam/scoring, evaluator or precision. Only cli lifecycle/trace instrumentation and independent bounded orchestration were reviewed.",
+    "outstanding": "Author final static bytes and actual new CPU/GPU preflight evidence have not yet been admitted. No static review is a real preflight PASS."
+  },
+  "static_repair_review_round1": {
+    "status": "STATIC_REVIEW_COMPLETE_REAL_PREFLIGHT_PENDING",
+    "round": 1,
+    "freeze_manifest": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/round1-source-freeze.json",
+      "sha256": "03e4686b2f9d19f21ce4fbee7c12f2089b3175915d1418140da73f79b03a6d3e",
+      "members": 20,
+      "all_members_byte_size_sha256_verified": true,
+      "Python_AST": "PASS"
+    },
+    "source_files": [
+      {
+        "path": "experiments/beauty_extensions/cli.py",
+        "sha256": "86412beb24b9ce8d8797828ee953529242357eef8be4d1ed76f0b806f574028d",
+        "bytes": 23339
+      },
+      {
+        "path": "experiments/beauty_extensions/authorization.py",
+        "sha256": "52a4f31575af35739bbfc84f05ce4e2cb9d343f7ed1fa0d64377f892dc26a581",
+        "bytes": 2302
+      },
+      {
+        "path": "experiments/preflight_20261015/__init__.py",
+        "sha256": "3e6844d8f37f1cb69ff58e7800c646db95b80fbe5a9c70229575e70d5f289896",
+        "bytes": 79
+      },
+      {
+        "path": "experiments/preflight_20261015/__pycache__/__init__.cpython-312.pyc",
+        "sha256": "914538d964c8bd0bd2cf3a0fd54e80c1b89cdcf939bcbfe1e0e3fbf1440b3caf",
+        "bytes": 279
+      },
+      {
+        "path": "experiments/preflight_20261015/__pycache__/run.cpython-312.pyc",
+        "sha256": "b6b0df6fc1ea96744a8a3a7a1ec81003e082bdfda9ce7492a2607ddfcd958520",
+        "bytes": 38824
+      },
+      {
+        "path": "experiments/preflight_20261015/asset-sources.json",
+        "sha256": "fcf3e6de37255897a8d8c6cc4ea3cd3254dfcc5ab14c320ee84ed4c249c9e207",
+        "bytes": 1625
+      },
+      {
+        "path": "experiments/preflight_20261015/assets.py",
+        "sha256": "9a676809ae3673bac7ff48657d5777b3efca6104447892f7535809f4d8439538",
+        "bytes": 2397
+      },
+      {
+        "path": "experiments/preflight_20261015/candidates.py",
+        "sha256": "4b843535ab9ece7b9eea2a9f3e8c25ff785aa62b8f0e53f2c9305885624482e7",
+        "bytes": 2577
+      },
+      {
+        "path": "experiments/preflight_20261015/deploy.py",
+        "sha256": "f5ee92c1b5442ac447a87ca6929129e50cc05f247f5706bc82f483558624c1e1",
+        "bytes": 6730
+      },
+      {
+        "path": "experiments/preflight_20261015/historical/sports-engineering-base.yaml",
+        "sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24",
+        "bytes": 12170
+      },
+      {
+        "path": "experiments/preflight_20261015/historical/toys-source.yaml",
+        "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd",
+        "bytes": 12183
+      },
+      {
+        "path": "experiments/preflight_20261015/run.py",
+        "sha256": "e3f9ce12abf51edd621e764bd1151dea99849f21a448b41245f61688bc152171",
+        "bytes": 30594
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/beauty-a-candidate.json",
+        "sha256": "ee447a68c4c998ba7e389e8593b8c5883d4b253609a76ae2deaa9d5cade4cba0",
+        "bytes": 1240
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/beauty-a.json",
+        "sha256": "f69a9dfb48080f24d3a2d9c9a061ff8a5541a7ec414c764b33290f3eeeaf39ac",
+        "bytes": 1467
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/beauty-b-candidate.json",
+        "sha256": "669859e52242149a28f1041d27b58ed10e27fbf8a7bd68896497e9c3c2be40e3",
+        "bytes": 1169
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/beauty-b.json",
+        "sha256": "9ce938633868d01868f90c20f728f2254bdc8e0e9a08a4d2743723c918d51a0a",
+        "bytes": 1411
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/sports-mlp-candidate.json",
+        "sha256": "83ed4e3dca177d282b9d5816e76cb14c7ed0ea00ea557482703a9c46d47c855e",
+        "bytes": 1196
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/sports-mlp.json",
+        "sha256": "e41d3212554b0869f9370307de28a680ee36c168d5cd181a15bedc4fff9cf2a3",
+        "bytes": 1418
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/toys-mlp-candidate.json",
+        "sha256": "383de1d3c8d7dce45f41933f636c9bfc8fd61c2f74badd76cddcaeeed9e2ae90",
+        "bytes": 1241
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/toys-mlp.json",
+        "sha256": "5be546e44ee8a7437e2a4d77b0996db0981776aa7d9fa60c2cc94351aaf354a3",
+        "bytes": 1463
+      }
+    ],
+    "source_manifest_note": "The freeze inventory includes two local __pycache__ .pyc members. The deployment builder excludes __pycache__ and uses source .py/.json/.yaml; these binary inventory entries are not claimed to be executed/deployed research source.",
+    "B_static_closures": [
+      {
+        "item": "N0/N3/N4 real sampler role coverage",
+        "evidence": "shuffle_check asserts B shuffle_role_counts delta(loss,generate)=(0,0) for Normal and=(number of actual test batches,number of actual test batches) for N3/N4",
+        "status": "IMPLEMENTED_PENDING_REAL_EVIDENCE"
+      },
+      {
+        "item": "Ordinary validation stays OFF",
+        "evidence": "ordinary_validation snapshots sampler_count, asserts each on_validation_batch_start is_testing=False, writes shuffle_call_delta and asserts exactly zero",
+        "status": "IMPLEMENTED_PENDING_REAL_EVIDENCE"
+      },
+      {
+        "item": "Training phase stays OFF",
+        "evidence": "Same model train()+on_train_start(), one real bounded test-batch model_step under no_grad, finite loss/zero Shuffle-call delta, zero optimizer updates, then eval()+on_validation_start()",
+        "status": "IMPLEMENTED_PENDING_REAL_EVIDENCE",
+        "limit": "This probes training mode/hook semantics only; it is not training-loader coverage, weight training or a research score."
+      },
+      {
+        "item": "Post-test device/mode repair",
+        "evidence": "Same trained model moved to requested cuda:0, eval and normal-validation hook set, unchanged input batch recursively moved and arguments rebuilt before retained old tail comparison",
+        "status": "IMPLEMENTED_PENDING_REAL_EVIDENCE"
+      },
+      {
+        "item": "True Trainer exception path",
+        "evidence": "Dedicated injected exception after one real test batch; only this class caught; callback events, cleanup receipt, restored evaluator/flags, same-instance OFF generation and bounded validation required",
+        "status": "IMPLEMENTED_PENDING_REAL_EVIDENCE",
+        "limit": "Final review must independently inspect actual flag_after_cleanup_callback=false; current code records this field but final assertion alone is not the callback evidence."
+      }
+    ],
+    "framework_provenance": {
+      "installed_310_record": {
+        "record_path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/installed-checkpoint-source.json",
+        "record_sha256": "77ca59472087e9fa98801625f1b0cf60e2402f944b4ce53536b93782a27004da",
+        "source": {
+          "path": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py",
+          "resolved": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py",
+          "sha256": "5f3a8ef94dfb07dc7f8debc2523b52720fe98e346cc75004f0ccf254fe8fdda9",
+          "methods": [
+            "def teardown(self) -> None:\n        \"\"\"This method is called to teardown the training process.\n\n        It is the right place to release memory and free other resources.\n\n        \"\"\"\n        _optimizers_to_device(self.optimizers, torch.device(\"cpu\"))\n\n        if self.lightning_module is not None:\n            log.debug(f\"{self.__class__.__name__}: moving model to CPU\")\n            self.lightning_module.cpu()\n        self.precision_plugin.teardown()\n        assert self.accelerator is not None\n        self.accelerator.teardown()\n        self.checkpoint_io.teardown()"
+          ]
+        }
+      },
+      "capture_310_and_previous_31_content_sha256_equal": true,
+      "conclusion": "The new explicit Python3.10 strategy read contains the same .cpu() teardown body/hash as the prior AST capture. New run environment additionally records inspect-derived actual framework file, resolved path and content hash; those runtime receipts remain pending.",
+      "no_framework_upgrade_or_patch_claim": true
+    },
+    "candidate_guard_negative_checks": {
+      "checks": [
+        {
+          "candidate": "beauty-a",
+          "candidate_sha256": "ee447a68c4c998ba7e389e8593b8c5883d4b253609a76ae2deaa9d5cade4cba0",
+          "rejection": "FORMAL_NOT_AUTHORIZED: explicit new user authorization required"
+        },
+        {
+          "candidate": "beauty-b",
+          "candidate_sha256": "669859e52242149a28f1041d27b58ed10e27fbf8a7bd68896497e9c3c2be40e3",
+          "rejection": "FORMAL_NOT_AUTHORIZED: explicit new user authorization required"
+        },
+        {
+          "candidate": "toys-mlp",
+          "candidate_sha256": "383de1d3c8d7dce45f41933f636c9bfc8fd61c2f74badd76cddcaeeed9e2ae90",
+          "rejection": "FORMAL_NOT_AUTHORIZED: explicit new user authorization required"
+        },
+        {
+          "candidate": "sports-mlp",
+          "candidate_sha256": "83ed4e3dca177d282b9d5816e76cb14c7ed0ea00ea557482703a9c46d47c855e",
+          "rejection": "FORMAL_NOT_AUTHORIZED: explicit new user authorization required"
+        }
+      ],
+      "scope": "Actual pure-CPU calls to require_formal_gate on the four on-disk false candidate specs; no valid/authorized gate created, no formal CLI handler invoked.",
+      "torch_transformers_lightning_src_not_imported": true,
+      "saved_author_receipt": "manifests/grid-shuffle-mlp-preflight-20261015/candidate-checks.json",
+      "saved_author_receipt_sha256": "b71b91d7cefe7e775431bd6cb9b3dc22017598e5e4e178dabf2eaed19f3abf93",
+      "B_CLI_early_guard_verified": "cli.main dispatches require_formal_gate for formal A/B before output creation, bind_source and instantiate.",
+      "MLP_scope_limit": "The new early CLI guard is scoped to A/B. The MLP candidate rejection check is the standalone validator and does not claim an implemented/admitted formal Toys/Sports training handler.",
+      "no_formal_authorization_token_emitted": true
+    },
+    "future_formal_gate_static_limit": {
+      "affected_source": "experiments/beauty_extensions/authorization.py at SHA52a4f31575af35739bbfc84f05ce4e2cb9d343f7ed1fa0d64377f892dc26a581",
+      "current_false_candidate_guard": "FAIL_CLOSED_CONFIRMED",
+      "independent_source_binding": "NEEDS_TIGHTENING_OR_EXPLICIT_FUTURE_LIMIT",
+      "finding": "The future authorized gate binds its own source_python_sha256 to deployment/current bytes, but the referenced independent_review is checked only for PREFLIGHT_GATE_PASS and plan_sha256. An old-source report for the same plan could therefore be referenced by a newly filled gate's updated code map without a validator error.",
+      "recommended": "Before ever admitting a valid formal gate, also require the independent report's source_python_sha256 (or equivalent reviewed deployment identity) to match the same current code map. This stage must still emit no active authorization.",
+      "scope": "This does not unblock or execute any formal task and does not prevent bounded engineering preflight from running. Negative false-spec checks do not constitute positive-path gate validation."
+    },
+    "engineering_gate": false,
+    "real_GPU_preflight": "NOT_YET_RUN/NOT_REVIEWED",
+    "current_external_resource_condition": "Parent reports both physical GPUs occupied by yychen; current stage performs CPU preparation and must not preempt those jobs.",
+    "reviewer_GPU_runs": 0,
+    "reviewer_source_spec_Git_changes": 0
+  },
+  "round1_preexecution_addendum_a71ba06_55fd80d": {
+    "status": "STATIC_REVIEW_PASS_FOR_B_PENDING_NEW_GPU_LIFECYCLE",
+    "author_reported_commit": "55fd80da1c56f5f70e3b19be578c758734f6c9c6",
+    "commit_verification_limit": "Author-reported local commit; reviewer performed no Git operations. Conclusions bind the exact current file bytes below, not an independently fetched Git ref.",
+    "sources": [
+      {
+        "path": "experiments/beauty_extensions/cli.py",
+        "bytes": 24348,
+        "sha256": "8cda941564321bab44aa698f5342296c2eae11bc1104a57d06177c9795af25af"
+      },
+      {
+        "path": "experiments/beauty_extensions/authorization.py",
+        "bytes": 2434,
+        "sha256": "5291e37397f21f9ddb2b3e0c0844aa0176ccfdd046f9050249661fb088c2d6ee"
+      },
+      {
+        "path": "experiments/beauty_extensions/baseline.py",
+        "bytes": 7160,
+        "sha256": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce"
+      },
+      {
+        "path": "experiments/beauty_extensions/common.py",
+        "bytes": 12084,
+        "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91"
+      },
+      {
+        "path": "experiments/preflight_20261015/run.py",
+        "bytes": 33610,
+        "sha256": "55890b1c908158fc7d25ad83689f3c7d48732098a009f34dd58a205d566a1355"
+      },
+      {
+        "path": "experiments/preflight_20261015/deploy.py",
+        "bytes": 6730,
+        "sha256": "f5ee92c1b5442ac447a87ca6929129e50cc05f247f5706bc82f483558624c1e1"
+      },
+      {
+        "path": "experiments/preflight_20261015/specs/beauty-b.json",
+        "bytes": 2226,
+        "sha256": "1820025194308d4e17a24e1fad73e35e5a2cce1fdd6c484ad8f434261be7d88f"
+      }
+    ],
+    "comparison": "Independently compared current cli.py, authorization.py and run.py to original bytes in snapshot-43aefff0f79f832f.tar.gz using a read-only archive/diff; baseline.py/common.py hashes remain unchanged.",
+    "closed_static_findings": [
+      {
+        "item": "Independent report code binding",
+        "observation": "require_formal_gate now requires independent report.source_python_sha256 == the entire deployed Python hash map. This closes the missing-code-binding finding for the earlier 52a4f315 authorization.py; earlier historical finding is retained as its original snapshot conclusion."
+      },
+      {
+        "item": "Fixed long-history coverage",
+        "observation": "First 31 testing rows are selected before predictions: four batches 8/8/8/7. expected_long_history_case is checked once by opaque raw identity and exactly 80 valid input tokens for 20 visible items. The reference A metadata supplies sample identity/length only; B still builds its own target using its Qwen/R-Kmeans SID. It does not transplant A target SID."
+      },
+      {
+        "item": "Raw permutation coverage",
+        "observation": "trace_limit/permutation_trace_limit are both 2 * len(test_batches), so the four-batch three-condition probe can retain all eight loss/generate encoder sampling records per shuffled condition."
+      },
+      {
+        "item": "Actual device/dtype evidence",
+        "observation": "test_lifecycle now writes input device/dtype and all parameter devices/dtypes for each actual Trainer test batch, then parameter device after teardown. Mode/RNG/cache assertions in smoke and the actual exception path remain in place."
+      },
+      {
+        "item": "Bounded source worker path",
+        "observation": "An explicit bounded_datamodule path requires integer limit_test_batches 1..4, preserves source num_workers/timeout, and marks metrics engineering-only. B source workers=0 means no extra worker job; A worker behavior belongs to another nonauthor reviewer."
+      },
+      {
+        "item": "Honest checkpoint claim",
+        "observation": "Shared test_lifecycle no longer labels every MLP caller strictly loaded. It records caller-owned model and points to loading.json/strict_restore.json, with Trainer.test ckpt_path=None."
+      },
+      {
+        "item": "Second GPU conflict check",
+        "observation": "run checks the selected physical UUID against live nvidia-smi compute processes before model placement; any other process raises RESOURCE_CONFLICT, without success wrapper or automatic retry. deploy checks first and raises RESOURCE_BUSY before snapshot/job submit."
+      }
+    ],
+    "syntax_check": "AST parse passed for each reviewed Python source; JSON parse passed for current Beauty A/B specs; no model modules imported.",
+    "negative_authorization_recheck": {
+      "status": "PASS_NEGATIVE_ONLY",
+      "candidate_paths": [
+        "experiments/preflight_20261015/specs/beauty-a-candidate.json",
+        "experiments/preflight_20261015/specs/beauty-b-candidate.json",
+        "experiments/preflight_20261015/specs/sports-mlp-candidate.json",
+        "experiments/preflight_20261015/specs/toys-mlp-candidate.json"
+      ],
+      "actual_result": "All four formal_approved=false candidates reject with FORMAL_NOT_AUTHORIZED before model imports. torch/transformers/lightning/src absent from sys.modules. No approval token or positive authorization gate was created or exercised.",
+      "scope_limit": "This pure validator test does not prove a future valid-gate formal handler, and does not authorize formal execution."
+    },
+    "resource_observation": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/gsp-20261015-b-shuffle-r1-resource-check.json",
+      "bytes": 315,
+      "sha256": "8646e65b84bca0e3671da9b9c57fd963896d33f3a3e5598c0a436a2d45e97210"
+    },
+    "resource_interpretation": "Observed compute processes on both physical 4090 cards; no reviewer GPU work. Author reports RESOURCE_BUSY refusal. Latest GPU lifecycle remains NOT_RUN/unsigned, regardless of CPU preparation success."
+  },
+  "real_cpu_prepare_r1_review": {
+    "status": "CPU_PREPARATION_PASS_ONLY",
+    "job_id": "gsp-20261015-b-prepare-r1",
+    "source_commit": "6b39c4323ab9e7c3a369aab6dab6eb59d6129e2c",
+    "snapshot_sha256": "c8cf51405fd5140b0cf10f78f745e1a9f42eae34c69f7073e218e8a26af91f4e",
+    "export_manifest": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-prepare-r1/retrieved/export-manifest.json",
+      "bytes": 2037,
+      "sha256": "9ea8ca3173e5db1172c02cdc1aa957079f68009d28b5c3d6b5a371d9302bac70"
+    },
+    "export_members_verified": 17,
+    "nonempty_export_members": 16,
+    "request": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-prepare-r1/retrieved/request.json",
+      "bytes": 1591,
+      "sha256": "90ad421292a6d584b39a5fdc465b952026451b72930b628cd91888efe84dbd39"
+    },
+    "runner_status": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-prepare-r1/retrieved/status.json",
+      "bytes": 3573,
+      "sha256": "fa3b286da741fd6808ca3480c540fae11627a778f9aee3c2530278f977ec9919"
+    },
+    "loading": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-prepare-r1/retrieved/output/loading.json",
+      "bytes": 1250,
+      "sha256": "a545a1b39778e6b35aeeb6745a0cb9211be05eb690505dc3d25b45ebccc912e5"
+    },
+    "environment": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-prepare-r1/retrieved/output/environment.json",
+      "bytes": 1043,
+      "sha256": "ac0c9bf85656243a78c504f724a42448d802bace3f554cfeeead1dd39ce27dda"
+    },
+    "invocation": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-prepare-r1/retrieved/output/invocation.json",
+      "bytes": 38593,
+      "sha256": "803d5676819423d0f5207a355b66006a28c556c0ee9258c939eec0854e263dcc"
+    },
+    "data_check": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-prepare-r1/retrieved/output/data_check.json",
+      "bytes": 15243,
+      "sha256": "ff017da5b893e950595a54d9000e9a220e00cc7da5e1ddad629d43ae500c8cc9"
+    },
+    "test_subset": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-prepare-r1/retrieved/output/test_subset.json",
+      "bytes": 2119,
+      "sha256": "5f8a273523645f7f0bf4a9845f50f70feb03fffbb75be25929640b0f0b3aa5d8"
+    },
+    "val_subset": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-prepare-r1/retrieved/output/val_subset.json",
+      "bytes": 1417,
+      "sha256": "4bd276e853e25b0e2c0618eb72ac2ea29cc941f9150c729e20544f957facf593"
+    },
+    "checkpoint_protocol": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-prepare-r1/retrieved/output/checkpoint_protocol.json",
+      "bytes": 2069,
+      "sha256": "e6ba89805d86e9246c7f36035a51d856effc447b3480d56a71e061f7b6b38888"
+    },
+    "execution": {
+      "runner_status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_may_be_live": false,
+      "cuda_visible_devices": "",
+      "phase": "prepare",
+      "seconds": 491.34054746711627
+    },
+    "identity_binding": "Request capture_version equals embedded DEPLOYMENT source_commit/snapshot. Recomputed snapshot manifest digest exactly. Spec SHA matches request input and invocation. Imported baseline src paths all lie under c8cf51405fd5140b snapshot.",
+    "strict_state": {
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "global_step": 12500,
+      "epoch": 0,
+      "all_parameter_keys_shapes_values_equal": true,
+      "state_tensor_count": 177,
+      "embedded_sid_exact": true
+    },
+    "parameter_count": 13128064,
+    "shared_sid_table": true,
+    "asset_identity": [
+      {
+        "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt",
+        "sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18",
+        "bytes": 388405,
+        "resolved": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt"
+      },
+      {
+        "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt",
+        "sha256": "3d8f03cf042293f2f7f02132c9d072f573f671d9550d567edd1754f50e53e605",
+        "bytes": 159332142,
+        "resolved": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt"
+      }
+    ],
+    "safe_load_protocol": "Static checkpoint GLOBAL opcode scan saved, no arbitrary pickle execution claimed; actual load uses weights_only=True with checkpoint-local explicit safe_globals. No strict=False, missing-key fallback, weight conversion or table copying.",
+    "bounded_data": {
+      "test_rows": 19,
+      "test_batch_sizes": [
+        8,
+        8,
+        3
+      ],
+      "test_unique_users": 19,
+      "val_rows": 11,
+      "val_batch_sizes": [
+        8,
+        3
+      ],
+      "test_and_val_use_own_split_targets": true,
+      "all_test_batches_have_padding": true
+    },
+    "limits": [
+      "CPU-only model construction/strict state and bounded data checks; no Trainer.test, generation, CUDA modes, sampler events or exception recovery were run.",
+      "This older c8cf/19-row snapshot does not validate current 55fd source or first31 long-history coverage. Current exact source static review is separate.",
+      "Actual imported Strategy path/hash was not included in this older environment.json; the long-r1 successor is required for that runtime binding."
+    ],
+    "PREFLIGHT_GATE_PASS": false,
+    "FORMAL_RUN_AUTHORIZED": false
+  },
+  "real_cpu_prepare_long_r1_review": {
+    "status": "CPU_PREPARATION_PASS_ONLY",
+    "reviewer": "/root/author_adapters",
+    "job_id": "gsp-20261015-b-prepare-long-r1",
+    "source_commit": "a71ba06fe9d722dd236d340b4eaaec6b9b3e600e",
+    "snapshot_sha256": "f7002a85350880be3b74d986d6fe5592244c43f1aba016a63d6ffa7d3b0d4417",
+    "collection": {
+      "manifest": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/COLLECTION_MANIFEST.json",
+        "bytes": 20150,
+        "sha256": "40e2c177404d022ae150b59251298be38c2d55df7ab169e15f757d43081bef3f"
+      },
+      "members_independently_verified": 109,
+      "this_job_members_verified": 18,
+      "snapshot_archive": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/snapshot-f7002a85350880be.tar.gz",
+        "bytes": 322002,
+        "sha256": "f7a8d7fd0b288c3554c53920fb76074e1e00d99dbd2b00b31f28d73c92f7889a"
+      },
+      "snapshot_source_files_independently_verified": 187,
+      "verification": "Every collected path/size/SHA verified; all 187 deployment members and DEPLOYMENT.json bytes verified against local exact snapshot archive; request input manifest SHA and canonical manifest digest independently match."
+    },
+    "evidence": {
+      "RESULT.json": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/RESULT.json",
+        "bytes": 206,
+        "sha256": "84f9e1c8307135173eb36a615506104cbabd0110228736dc511ff26922fee1cf"
+      },
+      "invocation.json": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/invocation.json",
+        "bytes": 40838,
+        "sha256": "6927d03a5ca70a653254d1536b73a5beeedc46486486e7ba3b6b69e443ff3a73"
+      },
+      "loading.json": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/loading.json",
+        "bytes": 1250,
+        "sha256": "a545a1b39778e6b35aeeb6745a0cb9211be05eb690505dc3d25b45ebccc912e5"
+      },
+      "checkpoint_protocol.json": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/checkpoint_protocol.json",
+        "bytes": 2069,
+        "sha256": "e6ba89805d86e9246c7f36035a51d856effc447b3480d56a71e061f7b6b38888"
+      },
+      "effective_config.yaml": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/effective_config.yaml",
+        "bytes": 14569,
+        "sha256": "25adfd188c3f6d15a9f5b422ee66e5393acbcaaa15c470e3220c2255a5ecfc46"
+      },
+      "used_config.json": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/used_config.json",
+        "bytes": 12677,
+        "sha256": "e4cbcd4097bf005457048d55a4a67b44342368ebd208acaa485596a203140e13"
+      },
+      "data_check.json": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/data_check.json",
+        "bytes": 15243,
+        "sha256": "ff017da5b893e950595a54d9000e9a220e00cc7da5e1ddad629d43ae500c8cc9"
+      },
+      "test_subset.json": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/test_subset.json",
+        "bytes": 3011,
+        "sha256": "2d7ca7c48b080dfe2db7c9b5965282ad3a05aec2488155ba33c11c807f2aaadf"
+      },
+      "val_subset.json": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/val_subset.json",
+        "bytes": 1417,
+        "sha256": "4bd276e853e25b0e2c0618eb72ac2ea29cc941f9150c729e20544f957facf593"
+      },
+      "long_history_case.json": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/long_history_case.json",
+        "bytes": 620,
+        "sha256": "c0108bb90f1d6cbfb1564807fb940384ddbf4bbf6d757e543c05a3cfd0065a7c"
+      },
+      "environment.json": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/output/environment.json",
+        "bytes": 1405,
+        "sha256": "49c65adab9469b315070fadc6e2023d0528d4cc3b4c03e44898a9ce5f5e8bfef"
+      }
+    },
+    "runner_request": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/request.json",
+      "bytes": 1596,
+      "sha256": "ce92a8b9c75ccc77b01072b8cf8368d12aee9ea25821534e928645f9faf6ed8a"
+    },
+    "runner_status": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-long-r1/status.json",
+      "bytes": 3727,
+      "sha256": "4615853aa74a3ed4a138dfb6eac5d5dd2e56028daa5e14649a61bfacb477880f"
+    },
+    "execution": {
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_may_be_live": false,
+      "phase": "prepare",
+      "CUDA_VISIBLE_DEVICES": "",
+      "reported_gpu_allocated_bytes": 0,
+      "reported_gpu_reserved_bytes": 0,
+      "elapsed_seconds": 370.2974629192613
+    },
+    "strict_model": {
+      "state_tensor_count": 177,
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "all_parameter_keys_shapes_values_equal": true,
+      "embedded_sid_exact": true,
+      "shared_sid_table": true,
+      "parameter_count": 13128064,
+      "model_class": "experiments.beauty_extensions.baseline.BaselineShuffleModel",
+      "assets": [
+        {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt",
+          "sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18",
+          "bytes": 388405,
+          "resolved": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt"
+        },
+        {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt",
+          "sha256": "3d8f03cf042293f2f7f02132c9d072f573f671d9550d567edd1754f50e53e605",
+          "bytes": 159332142,
+          "resolved": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt"
+        }
+      ],
+      "protocol": "weights_only=True with checkpoint-local explicit safe_globals; no model/table/weight migration"
+    },
+    "fixed_subset": {
+      "split": "test",
+      "rows": 31,
+      "unique_users": 31,
+      "batch_sizes": [
+        8,
+        8,
+        8,
+        7
+      ],
+      "token_length": 120,
+      "all_batches_have_padding": true,
+      "source_modified": false,
+      "drop_last": false,
+      "val_rows": 11,
+      "val_batch_sizes": [
+        8,
+        3
+      ],
+      "comparison_with_prior_raw_metadata": "All 31 ordered opaque keys equal the previously reviewed raw metadata. Every B visible-item count equals min(29, raw_item_count - 1). The prior A targets were not compared or used for B labels.",
+      "visible_item_count_min_max": [
+        4,
+        20
+      ]
+    },
+    "long_history": {
+      "case": {
+        "source": "previous reviewed metadata only; selection based on longest raw history, before new predictions",
+        "reviewed_zip_sha256": "a0ec709db33c5176639ff4bf8bac83d1e1d37394f5012a746d38b06f84438f99",
+        "target_index_sha256": "a2e7d74577d33c9d667733a25d438aec4fe2b6077d566c93d44c4f242d17d00d",
+        "data_file": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/beauty/testing/partition_123.tfrecord.gz",
+        "row_index": 29,
+        "sample_key": "0b79fa899b81340405a5e24b",
+        "raw_item_count": 21,
+        "visible_items": 20,
+        "previous_global_row_index": 29,
+        "verified_in_actual_subset": true
+      },
+      "actual_flat_index": 29,
+      "actual_batch_index": 3,
+      "actual_local_index": 5,
+      "actual_visible_items": 20,
+      "actual_valid_SID_tokens": 80,
+      "prior_raw_metadata": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-a-metadata-r3/retrieved/output/test_target_index.jsonl",
+        "bytes": 3307470,
+        "sha256": "a2e7d74577d33c9d667733a25d438aec4fe2b6077d566c93d44c4f242d17d00d"
+      },
+      "selection": "Fixed from previously reviewed raw sequence lengths before new predictions; no metric/attention selection. This covers 20 items, not the configured maximum 29-item truncation boundary."
+    },
+    "framework_actual_import": {
+      "file": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py",
+      "resolved": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py",
+      "sha256": "5f3a8ef94dfb07dc7f8debc2523b52720fe98e346cc75004f0ccf254fe8fdda9"
+    },
+    "framework_conclusion": "Actual runtime Strategy import binds the previously captured installed teardown body to lib/python3.10, SHA 5f3a8ef...; Strategy.teardown explicitly moves the module to CPU. The earlier 3.1-label uncertainty is closed for this CPU runtime; the new actual before/after CUDA lifecycle still awaits a GPU run.",
+    "source_config": {
+      "source": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/evidence/beauty-extensions/qwen-effective-source.yaml",
+        "bytes": 12321,
+        "sha256": "790e0d16c67823c6cad403013ae0f152ef61cebcd548715c113376c7a0ecef33"
+      },
+      "verified_hash": "790e0d16c67823c6cad403013ae0f152ef61cebcd548715c113376c7a0ecef33",
+      "source_kind": "Complete published Beauty Qwen/R-Kmeans working-run Hydra config; not a T5 author run or MLP config.",
+      "original_workers": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "source_and_effective_raw_batch_sizes": {
+        "train": 16,
+        "val": 8,
+        "test": 8
+      },
+      "model_graph_source_unchanged": "huggingface_model and decoder config trees match original source verbatim; checkpoint all key/shape/value and shared-object checks pass. B _target_, shuffle_n=0 and explicit original-default K10 are interface additions.",
+      "adaptation": "Asset/output/root paths remapped to readable preserved new-server assets and immutable export; train=false; selected Hydra interpolation fields materialized, same SID loaded with weights_only=True. Token length120 including target, H4, padding=-1, original drop_last unchanged.",
+      "training_setting_limit": "Legacy max_steps320000/max_epochs10/accum16 remain published config facts only. This prepare did no training; none supplies a newly authorized formal run or future MLP setting."
+    },
+    "static_current_source_direction": "Current 55fd cli/run changes are device/mode restore, actual batch evidence, bounded source-worker checks and fail-closed resource guards, with B native algorithm/common unchanged. Their static review is round1_preexecution_addendum_a71ba06_55fd80d; this f7002 CPU run does not claim those newer test hooks executed.",
+    "remaining": [
+      "Actual current-snapshot CUDA OFF/cache, native Shuffle3/4 traces, three real Trainer.test calls, validation/train OFF sampler, genuine exception callback and same-instance recovery have NOT_RUN due occupied GPUs.",
+      "No numerical metrics or perturbation effects are claimed from prepare. No B REAL_PREFLIGHT_PASS, NONAUTHOR_GATE_PASS or formal authorization is issued.",
+      "A is reviewed by another nonauthor, and this report does not sign A."
+    ],
+    "PRECHECK_PASS": true,
+    "SEMANTIC_PAIRING_PASS": true,
+    "REAL_PREFLIGHT_PASS": false,
+    "NONAUTHOR_GATE_PASS": false,
+    "PREFLIGHT_GATE_PASS": false,
+    "FORMAL_RUN_AUTHORIZED": false
+  },
+  "B_current_subgates": {
+    "PRECHECK_PASS": true,
+    "SEMANTIC_PAIRING_PASS": true,
+    "REAL_PREFLIGHT_PASS": true,
+    "NONAUTHOR_GATE_PASS": true,
+    "PREFLIGHT_GATE_PASS": true,
+    "FORMAL_RUN_AUTHORIZED": false,
+    "binding": "real_B_shared_gpu_round1_review"
+  },
+  "new_stage_original_mkdir_failure_preserved": {
+    "job_id": "gsp-20261015-b-prepare-r0",
+    "status": "FAILED",
+    "exit_code": 1,
+    "status_asset": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-r0/status.json",
+      "bytes": 2327,
+      "sha256": "4eaa41a964916252184e6b809b15d473330d598c8c620c7d324b132093ecf054"
+    },
+    "work_log_asset": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/collected-d2dfb159fe0747dd/gsp-20261015-b-prepare-r0/work.log",
+      "bytes": 1031,
+      "sha256": "39ceb107861ebbe32e177f19fa936b4c03959b903019388efb91c59dd2ff93b8"
+    },
+    "note": "Actual failed round0 directory mkdir receipt preserved unchanged; subsequent round1 CPU success does not rewrite it."
+  },
+  "user_authorized_shared_gpu_static_review": {
+    "status": "STATIC_REVIEW_PASS_PENDING_ACTUAL_B_CUDA_OUTPUT",
+    "reviewer": "/root/author_adapters",
+    "authorization": "Parent relayed latest explicit user approval: bounded preflight may share one GPU with sufficient headroom, serial task execution, no alteration/signals to yychen tasks, unchanged research batch/precision. Prior resource-busy conclusion remains a historical observation, not a permanent task stop.",
+    "authorization_receipt": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/shared-preflight-authorization.json",
+      "bytes": 499,
+      "sha256": "4ed1ffe8197bd0f8dce5998811168d98b8df12594852fef03ad7107fe53f2257"
+    },
+    "source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+    "snapshot_sha256": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+    "sources": [
+      {
+        "path": "experiments/beauty_extensions/cli.py",
+        "bytes": 24542,
+        "sha256": "1a7805c778d27f2f5f551398ba81679e036d0e2d4746650063226788e41b239a"
+      },
+      {
+        "path": "experiments/beauty_extensions/common.py",
+        "bytes": 12084,
+        "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91"
+      },
+      {
+        "path": "experiments/beauty_extensions/baseline.py",
+        "bytes": 7160,
+        "sha256": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce"
+      },
+      {
+        "path": "experiments/preflight_20261015/resources.py",
+        "bytes": 4565,
+        "sha256": "40e260a298902752190d791470e8d927d782ad5c8e2f845a3517fc42526e0597"
+      },
+      {
+        "path": "experiments/preflight_20261015/run.py",
+        "bytes": 33310,
+        "sha256": "8d715e3359b78f2c50b00fb48c3c6f9207437a5133750ee73916a2064698b370"
+      },
+      {
+        "path": "experiments/preflight_20261015/deploy.py",
+        "bytes": 7688,
+        "sha256": "50d21c8d0329c2b0cc664ddb06a60a8de0eb77537324d83404abfb0fb772488d"
+      }
+    ],
+    "source_binding": "Each listed current file SHA equals the actual afbd233/bcba deployment manifest; original B baseline/common bytes unchanged.",
+    "resource_baseline": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/shared-resource-baseline.json",
+      "bytes": 3705,
+      "sha256": "2a2f647f986acdbb2e9d5f83ae9bd370f0646a418adef5985696f60fefc1d9f2"
+    },
+    "baseline_samples": 4,
+    "physical_gpu": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+    "GPU1_free_GiB": [
+      22.4453125,
+      22.4453125,
+      22.4453125,
+      22.4453125
+    ],
+    "GPU1_utilization_percent": [
+      8,
+      1,
+      2,
+      9
+    ],
+    "guard_semantics": [
+      "resources.observe uses saved standard-library subprocess calls to nvidia-smi, JSON/timestamps/files only. No Torch/NumPy imports, seed calls, tensor manipulation or model attention/cache hooks.",
+      "Admission requires physical free memory >=14GiB (6GiB task estimate plus 8GiB reserve), including other-process allocations. Runtime threshold requires >=8GiB free. The 6GiB estimate is engineering budgeting, not a research batch/precision change.",
+      "Background thread samples every10s plus observation command duration. Trainer train/validation/test start hooks only call CURRENT.check and do not change data, generation count, dropout, optimizer or metric computation.",
+      "Observed resource failure sets a sticky reason; RuntimeError is raised in this task at a subsequent batch hook or successful context exit. Existing cli exception recording/finally cleanup/rethrow remain; run RESULT PASS is after context completion.",
+      "No foreign process signal, priority, CUDA memory fraction, thread count or GPU setting is changed by this guard. Runner owns only this accepted job and its bounded descendants.",
+      "The same source/spec still uses seed42, K10, actual four-code autoregression, train/val/test lifecycle and fixed testing31/validation11. formal_approved remains explicit false."
+    ],
+    "independent_pure_CPU_checks": {
+      "four_baseline_shared_assessments": "PASS",
+      "four_exclusive_assessments": "RESOURCE_BUSY as expected",
+      "initial_exact_14GiB_and_runtime_exact_8GiB": "PASS",
+      "each_threshold_minus_one_byte": "RESOURCE_MARGIN as expected",
+      "Python_random_state_unchanged": true,
+      "torch_numpy_lightning_src_imports": [],
+      "model_or_GPU_runs_by_reviewer": 0
+    },
+    "limits": [
+      "The guard is sampled and cooperative:10s polling plus nvidia-smi timeouts and next-batch/context boundary. Manual generation is not interrupted per CUDA operator; do not claim instantaneous stop.",
+      "Sufficient memory and no foreign signals do not prove zero throughput interference with yychen under GPU sharing. No fair performance comparison or guarantee of unaffected colleague runtime is inferred.",
+      "Initial ResourceMonitor enter failure exits this worker before the context summary is created; runner failure and resource-monitor trace must then be read instead. No gate can be granted from a missing summary.",
+      "Actual B CUDA OFF/cache/Shuffle/trainer/exception/evaluator results are not yet reviewed; the static guard check grants no REAL_PREFLIGHT/PREFLIGHT or formal authorization."
+    ],
+    "job_request": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/gsp-20261015-b-shared-r1-request.json",
+      "bytes": 1873,
+      "sha256": "cde2fcc10f8e238d2aec938da945f614a0487627c81df1e3b269afe94bc47de2"
+    },
+    "submission": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/gsp-20261015-b-shared-r1-submission.json",
+      "bytes": 1287,
+      "sha256": "d24fc8efaed7faa4cad89886f14fdc11b9922c32ee133ba44951b00f89eea04e"
+    },
+    "PREFLIGHT_GATE_PASS": false,
+    "FORMAL_RUN_AUTHORIZED": false
+  },
+  "real_B_shared_gpu_round1_review": {
+    "status": "PREFLIGHT_GATE_PASS",
+    "engineering_only": true,
+    "FORMAL_RUN_AUTHORIZED": false,
+    "reviewer": "/root/author_adapters",
+    "non_author_of": [
+      "B model hook",
+      "CLI repair",
+      "new-stage runner",
+      "resource guard",
+      "original evaluator"
+    ],
+    "job_id": "gsp-20261015-b-shared-r1",
+    "source_commit": "afbd2336fda5d5f87210b342ff3744bee2156c02",
+    "snapshot_sha256": "bcba4952e2830e13daf00c8001729a231488aad328b1144a82814d6e7350bde4",
+    "plan_sha256": "f01704b98fd442b1127c16c9e58085ffb3b9a11b940a814397781c70375e2051",
+    "spec_sha256": "1820025194308d4e17a24e1fad73e35e5a2cce1fdd6c484ad8f434261be7d88f",
+    "archive": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/evidence.tar.gz",
+      "bytes": 54411,
+      "sha256": "8789e6235d6b3b760738bdc25ac2ae0f69ad46e0760379010888047d0d408a6d"
+    },
+    "export_manifest": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/export-manifest.json",
+      "bytes": 7173,
+      "sha256": "fb7c673bd0e24a0a0a188bbddaa96fa1911d41e8181c0661eaef75f0645bc053"
+    },
+    "verified_tar_members": 55,
+    "verified_export_members": 54,
+    "member_safety": "All regular files; no absolute, traversal or duplicate paths. Every export member SHA/size and already-retrieved byte string matches original archive.",
+    "source_archive": {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-mlp-preflight-20261015/snapshot-bcba4952e2830e13.tar.gz",
+      "bytes": 329731,
+      "sha256": "7a4afbd7a4cde4747a612ea94e38697d57a3dfa0340d41be20617646ca9ea8d6"
+    },
+    "source_members_verified": 191,
+    "source_binding": "Manifest canonical digest, request capture_version and DEPLOYMENT input SHA all verified. Every deployment source byte matched fixed archive. Key reviewed current source files match the actual deployed bytes. This is export, not a Git checkout.",
+    "invocation": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/invocation.json",
+      "bytes": 41623,
+      "sha256": "3c0e66e923ab48d56645e76476ed30e32819cb1c8711531700859903392e9215"
+    },
+    "request": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/request.json",
+      "bytes": 1658,
+      "sha256": "e749ad0dd86ea9ab7463265b8238cc0c10049412ea8be4ec33382e6b22717b7d"
+    },
+    "runner_status": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/status.json",
+      "bytes": 8701,
+      "sha256": "1896cd4473c7ef88d1b1b12adac2dfe2ced81369cc97fd24e8833ba888676385"
+    },
+    "cleanup": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/cleanup.json",
+      "bytes": 664,
+      "sha256": "2987bca88a9957773816ee747b5e3c51258484fc37b6f81f777670bcd35291b2"
+    },
+    "work_log": {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/work.log",
+      "bytes": 26781,
+      "sha256": "02c3a58931c9a3462f9569e8c8e686a545d5e807cbe5bf562a075314f7828e0a"
+    },
+    "runner_terminal": {
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_may_be_live": false
+    },
+    "strict_loading": {
+      "evidence": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/loading.json",
+        "bytes": 1250,
+        "sha256": "a545a1b39778e6b35aeeb6745a0cb9211be05eb690505dc3d25b45ebccc912e5"
+      },
+      "strict177": {
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "global_step": 12500,
+        "epoch": 0,
+        "all_parameter_keys_shapes_values_equal": true,
+        "state_tensor_count": 177,
+        "embedded_sid_exact": true
+      },
+      "parameter_count": 13128064,
+      "shared_sid_table": true,
+      "original_assets": [
+        {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt",
+          "sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18",
+          "bytes": 388405,
+          "resolved": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt"
+        },
+        {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt",
+          "sha256": "3d8f03cf042293f2f7f02132c9d072f573f671d9550d567edd1754f50e53e605",
+          "bytes": 159332142,
+          "resolved": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt"
+        }
+      ]
+    },
+    "model_condition": "B only: Beauty Qwen -> R-Kmeans, H4, shared encoder/decoder SID table; same checkpoint step12500 as B own Normal. A T5 dual-table is a different condition and is not compared for numeric equality.",
+    "input_subset": {
+      "evidence": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/test_subset.json",
+        "bytes": 3011,
+        "sha256": "2d7ca7c48b080dfe2db7c9b5965282ad3a05aec2488155ba33c11c807f2aaadf"
+      },
+      "same_as_independently_reviewed_CPU_long_subset": true,
+      "test_rows": 31,
+      "test_batch_sizes": [
+        8,
+        8,
+        8,
+        7
+      ],
+      "val_rows": 11,
+      "long_history": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/long_history_case.json",
+        "bytes": 620,
+        "sha256": "c0108bb90f1d6cbfb1564807fb940384ddbf4bbf6d757e543c05a3cfd0065a7c"
+      },
+      "maximum_actual_visible_items": 20,
+      "configured_max_visible_items": 29,
+      "labels_and_inputs_unchanged_digest": "237153911ca3250b50dd24941e013ced4111673a8d5ea8ec04d68286bec5dbd5"
+    },
+    "OFF_and_cache": {
+      "evidence": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/off_and_cache.json",
+        "bytes": 1754,
+        "sha256": "97480a15cead44c1745d77ef20524dca809fba80cbb34a94c917f8781f3e3766"
+      },
+      "same_shape_decoder_hidden_loss_head_logits_scores_max_absolute": 0.0,
+      "same_shape_SID_exact": true,
+      "repeat_and_sample_order_SID_scores_exact": true,
+      "CPU_and_CUDA_OFF_RNG_unchanged": true,
+      "B8_to_B1_SID_exact": true,
+      "B8_to_B1_scores_max_absolute": 1.9360333681106567e-05,
+      "B8_to_B1_scores_original_tolerance_pass": false,
+      "original_baseline_same_shape_drift_exact": true,
+      "corresponding_B1_original_vs_adapter_scores_max_absolute": 0.0,
+      "B8_to_B1_to_B8_scores_max_absolute": 0.0,
+      "boundary": "Retain existing original-baseline shape-dependent score drift (1.9360333681106567e-05). Corresponding-size original/adapter and B8 roundtrip pass at unchanged rtol1e-5/atol1e-6. Do not claim scores invariant across batch shape or widen tolerance."
+    },
+    "permutation_method": {
+      "identifiable_unit_examples": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/identifiable_permutations.json",
+        "bytes": 1128,
+        "sha256": "c0e4b2e00c6e1e9188e8ba27e4d7b4adf621b3d0ee61eac85b0a70500bc2b58b"
+      },
+      "actual_trace_summary": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/shuffle_trace.json",
+        "bytes": 676,
+        "sha256": "5e64c3259f7832d29d944e8c71a2ece5c8ce5df42ed1569cf9a0f5c3f4cb61d1"
+      },
+      "sampling": "Frozen native [B,M,N] torch.rand argsort every encoder call; individual occurrence/group sampling; independent loss/generate calls; allowed identity. Replay false in all actual test records. Trace local Generator reproduces pre-call state without extra global draws.",
+      "visible_operation_scope": "Offset/lookup already completed; only grouped historic embeddings shuffled, no cross-item gather. Whole padding groups unchanged; native Shuffle3 fourth vector unchanged by executed assertions; source/label digest unchanged. SEP/user insertion and decoder lookup remain outside hook.",
+      "sampled_groups_including_padding": 3720,
+      "identity_count_in_full_sampling_summary": 373,
+      "normal_sampler_calls": 0,
+      "shuffle3_loss_generate_calls": [
+        4,
+        4
+      ],
+      "shuffle4_loss_generate_calls": [
+        4,
+        4
+      ],
+      "sampling_count_scope": "The saved 16calls/3720groups/373identities summary is emitted by cli.smoke after the three completed Normal/N3/N4 test conditions and manual OFF tail, before the later deliberate exception and recovery. It is not a whole-job final RNG/call counter. The subsequent fault test runs one real batch and is reviewed for genuine cleanup/recovery; it must not be silently included in these three-condition counters."
+    },
+    "real_three_tests": [
+      {
+        "condition": "Normal",
+        "shuffle_n": 0,
+        "engineering_only": true,
+        "samples": 31,
+        "unique_users": 31,
+        "metrics": {
+          "ndcg@5": 0.032258063554763794,
+          "ndcg@10": 0.04196871072053909,
+          "recall@5": 0.032258063554763794,
+          "recall@10": 0.06451612710952759
+        },
+        "prediction": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-0/predictions.jsonl",
+          "bytes": 15417,
+          "sha256": "f172e3795e40879f1c46a712ef5864764f5304787c9b5d8b46ed1f7dcbee9aac"
+        },
+        "per_sample_metrics": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-0/per_sample_metrics.jsonl",
+          "bytes": 3797,
+          "sha256": "0341f7b2cd7fd580c94e3398420b44a655636379a876c58aced5b032b9179f1e"
+        },
+        "original_evaluator_recompute": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-0/recomputed_metrics.json",
+          "bytes": 733,
+          "sha256": "94d8528353e4e24b0d4305e656ea402f598f8f98a796e48aed8bf60a26be9110"
+        },
+        "same_ordered_keys_and_targets": true,
+        "independent_numpy_same_definition": "Every per-sample metric and aggregate match to <=1e-7; means are exactly the saved FP32 values. Four-code equality targets; score top-K; NDCG ideal/zero handling and Recall denominator min(k,relevant). No score ties exist, so NumPy ranking tie order is irrelevant.",
+        "float32_score_tie_rows": 0,
+        "independently_counted_duplicate_candidates": 0,
+        "original_legal_SID_diagnostic_invalid_candidates": 0,
+        "legal_SID_review_limit": "Full membership was executed by original-SID remote recompute at the recorded SID hash; reviewer independently checks code/binding, integer range and saved row contents without downloading/loading SID.",
+        "sampler": {
+          "encoder_delta": {
+            "loss": 4,
+            "generate": 4
+          },
+          "shuffle_delta": {},
+          "events": 0,
+          "saved_fragments": 0,
+          "distinct_permutations": 0,
+          "identity_fragments": 0,
+          "loss_generate_fragment_pairs_distinct": null
+        },
+        "trace": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-0/intervention_trace.json",
+          "bytes": 340,
+          "sha256": "7f391102643a642adb6ce663e3649c0a0b34e0b23df23764be36705a7c36984c"
+        },
+        "lifecycle": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-0/lifecycle_cleanup.json",
+          "bytes": 1290,
+          "sha256": "db93cb5cfe19960e56a15ca9f82cd5af341b55751404aaaaae7ec2767cd83a08"
+        }
+      },
+      {
+        "condition": "Shuffle3",
+        "shuffle_n": 3,
+        "engineering_only": true,
+        "samples": 31,
+        "unique_users": 31,
+        "metrics": {
+          "ndcg@5": 0.032258063554763794,
+          "ndcg@10": 0.04158273711800575,
+          "recall@5": 0.032258063554763794,
+          "recall@10": 0.06451612710952759
+        },
+        "prediction": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-3/predictions.jsonl",
+          "bytes": 15421,
+          "sha256": "1241c59befa3493182dede25f15ed373cffd05a42064da850e6a8b754133f08b"
+        },
+        "per_sample_metrics": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-3/per_sample_metrics.jsonl",
+          "bytes": 3798,
+          "sha256": "c7461bb8e6ff8a0cf95a4104807b4bcf3beee0fca9196a8706e5732d970e4333"
+        },
+        "original_evaluator_recompute": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-3/recomputed_metrics.json",
+          "bytes": 733,
+          "sha256": "69640bfffa3d984710a9e62fa807b271dd143f08f4558cac8b104db8c2f12d95"
+        },
+        "same_ordered_keys_and_targets": true,
+        "independent_numpy_same_definition": "Every per-sample metric and aggregate match to <=1e-7; means are exactly the saved FP32 values. Four-code equality targets; score top-K; NDCG ideal/zero handling and Recall denominator min(k,relevant). No score ties exist, so NumPy ranking tie order is irrelevant.",
+        "float32_score_tie_rows": 0,
+        "independently_counted_duplicate_candidates": 0,
+        "original_legal_SID_diagnostic_invalid_candidates": 0,
+        "legal_SID_review_limit": "Full membership was executed by original-SID remote recompute at the recorded SID hash; reviewer independently checks code/binding, integer range and saved row contents without downloading/loading SID.",
+        "sampler": {
+          "encoder_delta": {
+            "loss": 4,
+            "generate": 4
+          },
+          "shuffle_delta": {
+            "loss": 4,
+            "generate": 4
+          },
+          "events": 8,
+          "saved_fragments": 96,
+          "distinct_permutations": 6,
+          "identity_fragments": 14,
+          "loss_generate_fragment_pairs_distinct": true
+        },
+        "trace": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-3/intervention_trace.json",
+          "bytes": 9389,
+          "sha256": "e4208f5b9602035fa11797e9d2ce4cc4c4cbf429d224ea299e0d23a9fe60a0e5"
+        },
+        "lifecycle": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-3/lifecycle_cleanup.json",
+          "bytes": 1287,
+          "sha256": "335e7f7140f71f7134db321932537ba9aea21fdddbc9e3718f027419584e1b22"
+        }
+      },
+      {
+        "condition": "Shuffle4",
+        "shuffle_n": 4,
+        "engineering_only": true,
+        "samples": 31,
+        "unique_users": 31,
+        "metrics": {
+          "ndcg@5": 0.032258063554763794,
+          "ndcg@10": 0.04196871072053909,
+          "recall@5": 0.032258063554763794,
+          "recall@10": 0.06451612710952759
+        },
+        "prediction": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-4/predictions.jsonl",
+          "bytes": 15428,
+          "sha256": "074189f734726843acf354ad831b2d40147667cdc95e51e8d323b3ab0816651f"
+        },
+        "per_sample_metrics": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-4/per_sample_metrics.jsonl",
+          "bytes": 3797,
+          "sha256": "0341f7b2cd7fd580c94e3398420b44a655636379a876c58aced5b032b9179f1e"
+        },
+        "original_evaluator_recompute": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-4/recomputed_metrics.json",
+          "bytes": 733,
+          "sha256": "5a68f7943b6ee00d6965ba9b3000e944d88e08b2e2b5d4668aaf10dd51ab524c"
+        },
+        "same_ordered_keys_and_targets": true,
+        "independent_numpy_same_definition": "Every per-sample metric and aggregate match to <=1e-7; means are exactly the saved FP32 values. Four-code equality targets; score top-K; NDCG ideal/zero handling and Recall denominator min(k,relevant). No score ties exist, so NumPy ranking tie order is irrelevant.",
+        "float32_score_tie_rows": 0,
+        "independently_counted_duplicate_candidates": 0,
+        "original_legal_SID_diagnostic_invalid_candidates": 0,
+        "legal_SID_review_limit": "Full membership was executed by original-SID remote recompute at the recorded SID hash; reviewer independently checks code/binding, integer range and saved row contents without downloading/loading SID.",
+        "sampler": {
+          "encoder_delta": {
+            "loss": 4,
+            "generate": 4
+          },
+          "shuffle_delta": {
+            "loss": 4,
+            "generate": 4
+          },
+          "events": 8,
+          "saved_fragments": 96,
+          "distinct_permutations": 24,
+          "identity_fragments": 5,
+          "loss_generate_fragment_pairs_distinct": true
+        },
+        "trace": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-4/intervention_trace.json",
+          "bytes": 10830,
+          "sha256": "6e16f512f955e20df747edbcbc10268d5f7426e61d7e8c1a0fa0446d827276c7"
+        },
+        "lifecycle": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/trainer-test-4/lifecycle_cleanup.json",
+          "bytes": 1287,
+          "sha256": "335e7f7140f71f7134db321932537ba9aea21fdddbc9e3718f027419584e1b22"
+        }
+      }
+    ],
+    "normal_phase_and_exception": {
+      "post_three_tests_manual_OFF": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/post_test_off.json",
+        "bytes": 303,
+        "sha256": "90a1f33ea86390fc9ebecd68b0d6e8d25f9a33f1aea3822d391ccf9202ae7552"
+      },
+      "post_teardown": "Each actual test records parameters on CPU after Strategy teardown; subsequent Trainer reattaches to cuda:0. Manual tail explicitly restores same model/clean arguments to cuda:0 and eval, then SID/scores exact Normal.",
+      "normal_validation_after_three": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/after-three-tests/ordinary_validation.json",
+        "bytes": 682,
+        "sha256": "a5e9aac7ce0cfb4270f0532c68070e2f9ab832b81182c0ecdd954905391dc229"
+      },
+      "normal_validation_after_exception": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/ordinary_validation.json",
+        "bytes": 682,
+        "sha256": "a5e9aac7ce0cfb4270f0532c68070e2f9ab832b81182c0ecdd954905391dc229"
+      },
+      "ordinary_validation_sampler_delta": 0,
+      "train_hook_real_forward": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/train_off_forward.json",
+        "bytes": 229,
+        "sha256": "351b4e1fe5a9dc4f49fbc7404832dce0936c2267068618c39e878296a805efa9"
+      },
+      "train_forward_finite_loss": 9.689665794372559,
+      "train_sampler_delta": 0,
+      "optimizer_updates": 0,
+      "exception_traceback": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/injected-test-failure/expected_traceback.txt",
+        "bytes": 2696,
+        "sha256": "51e9d192078ade5af18cf99bcb8454a3dd4b5575ca94e0acc493afcbf2edcbec"
+      },
+      "exception_cleanup": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/injected-test-failure/lifecycle_cleanup.json",
+        "bytes": 659,
+        "sha256": "1af30cca99bd00f32f6bb87bb981785adc4a80fd9d70fa089e3f6924d0f1e4ed"
+      },
+      "exception_recovery": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/exception_recovery.json",
+        "bytes": 778,
+        "sha256": "c01f966c168acef8b8b6eb84a38a2491076af7f645fe3e78a2b3c0f0215ba85a"
+      },
+      "actual_exception_type": "InjectedPreflightError raised after one real test batch by Trainer callback",
+      "callback_cleanup_flag": false,
+      "partial_saved_predictions": 8,
+      "failed_test_metrics_success_file_exists": false,
+      "same_model_parameters_unchanged_digest": "698a0acb8cfe266b4aac82d96d75883955fc522c5e205b8c81670dff1f753276",
+      "restored_evaluator_mask_replay_and_flag": true,
+      "same_instance_recovered_OFF_sid_scores_exact": true,
+      "cold_and_repeated_call_scope": "This accepted job starts a fresh independent Python process from fixed snapshot and strict checkpoint; within it, repeated same-instance generation, reordered samples, B8/B1/B8, three separate Trainer.test calls, then post-test and post-exception validation/generation all execute. No extra standalone repeat job or multi-seed robustness claim."
+    },
+    "resource": {
+      "summary": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/resource-summary.json",
+        "bytes": 285,
+        "sha256": "90e61c26b165644b134beb00912d5cfa389dda285bccc810b0eba4b0da91b20c"
+      },
+      "observations": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/resource-monitor.jsonl",
+        "bytes": 2039,
+        "sha256": "0687244d93fd46c039d97f50a53572ad7475c41e08ae9b1aa0b2c02bdda0ba16"
+      },
+      "shared_authorized": true,
+      "physical_gpu": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "observation_count": 3,
+      "minimum_free_bytes": 23348641792,
+      "own_peak_process_bytes_in_samples": 746586112,
+      "foreign_PID_and_memory_observed_constant": true,
+      "foreign_processes_signaled": false,
+      "stop_reason": null,
+      "reported_peak_allocated_bytes": 295276544,
+      "reported_peak_reserved_bytes": 322961408,
+      "job_wall_seconds_including_CPU_imports": 308.179068162106,
+      "limit": "Sampled memory/unchanged foreign process evidence; no guarantee or comparative claim about yychen throughput. Wall time includes CPU and is not integrated GPU-use measurement."
+    },
+    "log_interpretation": "Two faulthandler Timeout(0:02:00) diagnostic import stacks appear before seed/model readiness; these are periodic traceback reports, not runner hard timeout or failed model execution. Expected injected Trainer exception is kept separately and not mistaken for successful evaluation.",
+    "formal_boundary": "Only three bounded31-target tests and bounded11-target validation, one train-mode forward with0optimizer updates, plus deliberate first-batch exception. No full Beauty evaluation/training, no attention32, no cross-domain/future formal execution. All candidate specs remain formal_approved=false, no FORMAL_RUN_AUTHORIZED token.",
+    "PRECHECK_PASS": true,
+    "SEMANTIC_PAIRING_PASS": true,
+    "REAL_PREFLIGHT_PASS": true,
+    "NONAUTHOR_GATE_PASS": true,
+    "PREFLIGHT_GATE_PASS": true
+  },
+  "plan_sha256": "f01704b98fd442b1127c16c9e58085ffb3b9a11b940a814397781c70375e2051",
+  "source_python_sha256": {
+    "GRID baseline/src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/components/clustering_initializers.py": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+    "GRID baseline/src/components/distance_functions.py": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+    "GRID baseline/src/components/eval_metrics.py": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+    "GRID baseline/src/components/loss_functions.py": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+    "GRID baseline/src/components/network_blocks/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/components/network_blocks/hf_language_model.py": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+    "GRID baseline/src/components/quantization_strategies.py": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+    "GRID baseline/src/components/scheduler.py": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+    "GRID baseline/src/components/training_loop_functions.py": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+    "GRID baseline/src/data/loading/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/data/loading/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/data/loading/components/collate_functions.py": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+    "GRID baseline/src/data/loading/components/custom_dataloader.py": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+    "GRID baseline/src/data/loading/components/dataloading.py": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+    "GRID baseline/src/data/loading/components/interfaces.py": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+    "GRID baseline/src/data/loading/components/iterators.py": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+    "GRID baseline/src/data/loading/components/label_function.py": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+    "GRID baseline/src/data/loading/components/pre_processing.py": "31f89a77b4881c1130f83e1572b25fe273de1e641855d6a199cd0b9a84984391",
+    "GRID baseline/src/data/loading/datamodules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/data/loading/datamodules/sequence_datamodule.py": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+    "GRID baseline/src/data/loading/utils.py": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+    "GRID baseline/src/inference.py": "b24358c9089bccfcc9384a3b3df894bf1dc94761f30dbbb26ba85d5245a500d2",
+    "GRID baseline/src/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/components/interfaces.py": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+    "GRID baseline/src/models/components/network_blocks/aggregation_strategy.py": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+    "GRID baseline/src/models/components/network_blocks/embedding_aggregator.py": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+    "GRID baseline/src/models/components/network_blocks/mlp.py": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+    "GRID baseline/src/models/components/network_blocks/normalize_layer.py": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+    "GRID baseline/src/models/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/modules/base_module.py": "029dc55aa499147c55a915c9523291c6b331076afb5cd7a18459968aaff16b73",
+    "GRID baseline/src/models/modules/clustering/base_clustering_module.py": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+    "GRID baseline/src/models/modules/clustering/mini_batch_kmeans.py": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+    "GRID baseline/src/models/modules/huggingface/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/modules/huggingface/transformer_base_module.py": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+    "GRID baseline/src/models/modules/semantic_id/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+    "GRID baseline/src/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/modules/clustering/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GRID baseline/src/modules/clustering/residual_quantization.py": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+    "GRID baseline/src/modules/clustering/vector_quantization.py": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+    "GRID baseline/src/modules/semantic_embedding_inference_module.py": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+    "GRID baseline/src/train.py": "7bf26a7cc027783b99cc7f81c37a9f237cfb504df76dcbc202072ba5fc9565d5",
+    "GRID baseline/src/utils/__init__.py": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+    "GRID baseline/src/utils/custom_hydra_resolvers.py": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+    "GRID baseline/src/utils/decorators.py": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+    "GRID baseline/src/utils/file_utils.py": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+    "GRID baseline/src/utils/inference_utils.py": "8a498d5fa77196b28ea9328cd7c31ccece241e24c0be1934fdee27abb299252a",
+    "GRID baseline/src/utils/instantiators.py": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+    "GRID baseline/src/utils/launcher_utils.py": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+    "GRID baseline/src/utils/logging_utils.py": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+    "GRID baseline/src/utils/masking_utils.py": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+    "GRID baseline/src/utils/pylogger.py": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+    "GRID baseline/src/utils/restart_job.py": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+    "GRID baseline/src/utils/restart_job_utils.py": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+    "GRID baseline/src/utils/rich_utils.py": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+    "GRID baseline/src/utils/tensor_utils.py": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+    "GRID baseline/src/utils/utils.py": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788",
+    "experiments/beauty_extensions/__init__.py": "537a1698c10f159802a56e0e8d153b53806ca62f7b7a8383242939fb2edd7c6f",
+    "experiments/beauty_extensions/attention/__init__.py": "5cc5f615e21ec69e3d65342f12dc1ce9df93d467a2884f6bd6c17fb4b0f0a4c2",
+    "experiments/beauty_extensions/attention/capture.py": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+    "experiments/beauty_extensions/attention/plot.py": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+    "experiments/beauty_extensions/attention/records.py": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+    "experiments/beauty_extensions/attention/selfcheck.py": "6e1c542c79be85a8bb896fdad905c75e18a2a1e44e88b03ee5deba56a58eeb7e",
+    "experiments/beauty_extensions/author/__init__.py": "624d009dfbc652e17f3de47f768316c0eae386b67e6b87d83a1a8f4bc79ac457",
+    "experiments/beauty_extensions/author/bootstrap.py": "13b42af96b0a08bf8ac6636a1ff8bc7492e830692fedbd5b9890394eb6904c14",
+    "experiments/beauty_extensions/author/checks.py": "044c475be6cd40ca419b2da83a1b3d8851b1aa3a2c62760953064334d36be907",
+    "experiments/beauty_extensions/author/models.py": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4",
+    "experiments/beauty_extensions/authorization.py": "5291e37397f21f9ddb2b3e0c0844aa0176ccfdd046f9050249661fb088c2d6ee",
+    "experiments/beauty_extensions/baseline.py": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce",
+    "experiments/beauty_extensions/bundle_delivery.py": "38051a0e7d0f0ea9efbdf9d73cb71dd2c3473b4d628cd92c9c746085894327a9",
+    "experiments/beauty_extensions/checkpoint_info.py": "79edf46d9526e5298aff3ca56c619e9c8e21f41f3718b19e11b534d6b081736c",
+    "experiments/beauty_extensions/cli.py": "1a7805c778d27f2f5f551398ba81679e036d0e2d4746650063226788e41b239a",
+    "experiments/beauty_extensions/collect_evidence.py": "5a1ddcd221a01d1af8ccb5bc7b2aff96761f216f588afef8399aba19a3d4fcd7",
+    "experiments/beauty_extensions/common.py": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+    "experiments/beauty_extensions/data_checks.py": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f",
+    "experiments/beauty_extensions/deploy.py": "f9cf91d6798e171d7b641434766895333a59b675ccbfec3bf76326e108ced081",
+    "experiments/beauty_extensions/mlp_attention.py": "b53aa3832a693bdcfa015393799a320b10fa804d7f351cc029e690c1df95f9fa",
+    "experiments/beauty_extensions/mlp_execution.py": "e22e22710ccf664109b4b3142cbc26911325dcaea37e6459bdffdb37528f393a",
+    "experiments/beauty_extensions/mlp_formal.py": "ac362b84f7a9a979bb7549ce1f817448fe172b9d32adc1a449180f5aa97d9e56",
+    "experiments/beauty_extensions/monitor.py": "770376df0aeebb7ff2d5d727bdffd83c514ae54af0e983a88a5709f31c8d10b2",
+    "experiments/beauty_extensions/observation.py": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d",
+    "experiments/beauty_extensions/plot_training.py": "154cb13087b9f95b8c85024ad7548cf3a00c7183bbba6afe030e080208d51fe0",
+    "experiments/beauty_extensions/restore_assets.py": "5c8f8c7ae6e34289b4814e553345014f1d4de5d016ae46e935a89d3c0f94bf3f",
+    "experiments/beauty_extensions/results.py": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917",
+    "experiments/beauty_extensions/summarize_delivery.py": "dab21879249c3f66d63c6e9db6d6fa986ffddfff431be3e79c9215235ea6ff6f",
+    "experiments/beauty_extensions/training.py": "ad285f9bc2a850027cdefac096205ed9bdba012a89dccc8ed2f0d7a25023e8b3",
+    "experiments/beauty_extensions/verify_saved_predictions.py": "b6587fcebdbd86e6f21dcb25ce2d11b3a5c71895fe6660b6238571ba482972d0",
+    "experiments/preflight_20261015/__init__.py": "3e6844d8f37f1cb69ff58e7800c646db95b80fbe5a9c70229575e70d5f289896",
+    "experiments/preflight_20261015/assets.py": "9a676809ae3673bac7ff48657d5777b3efca6104447892f7535809f4d8439538",
+    "experiments/preflight_20261015/bundle.py": "822abe1f1886f2dd1afbe6856d1834181c8be6905bba6039747ad095ece84dd5",
+    "experiments/preflight_20261015/candidates.py": "b20a0c28448c043b96bb9db74881025562f3c065d644ac1eba77f8893e33142b",
+    "experiments/preflight_20261015/collect.py": "de3c57d83b52b17b8dbb94066543f1930c3ddf8e34413d42124d346ec5984511",
+    "experiments/preflight_20261015/deploy.py": "50d21c8d0329c2b0cc664ddb06a60a8de0eb77537324d83404abfb0fb772488d",
+    "experiments/preflight_20261015/publish.py": "7c6d1c7b3068a76c0999e92394822c64726b5d800b6f445968201532d27e4977",
+    "experiments/preflight_20261015/resources.py": "40e260a298902752190d791470e8d927d782ad5c8e2f845a3517fc42526e0597",
+    "experiments/preflight_20261015/run.py": "8d715e3359b78f2c50b00fb48c3c6f9207437a5133750ee73916a2064698b370",
+    "references/wmh-original/GRID/src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/components/clustering_initializers.py": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde",
+    "references/wmh-original/GRID/src/components/distance_functions.py": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c",
+    "references/wmh-original/GRID/src/components/eval_metrics.py": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+    "references/wmh-original/GRID/src/components/loss_functions.py": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9",
+    "references/wmh-original/GRID/src/components/network_blocks/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/components/network_blocks/hf_language_model.py": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65",
+    "references/wmh-original/GRID/src/components/optimizer.py": "d641316bf995f824b10d2499143b73333ae9bb4dfab1587c7c13c25d8ea46050",
+    "references/wmh-original/GRID/src/components/quantization_strategies.py": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7",
+    "references/wmh-original/GRID/src/components/scheduler.py": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832",
+    "references/wmh-original/GRID/src/components/training_loop_functions.py": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820",
+    "references/wmh-original/GRID/src/data/loading/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/data/loading/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/data/loading/components/collate_functions.py": "a4692ce68705ea6a10ed500245f5c5acc99468f7e5d3f2d41e1ff0970fa9a73c",
+    "references/wmh-original/GRID/src/data/loading/components/custom_dataloader.py": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28",
+    "references/wmh-original/GRID/src/data/loading/components/dataloading.py": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282",
+    "references/wmh-original/GRID/src/data/loading/components/interfaces.py": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4",
+    "references/wmh-original/GRID/src/data/loading/components/iterators.py": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f",
+    "references/wmh-original/GRID/src/data/loading/components/label_function.py": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7",
+    "references/wmh-original/GRID/src/data/loading/components/pre_processing.py": "a69c88681760df22e37fb7e66961ad97ed0824af20eae415a543379e881d71c7",
+    "references/wmh-original/GRID/src/data/loading/datamodules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/data/loading/datamodules/sequence_datamodule.py": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5",
+    "references/wmh-original/GRID/src/data/loading/utils.py": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9",
+    "references/wmh-original/GRID/src/inference.py": "f24892ed2d9777c6fd5d3eaf20cc0ea3d180a19a490519baa7ca2390a70c05ba",
+    "references/wmh-original/GRID/src/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/components/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/components/interfaces.py": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231",
+    "references/wmh-original/GRID/src/models/components/network_blocks/aggregation_strategy.py": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1",
+    "references/wmh-original/GRID/src/models/components/network_blocks/embedding_aggregator.py": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c",
+    "references/wmh-original/GRID/src/models/components/network_blocks/mlp.py": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a",
+    "references/wmh-original/GRID/src/models/components/network_blocks/normalize_layer.py": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e",
+    "references/wmh-original/GRID/src/models/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/modules/base_module.py": "7cfa9da5f73c0e666ab81f22440d04f04d6cc9624803de58cde3256dcae400b0",
+    "references/wmh-original/GRID/src/models/modules/clustering/base_clustering_module.py": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9",
+    "references/wmh-original/GRID/src/models/modules/clustering/mini_batch_kmeans.py": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659",
+    "references/wmh-original/GRID/src/models/modules/huggingface/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/modules/huggingface/transformer_base_module.py": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model.py": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_no_pos_embed.py": "7561d2f494764a77efac1d71abff4ea15bc683eea0816c1e8fe067d7d5c78463",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_parallel.py": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+    "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+    "references/wmh-original/GRID/src/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/modules/clustering/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "references/wmh-original/GRID/src/modules/clustering/residual_quantization.py": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307",
+    "references/wmh-original/GRID/src/modules/clustering/vector_quantization.py": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23",
+    "references/wmh-original/GRID/src/modules/semantic_embedding_inference_module.py": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d",
+    "references/wmh-original/GRID/src/test.py": "53f43b1c3e8c5549901aac4f8ee93eea92fc4123bc10439607de20f87be17d78",
+    "references/wmh-original/GRID/src/train.py": "f78680593ba465d0716aaf44239a730b5b449a227a0e957f67c0781e9a0fa4ea",
+    "references/wmh-original/GRID/src/utils/__init__.py": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff",
+    "references/wmh-original/GRID/src/utils/custom_hydra_resolvers.py": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a",
+    "references/wmh-original/GRID/src/utils/decorators.py": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6",
+    "references/wmh-original/GRID/src/utils/file_utils.py": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16",
+    "references/wmh-original/GRID/src/utils/inference_utils.py": "a3fa7e388713e38c5d67824b0a51eb9a9395695df46571c645845efbf183d7bf",
+    "references/wmh-original/GRID/src/utils/instantiators.py": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e",
+    "references/wmh-original/GRID/src/utils/launcher_utils.py": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837",
+    "references/wmh-original/GRID/src/utils/logging_utils.py": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d",
+    "references/wmh-original/GRID/src/utils/masking_utils.py": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5",
+    "references/wmh-original/GRID/src/utils/pylogger.py": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2",
+    "references/wmh-original/GRID/src/utils/restart_job.py": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c",
+    "references/wmh-original/GRID/src/utils/restart_job_utils.py": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad",
+    "references/wmh-original/GRID/src/utils/rich_utils.py": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac",
+    "references/wmh-original/GRID/src/utils/tensor_utils.py": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+    "references/wmh-original/GRID/src/utils/utils.py": "8e4c4b9d5078e0e1eacd3cb878844eca6b1424bc1ee27e5f148dd1f15633d788"
+  },
+  "gate_scope": "B engineering preflight only at exact afbd233/bcba source and bounded31 spec; not A gate, scientific conclusion, new formal authorization or retroactive change to previous Beauty FAILED/PARTIAL."
+}

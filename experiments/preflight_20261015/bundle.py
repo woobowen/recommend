@@ -34,7 +34,10 @@ def main():
         'asset-presence.json','remote-precheck.json','framework-lifecycle-source.txt','installed-checkpoint-source.json',
         'resource-process-check.json','resource-check-after-cpu.json','resource-check-0610.json','resource-final-check.json',
         'b-shuffle-submission-attempt.json','gsp-20261015-b-shuffle-r1-resource-check.json','round1-final-source.json',
-        'shared-preflight-authorization.json','shared-resource-baseline.json','network-recovery-check.json']
+        'shared-preflight-authorization.json','shared-resource-baseline.json','network-recovery-check.json',
+        'takeover-observation.json','manifest-rejection-diagnosis.json','round3-file-identity-validation.json',
+        'resume-preflight-resource-confirmation.json','round3-execution-validation.json',
+        'toys-resume-r2-rejection-transport.json','final-preflight-observation.json']
     for name in external:add('external-receipts/'+name,(SUPPORT/name).read_bytes())
     for f in sorted(SUPPORT.glob('gsp-20261015-*-shared-resource-check.json')):
         add('external-receipts/resource-admission/'+f.name,f.read_bytes())
@@ -46,7 +49,9 @@ def main():
     add('task-instructions/'+instruction.name,instruction.read_bytes())
     archive_root=Path('/home/addaswsw/recommend-support/wmh-a800-audit-20261010')
     restored=archive_root/'preservation/A800-grid-20261010-v1/restored/A800_GRID'
-    inherited=[restored/'logs/inference/runs/2025-09-22/08-44-16/.hydra/config.yaml',
+    inherited=[restored/'logs/inference/runs/2025-09-15/19-47-36/.hydra/config.yaml',
+        restored/'logs/inference/runs/2025-09-15/20-54-16/.hydra/config.yaml',
+        restored/'logs/inference/runs/2025-09-22/08-44-16/.hydra/config.yaml',
         restored/'logs/inference/runs/2025-09-22/10-05-01/.hydra/config.yaml',
         restored/'logs/train/runs/2025-10-22/21-25-31/.hydra/config.yaml',
         restored/'logs/train/runs/2025-10-22/21-28-23/.hydra/config.yaml']
@@ -56,6 +61,8 @@ def main():
     for f in inherited:
         assert f.is_file() and not f.is_symlink() and f.stat().st_size < 2*1024**2
         add('inherited-source-evidence/'+str(f.relative_to(archive_root)),f.read_bytes())
+    continuation=Path('/home/addaswsw/recommend/CODEX_RESUME_SHUFFLE_AB_MLP_PREFLIGHT_20261015.txt')
+    add('task-instructions/'+continuation.name,continuation.read_bytes())
     readme=f'''# GRID 第一阶段审核包 — {status}
 
 固定 wbw 提交：{a.commit}
@@ -70,7 +77,7 @@ A/B 每条件31条固定test及11条val，Toys/Sports各19条test及11条val；�
 repository/ 是固定Git提交的变更字节；evidence/ 是原request/status/log、有效配置、真实预跑结果和逐样本预测（另含collection manifest）。
 external-receipts/ 是实际部署/传输、资源观察与授权、框架源与GitHub回读/服务器对应回执。
 prior-B-failure/ 是旧beauty-b-smoke-r3原件的核验副本，不能冒充本轮实跑。
-inherited-source-evidence/ 是Toys两套历史配置及惰性checkpoint metadata，不能证明缺失的Sports历史或作者Python绑定。
+inherited-source-evidence/ 是A/Toys上游小配置、Toys两套历史训练配置及惰性checkpoint metadata，不能证明缺失的Sports历史或唯一作者Python绑定。
 task-instructions/ 和 applied-rules/ 固定本次授权及边界。
 
 逐线工程门禁必须由真实执行及非作者审核支持，不能用静态审核/CPU PASS代替REAL_PREFLIGHT_PASS；未来Toys/Sports正式研究条件另审。

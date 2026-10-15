@@ -1,0 +1,293 @@
+{
+  "schema": "grid-preflight-independent-source-continuation-v1",
+  "stage_id": "grid-shuffle-mlp-preflight-20261015",
+  "reviewer": "/root/source_conditions_review",
+  "reviewed_at_utc": "2026-10-15T10:09:25Z",
+  "status": "SOURCE_CONDITIONS_REVIEW_PASS_WITH_DECLARED_FORMAL_GAPS",
+  "review_type": "NONAUTHOR_SOURCE_CONFIG_AND_ASSET_IDENTITY_CONTINUATION",
+  "scope": {
+    "rule_source": "/home/addaswsw/recommend",
+    "rules_read": [
+      "AGENTS.md",
+      "PROJECT_RULES.md",
+      "REMOTE_EXECUTION.md"
+    ],
+    "first_shell_command": "ls -la",
+    "first_shell_cwd": "/home/addaswsw/recommend",
+    "repository": "/home/addaswsw/recommend-worktrees/sid-extensions-p0",
+    "controller_reported_head_at_delegation": "01dbaf2e10dfaeb8215048c33493e732e32a25a2",
+    "head_independently_queried_by_this_reviewer": false,
+    "reviewer_execution": "Read existing files, raw retrieved job artifacts and narrowly selected historical metadata; standard-library hashing of small config/SID/source entities only. No model import, GPU, remote execution or Git operation.",
+    "reviewer_mutation": "Only this independently authored receipt, explicitly requested by controller after the read-only review was complete.",
+    "new_checks_for_receipt": "None; receipt records completed review. Only the new receipt's JSON syntax and identity fields are checked after writing.",
+    "engineering_gate_scope": "Actual four-line engineering closure is signed by the separate execution/results reviewer. This source receipt does not substitute for that signoff or grant formal experiment authorization."
+  },
+  "reviewed_source_bytes": [
+    {
+      "path": "experiments/preflight_20261015/run.py",
+      "bytes": 33624,
+      "sha256": "4712b017a7d5bdf1c5f5da3db87eced96303115a69dd12e88c8b9aff4327fcd6"
+    },
+    {
+      "path": "experiments/beauty_extensions/common.py",
+      "bytes": 12084,
+      "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91"
+    },
+    {
+      "path": "experiments/beauty_extensions/author/models.py",
+      "bytes": 15033,
+      "sha256": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_mlp.py",
+      "sha256": "1b75bf94d6bd1187e7c30f996da33ebdc7ea2ffb33d8918a123991abbadafab9",
+      "direct_read_lines": "490-660"
+    },
+    {
+      "path": "experiments/preflight_20261015/specs/beauty-a.json",
+      "bytes": 2282,
+      "sha256": "85b878d095c0fbbc3de84ae770f2fab90d4691f5d19fccff4a1de9b11a868924"
+    },
+    {
+      "path": "experiments/preflight_20261015/specs/beauty-b.json",
+      "bytes": 2226,
+      "sha256": "1820025194308d4e17a24e1fad73e35e5a2cce1fdd6c484ad8f434261be7d88f"
+    },
+    {
+      "path": "experiments/preflight_20261015/specs/toys-mlp.json",
+      "bytes": 1463,
+      "sha256": "5be546e44ee8a7437e2a4d77b0996db0981776aa7d9fa60c2cc94351aaf354a3"
+    },
+    {
+      "path": "experiments/preflight_20261015/specs/sports-mlp.json",
+      "bytes": 1418,
+      "sha256": "e41d3212554b0869f9370307de28a680ee36c168d5cd181a15bedc4fff9cf2a3"
+    }
+  ],
+  "inherited_review_evidence_directly_read": [
+    "manifests/beauty-extensions/source-review.json",
+    "manifests/grid-shuffle-mlp-preflight-20261015/source-conditions-review.json",
+    "manifests/grid-shuffle-mlp-preflight-20261015/rounds.json",
+    "docs/sid-extensions/experiments/shuffle.md",
+    "docs/sid-extensions/experiments/mlp.md",
+    "experiments/preflight_20261015/asset-sources.json",
+    "experiments/preflight_20261015/specs/beauty-a-candidate.json",
+    "experiments/preflight_20261015/specs/beauty-b-candidate.json",
+    "experiments/preflight_20261015/specs/toys-mlp-candidate.json",
+    "experiments/preflight_20261015/specs/sports-mlp-candidate.json"
+  ],
+  "historical_metadata_directly_read": {
+    "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/analysis/a800-mechanisms/historical-parameter-context-v1/HISTORICAL_PARAMETER_RUN_CONTEXTS.jsonl",
+    "targeted_rows": [1, 2, 16],
+    "row1": "Toys 2025-10-22/21-25-31: one SID table, four aggregation tensors, 180 state tensors, historical checkpoint SHA fb215c22cdc413fc81233354439801a93eaa2d5b01ca328fdfc71dadb2a9d028.",
+    "row2": "Separate Toys 2025-10-22/21-28-23 R-Kmeans condition; not Sports.",
+    "row16": "Beauty 2025-11-03/02-47-09: two SID tables, no aggregation tensors, 178 state tensors; encoder and decoder table bytes differ in 131068 float32 elements.",
+    "historical_python_boundary": "Selected contexts explicitly retain historical_python_source=UNKNOWN and historical_forward_mask_loss_generate=UNKNOWN. Current preserved method compatibility does not establish a unique historical producer Python.",
+    "large_checkpoint_whole_hashes": "Inherited from preservation-bound metadata; not freshly rehashed or loaded by this reviewer.",
+    "sports_negative_search": "Inherited prior bounded search over preserved 64-checkpoint/17-context/248-candidate indexes; not repeated and not a claim that no historical Sports MLP ever existed."
+  },
+  "method_review": {
+    "status": "PASS_SOURCE_STRUCTURE",
+    "original_constructor": "L500-504 derives H from codebooks.shape[0] and U from codebooks.max()+1 when unspecified.",
+    "aggregation": "L580-590: one shared per-item Linear(HE,2E), ReLU, Dropout(0.1), Linear(2E,E), both Linear biases retained; sep_token=None.",
+    "forward": "L615-651: original hierarchy offset then shared-table lookup, reshape within each historical item, MLP, last-hierarchy item mask; not a single MLP over the whole user history.",
+    "adapter": "author/models.py L325-326: AuthorMLPModel inherits _RuntimeBridge and OriginalMLPModel without overriding aggregation.",
+    "config_adapter": "common.py L49-94 explicitly substitutes current paths and route class, preserves selected source model/optimizer fields, sets engineering workers0/devices1/strategyauto, and explicitly supplies K10.",
+    "training_boundary": "run.py rejects formal_approved other than explicit false, restricts MLP domains to Toys/Sports and updates to the fixed 2+1. Engineering checkpoints are marked formal_state_reuse_allowed=false."
+  },
+  "lines": {
+    "Shuffle-A": {
+      "source_condition_review": "PASS",
+      "RESEARCH_CONDITIONS_CONFIRMED": true,
+      "FORMAL_RUN_AUTHORIZED": false,
+      "condition": "Beauty T5-small MeanAggregation 512-dimensional embeddings, normalized residual MiniBatchKMeans with three quantizer codes plus collision disambiguation; preserved author dual-table model.",
+      "config_sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d",
+      "sid_sha256": "188af0341d8c232de73acd9aa7fc3390db8d430c8c71a94ec9816962d3d94f68",
+      "checkpoint_sha256": "21b174d051548d28eadc995c365c6c7beaf7410535fe726b8f720e9555a04e00",
+      "checkpoint_historical_run": "2025-11-03/02-47-09",
+      "checkpoint_step": 4800,
+      "direct_raw_job_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-a-shared-r1/retrieved",
+      "direct_raw_files": ["status.json", "output/loading.json", "output/data_check.json", "output/invocation.json", "output/used_config.json", "output/RESULT.json"],
+      "observed": {
+        "job_status": "SUCCEEDED",
+        "exit_code": 0,
+        "result": "PASS",
+        "strict_missing_keys": [],
+        "strict_unexpected_keys": [],
+        "all_parameter_keys_shapes_values_equal": true,
+        "embedded_sid_exact": true,
+        "state_tensor_count": 178,
+        "parameter_count": 13259136,
+        "shared_sid_table": false,
+        "sid_shape": [4, 12101],
+        "sid_dtype": "torch.int64",
+        "sid_range": [0, 255]
+      },
+      "ENGINEERING_PREFLIGHT_SIGNOFF": "DEFERRED_TO_INDEPENDENT_EXECUTION_RESULTS_REVIEWER",
+      "READY_FOR_FORMAL_REVIEW": "Requires merged engineering and publication review; source selection has no new methodological decision gap.",
+      "comparison_boundary": "A Normal is the comparison for A Shuffle3/4; A/B absolute metrics are not a same-model engineering equivalence test."
+    },
+    "Shuffle-B": {
+      "source_condition_review": "PASS",
+      "RESEARCH_CONDITIONS_CONFIRMED": true,
+      "FORMAL_RUN_AUTHORIZED": false,
+      "condition": "Matched working Beauty Qwen/R-Kmeans SID and single shared encoder/decoder SID embedding model.",
+      "config_sha256": "790e0d16c67823c6cad403013ae0f152ef61cebcd548715c113376c7a0ecef33",
+      "sid_sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18",
+      "checkpoint_sha256": "3d8f03cf042293f2f7f02132c9d072f573f671d9550d567edd1754f50e53e605",
+      "checkpoint_step": 12500,
+      "direct_raw_job_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved",
+      "direct_raw_files": ["status.json", "output/loading.json", "output/data_check.json", "output/invocation.json", "output/used_config.json", "output/RESULT.json"],
+      "observed": {
+        "job_status": "SUCCEEDED",
+        "exit_code": 0,
+        "result": "PASS",
+        "strict_missing_keys": [],
+        "strict_unexpected_keys": [],
+        "all_parameter_keys_shapes_values_equal": true,
+        "embedded_sid_exact": true,
+        "state_tensor_count": 177,
+        "parameter_count": 13128064,
+        "shared_sid_table": true,
+        "sid_shape": [4, 12101],
+        "sid_dtype": "torch.int64",
+        "sid_range": [0, 255]
+      },
+      "ENGINEERING_PREFLIGHT_SIGNOFF": "DEFERRED_TO_INDEPENDENT_EXECUTION_RESULTS_REVIEWER",
+      "READY_FOR_FORMAL_REVIEW": "Requires merged engineering and publication review; source selection has no new methodological decision gap."
+    },
+    "Toys-MLP": {
+      "source_condition_review": "PASS_ENGINEERING_IDENTITY_WITH_FORMAL_GAPS",
+      "RESEARCH_CONDITIONS_CONFIRMED": false,
+      "FORMAL_RUN_AUTHORIZED": false,
+      "FORMAL_TECHNICALLY_READY_PENDING_USER_AUTHORIZATION": false,
+      "historical_condition": "Native Toys 2025-10-22/21-25-31 RQ-VAE+STE candidate; distinct native Toys R-Kmeans alternative remains separate.",
+      "config_original_path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/train/runs/2025-10-22/21-25-31/.hydra/config.yaml",
+      "config_repository_copy": "experiments/preflight_20261015/historical/toys-source.yaml",
+      "config_bytes": 12183,
+      "config_sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd",
+      "original_config_equals_repository_copy": true,
+      "sid_original_path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/inference/runs/2025-09-22/10-05-01/pickle/merged_predictions_tensor.pt",
+      "sid_bytes": 382902,
+      "sid_sha256": "26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0",
+      "small_config_and_sid_hashes_freshly_verified_during_completed_review": true,
+      "direct_raw_job_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-toys-prepare-r1/retrieved",
+      "direct_raw_files": ["status.json", "output/loading.json", "output/data_check.json", "output/invocation.json", "output/used_config.json", "output/RESULT.json"],
+      "observed_cpu_preparation": {
+        "status": "PASS",
+        "parameter_count": 13291136,
+        "shared_sid_table": true,
+        "sid_shape": [4, 11924],
+        "sid_dtype": "torch.int64",
+        "sid_range": [0, 254],
+        "effective_U": 255,
+        "sid_embedding_rows": 1020
+      },
+      "source_training_values": {
+        "initial_checkpoint": null,
+        "seed": 42,
+        "raw_microbatch_per_device": 32,
+        "collate_window_cap": 512,
+        "accumulate_grad_batches": 16,
+        "validation_microbatch_interval": 1600,
+        "optimizer": "Adam",
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "scheduler": null,
+        "monitor": "val/recall@5",
+        "mode": "max",
+        "early_stop_patience": 10,
+        "max_steps": 320000,
+        "max_epochs": 10,
+        "observed_historical_world_size_from_inherited_review": 3
+      },
+      "engineering_condition": "Scratch full-parameter preserved MLP, K10, 2+1 updates, val11/test19; no historical or Beauty checkpoint reuse, no formal reuse of engineering state.",
+      "upstream_provenance_limit": "SID inference config declares learned ResidualQuantization, three levels, STE and BetaQuantizationLoss beta0.25. Linked embedding config has T5EncoderModel.from_pretrained at L19 but Qwen2.5-7B-Instruct path at L73. Preserve contradiction; do not claim proven T5 SID or uniquely reconstructed historical Python.",
+      "ENGINEERING_PREFLIGHT_SIGNOFF": "DEFERRED_TO_INDEPENDENT_EXECUTION_RESULTS_REVIEWER",
+      "later_engineering_closure": "Controller reports four-line engineering closure after this source review's direct raw reads; actual MLP train/resume signoff belongs to the separate reviewer.",
+      "READY_FOR_FORMAL_REVIEW": false,
+      "minimum_future_decision": "Confirm whole native RQ-VAE+STE condition versus separate native R-Kmeans condition, and approve initialization/freezing, single-card accumulation/validation cadence and this domain's termination/resource budget."
+    },
+    "Sports-MLP": {
+      "source_condition_review": "PASS_ENGINEERING_IDENTITY_WITH_FORMAL_GAPS",
+      "RESEARCH_CONDITIONS_CONFIRMED": false,
+      "FORMAL_RUN_AUTHORIZED": false,
+      "FORMAL_TECHNICALLY_READY_PENDING_USER_AUTHORIZATION": false,
+      "historical_condition": "HISTORICAL_CONDITION_UNCONFIRMED",
+      "config_original_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/manifests/sid-extensions/baseline-run-records/sports/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/.hydra/config.yaml",
+      "config_repository_copy": "experiments/preflight_20261015/historical/sports-engineering-base.yaml",
+      "config_bytes": 12170,
+      "config_sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24",
+      "original_config_equals_repository_copy": true,
+      "config_hash_freshly_verified_during_completed_review": true,
+      "sid_remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+      "sid_bytes_from_real_remote_loading_evidence": 588597,
+      "sid_sha256_from_real_remote_loading_evidence": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293",
+      "local_repository_sid_boundary": "Local corresponding file is an LFS pointer; never treat it as payload. This reviewer did not reload or rehash the remote SID.",
+      "direct_raw_job_root": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-sports-prepare-r1/retrieved",
+      "direct_raw_files": ["status.json", "output/loading.json", "output/data_check.json", "output/invocation.json", "output/used_config.json", "output/RESULT.json"],
+      "observed_cpu_preparation": {
+        "status": "PASS",
+        "parameter_count": 13292160,
+        "shared_sid_table": true,
+        "sid_shape": [4, 18357],
+        "sid_dtype": "torch.int64",
+        "sid_range": [0, 255],
+        "effective_U": 256
+      },
+      "working_upstream_metadata_direct_read": "manifests/sid-extensions/baseline-run-records/sports/experiments/sports_rkmeans_qwen_20261010_093035/item_embeddings.json: Qwen2.5-7B-Instruct/qwen2, shape18357x3584, WMH MeanAggregation/right padding, TFRecord text with preexisting embedding field ignored.",
+      "engineering_condition": "Matched same-domain working Qwen/R-Kmeans SID/data with scratch preserved author item MLP; source raw16/cap128/acc16 and optimizer values are engineering-base values, not an authenticated author Sports MLP training protocol.",
+      "ENGINEERING_PREFLIGHT_SIGNOFF": "DEFERRED_TO_INDEPENDENT_EXECUTION_RESULTS_REVIEWER",
+      "later_engineering_closure": "Controller reports four-line engineering closure after this source review's direct raw reads; actual MLP train/resume signoff belongs to the separate reviewer.",
+      "READY_FOR_FORMAL_REVIEW": false,
+      "minimum_future_decision": "Approve an explicitly new Sports Qwen/R-Kmeans plus preserved author item-MLP structural experiment and its initialization/freezing/training/selection/resource protocol, or supply a trustworthy author historical Sports MLP bundle."
+    }
+  },
+  "future_formal_recommendations_not_authorization": [
+    {
+      "domain": "Toys",
+      "recommendation": "Prefer retaining the currently source-matched native RQ-VAE+STE SID and fresh full-parameter MLP if aligned with the author's current instruction; retain original optimizer and selection rules as a whole.",
+      "basis": "Exact original config/SID entities, aggregation-bearing historical checkpoint context, inherited fourfold embedded SID pairing, real CPU model/data contract; no upstream regeneration required.",
+      "single_card_candidate_derivation_not_applied": "Original3*raw32*acc16=1536 nominal raw rows suggests single-card raw32/acc48 and val4800 for100 optimizer-update cadence. Collate windows, worker order and DDP reduction prevent claiming historical trajectory equivalence.",
+      "approval_status": "NOT_APPROVED; engineering smoke does not authorize this formal protocol.",
+      "do_not_inherit": "Beauty acc64/val6400/12h or historical best3800/final4800 as a new stopping step."
+    },
+    {
+      "domain": "Sports",
+      "recommendation": "If no trustworthy historical bundle is supplied, prefer a clearly named new same-domain Qwen/R-Kmeans plus preserved author item-MLP experiment from scratch, using current matched assets.",
+      "basis": "Bounded preserved indexes do not identify an author Sports MLP; same-domain working SID/data/upstream metadata are available and provenance-bound. No new embedding/SID or normal-baseline training is needed.",
+      "approval_status": "NOT_APPROVED; requires an explicit formal condition and independent training/resource plan after second review."
+    }
+  ],
+  "necessary_small_source_originals_for_review_bundle": [
+    {
+      "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/inference/runs/2025-09-15/19-47-36/.hydra/config.yaml",
+      "direct_read_evidence": "L19 T5EncoderModel.from_pretrained; L24 MeanAggregation; L73 t5-small path.",
+      "purpose": "A upper-stage encoder condition primary source."
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/inference/runs/2025-09-15/20-54-16/.hydra/config.yaml",
+      "direct_read_evidence": "L11-20 residual/layerwise normalized MiniBatchKMeans; L92 embedding source; L93-95 width256/three levels/512 dimensions.",
+      "purpose": "A upper-stage quantizer condition primary source."
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/inference/runs/2025-09-22/08-44-16/.hydra/config.yaml",
+      "inherited_sha256_not_freshly_rehashed_here": "54774539256a57edef8dd65af3dc2bfda1c5c599554ba9646d23b4ff3531a9b0",
+      "direct_read_evidence": "L19 T5 factory and L73 Qwen2.5-7B-Instruct path contradiction.",
+      "purpose": "Toys upper-stage provenance limitation primary source."
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/preservation/A800-grid-20261010-v1/restored/A800_GRID/logs/inference/runs/2025-09-22/10-05-01/.hydra/config.yaml",
+      "inherited_sha256_not_freshly_rehashed_here": "3d0f110b820f61c637827ad1ef1e4301403b4294a2886e6319c110f6a6df7082",
+      "direct_read_evidence": "L11 learned ResidualQuantization; L54 STE; L76-77 BetaQuantizationLoss beta0.25; L145-148 embedding source/three levels/3584 dimensions.",
+      "purpose": "Toys selected quantizer condition primary source."
+    }
+  ],
+  "publication_notes": {
+    "documentation_finding": "At direct read, current Toys/Sports section and old top-level review states still described CPU/resource blockage despite later accepted GPU jobs. Controller should preserve historical facts and update current-state reporting from verified final execution evidence.",
+    "candidate_boundary": "Toys/Sports candidate research_config_confirmed=false and training_budget_approved=false must remain false without new user decisions; no retroactive approval.",
+    "repair_budget": "Existing rounds.json records3/3 task-level correction rounds; this review and receipt add no repair round.",
+    "task_terminal_recommendation": "PARTIAL_PREFLIGHT when all engineering lines close but these formal research-condition decisions remain outstanding.",
+    "review_bundle": "Necessary raw source originals above are not all present in repository; include them and actual execution receipts in the controller's small verified ZIP, without model/data payloads."
+  }
+}

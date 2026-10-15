@@ -115,4 +115,34 @@
 
 核验入口：[训练结果](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-v1/training_result.json)、[严格best加载](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-v1/best_checkpoint_load.json)、[原始CSV](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-v1/csv/version_0/metrics.csv)、[完整验证记录](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-v1/validations.jsonl)、[正式曲线](../../../manifests/beauty-extensions/runs/beauty-mlp-training-curves-v2/training_validation_curves.png)、[非作者审核](../../../manifests/beauty-extensions/final-review.json)。全量预测/逐样本指标/原日志/终态回执在最终轻量ZIP；大型权重保留new-server原job输出目录。
 
+## 2026-10-15 Toys/Sports：2+1工程预跑已完成，正式条件待确认
+
+两域均 **ENGINEERING_PREFLIGHT_PASS**：各自从零2次optimizer update，保存后在独立进程严格恢复，再1次update，val11/test19及预测复算闭合。总体 **PARTIAL_PREFLIGHT**，因为两域 `RESEARCH_CONDITIONS_CONFIRMED=false`、`READY_FOR_FORMAL_REVIEW=false`；不将工程候选冒称已批准正式方案。Beauty已完成正式MLP、最佳checkpoint及原预测均未重跑/修改。
+
+|域|真实来源和工程采用值|结果与正式边界|
+|---|---|---|
+|Toys|作者run `2025-10-22/21-25-31` config SHA `9050b9de…`；RQ-VAE+STE SID SHA `26bae0c9…`，shape[4,11924]、U255；H4/E128、原raw32/collate cap512/accum16/Adam.001/wd.0001/no scheduler/seed42，scratch全参数|13,291,136参数，4个MLP参数均有限梯度且实际更新；原档案另有真正Toys R-Kmeans候选。上游T5 factory与Qwen路径冲突、唯一producer Python缺口继续披露；未来需批准整套条件与单卡协议/预算|
+|Sports|本域既有Qwen/R-Kmeans SID SHA `89b2c2bb…`，shape[4,18357]、U256；原普通工作config SHA `59a6a756…`，raw16/cap128/accum16/Adam.001/wd.0001/no scheduler/seed42，scratch工程模型|13,292,160参数，4个MLP参数均有限梯度且实际更新；HISTORICAL_CONDITION_UNCONFIRMED。普通配置不是作者Sports MLP历史设置；未来须明确批准本域SID+作者MLP的新结构实验、初始化和预算|
+
+结构直接继承保全作者MLP及已验证Beauty adapter：逐物品 `[B,M,4,128]→[B,M,512]→Linear512,256→ReLU→Dropout0.1→Linear256,128`，MLP跨全部历史物品共享，无SEP；本次有效config无user table，末码物品mask，decoder仍四码位自回归。不是整段用户历史聚合，也未重写loss/生成/evaluator。三split×8条item→SID/label/mask、部分有效组拒绝、真实尾批test8/8/3及val8/3均通过；原TFRecord/SID/item映射未改。
+
+Dropout按原结构和Lightning fit/validation/test的train/eval生命周期处理；独立性probe显式eval后恢复状态，代码与真实训练/评价链已经审核。没有逐阶段Dropout.training字段采样日志，不能伪称记录了该字段。原件与适配版空长度输入同样抛IndexError，全padding行为同样返回有限张量；这是保留的边界，不宣称空历史科学输入已被完整支持。
+
+|域|原scratch job /本次独立恢复job|实际更新、窗口和时间|峰值GPU显存|
+|---|---|---|---|
+|Toys|`gsp-20261015-toys-short-r1` / `gsp-20261015-toys-resume-r3`|2+1更新，32+16 microbatch，13,463+6,726 collate windows；训练/val/保存/test段10.376+7.043秒；worker总118.185+96.250秒|scratch allocated1,996,942,336 B/reserved3,806,330,880 B；恢复reserved3,026,190,336 B|
+|Sports|`gsp-20261015-sports-short-r1` / `gsp-20261015-sports-resume-r1`|2+1更新，32+16 microbatch，3,744+1,879 collate windows；对应段9.150+6.210秒；worker总95.093+29.255秒|scratch allocated693,331,456 B/reserved750,780,416 B；恢复reserved742,391,808 B|
+
+全部上述job均SUCCEEDED/0且cleanup verified。独立恢复模型所有键/shape/value、optimizer/global_step严格一致，恢复前19条SID/target/order及得分误差0；EarlyStopping exact。ModelCheckpoint换输出目录后按现装Lightning仅恢复best_model_path，其目录绑定排序状态重置；原状态/当前状态逐字段记录。没有RNG/数据游标连续恢复保证，不宣称不中断训练等价。工程checkpoint及optimizer状态禁止成为未来正式训练起点。
+
+**不利结果照实保留。** 每域scratch及恢复后test各190/190候选不在合法SID集合，原prefix约束false，原evaluator未过滤、补全或重排，Recall/NDCG均0。四码位输出/有限score/严格恢复与评价接口通过，不等于几次更新具有推荐效果；不得把它们用作正式指标。
+
+原Toys恢复r1在on_train_start记录callback的-inf sentinel时JSON失败，尚未新增update；已有round2递归编码修正保留有限loss/梯度参数检查。r2为manifest身份拒绝，无worker/GPU。接管只验证已有round3commit+files部署补丁，在新的不可变快照c42c3fcc9bba292f上完成两域恢复，没有第4轮研究修复。所有旧失败保留。
+
+资源预算估计仅以以上真实窗口、峰值及训练/验证/保存/test成本为依据；两个更新不足以给出可靠全量ETA，不用CPU导入耗时或Beauty步数冒充本域正式预算。预跑原硬限每job1200秒、总目标2GPUh/修正上限6GPUh，累计保守请求wall0.254719264GPUh，全部本任务job已终止。两个工程spec仍2+1更新、val11/test19，正式candidate不继承这些限制且始终未授权。
+
+仅剩未来正式决策：Toys首选沿本次已配对RQ-VAE+STE整套及原优化器/选模规则，用户批准单卡累积、验证节奏与停止/资源预算；原3卡名义raw32×acc16推导单卡acc48/val4800只是一项候选，未批准且不保证历史轨迹等价。Sports首选明确批准“本域Qwen/RK+作者逐物品MLP”的新结构实验及独立初始化/预算；若要求历史复现，需可信Sports作者bundle。不套用Beauty acc64/val6400/12h，不将历史best3800/终测4800变成新停止步数。
+
+真实代码/配置、来源审核及逐job身份见 [EXECUTION_SUMMARY.json](../../../manifests/grid-shuffle-mlp-preflight-20261015/EXECUTION_SUMMARY.json) 和同目录独立审核；原request/status/log、19条预测、callback状态与必要来源原文在校验后的轻量ZIP。当前停止，待GPT网页版二审与用户批准，不启动正式训练或注意力采集。
+
 CPU曲线v1的请求因plot/capture阶段生成不同manifest身份串而被runner在接受前拒绝，未启动worker。保留原拒绝请求/回执，v2只绑定已核不可变快照的真实manifest SHA，调用同一冻结绘图脚本和完整CSV成功，PNG实际重读。此为提交身份处理，未修改研究源码、训练/评价设置或重跑模型；[完整依据](../../../manifests/beauty-extensions/curves-submission-binding.json)随交付保留。
