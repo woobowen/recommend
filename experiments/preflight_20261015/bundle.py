@@ -16,6 +16,9 @@ def main():
     a=p.parse_args();assert re.fullmatch('[0-9a-f]{40}',a.commit)
     publication=json.loads((SUPPORT/'publication.json').read_text())
     assert publication['commit']==a.commit and publication['remote_ref_verified']
+    summary=json.loads(subprocess.check_output(['git','show',a.commit+':manifests/grid-shuffle-mlp-preflight-20261015/EXECUTION_SUMMARY.json'],cwd=REPO))
+    status=summary['status']
+    assert status in ('PREFLIGHT_READY_FOR_REVIEW','PARTIAL_PREFLIGHT','BLOCKED')
     receipt=json.loads((SUPPORT/'collection-receipt.json').read_text());collected=Path(receipt['directory'])
     members={}
     def add(name,data):
@@ -30,8 +33,11 @@ def main():
     external=['publication.json','collection-receipt.json','terminal-states.json','task.json','rounds.json',
         'asset-presence.json','remote-precheck.json','framework-lifecycle-source.txt','installed-checkpoint-source.json',
         'resource-process-check.json','resource-check-after-cpu.json','resource-check-0610.json','resource-final-check.json',
-        'b-shuffle-submission-attempt.json','gsp-20261015-b-shuffle-r1-resource-check.json','round1-final-source.json']
+        'b-shuffle-submission-attempt.json','gsp-20261015-b-shuffle-r1-resource-check.json','round1-final-source.json',
+        'shared-preflight-authorization.json','shared-resource-baseline.json','network-recovery-check.json']
     for name in external:add('external-receipts/'+name,(SUPPORT/name).read_bytes())
+    for f in sorted(SUPPORT.glob('gsp-20261015-*-shared-resource-check.json')):
+        add('external-receipts/resource-admission/'+f.name,f.read_bytes())
     for f in sorted(SUPPORT.glob('*-deployment.json')):add('external-receipts/deployments/'+f.name,f.read_bytes())
     for name in ['work.log','request.json','status.json']:add('prior-B-failure/'+name,(SUPPORT/'prior-failure'/name).read_bytes())
     for name in ['AGENTS.md','PROJECT_RULES.md','REMOTE_EXECUTION.md']:
@@ -50,22 +56,24 @@ def main():
     for f in inherited:
         assert f.is_file() and not f.is_symlink() and f.stat().st_size < 2*1024**2
         add('inherited-source-evidence/'+str(f.relative_to(archive_root)),f.read_bytes())
-    readme=f'''# GRID 第一阶段审核包 — PARTIAL_PREFLIGHT
+    readme=f'''# GRID 第一阶段审核包 — {status}
 
 固定 wbw 提交：{a.commit}
 入口：https://github.com/woobowen/recommend/blob/{a.commit}/manifests/grid-shuffle-mlp-preflight-20261015/EXECUTION_SUMMARY.json
 
 先读该 summary、shuffle-a-execution-review.json、shuffle-b-review.json、source-conditions-review.json，再读两份实验说明。
-7个本阶段job全部是CPU prepare：6成功、1个runner预建output导致的mkdir失败。A/B各31条test及11条val，Toys/Sports各19条test及11条val；没有GPU前向、optimizer更新、预测、checkpoint、全量评价或正式attention。
-两张4090均有同学任务，实际GPU提交在request创建前RESOURCE_BUSY拒绝。旧Beauty状态仍PARTIAL_BLOCKED。
+本轮终态与逐线准入以固定提交中的 EXECUTION_SUMMARY.json 为准，共 {len(summary['jobs'])} 个已接收 job。
+A/B 每条件31条固定test及11条val，Toys/Sports各19条test及11条val；训练限每域2次更新及独立恢复后的1次更新。
+用户后续明确允许有足够余量时共享单张GPU；共享授权、连续资源基线及每个实际GPU job的监视记录分别保留。此前BUSY拒绝和CPU检查均为真实历史，不作为当前资源结论。
+没有任何全量评价、正式训练或正式attention。旧Beauty交付状态仍PARTIAL_BLOCKED。
 
-repository/ 是固定Git提交的变更字节；evidence/ 是109份原request/status/log/CPU配置与结果（另含collection manifest）。
-external-receipts/ 是实际部署/传输、资源阻塞、框架源与GitHub回读/服务器对应回执。
+repository/ 是固定Git提交的变更字节；evidence/ 是原request/status/log、有效配置、真实预跑结果和逐样本预测（另含collection manifest）。
+external-receipts/ 是实际部署/传输、资源观察与授权、框架源与GitHub回读/服务器对应回执。
 prior-B-failure/ 是旧beauty-b-smoke-r3原件的核验副本，不能冒充本轮实跑。
 inherited-source-evidence/ 是Toys两套历史配置及惰性checkpoint metadata，不能证明缺失的Sports历史或作者Python绑定。
 task-instructions/ 和 applied-rules/ 固定本次授权及边界。
 
-本轮代码提供真实有界GPU预跑路径，但没有空闲卡执行；静态审核/CPU PASS不能代替REAL_PREFLIGHT_PASS。
+逐线工程门禁必须由真实执行及非作者审核支持，不能用静态审核/CPU PASS代替REAL_PREFLIGHT_PASS；未来Toys/Sports正式研究条件另审。
 所有候选formal_approved=false；未创建有效正式授权token。未来研究配置/训练预算另审。
 模型、SID、原数据和旧Beauty完整结果不放入本包，保持服务器原路径。MANIFEST.json逐项列SHA与大小；ZIP整体SHA仅写在包外。
 '''
@@ -75,10 +83,10 @@ task-instructions/ 和 applied-rules/ 固定本次授权及边界。
     for name,data in sorted(members.items()):
         assert not secret.search(data),name
         records.append({'path':name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
-    add('MANIFEST.json',(json.dumps({'commit':a.commit,'status':'PARTIAL_PREFLIGHT','files':records,
+    add('MANIFEST.json',(json.dumps({'commit':a.commit,'status':status,'files':records,
         'secret_pattern_scan':'PASS','model_and_source_data_payloads_excluded':True,'zip_sha_outside':True},ensure_ascii=False,indent=2)+'\n').encode())
     destination=SUPPORT/'deliveries';destination.mkdir(exist_ok=True)
-    path=destination/'grid-shuffle-mlp-preflight-partial-20261015.zip'
+    path=destination/'grid-shuffle-mlp-preflight-20261015.zip'
     with zipfile.ZipFile(path,'x',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:
         for name,data in sorted(members.items()):z.writestr(name,data)
     with zipfile.ZipFile(path) as z:
@@ -90,7 +98,7 @@ task-instructions/ 和 applied-rules/ 固定本次授权及边界。
     digest=sha256(path);path.with_suffix('.zip.sha256').write_text(digest+'  '+path.name+'\n')
     result={'path':str(path),'windows_unc':subprocess.check_output(['wslpath','-w',str(path)],text=True).strip(),
         'bytes':path.stat().st_size,'sha256':digest,'members':len(members),'crc_and_member_sha256_verified':True,
-        'secret_pattern_scan':'PASS','commit':a.commit,'status':'PARTIAL_PREFLIGHT'}
+        'secret_pattern_scan':'PASS','commit':a.commit,'status':status}
     write_json(destination/'zip-receipt.json',result);print(json.dumps(result,ensure_ascii=False,indent=2))
 
 
