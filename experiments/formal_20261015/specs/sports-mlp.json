@@ -1,0 +1,30 @@
+{
+  "route": "MLP",
+  "seed": 42,
+  "generation_k": 10,
+  "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports",
+  "config": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24/sports-engineering-base.yaml",
+    "sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24"
+  },
+  "sid": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+    "sha256": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293"
+  },
+  "domain": "sports",
+  "stage": "grid-formal-20261015",
+  "shuffle_n": 0,
+  "formal_approved": true,
+  "formal_training_allowed": true,
+  "formal_protocol_user_approved": true,
+  "initialization": "scratch; all parameters trainable; no engineering checkpoint reuse",
+  "approved_protocol": {
+    "raw_microbatch": 16,
+    "accumulate_grad_batches": 16,
+    "val_check_interval": 1600,
+    "collate_window_cap": 128
+  },
+  "hard_cap_hours": 12,
+  "user_approval_reference": "2026-10-15 user: 两个问题均批准方案1；12小时总硬资源上限，含完整测试，耗尽保存并如实未完成",
+  "research_identity": "new Sports Qwen/RK plus original per-item MLP structure experiment; not recovered historical Sports MLP"
+}

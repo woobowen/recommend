@@ -1,0 +1,271 @@
+{
+  "schema": 1,
+  "reviewer_task": "/root/implementation_review",
+  "role": "real nonauthor review of root-authored formal orchestration only",
+  "reviewed_at": "2026-10-15T23:26:54.865426+08:00",
+  "status": "NONAUTHOR_STATIC_ADMISSION_PASS",
+  "reviewed_non_author_source_files": [
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/run.py",
+      "bytes": 9805,
+      "sha256": "e0a2c8f5229e22299d7ce6f2b2933dc808e1a06bfb03794898bc6284cb52de66"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/deploy.py",
+      "bytes": 6845,
+      "sha256": "70210a765984c095ab14925c4801f38c913cb5c790d59483a88a294e10998a0c"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/__init__.py",
+      "bytes": 81,
+      "sha256": "f8a812be45c1741ccbc6ef90967b700c95d2109341c67067436efb672d0d7517"
+    }
+  ],
+  "explicit_authorship_exclusion": {
+    "path": "experiments/formal_20261015/train.py",
+    "author": "/root/implementation_review",
+    "self_signed": false,
+    "independent_reviewer": "/root/source_conditions_review",
+    "independent_review_relay": "Source reviewer directly read whole function AST/diff and signed SHA af7ec5159e0fbe9f7330d1172b81356920a1c626db9e15a6b339e6b074c79a1e; this receipt does not substitute for that review."
+  },
+  "reviewer_actions": {
+    "model_loads": 0,
+    "GPU_calls": 0,
+    "remote_actions": 0,
+    "repository_edits_in_this_nonauthor_review": 0,
+    "git_operations": 0,
+    "only_review_artifact_written": "/home/addaswsw/recommend-support/grid-formal-20261015/implementation-formal-admission.json"
+  },
+  "inherited_AB_computation": {
+    "anchor": "93567ea7f61e970c448838443595242d0b9beef0",
+    "preflight_jobs": [
+      "gsp-20261015-a-shared-r1",
+      "gsp-20261015-b-shared-r1"
+    ],
+    "same_core": "common.instantiate, original A/B adapters, cli.test_lifecycle, original four-code generation and evaluator",
+    "already_passed_preflights_not_rerun": true,
+    "prior_task_correction_rounds_used": 3,
+    "prior_task_correction_rounds_max": 3,
+    "budget_reset": false
+  },
+  "source_findings": [
+    {
+      "status": "PASS",
+      "topic": "immutable deployment",
+      "locations": [
+        "experiments/formal_20261015/deploy.py:28",
+        "experiments/formal_20261015/deploy.py:35",
+        "experiments/formal_20261015/deploy.py:56"
+      ],
+      "details": "Every source record is checked against git show HEAD:path before packaging. Directory identity covers source_commit plus exact sorted file records. Server verifies archive SHA, exact DEPLOYMENT raw SHA, every file size/hash and regular safe tar paths. Immutable old snapshot remains untouched; old Beauty files-only deploy is not called."
+    },
+    {
+      "status": "PASS",
+      "topic": "accepted request binding and safety",
+      "locations": [
+        "experiments/formal_20261015/deploy.py:72",
+        "experiments/formal_20261015/deploy.py:87",
+        "experiments/formal_20261015/deploy.py:97",
+        "experiments/formal_20261015/run.py:115"
+      ],
+      "details": "Fixed namespace and accepted runner are reused; request carries source/spec/asset/gate hashes, exact cwd/capture identity, existing job request mismatch fails closed. Timeouts bounded <=43200s. Identity/metadata use no CUDA visible device; GPU work checks current selected physical card for process and >=14GiB free. No foreign process signal, SSH configuration or driver mutation."
+    },
+    {
+      "status": "PASS",
+      "topic": "formal admission",
+      "locations": [
+        "experiments/formal_20261015/run.py:15",
+        "experiments/beauty_extensions/authorization.py:17"
+      ],
+      "details": "A/B uses original report/plan/source/assets gate. MLP uses config+SID, exact canonical plan, all deployed Python mapping and independent report; scratch/approved domain validation is done by independently reviewed train.configure. Metadata skips formal-run gate only for CPU data identity work. Actual gate files and accepted jobs still must be verified by root before model jobs."
+    },
+    {
+      "status": "PASS",
+      "topic": "complete A/B evaluation and real trace",
+      "locations": [
+        "experiments/formal_20261015/run.py:41",
+        "experiments/formal_20261015/run.py:49",
+        "experiments/formal_20261015/run.py:57"
+      ],
+      "details": "Instantiates strict selected checkpoint and same original datamodule/evaluator. formal_config forbids all limit_* / fast_dev / overfit overrides. test_lifecycle executes actual datamodule; finally preserves existing event/permutation/counter traces without extra sampler calls. recompute requires exact route-specific key/target index, original trainer metrics parity and Beauty22363 targets. Normal requires zero intervention calls; Shuffle3/4 requires real events and every encoder call counted."
+    },
+    {
+      "status": "PASS",
+      "topic": "finite real-generation attention",
+      "locations": [
+        "experiments/formal_20261015/run.py:76",
+        "experiments/formal_20261015/run.py:99",
+        "experiments/beauty_extensions/attention/capture.py:318",
+        "experiments/beauty_extensions/attention/records.py:49"
+      ],
+      "details": "Requires terminal successful prior result, exact checkpoint/config/SID and Shuffle condition, verified fixed32 cohort selected before outputs, then strict model restore. Calls existing capture_batch for four batches of8. Actual observer records unique prefix parents and backtracks final Top1; localfirst is separate independent parent0. Raw last-layer heads and all input slots/mask remain, head mean displayed. finally clears stage and full-permutation capture even on failure. Observer OFF/ON is explicitly not Shuffle OFF/ON."
+    },
+    {
+      "status": "PASS",
+      "topic": "training configuration report sequencing",
+      "locations": [
+        "experiments/formal_20261015/run.py:123",
+        "experiments/formal_20261015/run.py:127",
+        "experiments/formal_20261015/run.py:139"
+      ],
+      "details": "Root now calls train.configure before saving generic effective_config and passes that same cfg into execute; avoids source Toysacc16 being mislabeled effective while actual approved training isacc48. Old deadline_record retains total12h allowance including testing, with checkpoint reserve; no extra13th hour."
+    }
+  ],
+  "preexecution_findings_resolved": [
+    {
+      "issue": "metadata returned pathlib.Path cohort directly; standard JSON serialization would fail after data scan",
+      "resolution": "Root replaced with explicit path+sha256 record; current metadata function invoked using in-memory metadata providers and its actual return now serializes normally. No data/model execution claimed."
+    },
+    {
+      "issue": "source_records unconditionally added missing references/wmh-original/GRID/.project-root; real local pure CPU enumeration raised FileNotFoundError",
+      "resolution": "Root filters optional marker with is_file, matching accepted preflight enumerator. Current source_records actually succeeds, existing baseline marker retained, absent author marker excluded."
+    },
+    {
+      "issue": "generic effective_config saved before Toys approved overlay",
+      "resolution": "Root moved configure before save and reuses same cfg in execute; AST sequencing check passed."
+    }
+  ],
+  "pure_CPU_verification": {
+    "syntax_all_3_root_files": "PASS",
+    "metadata_Path_to_JSON": "PASS; actual wrapper with in-memory metadata provider stubs",
+    "source_records_count": 207,
+    "source_python_count": 171,
+    "same_commit_and_records_stable_identity": true,
+    "changed_commit_distinct_identity": true,
+    "changed_file_record_distinct_identity": true,
+    "unique_manifest_paths": true,
+    "optional_markers_enumeration": "PASS",
+    "configure_precedes_effective_config_save": "PASS",
+    "models_loaded": 0,
+    "GPU_calls": 0
+  },
+  "limits": [
+    "This is source-level admission with pure CPU orchestration checks; no formal evaluation/training/attention result has been produced by reviewer.",
+    "Actual signed gates, Git commit publication, remote snapshot content, asset existence/hashes, GPU state and accepted request fingerprints remain root run-time checks.",
+    "Beauty22363 invariant applies to current A/B identity-check/evaluate paths; do not dispatch identity-check for Toys/Sports whose metadata counts differ.",
+    "train.py is authored by this reviewer and explicitly excluded from this nonauthor signature.",
+    "Prior preflight repair budget remains3/3. These were first-execution formal orchestration findings, not a new preflight repair allowance."
+  ],
+  "inputs": [
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/run.py",
+      "bytes": 9805,
+      "sha256": "e0a2c8f5229e22299d7ce6f2b2933dc808e1a06bfb03794898bc6284cb52de66"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/deploy.py",
+      "bytes": 6845,
+      "sha256": "70210a765984c095ab14925c4801f38c913cb5c790d59483a88a294e10998a0c"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/__init__.py",
+      "bytes": 81,
+      "sha256": "f8a812be45c1741ccbc6ef90967b700c95d2109341c67067436efb672d0d7517"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/authorization.py",
+      "bytes": 2434,
+      "sha256": "5291e37397f21f9ddb2b3e0c0844aa0176ccfdd046f9050249661fb088c2d6ee"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/cli.py",
+      "bytes": 24542,
+      "sha256": "1a7805c778d27f2f5f551398ba81679e036d0e2d4746650063226788e41b239a"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/common.py",
+      "bytes": 12084,
+      "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/results.py",
+      "bytes": 3339,
+      "sha256": "86b07df74869b37c0f83c80f0ff1d216c3d747a5c9ea73e26981b075d6167917"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/observation.py",
+      "bytes": 5771,
+      "sha256": "ef1594e0f0769fbed191ad253e914f1582db629a2ff45bf7ec4c70a63aaf9a6d"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/mlp_attention.py",
+      "bytes": 4821,
+      "sha256": "b53aa3832a693bdcfa015393799a320b10fa804d7f351cc029e690c1df95f9fa"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/mlp_formal.py",
+      "bytes": 37293,
+      "sha256": "ac362b84f7a9a979bb7549ce1f817448fe172b9d32adc1a449180f5aa97d9e56"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/mlp_execution.py",
+      "bytes": 18341,
+      "sha256": "e22e22710ccf664109b4b3142cbc26911325dcaea37e6459bdffdb37528f393a"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/data_checks.py",
+      "bytes": 18260,
+      "sha256": "f9b5ef2fdd0a54f23a359857539f2a7f3d3f83b4ef44dbaf034e73de9db5159f"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/attention/capture.py",
+      "bytes": 21164,
+      "sha256": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/attention/records.py",
+      "bytes": 8911,
+      "sha256": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/attention/plot.py",
+      "bytes": 4378,
+      "sha256": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/preflight_20261015/deploy.py",
+      "bytes": 7954,
+      "sha256": "fd9abb949f9365acc6a93fb716f1e4290b84138547bd0b7465a66cf0da7a8b81"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/specs/beauty-a-0.json",
+      "bytes": 1946,
+      "sha256": "358c02bd2f6c90f3544d1b5aa37a07b11daf07e515864ab273bb51389b0954bc"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/specs/beauty-a-3.json",
+      "bytes": 1946,
+      "sha256": "c6922667b38a97b7bbe8b97394bf8666942d8cf6634882b97623e21be66b00fc"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/specs/beauty-a-4.json",
+      "bytes": 1946,
+      "sha256": "48b0e3c9646da031f708d98e5d944316c33929dd00a19b19293b02594ac934ae"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/specs/beauty-b-0.json",
+      "bytes": 1599,
+      "sha256": "38667ad154446aa1167892c60270139fd7f5abaabf5a1b29b139215a36738861"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/specs/beauty-b-3.json",
+      "bytes": 1599,
+      "sha256": "7b5be5927f1888f2137988feba6b60e19661e01a6f8198b304005eb05ca64970"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/specs/beauty-b-4.json",
+      "bytes": 1599,
+      "sha256": "509490eb06f8d538b7bea9b0a42d70fad23b88fa9da412689933a2e99879757e"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/specs/sports-mlp.json",
+      "bytes": 1408,
+      "sha256": "4ca16df7335dcf806b8e965a6143f619667d73dd2c71fd99f38b7d3f1c6ffcd1"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/specs/toys-mlp.json",
+      "bytes": 1415,
+      "sha256": "be6dbc336160feab1d8abc10f82cf762ad934308af112fbbcabef3309a8e55f4"
+    }
+  ]
+}

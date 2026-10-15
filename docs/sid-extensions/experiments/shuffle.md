@@ -129,3 +129,13 @@ A/B 是不同训练模型和上游条件，各自 Normal 才是本组对照。ML
 任务累计14个已接收job：12成功、2失败；另r2接受前拒绝。7个GPU请求的walltime（含初始化及失败恢复）合计0.254719264 GPU·h，其中本次新增两恢复0.036208736 GPU·h；不是纯GPU计算时长。原预算2h目标/6h修正上限未重置，修正3/3。原CPU资源拒绝是历史事实；本次GPU1经连续两次轻量观察有充足余量后串行使用，无外部进程终止，无活动本任务job遗留。
 
 四份正式candidate均未签署，formal_approved=false；不含工程row/step overlay。A/B须网页二审和用户另行正式批准后，绑定当前独立审核/计划/代码/资产生成新的授权gate。本轮未调用正式handler、全量测试或注意力采集。逐job版本、产物、来源缺口、恢复边界和非作者审核见 [EXECUTION_SUMMARY.json](../../../manifests/grid-shuffle-mlp-preflight-20261015/EXECUTION_SUMMARY.json)；原日志、预测、采样与部署回执在实际校验的轻量ZIP。
+
+## 2026-10-15 正式阶段接续
+
+用户在预跑网页版二审及临时件清理之后，明确批准 Beauty A/B 各 Normal/Shuffle3/Shuffle4 全量评测，并随后采集主工作baseline B与A/B fixed32 cross-attention。继承93567的真实预跑，不重做31行工程检查。旧MLP正式结果、fixed32及工程注意力记录保留。当前无未提交研究修改/未推送提交/活动旧worker，原服务器工作区仍为export。
+
+新增 `experiments/formal_20261015` 只编排原common.instantiate、原Trainer.test/datamodule、原evaluator与预测记录；模型、Shuffle sampler、beam、评价计算不改。部署复用已验收commit+文件清单身份，正式所有文件须属于固定Git提交；不调用仍有file-only目录问题的旧deploy。每路线先CPU极小身份/gate/完整索引确认，无额外模型/GPU预跑，再分别执行3个正式条件；每条件完整22363目标，保存原预测、完整coverage复算及原始Shuffle事件/总调用数。
+
+A/B分别对自己的Normal作delta，不把不同SID/模型的绝对值当同条件对照。注意力独立job，依赖对应正式结果成功/身份审核；继承同用户/物品的既有固定32 cohort，每路线使用自己的SID/target。显示最后decoder层head均值，保留所有raw heads与actual final-Top1 ancestry/local-first两路径，横轴是encoder位置。观测OFF/ON一致性不等于Shuffle OFF/ON对照。
+
+原预跑3/3修正与0.254719GPUh历史不重置；新增正式入口是本轮授权的初始编排，运行失败不据此自动获得第4轮修正。每正式评测job硬限1800秒；作业由已有runner脱离SSH独立运行，按原ID查询，无成功任务重跑。当前逐job状态与后续结果见 [正式阶段记录](../../../manifests/grid-formal-20261015/EXECUTION_SUMMARY.json)。

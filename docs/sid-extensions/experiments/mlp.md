@@ -146,3 +146,11 @@ Dropout按原结构和Lightning fit/validation/test的train/eval生命周期处�
 真实代码/配置、来源审核及逐job身份见 [EXECUTION_SUMMARY.json](../../../manifests/grid-shuffle-mlp-preflight-20261015/EXECUTION_SUMMARY.json) 和同目录独立审核；原request/status/log、19条预测、callback状态与必要来源原文在校验后的轻量ZIP。当前停止，待GPT网页版二审与用户批准，不启动正式训练或注意力采集。
 
 CPU曲线v1的请求因plot/capture阶段生成不同manifest身份串而被runner在接受前拒绝，未启动worker。保留原拒绝请求/回执，v2只绑定已核不可变快照的真实manifest SHA，调用同一冻结绘图脚本和完整CSV成功，PNG实际重读。此为提交身份处理，未修改研究源码、训练/评价设置或重跑模型；[完整依据](../../../manifests/beauty-extensions/curves-submission-binding.json)随交付保留。
+
+## 2026-10-15 Toys/Sports 正式条件批准
+
+用户本轮明确批准：Toys沿已配对作者RQ-VAE+STE整套，从零全参数训练，单4090 raw32/acc48/val4800（每100更新完整验证）；Sports沿本域Qwen/RK SID+原逐物品MLP，从零全参数，raw16/acc16/val1600，明确新结构实验。两域各12小时总硬额度包含导入、训练、完整验证、strict best、完整test及收尾，不是12+1小时；预计明显超额先暂停该域，不自动延长或改科学停止协议。旧预跑当时未批准记录保留历史含义。
+
+固定：seed42、原FP32配置及src/train.py matmul处理、Adam .001/wd .0001、无scheduler、H4/E128/L120、无user table、逐物品共享MLP/Dropout.1/noSEP、四步AR K10/prefixfalse；val/recall@5 max选best，patience10/min_delta0，max_steps320000/max_epochs10。Toys acc48/val4800是原3卡名义batch/验证更新节奏换算，不保证DDP随机轨迹等价；Sports原工作协议不是历史Sports作者MLP复现。
+
+新train入口复用旧Beauty已验收的完整val/test多重集检查、有限梯度/参数更新、保存RNG/optimizer/callback、strict best含SID与共享表、原evaluator复算；仅将Beauty固有raw/acc/cap/workers守卫改为本域批准cfg。完整域CPU metadata/index与成本场景估算须正式启动前完成；2+1工程checkpoint禁止作为起点。12h耗尽保存并记INCOMPLETE，不当早停或完整结果。见 [正式阶段记录](../../../manifests/grid-formal-20261015/EXECUTION_SUMMARY.json)。
