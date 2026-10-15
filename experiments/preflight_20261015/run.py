@@ -184,6 +184,8 @@ def shuffle_check(spec, cfg, model, dm, output, test_batches, val_batches):
     source_inputs = tensor_tree_digest(test_batches)
     if hasattr(model, "permutation_trace_limit"):
         model.permutation_trace_limit = 2 * len(test_batches)
+    if hasattr(model, "trace_limit"):
+        model.trace_limit = 2 * len(test_batches)
     smoke(spec, cfg, model, dm, output, test_batches)
     assert initial == state_digest(model)
     assert source_inputs == tensor_tree_digest(test_batches), "Input or labels modified in place"
@@ -463,6 +465,13 @@ def main():
     val_batches = bounded_batches(cfg, "val", 11)
     assert 2 <= len(test_batches) <= 4 and len(val_batches) == 2
     check_batches(test_batches, "test", output); check_batches(val_batches, "val", output)
+    if "expected_long_history_case" in spec:
+        case = spec["expected_long_history_case"]
+        found = [(batch, i) for batch in test_batches for i, key in enumerate(batch_keys(batch)) if key == case["sample_key"]]
+        assert len(found) == 1
+        batch, i = found[0]
+        assert int(batch[0].mask[i].sum()) == 4 * case["visible_items"]
+        write_json(output / "long_history_case.json", {**case, "verified_in_actual_subset": True})
     import inspect
     from lightning.pytorch.strategies.strategy import Strategy
     framework_path = Path(inspect.getfile(Strategy))

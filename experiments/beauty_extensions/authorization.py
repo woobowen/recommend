@@ -44,4 +44,6 @@ def require_formal_gate(spec):
     report = json.loads(Path(review["path"]).read_text())
     if report.get("status") != "PREFLIGHT_GATE_PASS" or report.get("plan_sha256") != digest:
         raise ValueError("Independent review does not bind this plan")
+    if report.get("source_python_sha256") != code:
+        raise ValueError("Independent review does not bind this source version")
     return gate
