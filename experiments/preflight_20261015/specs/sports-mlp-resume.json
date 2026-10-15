@@ -1,0 +1,47 @@
+{
+  "stage": "grid-shuffle-mlp-preflight-20261015",
+  "domain": "sports",
+  "route": "MLP",
+  "seed": 42,
+  "generation_k": 10,
+  "formal_approved": false,
+  "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports",
+  "config": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24/sports-engineering-base.yaml",
+    "sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24"
+  },
+  "sid": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+    "sha256": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293"
+  },
+  "preflight_rows": 19,
+  "optimizer_updates": 2,
+  "resume_updates": 1,
+  "initialization": "scratch; all parameters trainable; ENGINEERING_ONLY",
+  "research_condition": "HISTORICAL_CONDITION_UNCONFIRMED; own-domain Qwen/RK engineering surrogate, not author Sports MLP",
+  "engineering_overlay": {
+    "num_workers": 0,
+    "devices": 1,
+    "strategy": "auto",
+    "max_steps": 2,
+    "resume_max_steps": 3,
+    "val_check_interval_microbatches": 16,
+    "accumulate_grad_batches": 16,
+    "val_rows": 11,
+    "test_rows": 19,
+    "formal_checkpoint_reuse": false,
+    "microbatch_original": 16,
+    "collate_window_cap_original": 128
+  },
+  "resume_checkpoint": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-short-r1/output/checkpoints/engineering-final.ckpt",
+    "bytes": 160277276,
+    "sha256": "ec41936a0d3c54dd7915ee23b1eb785e5a0c3512dcb3dd923599f058abbfdc41"
+  },
+  "prior_predictions": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gsp-20261015-sports-short-r1/output/after-training-test/predictions.jsonl",
+    "bytes": 9945,
+    "sha256": "6bfdbbf82f379774066107f5f7402eecea9e190cbfa0a8d7e58c1752a3e31cb1"
+  },
+  "own_short_job": "gsp-20261015-sports-short-r1"
+}

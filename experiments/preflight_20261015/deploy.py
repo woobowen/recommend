@@ -28,9 +28,12 @@ def snapshot(t):
     files.extend(REPO / x for x in ['GRID baseline/.project-root', 'references/wmh-original/GRID/.project-root'] if (REPO / x).is_file())
     files = sorted(files)
     records = [{'path':str(f.relative_to(REPO)), 'bytes':f.stat().st_size, 'sha256':sha256(f)} for f in files]
-    digest = hashlib.sha256(json.dumps(records, sort_keys=True).encode()).hexdigest()
+    # DEPLOYMENT.json contains source_commit. Bind that field into the directory
+    # identity as well: identical files at a later commit must not reuse an old
+    # manifest while submitting the hash of a freshly constructed manifest.
+    digest = hashlib.sha256(json.dumps({'source_commit': head, 'files': records}, sort_keys=True).encode()).hexdigest()
     manifest = {'source_commit':head, 'snapshot_sha256':digest, 'files':records,
-        'identity_kind':'source_commit_plus_exact_manifest; engineering patch may be uncommitted',
+        'identity_kind':'commit_plus_file_manifest_v2; engineering patch may be uncommitted',
         'formal_approved':False}
     manifest_bytes = (json.dumps(manifest, indent=2)+'\n').encode()
     archive = SUPPORT / ('snapshot-'+digest[:16]+'.tar.gz')
