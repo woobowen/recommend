@@ -14,7 +14,8 @@ def main():
         source = root / "specs" / (name + ".json")
         smoke = json.loads(source.read_text())
         candidate = copy.deepcopy(smoke)
-        for key in ("preflight_rows", "engineering_overlay", "optimizer_updates", "resume_updates", "source_failed_job"):
+        for key in ("preflight_rows", "engineering_overlay", "optimizer_updates", "resume_updates", "source_failed_job",
+                    "expected_long_history_case", "test_subset_selection"):
             candidate.pop(key, None)
         candidate.update({"candidate_only": True, "formal_approved": False,
             "formal_gate_pending_user": True, "purpose": "unsigned next-stage plan; cannot authorize or submit any formal run"})

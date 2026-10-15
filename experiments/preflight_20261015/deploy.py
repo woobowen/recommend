@@ -67,6 +67,7 @@ def main():
     p.add_argument('phase',choices=['prepare','shuffle','mlp-short','mlp-resume'])
     p.add_argument('--spec',type=Path,required=True);p.add_argument('--job',required=True)
     p.add_argument('--gpu',choices=['0','1']);p.add_argument('--timeout',type=int,default=1200)
+    p.add_argument('--share-gpu',action='store_true',help='Explicit user-authorized shared preflight; keep memory safety margins')
     args=p.parse_args();spec=json.loads(args.spec.read_text());require_preflight(spec)
     if not args.job.startswith('gsp-20261015-'):raise ValueError('New stage job namespace required')
     if not 60 <= args.timeout <= 1200:raise ValueError('Bounded timeout required')
@@ -80,7 +81,17 @@ def main():
         code="import subprocess,json;print(json.dumps({'processes':subprocess.check_output(['nvidia-smi','--query-compute-apps=gpu_uuid,pid,used_memory','--format=csv,noheader'],text=True),'devices':subprocess.check_output(['nvidia-smi','--query-gpu=uuid,name,memory.used','--format=csv,noheader'],text=True)}))"
         observed=json.loads(t.python(code))
         write_json(SUPPORT/(args.job+'-resource-check.json'),observed)
-        if any(line.split(',')[0].strip()==gpu for line in observed['processes'].splitlines()):
+        if args.share_gpu:
+            from .resources import assess
+            # Obtain the same standard-library observation from the saved
+            # helper, before any model import or allocation.
+            helper=Path(__file__).with_name('resources.py')
+            remote_helper=REMOTE_STAGE+'/resource-tools/resources.py';t.put(helper,remote_helper)
+            detailed=json.loads(t.python('import sys,json;sys.path.insert(0,'+repr(REMOTE_STAGE+'/resource-tools')+');import resources;print(json.dumps(resources.observe()))'))
+            problem=assess(detailed,gpu,shared=True,initial=True)
+            write_json(SUPPORT/(args.job+'-shared-resource-check.json'),detailed)
+            if problem:raise RuntimeError(problem+'; no job submitted')
+        elif any(line.split(',')[0].strip()==gpu for line in observed['processes'].splitlines()):
             raise RuntimeError('RESOURCE_BUSY: no job submitted; card has an existing compute process')
     else:gpu=''
     root,manifest,manifest_sha=snapshot(t)
@@ -96,6 +107,7 @@ def main():
             'PYTHONPATH':root,'HF_HUB_OFFLINE':'1','WANDB_MODE':'disabled','TOKENIZERS_PARALLELISM':'false'},
         'inputs':[{'path':remote_spec,'sha256':sha256(args.spec)},
                   {'path':root+'/DEPLOYMENT.json','sha256':manifest_sha}]}
+    if args.share_gpu:request['env']['GRID_SHARED_PREFLIGHT']='1'
     request_path=SUPPORT/(args.job+'-request.json')
     if request_path.exists() and json.loads(request_path.read_text())!=request:raise RuntimeError('Existing job request differs')
     write_json(request_path,request);receipt=gridctl.submit(t,request_path)

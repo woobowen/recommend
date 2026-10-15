@@ -12,9 +12,11 @@
       "candidate_vs_smoke_fields": [
         "candidate_only",
         "engineering_overlay",
+        "expected_long_history_case",
         "formal_gate_pending_user",
         "preflight_rows",
-        "purpose"
+        "purpose",
+        "test_subset_selection"
       ],
       "differences": {
         "candidate_only": {
@@ -36,6 +38,20 @@
           },
           "candidate": null
         },
+        "expected_long_history_case": {
+          "smoke": {
+            "source": "previous reviewed metadata only; selection based on longest raw history, before new predictions",
+            "reviewed_zip_sha256": "a0ec709db33c5176639ff4bf8bac83d1e1d37394f5012a746d38b06f84438f99",
+            "target_index_sha256": "a2e7d74577d33c9d667733a25d438aec4fe2b6077d566c93d44c4f242d17d00d",
+            "data_file": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/beauty/testing/partition_123.tfrecord.gz",
+            "row_index": 29,
+            "sample_key": "0b79fa899b81340405a5e24b",
+            "raw_item_count": 21,
+            "visible_items": 20,
+            "previous_global_row_index": 29
+          },
+          "candidate": null
+        },
         "formal_gate_pending_user": {
           "smoke": null,
           "candidate": true
@@ -47,6 +63,10 @@
         "purpose": {
           "smoke": "preflight only; previously approved own model/SID pairing; no formal authorization",
           "candidate": "unsigned next-stage plan; cannot authorize or submit any formal run"
+        },
+        "test_subset_selection": {
+          "smoke": "first 31 rows, fixed before new predictions, includes the first maximum-history record at row29 in the prior reviewed metadata; four batches 8/8/8/7",
+          "candidate": null
         }
       },
       "shared_actual_core": "common.instantiate; cli.test_lifecycle (explicit bounded dataloaders in this stage)",
@@ -61,10 +81,12 @@
       "candidate_vs_smoke_fields": [
         "candidate_only",
         "engineering_overlay",
+        "expected_long_history_case",
         "formal_gate_pending_user",
         "preflight_rows",
         "purpose",
-        "source_failed_job"
+        "source_failed_job",
+        "test_subset_selection"
       ],
       "differences": {
         "candidate_only": {
@@ -83,6 +105,20 @@
               4
             ],
             "controlled_trainer_exception": true
+          },
+          "candidate": null
+        },
+        "expected_long_history_case": {
+          "smoke": {
+            "source": "previous reviewed metadata only; selection based on longest raw history, before new predictions",
+            "reviewed_zip_sha256": "a0ec709db33c5176639ff4bf8bac83d1e1d37394f5012a746d38b06f84438f99",
+            "target_index_sha256": "a2e7d74577d33c9d667733a25d438aec4fe2b6077d566c93d44c4f242d17d00d",
+            "data_file": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/beauty/testing/partition_123.tfrecord.gz",
+            "row_index": 29,
+            "sample_key": "0b79fa899b81340405a5e24b",
+            "raw_item_count": 21,
+            "visible_items": 20,
+            "previous_global_row_index": 29
           },
           "candidate": null
         },
@@ -100,6 +136,10 @@
         },
         "source_failed_job": {
           "smoke": "beauty-b-smoke-r3",
+          "candidate": null
+        },
+        "test_subset_selection": {
+          "smoke": "first 31 rows, fixed before new predictions, includes the first maximum-history record at row29 in the prior reviewed metadata; four batches 8/8/8/7",
           "candidate": null
         }
       },

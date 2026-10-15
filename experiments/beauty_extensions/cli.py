@@ -191,6 +191,9 @@ def test_lifecycle(cfg, model, dm, output, batches=None, engineering_callbacks=(
             clear_runtime(pl_module)
     trainer_cfg = cfg.trainer.copy()
     trainer_cfg.pop("profiler", None)
+    if os.environ.get("GRID_SHARED_PREFLIGHT") == "1":
+        from experiments.preflight_20261015.resources import callback
+        engineering_callbacks = (*engineering_callbacks, callback())
     trainer = hydra.utils.instantiate(trainer_cfg, logger=False,
         callbacks=[Keys(), *engineering_callbacks], enable_checkpointing=False)
     before_devices = sorted({str(p.device) for p in model.parameters()})

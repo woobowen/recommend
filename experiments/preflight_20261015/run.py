@@ -116,7 +116,8 @@ def ordinary_validation(cfg, model, batches, output):
                 "parameter_devices": sorted({str(p.device) for p in pl_module.parameters()}),
                 "is_testing": pl_module.is_testing, "training": pl_module.training})
     tc = cfg.trainer.copy(); tc.pop("profiler", None)
-    trainer = hydra.utils.instantiate(tc, logger=False, callbacks=[ValidateState()], enable_checkpointing=False)
+    from .resources import callback
+    trainer = hydra.utils.instantiate(tc, logger=False, callbacks=[ValidateState(), callback()], enable_checkpointing=False)
     try:
         metrics = trainer.validate(model, dataloaders=DataLoader(batches, batch_size=None), ckpt_path=None)
     finally:
@@ -430,7 +431,8 @@ def mlp_check(spec, cfg, model, dm, output, test_batches, val_batches, resume=Fa
         monitor="val/recall@5", mode="max", save_on_train_epoch_end=False, filename="engineering-{step:06d}")
     checkpoint_fresh_state = checkpoint.state_dict().copy()
     early = hydra.utils.instantiate(cfg.callbacks.early_stopping) if cfg.callbacks.get("early_stopping") else None
-    callbacks = [checkpoint, TrainingTrace()] + ([early] if early else [])
+    from .resources import callback as resource_callback
+    callbacks = [checkpoint, TrainingTrace(), resource_callback()] + ([early] if early else [])
     trainer = hydra.utils.instantiate(tc, callbacks=callbacks, logger=CSVLogger(str(output), name="training_csv"))
     OmegaConf.save(tc, output / "actual_smoke_trainer.yaml", resolve=True)
     started = time.monotonic()
@@ -513,17 +515,12 @@ def main():
     if args.phase != "prepare":
         physical = os.environ.get("CUDA_VISIBLE_DEVICES", "")
         assert physical.startswith("GPU-") and "," not in physical
-        processes = subprocess.check_output(['nvidia-smi','--query-compute-apps=gpu_uuid,pid,used_memory',
-            '--format=csv,noheader'], text=True)
-        conflicts = [line for line in processes.splitlines() if line.split(',')[0].strip() == physical
-            and int(line.split(',')[1]) != os.getpid()]
-        write_json(output / "gpu_start_check.json", {"physical_uuid": physical, "processes": processes,
-            "conflicts": conflicts, "worker_pid": os.getpid()})
-        assert not conflicts, "RESOURCE_CONFLICT: another process started before model placement"
         assert torch.cuda.device_count() == 1, "Exactly one isolated visible GPU required"
-        torch.cuda.reset_peak_memory_stats()
-        if args.phase == "shuffle": shuffle_check(spec, cfg, model, dm, output, test_batches, val_batches)
-        else: mlp_check(spec, cfg, model, dm, output, test_batches, val_batches, resume=args.phase == "mlp-resume")
+        from .resources import ResourceMonitor
+        with ResourceMonitor(output, physical, os.environ.get("GRID_SHARED_PREFLIGHT") == "1"):
+            torch.cuda.reset_peak_memory_stats()
+            if args.phase == "shuffle": shuffle_check(spec, cfg, model, dm, output, test_batches, val_batches)
+            else: mlp_check(spec, cfg, model, dm, output, test_batches, val_batches, resume=args.phase == "mlp-resume")
     write_json(output / "RESULT.json", {"status": "PASS", "phase": args.phase,
         "engineering_only": True, "formal_approved": False, "elapsed_seconds": time.monotonic()-start,
         "peak_gpu_allocated_bytes": torch.cuda.max_memory_allocated() if args.phase != "prepare" else 0,
