@@ -1,0 +1,64 @@
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/bwwu/grid-audits/sid-extensions-p0/grid-formal-20261015/snapshots/73074010b1acf951/experiments/formal_20261015/run.py", line 144, in <module>
+    if __name__=='__main__':main()
+  File "/home/bwwu/grid-audits/sid-extensions-p0/grid-formal-20261015/snapshots/73074010b1acf951/experiments/formal_20261015/run.py", line 127, in main
+    OmegaConf.save(cfg,output/'effective_config.yaml',resolve=True)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/omegaconf.py", line 221, in save
+    data = OmegaConf.to_yaml(config, resolve=resolve)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/omegaconf.py", line 760, in to_yaml
+    container = OmegaConf.to_container(cfg, resolve=resolve, enum_to_str=True)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/omegaconf.py", line 573, in to_container
+    return BaseContainer._to_content(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/basecontainer.py", line 292, in _to_content
+    value = get_node_value(key)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/basecontainer.py", line 244, in get_node_value
+    conf._format_and_raise(key=key, value=None, cause=e)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+    format_and_raise(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/_utils.py", line 899, in format_and_raise
+    _raise(ex, cause)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/_utils.py", line 797, in _raise
+    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/basecontainer.py", line 242, in get_node_value
+    node = node._dereference_node()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/base.py", line 246, in _dereference_node
+    node = self._dereference_node_impl(throw_on_resolution_failure=True)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/base.py", line 277, in _dereference_node_impl
+    return parent._resolve_interpolation_from_parse_tree(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/base.py", line 584, in _resolve_interpolation_from_parse_tree
+    resolved = self.resolve_parse_tree(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/base.py", line 764, in resolve_parse_tree
+    return visitor.visit(parse_tree)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/antlr4/tree/Tree.py", line 34, in visit
+    return tree.accept(self)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/grammar/gen/OmegaConfGrammarParser.py", line 206, in accept
+    return visitor.visitConfigValue(self)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/grammar_visitor.py", line 101, in visitConfigValue
+    return self.visit(ctx.getChild(0))
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/antlr4/tree/Tree.py", line 34, in visit
+    return tree.accept(self)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/grammar/gen/OmegaConfGrammarParser.py", line 342, in accept
+    return visitor.visitText(self)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/grammar_visitor.py", line 301, in visitText
+    return self._unescape(list(ctx.getChildren()))
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/grammar_visitor.py", line 389, in _unescape
+    text = str(self.visitInterpolation(node))
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/grammar_visitor.py", line 125, in visitInterpolation
+    return self.visit(ctx.getChild(0))
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/antlr4/tree/Tree.py", line 34, in visit
+    return tree.accept(self)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/grammar/gen/OmegaConfGrammarParser.py", line 1041, in accept
+    return visitor.visitInterpolationResolver(self)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/grammar_visitor.py", line 179, in visitInterpolationResolver
+    return self.resolver_interpolation_callback(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/base.py", line 750, in resolver_interpolation_callback
+    return self._evaluate_custom_resolver(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/omegaconf/base.py", line 702, in _evaluate_custom_resolver
+    raise UnsupportedInterpolationType(
+omegaconf.errors.UnsupportedInterpolationType: Unsupported interpolation type now
+    full_key: id
+    object_type=dict

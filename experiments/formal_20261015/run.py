@@ -124,7 +124,7 @@ def main():
         from .train import configure
         cfg=configure(spec,output)
     from omegaconf import OmegaConf
-    OmegaConf.save(cfg,output/'effective_config.yaml',resolve=True)
+    OmegaConf.save(cfg,output/'effective_config.yaml',resolve=False)
     if a.mode=='identity-check':
         from experiments.beauty_extensions.mlp_formal import read_index
         index,identity=read_index(spec['test_index']);assert sum(index.values())==22363

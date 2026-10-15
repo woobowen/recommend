@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "reviewer_task": "/root/implementation_review",
+  "role": "real independent nonauthor review of root one-line configuration serialization proposal",
+  "reviewed_at": "2026-10-15T23:40:57.932959+08:00",
+  "status": "PROPOSED_FIX_STATICALLY_APPROVED_PENDING_USER_AUTHORIZATION_AND_CPU_RETEST",
+  "models_loaded": 0,
+  "GPU_calls": 0,
+  "remote_actions": 0,
+  "repository_changes": 0,
+  "patch_applied_by_reviewer": false,
+  "failed_job": {
+    "job_id": "gf-20261015-a-identity-v1",
+    "source_commit": "ab056ffbb16f2303fe048c668ad275368ccc7237",
+    "snapshot_sha256": "73074010b1acf9510e2acf7ecfcdf9ba0931a22c1b176c144d3c4c6c17ce5db1",
+    "request_fingerprint_sha256": "8cf2fe1e425c839b6210ca836a21c2bbb0515636714562359f12155d156208a5",
+    "status": "FAILED",
+    "exit_code": 1,
+    "cleanup_verified": true,
+    "worker_alive": false,
+    "workgroup_live": false,
+    "CUDA_VISIBLE_DEVICES": "",
+    "started_at": "2026-10-15T15:28:41.743877+00:00",
+    "ended_at": "2026-10-15T15:28:50.528119+00:00",
+    "model_constructor_reached": false,
+    "failure_preserved": true
+  },
+  "root_cause": {
+    "failed_call": "formal_20261015/run.py:127 OmegaConf.save(cfg, effective_config.yaml, resolve=True)",
+    "actual_error": "UnsupportedInterpolationType: Unsupported interpolation type now; full_key=id",
+    "unused_source_field": "id: ${now:%Y-%m-%d}/${now:%H-%M-%S}",
+    "analysis": "New wrapper resolves the entire source template without a Hydra runtime, forcing an unused run-id resolver. Actual failing snapshot run.py bytes exactly match current unchanged root source. This is outside model construction; no device, SID pairing, checkpoint strict load or generation failure is evidenced."
+  },
+  "proposed_fix": {
+    "change": "resolve=True -> resolve=False for the single whole-config save",
+    "scope": "serialization only; retain unused source-template interpolation text",
+    "current_run_sha256": "e0a2c8f5229e22299d7ce6f2b2933dc808e1a06bfb03794898bc6284cb52de66",
+    "proposed_run_sha256": "15d4f7b280df8bb05200049ed643bf499038125d43529760c170c70dd6e2bc14",
+    "in_memory_syntax_check": "PASS",
+    "patch_contains_only_this_one_line_change": true,
+    "applied": false,
+    "runtime_retest_done": false,
+    "research_configuration_or_state_changed": false,
+    "gate_or_runner_checks_relaxed": false
+  },
+  "old_success_semantics": {
+    "common": "common.py:172 already saves the whole cfg with resolve=False. Lines173-175 resolve only used model/trainer/optim/eval/datamodule subtrees into used_config.json. Those same actual paths succeeded in A/B preflight.",
+    "old_MLP": "mlp_formal.py:183 saves whole approved cfg resolve=False; actual trainer and computation/callback/logger/datamodule subtrees resolve=True separately.",
+    "new_train_reference_only": "formal_20261015/train.py:211 inherited the same whole-template False + actual-trainer/subtree True policy. This review is not a new nonauthor signoff for reviewer-authored train.py.",
+    "actual_preflight_subtree_evidence": [
+      {
+        "route": "A",
+        "evidence": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-a-shared-r1/retrieved/output/used_config.json",
+          "bytes": 12966,
+          "sha256": "4a9a016157cc5571091663f7abe7c09277b1a915543213bc44b3a774e30b0e5f"
+        },
+        "actual_success_used_config_fully_resolved": true,
+        "contains_now_or_hydra_or_other_unresolved_interpolation": false
+      },
+      {
+        "route": "B",
+        "evidence": {
+          "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/used_config.json",
+          "bytes": 12671,
+          "sha256": "e90e2ecc986f4e00355306e37c359caea71cfcca2318aada14547f1c4cba0bf1"
+        },
+        "actual_success_used_config_fully_resolved": true,
+        "contains_now_or_hydra_or_other_unresolved_interpolation": false
+      }
+    ]
+  },
+  "remaining_entrypoint_startup_review": {
+    "identity_before_failure": "admit/gate, deployment/request/cwd/spec binding, bind_source and formal_config had already completed before observed save call.",
+    "immediate_after_proposal": "identity-check imports old read_index and reads the same previously verified index. Reviewer actually ran this original CPU-only read_index on preserved exact A index bytes:22363 rows/22363 distinct key-target pairs passed, matching the current hardcoded Beauty count.",
+    "metadata_wrapper": "Previously resolved Path serialization and optional project marker findings remain fixed in current source; no second obvious identity-startup blocker found in the scoped source review.",
+    "evaluation_and_training": "Existing actual-used subtrees have no residual now/hydra expressions. Existing model/datamodule/evaluator paths remain inherited; no new GPU execution or assurance that every future phase cannot fail is claimed.",
+    "scope_limit": "Local Python lacks OmegaConf; reviewer did not install it and did not claim actual patched OmegaConf execution. Actual same CPU identity path must be rerun after user authorization."
+  },
+  "required_followup_after_user_authorization": [
+    "Apply only the authorized one-line change; preserve original failure and immutable accepted request.",
+    "Bind the changed run.py SHA to a new fixed commit/snapshot and regenerated exact source gates/review records.",
+    "Run and independently read a new CPU-only identity attempt with empty CUDA_VISIBLE_DEVICES; no need to repeat inherited GPU preflights.",
+    "Proceed to already authorized formal jobs only when this CPU identity result is actually verified."
+  ],
+  "budget_and_approval": {
+    "previous_preflight_rounds_used": 3,
+    "previous_preflight_maximum": 3,
+    "reset": false,
+    "additional_repair_authorization_assumed": false,
+    "current_user_authorization_pending_as_relayed_by_root": true,
+    "review_does_not_authorize_patch_or_job": true
+  },
+  "supersedes_scope_claim_only": "Earlier orchestration source/mock checks did not execute the actual OmegaConf whole-save path. This actual FAILED job is authoritative and remains FAILED; this new review adds the diagnosed failure without rewriting the earlier receipt.",
+  "inputs": [
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/gf-20261015-a-identity-v1-request.json",
+      "bytes": 3227,
+      "sha256": "626c05fa5d0a673ed592465c2fcfe2a8b366267178b1da5f445b297833f86f01"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-a-identity-v1/last-query.json",
+      "bytes": 3720,
+      "sha256": "4a81ea0ce6ff690faaa5a8a3274b1568da767e1c1fdf1873a810287f4f9dd4ea"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/a-identity-v1-failure.log",
+      "bytes": 5391,
+      "sha256": "d04ca5b11a7d3fa588e820060e1c0a2fb4136ecf8f478ec92a9454e8f8f6ca61"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/a-identity-v1-failure-diagnosis.json",
+      "bytes": 542,
+      "sha256": "ab92ded9a14cd3cb22dc04adfbf7d264bc493e0df2d95401efcafe5d48e3a709"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/proposed-config-serialization-fix.patch",
+      "bytes": 548,
+      "sha256": "048ec32b56be0870db3713ceb7f13c37e76704b16c98f44b8f777123007c2f8d"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/73074010b1acf951-deployment.json",
+      "bytes": 41745,
+      "sha256": "bdc9688735a52efad410bc92e5e665d8a06f52c6c2594511a188d0b32093f45a"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/run.py",
+      "bytes": 9805,
+      "sha256": "e0a2c8f5229e22299d7ce6f2b2933dc808e1a06bfb03794898bc6284cb52de66"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/deploy.py",
+      "bytes": 6845,
+      "sha256": "70210a765984c095ab14925c4801f38c913cb5c790d59483a88a294e10998a0c"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/common.py",
+      "bytes": 12084,
+      "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/mlp_formal.py",
+      "bytes": 37293,
+      "sha256": "ac362b84f7a9a979bb7549ce1f817448fe172b9d32adc1a449180f5aa97d9e56"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/manifests/beauty-extensions/effective-config-sources/a-t5-rkmeans.yaml",
+      "bytes": 12269,
+      "sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-a-shared-r1/retrieved/output/used_config.json",
+      "bytes": 12966,
+      "sha256": "4a9a016157cc5571091663f7abe7c09277b1a915543213bc44b3a774e30b0e5f"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/used_config.json",
+      "bytes": 12671,
+      "sha256": "e90e2ecc986f4e00355306e37c359caea71cfcca2318aada14547f1c4cba0bf1"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/beauty-a-metadata-r3/retrieved/output/test_target_index.jsonl",
+      "bytes": 3307470,
+      "sha256": "a2e7d74577d33c9d667733a25d438aec4fe2b6077d566c93d44c4f242d17d00d"
+    }
+  ]
+}

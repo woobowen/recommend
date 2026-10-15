@@ -1,6 +1,6 @@
 {
   "stage": "grid-formal-20261015",
-  "status": "PREPARING",
+  "status": "EXCEPTION_REPAIR_CPU_REGRESSION_PENDING",
   "inherited_commit": "93567ea7f61e970c448838443595242d0b9beef0",
   "branch": "wbw",
   "takeover": {
@@ -35,14 +35,57 @@
     "inherited_preflight_correction_maximum": 3,
     "repair_budget_not_reset": true,
     "new_formal_orchestration_initial_implementation": true,
-    "new_runtime_correction_rounds_used": 0,
+    "new_runtime_correction_rounds_used": 1,
     "domain_training_wall_seconds_including_test": 43200,
     "formal_eval_per_condition_wall_seconds": 1800,
     "attention_per_job_wall_seconds": 1200,
-    "safety_budget_is_not_scientific_termination": true
+    "safety_budget_is_not_scientific_termination": true,
+    "additional_focused_repair_authorization": {
+      "approved": true,
+      "reference": "2026-10-15 user explicitly approved one strictly scoped engineering repair and CPU configuration roundtrip/gate/deployment regression",
+      "rounds_authorized": 1,
+      "rounds_started": 1,
+      "scope": "single whole-config save resolve=False; exact CPU/configuration/source/gate regression; no model or protocol changes",
+      "original_three_rounds_unchanged": true
+    }
   },
-  "jobs": [],
+  "jobs": [
+    {
+      "job_id": "gf-20261015-a-identity-v1",
+      "phase": "CPU_IDENTITY_CHECK_NOT_FORMAL_EVALUATION",
+      "status": "FAILED",
+      "exit_code": 1,
+      "fetched": true,
+      "source_commit": "ab056ffbb16f2303fe048c668ad275368ccc7237",
+      "snapshot": "73074010b1acf951",
+      "model_constructed": false,
+      "gpu_model_calls": 0,
+      "cleanup_verified": true,
+      "evidence": "runs/gf-20261015-a-identity-v1",
+      "failure": "Configuration record resolve=True traversed unused Hydra now:id; one-line patch prepared but not applied"
+    }
+  ],
   "formal_models_or_evaluator_modified": false,
   "new_packages": [],
-  "system_configuration_changes": []
+  "system_configuration_changes": [],
+  "formal_long_jobs_started": false,
+  "source_and_cost_review": "source-resource-review.json",
+  "independent_review_scope": {
+    "source": "source-formal-admission.json; source-resource-review.json",
+    "implementation": "implementation-formal-admission.json; config-serialization-review.json",
+    "results": "beauty-six-gate-review-index.json; identity-v1-failure-review.json",
+    "runtime_formal_PASS_claimed": false
+  },
+  "mlp_admission": {
+    "research_conditions_user_approved": true,
+    "toys_eval_test_rows_each": 19412,
+    "sports_eval_test_rows_each": 35598,
+    "complete_target_multiset_indexes": "PENDING_METADATA_CPU_JOB",
+    "reference_scenario_not_training_endpoints": true,
+    "conservative_planning_hours": {
+      "toys": 7.381,
+      "sports": 9.092
+    },
+    "12h_completion_guaranteed": false
+  }
 }
