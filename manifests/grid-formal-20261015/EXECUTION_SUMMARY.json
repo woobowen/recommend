@@ -1,6 +1,6 @@
 {
   "stage": "grid-formal-20261015",
-  "status": "BEAUTY_FORMAL_PASS_MLP_ADMITTED_PENDING_LAUNCH",
+  "status": "FORMAL_MLP_RUNNING_ATTENTION_ADMITTED_PENDING_CAPTURE",
   "inherited_commit": "93567ea7f61e970c448838443595242d0b9beef0",
   "branch": "wbw",
   "takeover": {
@@ -243,6 +243,40 @@
       "evidence": "runs/gf-20261015-toys-metadata-v1",
       "full_export_local": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gf-20261015-toys-metadata-v1/retrieved",
       "full_export_remote": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1"
+    },
+    {
+      "job_id": "gf-20261015-toys-mlp-formal-v1",
+      "phase": "train",
+      "status": "RUNNING",
+      "exit_code": null,
+      "fetched": false,
+      "source_commit": "4495c38459971aee36b00d881eb50f50fafa3159",
+      "snapshot_sha256": "77c012c07de3db19bc86108212ab292aabe704922f1f65d1d9c51da62b05a108",
+      "physical_gpu": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+      "cleanup_verified": false,
+      "started_at": "2026-10-15T17:26:33.286283+00:00",
+      "ended_at": null,
+      "evidence": "gf-20261015-toys-mlp-formal-v1-first-query.json",
+      "full_export_remote": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1",
+      "timeout_seconds": 43200,
+      "snapshot_immutable": true
+    },
+    {
+      "job_id": "gf-20261015-sports-mlp-formal-v1",
+      "phase": "train",
+      "status": "RUNNING",
+      "exit_code": null,
+      "fetched": false,
+      "source_commit": "4495c38459971aee36b00d881eb50f50fafa3159",
+      "snapshot_sha256": "77c012c07de3db19bc86108212ab292aabe704922f1f65d1d9c51da62b05a108",
+      "physical_gpu": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "cleanup_verified": false,
+      "started_at": "2026-10-15T17:26:46.329973+00:00",
+      "ended_at": null,
+      "evidence": "gf-20261015-sports-mlp-formal-v1-first-query.json",
+      "full_export_remote": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-mlp-formal-v1",
+      "timeout_seconds": 43200,
+      "snapshot_immutable": true
     }
   ],
   "formal_models_or_evaluator_modified": false,
@@ -428,5 +462,23 @@
       "per_sample_metrics_sha256": "dbf737242902714c42eaf63864cf77aac1a65c0f6f238c0c146754c19c51c2f2"
     }
   },
-  "beauty_formal_gpu_request_wall_hours": 0.34194260055555553
+  "beauty_formal_gpu_request_wall_hours": 0.34194260055555553,
+  "mlp_formal_training_started": true,
+  "resource_wait_resolution": {
+    "status": "RESOURCE_WAIT_RESOLVED_WITHOUT_POLICY_CHANGE",
+    "observed_at_utc": "2026-10-15T17:34:12.543809+00:00",
+    "evidence": "GPU_WAIT_OBSERVATION_3.json",
+    "both_GPUs_no_compute_processes": true,
+    "free_MiB_each": 24082,
+    "original_exclusive_guard_unchanged": true,
+    "resource_sharing_patch_applied": false,
+    "unanswered_optional_sharing_question_no_longer_blocks_original_admission": true,
+    "prior_hold_accepted_job": false,
+    "prior_hold_GPU_seconds": 0,
+    "formal_jobs_started": [
+      "gf-20261015-toys-mlp-formal-v1",
+      "gf-20261015-sports-mlp-formal-v1"
+    ]
+  },
+  "attention_plans_admitted": 6
 }

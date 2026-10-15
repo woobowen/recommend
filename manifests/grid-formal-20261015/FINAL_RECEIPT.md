@@ -2,7 +2,7 @@
 
 ## A. 总体状态
 
-PARTIAL：Beauty A/B六组正式全量评测及独立结果验收已经完成；Toys/Sports正式训练与新正式注意力图尚未完成。本文件会在本轮获授权工作终验后更新，当前不声称完整交付。
+PARTIAL：Beauty A/B六组正式全量评测及独立结果验收已经完成；Toys/Sports正式训练已独立启动，新正式注意力图尚待空闲GPU采集。本文件会在本轮获授权工作终验后更新，当前不声称完整交付。
 
 ## B. 本轮完成摘要
 
@@ -18,9 +18,9 @@ PARTIAL：Beauty A/B六组正式全量评测及独立结果验收已经完成；
 |---|---|---|
 |Beauty Shuffle A|Normal/Shuffle3/Shuffle4正式全量与独立复算PASS|对应正式attention待采|
 |Beauty Shuffle B|Normal/Shuffle3/Shuffle4正式全量与独立复算PASS|主baseline B Normal及对应Shuffle attention待采|
-|Toys MLP|用户批准作者RQ-VAE+STE整套、scratch全参数、raw32/acc48/val4800、12h总额度；真实CPU全val/test19412索引及fixed32生成PASS|精确新plan准入绑定、正式训练/选best/完整test|
-|Sports MLP|用户批准本域Qwen/RK+作者逐物品MLP新结构实验、scratch全参数、raw16/acc16/val1600、12h总额度；真实CPU全val/test35598索引及fixed32生成PASS|精确新plan准入绑定、正式训练/选best/完整test|
-|普通/Shuffle注意力|六份独立捕获计划绑定各自已审核正式eval RESULT/status/review及既有fixed32|单独准入与正式采集/绘图；B Normal同时作为主baseline，不重复采集|
+|Toys MLP|用户批准作者RQ-VAE+STE整套、scratch全参数、raw32/acc48/val4800、12h总额度；真实CPU全val/test19412索引及fixed32生成PASS|已完成独立准入与正式训练启动，选best/完整test运行中|
+|Sports MLP|用户批准本域Qwen/RK+作者逐物品MLP新结构实验、scratch全参数、raw16/acc16/val1600、12h总额度；真实CPU全val/test35598索引及fixed32生成PASS|已完成独立准入与正式训练启动，选best/完整test运行中|
+|普通/Shuffle注意力|六份独立捕获计划绑定各自已审核正式eval RESULT/status/review及既有fixed32|六独立attention准入已绑定；正式采集/绘图待空闲GPU，B Normal同时作为主baseline，不重复采集|
 |MLP注意力|Beauty正式fixed32继承，不重采|Toys/Sports正式训练成功且剩余额度足够后再采|
 
 ## D. 作业与资源
@@ -37,10 +37,12 @@ PARTIAL：Beauty A/B六组正式全量评测及独立结果验收已经完成；
 
 ## F. 未决事项
 
-Toys/Sports的研究条件与12h预算已正式批准，不需再次决定。当前运行准备仅剩新增完整输入的精确准入绑定；未发现新的研究决策阻塞。原3/3与单轮例外事实保留，不能继续扩大返工。正式训练和注意力尚未启动，不将准备进度冒称实验完成。
+Toys/Sports的研究条件与12h预算已正式批准，不需再次决定。两个域的完整输入均已独立准入并启动；未发现新的研究决策阻塞。原3/3与单轮例外事实保留，不能继续扩大返工。正式训练已启动、注意力尚未采集；等待真实终态，不将运行中进度冒称实验完成。
 
 ## G. 交付材料
 
 必要原始全预测与逐样本指标当前保留于WSL `.../sid-extensions-p0/jobs/new-server/<job>/retrieved` 和服务器原job目录；Git发布小回执/配置/指标/源码与身份。最终统一轻量ZIP将在本轮终验时生成、实际校验并给出大小/SHA/路径，当前尚未生成新ZIP。原已审核预跑ZIP及SHA不变并继续保留。
 
 `GPT_UPLOAD_REQUIRED: YES`（最终包待本轮终验；本文件是进行中的真实状态，尚非完整交付）。没有新增安装/环境配置、清理正式资产、Parallel、额外训练或测试集调参。
+
+正式训练于2026-10-15 17:26 UTC以固定提交4495c38459971aee36b00d881eb50f50fafa3159、不可变snapshot77c012c07de3db19启动，Toys GPU0 / Sports GPU1，各request43200秒。此前两卡外人作业导致的本地准入HOLD未创建runner请求、未运行模型，等卡自然空闲后原guard直接成功，未应用资源共享提案。计时与旧修正3/3＋单次配置例外均未重置。

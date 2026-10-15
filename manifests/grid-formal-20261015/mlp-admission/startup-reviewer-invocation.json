@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "reviewer": "/root/source_conditions_review",
+  "scope": "Actual independent startup evidence read and local review invocation; no project/Git/worker edits, no GPU invocation.",
+  "recorded_at_utc": "2026-10-15T17:35:54.181865+00:00",
+  "remote_read": {
+    "argv": [
+      "python3",
+      "-B",
+      "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/startup_remote_read.py"
+    ],
+    "cwd": "/home/addaswsw/recommend",
+    "exec_chunk_id": "83c85a",
+    "exit_code": 0,
+    "script": {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/startup_remote_read.py",
+      "bytes": 2431,
+      "sha256": "de8cbb6fa5a9cf1319747f5dfce85ec761f42e199d8cc6ea7fc94d34d97422d4"
+    },
+    "output": {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/startup-remote-evidence.json",
+      "bytes": 402373,
+      "sha256": "3f2f393ce20f427dba693bea53a33a2fd73ae8f0ba33e719befe331d0ba49e06"
+    },
+    "server_action": "Only read fixed DEPLOYMENT and two known job request/accepted/status, direct small output files and bound spec/token JSONs. No process scan or worker submission."
+  },
+  "local_review": {
+    "argv": [
+      "python3",
+      "-B",
+      "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/review_startup.py"
+    ],
+    "cwd": "/home/addaswsw/recommend",
+    "exec_chunk_id": "628ae7",
+    "exit_code": 0,
+    "script": {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/review_startup.py",
+      "bytes": 15959,
+      "sha256": "e745f962845b596c8527454349d637c5c42c840246fbe932999b10310fdd7cad"
+    },
+    "receipt": {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/formal-startup-review.json",
+      "bytes": 22912,
+      "sha256": "06316fe0ed63c4f6488b16368173c76d25f8aabb27e5e1273e1cd9019fea28d8"
+    }
+  },
+  "audit_tool_diagnostic": {
+    "exec_chunk_id": "3426a3",
+    "exit_code": 1,
+    "error": "KeyError request_sha256 in raw status.json; this field is supplied by runner query/accepted receipt, not raw status. Corrected audit binding uses accepted.json plus existing first-query fingerprint and verifies raw status worker.argv equals request.argv.",
+    "scope": "Audit helper assertion schema only; stopped before writing final receipt. No source/config/worker repair and no additional correction-budget use."
+  },
+  "new_packages_or_environment_changes": []
+}

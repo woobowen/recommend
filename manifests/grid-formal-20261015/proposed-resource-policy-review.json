@@ -1,0 +1,187 @@
+{
+  "schema": 1,
+  "reviewer_task": "/root/implementation_review",
+  "role": "independent nonauthor review of prospective resource policy; not implementation or permission",
+  "reviewed_at": "2026-10-16T01:22:49.617345+08:00",
+  "status": "PROPOSED_RESOURCE_POLICY_STATIC_PASS_WITH_LIMITS_PENDING_EXPLICIT_USER_APPROVAL",
+  "current_behavior": "Default exclusive admission correctly rejects an occupied selected GPU before constructing/submitting its runner request. Formal training remains unsubmitted as relayed by root; no source policy change is applied.",
+  "proposed_change": {
+    "path": "experiments/formal_20261015/deploy.py",
+    "current_sha256": "70210a765984c095ab14925c4801f38c913cb5c790d59483a88a294e10998a0c",
+    "proposed_sha256": "aaf739b0302aab70136724c632ad265744fc55ea359618bbc5b7d72a8d96cff5",
+    "patch_applied_by_reviewer": false,
+    "scope": "Move spec JSON read earlier; permit occupied-card admission only for strict True gpu_sharing_user_approved plus truthy gpu_sharing_approval_reference; unchanged >=14336MiB free floor.",
+    "no_model_training_generation_evaluation_source_change": true,
+    "default_exclusive_preserved": true,
+    "no_runner_gate_or_identity_validation_weakened": true,
+    "snapshot_and_source_records_AST_exact": true,
+    "new_canonical_plan_and_code_gate_required": true
+  },
+  "pure_CPU_policy_checks": {
+    "proposed_python_syntax": "PASS",
+    "expression_cases": [
+      {
+        "case": "unoccupied default",
+        "result": true,
+        "expected": true
+      },
+      {
+        "case": "occupied default",
+        "result": false,
+        "expected": false
+      },
+      {
+        "case": "occupied approval without reference",
+        "result": false,
+        "expected": false
+      },
+      {
+        "case": "occupied reference without approval",
+        "result": false,
+        "expected": false
+      },
+      {
+        "case": "occupied string true rejected",
+        "result": false,
+        "expected": false
+      },
+      {
+        "case": "occupied integer1 rejected",
+        "result": false,
+        "expected": false
+      },
+      {
+        "case": "explicit approved sharing",
+        "result": true,
+        "expected": true
+      },
+      {
+        "case": "approved sharing memory below floor",
+        "result": false,
+        "expected": false
+      },
+      {
+        "case": "unoccupied memory below floor",
+        "result": false,
+        "expected": false
+      },
+      {
+        "case": "sharing floor exact",
+        "result": true,
+        "expected": true
+      }
+    ],
+    "reference_type_boundary": {
+      "whitespace_string_passes": true,
+      "nonempty_object_passes": true
+    },
+    "model_GPU_SSH_or_submission_calls": 0
+  },
+  "observations": {
+    "first": {
+      "processes": [
+        {
+          "pid": 1560430,
+          "exists": true,
+          "uid": 1001
+        },
+        {
+          "pid": 1560439,
+          "exists": true,
+          "uid": 1001
+        }
+      ],
+      "active_formal_jobs": [],
+      "gpus": "0, 2178 MiB, 21906 MiB, 17 %\n1, 2178 MiB, 21906 MiB, 25 %\n"
+    },
+    "second": {
+      "observed_at": "2026-10-15T17:08:10.425888+00:00",
+      "devices": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 2178 MiB, 21906 MiB, 24 %\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 2178 MiB, 21906 MiB, 16 %\n",
+      "apps": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 1560430, 2168 MiB\nGPU-59cac3bd-3645-668b-79c8-839e0d878893, 1560439, 2168 MiB\n"
+    },
+    "interpretation": "Both sampled GPU observations show foreign UID1001 PIDs1560430/1560439, each about2178MiB device-used and21906MiB free (~21.39GiB). Sampled utilization spans16-25%. These are two observations, not a promise that occupation or throughput stays fixed during a twelve-hour run.",
+    "no_foreign_process_scanning_or_signals_by_reviewer": true
+  },
+  "findings": [
+    {
+      "severity": "required authorization boundary",
+      "topic": "new resource-policy supplement",
+      "details": "Earlier sharing approval explicitly covered short preflights only. This proposal changes admission for new formal GPU work and requires a new explicit user resource decision/reference. It is neither part of the completed one-line configuration serialization repair nor a new repair-budget reset. Pending approval, keep waiting/default refusal."
+    },
+    {
+      "severity": "required identity binding",
+      "topic": "canonical plans and gates",
+      "details": "Both resource fields belong to canonical_plan because only nonauthor_gate/formal_approved are excluded. Changing them changes plan SHA. Changing deploy.py changes the complete source_python gate mapping. Freeze new commit/snapshot and reissue exact independent review/authorization gates after actual resource approval; retain immutable old accepted requests and failure/admission evidence. Existing runner input/capture/source checks stay unchanged."
+    },
+    {
+      "severity": "scope limitation",
+      "topic": "admission is a point-in-time check",
+      "details": "The patch retains the initial14GiB free floor and does not add runtime GPU-free or utilization enforcement. It does not cap foreign allocations or prevent compute contention. User-facing resource options must state sharing may slow concurrent work and reduce progress inside the unchanged12h total training+test allowance; no guarantee of zero interference, stable free memory or completion is supported."
+    },
+    {
+      "severity": "reference validation limitation",
+      "topic": "truthy is not a verified user reference",
+      "details": "Current proposed expression admits whitespace strings and arbitrary nonempty JSON objects as reference. The independent gate author must verify a real specific user approval reference covering formal sharing; this field alone is not proof of authorization. A nonblank-string type check would prevent those malformed values but cannot replace semantic approval review; reviewer did not alter the patch."
+    }
+  ],
+  "budget": {
+    "old_preflight_rounds_used": 3,
+    "old_preflight_maximum": 3,
+    "reset": false,
+    "previous_serialization_exception": "already completed; CPU_CONFIGURATION_REGRESSION_PASS preserved",
+    "new_resource_policy_is_separate_user_decision": true,
+    "additional_automatic_repair_rounds_authorized": false,
+    "no_training_budget_precision_batch_or_scientific_stop_changes": true
+  },
+  "recommendation_scope": "Conditionally acceptable as the narrow prospective admission policy if the user explicitly approves formal sharing and exact new gates bind that choice. Reviewer does not grant that approval or initiate work. No substantive runner or model defect was found in this proposed patch; recorded reference/runtime limits remain visible.",
+  "reviewer_actions": {
+    "repo_edits": 0,
+    "git_mutations": 0,
+    "GPU_queries_or_runs": 0,
+    "remote_calls": 0,
+    "jobs_submitted": 0,
+    "only_written_artifact": "/home/addaswsw/recommend-support/grid-formal-20261015/proposed-resource-policy-review.json"
+  },
+  "inputs": [
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/deploy.py",
+      "bytes": 6845,
+      "sha256": "70210a765984c095ab14925c4801f38c913cb5c790d59483a88a294e10998a0c"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/proposed-resource-sharing-policy.patch",
+      "bytes": 1998,
+      "sha256": "caab4352d139990795e9f69ce02dfa8de9e3645297f6a653ddc65d67741b5e4e"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/GPU_OCCUPANCY_AT_TRAIN_LAUNCH.json",
+      "bytes": 276,
+      "sha256": "51fe085ce7a9d23bf1c5ebce8a7cf4fb4d193d0abdd39519989b49836fd90fc9"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/GPU_WAIT_OBSERVATION_2.json",
+      "bytes": 353,
+      "sha256": "96cec96b15e9bcec43eefea0179f618c7d01f77e20beeea1125244397ccda4b3"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/run.py",
+      "bytes": 9806,
+      "sha256": "15d4f7b280df8bb05200049ed643bf499038125d43529760c170c70dd6e2bc14"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/train.py",
+      "bytes": 36761,
+      "sha256": "af7ec5159e0fbe9f7330d1172b81356920a1c626db9e15a6b339e6b074c79a1e"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/authorization.py",
+      "bytes": 2434,
+      "sha256": "5291e37397f21f9ddb2b3e0c0844aa0176ccfdd046f9050249661fb088c2d6ee"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/config-roundtrip-runtime-review.json",
+      "bytes": 22800,
+      "sha256": "75abe13574c8fdd9f07559393664c4cb36dc9818441a7278008cd08f21c35d62"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "route": "B",
+  "seed": 42,
+  "generation_k": 10,
+  "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/beauty",
+  "config": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/.hydra/config.yaml",
+    "sha256": "790e0d16c67823c6cad403013ae0f152ef61cebcd548715c113376c7a0ecef33"
+  },
+  "sid": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt",
+    "sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18"
+  },
+  "checkpoint": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/beauty_rkmeans_qwen_20261010_012253/tiger_train_test/checkpoints/checkpoint_epoch=000_step=012500.ckpt",
+    "sha256": "3d8f03cf042293f2f7f02132c9d072f573f671d9550d567edd1754f50e53e605"
+  },
+  "stage": "grid-formal-20261015",
+  "domain": "beauty",
+  "shuffle_n": 0,
+  "formal_approved": true,
+  "purpose": "Separately authorized formal fixed32 attention after accepted complete evaluation; no model re-evaluation",
+  "test_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-b-smoke-r3/output/test_target_index.jsonl",
+    "sha256": "9ca3f5b45f57589815160b3f38fc2ccc48c4873ccd6a8f58c674913888f4b019",
+    "bytes": 3307712
+  },
+  "attention_cohort": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/beauty-b-smoke-r3/output/fixed_attention_samples.json",
+    "sha256": "1813a858d68a56c7f6cd72e977377d4320eab66e801f957aafa0eaee046a6fb0",
+    "bytes": 200016
+  },
+  "phase": "formal_attention_capture",
+  "evaluation_result": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-b-normal-v1/output/RESULT.json",
+    "sha256": "ecd07c197ba6fcc524120100504049f92b328284b11e9cf4f08295f37bba258b"
+  },
+  "evaluation_status": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-b-normal-v1/status.json",
+    "sha256": "d77768d1f1944af974f79a692a32dc26fae502de46e0ee80e210c7f845f0ad89"
+  },
+  "evaluation_independent_review": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-formal-20261015/approvals/7f236d47b01ca1f23b48dd84d149749add0e5d288d1340b3867935b58e8bd488/formal-evaluation-review.json",
+    "sha256": "7f236d47b01ca1f23b48dd84d149749add0e5d288d1340b3867935b58e8bd488"
+  },
+  "attention_protocol": {
+    "cohort": "existing fixed32, evaluation split, selected before model outputs",
+    "kind": "cross-attention",
+    "rows": "four autoregressive SID generation queries",
+    "columns": "encoder SID and SEP positions",
+    "layer": "last decoder layer",
+    "display_heads": "mean",
+    "retained_heads": "all raw heads of last layer",
+    "paths": [
+      "actual generation final Top-1 ancestry",
+      "local first parent per step"
+    ],
+    "scientific_similarity_claim": null
+  },
+  "baseline_role": "current main working baseline",
+  "nonauthor_gate": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-formal-20261015/approvals/42787427ab760ee700d784d1a8309e9df95dd3caf63153b8e8c14448707bbd18/authorization.json",
+    "sha256": "42787427ab760ee700d784d1a8309e9df95dd3caf63153b8e8c14448707bbd18"
+  }
+}
