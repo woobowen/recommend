@@ -159,20 +159,31 @@ class PredictionRecorder:
                 self.count += 1
 
 
-def test_lifecycle(cfg, model, dm, output, batches=None, engineering_callbacks=()):
+def test_lifecycle(cfg, model, dm, output, batches=None, engineering_callbacks=(), bounded_datamodule=False):
     import hydra
     from lightning import Callback
     from torch.utils.data import DataLoader
     from .common import batch_keys
-    if engineering_callbacks and batches is None:
+    if bounded_datamodule:
+        limit = cfg.trainer.get("limit_test_batches")
+        if batches is not None or not isinstance(limit, int) or not 1 <= limit <= 4:
+            raise ValueError("Bounded datamodule requires an explicit integer test limit <=4")
+    if engineering_callbacks and batches is None and not bounded_datamodule:
         raise ValueError("Injected lifecycle checks require explicit bounded batches")
     output.mkdir(parents=True, exist_ok=True)
     original_evaluator = model.evaluator
     recorder = PredictionRecorder(original_evaluator, output / "predictions.jsonl")
     model.evaluator = recorder
+    input_devices = []
     class Keys(Callback):
         def on_test_batch_start(self, trainer, pl_module, batch, batch_idx, dataloader_idx=0):
             recorder.current_keys = batch_keys(batch)
+            inputs = model_arguments(batch)
+            input_devices.append({"batch_index": batch_idx, "input_device": str(inputs["input_ids"].device),
+                "input_dtype": str(inputs["input_ids"].dtype),
+                "parameter_devices": sorted({str(p.device) for p in pl_module.parameters()}),
+                "parameter_dtypes": sorted({str(p.dtype) for p in pl_module.parameters()}),
+                "is_testing": getattr(pl_module, "is_testing", None)})
         def on_test_batch_end(self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx=0):
             if batch_idx % 64 == 0:
                 write_json(output / "progress.json", {"stage":"test", "batch":batch_idx,"samples":recorder.count})
@@ -201,9 +212,12 @@ def test_lifecycle(cfg, model, dm, output, batches=None, engineering_callbacks=(
             "is_testing_after": getattr(model, "is_testing", None),
             "encoder_mask_cleared": getattr(model, "_encoder_mask", None) is None,
             "replay_cleared": getattr(model, "_replay", None) is None,
-            "evaluator_restored": model.evaluator is original_evaluator, "exception": error})
+            "evaluator_restored": model.evaluator is original_evaluator, "exception": error,
+            "real_batch_devices": input_devices,
+            "author_replay_queue_cleared": getattr(model, "_replay_queue", None) is None})
     write_json(output / "metrics.json", {"metrics": metrics, "samples": recorder.count,
-                                          "formal": batches is None, "checkpoint_load": "strict before Trainer.test"})
+        "formal": batches is None and not bounded_datamodule,
+        "checkpoint_load": "caller-owned model; see loading.json/strict_restore.json; Trainer.test ckpt_path=None"})
     return metrics
 
 

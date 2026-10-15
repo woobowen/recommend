@@ -13,6 +13,7 @@ import importlib.metadata
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 import time
 import traceback
@@ -177,6 +178,7 @@ def fault_and_recovery(cfg, model, dm, test_batches, val_batches, output):
 
 
 def shuffle_check(spec, cfg, model, dm, output, test_batches, val_batches):
+    import hydra
     import torch
     from experiments.beauty_extensions.cli import smoke
     from experiments.beauty_extensions.results import recompute
@@ -204,6 +206,31 @@ def shuffle_check(spec, cfg, model, dm, output, test_batches, val_batches):
             assert changed.get("generate", 0) == (len(test_batches) if n else 0)
     ordinary_validation(cfg, model, val_batches, output / "after-three-tests")
     fault_and_recovery(cfg, model, dm, test_batches, val_batches, output)
+    # Cover the author's actual multi-worker data-module path under a hard
+    # Trainer limit. It is separate from the fixed small per-condition subset.
+    from omegaconf import OmegaConf
+    source_cfg = OmegaConf.load(spec["config"]["path"])
+    source_workers = int(source_cfg.data_loading.test_dataloader_config.dataloader.num_workers)
+    if source_workers:
+        from experiments.beauty_extensions.cli import test_lifecycle
+        worker_cfg = cfg.copy()
+        for split in ("train", "val", "test"):
+            lc = worker_cfg.data_loading[f"{split}_dataloader_config"].dataloader
+            lc.num_workers = int(source_cfg.data_loading[f"{split}_dataloader_config"].dataloader.num_workers)
+            lc.timeout = int(source_cfg.data_loading[f"{split}_dataloader_config"].dataloader.timeout)
+            lc.persistent_workers = False
+        worker_cfg.trainer.limit_test_batches = 4
+        worker_dm = hydra.utils.instantiate(worker_cfg.data_loading.datamodule)
+        if spec["route"] == "A": model.shuffle_embedding_on_test = False
+        else: model.shuffle_n = 0
+        folder = output / "source-workers-bounded-test"
+        test_lifecycle(worker_cfg, model, worker_dm, folder, bounded_datamodule=True)
+        result = recompute(spec, worker_cfg, folder / "predictions.jsonl", folder, trainer_metrics=folder / "metrics.json")
+        assert result["samples"] == 32 and result["unique_users"] == 32
+        write_json(folder / "worker_contract.json", {"original_workers": source_workers,
+            "trainer_limit_test_batches": 4, "metrics_are_engineering_only": True,
+            "full_datamodule_entry_used": True, "source_data_changed": False,
+            "prefetch_is_not_model_evaluation": True})
     model.to("cuda:0").train(); model.on_train_start()
     calls = sampler_count(model)
     with torch.no_grad():
@@ -484,6 +511,15 @@ def main():
         "gpu": [{"logical": i, "name": torch.cuda.get_device_name(i)} for i in range(torch.cuda.device_count())],
         "framework_strategy": {"file": str(framework_path), "resolved": str(framework_path.resolve()), "sha256": sha256(framework_path)}})
     if args.phase != "prepare":
+        physical = os.environ.get("CUDA_VISIBLE_DEVICES", "")
+        assert physical.startswith("GPU-") and "," not in physical
+        processes = subprocess.check_output(['nvidia-smi','--query-compute-apps=gpu_uuid,pid,used_memory',
+            '--format=csv,noheader'], text=True)
+        conflicts = [line for line in processes.splitlines() if line.split(',')[0].strip() == physical
+            and int(line.split(',')[1]) != os.getpid()]
+        write_json(output / "gpu_start_check.json", {"physical_uuid": physical, "processes": processes,
+            "conflicts": conflicts, "worker_pid": os.getpid()})
+        assert not conflicts, "RESOURCE_CONFLICT: another process started before model placement"
         assert torch.cuda.device_count() == 1, "Exactly one isolated visible GPU required"
         torch.cuda.reset_peak_memory_stats()
         if args.phase == "shuffle": shuffle_check(spec, cfg, model, dm, output, test_batches, val_batches)
