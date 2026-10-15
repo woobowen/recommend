@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "reviewer_task": "/root/implementation_review",
+  "role": "nonauthor preexecution review of root config serialization fix and external CPU roundtrip script",
+  "reviewed_at": "2026-10-15T23:54:52.568830+08:00",
+  "status": "STATIC_PASS_PENDING_REAL_CPU_REGRESSION",
+  "authorization_relay": "Root reported latest explicit user approval for exactly one narrow additional serialization/configuration regression exception; original3/3 remains unchanged; no further repair allowance.",
+  "budget": {
+    "old_task_used": 3,
+    "old_task_maximum": 3,
+    "old_task_reset": false,
+    "additional_exception_limit": 1,
+    "exception_scope": "one-line whole-config save resolve=False plus CPU save/reload/actual used-subtree interpolation and effective-config consistency checks",
+    "new_GPU_preflight_authorized_by_this_exception": false
+  },
+  "actual_change": {
+    "failed_snapshot_commit": "ab056ffbb16f2303fe048c668ad275368ccc7237",
+    "current_commit_at_check": "5d4655292bc850267723dbb5195e3fbe5524735b",
+    "python_changes_from_failed_immutable_snapshot": [
+      "experiments/formal_20261015/run.py"
+    ],
+    "failed_snapshot_python_members_checked": 171,
+    "exact_one_line_replacement_verified_against_failed_snapshot": true,
+    "before_run_sha256": "e0a2c8f5229e22299d7ce6f2b2933dc808e1a06bfb03794898bc6284cb52de66",
+    "after_run_sha256": "15d4f7b280df8bb05200049ed643bf499038125d43529760c170c70dd6e2bc14",
+    "common_cli_baseline_author_model_and_training_source_byte_changes": false,
+    "same_as_prior_statically_reviewed_proposal": true,
+    "old_success_reference": "common.py:172 and mlp_formal.py:183 already save whole template resolve=False; actual used subtrees are separately resolved."
+  },
+  "roundtrip_script_review": {
+    "path": "/home/addaswsw/recommend-support/grid-formal-20261015/config_roundtrip.py",
+    "sha256": "d691c8613881cd83da41efa450ee2d8bb9cb3fac398dede2bd428ca6e7232160",
+    "syntax": "PASS",
+    "route_isolation": "Parent launches one fresh interpreter per supplied spec, check=True propagates child failure; avoids A/B src namespace contamination.",
+    "GPU_boundary": "CUDA_VISIBLE_DEVICES empty is asserted before work in parent and child. No instantiate/model/Trainer/DataLoader/generate/fit/test/CUDA calls occur in script AST.",
+    "actual_config_path": "Each child executes real bind_source plus formal_config for A/B, or real approved train.configure for MLP. Config/SID files are hash-verified.",
+    "template_roundtrip": "Whole original configured template is captured resolve=False, saved with exact repaired policy, reloaded through OmegaConf, and compared exactly unresolved. Unused now:id template is kept instead of faking a resolver.",
+    "real_used_subtrees": "model,trainer,optim,eval,callbacks,logger,datamodule resolve=True with throw_on_missing before and after reload; exact equality and absence of ${/??? are asserted. This is actual OmegaConf resolution of Hydra-used configuration, without object instantiation.",
+    "approved_MLP_conditions": "configure enforces scratch/no checkpoint, Toys32/48/4800/cap512/sourceworkers8 and Sports16/16/1600/cap128/sourceworkers0. Script repeats raw/accumulation/cadence, Adam0.001/wd0.0001/no scheduler, seed42/K10, max320000/epochs10, validation recall5 max/patience10 and total12h checks after reload. Cap/worker preservation is in configure and full datamodule projection equality; report protocol currently does not list cap separately.",
+    "same_call_policy": "AST verifies current run.py has exactly one OmegaConf.save and its resolve keyword is False.",
+    "failure_reporting": "Any assertion/parse/child exit failure prevents parent RESULT PASS. Separate config-NN outputs retain per-route template and before/after effective projections.",
+    "obvious_startup_blockers_found": []
+  },
+  "prior_success_used_projection_evidence": [
+    {
+      "route": "A",
+      "evidence": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-a-shared-r1/retrieved/output/used_config.json",
+        "bytes": 12966,
+        "sha256": "4a9a016157cc5571091663f7abe7c09277b1a915543213bc44b3a774e30b0e5f"
+      },
+      "residual_interpolation_or_missing_markers": false
+    },
+    {
+      "route": "B",
+      "evidence": {
+        "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/used_config.json",
+        "bytes": 12671,
+        "sha256": "e90e2ecc986f4e00355306e37c359caea71cfcca2318aada14547f1c4cba0bf1"
+      },
+      "residual_interpolation_or_missing_markers": false
+    }
+  ],
+  "not_claimed": [
+    "The external script has not run yet under this reviewer; this receipt is not runtime regression PASS.",
+    "No actual Hydra object/model/Trainer/DataLoader instantiation is tested or needed for this configuration-only regression.",
+    "No GPU usage or recommendation output is retested; old preflight evidence is inherited.",
+    "No new indefinite repair budget is inferred. If the single authorized exception fails, preserve failure and stop dependent work for explicit decision.",
+    "Changed Python SHA must be rebound into fixed commit, deployment, exact gates and independent review maps before formal model jobs."
+  ],
+  "reviewer_actions": {
+    "repository_edits": 0,
+    "script_edits": 0,
+    "git_mutations": 0,
+    "remote_or_GPU_calls": 0,
+    "script_execution": false,
+    "only_output_artifact": "/home/addaswsw/recommend-support/grid-formal-20261015/config-roundtrip-preexecution-review.json"
+  },
+  "inputs": [
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/run.py",
+      "bytes": 9806,
+      "sha256": "15d4f7b280df8bb05200049ed643bf499038125d43529760c170c70dd6e2bc14"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/config_roundtrip.py",
+      "bytes": 7112,
+      "sha256": "d691c8613881cd83da41efa450ee2d8bb9cb3fac398dede2bd428ca6e7232160"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/proposed-config-serialization-fix.patch",
+      "bytes": 548,
+      "sha256": "048ec32b56be0870db3713ceb7f13c37e76704b16c98f44b8f777123007c2f8d"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/config-serialization-review.json",
+      "bytes": 9582,
+      "sha256": "ed44fbb32780b985a9b5aa1a566f1477979236820c4d51dfca9775a0c39d6072"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/formal_20261015/train.py",
+      "bytes": 36761,
+      "sha256": "af7ec5159e0fbe9f7330d1172b81356920a1c626db9e15a6b339e6b074c79a1e"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/common.py",
+      "bytes": 12084,
+      "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/mlp_formal.py",
+      "bytes": 37293,
+      "sha256": "ac362b84f7a9a979bb7549ce1f817448fe172b9d32adc1a449180f5aa97d9e56"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/cli.py",
+      "bytes": 24542,
+      "sha256": "1a7805c778d27f2f5f551398ba81679e036d0e2d4746650063226788e41b239a"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/baseline.py",
+      "bytes": 7160,
+      "sha256": "b54e221f8bf6c4720eb95dffdc19d5078ad72c9266c5782c3089ee28c0b0c4ce"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/author/models.py",
+      "bytes": 15033,
+      "sha256": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-a-shared-r1/retrieved/output/used_config.json",
+      "bytes": 12966,
+      "sha256": "4a9a016157cc5571091663f7abe7c09277b1a915543213bc44b3a774e30b0e5f"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gsp-20261015-b-shared-r1/retrieved/output/used_config.json",
+      "bytes": 12671,
+      "sha256": "e90e2ecc986f4e00355306e37c359caea71cfcca2318aada14547f1c4cba0bf1"
+    }
+  ]
+}

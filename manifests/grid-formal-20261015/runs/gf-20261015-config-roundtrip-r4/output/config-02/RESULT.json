@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "route": "MLP",
+  "domain": "toys",
+  "spec_sha256": "be6dbc336160feab1d8abc10f82cf762ad934308af112fbbcabef3309a8e55f4",
+  "run_py_sha256": "15d4f7b280df8bb05200049ed643bf499038125d43529760c170c70dd6e2bc14",
+  "whole_template_roundtrip_exact": true,
+  "actual_used_subtrees_resolve_exact": true,
+  "used_config_sha256": "b62eab1f18e4ac06834df695bd53aa89b37700cb4e7bfee80be8bc2db8a040de",
+  "source_only_id_template": "${now:%Y-%m-%d}/${now:%H-%M-%S}",
+  "unused_id_is_not_evaluated_by_computation": true,
+  "assets": {
+    "config": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd/toys-source.yaml",
+      "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd",
+      "bytes": 12183,
+      "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd/toys-source.yaml"
+    },
+    "sid": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0/toys-semantic-ids.pt",
+      "sha256": "26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0",
+      "bytes": 382902,
+      "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0/toys-semantic-ids.pt"
+    }
+  },
+  "approved_protocol": {
+    "raw_microbatch": 32,
+    "accumulation": 48,
+    "val_microbatches": 4800,
+    "initialization": "scratch; all parameters trainable; no engineering checkpoint reuse",
+    "total_hard_cap_seconds": 43200,
+    "max_steps": 320000,
+    "max_epochs": 10,
+    "selection": {
+      "_target_": "lightning.pytorch.callbacks.ModelCheckpoint",
+      "dirpath": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-config-roundtrip-r4/output/config-02/checkpoints",
+      "filename": "checkpoint_{epoch:03d}_{step:06d}",
+      "monitor": "val/recall@5",
+      "verbose": true,
+      "save_last": null,
+      "save_top_k": 1,
+      "mode": "max",
+      "auto_insert_metric_name": true,
+      "save_weights_only": false,
+      "every_n_train_steps": null,
+      "train_time_interval": null,
+      "every_n_epochs": null,
+      "save_on_train_epoch_end": false
+    },
+    "early_stopping": {
+      "_target_": "lightning.pytorch.callbacks.EarlyStopping",
+      "monitor": "val/recall@5",
+      "min_delta": 0.0,
+      "patience": 10,
+      "verbose": true,
+      "mode": "max",
+      "strict": true,
+      "check_finite": true,
+      "stopping_threshold": null,
+      "divergence_threshold": null,
+      "check_on_train_epoch_end": false
+    }
+  },
+  "model_constructions": 0,
+  "GPU_model_calls": 0,
+  "model_SID_initialization_optimizer_batch_validation_selection_budget_unchanged": true
+}

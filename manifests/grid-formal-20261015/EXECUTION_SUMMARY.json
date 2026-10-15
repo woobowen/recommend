@@ -1,6 +1,6 @@
 {
   "stage": "grid-formal-20261015",
-  "status": "EXCEPTION_REPAIR_CPU_REGRESSION_PENDING",
+  "status": "CPU_CONFIG_PASS_FORMAL_ENTRY_IDENTITY_PENDING",
   "inherited_commit": "93567ea7f61e970c448838443595242d0b9beef0",
   "branch": "wbw",
   "takeover": {
@@ -63,6 +63,19 @@
       "cleanup_verified": true,
       "evidence": "runs/gf-20261015-a-identity-v1",
       "failure": "Configuration record resolve=True traversed unused Hydra now:id; one-line patch prepared but not applied"
+    },
+    {
+      "job_id": "gf-20261015-config-roundtrip-r4",
+      "phase": "CPU_CONFIGURATION_ROUNDTRIP_NO_MODEL",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "fetched": true,
+      "source_commit": "5d4655292bc850267723dbb5195e3fbe5524735b",
+      "snapshot": "74dfb2810cbba76f",
+      "model_constructed": false,
+      "gpu_model_calls": 0,
+      "cleanup_verified": true,
+      "evidence": "runs/gf-20261015-config-roundtrip-r4"
     }
   ],
   "formal_models_or_evaluator_modified": false,
@@ -87,5 +100,13 @@
       "sports": 9.092
     },
     "12h_completion_guaranteed": false
+  },
+  "cpu_configuration_regression": {
+    "job_id": "gf-20261015-config-roundtrip-r4",
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "independent_status": "CPU_CONFIGURATION_REGRESSION_PASS",
+    "review": "config-roundtrip-runtime-review.json",
+    "actual_used_config_unchanged": true
   }
 }

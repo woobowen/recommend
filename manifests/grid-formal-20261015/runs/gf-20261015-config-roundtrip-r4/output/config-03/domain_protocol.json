@@ -1,0 +1,43 @@
+{
+  "domain": "sports",
+  "source_config": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24/sports-engineering-base.yaml",
+    "sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24"
+  },
+  "initialization": "scratch; no preflight checkpoint or optimizer state reused",
+  "raw_microbatch": 16,
+  "accumulate_grad_batches": 16,
+  "validation_interval_microbatches": 1600,
+  "collate_window_cap": 128,
+  "source_worker_protocol_preserved": {
+    "train": {
+      "num_workers": 0,
+      "timeout": 0,
+      "persistent_workers": false
+    },
+    "val": {
+      "num_workers": 0,
+      "timeout": 0,
+      "persistent_workers": false
+    },
+    "test": {
+      "num_workers": 0,
+      "timeout": 0,
+      "persistent_workers": false
+    }
+  },
+  "explicit_approved_overlay": {
+    "trainer.accumulate_grad_batches": {
+      "source": 16,
+      "approved": 16
+    },
+    "trainer.val_check_interval": {
+      "source": 1600,
+      "approved": 1600
+    }
+  },
+  "max_steps": 320000,
+  "max_epochs": 10,
+  "hard_cap_hours_including_full_test": 12.0,
+  "safety_allowance_is_not_training_endpoint": true
+}
