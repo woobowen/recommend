@@ -397,7 +397,11 @@ def mlp_check(spec, cfg, model, dm, output, test_batches, val_batches, resume=Fa
                         "prior": prior, "current": current,
                         "difference_boundary": None if exact else "ModelCheckpoint output dir changed; Lightning restores best_model_path but resets directory-bound ranking state; not exact uninterrupted selection continuation"})
                 def plain(value):
-                    if isinstance(value, torch.Tensor): return value.detach().cpu().tolist()
+                    # Callback ranking state legitimately contains +/-inf
+                    # tensor sentinels. Recurse after tolist() so JSON records
+                    # them explicitly without changing the restored state or
+                    # relaxing finite checks on model/gradient/loss tensors.
+                    if isinstance(value, torch.Tensor): return plain(value.detach().cpu().tolist())
                     if isinstance(value, dict): return {k: plain(v) for k,v in value.items()}
                     if isinstance(value, (list, tuple)): return [plain(v) for v in value]
                     if isinstance(value, float) and not __import__('math').isfinite(value): return str(value)
