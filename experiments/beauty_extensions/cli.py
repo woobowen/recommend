@@ -159,11 +159,13 @@ class PredictionRecorder:
                 self.count += 1
 
 
-def test_lifecycle(cfg, model, dm, output, batches=None):
+def test_lifecycle(cfg, model, dm, output, batches=None, engineering_callbacks=()):
     import hydra
     from lightning import Callback
     from torch.utils.data import DataLoader
     from .common import batch_keys
+    if engineering_callbacks and batches is None:
+        raise ValueError("Injected lifecycle checks require explicit bounded batches")
     output.mkdir(parents=True, exist_ok=True)
     original_evaluator = model.evaluator
     recorder = PredictionRecorder(original_evaluator, output / "predictions.jsonl")
@@ -178,15 +180,28 @@ def test_lifecycle(cfg, model, dm, output, batches=None):
             clear_runtime(pl_module)
     trainer_cfg = cfg.trainer.copy()
     trainer_cfg.pop("profiler", None)
-    trainer = hydra.utils.instantiate(trainer_cfg, logger=False, callbacks=[Keys()], enable_checkpointing=False)
+    trainer = hydra.utils.instantiate(trainer_cfg, logger=False,
+        callbacks=[Keys(), *engineering_callbacks], enable_checkpointing=False)
+    before_devices = sorted({str(p.device) for p in model.parameters()})
+    error = None
     try:
         if batches is None:
             metrics = trainer.test(model, datamodule=dm, ckpt_path=None)
         else:
             metrics = trainer.test(model, dataloaders=DataLoader(batches, batch_size=None), ckpt_path=None)
+    except BaseException as exc:
+        error = {"type": type(exc).__name__, "message": str(exc)}
+        raise
     finally:
         clear_runtime(model)
         model.evaluator = original_evaluator
+        write_json(output / "lifecycle_cleanup.json", {
+            "parameter_devices_before": before_devices,
+            "parameter_devices_after": sorted({str(p.device) for p in model.parameters()}),
+            "is_testing_after": getattr(model, "is_testing", None),
+            "encoder_mask_cleared": getattr(model, "_encoder_mask", None) is None,
+            "replay_cleared": getattr(model, "_replay", None) is None,
+            "evaluator_restored": model.evaluator is original_evaluator, "exception": error})
     write_json(output / "metrics.json", {"metrics": metrics, "samples": recorder.count,
                                           "formal": batches is None, "checkpoint_load": "strict before Trainer.test"})
     return metrics
@@ -257,6 +272,14 @@ def smoke(spec, cfg, model, dm, output, batches):
         permutation_check(model, output)
     if spec["route"] in ("A", "B"):
         for n in (0, 3, 4):
+            # Tracing must describe this condition, not an exhausted prior trace.
+            for name in ("shuffle_events", "permutation_events"):
+                if hasattr(model, name):
+                    setattr(model, name, [])
+            counts_before = {name: dict(getattr(model, name, {})) for name in
+                ("encoder_role_counts", "shuffle_role_counts")}
+            shuffle_count_before = getattr(model, "shuffle_call_count", None)
+            encoder_event_start = len(getattr(model, "encoder_events", []))
             if spec["route"] == "B":
                 model.shuffle_n = n
             else:
@@ -268,16 +291,29 @@ def smoke(spec, cfg, model, dm, output, batches):
                 "n":n, "events":getattr(model,"shuffle_events",getattr(model,"permutation_events",[])),
                 "encoder_role_counts":getattr(model,"encoder_role_counts",{}),
                 "shuffle_role_counts":getattr(model,"shuffle_role_counts",{}),
+                "role_count_delta": {name: {k: v - counts_before[name].get(k, 0)
+                    for k,v in getattr(model, name, {}).items()} for name in counts_before},
+                "shuffle_call_count_delta": (getattr(model, "shuffle_call_count") - shuffle_count_before)
+                    if shuffle_count_before is not None else None,
+                "encoder_events": getattr(model, "encoder_events", [])[encoder_event_start:],
                 "state_cleared":not model.is_testing})
             if hasattr(model,"shuffle_events"):
                 model.shuffle_events=[]
         # Ordinary validation must remain OFF even after a shuffled test.
-        model.eval(); model.on_validation_start()
+        # Lightning's Strategy.teardown moves this same model to CPU. Restore
+        # placement and rebuild clean input for the explicit post-test probe.
+        model.to(device).eval(); model.on_validation_start()
+        batch = batch_to(batches[0], device)
+        args = model_arguments(batch)
         with torch.inference_mode():
             validation_ids, validation_scores = model.generate(**args)
         assert torch.equal(validation_ids, ids) and torch.allclose(validation_scores, scores, rtol=1e-5, atol=1e-6)
-        model.on_exception(RuntimeError("bounded cleanup probe; no failed formal task"))
-        assert not model.is_testing
+        write_json(output / "post_test_off.json", {
+            "same_model_instance": True, "parameter_devices": sorted({str(p.device) for p in model.parameters()}),
+            "input_device": str(args["input_ids"].device), "is_testing": model.is_testing,
+            "sid_exact": True, "scores": numeric_difference(validation_scores, scores),
+            "model_eval": not model.training, "encoder_eval": not model.encoder.training,
+            "decoder_eval": not model.decoder.training})
     else:
         test_lifecycle(cfg, model, dm, output, batches)
     if spec["route"] == "A":
@@ -301,6 +337,9 @@ def main():
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     spec = json.loads(args.spec.read_text())
+    if args.phase == "formal" and spec["route"] in ("A", "B"):
+        from .authorization import require_formal_gate
+        require_formal_gate(spec)  # reject before imports/model/data or output
     output = (args.output or Path(os.environ["GRID_JOB_DIR"]) / "output").resolve()
     output.mkdir(parents=True, exist_ok=True)
     if (output / "invocation.json").exists():

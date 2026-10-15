@@ -1,0 +1,36 @@
+{
+  "stage": "grid-shuffle-mlp-preflight-20261015",
+  "domain": "toys",
+  "route": "MLP",
+  "seed": 42,
+  "generation_k": 10,
+  "formal_approved": false,
+  "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/toys",
+  "config": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd/toys-source.yaml",
+    "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd"
+  },
+  "sid": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0/toys-semantic-ids.pt",
+    "sha256": "26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0"
+  },
+  "preflight_rows": 19,
+  "optimizer_updates": 2,
+  "resume_updates": 1,
+  "initialization": "scratch; all parameters trainable; ENGINEERING_ONLY",
+  "research_condition": "Toys author RQ-VAE+STE candidate; producer Python binding incomplete; formal choice/budget pending",
+  "engineering_overlay": {
+    "num_workers": 0,
+    "devices": 1,
+    "strategy": "auto",
+    "max_steps": 2,
+    "resume_max_steps": 3,
+    "val_check_interval_microbatches": 16,
+    "accumulate_grad_batches": 16,
+    "val_rows": 11,
+    "test_rows": 19,
+    "formal_checkpoint_reuse": false,
+    "microbatch_original": 32,
+    "collate_window_cap_original": 512
+  }
+}
