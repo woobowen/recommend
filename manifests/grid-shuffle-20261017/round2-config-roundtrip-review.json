@@ -1,0 +1,95 @@
+{
+  "status": "ROUND2_CONFIG_ROUNDTRIP_FIX_REVIEW_PASS_RUNTIME_PENDING",
+  "reviewer_task": "/root/source_audit",
+  "reviewed_at_utc": "2026-10-16T18:17:10.932302+00:00",
+  "source": {
+    "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/shuffle_20261017/preflight.py",
+    "bytes": 6013,
+    "sha256": "48737a3b9ec1559bbeb2cdd98cc522bd0c3634b7192a179e900e8e04946c3d89"
+  },
+  "actual_failure_evidence": [
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-preflight-r1/retrieved/status.json",
+      "bytes": 2967,
+      "sha256": "81c146284dc259276d39205fa3410a1260dc4bcfada649bf5e820fdd12a813ed"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-preflight-r1/retrieved/work.log",
+      "bytes": 5076,
+      "sha256": "1193cedec4da524518b285ba662bb4e2d105f420509e6f8cd868de0c51c04457"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-preflight-r1/retrieved/output/loading.json",
+      "bytes": 1289,
+      "sha256": "c447fdda57a9c3cac4fa078c49150bc3dc0ad8a9efe81074a05b7113b0fe6add"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-preflight-r1/retrieved/output/used_config.json",
+      "bytes": 12664,
+      "sha256": "5f1a8df76c1df1eef72bc06188f5b538403397ad3fead6e2d1c3a5a2e66be15b"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-preflight-r1/retrieved/status.json",
+      "bytes": 2977,
+      "sha256": "5a9b28c2d5df11e1568be7abba1e0f1dd3e699363931bf293167db64fd3551ed"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-preflight-r1/retrieved/work.log",
+      "bytes": 5076,
+      "sha256": "1193cedec4da524518b285ba662bb4e2d105f420509e6f8cd868de0c51c04457"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-preflight-r1/retrieved/output/loading.json",
+      "bytes": 1297,
+      "sha256": "6ba9faaf38fee7cb6725e7d67e7c467681e2b7f75620601c00e4381eb1cf70e3"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-preflight-r1/retrieved/output/used_config.json",
+      "bytes": 12680,
+      "sha256": "556a5a6dc31e17d1a53ca59ac8a95dd4f8fcf5635efe4723698107c489c63761"
+    }
+  ],
+  "strict_load_evidence_before_failure": [
+    {
+      "domain": "toys",
+      "strict_load": {
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "global_step": 6200,
+        "epoch": 0,
+        "all_parameter_keys_shapes_values_equal": true,
+        "state_tensor_count": 177,
+        "embedded_sid_exact": true
+      },
+      "model_class": "experiments.beauty_extensions.baseline.BaselineShuffleModel",
+      "shared_sid_table": true,
+      "formal_or_model_forward_claim": false
+    },
+    {
+      "domain": "sports",
+      "strict_load": {
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "global_step": 9500,
+        "epoch": 0,
+        "all_parameter_keys_shapes_values_equal": true,
+        "state_tensor_count": 177,
+        "embedded_sid_exact": true
+      },
+      "model_class": "experiments.beauty_extensions.baseline.BaselineShuffleModel",
+      "shared_sid_table": true,
+      "formal_or_model_forward_claim": false
+    }
+  ],
+  "cause": "New whole-root resolve=True validation reached original unused Hydra id=${now:...} outside Hydra initialization, after successful strict model/SID loading.",
+  "fix": "Require full-root unresolved serialization equality and resolved equality for exactly the original computational sections: model/trainer/optim/eval/data_loading.datamodule. No resolver registration, original-config rewrite or computational setting change.",
+  "scope": "Roundtrip validation boundary correction only; does not relax any actual used model/data/trainer/evaluator field comparison.",
+  "original_compute_contract": {
+    "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/beauty_extensions/common.py",
+    "bytes": 12084,
+    "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91"
+  },
+  "review_limit": "Round2 runtime must still complete every real engineering check; no formal gate is issued from failed round1.",
+  "new_GPU_or_model_calls_by_reviewer": 0,
+  "source_or_Git_writes_by_reviewer": 0
+}
