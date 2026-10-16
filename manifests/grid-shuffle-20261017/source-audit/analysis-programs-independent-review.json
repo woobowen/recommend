@@ -1,0 +1,84 @@
+{
+  "status": "INDEPENDENT_ANALYSIS_PROGRAM_STATIC_AND_ANALYTICAL_CPU_PASS",
+  "reviewer_task": "/root/source_audit",
+  "reviewed_at_utc": "2026-10-16T18:15:12.116547+00:00",
+  "programs": [
+    {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/verify_formal_shuffle_result.py",
+      "bytes": 18739,
+      "sha256": "0381e220118694c54793804ac327a5a7a610720a7f5d32641b296819bbcd9cec"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/paired_shuffle_analysis.py",
+      "bytes": 15327,
+      "sha256": "514bdd9d601025109c4f3ceef220e696f4208db0ef8841024cafac59ea339583"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/verify_attention_exports.py",
+      "bytes": 23599,
+      "sha256": "512bd2e069160f7bf1eea3110af733e53139a8bcb5d9e1d19482a76baca7952b"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/verify_attention_statistics.py",
+      "bytes": 8146,
+      "sha256": "100df05a35c8892fc7e236a6ed5e586252d1c2e430e652ec0b30a04d346da421"
+    }
+  ],
+  "accepted_function_identity": [
+    {
+      "file": "verify_attention_exports.py",
+      "symbol": "verify_png_pixels",
+      "AST_equal_to_accepted_Beauty": true
+    },
+    {
+      "file": "verify_attention_statistics.py",
+      "symbol": "identity",
+      "AST_equal_to_accepted_Beauty": true
+    },
+    {
+      "file": "verify_attention_statistics.py",
+      "symbol": "close",
+      "AST_equal_to_accepted_Beauty": true
+    },
+    {
+      "file": "verify_attention_statistics.py",
+      "symbol": "pair_values",
+      "AST_equal_to_accepted_Beauty": true
+    }
+  ],
+  "analytical_paired_cases": {
+    "users": 3,
+    "conditions": [
+      0,
+      3,
+      4
+    ],
+    "all_four_hit_transition_buckets": true,
+    "manual_target_rank_transition_cases": true,
+    "same_global_Recall_with_changed_user_lists": true,
+    "same_set_changed_order_cases": true,
+    "original_invalid_candidates_retained": true,
+    "metric_absolute_relative_and_per_user_distribution_agree_with_manual_calculation": true,
+    "new_model_GPU_or_evaluator_calls": 0,
+    "synthetic_example_not_formal_result": true
+  },
+  "reviewed_new_logic": [
+    "Result verifier independently recomputes all per-user Recall/NDCG, refuses mixed relevance score ties, validates exact user-target coverage and native trace/lifecycle identity.",
+    "A and B switch fields checked by actual model configuration; absent should_check_prefix follows byte-bound constructor False default, explicit field must remain False.",
+    "Batch count follows actual lifecycle batch records; workers0 additionally requires ceil complete coverage.",
+    "Attention verifier infers actual history_slots from effective val sequence_length and uses full H+SEP width; inherited parent/head/mask/PNG-cell checks unchanged.",
+    "Paired analysis uses exact within-domain/route user-target identity; original ordered candidates unchanged; set operations only describe differences; manual three-user cases cover lost/gained/same hits, rank and list changes."
+  ],
+  "limits": [
+    "These are audit and analysis scripts authored by /root/results_audit, independently reviewed here. No new formal result or raw attention output is accepted by this static/program review.",
+    "The paired-analysis cases use explicitly synthetic saved rows and receipts to exercise calculation paths; they do not certify real experiment identities or empirical outcomes.",
+    "Real paired reports and all formal evidence require later exhaustive data-level checks."
+  ],
+  "review_program": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/source-audit/review_analysis_adaptations.py",
+    "bytes": 8100,
+    "sha256": "fe300089f68ef5b086370cc1d07ff28aaf5c53011a3482b413b4be5d6b97aa39"
+  },
+  "new_GPU_or_model_calls_by_reviewer": 0,
+  "source_or_Git_writes_by_reviewer": 0
+}

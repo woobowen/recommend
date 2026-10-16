@@ -1,0 +1,224 @@
+{
+  "status": "FORMAL_EVALUATION_ACCEPTANCE_PASS",
+  "reviewer": "/root/results_audit",
+  "reviewed_at_utc": "2026-10-16T18:37:46.996116+00:00",
+  "domain": "sports",
+  "route": "B",
+  "shuffle_n": 3,
+  "job_id": "gs-20261017-sports-b-shuffle3-v1",
+  "scope": "Complete original saved test predictions, every per-user metric, candidate legality, exact coverage, runtime load/identity/trace receipts, and terminal worker budget. No checkpoint payload deserialization or new model computation.",
+  "source_commit": "c8acac42d5e13ca80af75faac5d1f7bc33fb589f",
+  "snapshot_sha256": "f892ae7892f8c981ffe3494368fbaa6a88f693605c2d0c902581cfeea0d64c50",
+  "DEPLOYMENT_raw_sha256": "9f905f657daedff79f1d18900def1fdb96a5d890ff89ffd36f9a536cbe3bb815",
+  "spec_sha256": "ab17cba179e8711e551cdf11b1f2a6f3d2ebcc80d22281f36ad62b2f7fed51d4",
+  "source_python_bytes_match_current_reviewed_checkout": true,
+  "request_sha256": "f2b1ecff108b7c025290c5cdb701698301fcfe7b6fa7f6cf86f08b8229edca9d",
+  "config": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/.hydra/config.yaml",
+    "bytes": 12170,
+    "sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24"
+  },
+  "sid": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+    "bytes": 588597,
+    "sha256": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293"
+  },
+  "checkpoint": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/checkpoints/checkpoint_epoch=000_step=009500.ckpt",
+    "bytes": 160160622,
+    "sha256": "29fcf86753cf46fcdac816569372986497f4c64c4921a9cdbf617c04f4d3cf98"
+  },
+  "test_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gs-20261017-sports-b-preflight-r2/output/test_target_index.jsonl",
+    "sha256": "191a66c91b5797790842fb0f8cf241128d4dbc005987f0be8c2038079a163c2d"
+  },
+  "prefix_constraint_configuration": {
+    "effective_value": false,
+    "basis": "used config omits field; byte-bound actual SemanticIDEncoderDecoder constructor default is False",
+    "source": {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py",
+      "bytes": 44597,
+      "sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e"
+    }
+  },
+  "samples": 35598,
+  "unique_users": 35598,
+  "exact_key_target_multiset": true,
+  "metrics": {
+    "ndcg@5": 0.01461019553244114,
+    "ndcg@10": 0.01791044883430004,
+    "recall@5": 0.022276531904935837,
+    "recall@10": 0.03250182420015335
+  },
+  "independent_stdlib_metrics": {
+    "recall@5": 0.02227653238946008,
+    "ndcg@5": 0.01461019609343558,
+    "recall@10": 0.032501825945277826,
+    "ndcg@10": 0.0179104482596309
+  },
+  "independent_to_trainer_absolute_differences": {
+    "recall@5": 4.84524243643536e-10,
+    "ndcg@5": 5.609944401380185e-10,
+    "recall@10": 1.7451244754829176e-09,
+    "ndcg@10": 5.746691421337768e-10
+  },
+  "all_per_user_metrics_checked": 35598,
+  "maximum_per_user_metric_absolute_difference": {
+    "recall@5": 0.0,
+    "ndcg@5": 2.1402009775517428e-08,
+    "recall@10": 0.0,
+    "ndcg@10": 2.1402009775517428e-08
+  },
+  "per_user_diagnostics": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/sports-b-3-evaluation-review-per-user.jsonl.gz",
+    "bytes": 588329,
+    "sha256": "a8470d082a12af1d9cc1440572783304aa0cb17990d011e635b1e970e56506dc"
+  },
+  "prediction_sha256": "a9a5b3cdcf7bc27c4507221d5a89ca23b6b69bf57ac35e5fb5a8336433d85d3a",
+  "targets_sha256": "191a66c91b5797790842fb0f8cf241128d4dbc005987f0be8c2038079a163c2d",
+  "legal_vocabulary": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/sid-dictionary-results/gs-20261017-sports-b-sid-dictionary-v1/output/sid_dictionary.json",
+    "bytes": 270750,
+    "sha256": "fceae5f8aced66a3abc0e2b9fc08d91872ccd2e3bda341b7afe0bdfc4ca0986a"
+  },
+  "invalid_candidate_count": 5,
+  "invalid_candidates_per_user_histogram": {
+    "0": 35593,
+    "1": 5
+  },
+  "duplicate_candidate_count": 0,
+  "targets_outside_legal_vocabulary": 0,
+  "score_tie_rows": 0,
+  "positive_negative_score_tie_rows": 0,
+  "original_candidate_filtering_deduplication_rescoring_or_reordering_applied": false,
+  "strict_load_runtime_receipt": {
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "global_step": 9500,
+    "epoch": 0,
+    "all_parameter_keys_shapes_values_equal": true,
+    "state_tensor_count": 177,
+    "embedded_sid_exact": true
+  },
+  "checkpoint_payload_deserialized_by_reviewer": false,
+  "intervention_trace": {
+    "encoder_calls": 8900,
+    "loss_calls": 4450,
+    "generate_calls": 4450,
+    "shuffle_calls": 8900,
+    "bounded_native_events": 6,
+    "observed_permutation_variants": 6,
+    "loss_and_generate_sample_separately": true,
+    "lifecycle_cleanup_and_actual_cuda_batch_devices_checked": true,
+    "full_test_permutation_history_claimed": false
+  },
+  "terminal_state": "SUCCEEDED",
+  "exit_code": 0,
+  "worker_may_be_live": false,
+  "worker_wall_seconds_including_CPU_preparation": 275.436288,
+  "requested_budget_seconds": 1800,
+  "GPU_request_worker_wall_hours": 0.07651008,
+  "physical_GPU": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+  "inputs": [
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/output/RESULT.json",
+      "bytes": 2267,
+      "sha256": "66f72ca90bc644b2f12044eadf2db1f36b7472339adf8aa58ab3146d308cbf21"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/output/invocation.json",
+      "bytes": 48223,
+      "sha256": "5a3dbf74788b2fb7ff14fc00254bd97125374b97427829f7f13486c8f00a2341"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/output/used_config.json",
+      "bytes": 12679,
+      "sha256": "e62aa46dfa06635048b93545da488621bf89f71c75833df7a5e4e069200bebb6"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/output/loading.json",
+      "bytes": 1297,
+      "sha256": "6ba9faaf38fee7cb6725e7d67e7c467681e2b7f75620601c00e4381eb1cf70e3"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/output/intervention_trace.json",
+      "bytes": 7314,
+      "sha256": "1c045161813b62ebf6fc4d1e52f5eb4e34cfed073044b8b715ea42cbdf3a8376"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/output/test/predictions.jsonl",
+      "bytes": 17822386,
+      "sha256": "a9a5b3cdcf7bc27c4507221d5a89ca23b6b69bf57ac35e5fb5a8336433d85d3a"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/output/test/per_sample_metrics.jsonl",
+      "bytes": 4360459,
+      "sha256": "94ceb970c763d9bfe7bace9260d5548daf775bf8588ebf3be8d472919e96b793"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/output/test/recomputed_metrics.json",
+      "bytes": 737,
+      "sha256": "c1390161d9b6c311d97f30c53b1179cefee7fd6529fde1baddb98422676d5f8d"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/output/test/metrics.json",
+      "bytes": 395,
+      "sha256": "942f47b8ec4379d0a5e3a91093d729686df461bd433c67d598b74452213cae33"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/output/test/lifecycle_cleanup.json",
+      "bytes": 1107243,
+      "sha256": "c49e0657442baf195104a4a512eaa8c0d325e5c503a941b8823754ece4a0f839"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-preflight-r2/retrieved/output/test_target_index.jsonl",
+      "bytes": 5280326,
+      "sha256": "191a66c91b5797790842fb0f8cf241128d4dbc005987f0be8c2038079a163c2d"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/shuffle_20261017/specs/sports-b-3.json",
+      "bytes": 2260,
+      "sha256": "ab17cba179e8711e551cdf11b1f2a6f3d2ebcc80d22281f36ad62b2f7fed51d4"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/request.json",
+      "bytes": 2921,
+      "sha256": "15c699b31a5225c1af05567d365ef83fc7a2e4c16a6505ef7fd2d0cb3bd5b7b2"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/accepted.json",
+      "bytes": 310,
+      "sha256": "7b37b61d456bcbf200d6dbd7c436be2ca9a101702464fbe31facd5f514c6a396"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved/status.json",
+      "bytes": 4024,
+      "sha256": "b7703a9fd192dedfdb9bb97214e98b7fff4831749b53cca22e1f932bc7ddd95f"
+    }
+  ],
+  "program": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/verify_formal_shuffle_result.py",
+    "bytes": 18739,
+    "sha256": "0381e220118694c54793804ac327a5a7a610720a7f5d32641b296819bbcd9cec"
+  },
+  "argv": [
+    "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/verify_formal_shuffle_result.py",
+    "--job-directory",
+    "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-shuffle3-v1/retrieved",
+    "--targets",
+    "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-preflight-r2/retrieved/output/test_target_index.jsonl",
+    "--legal-sids",
+    "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/sid-dictionary-results/gs-20261017-sports-b-sid-dictionary-v1/output/sid_dictionary.json",
+    "--spec",
+    "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/shuffle_20261017/specs/sports-b-3.json",
+    "--output",
+    "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/sports-b-3-evaluation-review.json"
+  ],
+  "new_model_or_GPU_calls": 0,
+  "Git_or_original_evidence_writes": 0,
+  "boundaries": [
+    "Semantic historical pairing and weight/SID selection depend on the companion asset/source audit; shapes and hashes alone do not establish that pairing.",
+    "Normal OFF equivalence and occurrence-level random sampling implementation depend on the companion source/preflight review; bounded runtime traces certify actual test hook activation.",
+    "This result receipt does not accept attention or claim cross-seed stability, invariance, or a required metric value."
+  ]
+}

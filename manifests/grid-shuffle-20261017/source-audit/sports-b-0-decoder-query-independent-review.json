@@ -1,0 +1,37 @@
+{
+  "status": "INDEPENDENT_DECODER_QUERY_IDENTITIES_PASS",
+  "reviewer_task": "/root/source_audit",
+  "reviewed_at_utc": "2026-10-16T18:52:41.670024+00:00",
+  "program": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/source-audit/review_decoder_query_identities.py",
+    "bytes": 8737,
+    "sha256": "d7a47707ec5f63697604c456aee3bb85a5f6c1224d114db793469bb206885d8f"
+  },
+  "conditions": [
+    {
+      "job_id": "gs-20261017-sports-b-normal-attention-v1",
+      "domain": "sports",
+      "route": "B",
+      "shuffle_n": 0,
+      "report": {
+        "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/sports-b-0-decoder-query-identity.json",
+        "bytes": 218439,
+        "sha256": "cdef74c43b035399203c59b6cf0a11c1cdfda3c1b0bb307d3e365ab8cb492f1a"
+      },
+      "complete_users": 32,
+      "complete_query_identity_records": 256,
+      "all_raw_beam_parents_independently_reconstructed": true,
+      "both_path_every_query_identity_exact": true,
+      "BOS_has_no_fabricated_integer_ID": true,
+      "actual_query_lengths_and_last_indices_checked": true,
+      "embedding_table_width": 256,
+      "derived_vs_direct_observer_scope_preserved": true
+    }
+  ],
+  "condition_count": 1,
+  "total_query_identity_records": 256,
+  "method": "Independently reconstruct every native beam parent and reverse final Top1 ancestry from raw generated SID arrays, then derive every raw selected-parent prefix/query and offset index; compare all saved CPU-derived identity records.",
+  "scientific_scope": "These are source-derived query identities from actual saved raw beam arrays, with observed cross-attention query lengths. T5Stack input_ids/inputs_embeds were not separately captured.",
+  "new_model_GPU_or_evaluator_calls": 0,
+  "original_NPZ_PNG_or_source_writes": 0
+}

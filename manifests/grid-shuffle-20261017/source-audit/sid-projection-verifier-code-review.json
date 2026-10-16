@@ -1,0 +1,25 @@
+{
+  "status": "INDEPENDENT_SID_PROJECTION_VERIFIER_CODE_REVIEW_PASS",
+  "reviewer_task": "/root/source_audit",
+  "reviewed_at_utc": "2026-10-16T18:22:29.191942+00:00",
+  "reviewed_program": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/verify_sid_dictionary_projection.py",
+    "bytes": 11156,
+    "sha256": "3afbda25c494645fa70cd04197f4eef1b997d580f8166a33e1a2ccb5e1cf034d"
+  },
+  "actual_receipt": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/sid-dictionary-independent-review.json",
+    "bytes": 9620,
+    "sha256": "d17f05a940f4466e418390894e34af42bde1f61a695e34d8b2324d70bb2eb159"
+  },
+  "checks": [
+    "Restricted Unpickler allows only tensor metadata rebuild functions, integer storage metadata and OrderedDict; no torch/model import or CUDA initialization.",
+    "Raw tensor addresses computed from storage offset and actual 2D strides, bounds-checked, byte-order-aware; ZIP member reads validate CRC.",
+    "Sorted legal full SID tuples match complete 4-by-N storage, original payload byte count/SHA and exporter request/status/source identity.",
+    "Receipt original local raw SID and dictionaries and every referenced small evidence input hash rechecked by this reviewer."
+  ],
+  "scope": "Code and receipt/hash review only. The /root/results_audit agent performed the independent original storage reconstruction; this reviewer did not rerun that full verifier or any model.",
+  "raw_SID_transfer_bytes_total": 971370,
+  "new_GPU_or_model_calls_by_reviewer": 0,
+  "source_or_Git_writes_by_reviewer": 0
+}

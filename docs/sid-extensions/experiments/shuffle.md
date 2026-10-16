@@ -158,3 +158,8 @@ Shuffle均为loss2796/generate2796分别采样；实际原生排列记录、全�
 新正式入口的CPU配置保存首次失败保持FAILED：whole-cfg resolve=True误解析未用Hydra now:id。用户明确追加一次严格限定例外后，仅改为与旧成功入口一致的resolve=False；四组真实CPU保存/重载/有效子树解析exact及A/B正式入口identity均实际通过，模型/优化器/训练/评价配置未变。原3/3修正不重置，此例外不授予继续扩大返工。
 
 完整精度/每job输入与结果见 [正式阶段记录](../../../manifests/grid-formal-20261015/EXECUTION_SUMMARY.json)；[六组独立总验收](../../../manifests/grid-formal-20261015/results-review/beauty-six-formal-results-independent-summary.json)。原始全预测与逐样本指标将纳入最终轻量ZIP，正式注意力是后续独立job，不与这六次评测混记。
+
+
+## Toys/Sports Shuffle 正式补齐（2026-10-17）
+
+Toys/Sports B 的 Normal、Shuffle3、Shuffle4 完整测试、对应六组 fixed32 和2304条注意力描述统计已完成并经真实非作者审核；Beauty仅继承。Toys A选择/上游来源未闭合，Sports A缺完整配套链，总状态 PARTIAL。原始预测、24份NPZ和全部192张PNG保留服务器；代码、配套身份、完整指标/配对、统计、失败记录及审核入口见 [正式报告](../../../manifests/grid-shuffle-20261017/FINAL_REPORT.md)。单seed42，不将不同A/B基础条件或图像相似解释为严格置换不变。

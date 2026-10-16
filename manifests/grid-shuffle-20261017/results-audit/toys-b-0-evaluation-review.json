@@ -1,0 +1,227 @@
+{
+  "status": "FORMAL_EVALUATION_ACCEPTANCE_PASS",
+  "reviewer": "/root/results_audit",
+  "reviewed_at_utc": "2026-10-16T18:31:14.611834+00:00",
+  "domain": "toys",
+  "route": "B",
+  "shuffle_n": 0,
+  "job_id": "gs-20261017-toys-b-normal-v1",
+  "scope": "Complete original saved test predictions, every per-user metric, candidate legality, exact coverage, runtime load/identity/trace receipts, and terminal worker budget. No checkpoint payload deserialization or new model computation.",
+  "source_commit": "c8acac42d5e13ca80af75faac5d1f7bc33fb589f",
+  "snapshot_sha256": "f892ae7892f8c981ffe3494368fbaa6a88f693605c2d0c902581cfeea0d64c50",
+  "DEPLOYMENT_raw_sha256": "9f905f657daedff79f1d18900def1fdb96a5d890ff89ffd36f9a536cbe3bb815",
+  "spec_sha256": "e9a6544dbc8c24b96352c3eaf06fc584f39ef5891a87299383f6aa64114b6498",
+  "source_python_bytes_match_current_reviewed_checkout": true,
+  "request_sha256": "179486216f6c0317062e252bad94195d292d2e74f6524787bace0664d2d8126f",
+  "config": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/.hydra/config.yaml",
+    "bytes": 12166,
+    "sha256": "38edf61240a1ff26ae57e34bd508def3581261fcf5511d7a8563e9e773e8f4ed"
+  },
+  "sid": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/semantic_ids.pt",
+    "bytes": 382773,
+    "sha256": "c6d516be6b65708137e8eea078736b24f88fd50b45c132ac376947dd71c132ed"
+  },
+  "checkpoint": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/checkpoints/checkpoint_epoch=000_step=006200.ckpt",
+    "bytes": 159302894,
+    "sha256": "f778135f116c019f5beb9e627c2046e6ee3c4edade4139a0810995df692e47d5"
+  },
+  "test_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gs-20261017-toys-b-preflight-r2/output/test_target_index.jsonl",
+    "sha256": "37e23561ef6d460fc79ce1899478312c9dd309ac621ad1979d73ab5ec933099c"
+  },
+  "prefix_constraint_configuration": {
+    "effective_value": false,
+    "basis": "used config omits field; byte-bound actual SemanticIDEncoderDecoder constructor default is False",
+    "source": {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py",
+      "bytes": 44597,
+      "sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e"
+    }
+  },
+  "samples": 19412,
+  "unique_users": 19412,
+  "exact_key_target_multiset": true,
+  "metrics": {
+    "ndcg@5": 0.0269868616014719,
+    "ndcg@10": 0.03460293635725975,
+    "recall@5": 0.0420873686671257,
+    "recall@10": 0.06583556532859802
+  },
+  "independent_stdlib_metrics": {
+    "recall@5": 0.0420873686379559,
+    "ndcg@5": 0.02698686293729437,
+    "recall@10": 0.06583556562950751,
+    "ndcg@10": 0.03460293618402145
+  },
+  "independent_to_trainer_absolute_differences": {
+    "recall@5": 2.916979852107815e-11,
+    "ndcg@5": 2.389467828461944e-09,
+    "recall@10": 3.009094917683086e-10,
+    "ndcg@10": 1.7323829870630192e-10
+  },
+  "all_per_user_metrics_checked": 19412,
+  "maximum_per_user_metric_absolute_difference": {
+    "recall@5": 0.0,
+    "ndcg@5": 2.1402009775517428e-08,
+    "recall@10": 0.0,
+    "ndcg@10": 2.1402009775517428e-08
+  },
+  "per_user_diagnostics": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/toys-b-0-evaluation-review-per-user.jsonl.gz",
+    "bytes": 326749,
+    "sha256": "41adcb89df7c8e3ade9b5385da146c650aecce122c29b87c267b00d0165a01f9"
+  },
+  "prediction_sha256": "230b272d8189ddccfe09e5b2cad3029e58ea11af472e911fcbcd3488860f574f",
+  "targets_sha256": "37e23561ef6d460fc79ce1899478312c9dd309ac621ad1979d73ab5ec933099c",
+  "legal_vocabulary": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/sid-dictionary-results/gs-20261017-toys-b-sid-dictionary-v1/output/sid_dictionary.json",
+    "bytes": 177402,
+    "sha256": "739f07e476f96c64628f81a0a70dd4ecfbe330b0310c7402d6bfde98256c3292"
+  },
+  "invalid_candidate_count": 61,
+  "invalid_candidates_per_user_histogram": {
+    "0": 19360,
+    "1": 48,
+    "2": 2,
+    "3": 1,
+    "6": 1
+  },
+  "duplicate_candidate_count": 0,
+  "targets_outside_legal_vocabulary": 0,
+  "score_tie_rows": 0,
+  "positive_negative_score_tie_rows": 0,
+  "original_candidate_filtering_deduplication_rescoring_or_reordering_applied": false,
+  "strict_load_runtime_receipt": {
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "global_step": 6200,
+    "epoch": 0,
+    "all_parameter_keys_shapes_values_equal": true,
+    "state_tensor_count": 177,
+    "embedded_sid_exact": true
+  },
+  "checkpoint_payload_deserialized_by_reviewer": false,
+  "intervention_trace": {
+    "encoder_calls": 4854,
+    "loss_calls": 2427,
+    "generate_calls": 2427,
+    "shuffle_calls": 0,
+    "bounded_native_events": 0,
+    "observed_permutation_variants": 0,
+    "loss_and_generate_sample_separately": true,
+    "lifecycle_cleanup_and_actual_cuda_batch_devices_checked": true,
+    "full_test_permutation_history_claimed": false
+  },
+  "terminal_state": "SUCCEEDED",
+  "exit_code": 0,
+  "worker_may_be_live": false,
+  "worker_wall_seconds_including_CPU_preparation": 156.584343,
+  "requested_budget_seconds": 1800,
+  "GPU_request_worker_wall_hours": 0.04349565083333333,
+  "physical_GPU": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+  "inputs": [
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/output/RESULT.json",
+      "bytes": 2270,
+      "sha256": "e0923beceffe9436db886377ef63ceecd2c28919179a9e19e6d652eddbc19559"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/output/invocation.json",
+      "bytes": 48207,
+      "sha256": "d94c370f6df3f826b4faf6e84044cf79250a48a6d19e685cc93709c29ccf337e"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/output/used_config.json",
+      "bytes": 12661,
+      "sha256": "ca7a4b3668fc23d50fbbeeff326903263d48464f136252d38138f1fffd01aa13"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/output/loading.json",
+      "bytes": 1289,
+      "sha256": "c447fdda57a9c3cac4fa078c49150bc3dc0ad8a9efe81074a05b7113b0fe6add"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/output/intervention_trace.json",
+      "bytes": 536,
+      "sha256": "85fd46654b921165c4c4d0db55f7640cf1fcd6e81fd6ce6b77d59eecb8d6c9d0"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/output/test/predictions.jsonl",
+      "bytes": 9684771,
+      "sha256": "230b272d8189ddccfe09e5b2cad3029e58ea11af472e911fcbcd3488860f574f"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/output/test/per_sample_metrics.jsonl",
+      "bytes": 2389753,
+      "sha256": "4ca72476814dbece4a6aff0a399f263be8d0346b39023c099f393b0c10c4dc63"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/output/test/recomputed_metrics.json",
+      "bytes": 753,
+      "sha256": "9b27683ee26a249f927d2c6ee7afc61c8d4fd336311d3f50d7a99fb67722743a"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/output/test/metrics.json",
+      "bytes": 392,
+      "sha256": "5463851be330c526b4cd4e93de9257538e47382a83b1c91623a92b76ad2a0367"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/output/test/lifecycle_cleanup.json",
+      "bytes": 603516,
+      "sha256": "a69f139714450f523fada50645f0200b2d445c76544369e0c325307cff363cbc"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-preflight-r2/retrieved/output/test_target_index.jsonl",
+      "bytes": 2869232,
+      "sha256": "37e23561ef6d460fc79ce1899478312c9dd309ac621ad1979d73ab5ec933099c"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/shuffle_20261017/specs/toys-b-0.json",
+      "bytes": 2244,
+      "sha256": "e9a6544dbc8c24b96352c3eaf06fc584f39ef5891a87299383f6aa64114b6498"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/request.json",
+      "bytes": 2907,
+      "sha256": "f2b21beddde25782b8296e21ced682a4d5513c94553950df964989288df6414b"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/accepted.json",
+      "bytes": 310,
+      "sha256": "56856a8ec2b4553546212ae7f4ea182babdebeb8d67de0455d8449b02219e2f6"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved/status.json",
+      "bytes": 4001,
+      "sha256": "412e4b59fe8f45ba740df789ff17ba09e661a31bbb2095f54fc851f9a5d3f6b4"
+    }
+  ],
+  "program": {
+    "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/verify_formal_shuffle_result.py",
+    "bytes": 18739,
+    "sha256": "0381e220118694c54793804ac327a5a7a610720a7f5d32641b296819bbcd9cec"
+  },
+  "argv": [
+    "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/verify_formal_shuffle_result.py",
+    "--job-directory",
+    "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-normal-v1/retrieved",
+    "--targets",
+    "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-toys-b-preflight-r2/retrieved/output/test_target_index.jsonl",
+    "--legal-sids",
+    "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/sid-dictionary-results/gs-20261017-toys-b-sid-dictionary-v1/output/sid_dictionary.json",
+    "--spec",
+    "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/shuffle_20261017/specs/toys-b-0.json",
+    "--output",
+    "/home/addaswsw/recommend-support/grid-shuffle-20261017/results-audit/toys-b-0-evaluation-review.json"
+  ],
+  "new_model_or_GPU_calls": 0,
+  "Git_or_original_evidence_writes": 0,
+  "boundaries": [
+    "Semantic historical pairing and weight/SID selection depend on the companion asset/source audit; shapes and hashes alone do not establish that pairing.",
+    "Normal OFF equivalence and occurrence-level random sampling implementation depend on the companion source/preflight review; bounded runtime traces certify actual test hook activation.",
+    "This result receipt does not accept attention or claim cross-seed stability, invariance, or a required metric value."
+  ]
+}

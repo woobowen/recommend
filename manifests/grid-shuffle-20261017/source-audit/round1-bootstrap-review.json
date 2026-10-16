@@ -1,0 +1,43 @@
+{
+  "status": "ROUND1_MINIMAL_FIX_REVIEW_PASS_RUNTIME_PENDING",
+  "reviewer_task": "/root/source_audit",
+  "reviewed_at_utc": "2026-10-16T18:11:59.549130+00:00",
+  "source": {
+    "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/shuffle_20261017/preflight.py",
+    "bytes": 5476,
+    "sha256": "b9faffe11debe759a0fc2d31e9c9c28271169c2352a58e6427591bcbb00064f6"
+  },
+  "actual_failure_evidence": [
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-preflight-v1/retrieved/status.json",
+      "bytes": 2470,
+      "sha256": "b4d022a11150424e0f60ea1b3b66e21a3cf8ebd3ed9ce33b4f87b90de87797ad"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-preflight-v1/retrieved/work.log",
+      "bytes": 1212,
+      "sha256": "aa5a4fafefc48f984fb4beb8a3450a0c9904ad6e3cf40859bba31a6ee76397f5"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/jobs/new-server/gs-20261017-sports-b-preflight-v1/retrieved/output/invocation.json",
+      "bytes": 46142,
+      "sha256": "78882dc47659e18e7162ad1d3888ce60c108db379a8bb0fd9867a41a14a49bd8"
+    }
+  ],
+  "cause": "New preflight entry omitted initial bind_source; common.load_config imports project src resolvers before its own binding. The accepted formal entrypoint already binds before instantiation.",
+  "fix": "Import bind_source and call bind_source(spec[route]) immediately before instantiate; current AST proves ordering.",
+  "ordering": [
+    [
+      35,
+      "bind_source"
+    ],
+    [
+      36,
+      "instantiate"
+    ]
+  ],
+  "scope": "Entry bootstrap only. No original source, assets, model computation, sampler, loader, labels, beam, metrics or budget changes. New attempt and saved failure are required.",
+  "review_limit": "Actual rerun not yet reviewed; this is not PREFLIGHT_GATE_PASS. Initial static admission missed this bootstrap dependency; this receipt records the correction without rewriting original static review.",
+  "source_or_Git_writes_by_reviewer": 0,
+  "new_GPU_or_model_calls_by_reviewer": 0
+}

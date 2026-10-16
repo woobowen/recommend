@@ -1,0 +1,61 @@
+{
+  "status": "STATIC_DELIVERY_PROGRAM_REVIEW_COMPLETE_PENDING_EXECUTION",
+  "reviewer_task": "/root/delivery_audit",
+  "reviewed_at_utc": "2026-10-16T18:44:37.278723+00:00",
+  "programs": [
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/manifests/grid-shuffle-20261017/assemble_summary.py",
+      "bytes": 15812,
+      "sha256": "3ddf083d9d7ecd1f40983c5320da1d57342a067fce0da9a933de8c42dec0d935",
+      "syntax": "AST_PASS"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/manifests/grid-shuffle-20261017/publish.py",
+      "bytes": 6602,
+      "sha256": "da2b23631b8953b537430824e76ef731fe63561ccd8407bb175ddb472667de85",
+      "syntax": "AST_PASS"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/manifests/grid-shuffle-20261017/package_review.py",
+      "bytes": 11782,
+      "sha256": "8f87b995c3999a3f416ae00d767af76ded7a7f35ab139d4260d8fea174be7493",
+      "syntax": "AST_PASS"
+    }
+  ],
+  "three_previous_package_guard_recommendations": "IMPLEMENTED_IN_INSPECTED_BYTES",
+  "additional_observations": [
+    {
+      "program": "assemble_summary.py",
+      "issue": "Substring PASS check for paired review is weaker than known exact status; explicit review/spec identity guards recommended",
+      "required_actual_acceptance": "Exact pair review status and raw/model/domain/condition identity will be checked by content review regardless of generator guard."
+    },
+    {
+      "program": "publish.py",
+      "issue": "Remote manifest verified against some ancestor commit but not yet directly against original request capture_version and DEPLOYMENT input SHA",
+      "required_actual_acceptance": "Each real snapshot must equal the corresponding original request/source identity, not only some valid ancestor snapshot."
+    },
+    {
+      "program": "publish.py delivery phase",
+      "issue": "Path allowlist permits model/spec/result changes in final delivery phase; final source/results equivalence must be independently checked",
+      "required_actual_acceptance": "Content to final delivery change set only allowed receipt/audit additions; runtime source/results immutable."
+    }
+  ],
+  "content_review_schema": {
+    "status": "CONTENT_ACCEPTANCE_PASS only after actual checks",
+    "content_commit": "Full 40-hex published content SHA",
+    "summary": {
+      "path": "Absolute EXECUTION_SUMMARY.json path",
+      "bytes": "actual",
+      "sha256": "actual fixed Git byte identity"
+    },
+    "publication": {
+      "path": "Absolute publication-content.json path",
+      "bytes": "actual",
+      "sha256": "actual fresh raw ref/tree/file/snapshot receipt identity"
+    }
+  },
+  "decoder_query_origin_boundary": "Derived raw-SID/BOS identity supplementary output explicitly tagged as source reconstruction, not direct decoder inputs_embeds capture;256 query identities distinct from384 row/path records per condition.",
+  "new_model_or_GPU_calls": 0,
+  "Git_mutations": 0,
+  "final_content_acceptance": false
+}

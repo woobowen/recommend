@@ -94,3 +94,8 @@ B早期工程图用旧首文件3用户；A/MLP工程图用后来核实的DataMod
 网页精简展示规则固定为第一批原矩阵/记录及sample index0的图，全部32图与矩阵保留在轻量ZIP。图中sample index是批内0..7；全局序号为8×batch+批内index，身份以record.json的sample key为准，四批的index0是四个人。这张固定首样例的四步均主要关注encoder位置0和5，权重大小仍不同，逐步峰值约0.2645/0.3973/0.4436/0.4645。原矩阵的描述性核查中25/32样本四行峰位相同，但峰位相同不等于整行分布相同，也不等于总体遵循某个相似规律。未设置科学相似阈值、未追加六对行间差异统计、不据图宣称SID顺序无用。图生产链成功与现象是否具有普遍性分开报告。
 
 入口：[正式采集结果](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-attention32-v1/RESULT.json)、[第一批位置/身份/父链记录](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-attention32-v1/batch-00/bundle/record.json)、[第一批数值NPZ](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-attention32-v1/batch-00/bundle/arrays.npz)（allow_pickle=False）、[固定首图](../../../manifests/beauty-extensions/runs/beauty-mlp-formal-attention32-v1/batch-00/figures/sample_000_cross_attention.png)、[非作者独立审核](../../../manifests/beauty-extensions/b-attention-review.json)。A/B的正式Normal/Shuffle32人图仍未运行；不同SID/模型/encoder长度的图不作像素级或严格配对比较。整体仍为PARTIAL_BLOCKED。
+
+
+## Toys/Sports Shuffle 正式补齐（2026-10-17）
+
+Toys/Sports B 的 Normal、Shuffle3、Shuffle4 完整测试、对应六组 fixed32 和2304条注意力描述统计已完成并经真实非作者审核；Beauty仅继承。Toys A选择/上游来源未闭合，Sports A缺完整配套链，总状态 PARTIAL。原始预测、24份NPZ和全部192张PNG保留服务器；代码、配套身份、完整指标/配对、统计、失败记录及审核入口见 [正式报告](../../../manifests/grid-shuffle-20261017/FINAL_REPORT.md)。单seed42，不将不同A/B基础条件或图像相似解释为严格置换不变。

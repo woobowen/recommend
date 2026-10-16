@@ -1,0 +1,1076 @@
+{
+  "schema_version": 1,
+  "task": "grid-shuffle-20261017",
+  "reviewer": "/root/asset_audit",
+  "review_time": "2026-10-17T02:09:53.347831+08:00",
+  "review_scope": "Independent original records, exact payload identity and selection audit; no model/tensor execution",
+  "source_commit_anchor": "d0bcacfee4bab4276861573f7746405fb63c54f2",
+  "rules_explicitly_read": [
+    "/home/addaswsw/recommend/AGENTS.md",
+    "/home/addaswsw/recommend/PROJECT_RULES.md",
+    "/home/addaswsw/recommend/REMOTE_EXECUTION.md"
+  ],
+  "B": {
+    "toys": {
+      "status": "SOURCE_AND_PAYLOAD_IDENTITY_PASS_PENDING_LIVE_STRICT_SEMANTIC_GATE",
+      "assets": {
+        "config": {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/.hydra/config.yaml",
+          "bytes": 12166,
+          "sha256": "38edf61240a1ff26ae57e34bd508def3581261fcf5511d7a8563e9e773e8f4ed"
+        },
+        "sid": {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/semantic_ids.pt",
+          "bytes": 382773,
+          "sha256": "c6d516be6b65708137e8eea078736b24f88fd50b45c132ac376947dd71c132ed"
+        },
+        "checkpoint": {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/checkpoints/checkpoint_epoch=000_step=006200.ckpt",
+          "bytes": 159302894,
+          "sha256": "f778135f116c019f5beb9e627c2046e6ee3c4edade4139a0810995df692e47d5"
+        },
+        "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/toys"
+      },
+      "checkpoint_selection": {
+        "monitor": "val/recall@5",
+        "mode": "max",
+        "save_top_k": 1,
+        "selected_step": 6200,
+        "training_terminal_step": 7200,
+        "selection_original_stage_result": {
+          "checkpoint": "/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/checkpoints/checkpoint_epoch=000_step=006200.ckpt",
+          "global_step": 7200,
+          "test_metrics": [
+            {
+              "test/loss": 9.399924278259277,
+              "test/ndcg@5": 0.026988176628947258,
+              "test/ndcg@10": 0.03460517153143883,
+              "test/recall@5": 0.0420873686671257,
+              "test/recall@10": 0.06583556532859802
+            }
+          ]
+        },
+        "independent_csv_maximum": {
+          "count": 72,
+          "maximum": {
+            "epoch": "0",
+            "step": "6199",
+            "test/loss": "",
+            "test/ndcg@10": "",
+            "test/ndcg@5": "",
+            "test/recall@10": "",
+            "test/recall@5": "",
+            "train/loss_epoch": "",
+            "train/loss_step": "",
+            "val/loss": "8.902632713317871",
+            "val/ndcg@10": "0.04557700827717781",
+            "val/ndcg@5": "0.03712429851293564",
+            "val/recall@10": "0.08237172663211823",
+            "val/recall@5": "0.05609932169318199",
+            "physical_line": 683
+          },
+          "ties": [
+            {
+              "epoch": "0",
+              "step": "6199",
+              "test/loss": "",
+              "test/ndcg@10": "",
+              "test/ndcg@5": "",
+              "test/recall@10": "",
+              "test/recall@5": "",
+              "train/loss_epoch": "",
+              "train/loss_step": "",
+              "val/loss": "8.902632713317871",
+              "val/ndcg@10": "0.04557700827717781",
+              "val/ndcg@5": "0.03712429851293564",
+              "val/recall@10": "0.08237172663211823",
+              "val/recall@5": "0.05609932169318199",
+              "physical_line": 683
+            }
+          ]
+        },
+        "not_selected_by_largest_step_or_test_score": true,
+        "validation_interval_batches": 1600,
+        "accumulate_grad_batches": 16,
+        "observed_global_step_interval": 100
+      },
+      "fresh_model_training": true,
+      "source_training_pairing_argv": [
+        "data_dir=/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/original_assets/data/amazon_data/toys",
+        "semantic_id_path=/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/experiments/toys_rkmeans_qwen_20261010_093036/semantic_ids.pt",
+        "num_hierarchies=4",
+        "ckpt_path=null"
+      ],
+      "upstream": {
+        "dataset": "toys",
+        "model": "/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/models/Qwen2.5-7B-Instruct",
+        "architecture": "qwen2",
+        "shape": [
+          11924,
+          3584
+        ],
+        "pooling": "WMH MeanAggregation, right padding",
+        "max_length": 128,
+        "weight_dtype": "float16",
+        "stored_dtype": "float32",
+        "device_map": {
+          "embed_tokens": 0,
+          "layers.0": 0,
+          "layers.1": 0,
+          "layers.2": 0,
+          "layers.3": 0,
+          "layers.4": 0,
+          "layers.5": 0,
+          "layers.6": 0,
+          "layers.7": 0,
+          "layers.8": 0,
+          "layers.9": 0,
+          "layers.10": 0,
+          "layers.11": 0,
+          "layers.12": 0,
+          "layers.13": 1,
+          "layers.14": 1,
+          "layers.15": 1,
+          "layers.16": 1,
+          "layers.17": 1,
+          "layers.18": 1,
+          "layers.19": 1,
+          "layers.20": 1,
+          "layers.21": 1,
+          "layers.22": 1,
+          "layers.23": 1,
+          "layers.24": 1,
+          "layers.25": 1,
+          "layers.26": 1,
+          "layers.27": 1,
+          "norm": 1,
+          "rotary_emb": 1
+        },
+        "source": "TFRecord text (existing embedding field ignored)",
+        "sha256": "d0f0fb9128871a1863b3195b2aebe35976765eabe6abea8d39d6a0070ac7f8ca"
+      },
+      "source_manifest": [
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/item_embeddings.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/item_embeddings.json",
+          "bytes": 1075,
+          "sha256": "5e04b2f3db674b75c0a9378cce11531fb7c50e0484a335cc9337b71f7394256e",
+          "github_original_lfs_oid_or_blob_sha256": "5e04b2f3db674b75c0a9378cce11531fb7c50e0484a335cc9337b71f7394256e",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/stage_result.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/tiger_train_test_val1600_20261010_112259/stage_result.json",
+          "bytes": 470,
+          "sha256": "80e6f919687cc0d26aa84ca2bc55e8ddda3f454e9f2e5b67051c57f8484d1c1a",
+          "github_original_lfs_oid_or_blob_sha256": "80e6f919687cc0d26aa84ca2bc55e8ddda3f454e9f2e5b67051c57f8484d1c1a",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/progress.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/tiger_train_test_val1600_20261010_112259/progress.json",
+          "bytes": 107,
+          "sha256": "8acc779dbe8896025e885d3dbfb7ee61cd34a3fd972ad2a1792245ae6fc3ca16",
+          "github_original_lfs_oid_or_blob_sha256": "8acc779dbe8896025e885d3dbfb7ee61cd34a3fd972ad2a1792245ae6fc3ca16",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/command_val1600.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/tiger_train_test_val1600_20261010_112259/command_val1600.json",
+          "bytes": 3102,
+          "sha256": "93e0be785121931b57c39cf2cc1964ce660f813ff4c7748d5aef8b7420af4e12",
+          "github_original_lfs_oid_or_blob_sha256": "93e0be785121931b57c39cf2cc1964ce660f813ff4c7748d5aef8b7420af4e12",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/.hydra/config.yaml",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/tiger_train_test_val1600_20261010_112259/.hydra/config.yaml",
+          "bytes": 12166,
+          "sha256": "38edf61240a1ff26ae57e34bd508def3581261fcf5511d7a8563e9e773e8f4ed",
+          "github_original_lfs_oid_or_blob_sha256": "38edf61240a1ff26ae57e34bd508def3581261fcf5511d7a8563e9e773e8f4ed",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/.hydra/overrides.yaml",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/tiger_train_test_val1600_20261010_112259/.hydra/overrides.yaml",
+          "bytes": 1204,
+          "sha256": "dee37bdaa8a0cc54ef2d45a0a744a10702511fdd6d440a400b9a4535d90bceda",
+          "github_original_lfs_oid_or_blob_sha256": "dee37bdaa8a0cc54ef2d45a0a744a10702511fdd6d440a400b9a4535d90bceda",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/csv/version_0/metrics.csv",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/tiger_train_test_val1600_20261010_112259/csv/version_0/metrics.csv",
+          "bytes": 35022,
+          "sha256": "c8c34f47063943b6cae1e538f21350dda8fee24d87ba41425b62500f4fa6a2e6",
+          "github_original_lfs_oid_or_blob_sha256": "c8c34f47063943b6cae1e538f21350dda8fee24d87ba41425b62500f4fa6a2e6",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/tiger_train_test_val1600_20261010_112259/csv/version_0/hparams.yaml",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/tiger_train_test_val1600_20261010_112259/csv/version_0/hparams.yaml",
+          "bytes": 20432,
+          "sha256": "4439d5f99419678f7fca51acb897e48a7a5934a718dea4ce7b8e59a9ed3c4c90",
+          "github_original_lfs_oid_or_blob_sha256": "4439d5f99419678f7fca51acb897e48a7a5934a718dea4ce7b8e59a9ed3c4c90",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/sid_generation/.hydra/config.yaml",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/sid_generation/.hydra/config.yaml",
+          "bytes": 6833,
+          "sha256": "b2a6e99379d17562b915f4afa8d6f52e5cfb4a1b0a3ca4056403f749e01cac61",
+          "github_original_lfs_oid_or_blob_sha256": "b2a6e99379d17562b915f4afa8d6f52e5cfb4a1b0a3ca4056403f749e01cac61",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/sid_generation/command.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/sid_generation/command.json",
+          "bytes": 1331,
+          "sha256": "5b506af9b3dc5694924ce9275260af79a765c25fcde4d17ce5b6a5896aea3313",
+          "github_original_lfs_oid_or_blob_sha256": "5b506af9b3dc5694924ce9275260af79a765c25fcde4d17ce5b6a5896aea3313",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/toys_rkmeans_qwen_20261010_093036/sid_generation/stage_result.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/toys/sid_generation/stage_result.json",
+          "bytes": 160,
+          "sha256": "15597b5cb74c85edce7ce425a9091552a994af647a67a0e4c9ba05a9292c4743",
+          "github_original_lfs_oid_or_blob_sha256": "15597b5cb74c85edce7ce425a9091552a994af647a67a0e4c9ba05a9292c4743",
+          "identity_match": true
+        }
+      ],
+      "remaining_gate": [
+        "actual SID axis and item-to-SID semantic pairing",
+        "checkpoint embedded codebooks equal SID by value",
+        "strict state_dict load and actual shared-table architecture",
+        "formal target coverage from this route; no reuse by sample count alone"
+      ]
+    },
+    "sports": {
+      "status": "SOURCE_AND_PAYLOAD_IDENTITY_PASS_PENDING_LIVE_STRICT_SEMANTIC_GATE",
+      "assets": {
+        "config": {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/.hydra/config.yaml",
+          "bytes": 12170,
+          "sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24"
+        },
+        "sid": {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+          "bytes": 588597,
+          "sha256": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293"
+        },
+        "checkpoint": {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/checkpoints/checkpoint_epoch=000_step=009500.ckpt",
+          "bytes": 160160622,
+          "sha256": "29fcf86753cf46fcdac816569372986497f4c64c4921a9cdbf617c04f4d3cf98"
+        },
+        "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports"
+      },
+      "checkpoint_selection": {
+        "monitor": "val/recall@5",
+        "mode": "max",
+        "save_top_k": 1,
+        "selected_step": 9500,
+        "training_terminal_step": 10500,
+        "selection_original_stage_result": {
+          "checkpoint": "/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/checkpoints/checkpoint_epoch=000_step=009500.ckpt",
+          "global_step": 10500,
+          "test_metrics": [
+            {
+              "test/loss": 9.468976020812988,
+              "test/ndcg@5": 0.01586252450942993,
+              "test/ndcg@10": 0.019641468301415443,
+              "test/recall@5": 0.024214843288064003,
+              "test/recall@10": 0.03595707565546036
+            }
+          ]
+        },
+        "independent_csv_maximum": {
+          "count": 105,
+          "maximum": {
+            "epoch": "0",
+            "step": "9499",
+            "test/loss": "",
+            "test/ndcg@10": "",
+            "test/ndcg@5": "",
+            "test/recall@10": "",
+            "test/recall@5": "",
+            "train/loss_epoch": "",
+            "train/loss_step": "",
+            "val/loss": "9.066370010375977",
+            "val/ndcg@10": "0.025990210473537445",
+            "val/ndcg@5": "0.021560246124863625",
+            "val/recall@10": "0.046912748366594315",
+            "val/recall@5": "0.0332883857190609",
+            "physical_line": 1046
+          },
+          "ties": [
+            {
+              "epoch": "0",
+              "step": "9499",
+              "test/loss": "",
+              "test/ndcg@10": "",
+              "test/ndcg@5": "",
+              "test/recall@10": "",
+              "test/recall@5": "",
+              "train/loss_epoch": "",
+              "train/loss_step": "",
+              "val/loss": "9.066370010375977",
+              "val/ndcg@10": "0.025990210473537445",
+              "val/ndcg@5": "0.021560246124863625",
+              "val/recall@10": "0.046912748366594315",
+              "val/recall@5": "0.0332883857190609",
+              "physical_line": 1046
+            }
+          ]
+        },
+        "not_selected_by_largest_step_or_test_score": true,
+        "validation_interval_batches": 1600,
+        "accumulate_grad_batches": 16,
+        "observed_global_step_interval": 100
+      },
+      "fresh_model_training": true,
+      "source_training_pairing_argv": [
+        "data_dir=/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/original_assets/data/amazon_data/sports",
+        "semantic_id_path=/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+        "num_hierarchies=4",
+        "ckpt_path=null"
+      ],
+      "upstream": {
+        "dataset": "sports",
+        "model": "/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/models/Qwen2.5-7B-Instruct",
+        "architecture": "qwen2",
+        "shape": [
+          18357,
+          3584
+        ],
+        "pooling": "WMH MeanAggregation, right padding",
+        "max_length": 128,
+        "weight_dtype": "float16",
+        "stored_dtype": "float32",
+        "device_map": {
+          "embed_tokens": 0,
+          "layers.0": 0,
+          "layers.1": 0,
+          "layers.2": 0,
+          "layers.3": 0,
+          "layers.4": 0,
+          "layers.5": 0,
+          "layers.6": 0,
+          "layers.7": 0,
+          "layers.8": 0,
+          "layers.9": 0,
+          "layers.10": 0,
+          "layers.11": 0,
+          "layers.12": 0,
+          "layers.13": 1,
+          "layers.14": 1,
+          "layers.15": 1,
+          "layers.16": 1,
+          "layers.17": 1,
+          "layers.18": 1,
+          "layers.19": 1,
+          "layers.20": 1,
+          "layers.21": 1,
+          "layers.22": 1,
+          "layers.23": 1,
+          "layers.24": 1,
+          "layers.25": 1,
+          "layers.26": 1,
+          "layers.27": 1,
+          "norm": 1,
+          "rotary_emb": 1
+        },
+        "source": "TFRecord text (existing embedding field ignored)",
+        "sha256": "7d932edf2f0954a34c11597bac212ec39667884da87341a1bba570ae82ae4fa5"
+      },
+      "source_manifest": [
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/item_embeddings.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/item_embeddings.json",
+          "bytes": 1077,
+          "sha256": "70f9cddefd10742d8bf6e14ff71b11267659f1b0a576e11c0630570a1e09a3bd",
+          "github_original_lfs_oid_or_blob_sha256": "70f9cddefd10742d8bf6e14ff71b11267659f1b0a576e11c0630570a1e09a3bd",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/stage_result.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/tiger_train_test_val1600_20261010_112259/stage_result.json",
+          "bytes": 475,
+          "sha256": "4a3fe8e643cfc54da79715b13deb65f64b8bb7481650e46419b7b8b5c96beb2f",
+          "github_original_lfs_oid_or_blob_sha256": "4a3fe8e643cfc54da79715b13deb65f64b8bb7481650e46419b7b8b5c96beb2f",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/progress.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/tiger_train_test_val1600_20261010_112259/progress.json",
+          "bytes": 108,
+          "sha256": "332865aacbb19671874b4570dea98b787e66c3ea4c07dbd548e6cc84abdcb43f",
+          "github_original_lfs_oid_or_blob_sha256": "332865aacbb19671874b4570dea98b787e66c3ea4c07dbd548e6cc84abdcb43f",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/command_val1600.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/tiger_train_test_val1600_20261010_112259/command_val1600.json",
+          "bytes": 3126,
+          "sha256": "e4d02975d8910c5f8586b7b9aaa82a4fb0b91f6404bf1ad8add4a522a86e79d0",
+          "github_original_lfs_oid_or_blob_sha256": "e4d02975d8910c5f8586b7b9aaa82a4fb0b91f6404bf1ad8add4a522a86e79d0",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/.hydra/config.yaml",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/tiger_train_test_val1600_20261010_112259/.hydra/config.yaml",
+          "bytes": 12170,
+          "sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24",
+          "github_original_lfs_oid_or_blob_sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/.hydra/overrides.yaml",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/tiger_train_test_val1600_20261010_112259/.hydra/overrides.yaml",
+          "bytes": 1208,
+          "sha256": "e0004e1e44226ead2e43e7e222c33365f3de983d8baefc499a9130f58fbe2e2b",
+          "github_original_lfs_oid_or_blob_sha256": "e0004e1e44226ead2e43e7e222c33365f3de983d8baefc499a9130f58fbe2e2b",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/csv/version_0/metrics.csv",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/tiger_train_test_val1600_20261010_112259/csv/version_0/metrics.csv",
+          "bytes": 51197,
+          "sha256": "f906be258ca8346cdf5b62f5cbbb24d979c1300929b8dcf0039e3517dce23ea8",
+          "github_original_lfs_oid_or_blob_sha256": "f906be258ca8346cdf5b62f5cbbb24d979c1300929b8dcf0039e3517dce23ea8",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/tiger_train_test_val1600_20261010_112259/csv/version_0/hparams.yaml",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/tiger_train_test_val1600_20261010_112259/csv/version_0/hparams.yaml",
+          "bytes": 20470,
+          "sha256": "53527407020b298dcf6aca915dcab7efbff61732f408d75d17a9b3dbc7bf79d9",
+          "github_original_lfs_oid_or_blob_sha256": "53527407020b298dcf6aca915dcab7efbff61732f408d75d17a9b3dbc7bf79d9",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/sid_generation/.hydra/config.yaml",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/sid_generation/.hydra/config.yaml",
+          "bytes": 6839,
+          "sha256": "99c54151ee86adac69f0f1e48a3575c7cdca71273a27d0abf1b6696c4155818c",
+          "github_original_lfs_oid_or_blob_sha256": "99c54151ee86adac69f0f1e48a3575c7cdca71273a27d0abf1b6696c4155818c",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/sid_generation/command.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/sid_generation/command.json",
+          "bytes": 1339,
+          "sha256": "5fc4d81970c2bc999c97ccc50911c07fa7fc6d1f0f01fc42695f8531d71fc159",
+          "github_original_lfs_oid_or_blob_sha256": "5fc4d81970c2bc999c97ccc50911c07fa7fc6d1f0f01fc42695f8531d71fc159",
+          "identity_match": true
+        },
+        {
+          "remote_path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/sid_generation/stage_result.json",
+          "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/B-original-records/sports/sid_generation/stage_result.json",
+          "bytes": 162,
+          "sha256": "abf9ea2014365d9b50250de7f7acefa1913a5eb64a74e43662c480b024edc4e0",
+          "github_original_lfs_oid_or_blob_sha256": "abf9ea2014365d9b50250de7f7acefa1913a5eb64a74e43662c480b024edc4e0",
+          "identity_match": true
+        }
+      ],
+      "remaining_gate": [
+        "actual SID axis and item-to-SID semantic pairing",
+        "checkpoint embedded codebooks equal SID by value",
+        "strict state_dict load and actual shared-table architecture",
+        "formal target coverage from this route; no reuse by sample count alone"
+      ]
+    }
+  },
+  "A": {
+    "toys": {
+      "status": "IMPORTANT_CHECKPOINT_SELECTION_UNRESOLVED_NOT_MISSING_ALL_ASSETS",
+      "candidates": [
+        {
+          "run_id": "logs/train/runs/2025-10-29/23-42-04",
+          "checkpoint": {
+            "path": "/data_a/mhwang/Rec/GRID/logs/train/runs/2025-10-29/23-42-04/checkpoints/checkpoint_epoch=000_step=005300.ckpt",
+            "relative_path": "logs/train/runs/2025-10-29/23-42-04/checkpoints/checkpoint_epoch=000_step=005300.ckpt",
+            "entry_id": "ae9f61717f5ac903b87e70e65b8931c6f3731148053c05e8514c2210ddc59da0",
+            "capture_version": "A800-grid-20261010-v1",
+            "sha256": "5e88fac352f603cb0babad1935f7044072b1e75975bf9b41c30fda11f70435c5",
+            "bytes": 160836710
+          },
+          "coarse_parameter_family": "TABLES=2;AGGREGATION_TENSORS=0;BOS=[\"decoder.bos_token\"][1, 128]",
+          "state_dict_key_count": 178,
+          "original_parameter_witnesses": [
+            {
+              "tensor_path": "$[\"state_dict\"][\"decoder.bos_token\"]",
+              "shape": [
+                1,
+                128
+              ],
+              "stride": [
+                128,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/51",
+              "storage_key": "51",
+              "stored_device": "cuda:0",
+              "storage_bytes": 512,
+              "storage_sha256": "9dd20372093ca45be783c6037285adbf621ab9e46379691d57539b37268d31e3",
+              "crc_verified": true,
+              "minimum": -5.404687404632568,
+              "maximum": 0.41903436183929443,
+              "all_exact_zero": false
+            },
+            {
+              "tensor_path": "$[\"state_dict\"][\"decoder.decoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight\"]",
+              "shape": [
+                32,
+                6
+              ],
+              "stride": [
+                6,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/56",
+              "storage_key": "56",
+              "stored_device": "cuda:0",
+              "storage_bytes": 768,
+              "storage_sha256": "eb1a71a902f7a7193e8b58f31dd2a3c7b04c3cc1160f9c17c93ef6574fb2d8ec",
+              "crc_verified": true,
+              "minimum": -1.6434342861175537,
+              "maximum": 2.052049398422241,
+              "all_exact_zero": false
+            },
+            {
+              "tensor_path": "$[\"state_dict\"][\"item_sid_embedding_table_encoder.weight\"]",
+              "shape": [
+                1024,
+                128
+              ],
+              "stride": [
+                128,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/126",
+              "storage_key": "126",
+              "stored_device": "cuda:0",
+              "storage_bytes": 524288,
+              "storage_sha256": "528e0bb026f8a1601993ec14412ca2ac6e71741dea8075203b6652d6bebadb5e",
+              "crc_verified": true,
+              "minimum": -3.1689209938049316,
+              "maximum": 1.5128368139266968,
+              "all_exact_zero": false
+            },
+            {
+              "tensor_path": "$[\"state_dict\"][\"item_sid_embedding_table_decoder.weight\"]",
+              "shape": [
+                1024,
+                128
+              ],
+              "stride": [
+                128,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/127",
+              "storage_key": "127",
+              "stored_device": "cuda:0",
+              "storage_bytes": 524288,
+              "storage_sha256": "9daebceee7555c8a9c5bb73861070b332da807f310fdfbc249675c789faa9fb7",
+              "crc_verified": true,
+              "minimum": -1.0171256065368652,
+              "maximum": 1.0231080055236816,
+              "all_exact_zero": false
+            }
+          ],
+          "original_test_event_count": 1,
+          "independent_csv_validation_maximum": {
+            "count": 63,
+            "maximum": {
+              "epoch": "0",
+              "step": "5299",
+              "test/loss": "",
+              "test/ndcg@10": "",
+              "test/ndcg@5": "",
+              "test/recall@10": "",
+              "test/recall@5": "",
+              "train/loss_epoch": "",
+              "train/loss_step": "",
+              "val/loss": "9.380345344543457",
+              "val/ndcg@10": "0.0452377051115036",
+              "val/ndcg@5": "0.038080278784036636",
+              "val/recall@10": "0.07871419936418533",
+              "val/recall@5": "0.05666597932577133",
+              "physical_line": 107
+            },
+            "ties": [
+              {
+                "epoch": "0",
+                "step": "5299",
+                "test/loss": "",
+                "test/ndcg@10": "",
+                "test/ndcg@5": "",
+                "test/recall@10": "",
+                "test/recall@5": "",
+                "train/loss_epoch": "",
+                "train/loss_step": "",
+                "val/loss": "9.380345344543457",
+                "val/ndcg@10": "0.0452377051115036",
+                "val/ndcg@5": "0.038080278784036636",
+                "val/recall@10": "0.07871419936418533",
+                "val/recall@5": "0.05666597932577133",
+                "physical_line": 107
+              }
+            ]
+          },
+          "best_checkpoint_log_lines": [
+            {
+              "physical_line": 25,
+              "text": "[2025-10-30 08:15:33,395][__main__][INFO] - [rank: 0] Best ckpt path: /data/mhwang/Rec/GRID/logs/train/runs/2025-10-29/23-42-04/checkpoints/checkpoint_epoch=000_step=005300.ckpt"
+            }
+          ],
+          "historical_python_source": "UNKNOWN",
+          "historical_forward_mask_loss_generate": "UNKNOWN",
+          "source_files": [
+            {
+              "relative_path": "logs/train/runs/2025-10-29/23-42-04/.hydra/config.yaml",
+              "sha256": "b7008a5f603bfa76eaeb25565b8a917717895e22689a6b79a79298d23d930e78",
+              "bytes": 12183,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-10-29/23-42-04/.hydra/config.yaml"
+            },
+            {
+              "relative_path": "logs/train/runs/2025-10-29/23-42-04/.hydra/overrides.yaml",
+              "sha256": "b6a068b229726e16cc25bb5a2250b18c567636960805bc446bf8969467b7b974",
+              "bytes": 244,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-10-29/23-42-04/.hydra/overrides.yaml"
+            },
+            {
+              "relative_path": "logs/train/runs/2025-10-29/23-42-04/train.log",
+              "sha256": "dd22fbd3a404865ec6e6fa21ad0b940f3fc286cc3991a6f8b15e0fc236e57840",
+              "bytes": 5000,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-10-29/23-42-04/train.log"
+            },
+            {
+              "relative_path": "logs/train/runs/2025-10-29/23-42-04/csv/version_0/metrics.csv",
+              "sha256": "a104bd5cf6422ef5d0be5a1e7a127637222b1bea0265c4758989062b3214622d",
+              "bytes": 9820,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-10-29/23-42-04/csv/version_0/metrics.csv"
+            }
+          ],
+          "eligible_complete_candidate": true
+        },
+        {
+          "run_id": "logs/train/runs/2025-11-03/02-06-26",
+          "checkpoint": {
+            "path": "/data_a/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-06-26/checkpoints/checkpoint_epoch=000_step=000100.ckpt",
+            "relative_path": "logs/train/runs/2025-11-03/02-06-26/checkpoints/checkpoint_epoch=000_step=000100.ckpt",
+            "entry_id": "51e0d41745e31822478e76111e2364f291f905f88197737a628b07c0208d4ae5",
+            "capture_version": "A800-grid-20261010-v1",
+            "sha256": "7dc6fceb93b31923745fb4f84c8d5d9392cd6d849c11c37fdf130df7332b1438",
+            "bytes": 159787244
+          },
+          "coarse_parameter_family": "TABLES=2;AGGREGATION_TENSORS=0;BOS=[\"decoder.bos_token\"][1, 128]",
+          "state_dict_key_count": 178,
+          "original_parameter_witnesses": [
+            {
+              "tensor_path": "$[\"state_dict\"][\"decoder.bos_token\"]",
+              "shape": [
+                1,
+                128
+              ],
+              "stride": [
+                128,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/51",
+              "storage_key": "51",
+              "stored_device": "cuda:0",
+              "storage_bytes": 512,
+              "storage_sha256": "c2d14d4a552beee5167afb162988d6fb3b37eb21a94188514f2165306cce956f",
+              "crc_verified": true,
+              "minimum": -3.27653169631958,
+              "maximum": 1.933964490890503,
+              "all_exact_zero": false
+            },
+            {
+              "tensor_path": "$[\"state_dict\"][\"decoder.decoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight\"]",
+              "shape": [
+                32,
+                6
+              ],
+              "stride": [
+                6,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/56",
+              "storage_key": "56",
+              "stored_device": "cuda:0",
+              "storage_bytes": 768,
+              "storage_sha256": "56b6f8d92fa046c139bee7b9e1e2e3d10ea6f2febc8a003a8f03230ab0e7c552",
+              "crc_verified": true,
+              "minimum": -2.3054392337799072,
+              "maximum": 2.8586008548736572,
+              "all_exact_zero": false
+            },
+            {
+              "tensor_path": "$[\"state_dict\"][\"item_sid_embedding_table_encoder.weight\"]",
+              "shape": [
+                1024,
+                128
+              ],
+              "stride": [
+                128,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/126",
+              "storage_key": "126",
+              "stored_device": "cuda:0",
+              "storage_bytes": 524288,
+              "storage_sha256": "61fabe21190f7d0af11fc26fd9c702e5c3c82b00e8ed9dfb2914c07b526676d1",
+              "crc_verified": true,
+              "minimum": -4.088975429534912,
+              "maximum": 4.14818811416626,
+              "all_exact_zero": false
+            },
+            {
+              "tensor_path": "$[\"state_dict\"][\"item_sid_embedding_table_decoder.weight\"]",
+              "shape": [
+                1024,
+                128
+              ],
+              "stride": [
+                128,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/127",
+              "storage_key": "127",
+              "stored_device": "cuda:0",
+              "storage_bytes": 524288,
+              "storage_sha256": "fb906ed9d81ba32afeaacd68c5f2de4ae49705898e7332fefc95edf17a22985c",
+              "crc_verified": true,
+              "minimum": -4.381964683532715,
+              "maximum": 4.595348358154297,
+              "all_exact_zero": false
+            }
+          ],
+          "original_test_event_count": 0,
+          "independent_csv_validation_maximum": {
+            "count": 1,
+            "maximum": {
+              "epoch": "0",
+              "step": "99",
+              "train/loss_step": "",
+              "val/loss": "15.770654678344727",
+              "val/ndcg@10": "5.151452569407411e-05",
+              "val/ndcg@5": "5.151452569407411e-05",
+              "val/recall@10": "5.151452569407411e-05",
+              "val/recall@5": "5.151452569407411e-05",
+              "physical_line": 3
+            },
+            "ties": [
+              {
+                "epoch": "0",
+                "step": "99",
+                "train/loss_step": "",
+                "val/loss": "15.770654678344727",
+                "val/ndcg@10": "5.151452569407411e-05",
+                "val/ndcg@5": "5.151452569407411e-05",
+                "val/recall@10": "5.151452569407411e-05",
+                "val/recall@5": "5.151452569407411e-05",
+                "physical_line": 3
+              }
+            ]
+          },
+          "best_checkpoint_log_lines": [],
+          "historical_python_source": "UNKNOWN",
+          "historical_forward_mask_loss_generate": "UNKNOWN",
+          "source_files": [
+            {
+              "relative_path": "logs/train/runs/2025-11-03/02-06-26/.hydra/config.yaml",
+              "sha256": "f14ab2ee7c5f1dbaa4a69b474eebb40118c16b3a3e4e433af8b844d8ce9b07b2",
+              "bytes": 12267,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-11-03/02-06-26/.hydra/config.yaml"
+            },
+            {
+              "relative_path": "logs/train/runs/2025-11-03/02-06-26/.hydra/overrides.yaml",
+              "sha256": "b6a068b229726e16cc25bb5a2250b18c567636960805bc446bf8969467b7b974",
+              "bytes": 244,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-11-03/02-06-26/.hydra/overrides.yaml"
+            },
+            {
+              "relative_path": "logs/train/runs/2025-11-03/02-06-26/train.log",
+              "sha256": "4361b44f458860d2a8e9c72719f5efb17c72a16cac4bbbdeed0f0780c0b8abd3",
+              "bytes": 4271,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-11-03/02-06-26/train.log"
+            },
+            {
+              "relative_path": "logs/train/runs/2025-11-03/02-06-26/csv/version_0/metrics.csv",
+              "sha256": "c25823190a57242ba273bfcedb8948e5e8b26f90783ed510d8b880f395ddc399",
+              "bytes": 260,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-11-03/02-06-26/csv/version_0/metrics.csv"
+            }
+          ],
+          "eligible_complete_candidate": false
+        },
+        {
+          "run_id": "logs/train/runs/2025-11-03/02-31-15",
+          "checkpoint": {
+            "path": "/data_a/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-31-15/checkpoints/checkpoint_epoch=000_step=005000.ckpt",
+            "relative_path": "logs/train/runs/2025-11-03/02-31-15/checkpoints/checkpoint_epoch=000_step=005000.ckpt",
+            "entry_id": "435540cefecf7769760eef9c6e1e494d63dee1b7c825553121179774840ec06e",
+            "capture_version": "A800-grid-20261010-v1",
+            "sha256": "ed627a41aae73d941fe354e2c29d99d1e9d768e407c9d83eb2c401ca2f562090",
+            "bytes": 160836710
+          },
+          "coarse_parameter_family": "TABLES=2;AGGREGATION_TENSORS=0;BOS=[\"decoder.bos_token\"][1, 128]",
+          "state_dict_key_count": 178,
+          "original_parameter_witnesses": [
+            {
+              "tensor_path": "$[\"state_dict\"][\"decoder.bos_token\"]",
+              "shape": [
+                1,
+                128
+              ],
+              "stride": [
+                128,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/51",
+              "storage_key": "51",
+              "stored_device": "cuda:0",
+              "storage_bytes": 512,
+              "storage_sha256": "7dfee79d21fa11f7b1c743e94e9045e99694073418e4d65b8628ce732c06297c",
+              "crc_verified": true,
+              "minimum": -5.068787574768066,
+              "maximum": 0.6606737971305847,
+              "all_exact_zero": false
+            },
+            {
+              "tensor_path": "$[\"state_dict\"][\"decoder.decoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight\"]",
+              "shape": [
+                32,
+                6
+              ],
+              "stride": [
+                6,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/56",
+              "storage_key": "56",
+              "stored_device": "cuda:0",
+              "storage_bytes": 768,
+              "storage_sha256": "6c7d3e093cff211283d2056acd639965adcb89a56c51d832d2dcc1f5913855cb",
+              "crc_verified": true,
+              "minimum": -1.6671642065048218,
+              "maximum": 2.023226737976074,
+              "all_exact_zero": false
+            },
+            {
+              "tensor_path": "$[\"state_dict\"][\"item_sid_embedding_table_encoder.weight\"]",
+              "shape": [
+                1024,
+                128
+              ],
+              "stride": [
+                128,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/126",
+              "storage_key": "126",
+              "stored_device": "cuda:0",
+              "storage_bytes": 524288,
+              "storage_sha256": "2e127ba9d099c6c92304957ca81c9eeea431976fc7cc35c8fa40d97e02611b51",
+              "crc_verified": true,
+              "minimum": -2.9734246730804443,
+              "maximum": 1.2724500894546509,
+              "all_exact_zero": false
+            },
+            {
+              "tensor_path": "$[\"state_dict\"][\"item_sid_embedding_table_decoder.weight\"]",
+              "shape": [
+                1024,
+                128
+              ],
+              "stride": [
+                128,
+                1
+              ],
+              "dtype": "float32",
+              "storage_member": "archive/data/127",
+              "storage_key": "127",
+              "stored_device": "cuda:0",
+              "storage_bytes": 524288,
+              "storage_sha256": "5603f6e7970fc8d03d5d8c3f2da91509e01b12fa913bd9091f9871c3cd8fbe68",
+              "crc_verified": true,
+              "minimum": -1.258115530014038,
+              "maximum": 1.0806119441986084,
+              "all_exact_zero": false
+            }
+          ],
+          "original_test_event_count": 1,
+          "independent_csv_validation_maximum": {
+            "count": 60,
+            "maximum": {
+              "epoch": "0",
+              "step": "4999",
+              "test/loss": "",
+              "test/ndcg@10": "",
+              "test/ndcg@5": "",
+              "test/recall@10": "",
+              "test/recall@5": "",
+              "train/loss_epoch": "",
+              "train/loss_step": "",
+              "val/loss": "9.416121482849121",
+              "val/ndcg@10": "0.04422428831458092",
+              "val/ndcg@5": "0.03647690266370773",
+              "val/recall@10": "0.07830207794904709",
+              "val/recall@5": "0.05424479767680168",
+              "physical_line": 101
+            },
+            "ties": [
+              {
+                "epoch": "0",
+                "step": "4999",
+                "test/loss": "",
+                "test/ndcg@10": "",
+                "test/ndcg@5": "",
+                "test/recall@10": "",
+                "test/recall@5": "",
+                "train/loss_epoch": "",
+                "train/loss_step": "",
+                "val/loss": "9.416121482849121",
+                "val/ndcg@10": "0.04422428831458092",
+                "val/ndcg@5": "0.03647690266370773",
+                "val/recall@10": "0.07830207794904709",
+                "val/recall@5": "0.05424479767680168",
+                "physical_line": 101
+              }
+            ]
+          },
+          "best_checkpoint_log_lines": [
+            {
+              "physical_line": 25,
+              "text": "[2025-11-03 11:48:32,722][__main__][INFO] - [rank: 0] Best ckpt path: /data/mhwang/Rec/GRID/logs/train/runs/2025-11-03/02-31-15/checkpoints/checkpoint_epoch=000_step=005000.ckpt"
+            }
+          ],
+          "historical_python_source": "UNKNOWN",
+          "historical_forward_mask_loss_generate": "UNKNOWN",
+          "source_files": [
+            {
+              "relative_path": "logs/train/runs/2025-11-03/02-31-15/.hydra/config.yaml",
+              "sha256": "f14ab2ee7c5f1dbaa4a69b474eebb40118c16b3a3e4e433af8b844d8ce9b07b2",
+              "bytes": 12267,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-11-03/02-31-15/.hydra/config.yaml"
+            },
+            {
+              "relative_path": "logs/train/runs/2025-11-03/02-31-15/.hydra/overrides.yaml",
+              "sha256": "b6a068b229726e16cc25bb5a2250b18c567636960805bc446bf8969467b7b974",
+              "bytes": 244,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-11-03/02-31-15/.hydra/overrides.yaml"
+            },
+            {
+              "relative_path": "logs/train/runs/2025-11-03/02-31-15/train.log",
+              "sha256": "2a0452c3136421b369c4cd4006c1fd48aebcf13f0c38fff01dde5d1001e96d9a",
+              "bytes": 5000,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-11-03/02-31-15/train.log"
+            },
+            {
+              "relative_path": "logs/train/runs/2025-11-03/02-31-15/csv/version_0/metrics.csv",
+              "sha256": "dab3598cb5b56b3c1d2fcd6d9baf9152d412666954481917aa4b3b2446c9a219",
+              "bytes": 9373,
+              "local_path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/A-original-records/logs/train/runs/2025-11-03/02-31-15/csv/version_0/metrics.csv"
+            }
+          ],
+          "eligible_complete_candidate": true
+        }
+      ],
+      "shared_declared_sid": {
+        "relative_path": "logs/inference/runs/2025-09-17/21-57-54/pickle/merged_predictions_tensor.pt",
+        "source_path": "/data_a/mhwang/Rec/GRID/logs/inference/runs/2025-09-17/21-57-54/pickle/merged_predictions_tensor.pt",
+        "source_sha256": "a487a4bdadef63f3a87386ddce52ec03f4771bedbaf554f63272c45fe373e7d1",
+        "bytes": 382902,
+        "entry_id": "9eaaef90599ec034e92991e16ab89d117b82bb891c09653819065a8ebe5f3120"
+      },
+      "source_model": {
+        "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+        "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80"
+      },
+      "candidate_count_with_completed_original_test": 2,
+      "selection_limit": "Two complete same-SID double-table candidates; neither latest date, largest step nor test score is an approved between-run selection rule. Do not silently choose.",
+      "upstream_config_conflict": "Saved inference config declares Qwen path/3584 while preserved tensor/quantizer identity was independently established as 512-dimensional in prior A800 audit. Do not claim a uniquely bound historical producer.",
+      "precise_admission_gaps": [
+        "No approved rule uniquely selecting one of the two completed same-SID original training runs",
+        "Saved upstream Qwen/3584 declaration conflicts with preserved 512-dimensional content and does not uniquely establish this task T5 producer",
+        "No current-task strict load/value pairing receipt for a selected Toys A pair"
+      ],
+      "preferred_next_action": "Ask Wang senior to identify the intended complete Toys A run and confirm its true upstream T5/RK source chain, then perform only targeted restoration and the existing strict pairing gate. No new training, no SID regeneration, no selection from test scores.",
+      "required_if_selected": [
+        "targeted server restoration if payload absent",
+        "actual embedded SID value pairing",
+        "strict live model identity gate"
+      ]
+    },
+    "sports": {
+      "status": "MATCHED_SOURCE_SID_CHECKPOINT_CHAIN_NOT_FOUND_IN_CAPTURED_SCOPE",
+      "existing_run_context_index": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/analysis/a800-mechanisms/A800_EXPERIMENT_RUN_INDEX.jsonl",
+      "existing_run_context_index_sha256": "dba77aa1d530de303263c4db507b66504eecd57089b5a91add887eb1bfa94287",
+      "existing_run_context_count": 345,
+      "sports_declared_data_context_count": 0,
+      "scope_limit": "Reuses existing captured A800 run index and parameter context index; no new full archive scan, no claim Sports was never run historically.",
+      "impact": "Sports A Normal/Shuffle3/Shuffle4 and corresponding attention cannot be authorized from a matched captured pair.",
+      "best_next_action": "Provide a complete matching Sports A source/config/SID/selected checkpoint chain; no retraining or mixed assets within current task."
+    }
+  },
+  "warnings": [
+    "Toys existing MLP spec SID file SHA 26bae0... differs from Toys B c6d516...; old metadata indices must not be reused without route-specific semantic checks.",
+    "Source and hash checks do not substitute for checkpoint strict load, semantic pairing, full evaluation, attention correctness or scientific conclusions.",
+    "Beauty original formal results were inherited and not recomputed."
+  ],
+  "status": "PASS_SCOPED_SOURCE_AUDIT_WITH_A_UNRESOLVED_AND_LIVE_GATES_PENDING",
+  "input_receipts": [
+    {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/remote-b-training-records.json",
+      "bytes": 128388,
+      "sha256": "c1fcdf4a3e8db6eceab8fdf96f92ead3f9c656a5a54ff4e0e12e1a4f19a952da"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/remote-b-source-supplements.json",
+      "bytes": 62377,
+      "sha256": "05308f6e8d5d4475c387ce8e0028aa9380ec47527be990d16eb4c58be3b783df"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/remote-b-source-bytes.json",
+      "bytes": 247103,
+      "sha256": "c8a598ffeb9ea64a71d32927685c1a6fec0c1b63cac488bfcdf5c5edef9ac64f"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-shuffle-20261017/asset-audit/candidate_specs.json",
+      "bytes": 2019,
+      "sha256": "5d2b100d515bb469befa8fe3920be055e88db0c7c1e7d18c38874159bc33b2a3"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/analysis/a800-mechanisms/historical-parameter-context-v1/HISTORICAL_PARAMETER_RUN_CONTEXTS.jsonl",
+      "bytes": 187245,
+      "sha256": "7552a64c133126198f008867ff40074d73cf50a9801e08419d5e9d5be6b06b55"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/wmh-a800-audit-20261010/analysis/a800-mechanisms/A800_EXPERIMENT_RUN_INDEX.jsonl",
+      "bytes": 3786910,
+      "sha256": "dba77aa1d530de303263c4db507b66504eecd57089b5a91add887eb1bfa94287"
+    }
+  ],
+  "export_check_correction": {
+    "initial_failure": "read_text normalized original CRLF CSV before export and SHA mismatch correctly failed closed",
+    "fix": "Read server original bytes and transfer base64; verify original byte count/SHA and Git LFS OID before analysis",
+    "research_inputs_changed": false,
+    "models_or_GPU_executed": false
+  }
+}

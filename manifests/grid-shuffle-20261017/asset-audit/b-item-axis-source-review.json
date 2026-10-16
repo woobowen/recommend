@@ -1,0 +1,846 @@
+{
+  "reviewer": "/root/asset_audit",
+  "type": "original_B_item_axis_and_generation_source_review",
+  "scope": "source only; actual checkpoint-to-SID equality remains a separate live gate",
+  "findings": [
+    "Qwen embedding program validates original item IDs are exactly 0..N-1 then indexes texts/output by original IDs",
+    "SID writer constructs tensor by keyed item_id rather than file iteration order; original pipeline checks 4xN SID shape/range/uniqueness after dedup and transpose",
+    "B source constructor default generation K is 10 and prefix checks are False; custom beam uses this K to expand and retain active candidates, no distinct HuggingFace num_beams field identified in original path"
+  ],
+  "files": [
+    {
+      "path": "GRID baseline/_运行/generate_qwen_embeddings.py",
+      "sha256": "5f8ca5738c4a81e9ce6f9d1c8dd50c360fbca5f2fa233fee622343b2e7f63da7",
+      "original_lines": [
+        {
+          "line": 38,
+          "text": "    files = sorted((ROOT/'original_assets/data/amazon_data'/args.dataset/'items').glob('*.tfrecord.gz'))"
+        },
+        {
+          "line": 39,
+          "text": "    if not files:"
+        },
+        {
+          "line": 40,
+          "text": "        raise FileNotFoundError('No item TFRecords found')"
+        },
+        {
+          "line": 41,
+          "text": "    rows = {}"
+        },
+        {
+          "line": 42,
+          "text": "    options = tf.data.Options()"
+        },
+        {
+          "line": 43,
+          "text": "    options.threading.private_threadpool_size = 1"
+        },
+        {
+          "line": 44,
+          "text": "    for f in files:"
+        },
+        {
+          "line": 45,
+          "text": "        for raw in tf.data.TFRecordDataset(str(f), compression_type='GZIP').with_options(options):"
+        },
+        {
+          "line": 46,
+          "text": "            fields = tf.train.Example.FromString(raw.numpy()).features.feature"
+        },
+        {
+          "line": 47,
+          "text": "            idx = int(fields['id'].int64_list.value[0])"
+        },
+        {
+          "line": 48,
+          "text": "            text = fields['text'].bytes_list.value"
+        },
+        {
+          "line": 49,
+          "text": "            if idx in rows or len(text) != 1:"
+        },
+        {
+          "line": 50,
+          "text": "                raise ValueError(f'Duplicate ID or unexpected item text: {idx}')"
+        },
+        {
+          "line": 51,
+          "text": "            rows[idx] = text[0].decode('utf-8')"
+        },
+        {
+          "line": 52,
+          "text": "    if sorted(rows) != list(range(len(rows))):"
+        },
+        {
+          "line": 71,
+          "text": "    device = model.get_input_embeddings().weight.device"
+        },
+        {
+          "line": 72,
+          "text": "    output = torch.empty(len(rows), cfg.hidden_size, dtype=torch.float32)"
+        },
+        {
+          "line": 73,
+          "text": "    start = time.time()"
+        },
+        {
+          "line": 74,
+          "text": "    with torch.inference_mode():"
+        },
+        {
+          "line": 75,
+          "text": "        for offset in range(0, len(rows), args.batch_size):"
+        },
+        {
+          "line": 76,
+          "text": "            texts = [rows[i] for i in range(offset, min(offset+args.batch_size, len(rows)))]"
+        },
+        {
+          "line": 77,
+          "text": "            tokens = tokenizer(texts, max_length=128, padding='max_length', truncation=True,"
+        },
+        {
+          "line": 78,
+          "text": "                               add_special_tokens=True, return_tensors='pt').to(device)"
+        },
+        {
+          "line": 79,
+          "text": "            hidden = model(**tokens, use_cache=False).last_hidden_state"
+        },
+        {
+          "line": 80,
+          "text": "            vectors = aggregate(hidden, tokens.attention_mask.to(hidden.device)).float().cpu()"
+        },
+        {
+          "line": 81,
+          "text": "            if not torch.isfinite(vectors).all():"
+        },
+        {
+          "line": 82,
+          "text": "                raise ValueError('Non-finite Qwen item vector')"
+        },
+        {
+          "line": 83,
+          "text": "            output[offset:offset+len(texts)] = vectors"
+        },
+        {
+          "line": 84,
+          "text": "            if offset % 100 == 0:"
+        },
+        {
+          "line": 85,
+          "text": "                print(f'{offset}/{len(rows)} items, elapsed={time.time()-start:.0f}s', flush=True)"
+        }
+      ]
+    },
+    {
+      "path": "GRID baseline/_运行/run_pipeline.py",
+      "sha256": "5fa8d5918bb5f20caddc87e920ff19eff139ff029b3f123c467926ee0bcc7daf",
+      "original_lines": [
+        {
+          "line": 141,
+          "text": "        checkpoint = json.loads((out/'stage_result.json').read_text())['checkpoint']"
+        },
+        {
+          "line": 142,
+          "text": "        if not Path(checkpoint).resolve().is_relative_to(run):"
+        },
+        {
+          "line": 143,
+          "text": "            raise ValueError('Quantizer checkpoint must belong to this run')"
+        },
+        {
+          "line": 144,
+          "text": "        out = execute('sid_generation', [sys.executable, str(ROOT/'_运行/grid_stage.py'),"
+        },
+        {
+          "line": 145,
+          "text": "            f'experiment={args.method}_inference_flat', f'ckpt_path={checkpoint}',"
+        },
+        {
+          "line": 146,
+          "text": "            'callbacks.bq_writer=null', '++callbacks.restart_job=null']+common+"
+        },
+        {
+          "line": 147,
+          "text": "            workers('data_loading.datamodule.predict_dataloader_config.'), gpu_ids[0])"
+        },
+        {
+          "line": 148,
+          "text": "        tensor = torch.load(out/'pickle/merged_predictions_tensor.pt', map_location='cpu', weights_only=False).long()"
+        },
+        {
+          "line": 149,
+          "text": "        n = info['shape'][0]"
+        },
+        {
+          "line": 150,
+          "text": "        if list(tensor.shape) != [4, n] or tensor.min()<0 or tensor.max()>=256:"
+        },
+        {
+          "line": 151,
+          "text": "            raise ValueError('Expected 3 quantized SID digits + 1 dedup digit in [0,255]')"
+        },
+        {
+          "line": 152,
+          "text": "        if len(torch.unique(tensor.T, dim=0)) != n:"
+        },
+        {
+          "line": 153,
+          "text": "            raise ValueError('Generated SIDs must distinguish every item')"
+        },
+        {
+          "line": 154,
+          "text": "        torch.save(tensor, sid)"
+        },
+        {
+          "line": 155,
+          "text": "    if args.stage in ('all', 'train'):"
+        }
+      ]
+    },
+    {
+      "path": "GRID baseline/src/utils/tensor_utils.py",
+      "sha256": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d",
+      "original_lines": [
+        {
+          "line": 76,
+          "text": "def merge_list_of_keyed_tensors_to_single_tensor("
+        },
+        {
+          "line": 77,
+          "text": "    data: list[dict[str, torch.Tensor]],"
+        },
+        {
+          "line": 78,
+          "text": "    index_key: str,"
+        },
+        {
+          "line": 79,
+          "text": "    value_key: str,"
+        },
+        {
+          "line": 80,
+          "text": ") -> torch.Tensor:"
+        },
+        {
+          "line": 81,
+          "text": "    \"\"\""
+        },
+        {
+          "line": 82,
+          "text": "    Converts a list of dictionaries of id to tensors into a single tensor by squeezing"
+        },
+        {
+          "line": 83,
+          "text": "    the tensors along the specified index key."
+        },
+        {
+          "line": 84,
+          "text": "    e.g.,"
+        },
+        {
+          "line": 85,
+          "text": "    data = ["
+        },
+        {
+          "line": 86,
+          "text": "    ["
+        },
+        {
+          "line": 87,
+          "text": "        {'user_id': 123,"
+        },
+        {
+          "line": 88,
+          "text": "        {'semantic_id': torch.tensor([21, 32, 124]),"
+        },
+        {
+          "line": 89,
+          "text": "        other features.....}"
+        },
+        {
+          "line": 90,
+          "text": "        ],"
+        },
+        {
+          "line": 91,
+          "text": "    ["
+        },
+        {
+          "line": 92,
+          "text": "        {'user_id': 456,"
+        },
+        {
+          "line": 93,
+          "text": "        {'semantic_id': torch.tensor([11, 22, 33]),"
+        },
+        {
+          "line": 94,
+          "text": "        other features.....}"
+        },
+        {
+          "line": 95,
+          "text": "    ]"
+        },
+        {
+          "line": 96,
+          "text": "    output:"
+        },
+        {
+          "line": 97,
+          "text": "    tensor([...,"
+        },
+        {
+          "line": 98,
+          "text": "            [21, 32, 124], # row 123"
+        },
+        {
+          "line": 99,
+          "text": "            ...,"
+        },
+        {
+          "line": 100,
+          "text": "            [11, 22, 33], # row 456"
+        },
+        {
+          "line": 101,
+          "text": "            ..."
+        },
+        {
+          "line": 102,
+          "text": "            ])"
+        },
+        {
+          "line": 103,
+          "text": ""
+        },
+        {
+          "line": 104,
+          "text": "    Args:"
+        },
+        {
+          "line": 105,
+          "text": "        data (list[dict[str, torch.Tensor]]): A list of dictionaries where each dictionary"
+        },
+        {
+          "line": 106,
+          "text": "            contains an index key and a value key."
+        },
+        {
+          "line": 107,
+          "text": "        index_key (str): The key in the dictionary that contains the index for each row."
+        },
+        {
+          "line": 108,
+          "text": "        value_key (str): The key in the dictionary that contains the tensor to be merged."
+        },
+        {
+          "line": 109,
+          "text": "    \"\"\""
+        },
+        {
+          "line": 110,
+          "text": "    batch_size = len(data)"
+        },
+        {
+          "line": 111,
+          "text": "    dimensions = torch.tensor(data[0][value_key]).size()"
+        },
+        {
+          "line": 112,
+          "text": "    output_tensor = torch.zeros((batch_size, *dimensions))"
+        },
+        {
+          "line": 113,
+          "text": "    for row in data:"
+        },
+        {
+          "line": 114,
+          "text": "        index = row[index_key]"
+        },
+        {
+          "line": 115,
+          "text": "        value = row[value_key]"
+        },
+        {
+          "line": 116,
+          "text": "        if index < batch_size:"
+        },
+        {
+          "line": 117,
+          "text": "            output_tensor[index] = torch.tensor(value)"
+        },
+        {
+          "line": 118,
+          "text": "        else:"
+        },
+        {
+          "line": 119,
+          "text": "            raise IndexError("
+        },
+        {
+          "line": 120,
+          "text": "                f\"Index {index} out of bounds for batch size {batch_size}.\""
+        },
+        {
+          "line": 121,
+          "text": "            )"
+        },
+        {
+          "line": 122,
+          "text": "    return output_tensor"
+        },
+        {
+          "line": 146,
+          "text": "    # Use torch.unique to get unique rows and their inverse indices"
+        },
+        {
+          "line": 147,
+          "text": "    unique_rows, inverse_indices, counts = torch.unique("
+        },
+        {
+          "line": 148,
+          "text": "        data, dim=0, return_inverse=True, return_counts=True"
+        },
+        {
+          "line": 149,
+          "text": "    )"
+        },
+        {
+          "line": 150,
+          "text": ""
+        },
+        {
+          "line": 151,
+          "text": "    output_indices = torch.zeros_like(inverse_indices)"
+        },
+        {
+          "line": 152,
+          "text": ""
+        },
+        {
+          "line": 153,
+          "text": "    # Find indices where counts > 1 (meaning duplicates exist)"
+        },
+        {
+          "line": 154,
+          "text": "    duplicate_indices = torch.where(counts > 1)[0]"
+        },
+        {
+          "line": 155,
+          "text": ""
+        },
+        {
+          "line": 156,
+          "text": "    for i in range(len(duplicate_indices)):"
+        },
+        {
+          "line": 157,
+          "text": "        # Calculate number of collisions"
+        },
+        {
+          "line": 158,
+          "text": "        num_of_collisions = counts[duplicate_indices[i]]"
+        },
+        {
+          "line": 159,
+          "text": ""
+        },
+        {
+          "line": 160,
+          "text": "        # Gather the indices where the collisions occur"
+        },
+        {
+          "line": 161,
+          "text": "        indices_to_change = torch.where(inverse_indices == duplicate_indices[i])[0]"
+        },
+        {
+          "line": 162,
+          "text": ""
+        },
+        {
+          "line": 163,
+          "text": "        # Create a range based on the number of collision, starting from 1"
+        },
+        {
+          "line": 164,
+          "text": "        range_to_add = torch.arange(1, num_of_collisions + 1)"
+        },
+        {
+          "line": 165,
+          "text": ""
+        },
+        {
+          "line": 166,
+          "text": "        # Scatter to those specific indices"
+        },
+        {
+          "line": 167,
+          "text": "        output_indices = output_indices.scatter(0, indices_to_change, range_to_add)"
+        },
+        {
+          "line": 168,
+          "text": ""
+        },
+        {
+          "line": 169,
+          "text": "    # Concatenate the duplicate indicator column to the original data"
+        },
+        {
+          "line": 170,
+          "text": "    result = torch.cat((data, output_indices.unsqueeze(1)), dim=1).long()"
+        },
+        {
+          "line": 171,
+          "text": "    if return_tensor:"
+        },
+        {
+          "line": 172,
+          "text": "        return result"
+        },
+        {
+          "line": 173,
+          "text": "    else:"
+        },
+        {
+          "line": 174,
+          "text": "        # Save the result to a file"
+        },
+        {
+          "line": 175,
+          "text": "        torch.save(result, file_path)"
+        },
+        {
+          "line": 176,
+          "text": "        return None"
+        },
+        {
+          "line": 179,
+          "text": "def transpose_tensor_from_file("
+        },
+        {
+          "line": 180,
+          "text": "    file_path: Optional[str] = None,"
+        },
+        {
+          "line": 181,
+          "text": "    return_tensor: bool = False,"
+        },
+        {
+          "line": 182,
+          "text": "    dim1: int = -2,"
+        },
+        {
+          "line": 183,
+          "text": "    dim2: int = -1,"
+        },
+        {
+          "line": 184,
+          "text": ") -> Union[None, torch.Tensor]:"
+        },
+        {
+          "line": 185,
+          "text": "    \"\"\""
+        },
+        {
+          "line": 186,
+          "text": "    Transposes a PyTorch tensor from a file accoridng to designated dimensions."
+        },
+        {
+          "line": 187,
+          "text": ""
+        },
+        {
+          "line": 188,
+          "text": "    Args:"
+        },
+        {
+          "line": 189,
+          "text": "        file_path: Optional; Path to a file containing the tensor data."
+        },
+        {
+          "line": 190,
+          "text": "        return_tensor: If True, returns the modified tensor; otherwise, saves it to the file."
+        },
+        {
+          "line": 191,
+          "text": "        dim1: The first dimension to transpose (default: -2)."
+        },
+        {
+          "line": 192,
+          "text": "        dim2: The second dimension to transpose (default: -1)."
+        },
+        {
+          "line": 193,
+          "text": "    Returns:"
+        },
+        {
+          "line": 194,
+          "text": "        If return_tensor is True, returns the modified tensor. If False, saves the modified tensor to the file."
+        },
+        {
+          "line": 195,
+          "text": "    \"\"\""
+        },
+        {
+          "line": 196,
+          "text": "    if not file_path.endswith(\".pt\"):"
+        },
+        {
+          "line": 197,
+          "text": "        return None"
+        },
+        {
+          "line": 198,
+          "text": "    data = torch.load(open_local_or_remote(file_path, mode=\"rb\"))"
+        },
+        {
+          "line": 199,
+          "text": ""
+        },
+        {
+          "line": 200,
+          "text": "    # Transpose the tensor"
+        },
+        {
+          "line": 201,
+          "text": "    result = data.transpose(dim1, dim2)"
+        },
+        {
+          "line": 202,
+          "text": "    if return_tensor:"
+        },
+        {
+          "line": 203,
+          "text": "        return result"
+        },
+        {
+          "line": 204,
+          "text": "    else:"
+        },
+        {
+          "line": 205,
+          "text": "        # Save the result to a file"
+        },
+        {
+          "line": 206,
+          "text": "        torch.save(result, file_path)"
+        },
+        {
+          "line": 207,
+          "text": "        return None"
+        }
+      ]
+    },
+    {
+      "path": "GRID baseline/src/utils/inference_utils.py",
+      "sha256": "8a498d5fa77196b28ea9328cd7c31ccece241e24c0be1934fdee27abb299252a",
+      "original_lines": [
+        {
+          "line": 261,
+          "text": "        all_files = [f for f in os.listdir(self.output_dir) if f.endswith(\".pkl\")]"
+        },
+        {
+          "line": 262,
+          "text": "        merged_data = []"
+        },
+        {
+          "line": 263,
+          "text": "        for file in all_files:"
+        },
+        {
+          "line": 264,
+          "text": "            with open(os.path.join(self.output_dir, file), \"rb\") as f:"
+        },
+        {
+          "line": 265,
+          "text": "                merged_data.extend(pickle.load(f))"
+        },
+        {
+          "line": 266,
+          "text": "            os.remove(os.path.join(self.output_dir, file))"
+        },
+        {
+          "line": 267,
+          "text": "        with open(os.path.join(self.output_dir, \"merged_predictions.pkl\"), \"wb\") as f:"
+        },
+        {
+          "line": 268,
+          "text": "            pickle.dump(merged_data, f)"
+        },
+        {
+          "line": 269,
+          "text": "        log.info(f\"Merged {len(merged_data)} rows into merged_predictions.pkl.\")"
+        },
+        {
+          "line": 270,
+          "text": ""
+        },
+        {
+          "line": 271,
+          "text": "        if self.should_merge_list_of_keyed_tensors_to_single_tensor:"
+        },
+        {
+          "line": 272,
+          "text": "            merged_data_tensor = merge_list_of_keyed_tensors_to_single_tensor("
+        },
+        {
+          "line": 273,
+          "text": "                data=merged_data,"
+        },
+        {
+          "line": 274,
+          "text": "                index_key=self.prediction_key_name,"
+        },
+        {
+          "line": 275,
+          "text": "                value_key=self.prediction_name,"
+        },
+        {
+          "line": 276,
+          "text": "            )"
+        },
+        {
+          "line": 277,
+          "text": "            torch.save("
+        },
+        {
+          "line": 278,
+          "text": "                merged_data_tensor.cpu(),"
+        },
+        {
+          "line": 279,
+          "text": "                os.path.join(self.output_dir, \"merged_predictions_tensor.pt\"),"
+        },
+        {
+          "line": 280,
+          "text": "            )"
+        },
+        {
+          "line": 281,
+          "text": "            log.info("
+        },
+        {
+          "line": 282,
+          "text": "                f\"Merged {len(merged_data_tensor)} rows into merged_predictions_tensor.pt. as pytorch tensor\""
+        },
+        {
+          "line": 283,
+          "text": "            )"
+        }
+      ]
+    },
+    {
+      "path": "GRID baseline/src/models/modules/semantic_id/tiger_generation_model.py",
+      "sha256": "c61606b4a03d6fc8cfa6cb3bca093a36bbf9a1846334d39cb8dbcb67b32c296e",
+      "original_lines": [
+        {
+          "line": 467,
+          "text": "    def __init__("
+        },
+        {
+          "line": 468,
+          "text": "        self,"
+        },
+        {
+          "line": 469,
+          "text": "        top_k_for_generation: int = 10,"
+        },
+        {
+          "line": 470,
+          "text": "        codebooks: torch.Tensor = None,"
+        },
+        {
+          "line": 471,
+          "text": "        embedding_dim: int = None,"
+        },
+        {
+          "line": 472,
+          "text": "        num_hierarchies: int = None,"
+        },
+        {
+          "line": 473,
+          "text": "        num_embeddings_per_hierarchy: int = None,"
+        },
+        {
+          "line": 474,
+          "text": "        num_user_bins: Optional[int] = None,"
+        },
+        {
+          "line": 475,
+          "text": "        mlp_layers: Optional[int] = None,"
+        },
+        {
+          "line": 476,
+          "text": "        should_check_prefix: bool = False,"
+        },
+        {
+          "line": 477,
+          "text": "        should_add_sep_token: bool = True,"
+        },
+        {
+          "line": 773,
+          "text": "                # we need to reshape the generated ids so that"
+        },
+        {
+          "line": 774,
+          "text": "                # the number of beams equals to batch size * top_k"
+        },
+        {
+          "line": 775,
+          "text": "                squeezed_generated_ids = generated_ids.reshape(-1, hierarchy).to("
+        },
+        {
+          "line": 776,
+          "text": "                    encoder_output.device"
+        },
+        {
+          "line": 777,
+          "text": "                )  # shape: (batch_size * top_k, hierarchy)"
+        },
+        {
+          "line": 778,
+          "text": ""
+        },
+        {
+          "line": 779,
+          "text": "                repeated_encoder_output = encoder_output.repeat_interleave("
+        },
+        {
+          "line": 780,
+          "text": "                    self.top_k_for_generation, dim=0"
+        },
+        {
+          "line": 781,
+          "text": "                )"
+        },
+        {
+          "line": 782,
+          "text": "                # shape: (batch_size * top_k, seq_len+1, hidden_dim)"
+        },
+        {
+          "line": 783,
+          "text": "                # +1 because we have user_id token"
+        },
+        {
+          "line": 784,
+          "text": ""
+        },
+        {
+          "line": 785,
+          "text": "                repeated_encoder_attention_mask = ("
+        },
+        {
+          "line": 786,
+          "text": "                    encoder_attention_mask.repeat_interleave("
+        },
+        {
+          "line": 787,
+          "text": "                        self.top_k_for_generation, dim=0"
+        }
+      ]
+    }
+  ]
+}
