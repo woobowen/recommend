@@ -1,0 +1,142 @@
+{
+  "status": "COMPLETE",
+  "formal": true,
+  "engineering_only": false,
+  "training_complete": true,
+  "test_complete": true,
+  "fresh_initialization": true,
+  "full_parameter_training": true,
+  "termination": "original_patience10_validation_early_stop",
+  "safety_allowance_is_not_training_endpoint": true,
+  "global_step": 5900,
+  "current_epoch": 1,
+  "actual_microbatches": 94400,
+  "expanded_windows": 10113586,
+  "completed_full_validations": 59,
+  "fit_wall_seconds": 24588.621350205038,
+  "early_stopping": {
+    "wait_count": 10,
+    "patience": 10,
+    "stopped_epoch": 0,
+    "trainer_should_stop": true
+  },
+  "best_checkpoint": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-mlp-formal-v1/output/checkpoints/checkpoint_epoch=000_step=004900.ckpt",
+    "sha256": "8b503607ef3a64e8e1fc7803738ce8465378a799c97d4431c48a46f4830d814b",
+    "bytes": 162136214,
+    "monitor": "val/recall@5",
+    "mode": "max",
+    "score": 0.026293611153960228,
+    "engineering_only": false
+  },
+  "final_recovery": {
+    "reason": "Fit reached original_patience10_validation_early_stop",
+    "stage": "validation",
+    "formal": true,
+    "global_step": 5900,
+    "epoch": 1,
+    "microbatches_completed": 94400,
+    "microbatches_into_unfinished_accumulation": 0,
+    "partial_parameter_gradients_in_checkpoint": false,
+    "explicit_rng_capture": "immediately before checkpoint serialization",
+    "datamodule_state_dict": {},
+    "datamodule_state_is_empty": true,
+    "infinite_worker_cursor_saved": false,
+    "worker_process_RNG_and_prefetch_queue_saved": false,
+    "exact_uninterrupted_resume_claim": false,
+    "automatic_resume_allowed": false,
+    "weights_source": "current training state",
+    "optimizer_source": "final/current training optimizer; not rewound to validation best",
+    "resume_requires_explicit_decision": true,
+    "checkpoint_error": null,
+    "checkpoint": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-mlp-formal-v1/output/recovery/training-final-1/full-state.ckpt",
+      "sha256": "e9680cd17dba9e8af6a341afbe1ea29f15a6bb958e9d5c63cc48eddc3c97b08f",
+      "bytes": 162129622
+    },
+    "rng_files": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-mlp-formal-v1/output/recovery/training-final-1/python_numpy_rng.json",
+        "sha256": "e3701e169b088763f9522cc7afe1a6f59e2f6fdebc9a62b80ef3c67a380800f4"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-mlp-formal-v1/output/recovery/training-final-1/torch_rng.pt",
+        "sha256": "88baab9d2cf5a60c8d13e9b411b370c8da7a3d47e1e63ced8162f128e8e53794"
+      }
+    ]
+  },
+  "mlp_parameter_max_abs_updates": {
+    "0.weight": 0.31500375270843506,
+    "0.bias": 0.1441819667816162,
+    "3.weight": 0.5617446899414062,
+    "3.bias": 0.4501357972621918
+  },
+  "formal_state_reuse_allowed": false,
+  "approved_config_asset": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24/sports-engineering-base.yaml",
+    "sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24"
+  },
+  "sid_asset": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+    "sha256": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293"
+  },
+  "evaluation_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-metadata-v1/output/evaluation_target_index.jsonl",
+    "sha256": "dfb139f6abb4894613a43cd3a1f6692f7721958b7c7fccc0d1cf60bed6656867",
+    "bytes": 3717329,
+    "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-metadata-v1/output/evaluation_target_index.jsonl"
+  },
+  "test_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-metadata-v1/output/test_target_index.jsonl",
+    "sha256": "191a66c91b5797790842fb0f8cf241128d4dbc005987f0be8c2038079a163c2d",
+    "bytes": 5280326,
+    "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-metadata-v1/output/test_target_index.jsonl"
+  },
+  "engineering_test_complete": false,
+  "test_target_count": 35598,
+  "test_exact_key_target_multiset": true,
+  "test_metrics": {
+    "status": "PASS",
+    "metrics": {
+      "ndcg@5": 0.01131332479417324,
+      "ndcg@10": 0.014029854908585548,
+      "recall@5": 0.018090903759002686,
+      "recall@10": 0.026405977085232735
+    },
+    "samples": 35598,
+    "unique_users": 35598,
+    "prediction_sha256": "16c16e5e042c7130efe417971cc21404dc4bf8bbe57e39eddf50c93e853c7515",
+    "invalid_candidate_count": 0,
+    "duplicate_candidate_count": 0,
+    "candidate_treatment": "original evaluator, no filtering, completion, rescoring, or reordering",
+    "coverage_exact": true,
+    "trainer_absolute_differences": {
+      "ndcg@5": 0.0,
+      "ndcg@10": 0.0,
+      "recall@5": 0.0,
+      "recall@10": 0.0
+    },
+    "per_sample_metrics_sha256": "9b00067e29dfdebdd389d632c68d24d2b84dd212fc3153745c06f61540d16f7a"
+  },
+  "gpu_peak_allocated_bytes": 708345856,
+  "gpu_peak_reserved_bytes": 769654784,
+  "attention_collected": false,
+  "checkpoint": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-mlp-formal-v1/output/checkpoints/checkpoint_epoch=000_step=004900.ckpt",
+    "sha256": "8b503607ef3a64e8e1fc7803738ce8465378a799c97d4431c48a46f4830d814b",
+    "bytes": 162136214,
+    "monitor": "val/recall@5",
+    "mode": "max",
+    "score": 0.026293611153960228,
+    "engineering_only": false
+  },
+  "sid": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+    "sha256": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293"
+  },
+  "config": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24/sports-engineering-base.yaml",
+    "sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24"
+  },
+  "shuffle_n": 0
+}

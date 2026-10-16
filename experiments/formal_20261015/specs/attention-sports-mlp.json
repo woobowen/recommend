@@ -1,0 +1,89 @@
+{
+  "route": "MLP",
+  "seed": 42,
+  "generation_k": 10,
+  "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports",
+  "config": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24/sports-engineering-base.yaml",
+    "sha256": "59a6a7566bf2b3ed1dce34806cc454ece57c2cb5c84f67b32964687adfa15e24"
+  },
+  "sid": {
+    "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+    "sha256": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293"
+  },
+  "stage": "grid-formal-20261015",
+  "domain": "sports",
+  "formal_approved": true,
+  "test_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-metadata-v1/output/test_target_index.jsonl",
+    "sha256": "191a66c91b5797790842fb0f8cf241128d4dbc005987f0be8c2038079a163c2d",
+    "bytes": 5280326
+  },
+  "evaluation_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-metadata-v1/output/evaluation_target_index.jsonl",
+    "sha256": "dfb139f6abb4894613a43cd3a1f6692f7721958b7c7fccc0d1cf60bed6656867",
+    "bytes": 3717329
+  },
+  "attention_cohort": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-metadata-v1/output/fixed_attention_samples.json",
+    "sha256": "04db2497f34bf5d4fb44240136974759377e2b7f8a86c047b294f2ec0daca402",
+    "bytes": 258969
+  },
+  "checkpoint": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-mlp-formal-v1/output/checkpoints/checkpoint_epoch=000_step=004900.ckpt",
+    "sha256": "8b503607ef3a64e8e1fc7803738ce8465378a799c97d4431c48a46f4830d814b",
+    "bytes": 162136214,
+    "monitor": "val/recall@5",
+    "mode": "max",
+    "score": 0.026293611153960228,
+    "engineering_only": false
+  },
+  "shuffle_n": 0,
+  "phase": "formal_attention_capture",
+  "purpose": "Approved fixed32 inference capture after independently accepted full scratch MLP training/test; no training or full-test repetition",
+  "evaluation_result": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-mlp-formal-v1/output/RESULT.json",
+    "sha256": "a3b0c522e6a980f1c591de28a914b0ab68ae3f6d6597b9fb5132a2505e161a42"
+  },
+  "evaluation_status": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-sports-mlp-formal-v1/status.json",
+    "sha256": "1f7c19f01876b1cef9a63f17a58b79cbeea458883bbba4598c9f93e1c1f1a5e3"
+  },
+  "evaluation_independent_review": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-formal-20261015/approvals/fcfda353b69c76389ea312cf5f622a7833b961a174d870258d7998faa4db9ed8/formal-MLP-combined-review.json",
+    "sha256": "fcfda353b69c76389ea312cf5f622a7833b961a174d870258d7998faa4db9ed8"
+  },
+  "training_protocol_reference": {
+    "job_id": "gf-20261015-sports-mlp-formal-v1",
+    "approved_training_spec_sha256": "fea6c34cf5b495214516d3326381b5b1bff1b78be805088a09d18d27b03abf34",
+    "result_contains_actual_effective_protocol_and_best_selection": true
+  },
+  "attention_protocol": {
+    "cohort": "original first32 evaluation users fixed before training/model outputs",
+    "kind": "cross-attention",
+    "rows": "four autoregressive SID generation queries",
+    "columns": "per-history-item aggregated encoder tokens, including padding slots",
+    "layer": "last decoder layer",
+    "display_heads": "mean",
+    "retained_heads": "all raw heads of last layer",
+    "paths": [
+      "actual generation final Top-1 ancestry",
+      "local first parent per step"
+    ],
+    "scientific_similarity_claim": null
+  },
+  "attention_wall_seconds_limit": 1200,
+  "resource_allowance": {
+    "domain_original_hard_limit_seconds": 43200,
+    "actual_training_validation_and_test_worker_wall_seconds": 24896.878775,
+    "remaining_before_attention_seconds": 18303.121225,
+    "this_attention_request_max_seconds": 1200,
+    "maximum_cumulative_worker_wall_with_capture_seconds": 26096.878775,
+    "accounting": "actual per-domain runner worker wall for training/validation/test plus this capture; no cross-domain transfer or extension; idle waiting/query is not GPU work",
+    "user_approval_reference": "2026-10-16 explicit continuation attachment section4.2 authorizes each domain fixed32 within original remaining approved resources"
+  },
+  "nonauthor_gate": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-formal-20261015/approvals/06e10a1190e1952d4c7f9a6186da8bc12e6de85d0906cdd263abb3269b0ad7d8/authorization.json",
+    "sha256": "06e10a1190e1952d4c7f9a6186da8bc12e6de85d0906cdd263abb3269b0ad7d8"
+  }
+}

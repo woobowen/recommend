@@ -1,0 +1,142 @@
+{
+  "status": "COMPLETE",
+  "formal": true,
+  "engineering_only": false,
+  "training_complete": true,
+  "test_complete": true,
+  "fresh_initialization": true,
+  "full_parameter_training": true,
+  "termination": "original_patience10_validation_early_stop",
+  "safety_allowance_is_not_training_endpoint": true,
+  "global_step": 5400,
+  "current_epoch": 1,
+  "actual_microbatches": 259200,
+  "expanded_windows": 106933534,
+  "completed_full_validations": 54,
+  "fit_wall_seconds": 23046.726924699266,
+  "early_stopping": {
+    "wait_count": 10,
+    "patience": 10,
+    "stopped_epoch": 0,
+    "trainer_should_stop": true
+  },
+  "best_checkpoint": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/checkpoints/checkpoint_epoch=000_step=004400.ckpt",
+    "sha256": "1d613682e026366af2004b5c53a8657aec858b453b44ec5ead2f9706e9cf6c32",
+    "bytes": 161223318,
+    "monitor": "val/recall@5",
+    "mode": "max",
+    "score": 0.04790851101279259,
+    "engineering_only": false
+  },
+  "final_recovery": {
+    "reason": "Fit reached original_patience10_validation_early_stop",
+    "stage": "validation",
+    "formal": true,
+    "global_step": 5400,
+    "epoch": 1,
+    "microbatches_completed": 259200,
+    "microbatches_into_unfinished_accumulation": 0,
+    "partial_parameter_gradients_in_checkpoint": false,
+    "explicit_rng_capture": "immediately before checkpoint serialization",
+    "datamodule_state_dict": {},
+    "datamodule_state_is_empty": true,
+    "infinite_worker_cursor_saved": false,
+    "worker_process_RNG_and_prefetch_queue_saved": false,
+    "exact_uninterrupted_resume_claim": false,
+    "automatic_resume_allowed": false,
+    "weights_source": "current training state",
+    "optimizer_source": "final/current training optimizer; not rewound to validation best",
+    "resume_requires_explicit_decision": true,
+    "checkpoint_error": null,
+    "checkpoint": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/full-state.ckpt",
+      "sha256": "8d38468e8151d5b56db60fd0237d7b999a31159dae0861f2d6781a43c35effeb",
+      "bytes": 161216726
+    },
+    "rng_files": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/python_numpy_rng.json",
+        "sha256": "bbf8c8f1385441c579d53447ae736f5d77fb89bcf3532a19d513a4f18f7eb0e4"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/torch_rng.pt",
+        "sha256": "8214c7b9853d0657457c01fe54704e2a554fb07ab84bd4d708ec67bedd79a627"
+      }
+    ]
+  },
+  "mlp_parameter_max_abs_updates": {
+    "0.weight": 0.3933021128177643,
+    "0.bias": 0.06131234019994736,
+    "3.weight": 0.34422245621681213,
+    "3.bias": 0.04557342082262039
+  },
+  "formal_state_reuse_allowed": false,
+  "approved_config_asset": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd/toys-source.yaml",
+    "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd"
+  },
+  "sid_asset": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0/toys-semantic-ids.pt",
+    "sha256": "26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0"
+  },
+  "evaluation_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/evaluation_target_index.jsonl",
+    "sha256": "d25c0ca3db2ad98bf72d4c4d8900fbfbba3496501d16e8ba725b743c2fd149aa",
+    "bytes": 2023819,
+    "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/evaluation_target_index.jsonl"
+  },
+  "test_index": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/test_target_index.jsonl",
+    "sha256": "3e876c25ba53d513a4006a05b578694bcf59395fac973d5ecbc3e16b6fd80140",
+    "bytes": 2870565,
+    "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/test_target_index.jsonl"
+  },
+  "engineering_test_complete": false,
+  "test_target_count": 19412,
+  "test_exact_key_target_multiset": true,
+  "test_metrics": {
+    "status": "PASS",
+    "metrics": {
+      "ndcg@5": 0.025292707607150078,
+      "ndcg@10": 0.030142273753881454,
+      "recall@5": 0.03482381999492645,
+      "recall@10": 0.04981454834342003
+    },
+    "samples": 19412,
+    "unique_users": 19412,
+    "prediction_sha256": "7ad599ec19acb21d5fcf4e8d9745d50e00c3933267dbf88ecb67c99001b8a6fe",
+    "invalid_candidate_count": 354,
+    "duplicate_candidate_count": 0,
+    "candidate_treatment": "original evaluator, no filtering, completion, rescoring, or reordering",
+    "coverage_exact": true,
+    "trainer_absolute_differences": {
+      "ndcg@5": 0.0,
+      "ndcg@10": 0.0,
+      "recall@5": 0.0,
+      "recall@10": 0.0
+    },
+    "per_sample_metrics_sha256": "c07685a53b279d794291e3580ea66b06019bc19381ed04ba598bc32b99436496"
+  },
+  "gpu_peak_allocated_bytes": 2084640768,
+  "gpu_peak_reserved_bytes": 3686793216,
+  "attention_collected": false,
+  "checkpoint": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/checkpoints/checkpoint_epoch=000_step=004400.ckpt",
+    "sha256": "1d613682e026366af2004b5c53a8657aec858b453b44ec5ead2f9706e9cf6c32",
+    "bytes": 161223318,
+    "monitor": "val/recall@5",
+    "mode": "max",
+    "score": 0.04790851101279259,
+    "engineering_only": false
+  },
+  "sid": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0/toys-semantic-ids.pt",
+    "sha256": "26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0"
+  },
+  "config": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd/toys-source.yaml",
+    "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd"
+  },
+  "shuffle_n": 0
+}

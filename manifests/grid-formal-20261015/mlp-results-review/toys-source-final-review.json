@@ -1,0 +1,552 @@
+{
+  "schema": 1,
+  "status": "SOURCE_FORMAL_FINAL_REVIEW_PASS",
+  "reviewer": "/root/source_conditions_review",
+  "domain": "toys",
+  "reviewed_at_utc": "2026-10-16T05:55:36.833333+00:00",
+  "job_id": "gf-20261015-toys-mlp-formal-v1",
+  "job_status": "SUCCEEDED",
+  "exit_code": 0,
+  "cleanup_verified": true,
+  "worker_may_be_live": false,
+  "source_commit": "4495c38459971aee36b00d881eb50f50fafa3159",
+  "snapshot_sha256": "77c012c07de3db19bc86108212ab292aabe704922f1f65d1d9c51da62b05a108",
+  "source_python_count": 171,
+  "request_fingerprint_sha256": "33e8ce61002ba549de5451712a0ff1a51d4d8d3a73ee1af069f3b6b5628e44b4",
+  "inherited_startup_review": {
+    "path": "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/formal-startup-review.json",
+    "bytes": 22912,
+    "sha256": "06316fe0ed63c4f6488b16368173c76d25f8aabb27e5e1273e1cd9019fea28d8"
+  },
+  "immutable_startup_configuration_files_unchanged": true,
+  "approved_protocol": {
+    "domain": "toys",
+    "source_config": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd/toys-source.yaml",
+      "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd"
+    },
+    "initialization": "scratch; no preflight checkpoint or optimizer state reused",
+    "raw_microbatch": 32,
+    "accumulate_grad_batches": 48,
+    "validation_interval_microbatches": 4800,
+    "collate_window_cap": 512,
+    "source_worker_protocol_preserved": {
+      "train": {
+        "num_workers": 8,
+        "timeout": 60,
+        "persistent_workers": true
+      },
+      "val": {
+        "num_workers": 8,
+        "timeout": 60,
+        "persistent_workers": false
+      },
+      "test": {
+        "num_workers": 8,
+        "timeout": 60,
+        "persistent_workers": false
+      }
+    },
+    "explicit_approved_overlay": {
+      "trainer.accumulate_grad_batches": {
+        "source": 16,
+        "approved": 48
+      },
+      "trainer.val_check_interval": {
+        "source": 1600,
+        "approved": 4800
+      }
+    },
+    "max_steps": 320000,
+    "max_epochs": 10,
+    "hard_cap_hours_including_full_test": 12.0,
+    "safety_allowance_is_not_training_endpoint": true
+  },
+  "research_identity": "author Toys RQ-VAE+STE bundle with approved single-card adaptation",
+  "data_sid_conditions": {
+    "config": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd/toys-source.yaml",
+      "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd"
+    },
+    "sid": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0/toys-semantic-ids.pt",
+      "sha256": "26bae0c90859e1ccf7517dbdd077adc75d3550bb9a637df9905c0dc6eca73eb0"
+    },
+    "data_dir": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/toys",
+    "evaluation_index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/evaluation_target_index.jsonl",
+      "sha256": "d25c0ca3db2ad98bf72d4c4d8900fbfbba3496501d16e8ba725b743c2fd149aa",
+      "bytes": 2023819
+    },
+    "test_index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-metadata-v1/output/test_target_index.jsonl",
+      "sha256": "3e876c25ba53d513a4006a05b578694bcf59395fac973d5ecbc3e16b6fd80140",
+      "bytes": 2870565
+    },
+    "prior_domain_gate": {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-admission/toys-gate-review.json",
+      "bytes": 37476,
+      "sha256": "3b1663b1e24a3f3aeb3785ee7821eedd0c30eff02e1e786c4f8398d872272323"
+    }
+  },
+  "full_validation": {
+    "records": 54,
+    "global_steps": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900,
+      1000,
+      1100,
+      1200,
+      1300,
+      1400,
+      1500,
+      1600,
+      1700,
+      1800,
+      1900,
+      2000,
+      2100,
+      2200,
+      2300,
+      2400,
+      2500,
+      2600,
+      2700,
+      2800,
+      2900,
+      3000,
+      3100,
+      3200,
+      3300,
+      3400,
+      3500,
+      3600,
+      3700,
+      3800,
+      3900,
+      4000,
+      4100,
+      4200,
+      4300,
+      4400,
+      4500,
+      4600,
+      4700,
+      4800,
+      4900,
+      5000,
+      5100,
+      5200,
+      5300,
+      5400
+    ],
+    "targets_each": 19412,
+    "unique_users_each": 19412,
+    "all_recorded_key_target_multisets_exact": true,
+    "all_CSV_metrics_equal": true,
+    "tail_batch_size": 4,
+    "complete_validation_hook_seconds_sum": 7159.005798453931,
+    "evidence_boundary": "Verified every original full-validation record plus CSV and fixed reviewed multiset-check producer. Validation raw predictions were not re-generated; prior full target index admission is inherited."
+  },
+  "optimizer_training": {
+    "updates": 5400,
+    "microbatches": 259200,
+    "expanded_windows": 106933534,
+    "all_updates_sequential": true,
+    "all_accumulation_microbatches_exact": true,
+    "all_available_gradients_finite": true,
+    "all_updates_cover_every_trainable_parameter": true,
+    "parameter_count": 13291136,
+    "MLP_gradient_norm_min": {
+      "0.weight": 0.000636309152469039,
+      "0.bias": 3.363929135957733e-05,
+      "3.weight": 0.0008009286830201745,
+      "3.bias": 8.252577390521765e-05
+    },
+    "MLP_gradient_norm_max": {
+      "0.weight": 2.5461020469665527,
+      "0.bias": 0.4744343161582947,
+      "3.weight": 3.481534242630005,
+      "3.bias": 1.6697484254837036
+    },
+    "returned_batch_end_loss_min": 0.043027691543102264,
+    "returned_batch_end_loss_max": 0.48389577865600586,
+    "loss_scaling_note": "These batch-end losses are Lightning returned losses under gradient accumulation; original model train/loss is retained independently in CSV.",
+    "final_MLP_parameter_max_abs_updates": {
+      "0.weight": 0.3933021128177643,
+      "0.bias": 0.06131234019994736,
+      "3.weight": 0.34422245621681213,
+      "3.bias": 0.04557342082262039
+    }
+  },
+  "selection_and_termination": {
+    "monitor": "val/recall@5",
+    "mode": "max",
+    "min_delta": 0.0,
+    "patience": 10,
+    "improvement_steps_replayed_from_all_records": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      1000,
+      1200,
+      1300,
+      1400,
+      1800,
+      1900,
+      2500,
+      2900,
+      3900,
+      4400
+    ],
+    "best_step": 4400,
+    "best_score": 0.04790851101279259,
+    "first_step_reaching_patience10": 5400,
+    "last_ten_records": [
+      {
+        "step": 4500,
+        "val_recall_at_5": 0.047032762318849564
+      },
+      {
+        "step": 4600,
+        "val_recall_at_5": 0.04749639332294464
+      },
+      {
+        "step": 4700,
+        "val_recall_at_5": 0.0455903559923172
+      },
+      {
+        "step": 4800,
+        "val_recall_at_5": 0.04749639332294464
+      },
+      {
+        "step": 4900,
+        "val_recall_at_5": 0.0475994236767292
+      },
+      {
+        "step": 5000,
+        "val_recall_at_5": 0.04708427935838699
+      },
+      {
+        "step": 5100,
+        "val_recall_at_5": 0.047650936990976334
+      },
+      {
+        "step": 5200,
+        "val_recall_at_5": 0.047805480659008026
+      },
+      {
+        "step": 5300,
+        "val_recall_at_5": 0.047702450305223465
+      },
+      {
+        "step": 5400,
+        "val_recall_at_5": 0.04636307433247566
+      }
+    ],
+    "termination": "original_patience10_validation_early_stop",
+    "original_work_log_stop": [
+      {
+        "line": 328,
+        "text": "Monitored metric val/recall@5 did not improve in the last 10 records. Best score: 0.048. Signaling Trainer to stop."
+      }
+    ],
+    "original_work_log_best_save": [
+      {
+        "line": 318,
+        "text": "Epoch 0, global step 4400: 'val/recall@5' reached 0.04791 (best 0.04791), saving model to '/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/checkpoints/checkpoint_epoch=000_step=004400.ckpt' as top 1"
+      }
+    ],
+    "not_hard_timeout_or_source_max_steps": true
+  },
+  "strict_best_load": {
+    "protocol": "weights_only=True with checkpoint-local explicitly reviewed safe_globals",
+    "checkpoint": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/checkpoints/checkpoint_epoch=000_step=004400.ckpt",
+      "sha256": "1d613682e026366af2004b5c53a8657aec858b453b44ec5ead2f9706e9cf6c32",
+      "bytes": 161223318,
+      "monitor": "val/recall@5",
+      "mode": "max",
+      "score": 0.04790851101279259,
+      "engineering_only": false
+    },
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "all_keys_shapes_values_exact": true,
+    "embedded_sid_exact": true,
+    "optimizer_and_callbacks_present": true,
+    "state_tensor_count": 180,
+    "best_global_step": 4400,
+    "selected_by": "validation val/recall@5 only; original ModelCheckpoint"
+  },
+  "checkpoint_entities": {
+    "best": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/checkpoints/checkpoint_epoch=000_step=004400.ckpt",
+        "bytes": 161223318,
+        "sha256": "1d613682e026366af2004b5c53a8657aec858b453b44ec5ead2f9706e9cf6c32",
+        "mtime_ns": 1792104031407518302,
+        "inode": 4481239,
+        "header_hex": "504b0304",
+        "regular_file": true,
+        "symlink": false,
+        "unchanged_during_read": true
+      }
+    ],
+    "recovery": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/full-state.ckpt",
+        "bytes": 161216726,
+        "sha256": "8d38468e8151d5b56db60fd0237d7b999a31159dae0861f2d6781a43c35effeb",
+        "mtime_ns": 1792108295572215181,
+        "inode": 4481243,
+        "header_hex": "504b0304",
+        "regular_file": true,
+        "symlink": false,
+        "unchanged_during_read": true
+      }
+    ],
+    "rng": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/python_numpy_rng.json",
+        "bytes": 22406,
+        "sha256": "bbf8c8f1385441c579d53447ae736f5d77fb89bcf3532a19d513a4f18f7eb0e4",
+        "mtime_ns": 1792108295354804000,
+        "inode": 4481241,
+        "header_hex": "7b0a2020",
+        "regular_file": true,
+        "symlink": false,
+        "unchanged_during_read": true
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/torch_rng.pt",
+        "bytes": 6500,
+        "sha256": "8214c7b9853d0657457c01fe54704e2a554fb07ab84bd4d708ec67bedd79a627",
+        "mtime_ns": 1792108295355804036,
+        "inode": 4481242,
+        "header_hex": "504b0304",
+        "regular_file": true,
+        "symlink": false,
+        "unchanged_during_read": true
+      }
+    ]
+  },
+  "entity_observation": {
+    "path": "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-results-review/checkpoint-entity-evidence.json",
+    "bytes": 4228,
+    "sha256": "7b836aa8c4b212672b159cb0c743f930436defee42a9e59dcd0bd8b69e06b51d"
+  },
+  "no_reviewer_checkpoint_model_loading": true,
+  "strict_load_evidence_boundary": "Reused the actual saved strict loading report produced by unchanged reviewed train.py:521-536: strict=True, every key/shape/value exact, embedded SID exact, shared encoder/decoder table identity preserved. Reviewer independently rehashed actual server entity; did not deserialize or rerun model.",
+  "recovery": {
+    "record": {
+      "reason": "Fit reached original_patience10_validation_early_stop",
+      "stage": "validation",
+      "formal": true,
+      "global_step": 5400,
+      "epoch": 1,
+      "microbatches_completed": 259200,
+      "microbatches_into_unfinished_accumulation": 0,
+      "partial_parameter_gradients_in_checkpoint": false,
+      "explicit_rng_capture": "immediately before checkpoint serialization",
+      "datamodule_state_dict": {},
+      "datamodule_state_is_empty": true,
+      "infinite_worker_cursor_saved": false,
+      "worker_process_RNG_and_prefetch_queue_saved": false,
+      "exact_uninterrupted_resume_claim": false,
+      "automatic_resume_allowed": false,
+      "weights_source": "current training state",
+      "optimizer_source": "final/current training optimizer; not rewound to validation best",
+      "resume_requires_explicit_decision": true,
+      "checkpoint_error": null,
+      "checkpoint": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/full-state.ckpt",
+        "sha256": "8d38468e8151d5b56db60fd0237d7b999a31159dae0861f2d6781a43c35effeb",
+        "bytes": 161216726
+      },
+      "rng_files": [
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/python_numpy_rng.json",
+          "sha256": "bbf8c8f1385441c579d53447ae736f5d77fb89bcf3532a19d513a4f18f7eb0e4"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/torch_rng.pt",
+          "sha256": "8214c7b9853d0657457c01fe54704e2a554fb07ab84bd4d708ec67bedd79a627"
+        }
+      ]
+    },
+    "evidence_boundary": "Producer train.py saves weights_only=False, optimizer/callback state and explicit main-process Python/NumPy/Torch CPU/CUDA RNG beside the checkpoint. Server entities and sidecar hashes verified. Final recovery binary was not independently deserialized in this review. Infinite data stream cursor, worker RNG and prefetch queue are absent, so exact uninterrupted/bitwise stream continuation is not established; automatic resume remains forbidden."
+  },
+  "test_source_path": {
+    "target_count": 19412,
+    "saved_original_evaluator_metrics": {
+      "test/loss": 12.20610523223877,
+      "test/ndcg@5": 0.025292707607150078,
+      "test/ndcg@10": 0.030142273753881454,
+      "test/recall@5": 0.03482381999492645,
+      "test/recall@10": 0.04981454834342003
+    },
+    "complete_test_coverage_recorded": true,
+    "bounded_test_batches": null,
+    "independent_prediction_metric_recomputation": "Assigned to separate results reviewer; this source receipt does not substitute for that independent result acceptance."
+  },
+  "resource_budget": {
+    "runner_started_at": "2026-10-15T17:26:33.286283+00:00",
+    "runner_ended_at": "2026-10-15T23:53:42.476495+00:00",
+    "total_seconds_including_complete_test_and_cleanup": 23229.190212,
+    "total_hours": 6.452552836666667,
+    "fit_seconds": 23046.726924699266,
+    "hard_cap_seconds": 43200,
+    "remaining_from_original_domain_allowance_seconds": 19970.809788,
+    "safety_180_seconds_stop_not_reached": true,
+    "GPU_peak_allocated_bytes": 2084640768,
+    "GPU_peak_reserved_bytes": 3686793216,
+    "no_new_attention_approval_by_this_receipt": true
+  },
+  "scope": "Non-author final review of source/approved training protocol/optimization/validation selection/natural stopping/strict best loading and recovery boundary. No training, GPU model loading, large-asset download, metadata regeneration, result modification or Git edit.",
+  "correction_budget": {
+    "original_rounds_used": 3,
+    "explicit_serialization_exception_rounds_used": 1,
+    "new_research_correction_rounds": 0
+  },
+  "known_provenance_limits_inherited": "Toys upper-stage factory/path contradiction and unique historical producer gap remain disclosed; Sports is an approved new Qwen/RK+original itemMLP experiment, not an invented historical Sports reproduction.",
+  "checked_original_files": [
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/request.json",
+      "bytes": 2900,
+      "sha256": "41be4dab230fbe0d8f8ca9c9b5e596b13a037949dc7192293002eef3d518caa4"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/accepted.json",
+      "bytes": 310,
+      "sha256": "d3378082519377324536437835b5ecf339a0cd35a68d87d6f7cbb1b3e72bf7e6"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/status.json",
+      "bytes": 67904,
+      "sha256": "a912de874e879caec29ae7576ddba0b3b142efd413d2c35cd65a3927e4cab997"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/cleanup.json",
+      "bytes": 664,
+      "sha256": "fa42f5c04c292ae7cefc28f9e665410a8149073714a492a8a53fdbf7bd52ecdc"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/work.log",
+      "bytes": 32874,
+      "sha256": "d49b3dbff7f34491f6c74fd516d98d1d461fe8fd3d66d52b42ed48757b48a653"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/RESULT.json",
+      "bytes": 6274,
+      "sha256": "0cfe300ff99f9b2c86aa9b1e33e58db2f86c3476534d7cc27cb74118af03da82"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/training_result.json",
+      "bytes": 5301,
+      "sha256": "fe4d22301d96bb166a6e8ef5609cd644e5a01a1903dd58104c5ba0c1aaa85ad3"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/domain_protocol.json",
+      "bytes": 1222,
+      "sha256": "efa9691774c01d4cce49fbdd1087f1d20753b64a5c64d22362c47178936cc543"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/invocation.json",
+      "bytes": 44680,
+      "sha256": "156cb08b84d9e1a8ea84237f02db86282fbe81a8b601d632bd123aca4a872c9d"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/used_config.json",
+      "bytes": 14328,
+      "sha256": "02043aca2faab1e3b5559b3e211395174ce16340956058e798689a7481529912"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/effective_config.yaml",
+      "bytes": 13105,
+      "sha256": "2aa0df542122bb2a25094d27dc64c6f5cc5807e570cf46262ed504b5988b1be4"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/approved_formal_effective_config.yaml",
+      "bytes": 14679,
+      "sha256": "2982a8f42e42900155518e896443fb7caadeb61a5637fca3cbb29d7a33b55149"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/actual_trainer.yaml",
+      "bytes": 520,
+      "sha256": "d70dde335b7072bffaf9b36cb72c1ffd800e784bded9aef406ff68074af9f17d"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/actual_train_loader.json",
+      "bytes": 20298,
+      "sha256": "e2af8db7d7be9ba5f15934730e8d2cfc4c7f7cc86ac449fa2f71ed6f42b73752"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/structure.json",
+      "bytes": 15893,
+      "sha256": "d8b4fa8087bb8627ea57600c1b7e3a8c12fd77f046cd4ef19a18c4c22ffa42fa"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/optimizer_updates.jsonl",
+      "bytes": 10281779,
+      "sha256": "dd93802029913218234fc6d9f654c29eee8d67d00a0f51f65ef4eead22fb02c0"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/validations.jsonl",
+      "bytes": 42008,
+      "sha256": "07b509fc9fc0943f94ca22d73cd214981b30c60d509200200ce5107e9aa12929"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/csv/version_0/metrics.csv",
+      "bytes": 8492,
+      "sha256": "768734abbdc1c7a1117601be94773a599ca7bf5304bbdc6228bf61d37f6c2cf3"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/best_checkpoint_load.json",
+      "bytes": 777,
+      "sha256": "5cda55441aad232bab4a0658aef14b56ebf13dafaeaf0135e169575498a18707"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/latest_recovery.json",
+      "bytes": 1592,
+      "sha256": "5b66ec8de2b5ac3846a04e5fa626b2e71cede5909a335adc8f588ead5f587c11"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/recovery.json",
+      "bytes": 1592,
+      "sha256": "5b66ec8de2b5ac3846a04e5fa626b2e71cede5909a335adc8f588ead5f587c11"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/recovery/training-final-1/python_numpy_rng.json",
+      "bytes": 22406,
+      "sha256": "bbf8c8f1385441c579d53447ae736f5d77fb89bcf3532a19d513a4f18f7eb0e4"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/test/metrics.json",
+      "bytes": 433,
+      "sha256": "5c110119dcc78d0f9082c8b1005a653b078856eafb7dfab87a65b330a1e900df"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-formal-20261015/collected-9a64fd31218d0c68/gf-20261015-toys-mlp-formal-v1/output/test/recomputed_metrics.json",
+      "bytes": 740,
+      "sha256": "63477f9323e0b6637bbea2f22e2c662eb0e1b87452a101da05dd1f12c3776346"
+    }
+  ],
+  "reviewer_program": {
+    "path": "/home/addaswsw/recommend-support/grid-formal-20261015/mlp-results-review/review_source_final.py",
+    "bytes": 20010,
+    "sha256": "ae217939157f2fa98fb3a8050faf7cbdb9972f56596d7a67359df8fb8fa61171"
+  }
+}

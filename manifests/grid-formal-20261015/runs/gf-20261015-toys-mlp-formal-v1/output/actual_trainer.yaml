@@ -1,0 +1,20 @@
+_target_: lightning.pytorch.trainer.Trainer
+default_root_dir: /home/bwwu/grid-audits/sid-extensions-p0/jobs/gf-20261015-toys-mlp-formal-v1/output
+min_steps: 1
+max_steps: 320000
+max_epochs: 10
+accelerator: gpu
+devices: 1
+num_nodes: 1
+precision: 32-true
+log_every_n_steps: 100
+val_check_interval: 4800
+deterministic: false
+accumulate_grad_batches: 48
+profiler:
+  _target_: lightning.pytorch.profilers.PassThroughProfiler
+strategy: auto
+sync_batchnorm: true
+num_sanity_val_steps: 0
+min_epochs: 0
+enable_progress_bar: false

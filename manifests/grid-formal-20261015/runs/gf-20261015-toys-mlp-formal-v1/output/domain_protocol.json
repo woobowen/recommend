@@ -1,0 +1,43 @@
+{
+  "domain": "toys",
+  "source_config": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-shuffle-mlp-preflight-20261015/assets/9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd/toys-source.yaml",
+    "sha256": "9050b9de5ae2ed55ab68b6c653f968c04bf3272c17a1129c8f101498747799fd"
+  },
+  "initialization": "scratch; no preflight checkpoint or optimizer state reused",
+  "raw_microbatch": 32,
+  "accumulate_grad_batches": 48,
+  "validation_interval_microbatches": 4800,
+  "collate_window_cap": 512,
+  "source_worker_protocol_preserved": {
+    "train": {
+      "num_workers": 8,
+      "timeout": 60,
+      "persistent_workers": true
+    },
+    "val": {
+      "num_workers": 8,
+      "timeout": 60,
+      "persistent_workers": false
+    },
+    "test": {
+      "num_workers": 8,
+      "timeout": 60,
+      "persistent_workers": false
+    }
+  },
+  "explicit_approved_overlay": {
+    "trainer.accumulate_grad_batches": {
+      "source": 16,
+      "approved": 48
+    },
+    "trainer.val_check_interval": {
+      "source": 1600,
+      "approved": 4800
+    }
+  },
+  "max_steps": 320000,
+  "max_epochs": 10,
+  "hard_cap_hours_including_full_test": 12.0,
+  "safety_allowance_is_not_training_endpoint": true
+}

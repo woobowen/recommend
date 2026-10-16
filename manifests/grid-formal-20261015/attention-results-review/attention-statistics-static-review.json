@@ -1,0 +1,33 @@
+{
+  "status": "INDEPENDENT_ATTENTION_STATISTICS_STATIC_PASS",
+  "reviewer_task": "/root/implementation_review",
+  "reviewed_at_utc": "2026-10-16T06:36:20.295952+00:00",
+  "script": {
+    "path": "/home/addaswsw/recommend-support/grid-formal-20261015/attention_statistics.py",
+    "bytes": 7079,
+    "sha256": "88d81e05bbaccc04d684fc019d54bb11611526d21624f81fc58f67a29d378d66"
+  },
+  "scope": "Static directed review of new CPU descriptive statistics script; actual all-condition output remains pending and is not pre-signed. Applies to current four batches x eight fixed sample capture with selected_indices 0..7.",
+  "line_evidence": [
+    {
+      "lines": "33-45",
+      "conclusion": "Cosine and centered Pearson use original visible raw values. Constant Pearson is null. TV=half L1 and JS=mean KL to midpoint use per-visible-row probability normalization, with natural log and zero-mass KL terms excluded. Positive visible row sums are required before pair metrics; no raw matrix/image mutation."
+    },
+    {
+      "lines": "48-81",
+      "conclusion": "Formal complete 32 captures, exactly four verified bundles, each eight selected keys, both final Top1 and local-first paths, all six unordered query pairs and mask==1 positions including visible special tokens. Raw finite/nonnegative values and normalization/masked mass are reported; no cross-condition column comparison."
+    },
+    {
+      "lines": "84-101",
+      "conclusion": "All 192 pair rows per path are retained; summary min/median/mean/max and per-user mean cosine determine lowest three cases with stable key tie order. No similarity acceptance threshold or invariance claim."
+    },
+    {
+      "lines": "109-126",
+      "conclusion": "Refuses output overwrite, records exact input record/NPZ/script/plan identities and invokes only CPU array/persistence routines. Original matrices and raw heatmap transforms are unchanged; JSON forbids NaN."
+    }
+  ],
+  "scientific_scope": "Descriptive within-condition query-row comparisons only, not a threshold test or proof of order invariance; probability normalization is confined to statistical TV/JS computation and is explicitly distinct from raw plotted attention.",
+  "actual_statistics_output_review": "PENDING until all source captures and root-produced output are available",
+  "new_model_or_GPU_calls": 0,
+  "research_source_or_Git_edits": 0
+}
