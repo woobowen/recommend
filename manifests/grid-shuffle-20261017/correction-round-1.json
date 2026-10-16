@@ -1,0 +1,16 @@
+{
+  "round": 1,
+  "status": "CORRECTION_PENDING_NONAUTHOR_REVIEW",
+  "root_cause": "New preflight entry omitted bind_source before instantiate; common.load_config imports src resolver before its own bind_source. Original formal main had the bootstrap call.",
+  "failed_job_ids": [
+    "gs-20261017-sports-b-preflight-v1",
+    "gs-20261017-toys-b-preflight-v1"
+  ],
+  "minimal_change": "Call existing bind_source(spec[route]) before instantiate in new preflight only.",
+  "research_change": false,
+  "other_infrastructure_observation": "First Toys deploy tried reading shared snapshot during Sports extraction; no Toys job had been accepted, exact same ID retried after snapshot verified; future submissions serialized.",
+  "GPU_checks_planned_seconds_round0": 600,
+  "max_total_GPU_check_request_seconds": 1800,
+  "next_check_budget_seconds_per_domain": 300,
+  "prior_Beauty_corrections_unchanged": true
+}

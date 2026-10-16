@@ -9,7 +9,7 @@ import sys
 import time
 
 from experiments.beauty_extensions.common import (
-    REPO, instantiate, load_checkpoint, sha256, write_json,
+    REPO, bind_source, instantiate, load_checkpoint, sha256, write_json,
 )
 
 
@@ -32,6 +32,7 @@ def main():
         'spec_sha256':sha256(args.spec),'code_identity':deployment,
         'physical_gpu':os.environ['CUDA_VISIBLE_DEVICES'],'engineering_only':True})
     start=time.monotonic()
+    bind_source(spec['route'])
     cfg,model,dm=instantiate(spec,output,checkpoint=True)
     from omegaconf import OmegaConf
     from experiments.beauty_extensions.cli import check_data,smoke,clear_runtime
