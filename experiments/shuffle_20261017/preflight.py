@@ -41,7 +41,13 @@ def main():
     from experiments.preflight_20261015.run import tensor_tree_digest
     import torch
     saved=OmegaConf.load(output/'effective_config.yaml')
-    assert OmegaConf.to_container(saved,resolve=True)==OmegaConf.to_container(cfg,resolve=True)
+    assert OmegaConf.to_container(saved,resolve=False)==OmegaConf.to_container(cfg,resolve=False)
+    # Match common.instantiate's actually used configuration sections. The
+    # preserved root also contains unused Hydra metadata such as ${now:...};
+    # resolving it outside Hydra would add unrelated runtime dependencies.
+    for name in ('model','trainer','optim','eval'):
+        assert OmegaConf.to_container(saved[name],resolve=True)==OmegaConf.to_container(cfg[name],resolve=True)
+    assert OmegaConf.to_container(saved.data_loading.datamodule,resolve=True)==OmegaConf.to_container(cfg.data_loading.datamodule,resolve=True)
     assert cfg.model.top_k_for_generation==10
     batches=check_data(spec,cfg,output)
     prepare_fixed_attention_samples(cfg,spec,output)
