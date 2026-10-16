@@ -2,7 +2,7 @@
 
 ## A. 总体状态
 
-**COMPLETED_PENDING_DELIVERY_REVIEW**：六组Beauty正式全量评测、三域MLP正式成果、八组新增fixed32注意力以及本轮3072条CPU描述统计和非作者实际复算均完成。GitHub发布/回读、最终ZIP及其独立验包尚待本轮后续步骤；此处不预签这些检查。
+**READY_FOR_REVIEW（最终交付成立时状态，条件见I）**：六组Beauty正式全量评测、三域MLP正式成果、八组新增fixed32注意力及3072条CPU统计、非作者统计与整合审核、C1内容提交实际GitHub回读和交付候选包独立验包均已完成。C2元数据提交的实际远端回读及最终封装的独立验包不在本文预签；其真实SHA/回读/验包记录在包外回执与最终回复中绑定。仅在这两项实际PASS后最终交付状态才生效；最终网页GPT二次审核仍待进行。
 
 本轮没有训练、全量测试、注意力重采或GPU模型调用。GPT已审阶段快照仅覆盖旧成果；新统计和最终发布仍等待网页二次审核。原进行中报告已在支持目录 finalization-input-history-20261017 保留原文。
 
@@ -90,13 +90,13 @@ best checkpoint真实路径、大小、SHA、配置/SID及原训练source均见 
 
 ## F. 非作者审核及修正边界
 
-新统计实际由 `/root/implementation_review` 使用原独立程序从原始NPZ逐条复算（1e−12是计算一致性容差，不是相似性阈值），并核对fixed32、source/export、6-head均值和原件hash；详见 [runtime](attention-results-review/attention-statistics-runtime-review.json) 与 [来源复核](attention-results-review/attention-statistics-source-provenance-review-20261017.json)。旧技术审核不是本轮新采集。最终整合报告审核与包审核将另存真实回执，不预签。
+新统计实际由 `/root/implementation_review` 使用原独立程序从原始NPZ逐条复算（1e−12是计算一致性容差，不是相似性阈值），并核对fixed32、source/export、6-head均值和原件hash；详见 [runtime](attention-results-review/attention-statistics-runtime-review.json) 与 [来源复核](attention-results-review/attention-statistics-source-provenance-review-20261017.json)。旧技术审核不是本轮新采集。最终整合非作者审核已通过，见 [整合审核](final-integration-review-20261017.json)；已发布内容候选包也通过真实非作者验包，见 [交付候选审核](final-delivery-independent-review-20261017.json)。最终元数据封装的包外独立回执随最终交付提供；不把旧审核冒充新执行。
 
 原三轮3/3及一次限定resolve=False配置例外不重置；本轮新研究修正0轮、GPU预算0、新安装0，无新增研究方案。失败原件与既有CPU回归保持历史身份。
 
 ## G. 发布与交付状态
 
-`wbw`是唯一发布目标。本文内容提交后的实际完整SHA、远端关键文件回读以及最终ZIP大小/成员/SHA在支持目录最终发布/交付回执中记录，避免自身SHA自引用。当前发布与最终验包仍待执行，不将未执行检查写成PASS。
+`wbw`是唯一发布目标。本文内容提交后的实际完整SHA、远端关键文件回读以及最终ZIP大小/成员/SHA在支持目录最终发布/交付回执中记录，避免自身SHA自引用。已完成内容提交 `574baa497f2eec59c77311621695c9d52fd6a2f5` 的正常发布与六个关键文件完整正文回读，见 [实际回读](publication-readback-content-20261017.json)。本次最终元数据HEAD和最终封装的实测身份在包外回执给出；不改变已审研究数字/源码、统计输出或原件。
 
 ## H. GPT审核包
 
@@ -104,4 +104,4 @@ GPT_UPLOAD_REQUIRED: YES。旧阶段ZIP b3627f…保留；新最终ZIP须包含�
 
 ## I. 当前剩余必做项
 
-正式研究结果与CPU统计已验收；本轮尚须完成最终整合非作者审核、正常发布/实际回读和最终ZIP独立校验。完成后再将当前回执更新为READY_FOR_REVIEW，网页最终二次审核仍待进行。
+研究计算与内容审核已闭合。本次READY的最终交付成立条件为包外C2远端回读及最终ZIP独立验包均实际PASS；条件满足后本次授权范围无剩余必做项。研究结论的外推限制仍保留，等待网页GPT对新统计与最终交付二次审核；不自动开展Parallel、扩域或新增训练。
