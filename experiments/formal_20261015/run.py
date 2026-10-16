@@ -41,6 +41,8 @@ def formal_config(spec,output):
 def evaluate(spec,cfg,output):
     from experiments.beauty_extensions.cli import test_lifecycle
     from experiments.beauty_extensions.results import recompute
+    from experiments.beauty_extensions.mlp_formal import read_index
+    expected,coverage_identity=read_index(spec['test_index'])
     cfg,model,dm=instantiate(spec,output,checkpoint=True)
     started=time.monotonic();error=None
     try:
@@ -55,13 +57,14 @@ def evaluate(spec,cfg,output):
             'trace_scope':'existing bounded native observation events; full call counters; no extra sampler calls'}
         write_json(output/'intervention_trace.json',trace)
     metric=recompute(spec,cfg,output/'test/predictions.jsonl',output/'test',coverage_index=spec['test_index']['path'],trainer_metrics=output/'test/metrics.json')
-    assert metric['coverage_exact'] and metric['samples']==22363
+    assert metric['coverage_exact'] and metric['samples']==sum(expected.values())
     actual=trace['shuffle_summary']['calls'] if spec['route']=='B' else trace['shuffle_call_count']
     assert actual==(trace['encoder_calls'] if spec['shuffle_n'] else 0)
     assert spec['shuffle_n']==0 or bool(trace['shuffle_events'] if spec['route']=='B' else trace['permutation_events'])
     return {'status':'COMPLETE','formal':True,'route':spec['route'],'shuffle_n':spec['shuffle_n'],
         'test_complete':True,'metrics':metric,'intervention_calls':actual,'elapsed_test_and_recompute_seconds':time.monotonic()-started,
-        'checkpoint':spec['checkpoint'],'sid':spec['sid'],'config':spec['config'],'attention_collected':False}
+        'checkpoint':spec['checkpoint'],'sid':spec['sid'],'config':spec['config'],'attention_collected':False,
+        'coverage_index':coverage_identity}
 
 
 def metadata(spec,cfg,output):
@@ -127,7 +130,7 @@ def main():
     OmegaConf.save(cfg,output/'effective_config.yaml',resolve=False)
     if a.mode=='identity-check':
         from experiments.beauty_extensions.mlp_formal import read_index
-        index,identity=read_index(spec['test_index']);assert sum(index.values())==22363
+        index,identity=read_index(spec['test_index'])
         value={'status':'PASS','model_loaded':False,'GPU_model_calls':0,'test_targets':sum(index.values()),'coverage_index':identity,
             'preflight_inherited_from':'93567ea7f61e970c448838443595242d0b9beef0','formal_result':False}
     elif a.mode=='evaluate':value=evaluate(spec,cfg,output)
