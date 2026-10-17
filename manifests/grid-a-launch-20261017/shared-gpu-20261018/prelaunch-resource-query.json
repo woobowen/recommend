@@ -1,0 +1,4 @@
+{
+  "code": "import importlib.util,json,time,subprocess,datetime,pathlib,shutil\nsource='/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/cdfd283823bd1928/experiments/launch_20261017/queue.py'\nspec=importlib.util.spec_from_file_location('resource_read_only',source);q=importlib.util.module_from_spec(spec);spec.loader.exec_module(q)\nsamples=[]\nfor n in range(3):\n samples.append({'at':q.utc(),'cards':q.gpu_snapshot()})\n if n<2:time.sleep(2)\npmon=subprocess.run(['nvidia-smi','pmon','-c','3','-s','um'],text=True,capture_output=True,timeout=10)\nprint(json.dumps({'samples':samples,'pmon':{'stdout':pmon.stdout,'stderr':pmon.stderr,'exit':pmon.returncode},'new_outer_job_directory_exists':pathlib.Path('/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-shared-queue-v1').exists(),'disk':{p:shutil.disk_usage(p)._asdict() for p in ('/home/bwwu','/data/bwwu')}}))",
+  "mode": "read-only resource observations; no training or submission"
+}
