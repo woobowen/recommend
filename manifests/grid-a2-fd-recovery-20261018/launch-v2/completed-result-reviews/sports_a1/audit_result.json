@@ -1,0 +1,980 @@
+{
+  "reviewer": "/root/sports_a1_result_audit",
+  "status": "SPORTS_A1_NONAUTHOR_REVIEW_PASS",
+  "scope": "Sports A1 only; independent nonauthor CPU/read-only audit of original artifacts; no GPU or inference rerun",
+  "executed_at_utc": "2026-10-17T18:48:00.963861+00:00",
+  "direct_checkpoint_and_sid": {
+    "status": "PASS",
+    "GPU_or_forward_calls": 0,
+    "cuda_visible_devices": "",
+    "checkpoint": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/checkpoints/checkpoint_epoch=000_step=008600.ckpt",
+      "sha256": "0f2ce9ab6155eb9864363c32972d9f9ab775291e58f392b56e1db9901f3cb6f1",
+      "bytes": 161660262,
+      "score": 0.03368166834115982,
+      "monitor": "val/recall@5",
+      "mode": "max"
+    },
+    "strict_load": {
+      "missing": [],
+      "unexpected": [],
+      "state_tensors": 178,
+      "keys_shapes_values_exact": true,
+      "all_finite": true,
+      "global_step": 8600,
+      "epoch": 0,
+      "independent_sid_tables": true,
+      "table_shapes": [
+        [
+          1024,
+          128
+        ],
+        [
+          1024,
+          128
+        ]
+      ],
+      "embedded_sid_exact": true
+    },
+    "best_callbacks": {
+      "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}": {
+        "wait_count": 0,
+        "stopped_epoch": 0,
+        "best_score": 0.03368166834115982,
+        "patience": 10
+      },
+      "ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}": {
+        "best_model_score": 0.03368166834115982,
+        "best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/checkpoints/checkpoint_epoch=000_step=008600.ckpt",
+        "last_model_path": ""
+      }
+    },
+    "best_optimizer": {
+      "state_count": 128,
+      "minimum_step": 8600,
+      "maximum_step": 8600,
+      "param_groups": [
+        {
+          "lr": 0.001,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0001,
+          "amsgrad": false,
+          "maximize": false,
+          "foreach": null,
+          "capturable": false,
+          "differentiable": false,
+          "fused": null
+        }
+      ]
+    },
+    "sid": {
+      "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+      "sha256": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293",
+      "bytes": 588597,
+      "shape": [
+        4,
+        18357
+      ],
+      "dtype": "torch.int64"
+    },
+    "final_checkpoint": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/recovery/training-final/full-state.ckpt",
+      "sha256": "e67d76fdde33c228f82fde8dfa39579b698c7bfa0b793ddcc2dfe75f9a0fbc5d",
+      "bytes": 161653734,
+      "global_step": 9600,
+      "epoch": 1,
+      "callbacks": {
+        "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}": {
+          "wait_count": 10,
+          "stopped_epoch": 0,
+          "best_score": 0.03368166834115982,
+          "patience": 10
+        },
+        "ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}": {
+          "best_model_score": 0.03368166834115982,
+          "best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/checkpoints/checkpoint_epoch=000_step=008600.ckpt",
+          "last_model_path": ""
+        }
+      },
+      "optimizer": {
+        "state_count": 128,
+        "minimum_step": 9600,
+        "maximum_step": 9600,
+        "param_groups": [
+          {
+            "lr": 0.001,
+            "betas": [
+              0.9,
+              0.999
+            ],
+            "eps": 1e-08,
+            "weight_decay": 0.0001,
+            "amsgrad": false,
+            "maximize": false,
+            "foreach": null,
+            "capturable": false,
+            "differentiable": false,
+            "fused": null
+          }
+        ]
+      }
+    },
+    "deployment": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/DEPLOYMENT.json",
+      "sha256": "c0a28e5852891b147c00918fd209f056cfe56642b61349d58e01e56eddfc3866",
+      "source_commit": "b44399926c98369191c2ff5c2425377c8c07d3c8",
+      "snapshot_sha256": "b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+      "files": [
+        {
+          "path": "experiments/launch_20261017/train.py",
+          "sha256": "30511e6800e5502aa45eea9ebe0dc26a5ac98b6b08dada4c35ba453d813dde86",
+          "bytes": 38557
+        },
+        {
+          "path": "experiments/launch_20261017/run.py",
+          "sha256": "95f407d075bfa6f7d8eac709b0665c0c7e32074dc6ef1f3b7c515d29f6afd132",
+          "bytes": 11388
+        },
+        {
+          "path": "experiments/launch_20261017/statistics.py",
+          "sha256": "0bf2cb1af2d3b3eb3f83f513dd70b7603e038b59e6563d14c857ba99300e3eb1",
+          "bytes": 7054
+        },
+        {
+          "path": "experiments/beauty_extensions/common.py",
+          "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+          "bytes": 12084
+        },
+        {
+          "path": "experiments/beauty_extensions/author/models.py",
+          "sha256": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4",
+          "bytes": 15033
+        },
+        {
+          "path": "experiments/beauty_extensions/attention/records.py",
+          "sha256": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+          "bytes": 8911
+        },
+        {
+          "path": "experiments/beauty_extensions/attention/capture.py",
+          "sha256": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+          "bytes": 21164
+        },
+        {
+          "path": "experiments/beauty_extensions/attention/plot.py",
+          "sha256": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+          "bytes": 4378
+        },
+        {
+          "path": "experiments/formal_20261015/run.py",
+          "sha256": "1e7e47195e2bb955ecff2fb8690daa63a8757bc13ffaea7a6e7bcd81cb34c3de",
+          "bytes": 9963
+        },
+        {
+          "path": "references/wmh-original/GRID/src/components/eval_metrics.py",
+          "sha256": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+          "bytes": 15241
+        },
+        {
+          "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+          "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+          "bytes": 61418
+        }
+      ]
+    }
+  },
+  "source_git_byte_comparison": [
+    {
+      "path": "experiments/launch_20261017/train.py",
+      "sha256": "30511e6800e5502aa45eea9ebe0dc26a5ac98b6b08dada4c35ba453d813dde86",
+      "bytes": 38557
+    },
+    {
+      "path": "experiments/launch_20261017/run.py",
+      "sha256": "95f407d075bfa6f7d8eac709b0665c0c7e32074dc6ef1f3b7c515d29f6afd132",
+      "bytes": 11388
+    },
+    {
+      "path": "experiments/launch_20261017/statistics.py",
+      "sha256": "0bf2cb1af2d3b3eb3f83f513dd70b7603e038b59e6563d14c857ba99300e3eb1",
+      "bytes": 7054
+    },
+    {
+      "path": "experiments/beauty_extensions/common.py",
+      "sha256": "d0417ce7171d852d493d07fe1716f577be00edaa3b07ebdf2a5001b59254da91",
+      "bytes": 12084
+    },
+    {
+      "path": "experiments/beauty_extensions/author/models.py",
+      "sha256": "e542b7e6538445959c7687bb375a8299505d25be90275585b82af49ba9effbf4",
+      "bytes": 15033
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/records.py",
+      "sha256": "1dfc6a9f627615a428d14fe76c816ecb01164f87a3595ea93d939feda58adeb1",
+      "bytes": 8911
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/capture.py",
+      "sha256": "38bb840f19329d176bbab80b63022b1c8450f76ab91279909a0939c2a6af8113",
+      "bytes": 21164
+    },
+    {
+      "path": "experiments/beauty_extensions/attention/plot.py",
+      "sha256": "23daf8a334dea5f41c43ab69949fc5d830aa21f6e7091700e85d4c46745010d9",
+      "bytes": 4378
+    },
+    {
+      "path": "experiments/formal_20261015/run.py",
+      "sha256": "1e7e47195e2bb955ecff2fb8690daa63a8757bc13ffaea7a6e7bcd81cb34c3de",
+      "bytes": 9963
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/eval_metrics.py",
+      "sha256": "36881aa8349b07c83eda8e0d45ea495ee213f5022403ecb7490b3fab7e66c5bb",
+      "bytes": 15241
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py",
+      "sha256": "e03082ad87bfc842c05467580fc479eff4345c6a0d18c5b2f7faf320d4f96c80",
+      "bytes": 61418
+    }
+  ],
+  "terminal_jobs": [
+    {
+      "job_id": "ga-20261017-sportsa1-attention-0-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "started_at": "2026-10-17T17:31:21.136046+00:00",
+      "ended_at": "2026-10-17T17:32:18.300542+00:00",
+      "wall_seconds": 57.164496,
+      "GPU_requested_seconds": 57.164496,
+      "budget_group": "sports-a1-eval-attention",
+      "timeout_seconds": 1200,
+      "scientific_capture_version": "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+      "controller_commit": "6dafbc7215b58a2dbb47905a687c930caecf7b44"
+    },
+    {
+      "job_id": "ga-20261017-sportsa1-attention-3-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "started_at": "2026-10-17T17:31:25.645712+00:00",
+      "ended_at": "2026-10-17T17:32:23.626722+00:00",
+      "wall_seconds": 57.98101,
+      "GPU_requested_seconds": 57.98101,
+      "budget_group": "sports-a1-eval-attention",
+      "timeout_seconds": 1200,
+      "scientific_capture_version": "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+      "controller_commit": "6dafbc7215b58a2dbb47905a687c930caecf7b44"
+    },
+    {
+      "job_id": "ga-20261017-sportsa1-attention-4-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "started_at": "2026-10-17T17:32:36.533993+00:00",
+      "ended_at": "2026-10-17T17:33:30.075197+00:00",
+      "wall_seconds": 53.541204,
+      "GPU_requested_seconds": 53.541204,
+      "budget_group": "sports-a1-eval-attention",
+      "timeout_seconds": 1200,
+      "scientific_capture_version": "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+      "controller_commit": "6dafbc7215b58a2dbb47905a687c930caecf7b44"
+    },
+    {
+      "job_id": "ga-20261017-sportsa1-eval-0-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "started_at": "2026-10-17T17:16:51.486131+00:00",
+      "ended_at": "2026-10-17T17:21:16.339776+00:00",
+      "wall_seconds": 264.853645,
+      "GPU_requested_seconds": 264.853645,
+      "budget_group": "sports-a1-eval-attention",
+      "timeout_seconds": 1800,
+      "scientific_capture_version": "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+      "controller_commit": null
+    },
+    {
+      "job_id": "ga-20261017-sportsa1-eval-3-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "started_at": "2026-10-17T17:26:14.849965+00:00",
+      "ended_at": "2026-10-17T17:30:30.862874+00:00",
+      "wall_seconds": 256.012909,
+      "GPU_requested_seconds": 256.012909,
+      "budget_group": "sports-a1-eval-attention",
+      "timeout_seconds": 1800,
+      "scientific_capture_version": "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+      "controller_commit": "6dafbc7215b58a2dbb47905a687c930caecf7b44"
+    },
+    {
+      "job_id": "ga-20261017-sportsa1-eval-4-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "started_at": "2026-10-17T17:26:19.320690+00:00",
+      "ended_at": "2026-10-17T17:30:44.611928+00:00",
+      "wall_seconds": 265.291238,
+      "GPU_requested_seconds": 265.291238,
+      "budget_group": "sports-a1-eval-attention",
+      "timeout_seconds": 1800,
+      "scientific_capture_version": "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+      "controller_commit": "6dafbc7215b58a2dbb47905a687c930caecf7b44"
+    },
+    {
+      "job_id": "ga-20261017-sportsa1-gpu-gate-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "started_at": "2026-10-17T05:28:36.052664+00:00",
+      "ended_at": "2026-10-17T05:29:01.010076+00:00",
+      "wall_seconds": 24.957412,
+      "GPU_requested_seconds": 24.957412,
+      "budget_group": "engineering",
+      "timeout_seconds": 900,
+      "scientific_capture_version": "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+      "controller_commit": null
+    },
+    {
+      "job_id": "ga-20261017-sportsa1-metadata-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "started_at": "2026-10-17T05:20:28.500012+00:00",
+      "ended_at": "2026-10-17T05:21:18.831958+00:00",
+      "wall_seconds": 50.331946,
+      "GPU_requested_seconds": 0.0,
+      "budget_group": null,
+      "timeout_seconds": 1800,
+      "scientific_capture_version": "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+      "controller_commit": null
+    },
+    {
+      "job_id": "ga-20261017-sportsa1-stats-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "started_at": "2026-10-17T17:33:43.469509+00:00",
+      "ended_at": "2026-10-17T17:33:44.694528+00:00",
+      "wall_seconds": 1.225019,
+      "GPU_requested_seconds": 0.0,
+      "budget_group": null,
+      "timeout_seconds": 600,
+      "scientific_capture_version": "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+      "controller_commit": "6dafbc7215b58a2dbb47905a687c930caecf7b44"
+    },
+    {
+      "job_id": "ga-20261017-sportsa1-train-v1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "started_at": "2026-10-17T05:42:10.341290+00:00",
+      "ended_at": "2026-10-17T16:35:26.502824+00:00",
+      "wall_seconds": 39196.161534,
+      "GPU_requested_seconds": 39196.161534,
+      "budget_group": "sports-a1-train",
+      "timeout_seconds": 43200,
+      "scientific_capture_version": "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+      "controller_commit": null
+    }
+  ],
+  "original_artifacts_rehashed": 274,
+  "resource_use": {
+    "training_requested_seconds": 39196.161534,
+    "eval_attention_requested_seconds": 954.8445019999999,
+    "training_limit_seconds": 43200,
+    "eval_attention_group_limit_seconds": 9000
+  },
+  "training": {
+    "status": "PASS",
+    "optimizer_update_events": 9600,
+    "microbatches": 153600,
+    "expanded_windows": 47892458,
+    "all_96_full_validations_exact": true,
+    "full_validation_targets_each": 35598,
+    "best_step": 8600,
+    "final_step": 9600,
+    "best_validation_recall5": 0.03368166834115982,
+    "last_ten_nonimproving_steps": [
+      8700,
+      8800,
+      8900,
+      9000,
+      9100,
+      9200,
+      9300,
+      9400,
+      9500,
+      9600
+    ],
+    "loss_range": [
+      0.2413761019706726,
+      1.4542584419250488
+    ],
+    "watched_gradient_ranges": {
+      "encoder_sid": [
+        5.997400512569584e-05,
+        0.8951684832572937
+      ],
+      "decoder_sid": [
+        0.0022029641550034285,
+        1.2753551006317139
+      ],
+      "decoder_bos": [
+        0.0014890400925651193,
+        0.4734092354774475
+      ],
+      "encoder_transformer": [
+        0.0003017909184563905,
+        0.4463190734386444
+      ],
+      "decoder_transformer": [
+        0.009877903386950493,
+        0.2960207760334015
+      ]
+    },
+    "scratch_initialization_basis": [
+      "fixed source _fresh_model hydra instantiation; trainer.fit ckpt_path=None",
+      "actual empty Adam state at training start",
+      "best/final Adam step counts 8600/9600; trainable distinct encoder/decoder SID tables"
+    ],
+    "protocol": {
+      "optimizer": {
+        "_target_": "torch.optim.Adam",
+        "_partial_": true,
+        "lr": 0.001,
+        "weight_decay": 0.0001
+      },
+      "scheduler": null
+    },
+    "unverified_historical_fact": "No claim to recover the author historical Sports recommender weights."
+  },
+  "evaluation": {
+    "status": "PASS",
+    "conditions": {
+      "0": {
+        "original_metrics": {
+          "ndcg@5": 0.01716848649084568,
+          "ndcg@10": 0.020962946116924286,
+          "recall@5": 0.02581605687737465,
+          "recall@10": 0.037586379796266556
+        },
+        "independent_float64_metrics": {
+          "recall@5": 0.02581605708185853,
+          "ndcg@5": 0.01716848577933049,
+          "recall@10": 0.03758638125737401,
+          "ndcg@10": 0.02096294664378304
+        },
+        "maximum_original_delta": 1.4611074572457028e-09,
+        "samples": 35598,
+        "coverage_exact": true,
+        "invalid_candidates": 20,
+        "duplicate_candidates": 0,
+        "rows_with_score_ties": 1,
+        "relevant_score_ties": 0,
+        "out_of_order_score_rows": 0,
+        "prediction_sha256": "84d75ee341ca2212825bf13d501ef1ad06ac27feb36bd096d5df7db8a01266f9",
+        "intervention_calls": 0
+      },
+      "3": {
+        "original_metrics": {
+          "ndcg@5": 0.013000275008380413,
+          "ndcg@10": 0.016144171357154846,
+          "recall@5": 0.019748300313949585,
+          "recall@10": 0.02949603833258152
+        },
+        "independent_float64_metrics": {
+          "recall@5": 0.01974830046631833,
+          "ndcg@5": 0.013000274341104318,
+          "recall@10": 0.029496039103320413,
+          "ndcg@10": 0.016144169961836666
+        },
+        "maximum_original_delta": 1.3953181804415848e-09,
+        "samples": 35598,
+        "coverage_exact": true,
+        "invalid_candidates": 10,
+        "duplicate_candidates": 0,
+        "rows_with_score_ties": 0,
+        "relevant_score_ties": 0,
+        "out_of_order_score_rows": 0,
+        "prediction_sha256": "06b8604a89bb4e81888a297a5670a93117575dd3189dfc564e5ab53f71254b62",
+        "intervention_calls": 8900
+      },
+      "4": {
+        "original_metrics": {
+          "ndcg@5": 0.012999451719224453,
+          "ndcg@10": 0.016071824356913567,
+          "recall@5": 0.01986066624522209,
+          "recall@10": 0.029299398884177208
+        },
+        "independent_float64_metrics": {
+          "recall@5": 0.019860666329569076,
+          "ndcg@5": 0.012999451574841399,
+          "recall@10": 0.029299398842631608,
+          "ndcg@10": 0.016071824244809067
+        },
+        "maximum_original_delta": 1.443830541236757e-10,
+        "samples": 35598,
+        "coverage_exact": true,
+        "invalid_candidates": 14,
+        "duplicate_candidates": 0,
+        "rows_with_score_ties": 1,
+        "relevant_score_ties": 0,
+        "out_of_order_score_rows": 0,
+        "prediction_sha256": "5e7194e863a1f92fa850dd8605cdcce86aef3555ab6c2e973c66ff557c0d84ed",
+        "intervention_calls": 8900
+      }
+    },
+    "candidate_treatment": "all original ten candidates retained, no filtering, completion, rescoring or rewriting",
+    "independent_metric_implementation": "four-code exact match and native descending score order; float64 arithmetic compared with original FP32 results within 1e-7",
+    "effective_config_differences": {
+      "3": [
+        [
+          ".model.shuffle_embedding_on_test",
+          false,
+          true
+        ],
+        [
+          ".trainer.default_root_dir",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-eval-0-v1/output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-eval-3-v1/output"
+        ]
+      ],
+      "4": [
+        [
+          ".model.shuffle_embedding_on_test",
+          false,
+          true
+        ],
+        [
+          ".model.hierarchies_to_shuffle",
+          3,
+          4
+        ],
+        [
+          ".trainer.default_root_dir",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-eval-0-v1/output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-eval-4-v1/output"
+        ]
+      ]
+    }
+  },
+  "paired_predictions": {
+    "3": {
+      "samples": 35598,
+      "top1_changed": 21075,
+      "top10_order_changed": 35547,
+      "top10_set_changed": 35030,
+      "hit5_0to0": 34522,
+      "hit10_0to0": 34026,
+      "rank_improved_with_miss_as_11": 431,
+      "rank_worsened_with_miss_as_11": 829,
+      "rank_unchanged_with_miss_as_11": 34338,
+      "hit10_0to1": 234,
+      "hit5_1to1": 546,
+      "hit10_1to1": 816,
+      "hit5_0to1": 157,
+      "hit5_1to0": 373,
+      "hit10_1to0": 522,
+      "top10_overlap_mean": 4.809230855666049,
+      "both_hit10_rank_delta_shuffle_minus_normal": {
+        "n": 816,
+        "min": -7.0,
+        "median": 0.0,
+        "mean": 0.3590686274509804,
+        "max": 8.0
+      },
+      "per_user_file": "paired_normal_shuffle3.jsonl",
+      "per_user_sha256": "f08e996718fac136758c8b8a62bf5ab0ee53515264de7e626570568c1c698b6d"
+    },
+    "4": {
+      "samples": 35598,
+      "top1_changed": 21024,
+      "top10_order_changed": 35587,
+      "top10_set_changed": 35152,
+      "hit5_0to0": 34525,
+      "hit10_0to0": 34040,
+      "rank_improved_with_miss_as_11": 437,
+      "rank_worsened_with_miss_as_11": 796,
+      "rank_unchanged_with_miss_as_11": 34365,
+      "hit10_0to1": 220,
+      "hit5_1to1": 553,
+      "hit10_1to1": 823,
+      "hit5_1to0": 366,
+      "hit10_1to0": 515,
+      "hit5_0to1": 154,
+      "top10_overlap_mean": 4.889825271082645,
+      "both_hit10_rank_delta_shuffle_minus_normal": {
+        "n": 823,
+        "min": -7.0,
+        "median": 0.0,
+        "mean": 0.24787363304981774,
+        "max": 9.0
+      },
+      "per_user_file": "paired_normal_shuffle4.jsonl",
+      "per_user_sha256": "b8c7aa4aa18df2559b0f415bb6e8e5fa78acb99fe7218b5a0dcd7a9be5beda37"
+    }
+  },
+  "attention": {
+    "status": "PASS",
+    "fixed32_sha256": "3935dc0c085ad6134d6b5da50c387ee59e7b990e7d21226afcc3655ad211f565",
+    "cohort_split": "evaluation",
+    "conditions": {
+      "0": {
+        "status": "PASS",
+        "samples": 32,
+        "batches": 4,
+        "arrays_npz": 4,
+        "raw_head_query_shape": [
+          8,
+          4,
+          6,
+          150
+        ],
+        "pngs": 32,
+        "all_sample_cohort_and_targets_exact": true,
+        "parent_prefix_comparisons": 1280,
+        "position_map_checks": 4800,
+        "masked_mass_max": 0.0,
+        "raw_head_rowsum_error_max": 2.384185791015625e-07,
+        "statistic_rows": 384,
+        "maximum_independent_statistic_delta": 5.551115123125783e-16,
+        "summary": {
+          "final_top1_cross": {
+            "cosine": {
+              "n": 192,
+              "min": 0.1749295626256934,
+              "median": 0.8960990567048055,
+              "mean": 0.8428064768383091,
+              "max": 0.9999909248011578
+            },
+            "pearson": {
+              "n": 192,
+              "min": -0.7821516385217789,
+              "median": 0.2731894276110546,
+              "mean": 0.2775765080930986,
+              "max": 0.9999839624080678
+            },
+            "total_variation": {
+              "n": 192,
+              "min": 0.002125252186305354,
+              "median": 0.17526521701915299,
+              "mean": 0.1731003474143142,
+              "max": 0.6807427481009674
+            },
+            "jensen_shannon_nats": {
+              "n": 192,
+              "min": 0.00010347906239543579,
+              "median": 0.043219272283756036,
+              "mean": 0.050504576359742,
+              "max": 0.3077563670333317
+            }
+          },
+          "local_first_cross": {
+            "cosine": {
+              "n": 192,
+              "min": 0.1749295626256934,
+              "median": 0.8960990567048055,
+              "mean": 0.8452552440589521,
+              "max": 0.9999862987869895
+            },
+            "pearson": {
+              "n": 192,
+              "min": -0.7821516385217789,
+              "median": 0.25620239563013625,
+              "mean": 0.28325039612895614,
+              "max": 0.9999408040607709
+            },
+            "total_variation": {
+              "n": 192,
+              "min": 0.0023078454833444038,
+              "median": 0.1699820501712744,
+              "mean": 0.1686934210577252,
+              "max": 0.6807427481009674
+            },
+            "jensen_shannon_nats": {
+              "n": 192,
+              "min": 5.491182937753185e-05,
+              "median": 0.04103499465614458,
+              "mean": 0.04767893562087094,
+              "max": 0.3077563670333317
+            }
+          }
+        }
+      },
+      "3": {
+        "status": "PASS",
+        "samples": 32,
+        "batches": 4,
+        "arrays_npz": 4,
+        "raw_head_query_shape": [
+          8,
+          4,
+          6,
+          150
+        ],
+        "pngs": 32,
+        "all_sample_cohort_and_targets_exact": true,
+        "parent_prefix_comparisons": 1280,
+        "position_map_checks": 4800,
+        "masked_mass_max": 0.0,
+        "raw_head_rowsum_error_max": 1.1920928955078125e-07,
+        "statistic_rows": 384,
+        "maximum_independent_statistic_delta": 6.661338147750939e-16,
+        "summary": {
+          "final_top1_cross": {
+            "cosine": {
+              "n": 192,
+              "min": 0.12539420799878487,
+              "median": 0.8388543834955398,
+              "mean": 0.7579198020324194,
+              "max": 0.999939643188402
+            },
+            "pearson": {
+              "n": 192,
+              "min": -0.8231488692119239,
+              "median": 0.3891441301848565,
+              "mean": 0.358939588124892,
+              "max": 0.9999075285050959
+            },
+            "total_variation": {
+              "n": 192,
+              "min": 0.0035952292040766992,
+              "median": 0.1934402984269265,
+              "mean": 0.21825140154725794,
+              "max": 0.7141182673925829
+            },
+            "jensen_shannon_nats": {
+              "n": 192,
+              "min": 0.0002185162750913954,
+              "median": 0.05423420607838124,
+              "mean": 0.06911665952572031,
+              "max": 0.3333609801918008
+            }
+          },
+          "local_first_cross": {
+            "cosine": {
+              "n": 192,
+              "min": 0.12539420799878487,
+              "median": 0.8505992271646055,
+              "mean": 0.7606530025274081,
+              "max": 0.9999281323123438
+            },
+            "pearson": {
+              "n": 192,
+              "min": -0.8231488692119239,
+              "median": 0.3430321268038723,
+              "mean": 0.3513422536286421,
+              "max": 0.9999075285050959
+            },
+            "total_variation": {
+              "n": 192,
+              "min": 0.0035952292040766992,
+              "median": 0.18815999622246743,
+              "mean": 0.21874576833066173,
+              "max": 0.7141182673925829
+            },
+            "jensen_shannon_nats": {
+              "n": 192,
+              "min": 0.00034919984193051,
+              "median": 0.052952828950829325,
+              "mean": 0.06858199589649505,
+              "max": 0.3333609801918008
+            }
+          }
+        }
+      },
+      "4": {
+        "status": "PASS",
+        "samples": 32,
+        "batches": 4,
+        "arrays_npz": 4,
+        "raw_head_query_shape": [
+          8,
+          4,
+          6,
+          150
+        ],
+        "pngs": 32,
+        "all_sample_cohort_and_targets_exact": true,
+        "parent_prefix_comparisons": 1280,
+        "position_map_checks": 4800,
+        "masked_mass_max": 0.0,
+        "raw_head_rowsum_error_max": 2.384185791015625e-07,
+        "statistic_rows": 384,
+        "maximum_independent_statistic_delta": 4.440892098500626e-16,
+        "summary": {
+          "final_top1_cross": {
+            "cosine": {
+              "n": 192,
+              "min": 0.1577127943559135,
+              "median": 0.8841123254087468,
+              "mean": 0.7867102307242865,
+              "max": 0.9999504244333047
+            },
+            "pearson": {
+              "n": 192,
+              "min": -0.8887274863008041,
+              "median": 0.4244665591356448,
+              "mean": 0.40016696055429174,
+              "max": 0.9998677525708856
+            },
+            "total_variation": {
+              "n": 192,
+              "min": 0.003328734022485155,
+              "median": 0.17704074959778393,
+              "mean": 0.20717299683469145,
+              "max": 0.7024497577832249
+            },
+            "jensen_shannon_nats": {
+              "n": 192,
+              "min": 0.0003184574669599066,
+              "median": 0.044549488512226995,
+              "mean": 0.06424100288674911,
+              "max": 0.31759259642031357
+            }
+          },
+          "local_first_cross": {
+            "cosine": {
+              "n": 192,
+              "min": 0.1577127943559135,
+              "median": 0.8863460538472759,
+              "mean": 0.7818208066115312,
+              "max": 0.9999135277729798
+            },
+            "pearson": {
+              "n": 192,
+              "min": -0.9641460986656711,
+              "median": 0.40818815668801334,
+              "mean": 0.38617797580231944,
+              "max": 0.9998677525708856
+            },
+            "total_variation": {
+              "n": 192,
+              "min": 0.005816477212577084,
+              "median": 0.1694818000961528,
+              "mean": 0.20747548944589625,
+              "max": 0.7024497577832249
+            },
+            "jensen_shannon_nats": {
+              "n": 192,
+              "min": 0.00023793455784157103,
+              "median": 0.041671225132481365,
+              "mean": 0.06402932511503581,
+              "max": 0.31759259642031357
+            }
+          }
+        }
+      }
+    },
+    "PNG_validation_scope": "All 96 original PNG files decoded and matched original SHA/size, source NPZ record and each unscaled matrix maximum via receipts; plot source checked to use raw paired matrices. Visually inspected batch00/sample000 for each condition. No claim of bit-exact re-render across matplotlib versions.",
+    "statistical_claim_limit": "descriptive query-pair similarities for 32 fixed users per condition; no strict invariance or unused-prefix claim",
+    "testing_prediction_identity_limit": "Fixed32 uses original evaluation histories/targets, while formal full metrics use testing histories/targets; same user keys do not make these equal input rows."
+  },
+  "bounded_raw_cohort_and_current_processes": {
+    "status": "PASS",
+    "captured_epoch": 1792262860.0861862,
+    "cohort_split": "evaluation",
+    "raw_records_scanned": 32,
+    "distinct_users": 32,
+    "cohort_input_target_mask_exact_to_raw": true,
+    "sources": [
+      {
+        "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports/evaluation/partition_26.tfrecord.gz",
+        "bytes": 3880749,
+        "mtime_ns": 1791911679926857077
+      }
+    ],
+    "no_full_dataset_scan": true,
+    "GPU_or_model_calls": 0,
+    "process_checks": [
+      {
+        "job_id": "ga-20261017-sportsa1-metadata-v1",
+        "verified_live_original_processes": [],
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261017-sportsa1-gpu-gate-v1",
+        "verified_live_original_processes": [],
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261017-sportsa1-train-v1",
+        "verified_live_original_processes": [],
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261017-sportsa1-eval-0-v1",
+        "verified_live_original_processes": [],
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261017-sportsa1-eval-3-v1",
+        "verified_live_original_processes": [],
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261017-sportsa1-eval-4-v1",
+        "verified_live_original_processes": [],
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261017-sportsa1-attention-0-v1",
+        "verified_live_original_processes": [],
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261017-sportsa1-attention-3-v1",
+        "verified_live_original_processes": [],
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261017-sportsa1-attention-4-v1",
+        "verified_live_original_processes": [],
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261017-sportsa1-stats-v1",
+        "verified_live_original_processes": [],
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true
+      }
+    ]
+  },
+  "limitations": [
+    "A1 new dual-table training using Qwen SID is method reproduction, not recovery of the author historical Sports weights.",
+    "Toys producer provenance is outside this A1 audit; parent must retain separate disclosure.",
+    "Metadata target indices are original production artifacts. Their exact coverage is independently checked here; TFRecord decoding is repeated only for the bounded 32 original evaluation records, not all training/evaluation/testing rows.",
+    "Fresh initialization proven from frozen byte-matched code, effective spec and original empty optimizer trace; no original full random initial parameter dump exists.",
+    "No GPU evaluation/training re-execution; the independent strict checkpoint load uses CPU only.",
+    "Original run log/trace capture is not a second physical measurement of past GPU scheduling."
+  ],
+  "audit_tooling_note": "Reviewer first run assumed hidden lookup indices also kept hierarchy offsets. Direct original code inspection showed the existing mask multiplies them to zero. Corrected this review assertion only; no source, artifact, research condition or run changed."
+}

@@ -1,0 +1,94 @@
+{
+  "status": "SUPPLEMENTAL_LIFECYCLE_SOURCE_REVIEW_PASS",
+  "main_report": {
+    "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/toys/toys-independent-review.json",
+    "bytes": 120674,
+    "sha256": "993d42bf999413307713764599a9cdf54f20f97d64288c31694868a83c057eed"
+  },
+  "source_and_asset_identity": {
+    "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/toys/scientific-source-server-bindings.json",
+    "bytes": 5719,
+    "sha256": "eeb553ac86331716b3d40fc1045963c409ad2f758a13e73efcdfc7f8e239a12a"
+  },
+  "checks": [
+    {
+      "workflow": "toys5300",
+      "shuffle_n": 0,
+      "GPU_lifecycle_batches": 2427,
+      "batch_size": 8,
+      "test_workers": 8,
+      "all_input_and_model_devices_dtypes_verified": true,
+      "cleanup_flags_pass": true,
+      "observer_OFF_ON_checks_pass": 4,
+      "observer_not_same_as_shuffle_OFF_ON": true
+    },
+    {
+      "workflow": "toys5300",
+      "shuffle_n": 3,
+      "GPU_lifecycle_batches": 2427,
+      "batch_size": 8,
+      "test_workers": 8,
+      "all_input_and_model_devices_dtypes_verified": true,
+      "cleanup_flags_pass": true,
+      "observer_OFF_ON_checks_pass": 4,
+      "observer_not_same_as_shuffle_OFF_ON": true
+    },
+    {
+      "workflow": "toys5300",
+      "shuffle_n": 4,
+      "GPU_lifecycle_batches": 2427,
+      "batch_size": 8,
+      "test_workers": 8,
+      "all_input_and_model_devices_dtypes_verified": true,
+      "cleanup_flags_pass": true,
+      "observer_OFF_ON_checks_pass": 4,
+      "observer_not_same_as_shuffle_OFF_ON": true
+    },
+    {
+      "workflow": "toys5000",
+      "shuffle_n": 0,
+      "GPU_lifecycle_batches": 2427,
+      "batch_size": 8,
+      "test_workers": 8,
+      "all_input_and_model_devices_dtypes_verified": true,
+      "cleanup_flags_pass": true,
+      "observer_OFF_ON_checks_pass": 4,
+      "observer_not_same_as_shuffle_OFF_ON": true
+    },
+    {
+      "workflow": "toys5000",
+      "shuffle_n": 3,
+      "GPU_lifecycle_batches": 2427,
+      "batch_size": 8,
+      "test_workers": 8,
+      "all_input_and_model_devices_dtypes_verified": true,
+      "cleanup_flags_pass": true,
+      "observer_OFF_ON_checks_pass": 4,
+      "observer_not_same_as_shuffle_OFF_ON": true
+    },
+    {
+      "workflow": "toys5000",
+      "shuffle_n": 4,
+      "GPU_lifecycle_batches": 2427,
+      "batch_size": 8,
+      "test_workers": 8,
+      "all_input_and_model_devices_dtypes_verified": true,
+      "cleanup_flags_pass": true,
+      "observer_OFF_ON_checks_pass": 4,
+      "observer_not_same_as_shuffle_OFF_ON": true
+    }
+  ],
+  "visual_inspection": [
+    "toys5300 Normal batch-00 sample-000",
+    "toys5000 Shuffle4 batch-00 sample-000"
+  ],
+  "visual_findings": "Both panels show four target-code rows, untrimmed 150 encoder slots, common color scale, visible mask; masked positions match blank/padding region.",
+  "reviewer": "/root/toys_result_audit",
+  "new_packages_installed": [],
+  "config_mutations": [],
+  "research_correction_rounds": 0,
+  "audit_development_notes": [
+    "The audit parser initially expected an explicit should_check_prefix field; the preserved source constructor defaults it to False. No experiment setting changed.",
+    "The working tree launch/run.py changed during A2 work. All 13 inspected source files were therefore fetched directly from the frozen old b620 snapshot and matched its deployment manifest. No old run identity was rewritten."
+  ]
+}

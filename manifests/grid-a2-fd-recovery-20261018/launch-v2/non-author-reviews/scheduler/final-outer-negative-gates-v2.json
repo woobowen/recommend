@@ -1,0 +1,58 @@
+{
+  "status": "ACTUAL_OUTER_PRECISE_CPU_LONG_WALL_GATES_PASS",
+  "source": "actual deployed outer runner verify; in-memory request/config mutations only",
+  "checks": [
+    {
+      "case": "actual_long_CPU_controller_request",
+      "status": "PASS"
+    },
+    {
+      "case": "nonempty_CUDA_VISIBLE_DEVICES",
+      "status": "EXPECTED_REJECTION",
+      "exception_type": "AssertionError"
+    },
+    {
+      "case": "unlisted_long_controller_ID",
+      "status": "EXPECTED_REJECTION",
+      "exception_type": "AssertionError"
+    },
+    {
+      "case": "wrong_module",
+      "status": "EXPECTED_REJECTION",
+      "exception_type": "AssertionError"
+    },
+    {
+      "case": "extra_argv",
+      "status": "EXPECTED_REJECTION",
+      "exception_type": "AssertionError"
+    },
+    {
+      "case": "wall_above_bound_config",
+      "status": "EXPECTED_REJECTION",
+      "exception_type": "AssertionError"
+    },
+    {
+      "case": "config_input_hash_changed",
+      "status": "EXPECTED_REJECTION",
+      "exception_type": "AssertionError"
+    },
+    {
+      "case": "changed_original_deadline",
+      "status": "EXPECTED_REJECTION",
+      "exception_type": "AssertionError"
+    },
+    {
+      "case": "config_queue_id_mismatch",
+      "status": "EXPECTED_REJECTION",
+      "exception_type": "AssertionError"
+    },
+    {
+      "case": "config_snapshot_root_mismatch",
+      "status": "EXPECTED_REJECTION",
+      "exception_type": "AssertionError"
+    }
+  ],
+  "filesystem_mutations": 0,
+  "submit_calls": 0,
+  "GPU_or_model_calls": 0
+}

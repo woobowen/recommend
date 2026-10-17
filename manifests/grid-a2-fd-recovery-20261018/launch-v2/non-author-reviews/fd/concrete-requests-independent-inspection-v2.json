@@ -1,0 +1,738 @@
+{
+  "reviewer": "/root/fd_repair_reviewer",
+  "at": "2026-10-17T19:05:13.210301+00:00",
+  "status": "CONCRETE_REQUESTS_AND_CURRENT_LIVE_ADMISSION_PASS",
+  "queue_config_sha256": "ddc231d33f739ec8f5282c60ad2a670023d057f8609bcca1d9526129fdfb711e",
+  "supervisor_request_file_sha256": "291f9eb6376022b2ac1a94236b87cfb66a4b30d1859eca4597c47f587489d3f1",
+  "supervisor_canonical_request_sha256": "310b51b2ae494b2b2a819313b954fac416a0efbf7ace6e45b1e9703a535d9b18",
+  "source_commit": "85b77f5e2a5b497fdc1f620649ba488fc783a245",
+  "snapshot": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/22286966cd544773",
+  "launch_review_sha256": "a97efd983b4c0994f4e8b97d7b8addd1f521d2d68423e2ef986bab57d62c8530",
+  "stage_request_checks": [
+    {
+      "stage": "sportsa2-quantize",
+      "job_id": "ga-20261018-sportsa2-quantize-fd-recovery-v1",
+      "kind": "rkmeans",
+      "wall_seconds": 3420,
+      "gpu_uuids": [
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+      ],
+      "GPU_candidates": [],
+      "depends_on": [],
+      "spec_sha256": "c1f835dcba32a2d4e5080eb65d637648e7a5bb96d421ae462768218e3380e7cd",
+      "wrapped_request_sha256": "ef4ebee7acbdf2badaa7f887f6eaae1e80e6cf99c5f7e2a3cc4154d5962b33b1",
+      "expected_argv_env_inputs_scope_checked": true
+    },
+    {
+      "stage": "sportsa2-metadata",
+      "job_id": "ga-20261018-sportsa2-metadata-fd-recovery-v1",
+      "kind": "cpu",
+      "wall_seconds": 1800,
+      "gpu_uuids": [],
+      "GPU_candidates": [],
+      "depends_on": [
+        "sportsa2-quantize"
+      ],
+      "spec_sha256": "218417c2305779eacd2147871d46ace10a382fb9cbd3665aaf0101a850166a5a",
+      "wrapped_request_sha256": "d03f43bb4b1074c48d9673e200b85080725f482b0a07d939e8db72fd1067c397",
+      "expected_argv_env_inputs_scope_checked": true
+    },
+    {
+      "stage": "sportsa2-gpu-gate",
+      "job_id": "ga-20261018-sportsa2-gpu-gate-fd-recovery-v1",
+      "kind": "admission",
+      "wall_seconds": 900,
+      "gpu_uuids": [
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+      ],
+      "GPU_candidates": [
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+      ],
+      "depends_on": [
+        "sportsa2-metadata"
+      ],
+      "spec_sha256": "fbd3211187baabc0d50072426833bf6751b5743cd15eb2e69daa6a561cede008",
+      "wrapped_request_sha256": "bb9f0d5bde40de218f56dea2a3a971e2bf3c8a5e11869abc1ba335927bc20428",
+      "expected_argv_env_inputs_scope_checked": true
+    },
+    {
+      "stage": "sportsa2-train",
+      "job_id": "ga-20261018-sportsa2-train-fd-recovery-v1",
+      "kind": "train",
+      "wall_seconds": 43200,
+      "gpu_uuids": [
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+      ],
+      "GPU_candidates": [
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+      ],
+      "depends_on": [
+        "sportsa2-gpu-gate"
+      ],
+      "spec_sha256": "dd365c101f0f28b72e646e1d2815e1e7353718d88cb7a282c26af35a4b425dd7",
+      "wrapped_request_sha256": "9a9cf1ad2c8599a4b0031ff5e1e913cc585caf8f8d228bb5925a96e6517d7c30",
+      "expected_argv_env_inputs_scope_checked": true
+    },
+    {
+      "stage": "sportsa2-eval-0",
+      "job_id": "ga-20261018-sportsa2-eval-0-fd-recovery-v1",
+      "kind": "evaluate",
+      "wall_seconds": 1800,
+      "gpu_uuids": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+      ],
+      "GPU_candidates": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+      ],
+      "depends_on": [
+        "sportsa2-train"
+      ],
+      "spec_sha256": "443616b632e90029bc7f9e07d80a92251c2db50bcac1932805ee61b8db71a71a",
+      "wrapped_request_sha256": "f02c12dddf492cbefcc605d58f66f4c4fb13ea51ecada31b9893c8a367366a0b",
+      "expected_argv_env_inputs_scope_checked": true
+    },
+    {
+      "stage": "sportsa2-eval-3",
+      "job_id": "ga-20261018-sportsa2-eval-3-fd-recovery-v1",
+      "kind": "evaluate",
+      "wall_seconds": 1800,
+      "gpu_uuids": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+      ],
+      "GPU_candidates": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+      ],
+      "depends_on": [
+        "sportsa2-train"
+      ],
+      "spec_sha256": "d9d6754e4302bd8c761c832c8741ab9c82be9085918bab7c8a1af64280e6b768",
+      "wrapped_request_sha256": "063c5048e9f3271284f0ce6e5871ddda630422c9e6de1ce85299da232456c8f4",
+      "expected_argv_env_inputs_scope_checked": true
+    },
+    {
+      "stage": "sportsa2-eval-4",
+      "job_id": "ga-20261018-sportsa2-eval-4-fd-recovery-v1",
+      "kind": "evaluate",
+      "wall_seconds": 1800,
+      "gpu_uuids": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+      ],
+      "GPU_candidates": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+      ],
+      "depends_on": [
+        "sportsa2-train"
+      ],
+      "spec_sha256": "d8bb4161205c8864b1fc75083dfa3df18ede2dacef4b7ab29480457b1cb91c8a",
+      "wrapped_request_sha256": "116d94617a1a4edb26ecf2e660348a2980390540e079830a969e3b682b1a7c08",
+      "expected_argv_env_inputs_scope_checked": true
+    },
+    {
+      "stage": "sportsa2-attention-0",
+      "job_id": "ga-20261018-sportsa2-attention-0-fd-recovery-v1",
+      "kind": "attention",
+      "wall_seconds": 1200,
+      "gpu_uuids": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+      ],
+      "GPU_candidates": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+      ],
+      "depends_on": [
+        "sportsa2-eval-0",
+        "sportsa2-eval-3",
+        "sportsa2-eval-4"
+      ],
+      "spec_sha256": "2d59673c88cec6a35f1e162ba7fbd67d81b775bcba69a21cefea9fa98701ee54",
+      "wrapped_request_sha256": "5a264ac84c1dd2570eec1ff3cfd6054eab0e26abfceb251fdb229b1fbcc827b0",
+      "expected_argv_env_inputs_scope_checked": true
+    },
+    {
+      "stage": "sportsa2-attention-3",
+      "job_id": "ga-20261018-sportsa2-attention-3-fd-recovery-v1",
+      "kind": "attention",
+      "wall_seconds": 1200,
+      "gpu_uuids": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+      ],
+      "GPU_candidates": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+      ],
+      "depends_on": [
+        "sportsa2-eval-0",
+        "sportsa2-eval-3",
+        "sportsa2-eval-4"
+      ],
+      "spec_sha256": "a8968911a30a3639c5d44a5f5c856032eb4f4601ea8a0d75639f713af3f4941c",
+      "wrapped_request_sha256": "5c341907aedc63ae659195b259f1fcc7e31eba13946565bff9f793a50b8c6964",
+      "expected_argv_env_inputs_scope_checked": true
+    },
+    {
+      "stage": "sportsa2-attention-4",
+      "job_id": "ga-20261018-sportsa2-attention-4-fd-recovery-v1",
+      "kind": "attention",
+      "wall_seconds": 1200,
+      "gpu_uuids": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+      ],
+      "GPU_candidates": [
+        "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+      ],
+      "depends_on": [
+        "sportsa2-eval-0",
+        "sportsa2-eval-3",
+        "sportsa2-eval-4"
+      ],
+      "spec_sha256": "1a3a36e473227013f5fb9108d1a7c64c9089414f7c39e46913bbe7dd93a57d52",
+      "wrapped_request_sha256": "8d9650bb92ea70a9d10fb79dbc54af7abb828e69fc9d52c6204eb867f0be37c6",
+      "expected_argv_env_inputs_scope_checked": true
+    },
+    {
+      "stage": "sportsa2-stats",
+      "job_id": "ga-20261018-sportsa2-stats-fd-recovery-v1",
+      "kind": "cpu",
+      "wall_seconds": 600,
+      "gpu_uuids": [],
+      "GPU_candidates": [],
+      "depends_on": [
+        "sportsa2-attention-0",
+        "sportsa2-attention-3",
+        "sportsa2-attention-4"
+      ],
+      "spec_sha256": "5e85fb0058299f8b4a28f1be4f99ad474f5c6e82c042fa2fa6f78f87c2d153d4",
+      "wrapped_request_sha256": "7464f7277b84d762f8b0c3db832887e62fe3ae8d8fb92f4e73154e2e2ff02afb",
+      "expected_argv_env_inputs_scope_checked": true
+    }
+  ],
+  "GPU_reserved_seconds": 59940,
+  "reserved_by_group": {
+    "toys-5300": 0,
+    "toys-5000": 0,
+    "sports-a1-train": 0,
+    "sports-a2-encode": 0,
+    "sports-a2-rkmeans": 6840,
+    "sports-a2-train": 43200,
+    "sports-a1-eval-attention": 0,
+    "sports-a2-eval-attention": 9000,
+    "engineering": 900
+  },
+  "remote_independent_check": {
+    "at": "2026-10-17T19:05:17.165997+00:00",
+    "read_only_no_submission": true,
+    "input_hash_checks": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/queue-config-ddc231d33f739ec8.json",
+        "bytes": 67525,
+        "sha256": "ddc231d33f739ec8f5282c60ad2a670023d057f8609bcca1d9526129fdfb711e"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/22286966cd544773/DEPLOYMENT.json",
+        "bytes": 49552,
+        "sha256": "05defd537c43f410493ea3e1d312d1daae8d1d7c9317353e09036c6ff8b439b3"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/plan.json",
+        "bytes": 27581,
+        "sha256": "fd71360e9c08f7728b6867112867f8388df673fe086fd2e103d1822f4c055ea6"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/shared-20261018/compiled/queue-config-d5528b2c185395bd.json",
+        "bytes": 144688,
+        "sha256": "d5528b2c185395bd5c77803189f97a756891dd2f5db4d798fbb5f2e1deb04df3"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/shared-20261018/compiled/queue-state/queue-status.json",
+        "bytes": 356348,
+        "sha256": "d6f508901c87624507dfa5fcd12786ef9b214b1d65623d315ecc1d7d69d70b73"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-config-0de997aad986903d.json",
+        "bytes": 137025,
+        "sha256": "0de997aad986903da46bb3865c5d26507d45b0944d13b46c48da9c01c272997a"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-state/queue-status.json",
+        "bytes": 263632,
+        "sha256": "1b6c0c534192d127be120eac10fad0bfce0ceca8273f84473c3bdd4c3ca05ad5"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-queue-v1/request.json",
+        "bytes": 2439,
+        "sha256": "9c7dc0ef930a7dcf421d8ea173dd8ee3992bf8d6fd2ad6e9d9fb291455f80acf"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-queue-v1/status.json",
+        "bytes": 2444,
+        "sha256": "b5a40ebab881757fca447f4c1ca4a1ce7a17ddb1e612c89fd5e7e604f285fde2"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-shared-queue-v1/request.json",
+        "bytes": 2629,
+        "sha256": "25f63f546c972302a04848209789a8e3ec59d2a6b5fb79eab3c92838274575c0"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-shared-queue-v1/status.json",
+        "bytes": 2444,
+        "sha256": "15ba0a5b4af2ae8d0cfba099216bf8ded64b1e0b69c54814ba45323af35d310d"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/request.json",
+        "bytes": 3344,
+        "sha256": "03ee3ccddea2ec4cc6214baebb5e717013312d99407f3e15eaf084a30c26ea17"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/status.json",
+        "bytes": 4612,
+        "sha256": "edf52397cd63b68caa1bde6bc9e9aefee8f7daf5b170fb79cf74fef96bb686c0"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-quantize-v1/request.json",
+        "bytes": 3747,
+        "sha256": "c34269c9af8ed43b507a0d05efa247637d75dcaf10c08d754065bb5808de2fb5"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-quantize-v1/status.json",
+        "bytes": 18407,
+        "sha256": "822da72c7587b0d3bb00d21e13fe395a0853c4b360c29b90bdd940dca7610bf4"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-a2-fd-cpu-equivalence-v1/request.json",
+        "bytes": 1969,
+        "sha256": "025257f88327a0d871749cf8acea27f05d0fa4e627257c0eed86e53a0882275b"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-a2-fd-cpu-equivalence-v1/status.json",
+        "bytes": 10101,
+        "sha256": "aa3427f4f7784bdceedd677ccbfa2ba06d74b352bbf0e26269707b3e9d297b44"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-a2-fd-cpu-equivalence-v1/output/equivalence.json",
+        "bytes": 83782,
+        "sha256": "f4342a052204557321f645d202f18542c844910d2870efc99e7d862cca98bb7e"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-a2-fd-cpu-equivalence-v1/output/config-equivalence.json",
+        "bytes": 22726,
+        "sha256": "63efde7ac24e9dae9b8a22dbeff761b03b22b4c8ae518667d3b73a0d9baa798e"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/launch-review.json",
+        "bytes": 33627,
+        "sha256": "a97efd983b4c0994f4e8b97d7b8addd1f521d2d68423e2ef986bab57d62c8530"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-quantize.json",
+        "bytes": 1909,
+        "sha256": "c1f835dcba32a2d4e5080eb65d637648e7a5bb96d421ae462768218e3380e7cd"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml",
+        "bytes": 12269,
+        "sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/22286966cd544773/experiments/launch_20261017/training_protocol.json",
+        "bytes": 2542,
+        "sha256": "9d3823c2ada022f479fb3b8ac4e36bc2cf09267281db5b15edc636bec0a45c7e"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+        "bytes": 37596356,
+        "sha256": "b137cb8a006a8b950396524ed5be3bbc91d711b36068d671c01da3742d7cda6f"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/22286966cd544773/experiments/launch_20261017/queue.py",
+        "bytes": 34111,
+        "sha256": "31eb9cffbce1a34f778d141b321b8ddeab08d04bb68416f2a09ea7ddf792a6c4"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/22286966cd544773/experiments/a2_fd_recovery_20261018/controller.py",
+        "bytes": 8635,
+        "sha256": "814f43a3043bae142453f92f10a48acf897e1641e5def6976c2c541ef7834bed"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-metadata.json",
+        "bytes": 1632,
+        "sha256": "218417c2305779eacd2147871d46ace10a382fb9cbd3665aaf0101a850166a5a"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-gpu-gate.json",
+        "bytes": 1732,
+        "sha256": "fbd3211187baabc0d50072426833bf6751b5743cd15eb2e69daa6a561cede008"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-train.json",
+        "bytes": 1717,
+        "sha256": "dd365c101f0f28b72e646e1d2815e1e7353718d88cb7a282c26af35a4b425dd7"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-eval-0.json",
+        "bytes": 1814,
+        "sha256": "443616b632e90029bc7f9e07d80a92251c2db50bcac1932805ee61b8db71a71a"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-eval-3.json",
+        "bytes": 1814,
+        "sha256": "d9d6754e4302bd8c761c832c8741ab9c82be9085918bab7c8a1af64280e6b768"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-eval-4.json",
+        "bytes": 1814,
+        "sha256": "d8bb4161205c8864b1fc75083dfa3df18ede2dacef4b7ab29480457b1cb91c8a"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-attention-0.json",
+        "bytes": 1879,
+        "sha256": "2d59673c88cec6a35f1e162ba7fbd67d81b775bcba69a21cefea9fa98701ee54"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-attention-3.json",
+        "bytes": 1879,
+        "sha256": "a8968911a30a3639c5d44a5f5c856032eb4f4601ea8a0d75639f713af3f4941c"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-attention-4.json",
+        "bytes": 1879,
+        "sha256": "1a3a36e473227013f5fb9108d1a7c64c9089414f7c39e46913bbe7dd93a57d52"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/22286966cd544773/specs/sportsa2-stats.json",
+        "bytes": 1884,
+        "sha256": "5e85fb0058299f8b4a28f1be4f99ad474f5c6e82c042fa2fa6f78f87c2d153d4"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/runners/a2-queue-runner-6c64871028aec213.py",
+        "bytes": 25280,
+        "sha256": "6c64871028aec213646083d92b09a5b9b3a4571f73053ecc1bcb7719b1807767"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/runners/a2-queue-runner-6c64871028aec213.py.deployment.json",
+        "bytes": 172,
+        "sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/c31d2d3eaaafbd18/queue-config-45fa8698ab605332.json",
+        "bytes": 67525,
+        "sha256": "45fa8698ab605332b992ae37ce097acf67328777bf06900116304b789fafe3ac"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/runners/queue-runner-6f762b9a06a0ec20.py",
+        "bytes": 24518,
+        "sha256": "6f762b9a06a0ec2007d79136f34d78d9875a23f377dd44c710672d986983474e"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-quantize-v1/work.log",
+        "bytes": 22760,
+        "sha256": "8d4351404436d903c10ddf7015278e127cc654e2df6d03febfa5b6aebbf207d9"
+      }
+    ],
+    "source_commit": "85b77f5e2a5b497fdc1f620649ba488fc783a245",
+    "summary": {
+      "reserved_gpu_seconds": 59940,
+      "groups": {
+        "toys-5300": 0,
+        "toys-5000": 0,
+        "sports-a1-train": 0,
+        "sports-a2-encode": 0,
+        "sports-a2-rkmeans": 6840,
+        "sports-a2-train": 43200,
+        "sports-a1-eval-attention": 0,
+        "sports-a2-eval-attention": 9000,
+        "engineering": 900
+      },
+      "sports_a2_reserved_cpu_seconds": 2400,
+      "stages": 11
+    },
+    "historical_accounting": {
+      "used_gpu_request_seconds": 41837.856885,
+      "groups": {
+        "toys-5300": 612.7648869999999,
+        "toys-5000": 593.6006870000001,
+        "sports-a1-train": 39196.161534,
+        "sports-a2-encode": 178.435799,
+        "sports-a2-rkmeans": 302.049476,
+        "sports-a2-train": 0.0,
+        "sports-a1-eval-attention": 954.8445019999999,
+        "sports-a2-eval-attention": 0.0,
+        "engineering": 0.0
+      },
+      "remaining_gpu_request_seconds": 101203.143115
+    },
+    "selected_old_job_queries": [
+      {
+        "job_id": "ga-20261017-queue-v1",
+        "status": "FAILED",
+        "exit_code": 2,
+        "supervisor_alive": false,
+        "worker_alive": false,
+        "workgroup_live": false,
+        "worker_may_be_live": false,
+        "cleanup_verified": true,
+        "request_sha256": "359d11104c308059f6c616d408db15c0184c2929d34cf34d735a36184b065ac3"
+      },
+      {
+        "job_id": "ga-20261018-shared-queue-v1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "supervisor_alive": false,
+        "worker_alive": false,
+        "workgroup_live": false,
+        "worker_may_be_live": false,
+        "cleanup_verified": true,
+        "request_sha256": "8b01fb1db6f4d64bf7238b4432b40daeffbcadc286740aa3a6605081a5d96c50"
+      },
+      {
+        "job_id": "ga-20261017-sportsa2-encode-v1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "supervisor_alive": false,
+        "worker_alive": false,
+        "workgroup_live": false,
+        "worker_may_be_live": false,
+        "cleanup_verified": true,
+        "request_sha256": "a1c12abedd7415729cea059598b065fe4df6960c51171dd792727f76ce045050"
+      },
+      {
+        "job_id": "ga-20261017-sportsa2-quantize-v1",
+        "status": "INTERRUPTED",
+        "exit_code": -9,
+        "supervisor_alive": false,
+        "worker_alive": false,
+        "workgroup_live": false,
+        "worker_may_be_live": false,
+        "cleanup_verified": true,
+        "request_sha256": "c21ba6393d21b61355a1c9de6eeece48aaccbc2b8598a51ecc9b5c0c5e8299cf"
+      },
+      {
+        "job_id": "ga-20261018-a2-fd-cpu-equivalence-v1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "supervisor_alive": false,
+        "worker_alive": false,
+        "workgroup_live": false,
+        "worker_may_be_live": false,
+        "cleanup_verified": true,
+        "request_sha256": "b33b83bd225a8c1d46f5cb04542f25b6bb1d0266040058cb96210937ab561b48"
+      }
+    ],
+    "new_ID_conflicts": [],
+    "supervisor_request_accepted_by_readonly_verify": true,
+    "quantizer_prelaunch_resource_ok": true,
+    "quantizer_resource_samples": [
+      {
+        "at": "2026-10-17T19:05:12.787809+00:00",
+        "gpus": {
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+            "index": 0,
+            "name": "NVIDIA GeForce RTX 4090",
+            "total_mib": 24564,
+            "used_mib": 518,
+            "free_mib": 23566,
+            "utilization": 7,
+            "processes": [
+              {
+                "pid": 1995214,
+                "process_name": "/data/yychen/headpatch-www2027-autoresearch/runtime_sparse_intersection_v1/bin/python",
+                "used_mib": 508
+              }
+            ]
+          },
+          "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+            "index": 1,
+            "name": "NVIDIA GeForce RTX 4090",
+            "total_mib": 24564,
+            "used_mib": 1,
+            "free_mib": 24082,
+            "utilization": 0,
+            "processes": []
+          }
+        },
+        "resource_assessment": {
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+            "ok": true,
+            "free_mib": 23566,
+            "owned_mib": 0,
+            "remaining_estimated_peak_mib": 6144,
+            "required_free_mib": 8192,
+            "peer_memory_mib": 508,
+            "utilization_percent": 7,
+            "load_ok": true,
+            "reason": "stage peak plus headroom and sampled load; no fixed peer-memory cap",
+            "observed_memory_swing_mib": 0,
+            "sampled_required_free_mib": 8192
+          },
+          "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+            "ok": true,
+            "free_mib": 24082,
+            "owned_mib": 0,
+            "remaining_estimated_peak_mib": 6144,
+            "required_free_mib": 8192,
+            "peer_memory_mib": 0,
+            "utilization_percent": 0,
+            "load_ok": true,
+            "reason": "stage peak plus headroom and sampled load; no fixed peer-memory cap",
+            "observed_memory_swing_mib": 0,
+            "sampled_required_free_mib": 8192
+          }
+        }
+      },
+      {
+        "at": "2026-10-17T19:05:14.882790+00:00",
+        "gpus": {
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+            "index": 0,
+            "name": "NVIDIA GeForce RTX 4090",
+            "total_mib": 24564,
+            "used_mib": 518,
+            "free_mib": 23566,
+            "utilization": 5,
+            "processes": [
+              {
+                "pid": 1995214,
+                "process_name": "/data/yychen/headpatch-www2027-autoresearch/runtime_sparse_intersection_v1/bin/python",
+                "used_mib": 508
+              }
+            ]
+          },
+          "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+            "index": 1,
+            "name": "NVIDIA GeForce RTX 4090",
+            "total_mib": 24564,
+            "used_mib": 1,
+            "free_mib": 24082,
+            "utilization": 0,
+            "processes": []
+          }
+        },
+        "resource_assessment": {
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+            "ok": true,
+            "free_mib": 23566,
+            "owned_mib": 0,
+            "remaining_estimated_peak_mib": 6144,
+            "required_free_mib": 8192,
+            "peer_memory_mib": 508,
+            "utilization_percent": 5,
+            "load_ok": true,
+            "reason": "stage peak plus headroom and sampled load; no fixed peer-memory cap",
+            "observed_memory_swing_mib": 0,
+            "sampled_required_free_mib": 8192
+          },
+          "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+            "ok": true,
+            "free_mib": 24082,
+            "owned_mib": 0,
+            "remaining_estimated_peak_mib": 6144,
+            "required_free_mib": 8192,
+            "peer_memory_mib": 0,
+            "utilization_percent": 0,
+            "load_ok": true,
+            "reason": "stage peak plus headroom and sampled load; no fixed peer-memory cap",
+            "observed_memory_swing_mib": 0,
+            "sampled_required_free_mib": 8192
+          }
+        }
+      },
+      {
+        "at": "2026-10-17T19:05:16.990282+00:00",
+        "gpus": {
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+            "index": 0,
+            "name": "NVIDIA GeForce RTX 4090",
+            "total_mib": 24564,
+            "used_mib": 518,
+            "free_mib": 23566,
+            "utilization": 5,
+            "processes": [
+              {
+                "pid": 1995214,
+                "process_name": "/data/yychen/headpatch-www2027-autoresearch/runtime_sparse_intersection_v1/bin/python",
+                "used_mib": 508
+              }
+            ]
+          },
+          "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+            "index": 1,
+            "name": "NVIDIA GeForce RTX 4090",
+            "total_mib": 24564,
+            "used_mib": 1,
+            "free_mib": 24082,
+            "utilization": 0,
+            "processes": []
+          }
+        },
+        "resource_assessment": {
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+            "ok": true,
+            "free_mib": 23566,
+            "owned_mib": 0,
+            "remaining_estimated_peak_mib": 6144,
+            "required_free_mib": 8192,
+            "peer_memory_mib": 508,
+            "utilization_percent": 5,
+            "load_ok": true,
+            "reason": "stage peak plus headroom and sampled load; no fixed peer-memory cap",
+            "observed_memory_swing_mib": 0,
+            "sampled_required_free_mib": 8192
+          },
+          "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+            "ok": true,
+            "free_mib": 24082,
+            "owned_mib": 0,
+            "remaining_estimated_peak_mib": 6144,
+            "required_free_mib": 8192,
+            "peer_memory_mib": 0,
+            "utilization_percent": 0,
+            "load_ok": true,
+            "reason": "stage peak plus headroom and sampled load; no fixed peer-memory cap",
+            "observed_memory_swing_mib": 0,
+            "sampled_required_free_mib": 8192
+          }
+        }
+      }
+    ],
+    "disk": {
+      "ok": true,
+      "files_logical_bytes": 3207568279,
+      "max_bytes": 53687091200,
+      "free": [
+        {
+          "path": "/home/bwwu",
+          "free_bytes": 619733495808,
+          "min_free_bytes": 21474836480
+        },
+        {
+          "path": "/data/bwwu",
+          "free_bytes": 4333732278272,
+          "min_free_bytes": 21474836480
+        }
+      ]
+    },
+    "existing_project_GPU_locks_available": true,
+    "deadline": "2026-10-19T05:40:30.012007+00:00",
+    "deadline_remaining_seconds": 124512.846021
+  },
+  "scientific_results_preapproved": false,
+  "submit_script_static_review": {
+    "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/submit_recovery.py",
+    "bytes": 1875,
+    "sha256": "a4f12f7ed0e23d61d88775b45317af6388fddfa192cee73b531c81699ef5138c",
+    "both_real_nonauthor_reviews_four_exact_fields_checked": true,
+    "same_new_controller_ID_absence_before_fresh_live_validate": true,
+    "one_submit_call_no_retry_loop": true,
+    "accepted_child_runner_unchanged_and_audited_new_outer_only": true,
+    "not_executed_by_reviewer": true
+  },
+  "old_c31_candidate_config_and_outer_runner_bytes_unchanged": true,
+  "original_failed_quantizer_work_log_exact_preserved": true,
+  "formal_quantizer_attempts_before_this_review": 0
+}

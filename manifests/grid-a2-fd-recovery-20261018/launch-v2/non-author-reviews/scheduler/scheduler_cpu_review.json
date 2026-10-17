@@ -1,0 +1,659 @@
+{
+  "status": "A2_ONLY_SCHEDULER_SOURCE_CPU_REVIEW_PASS_CONDITIONAL_DEPLOYMENT",
+  "reviewer": "/root/sports_a1_result_audit",
+  "fixture_path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy",
+  "fixture_only": true,
+  "real_runner_submissions": 0,
+  "GPU_or_model_calls": 0,
+  "checks": [
+    {
+      "name": "actual_history_accounting_and_original_deadline",
+      "status": "PASS",
+      "historical_stage_seconds": 41837.856885,
+      "prior_seconds": 58.650573,
+      "original_remaining_seconds": 101203.49254199999
+    },
+    {
+      "name": "eleven_unique_templates_science_unchanged_only_encode_legacy",
+      "status": "PASS"
+    },
+    {
+      "name": "compile_resource_reservation_and_lineage",
+      "status": "PASS",
+      "reservation": {
+        "reserved_gpu_seconds": 59940,
+        "groups": {
+          "toys-5300": 0,
+          "toys-5000": 0,
+          "sports-a1-train": 0,
+          "sports-a2-encode": 0,
+          "sports-a2-rkmeans": 6840,
+          "sports-a2-train": 43200,
+          "sports-a1-eval-attention": 0,
+          "sports-a2-eval-attention": 9000,
+          "engineering": 900
+        },
+        "sports_a2_reserved_cpu_seconds": 2400,
+        "stages": 11
+      },
+      "quantizer_remaining_buffer_seconds": 57.95052399999986
+    },
+    {
+      "name": "group_budget_reset",
+      "status": "EXPECTED_REJECTION",
+      "exception": "group allowance was reset: sports-a2-rkmeans"
+    },
+    {
+      "name": "global_budget_reset",
+      "status": "EXPECTED_REJECTION",
+      "exception": "overall allowance was reset"
+    },
+    {
+      "name": "deadline_reset",
+      "status": "EXPECTED_REJECTION",
+      "exception": "original absolute deadline changed"
+    },
+    {
+      "name": "old_job_reuse",
+      "status": "EXPECTED_REJECTION",
+      "exception": "old job identity reused"
+    },
+    {
+      "name": "GPU_policy_change",
+      "status": "EXPECTED_REJECTION",
+      "exception": "shared resource/protocol setting changed: sportsa2-quantize:resource_policy"
+    },
+    {
+      "name": "stage_scope_change",
+      "status": "EXPECTED_REJECTION",
+      "exception": "A2-only stage scope changed"
+    },
+    {
+      "name": "runner_change",
+      "status": "EXPECTED_REJECTION",
+      "exception": "accepted runner or shared GPU locks changed"
+    },
+    {
+      "name": "omitted_old_storage",
+      "status": "EXPECTED_REJECTION",
+      "exception": "old outputs omitted from storage accounting"
+    },
+    {
+      "name": "live_lineage_terminal_fixture",
+      "status": "PASS",
+      "real_runner_calls": 0
+    },
+    {
+      "name": "new_id_already_exists",
+      "status": "EXPECTED_REJECTION",
+      "exception": "new job ID already occupied; query, never resubmit"
+    },
+    {
+      "name": "unresolved_historical_SUBMITTING",
+      "status": "EXPECTED_REJECTION",
+      "exception": "unresolved historical submission"
+    },
+    {
+      "name": "dynamic_encode_new_sid_best_metadata_evaluation_resolution",
+      "status": "PASS",
+      "resolved_stages": 11,
+      "model_or_GPU_calls": 0
+    },
+    {
+      "name": "old_failed_quantizer_link",
+      "status": "EXPECTED_REJECTION",
+      "exception": "[Errno 2] No such file or directory: '/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/resolve-jobs/ga-20261017-sportsa2-quantize-v1/request.json'"
+    },
+    {
+      "name": "best_checkpoint_sid_mismatch",
+      "status": "EXPECTED_REJECTION",
+      "exception": ""
+    },
+    {
+      "name": "shared_GPU_peer_presence_allowed_peak_margin_both_UUIDs_enforced",
+      "status": "PASS",
+      "foreign_peer_mib_each": 16000,
+      "required_free_mib_each": 8192
+    },
+    {
+      "name": "terminal_controller_automatic_restart",
+      "status": "EXPECTED_REJECTION",
+      "exception": "queue already claimed; query saved status, no automatic restart"
+    },
+    {
+      "name": "existing_failed_quantizer_no_resubmit_all_10_dependents_blocked",
+      "status": "PASS",
+      "fixture_runner_queries": 1,
+      "fixture_submits": 0
+    },
+    {
+      "name": "new_submission_cannot_fit_original_absolute_deadline",
+      "status": "EXPECTED_REJECTION",
+      "exception": "original absolute deadline cannot contain this unchanged stage budget"
+    },
+    {
+      "name": "old_absolute_deadline_60_second_reserve",
+      "status": "PASS",
+      "deadline": "2026-10-19T05:40:30.012007+00:00"
+    }
+  ],
+  "template_differences": {
+    "sportsa2-attention-0": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ],
+      [
+        ".resolve.sid.job",
+        "ga-20261017-sportsa2-quantize-v1",
+        "ga-20261018-sportsa2-quantize-fd-recovery-v1"
+      ],
+      [
+        ".resolve.checkpoint.job",
+        "ga-20261017-sportsa2-train-v1",
+        "ga-20261018-sportsa2-train-fd-recovery-v1"
+      ],
+      [
+        ".resolve.evaluation",
+        "ga-20261017-sportsa2-eval-0-v1",
+        "ga-20261018-sportsa2-eval-0-fd-recovery-v1"
+      ],
+      [
+        ".resolve.metadata",
+        "ga-20261017-sportsa2-metadata-v1",
+        "ga-20261018-sportsa2-metadata-fd-recovery-v1"
+      ]
+    ],
+    "sportsa2-attention-3": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ],
+      [
+        ".resolve.sid.job",
+        "ga-20261017-sportsa2-quantize-v1",
+        "ga-20261018-sportsa2-quantize-fd-recovery-v1"
+      ],
+      [
+        ".resolve.checkpoint.job",
+        "ga-20261017-sportsa2-train-v1",
+        "ga-20261018-sportsa2-train-fd-recovery-v1"
+      ],
+      [
+        ".resolve.evaluation",
+        "ga-20261017-sportsa2-eval-3-v1",
+        "ga-20261018-sportsa2-eval-3-fd-recovery-v1"
+      ],
+      [
+        ".resolve.metadata",
+        "ga-20261017-sportsa2-metadata-v1",
+        "ga-20261018-sportsa2-metadata-fd-recovery-v1"
+      ]
+    ],
+    "sportsa2-attention-4": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ],
+      [
+        ".resolve.sid.job",
+        "ga-20261017-sportsa2-quantize-v1",
+        "ga-20261018-sportsa2-quantize-fd-recovery-v1"
+      ],
+      [
+        ".resolve.checkpoint.job",
+        "ga-20261017-sportsa2-train-v1",
+        "ga-20261018-sportsa2-train-fd-recovery-v1"
+      ],
+      [
+        ".resolve.evaluation",
+        "ga-20261017-sportsa2-eval-4-v1",
+        "ga-20261018-sportsa2-eval-4-fd-recovery-v1"
+      ],
+      [
+        ".resolve.metadata",
+        "ga-20261017-sportsa2-metadata-v1",
+        "ga-20261018-sportsa2-metadata-fd-recovery-v1"
+      ]
+    ],
+    "sportsa2-eval-0": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ],
+      [
+        ".resolve.sid.job",
+        "ga-20261017-sportsa2-quantize-v1",
+        "ga-20261018-sportsa2-quantize-fd-recovery-v1"
+      ],
+      [
+        ".resolve.checkpoint.job",
+        "ga-20261017-sportsa2-train-v1",
+        "ga-20261018-sportsa2-train-fd-recovery-v1"
+      ],
+      [
+        ".resolve.metadata",
+        "ga-20261017-sportsa2-metadata-v1",
+        "ga-20261018-sportsa2-metadata-fd-recovery-v1"
+      ]
+    ],
+    "sportsa2-eval-3": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ],
+      [
+        ".resolve.sid.job",
+        "ga-20261017-sportsa2-quantize-v1",
+        "ga-20261018-sportsa2-quantize-fd-recovery-v1"
+      ],
+      [
+        ".resolve.checkpoint.job",
+        "ga-20261017-sportsa2-train-v1",
+        "ga-20261018-sportsa2-train-fd-recovery-v1"
+      ],
+      [
+        ".resolve.metadata",
+        "ga-20261017-sportsa2-metadata-v1",
+        "ga-20261018-sportsa2-metadata-fd-recovery-v1"
+      ]
+    ],
+    "sportsa2-eval-4": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ],
+      [
+        ".resolve.sid.job",
+        "ga-20261017-sportsa2-quantize-v1",
+        "ga-20261018-sportsa2-quantize-fd-recovery-v1"
+      ],
+      [
+        ".resolve.checkpoint.job",
+        "ga-20261017-sportsa2-train-v1",
+        "ga-20261018-sportsa2-train-fd-recovery-v1"
+      ],
+      [
+        ".resolve.metadata",
+        "ga-20261017-sportsa2-metadata-v1",
+        "ga-20261018-sportsa2-metadata-fd-recovery-v1"
+      ]
+    ],
+    "sportsa2-gpu-gate": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ],
+      [
+        ".resolve.sid.job",
+        "ga-20261017-sportsa2-quantize-v1",
+        "ga-20261018-sportsa2-quantize-fd-recovery-v1"
+      ],
+      [
+        ".resolve.metadata",
+        "ga-20261017-sportsa2-metadata-v1",
+        "ga-20261018-sportsa2-metadata-fd-recovery-v1"
+      ]
+    ],
+    "sportsa2-metadata": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ],
+      [
+        ".resolve.sid.job",
+        "ga-20261017-sportsa2-quantize-v1",
+        "ga-20261018-sportsa2-quantize-fd-recovery-v1"
+      ]
+    ],
+    "sportsa2-quantize": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa2-encode-v1",
+        null,
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41"
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".fd_engineering",
+        null,
+        {
+          "purpose": "A2 DataLoader IPC/FD engineering adaptation",
+          "worker_hard_seconds": 3300
+        }
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ]
+    ],
+    "sportsa2-stats": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ],
+      [
+        ".attention_jobs",
+        [
+          "ga-20261017-sportsa2-attention-0-v1",
+          "ga-20261017-sportsa2-attention-3-v1",
+          "ga-20261017-sportsa2-attention-4-v1"
+        ],
+        [
+          "ga-20261018-sportsa2-attention-0-fd-recovery-v1",
+          "ga-20261018-sportsa2-attention-3-fd-recovery-v1",
+          "ga-20261018-sportsa2-attention-4-fd-recovery-v1"
+        ]
+      ],
+      [
+        ".resolve.sid.job",
+        "ga-20261017-sportsa2-quantize-v1",
+        "ga-20261018-sportsa2-quantize-fd-recovery-v1"
+      ],
+      [
+        ".resolve.metadata",
+        "ga-20261017-sportsa2-metadata-v1",
+        "ga-20261018-sportsa2-metadata-fd-recovery-v1"
+      ]
+    ],
+    "sportsa2-train": [
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5300-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-toys5000-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".prerequisite_capture_versions.ga-20261017-sportsa1-metadata-v1",
+        "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+        null
+      ],
+      [
+        ".capture_version",
+        "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      [
+        ".training_protocol.path",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+        "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/scheduler/fixture-nxt8xihy/snapshot/experiments/launch_20261017/training_protocol.json"
+      ],
+      [
+        ".resolve.sid.job",
+        "ga-20261017-sportsa2-quantize-v1",
+        "ga-20261018-sportsa2-quantize-fd-recovery-v1"
+      ],
+      [
+        ".resolve.metadata",
+        "ga-20261017-sportsa2-metadata-v1",
+        "ga-20261018-sportsa2-metadata-fd-recovery-v1"
+      ]
+    ]
+  },
+  "reservation": {
+    "reserved_gpu_seconds": 59940,
+    "groups": {
+      "toys-5300": 0,
+      "toys-5000": 0,
+      "sports-a1-train": 0,
+      "sports-a2-encode": 0,
+      "sports-a2-rkmeans": 6840,
+      "sports-a2-train": 43200,
+      "sports-a1-eval-attention": 0,
+      "sports-a2-eval-attention": 9000,
+      "engineering": 900
+    },
+    "sports_a2_reserved_cpu_seconds": 2400,
+    "stages": 11
+  },
+  "source_files": [
+    {
+      "path": "experiments/a2_fd_recovery_20261018/controller.py",
+      "sha256": "814f43a3043bae142453f92f10a48acf897e1641e5def6976c2c541ef7834bed",
+      "bytes": 8635
+    },
+    {
+      "path": "experiments/a2_fd_recovery_20261018/build.py",
+      "sha256": "3e56b90ed15fcad57b9b54af6a35ce4dde04571306ffca864fe062d1c5b7d302",
+      "bytes": 8888
+    },
+    {
+      "path": "experiments/a2_fd_recovery_20261018/adapter.py",
+      "sha256": "a0903170b821db52d69e2213e20547bef8eee80c1cccf864398e44187ab3d4bb",
+      "bytes": 7862
+    },
+    {
+      "path": "experiments/launch_20261017/run.py",
+      "sha256": "5db6d33e39f7e01645b06968c671b0de61661d5ca48629b685ed5c4eba9a3575",
+      "bytes": 11549
+    },
+    {
+      "path": "experiments/launch_20261017/a2_upstream.py",
+      "sha256": "837bc33b3db7a959c34e1a6019ab87afd1f33caafb459c3690e4b723d39b6736",
+      "bytes": 19332
+    },
+    {
+      "path": "experiments/launch_20261017/training_protocol.json",
+      "sha256": "9d3823c2ada022f479fb3b8ac4e36bc2cf09267281db5b15edc636bec0a45c7e",
+      "bytes": 2542
+    }
+  ],
+  "scene_sha256": "27776c1ef543945c25b486d6ec01629eb929cdb04ef69ca3f489a1b995215077",
+  "pending": [
+    "real fixed commit/deployment manifest and uploaded spec/config/review hashes",
+    "real pre-submit controller validate with original runner on new-server",
+    "new controller acceptance independent of SSH and active quantizer FD/step health"
+  ]
+}

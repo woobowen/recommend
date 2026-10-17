@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-17T18:57:48.297179+00:00",
+  "runner": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/runners/queue-runner-6f762b9a06a0ec20.py",
+  "runner_sha256": "6f762b9a06a0ec2007d79136f34d78d9875a23f377dd44c710672d986983474e",
+  "request": {
+    "schema": 1,
+    "job_id": "ga-20261018-a2-fd-queue-v1",
+    "host": "zwlab-01",
+    "user": "bwwu",
+    "uid": 1005,
+    "namespace": "sid-extensions-p0/new-server",
+    "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+    "capture_version": "0d18820025e7a28675ed7112be0b1b4ff0110025/c31d2d3eaaafbd1899bffc5f4226ffe6ffdd51d88b4d1f014289d3e17ead44ad",
+    "argv": [
+      "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+      "-B",
+      "-m",
+      "experiments.a2_fd_recovery_20261018.controller",
+      "supervise",
+      "--config",
+      "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/c31d2d3eaaafbd18/queue-config-45fa8698ab605332.json"
+    ],
+    "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/c31d2d3eaaafbd18",
+    "timeout_seconds": 125069,
+    "env": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "OMP_NUM_THREADS": "4",
+      "TF_CPP_MIN_LOG_LEVEL": "3",
+      "TF_NUM_INTRAOP_THREADS": "2",
+      "TF_NUM_INTEROP_THREADS": "2",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/c31d2d3eaaafbd18",
+      "HF_HUB_OFFLINE": "1",
+      "WANDB_MODE": "disabled",
+      "TOKENIZERS_PARALLELISM": "false"
+    },
+    "inputs": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/c31d2d3eaaafbd18/DEPLOYMENT.json",
+        "sha256": "6acbdcf12b7e46e85888c8e01d29a89a3825dfc7077f10052b493c2569013504"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/c31d2d3eaaafbd18/queue-config-45fa8698ab605332.json",
+        "sha256": "45fa8698ab605332b992ae37ce097acf67328777bf06900116304b789fafe3ac"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/runners/queue-runner-6f762b9a06a0ec20.py",
+        "sha256": "6f762b9a06a0ec2007d79136f34d78d9875a23f377dd44c710672d986983474e"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/runners/queue-runner-6f762b9a06a0ec20.py.deployment.json",
+        "sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/c31d2d3eaaafbd18/launch-review.json",
+        "sha256": "3c115199a790458af4ef6cc6d8b9c08c1ec0a63ee3b7dc74c0dd80231fe784b9"
+      }
+    ]
+  },
+  "job_directory_exists": false,
+  "verification_only_no_submission": true,
+  "verify_pass": false,
+  "error": "AssertionError()",
+  "failed_line": {
+    "file": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/runners/queue-runner-6f762b9a06a0ec20.py",
+    "line": 292,
+    "code": "assert 0 < r['timeout_seconds'] <= (172800 if queue_only else 86400)"
+  },
+  "reviewer": "/root/fd_repair_reviewer"
+}
