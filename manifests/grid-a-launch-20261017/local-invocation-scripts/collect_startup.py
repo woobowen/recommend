@@ -18,7 +18,7 @@ jobs += ['ga-20261017-sportsa1-cpu-gate-v2']
 jobs += ['ga-20261017-'+n+'-gpu-gate-v1' for n in ('toys5300','toys5000','sportsa1')]
 code='''import pathlib,json,base64,hashlib
 root=pathlib.Path('/home/bwwu/grid-audits/sid-extensions-p0/jobs');out=[]
-names=['request.json','accepted.json','status.json','work.log','supervisor.log','output/RESULT.json','output/invocation.json','output/loading.json','output/used_config.json','output/effective_config.yaml','output/structure.json','output/cpu_admission_batch_shapes.json','output/admission.json','output/progress.json','output/stage-entry.json','output/stage-exit.json','output/checkpoint_protocol.json','output/data_check.json','output/evaluation_coverage.json','output/test_coverage.json']
+names=['request.json','accepted.json','status.json','work.log','supervisor.log','output/RESULT.json','output/invocation.json','output/loading.json','output/used_config.json','output/effective_config.yaml','output/structure.json','output/cpu_admission_batch_shapes.json','output/admission.json','output/progress.json','output/stage-entry.json','output/stage-exit.json','output/checkpoint_protocol.json','output/data_check.json','output/evaluation_coverage.json','output/test_coverage.json','output/fixed_attention_samples.json']
 for job in JOBS:
  for name in names:
   p=root/job/name

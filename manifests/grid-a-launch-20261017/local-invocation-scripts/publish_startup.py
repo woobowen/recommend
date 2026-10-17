@@ -25,7 +25,8 @@ for path in sorted((support/'startup-evidence').rglob('*')):
  if path.is_file():copy(path,Path('preparation-jobs')/path.relative_to(support/'startup-evidence'))
 names=['asset-restoration-receipt.json','final_config_review.json','training_assets_independent.json',
  'a2_independent_review.json','metadata_source_link_review.json','cpu_admission_slice_review.json',
- 'final_queue_review.json','3ef93829656b734a-deployment.json','b6203414ee58a400-deployment.json']
+ 'final_queue_review.json','launch_runtime_independent.json','observation_independent.json',
+ '3ef93829656b734a-deployment.json','b6203414ee58a400-deployment.json']
 for name in names:
  p=support/name
  if p.exists():copy(p,Path('reviews-and-identities')/name)
@@ -44,7 +45,7 @@ for p in sorted(fixture.rglob('*')):
  if p.is_file() and not p.is_symlink() and p.suffix in ('.json','.py','.log'):
   copy(p,Path('cpu-queue-fixture')/p.relative_to(fixture))
 for name in ('prepare_assets_local.py','submit_preparation.py','prepare_gpu_admission.py',
- 'finalize_queue.py','health_query.py','collect_startup.py','publish_startup.py','submit_formal_queue.py'):
+ 'finalize_queue.py','health_query.py','collect_startup.py','publish_startup.py','submit_formal_queue.py','finish_observation.py'):
  p=support/name
  if p.exists():copy(p,Path('local-invocation-scripts')/name)
 external=[]

@@ -1,0 +1,2869 @@
+{
+  "observed_at_utc": "2026-10-17T05:46:57.028801+00:00",
+  "observed_at_cst": "2026-10-17T13:46:57.028801+08:00",
+  "queue_state": {
+    "accounting": {
+      "groups": {
+        "engineering": 0.0,
+        "sports-a1-eval-attention": 0.0,
+        "sports-a1-train": 277.921127,
+        "sports-a2-encode": 178.435799,
+        "sports-a2-eval-attention": 0.0,
+        "sports-a2-rkmeans": 0.0,
+        "sports-a2-train": 0.0,
+        "toys-5000": 0.0,
+        "toys-5300": 91.319039
+      },
+      "remaining_gpu_request_seconds": 142493.324035,
+      "used_gpu_request_seconds": 547.675965
+    },
+    "blocked_workflows": {},
+    "config_sha256": "0de997aad986903da46bb3865c5d26507d45b0944d13b46c48da9c01c272997a",
+    "disk": {
+      "files_logical_bytes": 2648847265,
+      "free": [
+        {
+          "free_bytes": 620300001280,
+          "min_free_bytes": 21474836480,
+          "path": "/home/bwwu"
+        },
+        {
+          "free_bytes": 4374179307520,
+          "min_free_bytes": 21474836480,
+          "path": "/data/bwwu"
+        }
+      ],
+      "max_bytes": 53687091200,
+      "ok": true
+    },
+    "gpus": {
+      "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+        "index": 1,
+        "name": "NVIDIA GeForce RTX 4090",
+        "processes": [
+          {
+            "pid": 1765811,
+            "process_name": "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+            "used_mib": 730
+          }
+        ],
+        "total_mib": 24564,
+        "used_mib": 740,
+        "utilization": 15
+      },
+      "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+        "index": 0,
+        "name": "NVIDIA GeForce RTX 4090",
+        "processes": [
+          {
+            "pid": 1762415,
+            "process_name": "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+            "used_mib": 18958
+          }
+        ],
+        "total_mib": 24564,
+        "used_mib": 18968,
+        "utilization": 14
+      }
+    },
+    "observed_at": "2026-10-17T05:46:47.709896+00:00",
+    "queue_id": "ga-20261017-queue-v1",
+    "reservation": {
+      "groups": {
+        "engineering": 900,
+        "sports-a1-eval-attention": 9000,
+        "sports-a1-train": 43200,
+        "sports-a2-encode": 10800,
+        "sports-a2-eval-attention": 9000,
+        "sports-a2-rkmeans": 7200,
+        "sports-a2-train": 43200,
+        "toys-5000": 9000,
+        "toys-5300": 9000
+      },
+      "reserved_gpu_seconds": 141300,
+      "sports_a2_reserved_cpu_seconds": 2400,
+      "stages": 34
+    },
+    "stages": {
+      "sportsa1-attention-0": {
+        "job_id": "ga-20261017-sportsa1-attention-0-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa1-attention-3": {
+        "job_id": "ga-20261017-sportsa1-attention-3-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa1-attention-4": {
+        "job_id": "ga-20261017-sportsa1-attention-4-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa1-eval-0": {
+        "job_id": "ga-20261017-sportsa1-eval-0-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa1-eval-3": {
+        "job_id": "ga-20261017-sportsa1-eval-3-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa1-eval-4": {
+        "job_id": "ga-20261017-sportsa1-eval-4-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa1-stats": {
+        "job_id": "ga-20261017-sportsa1-stats-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa1-train": {
+        "accepted_at": "2026-10-17T05:42:10.314257+00:00",
+        "gate_receipts": [
+          {
+            "bytes": 10094,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-gpu-gate-v1/status.json",
+            "sha256": "ab945c7faa40d9a3a000afc724d4bc5a08d384d039aa0f76e435920196bfd2f9"
+          },
+          {
+            "bytes": 4954,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-gpu-gate-v1/output/RESULT.json",
+            "sha256": "e76dbd091656e0c0e710d8deaf20bd18a2d4e0ef03eeaf3564c4fcb145082b4c"
+          }
+        ],
+        "job_id": "ga-20261017-sportsa1-train-v1",
+        "prelaunch_resource_samples": [
+          {
+            "at": "2026-10-17T05:42:10.152750+00:00",
+            "gpus": {
+              "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                "index": 1,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              },
+              "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                "index": 0,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              }
+            }
+          }
+        ],
+        "request_path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-state/requests/ga-20261017-sportsa1-train-v1.json",
+        "runner_status": {
+          "cleanup_evidence_level": "captured_at_launch",
+          "cleanup_verified": false,
+          "exit_code": null,
+          "job_id": "ga-20261017-sportsa1-train-v1",
+          "received_at": "2026-10-17T05:42:10.252016+00:00",
+          "request_sha256": "7be01b2195b36c26a55c7c0953a07e2ec0ab867dedc4ca79d01f423db0243b78",
+          "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output",
+          "started_at": "2026-10-17T05:42:10.341290+00:00",
+          "status": "RUNNING",
+          "supervisor": {
+            "argv": [
+              "/usr/bin/python3",
+              "-I",
+              "-S",
+              "-B",
+              "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+              "supervise",
+              "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1"
+            ],
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pid": 1762409,
+            "start_ticks": "282106714",
+            "uid": 1005
+          },
+          "supervisor_alive": true,
+          "worker": {
+            "argv": [
+              "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+              "-u",
+              "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/queue.py",
+              "run-stage",
+              "--config",
+              "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-config-0de997aad986903d.json",
+              "--stage",
+              "sportsa1-train"
+            ],
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pid": 1762410,
+            "start_ticks": "282106723",
+            "uid": 1005
+          },
+          "worker_alive": true,
+          "worker_group": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1",
+            "job_id": "ga-20261017-sportsa1-train-v1",
+            "known_members": [
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762410,
+                "session_id": 1762410,
+                "start_ticks": "282106723",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762415,
+                "session_id": 1762410,
+                "start_ticks": "282106746",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762484,
+                "session_id": 1762410,
+                "start_ticks": "282107489",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762485,
+                "session_id": 1762410,
+                "start_ticks": "282107492",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762486,
+                "session_id": 1762410,
+                "start_ticks": "282107494",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762487,
+                "session_id": 1762410,
+                "start_ticks": "282107497",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762488,
+                "session_id": 1762410,
+                "start_ticks": "282107499",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762489,
+                "session_id": 1762410,
+                "start_ticks": "282107501",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762490,
+                "session_id": 1762410,
+                "start_ticks": "282107504",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762491,
+                "session_id": 1762410,
+                "start_ticks": "282107506",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764390,
+                "session_id": 1762410,
+                "start_ticks": "282124958",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764391,
+                "session_id": 1762410,
+                "start_ticks": "282124962",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764392,
+                "session_id": 1762410,
+                "start_ticks": "282124966",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764393,
+                "session_id": 1762410,
+                "start_ticks": "282124969",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764394,
+                "session_id": 1762410,
+                "start_ticks": "282124973",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764395,
+                "session_id": 1762410,
+                "start_ticks": "282124976",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764396,
+                "session_id": 1762410,
+                "start_ticks": "282124980",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764397,
+                "session_id": 1762410,
+                "start_ticks": "282124983",
+                "uid": 1005
+              }
+            ],
+            "leader": {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762410,
+              "session_id": 1762410,
+              "start_ticks": "282106723",
+              "uid": 1005
+            },
+            "ownership_schema": 1,
+            "pgid": 1762410,
+            "session_id": 1762410,
+            "source": "captured_at_launch",
+            "uid": 1005
+          },
+          "workgroup_live": true,
+          "workgroup_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-10-17T05:46:47.936663+00:00",
+            "owned_live": [
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762410,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282106723",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762415,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282106746",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762484,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282107489",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762485,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282107492",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762486,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282107494",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762487,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282107497",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762488,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282107499",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762489,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282107501",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762490,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282107504",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1762491,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282107506",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764390,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282124958",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764391,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282124962",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764392,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282124966",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764393,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282124969",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764394,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282124973",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764395,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282124976",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764396,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282124980",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762410,
+                "pid": 1764397,
+                "proof": "TASK_MARKERS",
+                "session_id": 1762410,
+                "start_ticks": "282124983",
+                "uid": 1005
+              }
+            ],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": false,
+            "zombies": []
+          }
+        },
+        "status": "RUNNING",
+        "submission_intent_at": "2026-10-17T05:42:10.158912+00:00"
+      },
+      "sportsa2-attention-0": {
+        "job_id": "ga-20261017-sportsa2-attention-0-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa2-attention-3": {
+        "job_id": "ga-20261017-sportsa2-attention-3-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa2-attention-4": {
+        "job_id": "ga-20261017-sportsa2-attention-4-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa2-encode": {
+        "accepted_at": "2026-10-17T05:42:12.590260+00:00",
+        "gate_receipts": [],
+        "job_id": "ga-20261017-sportsa2-encode-v1",
+        "prelaunch_resource_samples": [
+          {
+            "at": "2026-10-17T05:42:10.315988+00:00",
+            "gpus": {
+              "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                "index": 1,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              },
+              "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                "index": 0,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              }
+            }
+          },
+          {
+            "at": "2026-10-17T05:42:12.318145+00:00",
+            "gpus": {
+              "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                "index": 1,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              },
+              "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                "index": 0,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              }
+            }
+          }
+        ],
+        "request_path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-state/requests/ga-20261017-sportsa2-encode-v1.json",
+        "runner_status": {
+          "artifacts": [
+            {
+              "bytes": 1380,
+              "path": "output/RESULT.json",
+              "sha256": "76ba32e1ba6e9c1114f03593fe34efd4aed510c5d9d85ecf343da9d7117f60f9"
+            },
+            {
+              "bytes": 6842,
+              "path": "output/effective_config.yaml",
+              "sha256": "e87d5a3b6ad6942d0a1ec6fe4a7aa903aac3e3bdca3832f164181781430a52e3"
+            },
+            {
+              "bytes": 3166,
+              "path": "output/invocation.json",
+              "sha256": "cdb53f8d9b4108901ecec2dcef08c1abe4bdc2b5c0bd4451973789ce575ce421"
+            },
+            {
+              "bytes": 324,
+              "path": "output/item_axis.json",
+              "sha256": "440da06d29432fec1e0c0e682cdb86670956f3e43eb4ad8b38bcbf06f3d7e920"
+            },
+            {
+              "bytes": 37596356,
+              "path": "output/item_embeddings.pt",
+              "sha256": "b137cb8a006a8b950396524ed5be3bbc91d711b36068d671c01da3742d7cda6f"
+            },
+            {
+              "bytes": 42951540,
+              "path": "output/prediction-rank-0.pt",
+              "sha256": "4c8dde708ecd1844b6b4ea8e4ad1d012e273c66ff541ceddec9ce22162d532c0"
+            },
+            {
+              "bytes": 37596336,
+              "path": "output/predictions.pt",
+              "sha256": "2bc4d4cded6465f1d8f04e95c4f423e24d0044e9e5837f371f6f8f9a8687cffd"
+            },
+            {
+              "bytes": 451,
+              "path": "output/progress.json",
+              "sha256": "e6d23b6814c4da2b4c12769b1521e02b46fc977d0992ec7dbcb730991f7347d0"
+            },
+            {
+              "bytes": 245,
+              "path": "output/resource_schedule.json",
+              "sha256": "959fa158849b7af935b174e9c8c2ee4a4e301fd57a7ff8ed61810a74212ca641"
+            },
+            {
+              "bytes": 15484,
+              "path": "output/source_identity.json",
+              "sha256": "9d2ea60740ec59b6237db970ceddfafe56cf985e0b0e711c46551a7dadc737cc"
+            },
+            {
+              "bytes": 1932,
+              "path": "output/stage-entry.json",
+              "sha256": "c6233a2e4a3c57929071f92033507e1796120bfa6b4e4843f8dfef0b5cc43030"
+            },
+            {
+              "bytes": 207,
+              "path": "output/stage-exit.json",
+              "sha256": "9058f994ad487be1b20cbb7e83e8377158d2df38c03b09af2ad1243d98ef1e31"
+            },
+            {
+              "bytes": 601,
+              "path": "output/stage_result.json",
+              "sha256": "a2b857cb89411dc4b80c77ba24337b402f2c6d4d933d86310772f5654d4a1215"
+            },
+            {
+              "bytes": 9927,
+              "path": "output/used_config.json",
+              "sha256": "9004bd5bbbc2ff82afa0261834e65693030afbe7cc40acdb44c537e7b8b3ecfa"
+            }
+          ],
+          "cleanup": {
+            "ended_at": "2026-10-17T05:45:11.045574+00:00",
+            "events": [],
+            "initial_observation": {
+              "boot_changed": false,
+              "observed_at": "2026-10-17T05:45:10.960728+00:00",
+              "owned_live": [],
+              "scan_complete": true,
+              "scan_errors": [],
+              "source": "captured_at_launch",
+              "unconfirmed_live": [],
+              "unsupported_live": [],
+              "verified_empty": true,
+              "zombies": []
+            },
+            "last_observation": {
+              "boot_changed": false,
+              "observed_at": "2026-10-17T05:45:11.003339+00:00",
+              "owned_live": [],
+              "scan_complete": true,
+              "scan_errors": [],
+              "source": "captured_at_launch",
+              "unconfirmed_live": [],
+              "unsupported_live": [],
+              "verified_empty": true,
+              "zombies": []
+            },
+            "reason": "NORMAL_EXIT_CHECK",
+            "started_at": "2026-10-17T05:45:10.960677+00:00",
+            "verified": true
+          },
+          "cleanup_evidence_level": "captured_at_launch",
+          "cleanup_verified": true,
+          "ended_at": "2026-10-17T05:45:11.048025+00:00",
+          "exit_code": 0,
+          "job_id": "ga-20261017-sportsa2-encode-v1",
+          "received_at": "2026-10-17T05:42:12.525912+00:00",
+          "request_sha256": "a1c12abedd7415729cea059598b065fe4df6960c51171dd792727f76ce045050",
+          "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output",
+          "started_at": "2026-10-17T05:42:12.612226+00:00",
+          "status": "SUCCEEDED",
+          "supervisor": {
+            "argv": [
+              "/usr/bin/python3",
+              "-I",
+              "-S",
+              "-B",
+              "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+              "supervise",
+              "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1"
+            ],
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pid": 1762424,
+            "start_ticks": "282106942",
+            "uid": 1005
+          },
+          "supervisor_alive": false,
+          "worker": {
+            "argv": [
+              "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+              "-u",
+              "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/queue.py",
+              "run-stage",
+              "--config",
+              "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-config-0de997aad986903d.json",
+              "--stage",
+              "sportsa2-encode"
+            ],
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pid": 1762425,
+            "start_ticks": "282106951",
+            "uid": 1005
+          },
+          "worker_alive": false,
+          "worker_group": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1",
+            "job_id": "ga-20261017-sportsa2-encode-v1",
+            "known_members": [
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762425,
+                "pid": 1762425,
+                "session_id": 1762425,
+                "start_ticks": "282106951",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762425,
+                "pid": 1762456,
+                "session_id": 1762425,
+                "start_ticks": "282107184",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762425,
+                "pid": 1763903,
+                "session_id": 1762425,
+                "start_ticks": "282107958",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1762425,
+                "pid": 1763904,
+                "session_id": 1762425,
+                "start_ticks": "282107960",
+                "uid": 1005
+              }
+            ],
+            "leader": {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762425,
+              "pid": 1762425,
+              "session_id": 1762425,
+              "start_ticks": "282106951",
+              "uid": 1005
+            },
+            "ownership_schema": 1,
+            "pgid": 1762425,
+            "session_id": 1762425,
+            "source": "captured_at_launch",
+            "uid": 1005
+          },
+          "worker_may_be_live": false,
+          "workgroup_live": false,
+          "workgroup_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-10-17T05:46:48.069280+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          }
+        },
+        "status": "SUCCEEDED",
+        "submission_intent_at": "2026-10-17T05:42:12.433470+00:00"
+      },
+      "sportsa2-eval-0": {
+        "job_id": "ga-20261017-sportsa2-eval-0-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa2-eval-3": {
+        "job_id": "ga-20261017-sportsa2-eval-3-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa2-eval-4": {
+        "job_id": "ga-20261017-sportsa2-eval-4-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa2-gpu-gate": {
+        "job_id": "ga-20261017-sportsa2-gpu-gate-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa2-metadata": {
+        "job_id": "ga-20261017-sportsa2-metadata-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa2-quantize": {
+        "gate_receipts": [
+          {
+            "bytes": 4612,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/status.json",
+            "sha256": "edf52397cd63b68caa1bde6bc9e9aefee8f7daf5b170fb79cf74fef96bb686c0"
+          },
+          {
+            "bytes": 1380,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/RESULT.json",
+            "sha256": "76ba32e1ba6e9c1114f03593fe34efd4aed510c5d9d85ecf343da9d7117f60f9"
+          }
+        ],
+        "job_id": "ga-20261017-sportsa2-quantize-v1",
+        "status": "WAITING_GPU"
+      },
+      "sportsa2-stats": {
+        "job_id": "ga-20261017-sportsa2-stats-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "sportsa2-train": {
+        "job_id": "ga-20261017-sportsa2-train-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "toys5000-attention-0": {
+        "job_id": "ga-20261017-toys5000-attention-0-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "toys5000-attention-3": {
+        "job_id": "ga-20261017-toys5000-attention-3-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "toys5000-attention-4": {
+        "job_id": "ga-20261017-toys5000-attention-4-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "toys5000-eval-0": {
+        "gate_receipts": [
+          {
+            "bytes": 6341,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5000-gpu-gate-v1/status.json",
+            "sha256": "bd04c9eefe28974ad2ba38f6dbf926a4c2cce6e81e2a0721ede0822094fc0c2a"
+          },
+          {
+            "bytes": 22323,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5000-gpu-gate-v1/output/RESULT.json",
+            "sha256": "e78577b42ff50fecb2ae8b65615c8de2f31c49bda5518487913ac31e038eca95"
+          }
+        ],
+        "job_id": "ga-20261017-toys5000-eval-0-v1",
+        "status": "WAITING_GPU"
+      },
+      "toys5000-eval-3": {
+        "gate_receipts": [
+          {
+            "bytes": 6341,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5000-gpu-gate-v1/status.json",
+            "sha256": "bd04c9eefe28974ad2ba38f6dbf926a4c2cce6e81e2a0721ede0822094fc0c2a"
+          },
+          {
+            "bytes": 22323,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5000-gpu-gate-v1/output/RESULT.json",
+            "sha256": "e78577b42ff50fecb2ae8b65615c8de2f31c49bda5518487913ac31e038eca95"
+          }
+        ],
+        "job_id": "ga-20261017-toys5000-eval-3-v1",
+        "status": "WAITING_GPU"
+      },
+      "toys5000-eval-4": {
+        "gate_receipts": [
+          {
+            "bytes": 6341,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5000-gpu-gate-v1/status.json",
+            "sha256": "bd04c9eefe28974ad2ba38f6dbf926a4c2cce6e81e2a0721ede0822094fc0c2a"
+          },
+          {
+            "bytes": 22323,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5000-gpu-gate-v1/output/RESULT.json",
+            "sha256": "e78577b42ff50fecb2ae8b65615c8de2f31c49bda5518487913ac31e038eca95"
+          }
+        ],
+        "job_id": "ga-20261017-toys5000-eval-4-v1",
+        "status": "WAITING_GPU"
+      },
+      "toys5000-stats": {
+        "job_id": "ga-20261017-toys5000-stats-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "toys5300-attention-0": {
+        "job_id": "ga-20261017-toys5300-attention-0-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "toys5300-attention-3": {
+        "job_id": "ga-20261017-toys5300-attention-3-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "toys5300-attention-4": {
+        "job_id": "ga-20261017-toys5300-attention-4-v1",
+        "status": "WAITING_DEPENDENCY"
+      },
+      "toys5300-eval-0": {
+        "accepted_at": "2026-10-17T05:45:16.483629+00:00",
+        "gate_receipts": [
+          {
+            "bytes": 6341,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-gpu-gate-v1/status.json",
+            "sha256": "e4885ef1934e9d89f7c9626adbc1fb100608e4064c08955e7178a0372d1576f5"
+          },
+          {
+            "bytes": 22323,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-gpu-gate-v1/output/RESULT.json",
+            "sha256": "7bce004b9ad6e2bf61309e318b67d44e94c5e5b40896982820a143b01826e2ec"
+          }
+        ],
+        "job_id": "ga-20261017-toys5300-eval-0-v1",
+        "prelaunch_resource_samples": [
+          {
+            "at": "2026-10-17T05:45:15.441138+00:00",
+            "gpus": {
+              "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                "index": 1,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              },
+              "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                "index": 0,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [
+                  {
+                    "pid": 1762415,
+                    "process_name": "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+                    "used_mib": 18958
+                  }
+                ],
+                "total_mib": 24564,
+                "used_mib": 18968,
+                "utilization": 15
+              }
+            }
+          }
+        ],
+        "request_path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-state/requests/ga-20261017-toys5300-eval-0-v1.json",
+        "runner_status": {
+          "cleanup_evidence_level": "captured_at_launch",
+          "cleanup_verified": false,
+          "exit_code": null,
+          "job_id": "ga-20261017-toys5300-eval-0-v1",
+          "received_at": "2026-10-17T05:45:16.418911+00:00",
+          "request_sha256": "d1fc5df5c5363df85cbdc47af23a3315570947d7b9adb8bbdef2aa2207c95623",
+          "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-eval-0-v1/output",
+          "started_at": "2026-10-17T05:45:16.943464+00:00",
+          "status": "RUNNING",
+          "supervisor": {
+            "argv": [
+              "/usr/bin/python3",
+              "-I",
+              "-S",
+              "-B",
+              "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+              "supervise",
+              "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-eval-0-v1"
+            ],
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pid": 1765805,
+            "start_ticks": "282125331",
+            "uid": 1005
+          },
+          "supervisor_alive": true,
+          "worker": {
+            "argv": [
+              "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+              "-u",
+              "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/queue.py",
+              "run-stage",
+              "--config",
+              "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-config-0de997aad986903d.json",
+              "--stage",
+              "toys5300-eval-0"
+            ],
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pid": 1765806,
+            "start_ticks": "282125384",
+            "uid": 1005
+          },
+          "worker_alive": true,
+          "worker_group": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-eval-0-v1",
+            "job_id": "ga-20261017-toys5300-eval-0-v1",
+            "known_members": [
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765806,
+                "session_id": 1765806,
+                "start_ticks": "282125384",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765811,
+                "session_id": 1765806,
+                "start_ticks": "282125405",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765827,
+                "session_id": 1765806,
+                "start_ticks": "282126242",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765828,
+                "session_id": 1765806,
+                "start_ticks": "282126244",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765829,
+                "session_id": 1765806,
+                "start_ticks": "282126246",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765830,
+                "session_id": 1765806,
+                "start_ticks": "282126250",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765831,
+                "session_id": 1765806,
+                "start_ticks": "282126252",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765832,
+                "session_id": 1765806,
+                "start_ticks": "282126254",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765833,
+                "session_id": 1765806,
+                "start_ticks": "282126256",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765834,
+                "session_id": 1765806,
+                "start_ticks": "282126258",
+                "uid": 1005
+              }
+            ],
+            "leader": {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765806,
+              "session_id": 1765806,
+              "start_ticks": "282125384",
+              "uid": 1005
+            },
+            "ownership_schema": 1,
+            "pgid": 1765806,
+            "session_id": 1765806,
+            "source": "captured_at_launch",
+            "uid": 1005
+          },
+          "workgroup_live": true,
+          "workgroup_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-10-17T05:46:48.198951+00:00",
+            "owned_live": [
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765806,
+                "proof": "TASK_MARKERS",
+                "session_id": 1765806,
+                "start_ticks": "282125384",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765811,
+                "proof": "TASK_MARKERS",
+                "session_id": 1765806,
+                "start_ticks": "282125405",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765827,
+                "proof": "TASK_MARKERS",
+                "session_id": 1765806,
+                "start_ticks": "282126242",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765828,
+                "proof": "TASK_MARKERS",
+                "session_id": 1765806,
+                "start_ticks": "282126244",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765829,
+                "proof": "TASK_MARKERS",
+                "session_id": 1765806,
+                "start_ticks": "282126246",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765830,
+                "proof": "TASK_MARKERS",
+                "session_id": 1765806,
+                "start_ticks": "282126250",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765831,
+                "proof": "TASK_MARKERS",
+                "session_id": 1765806,
+                "start_ticks": "282126252",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765832,
+                "proof": "TASK_MARKERS",
+                "session_id": 1765806,
+                "start_ticks": "282126254",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765833,
+                "proof": "TASK_MARKERS",
+                "session_id": 1765806,
+                "start_ticks": "282126256",
+                "uid": 1005
+              },
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 1765806,
+                "pid": 1765834,
+                "proof": "TASK_MARKERS",
+                "session_id": 1765806,
+                "start_ticks": "282126258",
+                "uid": 1005
+              }
+            ],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": false,
+            "zombies": []
+          }
+        },
+        "status": "RUNNING",
+        "submission_intent_at": "2026-10-17T05:45:15.446272+00:00"
+      },
+      "toys5300-eval-3": {
+        "gate_receipts": [
+          {
+            "bytes": 6341,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-gpu-gate-v1/status.json",
+            "sha256": "e4885ef1934e9d89f7c9626adbc1fb100608e4064c08955e7178a0372d1576f5"
+          },
+          {
+            "bytes": 22323,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-gpu-gate-v1/output/RESULT.json",
+            "sha256": "7bce004b9ad6e2bf61309e318b67d44e94c5e5b40896982820a143b01826e2ec"
+          }
+        ],
+        "job_id": "ga-20261017-toys5300-eval-3-v1",
+        "status": "WAITING_GPU"
+      },
+      "toys5300-eval-4": {
+        "gate_receipts": [
+          {
+            "bytes": 6341,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-gpu-gate-v1/status.json",
+            "sha256": "e4885ef1934e9d89f7c9626adbc1fb100608e4064c08955e7178a0372d1576f5"
+          },
+          {
+            "bytes": 22323,
+            "hash_sources": [],
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-gpu-gate-v1/output/RESULT.json",
+            "sha256": "7bce004b9ad6e2bf61309e318b67d44e94c5e5b40896982820a143b01826e2ec"
+          }
+        ],
+        "job_id": "ga-20261017-toys5300-eval-4-v1",
+        "status": "WAITING_GPU"
+      },
+      "toys5300-stats": {
+        "job_id": "ga-20261017-toys5300-stats-v1",
+        "status": "WAITING_DEPENDENCY"
+      }
+    },
+    "started_at": "2026-10-17T05:42:10.012007+00:00",
+    "status": "RUNNING",
+    "supervisor_pid": 1762403
+  },
+  "jobs": {
+    "ga-20261017-queue-v1": {
+      "status": {
+        "exit_code": null,
+        "job_id": "ga-20261017-queue-v1",
+        "received_at": "2026-10-17T05:42:09.843377+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-queue-v1/output",
+        "started_at": "2026-10-17T05:42:09.928496+00:00",
+        "status": "RUNNING",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/runners/queue-runner-8685ab1dfbdc3d22.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-queue-v1"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 1762401,
+          "start_ticks": "282106674",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+            "-B",
+            "-m",
+            "experiments.launch_20261017.queue",
+            "supervise",
+            "--config",
+            "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-config-0de997aad986903d.json"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 1762403,
+          "start_ticks": "282106682",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-queue-v1",
+          "job_id": "ga-20261017-queue-v1",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762403,
+              "pid": 1762403,
+              "session_id": 1762403,
+              "start_ticks": "282106682",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 1762403,
+            "pid": 1762403,
+            "session_id": 1762403,
+            "start_ticks": "282106682",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 1762403,
+          "session_id": 1762403,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "request_sha256": "359d11104c308059f6c616d408db15c0184c2929d34cf34d735a36184b065ac3",
+        "supervisor_alive": true,
+        "worker_alive": true,
+        "workgroup_observation": {
+          "observed_at": "2026-10-17T05:46:56.407781+00:00",
+          "source": "captured_at_launch",
+          "boot_changed": false,
+          "owned_live": [
+            {
+              "pid": 1762403,
+              "start_ticks": "282106682",
+              "uid": 1005,
+              "pgid": 1762403,
+              "session_id": 1762403,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            }
+          ],
+          "unconfirmed_live": [],
+          "unsupported_live": [],
+          "zombies": [],
+          "scan_errors": [],
+          "scan_complete": true,
+          "verified_empty": false
+        },
+        "workgroup_live": true,
+        "cleanup_verified": false,
+        "cleanup_evidence_level": "captured_at_launch"
+      },
+      "details": {},
+      "logs": {
+        "work.log": {
+          "mtime_utc": "2026-10-17T05:42:09.929335+00:00",
+          "tail": "",
+          "bytes": 0
+        },
+        "supervisor.log": {
+          "mtime_utc": "2026-10-17T05:42:09.844332+00:00",
+          "tail": "",
+          "bytes": 0
+        }
+      }
+    },
+    "ga-20261017-sportsa1-train-v1": {
+      "status": {
+        "exit_code": null,
+        "job_id": "ga-20261017-sportsa1-train-v1",
+        "received_at": "2026-10-17T05:42:10.252016+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output",
+        "started_at": "2026-10-17T05:42:10.341290+00:00",
+        "status": "RUNNING",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 1762409,
+          "start_ticks": "282106714",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+            "-u",
+            "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/queue.py",
+            "run-stage",
+            "--config",
+            "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-config-0de997aad986903d.json",
+            "--stage",
+            "sportsa1-train"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 1762410,
+          "start_ticks": "282106723",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1",
+          "job_id": "ga-20261017-sportsa1-train-v1",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762410,
+              "session_id": 1762410,
+              "start_ticks": "282106723",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762415,
+              "session_id": 1762410,
+              "start_ticks": "282106746",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762484,
+              "session_id": 1762410,
+              "start_ticks": "282107489",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762485,
+              "session_id": 1762410,
+              "start_ticks": "282107492",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762486,
+              "session_id": 1762410,
+              "start_ticks": "282107494",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762487,
+              "session_id": 1762410,
+              "start_ticks": "282107497",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762488,
+              "session_id": 1762410,
+              "start_ticks": "282107499",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762489,
+              "session_id": 1762410,
+              "start_ticks": "282107501",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762490,
+              "session_id": 1762410,
+              "start_ticks": "282107504",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1762491,
+              "session_id": 1762410,
+              "start_ticks": "282107506",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1764390,
+              "session_id": 1762410,
+              "start_ticks": "282124958",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1764391,
+              "session_id": 1762410,
+              "start_ticks": "282124962",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1764392,
+              "session_id": 1762410,
+              "start_ticks": "282124966",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1764393,
+              "session_id": 1762410,
+              "start_ticks": "282124969",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1764394,
+              "session_id": 1762410,
+              "start_ticks": "282124973",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1764395,
+              "session_id": 1762410,
+              "start_ticks": "282124976",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1764396,
+              "session_id": 1762410,
+              "start_ticks": "282124980",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762410,
+              "pid": 1764397,
+              "session_id": 1762410,
+              "start_ticks": "282124983",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 1762410,
+            "pid": 1762410,
+            "session_id": 1762410,
+            "start_ticks": "282106723",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 1762410,
+          "session_id": 1762410,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "request_sha256": "7be01b2195b36c26a55c7c0953a07e2ec0ab867dedc4ca79d01f423db0243b78",
+        "supervisor_alive": true,
+        "worker_alive": true,
+        "workgroup_observation": {
+          "observed_at": "2026-10-17T05:46:56.535381+00:00",
+          "source": "captured_at_launch",
+          "boot_changed": false,
+          "owned_live": [
+            {
+              "pid": 1762410,
+              "start_ticks": "282106723",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1762415,
+              "start_ticks": "282106746",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1762484,
+              "start_ticks": "282107489",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1762485,
+              "start_ticks": "282107492",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1762486,
+              "start_ticks": "282107494",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1762487,
+              "start_ticks": "282107497",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1762488,
+              "start_ticks": "282107499",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1762489,
+              "start_ticks": "282107501",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1762490,
+              "start_ticks": "282107504",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1762491,
+              "start_ticks": "282107506",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1764390,
+              "start_ticks": "282124958",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1764391,
+              "start_ticks": "282124962",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1764392,
+              "start_ticks": "282124966",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1764393,
+              "start_ticks": "282124969",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1764394,
+              "start_ticks": "282124973",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1764395,
+              "start_ticks": "282124976",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1764396,
+              "start_ticks": "282124980",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1764397,
+              "start_ticks": "282124983",
+              "uid": 1005,
+              "pgid": 1762410,
+              "session_id": 1762410,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            }
+          ],
+          "unconfirmed_live": [],
+          "unsupported_live": [],
+          "zombies": [],
+          "scan_errors": [],
+          "scan_complete": true,
+          "verified_empty": false
+        },
+        "workgroup_live": true,
+        "cleanup_verified": false,
+        "cleanup_evidence_level": "captured_at_launch"
+      },
+      "details": {
+        "progress.json": {
+          "mtime_utc": "2026-10-17T05:46:50.590334+00:00",
+          "data": {
+            "at": "2026-10-17T05:46:50.590140+00:00",
+            "stage": "validation",
+            "global_step": 100,
+            "batch_idx": 1792,
+            "observed_targets": 14344
+          }
+        },
+        "stage-entry.json": {
+          "mtime_utc": "2026-10-17T05:42:10.569260+00:00",
+          "data": {
+            "command": [
+              "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+              "-B",
+              "-m",
+              "experiments.launch_20261017.run",
+              "train",
+              "--spec",
+              "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/specs/sportsa1-train.json"
+            ],
+            "config_sha256": "0de997aad986903da46bb3865c5d26507d45b0944d13b46c48da9c01c272997a",
+            "disk": {
+              "files_logical_bytes": 2523895867,
+              "free": [
+                {
+                  "free_bytes": 620425134080,
+                  "min_free_bytes": 21474836480,
+                  "path": "/home/bwwu"
+                },
+                {
+                  "free_bytes": 4374179307520,
+                  "min_free_bytes": 21474836480,
+                  "path": "/data/bwwu"
+                }
+              ],
+              "max_bytes": 53687091200,
+              "ok": true
+            },
+            "entered_at": "2026-10-17T05:42:10.568596+00:00",
+            "gate_receipts": [
+              {
+                "bytes": 10094,
+                "hash_sources": [],
+                "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-gpu-gate-v1/status.json",
+                "sha256": "ab945c7faa40d9a3a000afc724d4bc5a08d384d039aa0f76e435920196bfd2f9"
+              },
+              {
+                "bytes": 4954,
+                "hash_sources": [],
+                "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-gpu-gate-v1/output/RESULT.json",
+                "sha256": "e76dbd091656e0c0e710d8deaf20bd18a2d4e0ef03eeaf3564c4fcb145082b4c"
+              }
+            ],
+            "gpus": {
+              "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                "index": 1,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              },
+              "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                "index": 0,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              }
+            },
+            "prelaunch_resource_samples": [
+              {
+                "at": "2026-10-17T05:42:10.418906+00:00",
+                "gpus": {
+                  "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                    "index": 1,
+                    "name": "NVIDIA GeForce RTX 4090",
+                    "processes": [],
+                    "total_mib": 24564,
+                    "used_mib": 1,
+                    "utilization": 0
+                  },
+                  "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                    "index": 0,
+                    "name": "NVIDIA GeForce RTX 4090",
+                    "processes": [],
+                    "total_mib": 24564,
+                    "used_mib": 1,
+                    "utilization": 0
+                  }
+                }
+              }
+            ],
+            "resource_policy": {},
+            "source_commit": "b44399926c98369191c2ff5c2425377c8c07d3c8",
+            "stage": "sportsa1-train"
+          }
+        }
+      },
+      "logs": {
+        "work.log": {
+          "mtime_utc": "2026-10-17T05:42:17.972625+00:00",
+          "tail": "�� decoder.decoder.block.2.layer.2.mlp.model.2                           │ │ ││\n│ │ decoder.decoder.block.2.layer.2.mlp.model.3                           │ │ ││\n│ │ decoder.decoder.block.2.layer.2.mlp.model.4                           │ │ ││\n│ │ decoder.decoder.block.2.layer.2.mlp.model.5                           │ │ ││\n│ │ decoder.decoder.block.2.layer.2.mlp.model.6                           │ │ ││\n│ │ decoder.decoder.block.2.layer.2.layer_norm                            │ │ ││\n│ │ decoder.decoder.block.2.layer.2.dropout                               │ │ ││\n│ │ decoder.decoder.block.3                                               │ │ ││\n│ │ decoder.decoder.block.3.layer                                         │ │ ││\n│ │ decoder.decoder.block.3.layer.0                                       │ │ ││\n│ │ decoder.decoder.block.3.layer.0.SelfAttention                         │ │ ││\n│ │ decoder.decoder.block.3.layer.0.SelfAttention.q                       │ │ ││\n│ │ decoder.decoder.block.3.layer.0.SelfAttention.k                       │ │ ││\n│ │ decoder.decoder.block.3.layer.0.SelfAttention.v                       │ │ ││\n│ │ decoder.decoder.block.3.layer.0.SelfAttention.o                       │ │ ││\n│ │ decoder.decoder.block.3.layer.0.layer_norm                            │ │ ││\n│ │ decoder.decoder.block.3.layer.0.dropout                               │ │ ││\n│ │ decoder.decoder.block.3.layer.1                                       │ │ ││\n│ │ decoder.decoder.block.3.layer.1.EncDecAttention                       │ │ ││\n│ │ decoder.decoder.block.3.layer.1.EncDecAttention.q                     │ │ ││\n│ │ decoder.decoder.block.3.layer.1.EncDecAttention.k                     │ │ ││\n│ │ decoder.decoder.block.3.layer.1.EncDecAttention.v                     │ │ ││\n│ │ decoder.decoder.block.3.layer.1.EncDecAttention.o                     │ │ ││\n│ │ decoder.decoder.block.3.layer.1.layer_norm                            │ │ ││\n│ │ decoder.decoder.block.3.layer.1.dropout                               │ │ ││\n│ │ decoder.decoder.block.3.layer.2                                       │ │ ││\n│ │ decoder.decoder.block.3.layer.2.mlp                                   │ │ ││\n│ │ decoder.decoder.block.3.layer.2.mlp.model                             │ │ ││\n│ │ decoder.decoder.block.3.layer.2.mlp.model.0                           │ │ ││\n│ │ decoder.decoder.block.3.layer.2.mlp.model.1                           │ │ ││\n│ │ decoder.decoder.block.3.layer.2.mlp.model.2                           │ │ ││\n│ │ decoder.decoder.block.3.layer.2.mlp.model.3                           │ │ ││\n│ │ decoder.decoder.block.3.layer.2.mlp.model.4                           │ │ ││\n│ │ decoder.decoder.block.3.layer.2.mlp.model.5                           │ │ ││\n│ │ decoder.decoder.block.3.layer.2.mlp.model.6                           │ │ ││\n│ │ decoder.decoder.block.3.layer.2.layer_norm                            │ │ ││\n│ │ decoder.decoder.block.3.layer.2.dropout                               │ │ ││\n│ │ decoder.decoder.final_layer_norm                                      │ │ ││\n│ │ decoder.decoder.dropout                                               │ │ ││\n│ │ decoder.decoder_mlp                                                   │ │ ││\n│ │ decoder.decoder_mlp.0                                                 │ │ ││\n│ │ decoder.decoder_mlp.1                                                 │ │ ││\n│ │ decoder.decoder_mlp.2                                                 │ │ ││\n│ │ decoder.decoder_mlp.3                                                 │ │ ││\n│ │ item_sid_embedding_table_encoder                                      │ │ ││\n│ │ item_sid_embedding_table_decoder                                      │ │ ││\n└─┴───────────────────────────────────────────────────────────────────────┴─┴─┴┘\nTrainable params: 13.3 M                                                        \nNon-trainable params: 0                                                         \nTotal params: 13.3 M                                                            \nTotal estimated model params size (MB): 53                                      \nModules in train mode: 236                                                      \nModules in eval mode: 0                                                         \n",
+          "bytes": 23648
+        },
+        "supervisor.log": {
+          "mtime_utc": "2026-10-17T05:42:10.252347+00:00",
+          "tail": "",
+          "bytes": 0
+        }
+      }
+    },
+    "ga-20261017-sportsa2-encode-v1": {
+      "status": {
+        "artifacts": [
+          {
+            "bytes": 1380,
+            "path": "output/RESULT.json",
+            "sha256": "76ba32e1ba6e9c1114f03593fe34efd4aed510c5d9d85ecf343da9d7117f60f9"
+          },
+          {
+            "bytes": 6842,
+            "path": "output/effective_config.yaml",
+            "sha256": "e87d5a3b6ad6942d0a1ec6fe4a7aa903aac3e3bdca3832f164181781430a52e3"
+          },
+          {
+            "bytes": 3166,
+            "path": "output/invocation.json",
+            "sha256": "cdb53f8d9b4108901ecec2dcef08c1abe4bdc2b5c0bd4451973789ce575ce421"
+          },
+          {
+            "bytes": 324,
+            "path": "output/item_axis.json",
+            "sha256": "440da06d29432fec1e0c0e682cdb86670956f3e43eb4ad8b38bcbf06f3d7e920"
+          },
+          {
+            "bytes": 37596356,
+            "path": "output/item_embeddings.pt",
+            "sha256": "b137cb8a006a8b950396524ed5be3bbc91d711b36068d671c01da3742d7cda6f"
+          },
+          {
+            "bytes": 42951540,
+            "path": "output/prediction-rank-0.pt",
+            "sha256": "4c8dde708ecd1844b6b4ea8e4ad1d012e273c66ff541ceddec9ce22162d532c0"
+          },
+          {
+            "bytes": 37596336,
+            "path": "output/predictions.pt",
+            "sha256": "2bc4d4cded6465f1d8f04e95c4f423e24d0044e9e5837f371f6f8f9a8687cffd"
+          },
+          {
+            "bytes": 451,
+            "path": "output/progress.json",
+            "sha256": "e6d23b6814c4da2b4c12769b1521e02b46fc977d0992ec7dbcb730991f7347d0"
+          },
+          {
+            "bytes": 245,
+            "path": "output/resource_schedule.json",
+            "sha256": "959fa158849b7af935b174e9c8c2ee4a4e301fd57a7ff8ed61810a74212ca641"
+          },
+          {
+            "bytes": 15484,
+            "path": "output/source_identity.json",
+            "sha256": "9d2ea60740ec59b6237db970ceddfafe56cf985e0b0e711c46551a7dadc737cc"
+          },
+          {
+            "bytes": 1932,
+            "path": "output/stage-entry.json",
+            "sha256": "c6233a2e4a3c57929071f92033507e1796120bfa6b4e4843f8dfef0b5cc43030"
+          },
+          {
+            "bytes": 207,
+            "path": "output/stage-exit.json",
+            "sha256": "9058f994ad487be1b20cbb7e83e8377158d2df38c03b09af2ad1243d98ef1e31"
+          },
+          {
+            "bytes": 601,
+            "path": "output/stage_result.json",
+            "sha256": "a2b857cb89411dc4b80c77ba24337b402f2c6d4d933d86310772f5654d4a1215"
+          },
+          {
+            "bytes": 9927,
+            "path": "output/used_config.json",
+            "sha256": "9004bd5bbbc2ff82afa0261834e65693030afbe7cc40acdb44c537e7b8b3ecfa"
+          }
+        ],
+        "cleanup": {
+          "ended_at": "2026-10-17T05:45:11.045574+00:00",
+          "events": [],
+          "initial_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-10-17T05:45:10.960728+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "last_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-10-17T05:45:11.003339+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "reason": "NORMAL_EXIT_CHECK",
+          "started_at": "2026-10-17T05:45:10.960677+00:00",
+          "verified": true
+        },
+        "ended_at": "2026-10-17T05:45:11.048025+00:00",
+        "exit_code": 0,
+        "job_id": "ga-20261017-sportsa2-encode-v1",
+        "received_at": "2026-10-17T05:42:12.525912+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output",
+        "started_at": "2026-10-17T05:42:12.612226+00:00",
+        "status": "SUCCEEDED",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 1762424,
+          "start_ticks": "282106942",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+            "-u",
+            "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/queue.py",
+            "run-stage",
+            "--config",
+            "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-config-0de997aad986903d.json",
+            "--stage",
+            "sportsa2-encode"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 1762425,
+          "start_ticks": "282106951",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1",
+          "job_id": "ga-20261017-sportsa2-encode-v1",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762425,
+              "pid": 1762425,
+              "session_id": 1762425,
+              "start_ticks": "282106951",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762425,
+              "pid": 1762456,
+              "session_id": 1762425,
+              "start_ticks": "282107184",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762425,
+              "pid": 1763903,
+              "session_id": 1762425,
+              "start_ticks": "282107958",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1762425,
+              "pid": 1763904,
+              "session_id": 1762425,
+              "start_ticks": "282107960",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 1762425,
+            "pid": 1762425,
+            "session_id": 1762425,
+            "start_ticks": "282106951",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 1762425,
+          "session_id": 1762425,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "worker_may_be_live": false,
+        "request_sha256": "a1c12abedd7415729cea059598b065fe4df6960c51171dd792727f76ce045050",
+        "supervisor_alive": false,
+        "worker_alive": false,
+        "workgroup_observation": {
+          "observed_at": "2026-10-17T05:46:56.660062+00:00",
+          "source": "captured_at_launch",
+          "boot_changed": false,
+          "owned_live": [],
+          "unconfirmed_live": [],
+          "unsupported_live": [],
+          "zombies": [],
+          "scan_errors": [],
+          "scan_complete": true,
+          "verified_empty": true
+        },
+        "workgroup_live": false,
+        "cleanup_verified": true,
+        "cleanup_evidence_level": "captured_at_launch"
+      },
+      "details": {
+        "progress.json": {
+          "mtime_utc": "2026-10-17T05:45:01.392507+00:00",
+          "data": {
+            "stage": "t5_encode",
+            "status": "RUNNING",
+            "time": "2026-10-17T05:45:01.392666+00:00",
+            "pid": 1762456,
+            "global_step": 0,
+            "processed_items_rank0": 17928,
+            "world_size": 1,
+            "elapsed_seconds": 159.03975354414433,
+            "gpu_duty_cycle_target": 0.2,
+            "measured_compute_seconds": 27.86729370895773,
+            "throttle_sleep_seconds": 111.46917483583093,
+            "cuda_visible_devices": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+            "loader_batch": 2240
+          }
+        },
+        "stage_result.json": {
+          "mtime_utc": "2026-10-17T05:45:09.161720+00:00",
+          "data": {
+            "status": "SUCCEEDED",
+            "stage": "t5_encode",
+            "time": "2026-10-17T05:45:09.053358+00:00",
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+            "sha256": "b137cb8a006a8b950396524ed5be3bbc91d711b36068d671c01da3742d7cda6f",
+            "shape": [
+              18357,
+              512
+            ],
+            "dtype": "torch.float32",
+            "frozen_t5": true,
+            "normalization": "Identity after MeanAggregation; no vector normalization",
+            "items": 18357,
+            "item_axis_gate": "exact",
+            "source_manifest_sha256": "92a2725517a569366fdb0ee88f4263f45ad71679327a22a42580fa6326a5725d"
+          }
+        },
+        "RESULT.json": {
+          "mtime_utc": "2026-10-17T05:45:09.270177+00:00",
+          "data": {
+            "status": "SUCCEEDED",
+            "stage": "t5_encode",
+            "time": "2026-10-17T05:45:09.053358+00:00",
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+            "sha256": "b137cb8a006a8b950396524ed5be3bbc91d711b36068d671c01da3742d7cda6f",
+            "shape": [
+              18357,
+              512
+            ],
+            "dtype": "torch.float32",
+            "frozen_t5": true,
+            "normalization": "Identity after MeanAggregation; no vector normalization",
+            "items": 18357,
+            "item_axis_gate": "exact",
+            "source_manifest_sha256": "92a2725517a569366fdb0ee88f4263f45ad71679327a22a42580fa6326a5725d",
+            "embedding_asset": {
+              "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+              "sha256": "b137cb8a006a8b950396524ed5be3bbc91d711b36068d671c01da3742d7cda6f",
+              "bytes": 37596356
+            },
+            "method_gate": "MECHANICAL_IDENTITY_ONLY; RESULTS_PENDING_FUTURE_REVIEW",
+            "workflow": "Sports-A2",
+            "config": {
+              "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml",
+              "sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d"
+            },
+            "capture_version": "b44399926c98369191c2ff5c2425377c8c07d3c8/b6203414ee58a40034d8a5e9c311ff509d897002804c2cb81f4c83bf419d2d41",
+            "future_result_review": "NOT_PREAPPROVED"
+          }
+        },
+        "stage-entry.json": {
+          "mtime_utc": "2026-10-17T05:42:14.949336+00:00",
+          "data": {
+            "command": [
+              "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+              "-B",
+              "-m",
+              "experiments.launch_20261017.run",
+              "a2-encode",
+              "--spec",
+              "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/specs/sportsa2-encode.json"
+            ],
+            "config_sha256": "0de997aad986903da46bb3865c5d26507d45b0944d13b46c48da9c01c272997a",
+            "disk": {
+              "files_logical_bytes": 2523920255,
+              "free": [
+                {
+                  "free_bytes": 620425084928,
+                  "min_free_bytes": 21474836480,
+                  "path": "/home/bwwu"
+                },
+                {
+                  "free_bytes": 4374179307520,
+                  "min_free_bytes": 21474836480,
+                  "path": "/data/bwwu"
+                }
+              ],
+              "max_bytes": 53687091200,
+              "ok": true
+            },
+            "entered_at": "2026-10-17T05:42:14.948609+00:00",
+            "gate_receipts": [],
+            "gpus": {
+              "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                "index": 1,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              },
+              "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                "index": 0,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              }
+            },
+            "prelaunch_resource_samples": [
+              {
+                "at": "2026-10-17T05:42:12.692160+00:00",
+                "gpus": {
+                  "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                    "index": 1,
+                    "name": "NVIDIA GeForce RTX 4090",
+                    "processes": [],
+                    "total_mib": 24564,
+                    "used_mib": 1,
+                    "utilization": 0
+                  },
+                  "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                    "index": 0,
+                    "name": "NVIDIA GeForce RTX 4090",
+                    "processes": [],
+                    "total_mib": 24564,
+                    "used_mib": 1,
+                    "utilization": 0
+                  }
+                }
+              },
+              {
+                "at": "2026-10-17T05:42:14.803188+00:00",
+                "gpus": {
+                  "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                    "index": 1,
+                    "name": "NVIDIA GeForce RTX 4090",
+                    "processes": [],
+                    "total_mib": 24564,
+                    "used_mib": 1,
+                    "utilization": 0
+                  },
+                  "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                    "index": 0,
+                    "name": "NVIDIA GeForce RTX 4090",
+                    "processes": [],
+                    "total_mib": 24564,
+                    "used_mib": 1,
+                    "utilization": 0
+                  }
+                }
+              }
+            ],
+            "resource_policy": {
+              "allow_shared": true,
+              "max_peer_memory_mib": 2048,
+              "max_prelaunch_utilization_percent": 30,
+              "min_free_mib": 8192,
+              "required_samples": 2,
+              "sample_seconds": 2
+            },
+            "source_commit": "b44399926c98369191c2ff5c2425377c8c07d3c8",
+            "stage": "sportsa2-encode"
+          }
+        },
+        "stage-exit.json": {
+          "mtime_utc": "2026-10-17T05:45:10.854796+00:00",
+          "data": {
+            "command_exit_code": 0,
+            "command_wall_seconds": 175.903756106738,
+            "ended_at": "2026-10-17T05:45:10.854354+00:00",
+            "result_review": "NOT_PERFORMED_BY_MECHANICAL_QUEUE",
+            "stage": "sportsa2-encode",
+            "stop_reason": null
+          }
+        }
+      },
+      "logs": {
+        "work.log": {
+          "mtime_utc": "2026-10-17T05:45:09.270177+00:00",
+          "tail": ",)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\ntorch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\nid torch.Size([1])\ntext (1,)\n{\"workflow\": \"Sports-A2\", \"mode\": \"a2-encode\", \"status\": \"SUCCEEDED\"}\n",
+          "bytes": 548944
+        },
+        "supervisor.log": {
+          "mtime_utc": "2026-10-17T05:42:12.526428+00:00",
+          "tail": "",
+          "bytes": 0
+        }
+      }
+    },
+    "ga-20261017-sportsa2-quantize-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-quantize-v1",
+      "queue_stage_status": "WAITING_GPU"
+    },
+    "ga-20261017-sportsa2-metadata-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-metadata-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa2-gpu-gate-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-gpu-gate-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa2-train-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-train-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-toys5300-eval-0-v1": {
+      "status": {
+        "exit_code": null,
+        "job_id": "ga-20261017-toys5300-eval-0-v1",
+        "received_at": "2026-10-17T05:45:16.418911+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-eval-0-v1/output",
+        "started_at": "2026-10-17T05:45:16.943464+00:00",
+        "status": "RUNNING",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-eval-0-v1"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 1765805,
+          "start_ticks": "282125331",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+            "-u",
+            "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/queue.py",
+            "run-stage",
+            "--config",
+            "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/queue-config-0de997aad986903d.json",
+            "--stage",
+            "toys5300-eval-0"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 1765806,
+          "start_ticks": "282125384",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-eval-0-v1",
+          "job_id": "ga-20261017-toys5300-eval-0-v1",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765806,
+              "session_id": 1765806,
+              "start_ticks": "282125384",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765811,
+              "session_id": 1765806,
+              "start_ticks": "282125405",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765827,
+              "session_id": 1765806,
+              "start_ticks": "282126242",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765828,
+              "session_id": 1765806,
+              "start_ticks": "282126244",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765829,
+              "session_id": 1765806,
+              "start_ticks": "282126246",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765830,
+              "session_id": 1765806,
+              "start_ticks": "282126250",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765831,
+              "session_id": 1765806,
+              "start_ticks": "282126252",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765832,
+              "session_id": 1765806,
+              "start_ticks": "282126254",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765833,
+              "session_id": 1765806,
+              "start_ticks": "282126256",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 1765806,
+              "pid": 1765834,
+              "session_id": 1765806,
+              "start_ticks": "282126258",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 1765806,
+            "pid": 1765806,
+            "session_id": 1765806,
+            "start_ticks": "282125384",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 1765806,
+          "session_id": 1765806,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "request_sha256": "d1fc5df5c5363df85cbdc47af23a3315570947d7b9adb8bbdef2aa2207c95623",
+        "supervisor_alive": true,
+        "worker_alive": true,
+        "workgroup_observation": {
+          "observed_at": "2026-10-17T05:46:56.786864+00:00",
+          "source": "captured_at_launch",
+          "boot_changed": false,
+          "owned_live": [
+            {
+              "pid": 1765806,
+              "start_ticks": "282125384",
+              "uid": 1005,
+              "pgid": 1765806,
+              "session_id": 1765806,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1765811,
+              "start_ticks": "282125405",
+              "uid": 1005,
+              "pgid": 1765806,
+              "session_id": 1765806,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1765827,
+              "start_ticks": "282126242",
+              "uid": 1005,
+              "pgid": 1765806,
+              "session_id": 1765806,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1765828,
+              "start_ticks": "282126244",
+              "uid": 1005,
+              "pgid": 1765806,
+              "session_id": 1765806,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1765829,
+              "start_ticks": "282126246",
+              "uid": 1005,
+              "pgid": 1765806,
+              "session_id": 1765806,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1765830,
+              "start_ticks": "282126250",
+              "uid": 1005,
+              "pgid": 1765806,
+              "session_id": 1765806,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1765831,
+              "start_ticks": "282126252",
+              "uid": 1005,
+              "pgid": 1765806,
+              "session_id": 1765806,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1765832,
+              "start_ticks": "282126254",
+              "uid": 1005,
+              "pgid": 1765806,
+              "session_id": 1765806,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1765833,
+              "start_ticks": "282126256",
+              "uid": 1005,
+              "pgid": 1765806,
+              "session_id": 1765806,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            },
+            {
+              "pid": 1765834,
+              "start_ticks": "282126258",
+              "uid": 1005,
+              "pgid": 1765806,
+              "session_id": 1765806,
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "proof": "TASK_MARKERS"
+            }
+          ],
+          "unconfirmed_live": [],
+          "unsupported_live": [],
+          "zombies": [],
+          "scan_errors": [],
+          "scan_complete": true,
+          "verified_empty": false
+        },
+        "workgroup_live": true,
+        "cleanup_verified": false,
+        "cleanup_evidence_level": "captured_at_launch"
+      },
+      "details": {
+        "stage-entry.json": {
+          "mtime_utc": "2026-10-17T05:45:17.161901+00:00",
+          "data": {
+            "command": [
+              "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+              "-B",
+              "-m",
+              "experiments.launch_20261017.run",
+              "evaluate",
+              "--spec",
+              "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/b6203414ee58a400/specs/toys5300-eval-0.json"
+            ],
+            "config_sha256": "0de997aad986903da46bb3865c5d26507d45b0944d13b46c48da9c01c272997a",
+            "disk": {
+              "files_logical_bytes": 2642900964,
+              "free": [
+                {
+                  "free_bytes": 620305985536,
+                  "min_free_bytes": 21474836480,
+                  "path": "/home/bwwu"
+                },
+                {
+                  "free_bytes": 4374179307520,
+                  "min_free_bytes": 21474836480,
+                  "path": "/data/bwwu"
+                }
+              ],
+              "max_bytes": 53687091200,
+              "ok": true
+            },
+            "entered_at": "2026-10-17T05:45:17.161246+00:00",
+            "gate_receipts": [
+              {
+                "bytes": 6341,
+                "hash_sources": [],
+                "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-gpu-gate-v1/status.json",
+                "sha256": "e4885ef1934e9d89f7c9626adbc1fb100608e4064c08955e7178a0372d1576f5"
+              },
+              {
+                "bytes": 22323,
+                "hash_sources": [],
+                "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-toys5300-gpu-gate-v1/output/RESULT.json",
+                "sha256": "7bce004b9ad6e2bf61309e318b67d44e94c5e5b40896982820a143b01826e2ec"
+              }
+            ],
+            "gpus": {
+              "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                "index": 1,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [],
+                "total_mib": 24564,
+                "used_mib": 1,
+                "utilization": 0
+              },
+              "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                "index": 0,
+                "name": "NVIDIA GeForce RTX 4090",
+                "processes": [
+                  {
+                    "pid": 1762415,
+                    "process_name": "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+                    "used_mib": 18958
+                  }
+                ],
+                "total_mib": 24564,
+                "used_mib": 18968,
+                "utilization": 14
+              }
+            },
+            "prelaunch_resource_samples": [
+              {
+                "at": "2026-10-17T05:45:17.022898+00:00",
+                "gpus": {
+                  "GPU-59cac3bd-3645-668b-79c8-839e0d878893": {
+                    "index": 1,
+                    "name": "NVIDIA GeForce RTX 4090",
+                    "processes": [],
+                    "total_mib": 24564,
+                    "used_mib": 1,
+                    "utilization": 0
+                  },
+                  "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae": {
+                    "index": 0,
+                    "name": "NVIDIA GeForce RTX 4090",
+                    "processes": [
+                      {
+                        "pid": 1762415,
+                        "process_name": "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+                        "used_mib": 18958
+                      }
+                    ],
+                    "total_mib": 24564,
+                    "used_mib": 18968,
+                    "utilization": 14
+                  }
+                }
+              }
+            ],
+            "resource_policy": {},
+            "source_commit": "b44399926c98369191c2ff5c2425377c8c07d3c8",
+            "stage": "toys5300-eval-0"
+          }
+        }
+      },
+      "logs": {
+        "work.log": {
+          "mtime_utc": "2026-10-17T05:45:25.358370+00:00",
+          "tail": "Seed set to 42\nGPU available: True (cuda), used: True\nTPU available: False, using: 0 TPU cores\nHPU available: False, using: 0 HPUs\nLOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [GPU-59cac3bd-3645-668b-79c8-839e0d878893]\n",
+          "bytes": 212
+        },
+        "supervisor.log": {
+          "mtime_utc": "2026-10-17T05:45:16.420048+00:00",
+          "tail": "",
+          "bytes": 0
+        }
+      }
+    },
+    "ga-20261017-toys5300-eval-3-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5300-eval-3-v1",
+      "queue_stage_status": "WAITING_GPU"
+    },
+    "ga-20261017-toys5300-eval-4-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5300-eval-4-v1",
+      "queue_stage_status": "WAITING_GPU"
+    },
+    "ga-20261017-toys5300-attention-0-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5300-attention-0-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-toys5300-attention-3-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5300-attention-3-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-toys5300-attention-4-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5300-attention-4-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-toys5300-stats-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5300-stats-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-toys5000-eval-0-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5000-eval-0-v1",
+      "queue_stage_status": "WAITING_GPU"
+    },
+    "ga-20261017-toys5000-eval-3-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5000-eval-3-v1",
+      "queue_stage_status": "WAITING_GPU"
+    },
+    "ga-20261017-toys5000-eval-4-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5000-eval-4-v1",
+      "queue_stage_status": "WAITING_GPU"
+    },
+    "ga-20261017-toys5000-attention-0-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5000-attention-0-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-toys5000-attention-3-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5000-attention-3-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-toys5000-attention-4-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5000-attention-4-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-toys5000-stats-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-toys5000-stats-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa1-eval-0-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa1-eval-0-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa1-eval-3-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa1-eval-3-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa1-eval-4-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa1-eval-4-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa1-attention-0-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa1-attention-0-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa1-attention-3-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa1-attention-3-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa1-attention-4-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa1-attention-4-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa1-stats-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa1-stats-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa2-eval-0-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-eval-0-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa2-eval-3-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-eval-3-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa2-eval-4-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-eval-4-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa2-attention-0-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-attention-0-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa2-attention-3-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-attention-3-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa2-attention-4-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-attention-4-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    },
+    "ga-20261017-sportsa2-stats-v1": {
+      "status": "NOT_SUBMITTED",
+      "planned_job_id": "ga-20261017-sportsa2-stats-v1",
+      "queue_stage_status": "WAITING_DEPENDENCY"
+    }
+  },
+  "gpu": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564, 18968, 5116, 14, 36\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564, 740, 23344, 15, 30\n",
+  "compute_apps": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 1762415, /data/bwwu/envs/grid-20261009-e61baf3/bin/python, 18958\nGPU-59cac3bd-3645-668b-79c8-839e0d878893, 1765811, /data/bwwu/envs/grid-20261009-e61baf3/bin/python, 730\n",
+  "process_owners": {
+    "1762415": "1762415 bwwu           04:46 Rl",
+    "1765811": "1765811 bwwu           01:39 Rl"
+  },
+  "disk": {
+    "/home/bwwu": {
+      "total": 913593581568,
+      "used": 246810775552,
+      "free": 620299276288
+    },
+    "/data/bwwu": {
+      "total": 7937302376448,
+      "used": 3483090673664,
+      "free": 4374179307520
+    }
+  },
+  "loadavg": [
+    3.41943359375,
+    2.3466796875,
+    1.35205078125
+  ],
+  "memory_available": "MemAvailable:   246760716 kB"
+}

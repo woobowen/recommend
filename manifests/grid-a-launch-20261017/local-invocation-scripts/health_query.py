@@ -22,7 +22,7 @@ def query(job):
  r=config['runner'];cmd=[r['python'],'-I','-S','-B',r['script'],'query',str(path)]
  p=subprocess.run(cmd,capture_output=True,text=True,timeout=30);assert p.returncode==0,p.stderr
  status=json.loads(p.stdout);output=path/'output';details={}
- for name in ('progress.json','latest_validation.json','stage_result.json','RESULT.json','stage-entry.json','stage-exit.json'):
+ for name in ('progress.json','test/progress.json','latest_validation.json','stage_result.json','RESULT.json','stage-entry.json','stage-exit.json'):
   f=output/name
   if f.exists():
    details[name]={'mtime_utc':datetime.datetime.fromtimestamp(f.stat().st_mtime,datetime.timezone.utc).isoformat(),'data':json.loads(f.read_text())}
@@ -33,6 +33,10 @@ def query(job):
    with f.open('rb') as stream:
     stream.seek(max(0,f.stat().st_size-5000));text=stream.read().decode('utf-8','replace')
    logs[name]={'mtime_utc':datetime.datetime.fromtimestamp(f.stat().st_mtime,datetime.timezone.utc).isoformat(),'tail':text,'bytes':f.stat().st_size}
+ first_update=output/'optimizer_updates.jsonl'
+ if first_update.exists():
+  with first_update.open() as stream:line=stream.readline()
+  if line:details['first_optimizer_update']={'data':json.loads(line)}
  return {'status':status,'details':details,'logs':logs}
 jobs={'ga-20261017-queue-v1':query('ga-20261017-queue-v1')}
 if state:
@@ -53,5 +57,5 @@ print(json.dumps({'observed_at_utc':now.isoformat(),'observed_at_cst':now.astime
 '''.replace('CONFIG_PATH',repr(deployment['remote_config']))
 value=json.loads(t.python(code,timeout=60))
 path=args.queue_deployment.parent/('health-'+args.label+'.json');atomic(path,value)
-active={j:{'status':v['status']['status'],'progress':v['details'].get('progress.json',{}).get('data'),'upstream':v['details'].get('stage_result.json',{}).get('data',{}).get('items')} for j,v in value['jobs'].items() if isinstance(v['status'],dict)}
+active={j:{'status':v['status']['status'],'progress':v['details'].get('progress.json',v['details'].get('test/progress.json',{})).get('data'),'upstream':v['details'].get('stage_result.json',{}).get('data',{}).get('items')} for j,v in value['jobs'].items() if isinstance(v['status'],dict)}
 print(json.dumps({'at':value['observed_at_cst'],'record':str(path),'queue_status':value['queue_state']['status'] if value['queue_state'] else None,'received_jobs':active,'gpu':value['gpu'],'disk_free':{p:d['free'] for p,d in value['disk'].items()}},indent=2))
