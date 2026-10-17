@@ -1,0 +1,71 @@
+{
+  "reviewer": "/root/fd_repair_reviewer",
+  "reviewed_at": "2026-10-17T19:01:22.787010+00:00",
+  "status": "OUTER_RUNNER_ENGINEERING_ADAPTATION_PASS",
+  "fd_engineering_status": "FD_ENGINEERING_EQUIVALENCE_PASS",
+  "source": {
+    "path": "experiments/launch_20261017/queue_runner.py",
+    "sha256": "6c64871028aec213646083d92b09a5b9b3a4571f73053ecc1bcb7719b1807767"
+  },
+  "base_source_commit": "0d18820025e7a28675ed7112be0b1b4ff0110025",
+  "old_outer_runner_sha256": "6f762b9a06a0ec2007d79136f34d78d9875a23f377dd44c710672d986983474e",
+  "old_outer_runner_bytes_unchanged": true,
+  "author_separation": "Reviewer did not author or edit the runner adaptation; independently read exact diff, proved all other source bytes unchanged, and ran read-only positive/negative checks.",
+  "discovery": "The old accepted outer runner allows >86400s only for its two exact historical CPU queue identities. The unsubmitted c31/45fa new controller request125069s was correctly rejected by actual old remote verify() line292.",
+  "minimal_diff_scope": "Add exact ga-20261018-a2-fd-queue-v1 / seven-element module-supervise---config argv recognition; require absolute hash-bound config, matching config queue_id and snapshot.root, exact original absolute deadline, timeout <= config.max_queue_seconds. Only CPU CUDA_VISIBLE_DEVICES empty qualifies for existing172800s long queue cap.",
+  "unchanged": [
+    "all old deployed runner files",
+    "generic <=86400s worker cap",
+    "old two CPU queue recognition paths",
+    "independent supervisor/session/at-most-once/cleanup/ownership code",
+    "scientific child runner398768a732bbfebde4308486a0cedd924595157fda6cbff6a88f0bfaa512beff",
+    "all eleven scientific stage methods and GPU request budgets",
+    "original absolute deadline2026-10-19T05:40:30.012007+00:00"
+  ],
+  "tests": {
+    "status": "NARROW_OUTER_RUNNER_READONLY_POSITIVE_NEGATIVE_PASS",
+    "cases": 16,
+    "old_unchanged_runner_rejects_new_long_controller": true,
+    "new_exact_CPU_controller_accepts": true,
+    "long_non_CPU_wrong_ID_wrong_module_extra_arg_rejected": true,
+    "unbound_or_wrong_hash_config_rejected": true,
+    "above_config_wall_changed_deadline_wrong_snapshot_wrong_queue_ID_rejected": true,
+    "both_old_controller_requests_still_accept_old_and_new_verify": true,
+    "actual_remote_unchanged_config_and_input_hash_checks": true,
+    "config_mutation_negative_cases": "Explicit in-memory read fixtures only; no remote file changed.",
+    "execution_scope": "Only candidate verify() AST function in accepted old runner namespace; other code proven byte-identical. Config mutation negative fixtures override read in memory only; no remote file or job mutation.",
+    "new_job_absent_before_after": true,
+    "submission_called": false,
+    "GPU_compute_requested": false,
+    "harness_note": "First transport script had a placeholder replacement syntax error before execution. Only the independent harness was corrected; candidate source did not change. The complete16-case suite then passed; transport retains both invocation records."
+  },
+  "limits": [
+    "The exception only affects long CPU supervisor admission. Existing generic short-worker behavior is preserved; this is not a claim that all short non-CPU jobs are rejected.",
+    "A new immutable source/outer runner deployment, sidecar and request binding still require final review. This component PASS alone does not approve any concrete submission.",
+    "Future scientific results remain unapproved."
+  ],
+  "formal_submission_approved_by_this_receipt": false,
+  "scientific_result_status": "SCIENTIFIC_RESULT_NOT_YET_AVAILABLE",
+  "historical_candidate_status": "c31/45fa remains preserved unsubmitted and NOT_ADMITTED due to old outer-runner wall-cap mismatch.",
+  "repair_budget_boundary": "Same concentrated pre-submission engineering recovery; zero new formal quantizer attempts. Original task3/3 history is unchanged.",
+  "evidence": [
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/outer-request-readonly-verify-blocked.json",
+      "bytes": 3209,
+      "sha256": "1ce477ec2226fa8df5057515c58bff8b852bb910e53ad193d9e2d6e508476ba2"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/runner-adaptation-readonly-tests.json",
+      "bytes": 6652,
+      "sha256": "5824b4e5e30ffdd0d29bf6f8084d57464fa68d06d639b2f2d8202d8b3acc41a3"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/check_runner_adaptation_readonly.py",
+      "bytes": 7314,
+      "sha256": "52b8c2a1b4dd01d6bd7d25f93d5fc445ecb27372c7494c612584e54e82f0a074"
+    }
+  ],
+  "dependencies_installed": [],
+  "global_config_changes": [],
+  "GPT_UPLOAD_REQUIRED": "YES"
+}

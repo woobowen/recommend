@@ -287,7 +287,18 @@ def verify(r):
         r['argv'][1:5] == ['-B', '-m', 'experiments.launch_20261017.queue', 'supervise'])
     shared_continuation = (r['job_id'] == 'ga-20261018-shared-queue-v1' and
         r['argv'][1:4] == ['-B', str(Path(r['cwd']) / 'experiments/launch_20261018_shared_gpu/resume.py'), 'supervise'])
-    queue_only = ((original_queue or shared_continuation) and
+    a2_fd_continuation = (r['job_id'] == 'ga-20261018-a2-fd-queue-v1' and
+        len(r['argv']) == 7 and r['argv'][1:6] ==
+        ['-B', '-m', 'experiments.a2_fd_recovery_20261018.controller', 'supervise', '--config'])
+    if a2_fd_continuation:
+        config_path = Path(r['argv'][6])
+        assert config_path.is_absolute()
+        config = read(config_path)
+        assert config['queue_id'] == r['job_id'] and config['snapshot']['root'] == r['cwd']
+        assert config['recovery']['original_absolute_queue_deadline'] == '2026-10-19T05:40:30.012007+00:00'
+        assert r['timeout_seconds'] <= config['max_queue_seconds']
+        assert {item['path']: item['sha256'] for item in r['inputs']}[str(config_path)] == sha(config_path)
+    queue_only = ((original_queue or shared_continuation or a2_fd_continuation) and
         r.get('env', {}).get('CUDA_VISIBLE_DEVICES') == '')
     assert 0 < r['timeout_seconds'] <= (172800 if queue_only else 86400)
     assert all(isinstance(k,str) and isinstance(v,str) for k,v in r.get('env',{}).items())

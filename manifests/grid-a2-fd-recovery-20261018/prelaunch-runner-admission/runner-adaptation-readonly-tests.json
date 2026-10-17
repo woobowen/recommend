@@ -1,0 +1,192 @@
+{
+  "status": "NARROW_OUTER_RUNNER_READONLY_POSITIVE_NEGATIVE_PASS",
+  "at": "2026-10-17T19:00:55.179473+00:00",
+  "original_runner": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/runners/queue-runner-6f762b9a06a0ec20.py",
+  "original_runner_sha256": "6f762b9a06a0ec2007d79136f34d78d9875a23f377dd44c710672d986983474e",
+  "candidate_verify_source_sha256": "c2b969aa228fce5caf95417099c11d7db1520a049d041e155f593f5cf9b95adb",
+  "cases": [
+    {
+      "case": "old_unchanged_runner_rejects_new_long_controller",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "AssertionError()",
+      "failed_line": {
+        "file": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/runners/queue-runner-6f762b9a06a0ec20.py",
+        "line": 292,
+        "code": "assert 0 < r['timeout_seconds'] <= (172800 if queue_only else 86400)"
+      },
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "new_exact_CPU_controller_accepted",
+      "expected_pass": true,
+      "actual_pass": true,
+      "error": null,
+      "failed_line": null,
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "non_CPU_long_controller_rejected",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "AssertionError()",
+      "failed_line": {
+        "file": "candidate_queue_runner.verify",
+        "line": 25,
+        "code": ""
+      },
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "wrong_ID_long_controller_rejected",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "AssertionError()",
+      "failed_line": {
+        "file": "candidate_queue_runner.verify",
+        "line": 25,
+        "code": ""
+      },
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "wrong_module_long_controller_rejected",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "AssertionError()",
+      "failed_line": {
+        "file": "candidate_queue_runner.verify",
+        "line": 25,
+        "code": ""
+      },
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "extra_argv_long_controller_rejected",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "AssertionError()",
+      "failed_line": {
+        "file": "candidate_queue_runner.verify",
+        "line": 25,
+        "code": ""
+      },
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "unbound_config_rejected",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "KeyError('/home/bwwu/grid-audits/sid-extensions-p0/grid-a2-fd-recovery-20261018/compiled/c31d2d3eaaafbd18/queue-config-45fa8698ab605332.json')",
+      "failed_line": {
+        "file": "candidate_queue_runner.verify",
+        "line": 22,
+        "code": ""
+      },
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "mismatched_config_hash_rejected",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "AssertionError()",
+      "failed_line": {
+        "file": "candidate_queue_runner.verify",
+        "line": 22,
+        "code": ""
+      },
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "above_config_wall_rejected",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "AssertionError()",
+      "failed_line": {
+        "file": "candidate_queue_runner.verify",
+        "line": 21,
+        "code": ""
+      },
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "changed_absolute_deadline_rejected",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "AssertionError()",
+      "failed_line": {
+        "file": "candidate_queue_runner.verify",
+        "line": 20,
+        "code": ""
+      },
+      "config_fixture": "in-memory read override only"
+    },
+    {
+      "case": "config_queue_ID_mismatch_rejected",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "AssertionError()",
+      "failed_line": {
+        "file": "candidate_queue_runner.verify",
+        "line": 19,
+        "code": ""
+      },
+      "config_fixture": "in-memory read override only"
+    },
+    {
+      "case": "config_snapshot_root_mismatch_rejected",
+      "expected_pass": false,
+      "actual_pass": false,
+      "error": "AssertionError()",
+      "failed_line": {
+        "file": "candidate_queue_runner.verify",
+        "line": 19,
+        "code": ""
+      },
+      "config_fixture": "in-memory read override only"
+    },
+    {
+      "case": "old_controller_unchanged_accepted_old_runner_ga-20261017-queue-v1",
+      "expected_pass": true,
+      "actual_pass": true,
+      "error": null,
+      "failed_line": null,
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "old_controller_unchanged_accepted_new_runner_ga-20261017-queue-v1",
+      "expected_pass": true,
+      "actual_pass": true,
+      "error": null,
+      "failed_line": null,
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "old_controller_unchanged_accepted_old_runner_ga-20261018-shared-queue-v1",
+      "expected_pass": true,
+      "actual_pass": true,
+      "error": null,
+      "failed_line": null,
+      "config_fixture": "unchanged actual hash-bound server config"
+    },
+    {
+      "case": "old_controller_unchanged_accepted_new_runner_ga-20261018-shared-queue-v1",
+      "expected_pass": true,
+      "actual_pass": true,
+      "error": null,
+      "failed_line": null,
+      "config_fixture": "unchanged actual hash-bound server config"
+    }
+  ],
+  "case_count": 16,
+  "new_job_directory_absent_before_after": true,
+  "submission_called": false,
+  "source_execution_scope": "Only candidate verify() AST function in accepted old runner namespace; other code proven byte-identical. Config mutation negative fixtures override read in memory only; no remote file or job mutation.",
+  "reviewer": "/root/fd_repair_reviewer",
+  "candidate_source_path": "/home/addaswsw/recommend-worktrees/sid-extensions-p0/experiments/launch_20261017/queue_runner.py",
+  "candidate_full_source_sha256": "6c64871028aec213646083d92b09a5b9b3a4571f73053ecc1bcb7719b1807767",
+  "source_diff_only_exact_new_CPU_controller_long_wall_gate": true,
+  "old_runner_full_source_sha256": "6f762b9a06a0ec2007d79136f34d78d9875a23f377dd44c710672d986983474e",
+  "no_global_limits_changed": true,
+  "no_GPU_execution": true
+}
