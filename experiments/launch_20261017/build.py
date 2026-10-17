@@ -17,10 +17,10 @@ NAMES = {'toys5300': 'Toys-A-5300', 'toys5000': 'Toys-A-5000',
 
 
 def job(name):
-    return 'ga-20261017-' + name + '-v1'
+    return 'ga-20261017-' + name + ('-v2' if name == 'sportsa1-cpu-gate' else '-v1')
 
 
-def build(deployment, t):
+def build(deployment, t, reuse_index=None):
     short = deployment['manifest']['snapshot_sha256'][:16]
     root = SUPPORT / ('compiled-' + short)
     remote = REMOTE + '/compiled/' + short
@@ -31,6 +31,11 @@ def build(deployment, t):
     config_beauty = by_path['A800_GRID/logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml']
     sid_toys = by_path['A800_GRID/logs/inference/runs/2025-09-17/21-57-54/pickle/merged_predictions_tensor.pt']
     capture = deployment['manifest']['source_commit'] + '/' + deployment['manifest']['snapshot_sha256']
+    prior = {}
+    if reuse_index is not None:
+        old = reuse_index['source_deployment']['manifest']
+        old_capture = old['source_commit'] + '/' + old['snapshot_sha256']
+        prior = {job(name + '-metadata'): old_capture for name in ('toys5300', 'toys5000', 'sportsa1')}
     protocol = {'path': deployment['root'] + '/experiments/launch_20261017/training_protocol.json',
         'sha256': sha256(REPO / 'experiments/launch_20261017/training_protocol.json')}
     bases = {}
@@ -39,6 +44,7 @@ def build(deployment, t):
         spec = {'workflow': workflow, 'route': 'A', 'domain': domain, 'seed': 42,
             'generation_k': 10, 'shuffle_n': 0, 'formal_approved': True,
             'capture_version': capture, 'job_root': JOB_ROOT,
+            'prerequisite_capture_versions': prior,
             'data_dir': '/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/' + domain,
             'config': config_beauty, 'training_protocol': protocol,
             'test_selection_forbidden': True, 'final_result_review': 'PENDING_FUTURE_CODEX'}
@@ -125,10 +131,12 @@ def make_request(t, index, name, timeout, gpu=''):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--deployment', type=Path, required=True)
+    parser.add_argument('--reuse-preparation-index', type=Path)
     args = parser.parse_args()
     sys.path.insert(0, str(TRANSPORT))
     from transport import Transport
-    value = build(json.loads(args.deployment.read_text()), Transport('new-server'))
+    prior = json.loads(args.reuse_preparation_index.read_text()) if args.reuse_preparation_index else None
+    value = build(json.loads(args.deployment.read_text()), Transport('new-server'), prior)
     print(json.dumps({'local_root': value['local_root'], 'templates': len(value['templates'])}))
 
 

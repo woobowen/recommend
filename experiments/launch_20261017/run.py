@@ -28,7 +28,9 @@ def completed(job_id, spec):
     result = json.loads((root / 'output/RESULT.json').read_text())
     assert status['status'] == 'SUCCEEDED' and status['exit_code'] == 0
     assert status['cleanup']['verified']
-    assert request['capture_version'] == spec['capture_version']
+    expected_capture = spec.get('prerequisite_capture_versions', {}).get(job_id, spec['capture_version'])
+    assert request['capture_version'] == expected_capture
+    assert result['capture_version'] == expected_capture
     assert result['workflow'] == spec['workflow']
     return root, result
 

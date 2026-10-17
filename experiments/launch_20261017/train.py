@@ -461,8 +461,25 @@ No test examples, scores or formal checkpoint initialization are involved.
     cpu = device == "cpu"
     if cpu:
         import dataclasses
+        from src.data.loading.components.interfaces import SequentialModuleLabelData
         torch.set_num_threads(min(4, os.cpu_count() or 1))
         def slice_rows(value, n=2):
+            if isinstance(value, SequentialModuleLabelData):
+                # NextKTokenMasking stores four target codes/locations per row
+                # on a flattened first axis. Slice complete row groups here;
+                # ordinary input/mask tensors below still have one entry/row.
+                hierarchies = int(cfg.num_hierarchies)
+                sliced_labels, sliced_locations = {}, {}
+                for key, tensor in value.labels.items():
+                    if tensor.ndim != 1 or tensor.numel() % hierarchies:
+                        raise ValueError("CPU admission requires original flattened four-code targets")
+                    sliced_labels[key] = tensor.reshape(-1, hierarchies)[:n].reshape(-1)
+                for key, tensor in value.label_location.items():
+                    if tensor.ndim != 2 or tensor.shape[1] != 2 or tensor.shape[0] % hierarchies:
+                        raise ValueError("CPU admission requires original four target locations per row")
+                    sliced_locations[key] = tensor.reshape(-1, hierarchies, 2)[:n].reshape(-1, 2)
+                return type(value)(labels=sliced_labels, label_location=sliced_locations,
+                                   attention_mask=slice_rows(value.attention_mask, n))
             if isinstance(value, torch.Tensor):
                 return value[:n]
             if isinstance(value, dict):
@@ -478,6 +495,21 @@ No test examples, scores or formal checkpoint initialization are involved.
         original_shape = list(original_train[0].transformed_sequences["sequence_data"].shape)
         train_batch = slice_rows(original_train)
         val_batch = slice_rows(next(iter(make_loader(cfg, "val"))))
+        batch_shapes = {}
+        for split, batch in (("train", train_batch), ("val", val_batch)):
+            inputs, labels = batch
+            rows = inputs.transformed_sequences["sequence_data"].shape[0]
+            target = labels.labels["sequence_data"]
+            locations = labels.label_location["sequence_data"]
+            if rows != 2 or target.shape != (rows * 4,) or locations.shape != (rows * 4, 2):
+                raise ValueError("CPU admission input/target/location row groups differ")
+            if not torch.equal(locations[:, 0], torch.arange(rows).repeat_interleave(4)):
+                raise ValueError("CPU admission target locations do not cover each retained row four times")
+            batch_shapes[split] = {"input": list(inputs.transformed_sequences["sequence_data"].shape),
+                "mask": list(inputs.mask.shape), "flat_targets": list(target.shape),
+                "four_code_targets": list(target.reshape(rows, 4).shape),
+                "label_locations": list(locations.shape), "complete_four_code_groups": True}
+        write_json(output / "cpu_admission_batch_shapes.json", batch_shapes)
         class BoundedDataModule(LightningDataModule):
             def train_dataloader(self):
                 return (DataLoader([train_batch] * 64, batch_size=None, collate_fn=lambda value: value),)
