@@ -141,15 +141,29 @@ def validate(config, path, require_ready=True):
         devices = gpus(stage)
         policy = stage.get("resource_policy", {})
         if set(policy) - {"allow_shared", "min_free_mib", "max_peer_memory_mib",
+                          "estimated_peak_mib", "safety_margin_mib", "min_runtime_free_mib",
                           "max_prelaunch_utilization_percent", "sample_seconds", "required_samples"}:
             raise ValueError("unsupported resource policy; no implied duty-cycle throttling")
         if policy.get("allow_shared"):
-            if policy.get("min_free_mib", 0) < 8192 or not 0 < policy.get("max_peer_memory_mib", 0) <= 2048:
-                raise ValueError("shared stage requires >=8GiB free and <=2GiB peer memory")
-            if not 0 <= policy.get("max_prelaunch_utilization_percent", 100) <= 30:
-                raise ValueError("shared stage prelaunch utilization must be <=30 percent")
+            if "estimated_peak_mib" in policy:
+                if "max_peer_memory_mib" in policy or "min_free_mib" in policy:
+                    raise ValueError("demand-based sharing cannot impose a fixed peer-memory ceiling")
+                if not 0 < policy["estimated_peak_mib"] <= 24564 or not 512 <= policy.get("safety_margin_mib", 0) <= 8192:
+                    raise ValueError("stage demand and explicit safety margin required")
+                if not 256 <= policy.get("min_runtime_free_mib", 0) <= policy["safety_margin_mib"]:
+                    raise ValueError("invalid runtime headroom")
+            elif policy.get("min_free_mib", 0) < 8192 or not 0 < policy.get("max_peer_memory_mib", 0) <= 2048:
+                raise ValueError("invalid legacy encoding-only resource policy")
+            if not 0 <= policy.get("max_prelaunch_utilization_percent", 100) <= 60:
+                raise ValueError("bounded sustained prelaunch load is required")
             if not 2 <= policy.get("required_samples", 2) <= 3 or not 1 <= policy.get("sample_seconds", 2) <= 5:
                 raise ValueError("shared resource policy requires two or three bounded samples")
+        if stage.get("gpu_candidates"):
+            candidates = stage["gpu_candidates"]
+            if len(devices) != 1 or len(candidates) != len(set(candidates)) or devices[0] not in candidates:
+                raise ValueError("only single-card stages may choose approved alternative devices")
+            if not set(candidates) <= set(config.get("approved_gpu_uuids", [])):
+                raise ValueError("candidate device outside approved physical GPUs")
         r = stage["request"]
         job = safe_id(r["job_id"])
         if job in jobs:
@@ -247,14 +261,14 @@ def runner_call(config, mode, argument):
 
 
 def gpu_snapshot():
-    args = ["nvidia-smi", "--query-gpu=index,uuid,name,memory.total,memory.used,utilization.gpu",
+    args = ["nvidia-smi", "--query-gpu=index,uuid,name,memory.total,memory.used,memory.free,utilization.gpu",
             "--format=csv,noheader,nounits"]
     q = subprocess.run(args, capture_output=True, text=True, timeout=15, check=True)
     cards = {}
     for row in csv.reader(q.stdout.splitlines()):
-        index, uid, name, total, used, util = [v.strip() for v in row]
+        index, uid, name, total, used, free, util = [v.strip() for v in row]
         cards[uid] = dict(index=int(index), name=name, total_mib=int(total),
-                          used_mib=int(used), utilization=int(util), processes=[])
+                          used_mib=int(used), free_mib=int(free), utilization=int(util), processes=[])
     q = subprocess.run(["nvidia-smi", "--query-compute-apps=gpu_uuid,pid,process_name,used_gpu_memory",
                         "--format=csv,noheader,nounits"], capture_output=True,
                        text=True, timeout=15, check=True)
@@ -266,29 +280,51 @@ def gpu_snapshot():
     return cards
 
 
-def resource_ok(stage, cards, running=False):
-    """Sharing is opt-in and bounded; only our process group is exempt at run time."""
+def resource_assessment(stage, cards, running=False):
+    """Judge remaining stage demand; peer presence alone is never a shared veto."""
     policy = stage.get("resource_policy", {})
+    result = {}
     for device in gpus(stage):
         if device not in cards:
-            return False
+            result[device] = {"ok": False, "reason": "physical device absent"}
+            continue
         card = cards[device]
-        peers = card["processes"]
+        peers, owned_mib = list(card["processes"]), 0
         if running:
-            def foreign(process):
+            foreign = []
+            for process in peers:
                 try:
-                    return os.getpgid(process["pid"]) != os.getpgrp()
+                    if os.getpgid(process["pid"]) == os.getpgrp():
+                        owned_mib += process["used_mib"]
+                    else:
+                        foreign.append(process)
                 except ProcessLookupError:
-                    return False
-            peers = [v for v in peers if foreign(v)]
+                    continue
+            peers = foreign
+        free = card["free_mib"]
         if not policy.get("allow_shared"):
-            if peers:
-                return False
-        elif (card["total_mib"] - card["used_mib"] < policy["min_free_mib"] or
-              sum(v["used_mib"] for v in peers) > policy["max_peer_memory_mib"] or
-              (not running and card["utilization"] > policy["max_prelaunch_utilization_percent"])):
-            return False
-    return True
+            result[device] = {"ok": not peers, "reason": "legacy unshared stage", "free_mib": free}
+            continue
+        if "estimated_peak_mib" in policy:
+            remaining = max(0, policy["estimated_peak_mib"] - owned_mib) if running else policy["estimated_peak_mib"]
+            required = max(policy["min_runtime_free_mib"], remaining + policy["safety_margin_mib"])
+            load_ok = running or card["utilization"] <= policy["max_prelaunch_utilization_percent"]
+            result[device] = {"ok": free >= required and load_ok, "free_mib": free,
+                "owned_mib": owned_mib, "remaining_estimated_peak_mib": remaining,
+                "required_free_mib": required, "peer_memory_mib": sum(p["used_mib"] for p in peers),
+                "utilization_percent": card["utilization"], "load_ok": load_ok,
+                "reason": "stage peak plus headroom and sampled load; no fixed peer-memory cap"}
+        else:
+            # Historical completed encoding request compatibility only.
+            result[device] = {"ok": free >= policy["min_free_mib"] and
+                sum(p["used_mib"] for p in peers) <= policy["max_peer_memory_mib"] and
+                (running or card["utilization"] <= policy["max_prelaunch_utilization_percent"]),
+                "free_mib": free, "reason": "legacy encoding policy"}
+    return result
+
+
+def resource_ok(stage, cards, running=False):
+    return all(v["ok"] for v in resource_assessment(stage, cards, running).values())
 
 
 def prelaunch_samples(stage, first=None):
@@ -298,7 +334,50 @@ def prelaunch_samples(stage, first=None):
     for _ in range(1, count):
         time.sleep(policy.get("sample_seconds", 2))
         samples.append({"at": utc(), "gpus": gpu_snapshot()})
-    return all(resource_ok(stage, v["gpus"]) for v in samples), samples
+    okay = all(resource_ok(stage, v["gpus"]) for v in samples)
+    for sample in samples:
+        sample["resource_assessment"] = resource_assessment(stage, sample["gpus"])
+    if "estimated_peak_mib" in policy:
+        for device in gpus(stage):
+            if any(device not in s["gpus"] for s in samples):
+                okay = False
+                continue
+            used = [s["gpus"][device]["used_mib"] for s in samples]
+            observed_swing = max(used) - min(used)
+            required = policy["estimated_peak_mib"] + policy["safety_margin_mib"] + observed_swing
+            for sample in samples:
+                assessment = sample["resource_assessment"][device]
+                assessment.update(observed_memory_swing_mib=observed_swing, sampled_required_free_mib=required)
+                if assessment["free_mib"] < required:
+                    assessment["ok"] = False
+                    okay = False
+    return okay, samples
+
+
+def allocation_stage(stage, devices):
+    """Freeze one approved physical allocation without changing research argv."""
+    if devices == gpus(stage):
+        return stage
+    if len(devices) != 1 or devices[0] not in stage.get("gpu_candidates", []):
+        raise ValueError("unapproved stage GPU allocation")
+    value = json.loads(json.dumps(stage))
+    value.pop("gpu_uuid", None)
+    value["gpu_uuids"] = list(devices)
+    return value
+
+
+def existing_stage(stage, job):
+    actual = read(Path(job) / "request.json")
+    return allocation_stage(stage, actual["queue_stage"]["gpu_uuids"])
+
+
+def initial_stage_states(config):
+    return {s["id"]: dict(job_id=s["request"]["job_id"], status="QUEUED") for s in config["stages"]}
+
+
+def queue_should_stop(config, started):
+    reserve = min(60, config["max_queue_seconds"] * 0.1)
+    return time.monotonic() - started >= config["max_queue_seconds"] - reserve
 
 
 @contextlib.contextmanager
@@ -388,7 +467,7 @@ def supervise(config, config_path):
         state = dict(queue_id=config["queue_id"], config_sha256=config_hash, started_at=utc(),
                      supervisor_pid=os.getpid(), status="RUNNING", reservation=summary,
                      blocked_workflows=config.get("blocked_workflows", {}),
-                     stages={s["id"]: dict(job_id=s["request"]["job_id"], status="QUEUED") for s in config["stages"]})
+                     stages=initial_stage_states(config))
         atomic(root / "queue-status.json", state)
         started = time.monotonic()
         stop = False
@@ -408,6 +487,7 @@ def supervise(config, config_path):
                 item = state["stages"][stage["id"]]
                 job = Path(config["runner"]["job_root"]) / stage["request"]["job_id"]
                 if (job / "accepted.json").exists():
+                    stage = existing_stage(stage, job)
                     actual = runner_call(config, "query", job)
                     expected = hashlib.sha256(canonical(wrapped_request(config, config_path, stage))).hexdigest()
                     if actual["request_sha256"] != expected:
@@ -425,6 +505,8 @@ def supervise(config, config_path):
                     state["accounting"]["groups"][g] > cap for g, cap in config["budget_groups"].items()):
                 raise RuntimeError("GPU accounting exceeds approved hard limit; no further submission")
             for stage in config["stages"]:
+                if stop or queue_should_stop(config, started):
+                    break
                 item = state["stages"][stage["id"]]
                 if item["status"] in FINAL_QUEUE | ACTIVE:
                     continue
@@ -447,10 +529,18 @@ def supervise(config, config_path):
                 if any(d not in cards for d in devices):
                     item.update(status="BLOCKED_GATE", reason="physical GPU UUID absent")
                     continue
-                if any(d in reserved for d in devices):
-                    item["status"] = "WAITING_GPU"
-                    continue
-                available, samples = prelaunch_samples(stage, cards) if devices else (True, [])
+                options = [[d] for d in stage.get("gpu_candidates", [])] or [devices]
+                available, samples = False, []
+                selected = stage
+                for option in options:
+                    if any(d in reserved for d in option):
+                        continue
+                    selected = allocation_stage(stage, option)
+                    available, samples = prelaunch_samples(selected) if option else (True, [])
+                    if available:
+                        break
+                stage = selected
+                devices = gpus(stage)
                 item["prelaunch_resource_samples"] = samples
                 if not available:
                     item["status"] = "WAITING_GPU"
@@ -466,6 +556,8 @@ def supervise(config, config_path):
                 if request_path.exists() and read(request_path) != request:
                     raise RuntimeError("immutable request conflict")
                 atomic(request_path, request)
+                if stop or queue_should_stop(config, started):
+                    break
                 # Persist intent before submission. An ambiguous failure stops the
                 # queue; the next human queries this exact ID before any action.
                 item.update(status="SUBMITTING", request_path=str(request_path), submission_intent_at=utc())
@@ -483,8 +575,7 @@ def supervise(config, config_path):
                 state.update(status="TERMINAL_PENDING_RESULT_REVIEW", ended_at=utc())
                 atomic(root / "queue-status.json", state)
                 return 0
-            queue_reserve = min(60, config["max_queue_seconds"] * 0.1)
-            if stop or time.monotonic() - started >= config["max_queue_seconds"] - queue_reserve:
+            if stop or queue_should_stop(config, started):
                 state.update(status="STOPPED_NO_NEW_SUBMISSIONS", ended_at=utc(),
                              reason="signal or queue wall limit; accepted independent children continue")
                 atomic(root / "queue-status.json", state)
@@ -497,6 +588,7 @@ def run_stage(config, config_path, name):
     stage = next(s for s in config["stages"] if s["id"] == name)
     request = stage["request"]
     job_dir = Path(os.environ["GRID_JOB_DIR"])
+    stage = existing_stage(stage, job_dir)
     worker_entered = time.monotonic()
     if os.environ["GRID_JOB_ID"] != request["job_id"]:
         raise ValueError("stage/runner job identity mismatch")
@@ -541,8 +633,12 @@ def run_stage(config, config_path, name):
                 reason = "TIME_BUDGET"
             elif not disk_snapshot(config)["ok"]:
                 reason = "SPACE_GUARD"
-            elif stage.get("resource_policy", {}).get("allow_shared") and not resource_ok(stage, gpu_snapshot(), running=True):
-                reason = "SHARED_RESOURCE_GUARD"
+            elif stage.get("resource_policy", {}).get("allow_shared"):
+                cards_now = gpu_snapshot()
+                if not resource_ok(stage, cards_now, running=True):
+                    atomic(job_dir / "output" / "resource-guard.json", {"at": utc(), "gpus": cards_now,
+                        "assessment": resource_assessment(stage, cards_now, running=True)})
+                    reason = "SHARED_RESOURCE_GUARD"
             if reason:
                 child.terminate()
                 try:

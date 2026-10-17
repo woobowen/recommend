@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "created_at_utc": "2026-10-17T17:04:51.882725+00:00",
+  "author": "/root/resource_audit",
+  "scope": "Resource estimates and exact existing-source inspection only; no GPU model execution, submission, scientific-result acceptance, or research-method changes.",
+  "original_source_commit": "b44399926c98369191c2ff5c2425377c8c07d3c8",
+  "correction_round": 3,
+  "sources": [
+    {
+      "path": "experiments/launch_20261017/a2_upstream.py",
+      "bytes": 17928,
+      "sha256": "000f5525d9f855321a83e04e0b3f9aa321d4b2ec81d7aa56728f315199247ff9"
+    },
+    {
+      "path": "experiments/launch_20261017/a2_sources.json",
+      "bytes": 95560,
+      "sha256": "92a2725517a569366fdb0ee88f4263f45ad71679327a22a42580fa6326a5725d"
+    },
+    {
+      "path": "experiments/launch_20261017/train.py",
+      "bytes": 38557,
+      "sha256": "30511e6800e5502aa45eea9ebe0dc26a5ac98b6b08dada4c35ba453d813dde86"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/distance_functions.py",
+      "bytes": 5118,
+      "sha256": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/components/clustering_initializers.py",
+      "bytes": 9117,
+      "sha256": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/clustering/base_clustering_module.py",
+      "bytes": 11490,
+      "sha256": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/models/modules/clustering/mini_batch_kmeans.py",
+      "bytes": 6013,
+      "sha256": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659"
+    },
+    {
+      "path": "references/wmh-original/GRID/src/modules/clustering/residual_quantization.py",
+      "bytes": 32525,
+      "sha256": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307"
+    },
+    {
+      "path": "manifests/grid-a-launch-20261017/preparation-jobs/ga-20261017-sportsa1-gpu-gate-v1/output/admission.json",
+      "bytes": 4501,
+      "sha256": "9aefbdd0bdfd94f73fb67f1639bfab29aea054ed56bd71d5e16bd31cab709ae8"
+    },
+    {
+      "path": "manifests/grid-a-launch-20261017/health/health-T20.json",
+      "bytes": 1252959,
+      "sha256": "b2222b72c60bd58ed5ef54a5585b1134a8448ed0c0f695178fb0890ca1cabcac"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a-launch-20261017/compiled-b6203414ee58a400/health-monitor-20261017T170038Z.json",
+      "bytes": 2674741,
+      "sha256": "78b2a2c6c01fb846a66fecabf75039f5ce53f5a6468a92739b221e0df17ecba0",
+      "evidence_pointer": "/monitor_details/ga-20261017-sportsa1-train-v1/training_result.json/data",
+      "observed_at_utc": "2026-10-17T17:00:39.323773+00:00",
+      "extracted": {
+        "global_step": 9600,
+        "gpu_peak_reserved_bytes": 20648558592
+      }
+    }
+  ],
+  "policies": {
+    "generator_training": {
+      "stages": [
+        "Sports A2 GPU admission",
+        "Sports A2 generator training"
+      ],
+      "predicted_peak_mib": 20480,
+      "safety_margin_mib": 2048,
+      "minimum_free_mib": 22528,
+      "measured_reference_peak_reserved_bytes": 20648558592,
+      "measured_reference_peak_mib": 19692.0,
+      "reference": "Completed original Sports A1 full training, global_step 9600, allocator-reserved peak19692MiB. Round the workload envelope upward to20480MiB for nonallocator CUDA context/process overhead, then retain an additional2048MiB safety margin for fluctuations. These are distinct from a measured total-process peak.",
+      "limitations": [
+        "A2 uses the same dual-table generator, sequence geometry, FP32, Adam, raw16/acc16 and cap512. SID values differ and cannot prove an absolute worst-case bound.",
+        "Do not shrink batch or change precision. If free memory is insufficient, wait. Runtime guard must remain enabled."
+      ]
+    },
+    "generator_evaluation_attention": {
+      "stages": [
+        "Sports A1 eval Normal/Shuffle3/Shuffle4",
+        "Sports A1 fixed32 attention",
+        "Sports A2 eval Normal/Shuffle3/Shuffle4",
+        "Sports A2 fixed32 attention"
+      ],
+      "predicted_peak_mib": 2048,
+      "safety_margin_mib": 1024,
+      "minimum_free_mib": 3072,
+      "reference": "Historical T20 actual Toys5000 Shuffle4 compute process 1776374 occupied 730MiB on RTX4090 GPU1. The generator architecture and native beam protocol are reused, with Sports item-axis growth mostly SID/candidate tables.",
+      "static_increment_bytes_for_extra_sid_rows": 205856,
+      "classification": "Conservative engineering admission envelope; not an empirically measured Sports inference peak.",
+      "limitations": [
+        "No extra inference computation was run to manufacture a peak. OFF/ON capture and six-head attention remain original.",
+        "Must preserve process-aware runtime memory protection; first real stage is observed after launch."
+      ]
+    },
+    "residual_kmeans": {
+      "stages": [
+        "Sports A2 dual-GPU R-Kmeans and SID export"
+      ],
+      "devices": 2,
+      "predicted_peak_mib_per_device": 6144,
+      "safety_margin_mib_per_device": 2048,
+      "minimum_free_mib_per_device": 8192,
+      "classification": "Conservative static admission envelope, not an empirical peak or mathematical allocator bound.",
+      "unchanged_method": {
+        "raw_batch_per_device": 2048,
+        "world_size": 2,
+        "precision": "bf16-mixed",
+        "steps": 30,
+        "layers": 3,
+        "codebook_width": 256,
+        "dimension": 512,
+        "init_buffer_rows": 3072,
+        "initialize_on_cpu": false,
+        "normalize_residuals": true
+      },
+      "source_dimensions": {
+        "full_input_batch_fp32_bytes": 4194304,
+        "per_layer_init_buffer_fp32_bytes": 6291456,
+        "three_centroid_tables_fp32_bytes": 1572864,
+        "distance_row_block": 256,
+        "one_explicit_distance_broadcast_fp32_bytes": 134217728,
+        "subtraction_and_square_coexisting_fp32_bytes": 268435456,
+        "output_distance_matrix_per_raw_batch_fp32_bytes": 2097152,
+        "one_hot_assignment_int64_bytes": 4194304
+      },
+      "reasoning": [
+        "SquaredEuclideanDistance.compute has default batch_size=256 and explicitly iterates x row blocks before concatenating distance outputs. Large temporary tensors are 256 by at most256 by512; neither the full18357 item axis nor2048 raw rows is broadcast at once.",
+        "BaseClusteringModule.predict_step wraps centroid-distance assignment in torch.no_grad, and init buffer points are detached. KMeans++ initializer tensors are not generator transformer activations.",
+        "3072 row initialization runs on GPU rank0 as recorded in actual historical config; all ranks still reserve independent device resources.",
+        "Three layers use author sequential residual normalization and layer-wise optimization. No T5 encoder is on GPU in this quantization process.",
+        "6GiB workload envelope plus2GiB margin intentionally exceeds visible tensor sizes to allow runtime, allocator caching, DDP/NCCL and export overhead. Both physical devices independently must pass before submitting."
+      ],
+      "limitations": [
+        "CUDA allocator, distributed framework and external users are dynamic. This static estimate alone does not guarantee noninterference. Multiple observations plus runtime protection and real postlaunch progress are required.",
+        "Two GPUs each having peers is permitted; peer process presence or an arbitrary peer-memory ceiling must not be a rejection rule."
+      ]
+    }
+  },
+  "sharing_safety": {
+    "required": "Check actual free memory against workload envelope plus safety margin on each physical UUID; account own reservations/locks, sample2-3 times, monitor peer memory growth and device errors.",
+    "peer_presence_alone_reject": false,
+    "fixed_small_peer_memory_cap_recommended": false,
+    "utilization": "A bounded prelaunch utilization threshold such as50percent with3 samples is an engineering conservative contention screen, not proof that peers experience zero slowdown. Preserve samples and observe newly launched work. High utilization alone after our own launch is not proof of peer interference.",
+    "runtime": "Must distinguish our process group from foreign processes and stop only this task on sustained demonstrated memory danger. Never kill, pause, or reprioritize peer jobs.",
+    "actual_free_memory": "Use nvidia-smi memory.free directly. T20 GPU1 total24564-used740=23824MiB, but recorded truefree23344MiB; total-minus-used can overestimate available memory by480MiB."
+  },
+  "result_review": "NOT_PERFORMED; this file does not approve completed recommendation metrics, attention outcomes or scientific conclusions."
+}

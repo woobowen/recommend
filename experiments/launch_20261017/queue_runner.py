@@ -283,9 +283,12 @@ def verify(r):
     assert isinstance(r['argv'], list) and r['argv'] and all(isinstance(v,str) for v in r['argv'])
     assert Path(r['argv'][0]).is_absolute() and os.access(r['argv'][0], os.X_OK)
     assert Path(r['cwd']).is_dir() and Path(r['cwd']).is_absolute()
-    queue_only = (r['job_id'] == 'ga-20261017-queue-v1' and
-        r.get('env', {}).get('CUDA_VISIBLE_DEVICES') == '' and
+    original_queue = (r['job_id'] == 'ga-20261017-queue-v1' and
         r['argv'][1:5] == ['-B', '-m', 'experiments.launch_20261017.queue', 'supervise'])
+    shared_continuation = (r['job_id'] == 'ga-20261018-shared-queue-v1' and
+        r['argv'][1:4] == ['-B', str(Path(r['cwd']) / 'experiments/launch_20261018_shared_gpu/resume.py'), 'supervise'])
+    queue_only = ((original_queue or shared_continuation) and
+        r.get('env', {}).get('CUDA_VISIBLE_DEVICES') == '')
     assert 0 < r['timeout_seconds'] <= (172800 if queue_only else 86400)
     assert all(isinstance(k,str) and isinstance(v,str) for k,v in r.get('env',{}).items())
     assert 'GRID_JOB_ID' not in r.get('env', {}) and 'GRID_JOB_DIR' not in r.get('env', {})

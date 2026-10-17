@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "reviewer": "/root/resource_audit",
+  "role": "Actual non-author reviewer of queue.py and queue_runner.py; author only of separate static resource_evidence.json estimates.",
+  "reviewed_at_utc": "2026-10-17T17:11:07.060817+00:00",
+  "status": "SOURCE_RESOURCE_PASS",
+  "baseline_research_commit": "b44399926c98369191c2ff5c2425377c8c07d3c8",
+  "fixed_reviewed_source": [
+    {
+      "path": "experiments/launch_20261017/queue.py",
+      "sha256": "31eb9cffbce1a34f778d141b321b8ddeab08d04bb68416f2a09ea7ddf792a6c4",
+      "bytes": 34111
+    },
+    {
+      "path": "experiments/launch_20261017/queue_runner.py",
+      "sha256": "6f762b9a06a0ec2007d79136f34d78d9875a23f377dd44c710672d986983474e",
+      "bytes": 24518
+    }
+  ],
+  "checked": [
+    "Original unshared peer-presence veto is removed from demand-based shared policies. No arbitrary small fixed peer-memory maximum applies to demand-based policies. Legacy completed encoding request compatibility is explicitly separate.",
+    "gpu_snapshot reads true nvidia-smi memory.free, avoiding the observed480MiB total-minus-used overestimate.",
+    "Prelaunch uses predicted phase peak plus explicit safety margin; three bounded samples add measured memory swing and bound sustained utilization. Both physical GPUs independently must fit dual-card quantization.",
+    "Runtime deducts memory already allocated by own process group, includes original DDP rank children, and requires remaining peak plus headroom. Total utilization after own launch is not treated as proof of foreign contention.",
+    "Approved alternative UUID selection freezes the selected allocation into immutable wrappers and does not mutate scientific requests. Original UUID lock and in-flight reservation mechanisms remain.",
+    "On runtime resource danger the stage stops its direct child and original runner cleans only the verified project group; it does not signal peer tasks.",
+    "queue_runner diff only adds exact named CPU continuation job with empty CUDA_VISIBLE_DEVICES to its48h supervisor exception. Research children keep the original accepted runner and time caps."
+  ],
+  "cpu_verification": {
+    "path": "/home/addaswsw/recommend-support/grid-a-launch-20261017/resource-sharing-cpu-check-20261018.json",
+    "sha256": "466c1e96b8186f09a148f59d8658f8f4278e119088cd0c771eab8a9939583793",
+    "status": "PASS",
+    "checks": 13,
+    "source_unchanged_during_tests": true,
+    "research_compute_or_nvidia_commands_executed": 0,
+    "check_names": [
+      "peer_5GiB_is_not_a_veto_when_real_free_and_load_suffice",
+      "real_free_shortage_refuses_despite_total_minus_used_seeming_large",
+      "prelaunch_utilization_above_approved_50_percent_refused",
+      "dual_gpu_each_independently_sufficient",
+      "dual_gpu_one_short_refuses",
+      "runtime_owned_pgid_memory_subtracted_from_remaining_demand",
+      "runtime_total_utilization_100_is_not_mistaken_for_foreign_contention",
+      "runtime_real_headroom_danger_stops_own_stage",
+      "observed_memory_growth_adds_to_safety_requirement",
+      "single_gpu_can_choose_other_approved_physical_uuid_without_mutating_stage",
+      "outside_approved_physical_gpu_candidates_refused",
+      "gpu_snapshot_uses_driver_true_memory_free_not_total_minus_used",
+      "gpu_snapshot_requests_explicit_memory_free"
+    ]
+  },
+  "resource_envelopes": {
+    "generator_train_and_gpu_admission": {
+      "estimated_peak_mib": 20480,
+      "safety_margin_mib": 2048,
+      "minimum_true_free_mib": 22528,
+      "basis": "Original full A1 allocator peak19692MiB, rounded to20GiB process envelope plus2GiB safety."
+    },
+    "evaluate_attention": {
+      "estimated_peak_mib": 2048,
+      "safety_margin_mib": 1024,
+      "minimum_true_free_mib": 3072,
+      "basis": "Original same-architecture Toys actual730MiB plus conservative inference/capture allowance."
+    },
+    "dual_rkmeans_per_physical_gpu": {
+      "estimated_peak_mib": 6144,
+      "safety_margin_mib": 2048,
+      "minimum_true_free_mib": 8192,
+      "basis": "Static author source tensor dimensions and distributed-runtime allowance, explicitly not a measured peak."
+    }
+  },
+  "limitations": [
+    "The50percent prelaunch load screen and multi-sampling are engineering contention protection, not proof that peer workloads experience zero slowdown. New real computation and peers must be observed after launch.",
+    "This is fixed-source resource review. Final compiled configuration byte identity, actual old-controller stop/empty proof, inherited job inventory, absolute deadline and live budget still require their separate targeted checks before launch.",
+    "No final recommendation metrics, attention results or scientific outcomes have been reviewed or approved."
+  ]
+}

@@ -15,7 +15,8 @@ REMOTE = '/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017'
 TRANSPORT = Path('/home/addaswsw/recommend-support/sid-extensions-p0/scripts')
 SOURCE_DIRS = ['GRID baseline/src', 'references/wmh-original/GRID/src',
     'experiments/beauty_extensions', 'experiments/preflight_20261015',
-    'experiments/formal_20261015', 'experiments/launch_20261017', 'tools/sid-extensions-prep']
+    'experiments/formal_20261015', 'experiments/launch_20261017',
+    'experiments/launch_20261018_shared_gpu', 'tools/sid-extensions-prep']
 
 
 def snapshot(t):

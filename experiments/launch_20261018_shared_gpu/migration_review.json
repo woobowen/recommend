@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "reviewer": "/root/migration_audit",
+  "authored_scientific_or_scheduler_code": false,
+  "observed_at_utc": "2026-10-17T17:12:56.619946+00:00",
+  "original_scientific_commit": "b44399926c98369191c2ff5c2425377c8c07d3c8",
+  "original_queue_config_sha256": "0de997aad986903da46bb3865c5d26507d45b0944d13b46c48da9c01c272997a",
+  "scope": "Independent code, CPU safety fixtures, queue migration and identity/budget/deadline admission only. No scientific result acceptance.",
+  "correction_round": 3,
+  "total_allowed_correction_rounds": 3,
+  "decision": "SOURCE_AND_CPU_ADMISSION_PASS_ACTUAL_BINDING_PENDING",
+  "files_read": [
+    {
+      "path": "experiments/launch_20261017/queue.py",
+      "bytes": 34111,
+      "sha256": "31eb9cffbce1a34f778d141b321b8ddeab08d04bb68416f2a09ea7ddf792a6c4"
+    },
+    {
+      "path": "experiments/launch_20261017/queue_runner.py",
+      "bytes": 24518,
+      "sha256": "6f762b9a06a0ec2007d79136f34d78d9875a23f377dd44c710672d986983474e"
+    },
+    {
+      "path": "experiments/launch_20261018_shared_gpu/resume.py",
+      "bytes": 14724,
+      "sha256": "20647d066ff6345b70f93e9676f0aef2d23f2c88c16f677c1264839ec7ee71b3"
+    },
+    {
+      "path": "experiments/launch_20261018_shared_gpu/test_resume.py",
+      "bytes": 15640,
+      "sha256": "45918548d663fd852e2a31dcbf25d4af297ac67bad145b9017b14fb0b22f6d16"
+    },
+    {
+      "path": "experiments/launch_20261018_shared_gpu/resource_evidence.json",
+      "bytes": 8809,
+      "sha256": "7f7a70978287cb8ffc943922fd087c3eeb10d7858130911cfdde9fa3644b4723"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/sid-extensions-p0/scripts/runner.py",
+      "bytes": 24017,
+      "sha256": "398768a732bbfebde4308486a0cedd924595157fda6cbff6a88f0bfaa512beff"
+    },
+    {
+      "path": "experiments/launch_20261018_shared_gpu/quiesce.py",
+      "bytes": 5947,
+      "sha256": "f559a65814f6c260197700e0b91dc9a0315d6330482cc637a91813b960f5f53e"
+    },
+    {
+      "path": "experiments/launch_20261017/deploy.py",
+      "bytes": 5324,
+      "sha256": "82bb3146ad6425a238718d85825133733fec160a74be7bd912c0936e37d3b3ac"
+    },
+    {
+      "path": "experiments/launch_20261018_shared_gpu/build.py",
+      "bytes": 3717,
+      "sha256": "031e18cbf130b568659b26462be6bde603a8acdebd57415b1ffa1c3f14368d4c"
+    }
+  ],
+  "rules_read": [
+    "/home/addaswsw/recommend/AGENTS.md",
+    "/home/addaswsw/recommend/PROJECT_RULES.md",
+    "/home/addaswsw/recommend/REMOTE_EXECUTION.md"
+  ],
+  "independent_tests": [
+    {
+      "command": "python3 -B -m unittest experiments.launch_20261018_shared_gpu.test_resume -v",
+      "result": "12/12 PASS",
+      "elapsed_seconds": 1.197,
+      "test_kind": "pure CPU, mock runner/GPU, no scientific command execution"
+    },
+    {
+      "fixture": "original C2 SIGTERM stop-order",
+      "result": "PASS: injected captured signal handler in first gate; original loop still called mock submit for both fixture stages; finally STOPPED_NO_NEW_SUBMISSIONS/return2",
+      "source_sha256": "ce5af0372ba8c3008b2c98bc3cf960b6821caca5ad33b6c844ecfa38a5e8775c",
+      "first_fixture_failure": "Incomplete local fixture lacked runner.job_root and raised KeyError; fixed local mock config only, then passed. No production code was modified for this fixture."
+    },
+    {
+      "kind": "AST parse",
+      "result": "PASS",
+      "paths": [
+        "queue.py",
+        "queue_runner.py",
+        "deploy.py",
+        "all new shared_gpu Python modules"
+      ],
+      "scope": "Syntax only; no model execution"
+    },
+    {
+      "kind": "34-stage build CPU fixture",
+      "result": "PASS",
+      "fixture": "actual original queue-config.json plus synthetic 16-submitted/18-pending stop receipt; no real submission or server query",
+      "checks": "all request/dependency/gate bytes preserved; budget groups and143041s unchanged; shorter remaining horizon; every pending GPU uses demand shared policy; single-card approved alternatives; dual-card RQ unchanged",
+      "reservation": {
+        "gpu_seconds": 141300,
+        "stages": 34,
+        "sports_a2_cpu_seconds": 2400
+      }
+    }
+  ],
+  "reviewed_properties": {
+    "old_stop": "Only exact original queue worker stable boot/UID/start_ticks/argv identity may receive SIGTERM; its signal handler does not interrupt independent research workers. Wait for STOPPED_NO_NEW_SUBMISSIONS, outer terminal cleanup and supervisor lock release, then refresh all original jobs to resolve late submissions.",
+    "runner_groups": "Original runner creates each supervisor and each worker in independent sessions. queue.runner_call strips outer GRID_JOB_ID/GRID_JOB_DIR before child runner. Sending the outer supervisor SIGTERM instead can initiate owned-workgroup cleanup and is not the prescribed migration operation.",
+    "original_wrappers": "resume._old_module verifies original C2 DEPLOYMENT manifest bound by original outer request before reloading preserved original queue.py. Accepted jobs retain exact original wrapped request and acceptance fingerprint; completed jobs are not re-executed.",
+    "ambiguity": "Old SUBMITTING, missing acceptance, request files on unlisted pending jobs, active/unconfirmed outer, unreleased old lock, unexplained execution success on pending stage all reject continuation. Unlisted original job directories are rejected even if empty. Original outer request must bind exact original config path+hash.",
+    "method": "Every original scientific request, dependency, gate, GPU-count and protocol field remains equality checked. Only resource_policy, approved candidate allocation and priority scheduling fields may differ. Scientific cwd/PYTHONPATH remain C2. New controller identity is separately recorded.",
+    "budget": "Original GPU budget/groups/prior usage and request hard caps are equality checked. Original completed and active wall accounting is retained. Absolute deadline is recomputed from original started_at+max_queue_seconds; new controller cannot reset it.",
+    "submission_stop": "New queue tests stop/deadline at each stage and again before SUBMITTING; accepted jobs remain independently supervised.",
+    "gpu_allocation": "Single-card alternatives must belong to the same two approved UUIDs; submitted physical allocation is frozen in immutable request and recovered for verification. Dual-card quantization remains simultaneous two-card.",
+    "failure": "Terminal failures/unconfirmed states are BLOCKED_NO_RETRY; downstream is blocked mechanically. No method search, terminal retry or extra budget is enabled.",
+    "resource_scope": "Demand-based sharing and memory safety independently reviewed by resource_audit. This reviewer read the actual demand policy diff and confirmed peer presence alone is not a veto for demand-based shared stages.",
+    "quiesce_script": "quiesce.py verifies fixed old config, original outer request and C2 deployment; binds exact old worker boot/uid/start_ticks/full argv to original request, checks active child sessions differ, uses pidfd SIGTERM only once, then waits bounded 50s for stopped state, empty verified outer and lock release. It rejects any unresolved SUBMITTING or even unaccepted original job directory and refreshes all 34 original request identities. No research job receives a signal.",
+    "queue_runner_extension": "Only exact CPU controller ga-20261018-shared-queue-v1 with empty CUDA_VISIBLE_DEVICES and absolute fixed resume.py supervise entry receives <=172800s wrapper limit. Child limits remain original; resume separately enforces original absolute deadline. Original runner source remains unchanged.",
+    "deployment_delta": "deploy.py adds only experiments/launch_20261018_shared_gpu to SOURCE_DIRS. Git tracked diff inspected is limited to queue.py, queue_runner.py, deploy.py; old C2 immutable server snapshot is not modified.",
+    "training_admission": "New controller uses more conservative 20480MiB demand plus2048MiB margin for Sports admission/training; full A1 measured reserved peak19692MiB retained as source. No scientific batch/precision change.",
+    "config_builder": "build.py deepcopies original 34 stages, retains every scientific request/dependency/gate, changes only scheduling resource policy/candidate UUIDs/controller identity/state roots; requires quiescence receipt, derives finite max_queue_seconds from original absolute deadline without extension. Every unsubmitted GPU stage has demand-based sharing; single-card stages can choose either originally approved GPU while quantization remains two-card. resume.bind independently rechecks live original evidence before execution."
+  },
+  "required_actual_binding_before_new_controller": [
+    "Old controller signal/exit receipt with exact identity, outer cleanup, released old lock.",
+    "Fresh complete original-stage inventory including no unresolved SUBMITTING or unacknowledged requests.",
+    "New immutable configuration preserves old stage sciences, original absolute deadline, original budgets, asset/source paths, all 34 stages; submitted ID set matches fresh receipts.",
+    "Published/read-back new scheduler commit, fixed controller snapshot and actual request/argv hashes match reviewed source."
+  ],
+  "operations_performed_by_reviewer": {
+    "remote_queries": 0,
+    "real_signals": 0,
+    "research_submissions": 0,
+    "scientific_computations": 0,
+    "git_index_or_ref_changes": 0
+  },
+  "result_review": "NOT_PERFORMED; no future training, recommendation metric, SID correctness result or attention scientific conclusion is preapproved."
+}
