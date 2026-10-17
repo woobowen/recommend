@@ -189,7 +189,9 @@ def main():
         from types import SimpleNamespace
         upstream = SimpleNamespace(assets=Path(spec['upstream_assets']), data=Path(spec['data_dir']),
             output=output, embedding=Path(spec['embedding']['path']) if 'embedding' in spec else None,
-            gpu_duty_cycle=spec.get('gpu_duty_cycle', 1.0))
+            gpu_duty_cycle=spec.get('gpu_duty_cycle', 1.0), fd_engineering=spec.get('fd_engineering'))
+        if upstream.fd_engineering:
+            assert args.mode == 'a2-quantize' and spec['workflow'] == 'Sports-A2'
         sources = bind_sources(upstream.assets, output)
         item_axis_gate(sources, upstream.data, output)
         (encode if args.mode == 'a2-encode' else quantize)(upstream, sources)

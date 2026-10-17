@@ -215,6 +215,10 @@ def encode(args, sources=None):
 
 
 def quantize(args, sources=None):
+    fd_engineering = getattr(args, "fd_engineering", None)
+    if fd_engineering:
+        from experiments.a2_fd_recovery_20261018.adapter import configure_process, adapt_config, resource_callback
+        configure_process(args.output)
     if sources is None:
         sources = bind_sources(args.assets, args.output)
         item_axis_gate(sources, args.data, args.output)
@@ -246,6 +250,11 @@ def quantize(args, sources=None):
     pred.embedding_path = str(args.embedding)
     cfg.data_loading.datamodule.predict_dataloader_config = OmegaConf.create(
         OmegaConf.to_container(pred.data_loading.datamodule.predict_dataloader_config, resolve=True))
+    fd_callbacks = []
+    if fd_engineering:
+        changes = adapt_config(cfg)
+        write_json(args.output / ("fd-config-rank-" + os.environ.get("LOCAL_RANK", "0") + ".json"), changes)
+        fd_callbacks = [resource_callback(args.output, tensor)]
     model = hydra.utils.instantiate(cfg.model)
     dm = hydra.utils.instantiate(cfg.data_loading.datamodule)
     if int(os.environ.get("LOCAL_RANK", "0")) == 0:
@@ -256,12 +265,23 @@ def quantize(args, sources=None):
                     monitor="train/loss", mode="min", save_top_k=1, every_n_train_steps=30,
                     save_on_train_epoch_end=False, auto_insert_metric_name=False)
     trainer = hydra.utils.instantiate(cfg.trainer, logger=CSVLogger(str(args.output), name="csv"),
-              callbacks=[checkpoint, Progress(args.output, "rkmeans_sid", 3600),
-                         PredictionWriter(args.output, "cluster_ids")])
+              callbacks=[checkpoint, Progress(args.output, "rkmeans_sid", fd_engineering["worker_hard_seconds"] if fd_engineering else 3600),
+                         PredictionWriter(args.output, "cluster_ids"), *fd_callbacks])
     trainer.fit(model, datamodule=dm)
     if trainer.global_step != 30 or not all(q.is_initialized for q in model.quantization_layer_list):
         raise RuntimeError("Author residual quantization training did not complete all 30 steps/layers")
     trainer.save_checkpoint(str(args.output / "quantizer.ckpt"))
+    if fd_engineering and trainer.is_global_zero:
+        payload = torch.load(args.output / "quantizer.ckpt", map_location="cpu", weights_only=False)
+        assert payload["global_step"] == 30
+        current = model.state_dict()
+        assert current.keys() == payload["state_dict"].keys()
+        assert all(torch.equal(value.detach().cpu(), payload["state_dict"][key]) for key, value in current.items())
+        strict = model.load_state_dict(payload["state_dict"], strict=True)
+        assert not strict.missing_keys and not strict.unexpected_keys
+        write_json(args.output / "quantizer-strict-load.json", {"strict_load": True, "global_step": 30,
+                   "state_exact_to_trained_model": True, "keys": len(current),
+                   "initialized": [bool(q.is_initialized) for q in model.quantization_layer_list]})
     trainer.predict(model, datamodule=dm, return_predictions=False)
     if trainer.is_global_zero:
         codes = torch.load(args.output / "predictions.pt", weights_only=True)

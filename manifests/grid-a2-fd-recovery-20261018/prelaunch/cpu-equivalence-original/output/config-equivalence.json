@@ -1,0 +1,675 @@
+{
+  "original": {
+    "_target_": "src.data.loading.datamodules.sequence_datamodule.ItemDataModule",
+    "train_dataloader_config": {
+      "_target_": "src.data.loading.components.interfaces.ItemDataloaderConfig",
+      "dataset_class": {
+        "_target_": "src.data.loading.components.dataloading.UnboundedSequenceIterable",
+        "_partial_": true
+      },
+      "data_folder": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports/items",
+      "should_shuffle_rows": true,
+      "batch_size_per_device": 2048,
+      "num_workers": 12,
+      "assign_files_by_size": false,
+      "timeout": 60,
+      "drop_last": false,
+      "pin_memory": true,
+      "persistent_workers": true,
+      "collate_fn": {
+        "_target_": "src.data.loading.components.collate_functions.collate_fn_items",
+        "_partial_": true,
+        "item_id_field": "id",
+        "feature_to_input_name": {
+          "id": "item_ids",
+          "text": "text_tokens",
+          "text_mask": "text_mask",
+          "embedding": "input_embedding"
+        }
+      },
+      "dataset_config": {
+        "_target_": "src.data.loading.components.interfaces.ItemDatasetConfig",
+        "item_id_field": "id",
+        "keep_item_id": true,
+        "iterate_per_row": true,
+        "data_iterator": {
+          "_target_": "src.data.loading.components.iterators.TFRecordIterator"
+        },
+        "features_to_consider": [
+          "id"
+        ],
+        "embedding_map": {
+          "id": {
+            "_target_": "torch.load",
+            "_args_": [
+              {
+                "_target_": "src.utils.file_utils.open_local_or_remote",
+                "file_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+                "mode": "rb"
+              }
+            ]
+          }
+        },
+        "num_placeholder_tokens_map": {
+          "id": 0
+        },
+        "preprocessing_functions": [
+          {
+            "_target_": "src.data.loading.components.pre_processing.filter_features_to_consider",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_to_dense_numpy_array",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_fields_to_tensors",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.map_sparse_id_to_embedding",
+            "_partial_": true,
+            "sparse_id_field": "id",
+            "embedding_field_to_add": "embedding"
+          }
+        ],
+        "field_type_map": {
+          "id": {
+            "_target_": "torch.__dict__.get",
+            "_args_": [
+              "int32"
+            ]
+          }
+        }
+      },
+      "limit_files": null,
+      "assign_all_files_per_worker": true
+    },
+    "val_dataloader_config": {
+      "_target_": "src.data.loading.components.interfaces.ItemDataloaderConfig",
+      "dataset_class": {
+        "_target_": "src.data.loading.components.dataloading.UnboundedSequenceIterable",
+        "_partial_": true
+      },
+      "data_folder": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports/items",
+      "should_shuffle_rows": false,
+      "batch_size_per_device": 256,
+      "num_workers": 2,
+      "assign_files_by_size": true,
+      "timeout": 60,
+      "drop_last": false,
+      "pin_memory": false,
+      "persistent_workers": true,
+      "collate_fn": {
+        "_target_": "src.data.loading.components.collate_functions.collate_fn_items",
+        "_partial_": true,
+        "item_id_field": "id",
+        "feature_to_input_name": {
+          "id": "item_ids",
+          "text": "text_tokens",
+          "text_mask": "text_mask",
+          "embedding": "input_embedding"
+        }
+      },
+      "dataset_config": {
+        "_target_": "src.data.loading.components.interfaces.ItemDatasetConfig",
+        "item_id_field": "id",
+        "keep_item_id": true,
+        "iterate_per_row": true,
+        "data_iterator": {
+          "_target_": "src.data.loading.components.iterators.TFRecordIterator"
+        },
+        "features_to_consider": [
+          "id"
+        ],
+        "embedding_map": {
+          "id": {
+            "_target_": "torch.load",
+            "_args_": [
+              {
+                "_target_": "src.utils.file_utils.open_local_or_remote",
+                "file_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+                "mode": "rb"
+              }
+            ]
+          }
+        },
+        "num_placeholder_tokens_map": {
+          "id": 0
+        },
+        "preprocessing_functions": [
+          {
+            "_target_": "src.data.loading.components.pre_processing.filter_features_to_consider",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_to_dense_numpy_array",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_fields_to_tensors",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.map_sparse_id_to_embedding",
+            "_partial_": true,
+            "sparse_id_field": "id",
+            "embedding_field_to_add": "embedding"
+          }
+        ],
+        "field_type_map": {
+          "id": {
+            "_target_": "torch.__dict__.get",
+            "_args_": [
+              "int32"
+            ]
+          }
+        }
+      },
+      "limit_files": null
+    },
+    "test_dataloader_config": {
+      "_target_": "src.data.loading.components.interfaces.ItemDataloaderConfig",
+      "dataset_class": {
+        "_target_": "src.data.loading.components.dataloading.UnboundedSequenceIterable",
+        "_partial_": true
+      },
+      "data_folder": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports/items",
+      "should_shuffle_rows": false,
+      "batch_size_per_device": 256,
+      "num_workers": 2,
+      "assign_files_by_size": true,
+      "timeout": 60,
+      "drop_last": false,
+      "pin_memory": false,
+      "persistent_workers": true,
+      "collate_fn": {
+        "_target_": "src.data.loading.components.collate_functions.collate_fn_items",
+        "_partial_": true,
+        "item_id_field": "id",
+        "feature_to_input_name": {
+          "id": "item_ids",
+          "text": "text_tokens",
+          "text_mask": "text_mask",
+          "embedding": "input_embedding"
+        }
+      },
+      "dataset_config": {
+        "_target_": "src.data.loading.components.interfaces.ItemDatasetConfig",
+        "item_id_field": "id",
+        "keep_item_id": true,
+        "iterate_per_row": true,
+        "data_iterator": {
+          "_target_": "src.data.loading.components.iterators.TFRecordIterator"
+        },
+        "features_to_consider": [
+          "id"
+        ],
+        "embedding_map": {
+          "id": {
+            "_target_": "torch.load",
+            "_args_": [
+              {
+                "_target_": "src.utils.file_utils.open_local_or_remote",
+                "file_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+                "mode": "rb"
+              }
+            ]
+          }
+        },
+        "num_placeholder_tokens_map": {
+          "id": 0
+        },
+        "preprocessing_functions": [
+          {
+            "_target_": "src.data.loading.components.pre_processing.filter_features_to_consider",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_to_dense_numpy_array",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_fields_to_tensors",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.map_sparse_id_to_embedding",
+            "_partial_": true,
+            "sparse_id_field": "id",
+            "embedding_field_to_add": "embedding"
+          }
+        ],
+        "field_type_map": {
+          "id": {
+            "_target_": "torch.__dict__.get",
+            "_args_": [
+              "int32"
+            ]
+          }
+        }
+      },
+      "limit_files": null
+    },
+    "predict_dataloader_config": {
+      "_target_": "src.data.loading.components.interfaces.ItemDataloaderConfig",
+      "dataset_class": {
+        "_target_": "src.data.loading.components.dataloading.UnboundedSequenceIterable",
+        "_partial_": true
+      },
+      "data_folder": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports/items",
+      "should_shuffle_rows": false,
+      "batch_size_per_device": 128,
+      "num_workers": 2,
+      "assign_files_by_size": true,
+      "timeout": 60,
+      "drop_last": false,
+      "pin_memory": false,
+      "persistent_workers": true,
+      "collate_fn": {
+        "_target_": "src.data.loading.components.collate_functions.collate_fn_items",
+        "_partial_": true,
+        "item_id_field": "id",
+        "feature_to_input_name": {
+          "id": "item_ids",
+          "text": "text_tokens",
+          "text_mask": "text_mask",
+          "embedding": "input_embedding"
+        }
+      },
+      "dataset_config": {
+        "_target_": "src.data.loading.components.interfaces.ItemDatasetConfig",
+        "item_id_field": "id",
+        "keep_item_id": true,
+        "iterate_per_row": true,
+        "data_iterator": {
+          "_target_": "src.data.loading.components.iterators.TFRecordIterator"
+        },
+        "features_to_consider": [
+          "id"
+        ],
+        "embedding_map": {
+          "id": {
+            "_target_": "torch.load",
+            "_args_": [
+              {
+                "_target_": "src.utils.file_utils.open_local_or_remote",
+                "file_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+                "mode": "rb"
+              }
+            ]
+          }
+        },
+        "num_placeholder_tokens_map": {
+          "id": 0
+        },
+        "preprocessing_functions": [
+          {
+            "_target_": "src.data.loading.components.pre_processing.filter_features_to_consider",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_to_dense_numpy_array",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_fields_to_tensors",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.map_sparse_id_to_embedding",
+            "_partial_": true,
+            "sparse_id_field": "id",
+            "embedding_field_to_add": "embedding"
+          }
+        ],
+        "field_type_map": {
+          "id": {
+            "_target_": "torch.__dict__.get",
+            "_args_": [
+              "int32"
+            ]
+          }
+        }
+      },
+      "limit_files": null
+    }
+  },
+  "adapted": {
+    "_target_": "src.data.loading.datamodules.sequence_datamodule.ItemDataModule",
+    "train_dataloader_config": {
+      "_target_": "src.data.loading.components.interfaces.ItemDataloaderConfig",
+      "dataset_class": {
+        "_target_": "src.data.loading.components.dataloading.UnboundedSequenceIterable",
+        "_partial_": true
+      },
+      "data_folder": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports/items",
+      "should_shuffle_rows": true,
+      "batch_size_per_device": 2048,
+      "num_workers": 12,
+      "assign_files_by_size": false,
+      "timeout": 60,
+      "drop_last": false,
+      "pin_memory": true,
+      "persistent_workers": true,
+      "collate_fn": {
+        "_target_": "experiments.a2_fd_recovery_20261018.adapter.collate_items_contiguous",
+        "_partial_": true,
+        "item_id_field": "id",
+        "feature_to_input_name": {
+          "id": "item_ids",
+          "text": "text_tokens",
+          "text_mask": "text_mask",
+          "embedding": "input_embedding"
+        }
+      },
+      "dataset_config": {
+        "_target_": "src.data.loading.components.interfaces.ItemDatasetConfig",
+        "item_id_field": "id",
+        "keep_item_id": true,
+        "iterate_per_row": true,
+        "data_iterator": {
+          "_target_": "src.data.loading.components.iterators.TFRecordIterator"
+        },
+        "features_to_consider": [
+          "id"
+        ],
+        "embedding_map": {
+          "id": {
+            "_target_": "torch.load",
+            "_args_": [
+              {
+                "_target_": "src.utils.file_utils.open_local_or_remote",
+                "file_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+                "mode": "rb"
+              }
+            ]
+          }
+        },
+        "num_placeholder_tokens_map": {
+          "id": 0
+        },
+        "preprocessing_functions": [
+          {
+            "_target_": "src.data.loading.components.pre_processing.filter_features_to_consider",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_to_dense_numpy_array",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_fields_to_tensors",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.map_sparse_id_to_embedding",
+            "_partial_": true,
+            "sparse_id_field": "id",
+            "embedding_field_to_add": "embedding"
+          }
+        ],
+        "field_type_map": {
+          "id": {
+            "_target_": "torch.__dict__.get",
+            "_args_": [
+              "int32"
+            ]
+          }
+        }
+      },
+      "limit_files": null,
+      "assign_all_files_per_worker": true
+    },
+    "val_dataloader_config": {
+      "_target_": "src.data.loading.components.interfaces.ItemDataloaderConfig",
+      "dataset_class": {
+        "_target_": "src.data.loading.components.dataloading.UnboundedSequenceIterable",
+        "_partial_": true
+      },
+      "data_folder": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports/items",
+      "should_shuffle_rows": false,
+      "batch_size_per_device": 256,
+      "num_workers": 2,
+      "assign_files_by_size": true,
+      "timeout": 60,
+      "drop_last": false,
+      "pin_memory": false,
+      "persistent_workers": true,
+      "collate_fn": {
+        "_target_": "src.data.loading.components.collate_functions.collate_fn_items",
+        "_partial_": true,
+        "item_id_field": "id",
+        "feature_to_input_name": {
+          "id": "item_ids",
+          "text": "text_tokens",
+          "text_mask": "text_mask",
+          "embedding": "input_embedding"
+        }
+      },
+      "dataset_config": {
+        "_target_": "src.data.loading.components.interfaces.ItemDatasetConfig",
+        "item_id_field": "id",
+        "keep_item_id": true,
+        "iterate_per_row": true,
+        "data_iterator": {
+          "_target_": "src.data.loading.components.iterators.TFRecordIterator"
+        },
+        "features_to_consider": [
+          "id"
+        ],
+        "embedding_map": {
+          "id": {
+            "_target_": "torch.load",
+            "_args_": [
+              {
+                "_target_": "src.utils.file_utils.open_local_or_remote",
+                "file_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+                "mode": "rb"
+              }
+            ]
+          }
+        },
+        "num_placeholder_tokens_map": {
+          "id": 0
+        },
+        "preprocessing_functions": [
+          {
+            "_target_": "src.data.loading.components.pre_processing.filter_features_to_consider",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_to_dense_numpy_array",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_fields_to_tensors",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.map_sparse_id_to_embedding",
+            "_partial_": true,
+            "sparse_id_field": "id",
+            "embedding_field_to_add": "embedding"
+          }
+        ],
+        "field_type_map": {
+          "id": {
+            "_target_": "torch.__dict__.get",
+            "_args_": [
+              "int32"
+            ]
+          }
+        }
+      },
+      "limit_files": null
+    },
+    "test_dataloader_config": {
+      "_target_": "src.data.loading.components.interfaces.ItemDataloaderConfig",
+      "dataset_class": {
+        "_target_": "src.data.loading.components.dataloading.UnboundedSequenceIterable",
+        "_partial_": true
+      },
+      "data_folder": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports/items",
+      "should_shuffle_rows": false,
+      "batch_size_per_device": 256,
+      "num_workers": 2,
+      "assign_files_by_size": true,
+      "timeout": 60,
+      "drop_last": false,
+      "pin_memory": false,
+      "persistent_workers": true,
+      "collate_fn": {
+        "_target_": "src.data.loading.components.collate_functions.collate_fn_items",
+        "_partial_": true,
+        "item_id_field": "id",
+        "feature_to_input_name": {
+          "id": "item_ids",
+          "text": "text_tokens",
+          "text_mask": "text_mask",
+          "embedding": "input_embedding"
+        }
+      },
+      "dataset_config": {
+        "_target_": "src.data.loading.components.interfaces.ItemDatasetConfig",
+        "item_id_field": "id",
+        "keep_item_id": true,
+        "iterate_per_row": true,
+        "data_iterator": {
+          "_target_": "src.data.loading.components.iterators.TFRecordIterator"
+        },
+        "features_to_consider": [
+          "id"
+        ],
+        "embedding_map": {
+          "id": {
+            "_target_": "torch.load",
+            "_args_": [
+              {
+                "_target_": "src.utils.file_utils.open_local_or_remote",
+                "file_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+                "mode": "rb"
+              }
+            ]
+          }
+        },
+        "num_placeholder_tokens_map": {
+          "id": 0
+        },
+        "preprocessing_functions": [
+          {
+            "_target_": "src.data.loading.components.pre_processing.filter_features_to_consider",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_to_dense_numpy_array",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_fields_to_tensors",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.map_sparse_id_to_embedding",
+            "_partial_": true,
+            "sparse_id_field": "id",
+            "embedding_field_to_add": "embedding"
+          }
+        ],
+        "field_type_map": {
+          "id": {
+            "_target_": "torch.__dict__.get",
+            "_args_": [
+              "int32"
+            ]
+          }
+        }
+      },
+      "limit_files": null
+    },
+    "predict_dataloader_config": {
+      "_target_": "src.data.loading.components.interfaces.ItemDataloaderConfig",
+      "dataset_class": {
+        "_target_": "src.data.loading.components.dataloading.UnboundedSequenceIterable",
+        "_partial_": true
+      },
+      "data_folder": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports/items",
+      "should_shuffle_rows": false,
+      "batch_size_per_device": 128,
+      "num_workers": 2,
+      "assign_files_by_size": true,
+      "timeout": 60,
+      "drop_last": false,
+      "pin_memory": false,
+      "persistent_workers": true,
+      "collate_fn": {
+        "_target_": "experiments.a2_fd_recovery_20261018.adapter.collate_items_contiguous",
+        "_partial_": true,
+        "item_id_field": "id",
+        "feature_to_input_name": {
+          "id": "item_ids",
+          "text": "text_tokens",
+          "text_mask": "text_mask",
+          "embedding": "input_embedding"
+        }
+      },
+      "dataset_config": {
+        "_target_": "src.data.loading.components.interfaces.ItemDatasetConfig",
+        "item_id_field": "id",
+        "keep_item_id": true,
+        "iterate_per_row": true,
+        "data_iterator": {
+          "_target_": "src.data.loading.components.iterators.TFRecordIterator"
+        },
+        "features_to_consider": [
+          "id"
+        ],
+        "embedding_map": {
+          "id": {
+            "_target_": "torch.load",
+            "_args_": [
+              {
+                "_target_": "src.utils.file_utils.open_local_or_remote",
+                "file_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+                "mode": "rb"
+              }
+            ]
+          }
+        },
+        "num_placeholder_tokens_map": {
+          "id": 0
+        },
+        "preprocessing_functions": [
+          {
+            "_target_": "src.data.loading.components.pre_processing.filter_features_to_consider",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_to_dense_numpy_array",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.convert_fields_to_tensors",
+            "_partial_": true
+          },
+          {
+            "_target_": "src.data.loading.components.pre_processing.map_sparse_id_to_embedding",
+            "_partial_": true,
+            "sparse_id_field": "id",
+            "embedding_field_to_add": "embedding"
+          }
+        ],
+        "field_type_map": {
+          "id": {
+            "_target_": "torch.__dict__.get",
+            "_args_": [
+              "int32"
+            ]
+          }
+        }
+      },
+      "limit_files": null
+    }
+  },
+  "only_two_collate_targets_changed": true
+}
