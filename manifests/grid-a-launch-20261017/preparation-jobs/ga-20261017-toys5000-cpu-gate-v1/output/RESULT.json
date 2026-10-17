@@ -1,0 +1,878 @@
+{
+  "status": "PASS",
+  "formal": false,
+  "strict_checkpoint": true,
+  "structure": {
+    "adapter_class": "AuthorShuffleModel",
+    "num_hierarchies": 4,
+    "num_embeddings_per_hierarchy": 256,
+    "embedding_dim": 128,
+    "top_k_for_generation": 10,
+    "shared_sid_table": false,
+    "encoder_sid_table_shape": [
+      1024,
+      128
+    ],
+    "decoder_sid_table_shape": [
+      1024,
+      128
+    ],
+    "has_sep": true,
+    "has_user_table": false,
+    "parameters_total": 13259136,
+    "parameters_trainable": 13259136,
+    "state_dict_shapes": {
+      "sep_token": [
+        1,
+        128
+      ],
+      "model.encoder.block.0.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.0.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.0.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.0.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "model.encoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight": [
+        32,
+        6
+      ],
+      "model.encoder.block.0.layer.0.layer_norm.weight": [
+        128
+      ],
+      "model.encoder.block.0.layer.1.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "model.encoder.block.0.layer.1.mlp.model.0.bias": [
+        1024
+      ],
+      "model.encoder.block.0.layer.1.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "model.encoder.block.0.layer.1.mlp.model.2.bias": [
+        1024
+      ],
+      "model.encoder.block.0.layer.1.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "model.encoder.block.0.layer.1.mlp.model.5.bias": [
+        128
+      ],
+      "model.encoder.block.0.layer.1.layer_norm.weight": [
+        128
+      ],
+      "model.encoder.block.1.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.1.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.1.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.1.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "model.encoder.block.1.layer.0.layer_norm.weight": [
+        128
+      ],
+      "model.encoder.block.1.layer.1.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "model.encoder.block.1.layer.1.mlp.model.0.bias": [
+        1024
+      ],
+      "model.encoder.block.1.layer.1.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "model.encoder.block.1.layer.1.mlp.model.2.bias": [
+        1024
+      ],
+      "model.encoder.block.1.layer.1.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "model.encoder.block.1.layer.1.mlp.model.5.bias": [
+        128
+      ],
+      "model.encoder.block.1.layer.1.layer_norm.weight": [
+        128
+      ],
+      "model.encoder.block.2.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.2.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.2.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.2.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "model.encoder.block.2.layer.0.layer_norm.weight": [
+        128
+      ],
+      "model.encoder.block.2.layer.1.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "model.encoder.block.2.layer.1.mlp.model.0.bias": [
+        1024
+      ],
+      "model.encoder.block.2.layer.1.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "model.encoder.block.2.layer.1.mlp.model.2.bias": [
+        1024
+      ],
+      "model.encoder.block.2.layer.1.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "model.encoder.block.2.layer.1.mlp.model.5.bias": [
+        128
+      ],
+      "model.encoder.block.2.layer.1.layer_norm.weight": [
+        128
+      ],
+      "model.encoder.block.3.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.3.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.3.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "model.encoder.block.3.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "model.encoder.block.3.layer.0.layer_norm.weight": [
+        128
+      ],
+      "model.encoder.block.3.layer.1.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "model.encoder.block.3.layer.1.mlp.model.0.bias": [
+        1024
+      ],
+      "model.encoder.block.3.layer.1.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "model.encoder.block.3.layer.1.mlp.model.2.bias": [
+        1024
+      ],
+      "model.encoder.block.3.layer.1.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "model.encoder.block.3.layer.1.mlp.model.5.bias": [
+        128
+      ],
+      "model.encoder.block.3.layer.1.layer_norm.weight": [
+        128
+      ],
+      "model.encoder.final_layer_norm.weight": [
+        128
+      ],
+      "encoder.encoder.encoder.block.0.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.0.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.0.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.0.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "encoder.encoder.encoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight": [
+        32,
+        6
+      ],
+      "encoder.encoder.encoder.block.0.layer.0.layer_norm.weight": [
+        128
+      ],
+      "encoder.encoder.encoder.block.0.layer.1.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "encoder.encoder.encoder.block.0.layer.1.mlp.model.0.bias": [
+        1024
+      ],
+      "encoder.encoder.encoder.block.0.layer.1.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "encoder.encoder.encoder.block.0.layer.1.mlp.model.2.bias": [
+        1024
+      ],
+      "encoder.encoder.encoder.block.0.layer.1.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "encoder.encoder.encoder.block.0.layer.1.mlp.model.5.bias": [
+        128
+      ],
+      "encoder.encoder.encoder.block.0.layer.1.layer_norm.weight": [
+        128
+      ],
+      "encoder.encoder.encoder.block.1.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.1.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.1.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.1.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "encoder.encoder.encoder.block.1.layer.0.layer_norm.weight": [
+        128
+      ],
+      "encoder.encoder.encoder.block.1.layer.1.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "encoder.encoder.encoder.block.1.layer.1.mlp.model.0.bias": [
+        1024
+      ],
+      "encoder.encoder.encoder.block.1.layer.1.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "encoder.encoder.encoder.block.1.layer.1.mlp.model.2.bias": [
+        1024
+      ],
+      "encoder.encoder.encoder.block.1.layer.1.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "encoder.encoder.encoder.block.1.layer.1.mlp.model.5.bias": [
+        128
+      ],
+      "encoder.encoder.encoder.block.1.layer.1.layer_norm.weight": [
+        128
+      ],
+      "encoder.encoder.encoder.block.2.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.2.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.2.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.2.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "encoder.encoder.encoder.block.2.layer.0.layer_norm.weight": [
+        128
+      ],
+      "encoder.encoder.encoder.block.2.layer.1.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "encoder.encoder.encoder.block.2.layer.1.mlp.model.0.bias": [
+        1024
+      ],
+      "encoder.encoder.encoder.block.2.layer.1.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "encoder.encoder.encoder.block.2.layer.1.mlp.model.2.bias": [
+        1024
+      ],
+      "encoder.encoder.encoder.block.2.layer.1.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "encoder.encoder.encoder.block.2.layer.1.mlp.model.5.bias": [
+        128
+      ],
+      "encoder.encoder.encoder.block.2.layer.1.layer_norm.weight": [
+        128
+      ],
+      "encoder.encoder.encoder.block.3.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.3.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.3.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "encoder.encoder.encoder.block.3.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "encoder.encoder.encoder.block.3.layer.0.layer_norm.weight": [
+        128
+      ],
+      "encoder.encoder.encoder.block.3.layer.1.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "encoder.encoder.encoder.block.3.layer.1.mlp.model.0.bias": [
+        1024
+      ],
+      "encoder.encoder.encoder.block.3.layer.1.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "encoder.encoder.encoder.block.3.layer.1.mlp.model.2.bias": [
+        1024
+      ],
+      "encoder.encoder.encoder.block.3.layer.1.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "encoder.encoder.encoder.block.3.layer.1.mlp.model.5.bias": [
+        128
+      ],
+      "encoder.encoder.encoder.block.3.layer.1.layer_norm.weight": [
+        128
+      ],
+      "encoder.encoder.encoder.final_layer_norm.weight": [
+        128
+      ],
+      "decoder.bos_token": [
+        1,
+        128
+      ],
+      "decoder.decoder.block.0.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.0.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.0.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.0.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "decoder.decoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight": [
+        32,
+        6
+      ],
+      "decoder.decoder.block.0.layer.0.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.0.layer.1.EncDecAttention.q.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.0.layer.1.EncDecAttention.k.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.0.layer.1.EncDecAttention.v.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.0.layer.1.EncDecAttention.o.weight": [
+        128,
+        384
+      ],
+      "decoder.decoder.block.0.layer.1.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.0.layer.2.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "decoder.decoder.block.0.layer.2.mlp.model.0.bias": [
+        1024
+      ],
+      "decoder.decoder.block.0.layer.2.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "decoder.decoder.block.0.layer.2.mlp.model.2.bias": [
+        1024
+      ],
+      "decoder.decoder.block.0.layer.2.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "decoder.decoder.block.0.layer.2.mlp.model.5.bias": [
+        128
+      ],
+      "decoder.decoder.block.0.layer.2.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.1.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.1.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.1.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.1.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "decoder.decoder.block.1.layer.0.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.1.layer.1.EncDecAttention.q.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.1.layer.1.EncDecAttention.k.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.1.layer.1.EncDecAttention.v.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.1.layer.1.EncDecAttention.o.weight": [
+        128,
+        384
+      ],
+      "decoder.decoder.block.1.layer.1.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.1.layer.2.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "decoder.decoder.block.1.layer.2.mlp.model.0.bias": [
+        1024
+      ],
+      "decoder.decoder.block.1.layer.2.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "decoder.decoder.block.1.layer.2.mlp.model.2.bias": [
+        1024
+      ],
+      "decoder.decoder.block.1.layer.2.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "decoder.decoder.block.1.layer.2.mlp.model.5.bias": [
+        128
+      ],
+      "decoder.decoder.block.1.layer.2.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.2.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.2.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.2.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.2.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "decoder.decoder.block.2.layer.0.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.2.layer.1.EncDecAttention.q.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.2.layer.1.EncDecAttention.k.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.2.layer.1.EncDecAttention.v.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.2.layer.1.EncDecAttention.o.weight": [
+        128,
+        384
+      ],
+      "decoder.decoder.block.2.layer.1.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.2.layer.2.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "decoder.decoder.block.2.layer.2.mlp.model.0.bias": [
+        1024
+      ],
+      "decoder.decoder.block.2.layer.2.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "decoder.decoder.block.2.layer.2.mlp.model.2.bias": [
+        1024
+      ],
+      "decoder.decoder.block.2.layer.2.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "decoder.decoder.block.2.layer.2.mlp.model.5.bias": [
+        128
+      ],
+      "decoder.decoder.block.2.layer.2.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.3.layer.0.SelfAttention.q.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.3.layer.0.SelfAttention.k.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.3.layer.0.SelfAttention.v.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.3.layer.0.SelfAttention.o.weight": [
+        128,
+        384
+      ],
+      "decoder.decoder.block.3.layer.0.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.3.layer.1.EncDecAttention.q.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.3.layer.1.EncDecAttention.k.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.3.layer.1.EncDecAttention.v.weight": [
+        384,
+        128
+      ],
+      "decoder.decoder.block.3.layer.1.EncDecAttention.o.weight": [
+        128,
+        384
+      ],
+      "decoder.decoder.block.3.layer.1.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.block.3.layer.2.mlp.model.0.weight": [
+        1024,
+        128
+      ],
+      "decoder.decoder.block.3.layer.2.mlp.model.0.bias": [
+        1024
+      ],
+      "decoder.decoder.block.3.layer.2.mlp.model.2.weight": [
+        1024,
+        1024
+      ],
+      "decoder.decoder.block.3.layer.2.mlp.model.2.bias": [
+        1024
+      ],
+      "decoder.decoder.block.3.layer.2.mlp.model.5.weight": [
+        128,
+        1024
+      ],
+      "decoder.decoder.block.3.layer.2.mlp.model.5.bias": [
+        128
+      ],
+      "decoder.decoder.block.3.layer.2.layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder.final_layer_norm.weight": [
+        128
+      ],
+      "decoder.decoder_mlp.0.weight": [
+        256,
+        128
+      ],
+      "decoder.decoder_mlp.1.weight": [
+        256,
+        128
+      ],
+      "decoder.decoder_mlp.2.weight": [
+        256,
+        128
+      ],
+      "decoder.decoder_mlp.3.weight": [
+        256,
+        128
+      ],
+      "item_sid_embedding_table_encoder.weight": [
+        1024,
+        128
+      ],
+      "item_sid_embedding_table_decoder.weight": [
+        1024,
+        128
+      ]
+    }
+  },
+  "original_normal_parity": {
+    "logits": {
+      "max_absolute": 0.0,
+      "allclose": true,
+      "exact": true
+    },
+    "loss": {
+      "max_absolute": 0.0,
+      "allclose": true,
+      "exact": true
+    }
+  },
+  "shuffle_original_parity": {
+    "status": "PASS",
+    "probe_only": true,
+    "checks": [
+      {
+        "n": 3,
+        "original_equals_adapter": true,
+        "global_rng_equals_original": true,
+        "caller_input_unchanged": true,
+        "padding_unchanged": true,
+        "unshuffled_codes_unchanged": true,
+        "trace_matches_moved_vectors": true,
+        "random_permutation": [
+          [
+            [
+              0,
+              2,
+              1
+            ],
+            [
+              2,
+              0,
+              1
+            ],
+            [
+              1,
+              2,
+              0
+            ]
+          ],
+          [
+            [
+              1,
+              0,
+              2
+            ],
+            [
+              2,
+              1,
+              0
+            ],
+            [
+              1,
+              2,
+              0
+            ]
+          ]
+        ],
+        "nonidentity_replay": [
+          [
+            [
+              2,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              2,
+              0,
+              1
+            ],
+            [
+              2,
+              0,
+              1
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ]
+        ]
+      },
+      {
+        "n": 4,
+        "original_equals_adapter": true,
+        "global_rng_equals_original": true,
+        "caller_input_unchanged": true,
+        "padding_unchanged": true,
+        "unshuffled_codes_unchanged": true,
+        "trace_matches_moved_vectors": true,
+        "random_permutation": [
+          [
+            [
+              0,
+              2,
+              1,
+              3
+            ],
+            [
+              3,
+              2,
+              1,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              3
+            ]
+          ],
+          [
+            [
+              2,
+              1,
+              0,
+              3
+            ],
+            [
+              2,
+              0,
+              1,
+              3
+            ],
+            [
+              1,
+              2,
+              3,
+              0
+            ]
+          ]
+        ],
+        "nonidentity_replay": [
+          [
+            [
+              3,
+              0,
+              1,
+              2
+            ],
+            [
+              3,
+              2,
+              1,
+              0
+            ],
+            [
+              3,
+              0,
+              1,
+              2
+            ]
+          ],
+          [
+            [
+              3,
+              0,
+              1,
+              2
+            ],
+            [
+              3,
+              0,
+              1,
+              2
+            ],
+            [
+              3,
+              0,
+              1,
+              2
+            ]
+          ]
+        ]
+      }
+    ]
+  },
+  "observer_checks": null,
+  "finite_loss": 6.8665056228637695,
+  "gpu_peak_bytes": null,
+  "sid": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/inference/runs/2025-09-17/21-57-54/pickle/merged_predictions_tensor.pt",
+    "sha256": "a487a4bdadef63f3a87386ddce52ec03f4771bedbaf554f63272c45fe373e7d1"
+  },
+  "workflow": "Toys-A-5000",
+  "config": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/train/runs/2025-11-03/02-31-15/.hydra/config.yaml",
+    "sha256": "f14ab2ee7c5f1dbaa4a69b474eebb40118c16b3a3e4e433af8b844d8ce9b07b2"
+  },
+  "capture_version": "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+  "future_result_review": "NOT_PREAPPROVED"
+}

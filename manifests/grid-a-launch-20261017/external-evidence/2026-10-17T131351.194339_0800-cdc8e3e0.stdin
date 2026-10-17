@@ -1,0 +1,22 @@
+import os,sys,json,hashlib,time
+os.environ['CUDA_VISIBLE_DEVICES']='';os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
+os.environ['HF_HUB_OFFLINE']='1';os.environ['TRANSFORMERS_OFFLINE']='1';os.environ['TOKENIZERS_PARALLELISM']='false'
+sys.path.insert(0,'/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID')
+import src.utils
+import torch,transformers,tensorflow as tf,numpy as np
+from src.components.network_blocks.hf_language_model import HFLanguageModel
+from src.models.components.network_blocks.embedding_aggregator import EmbeddingAggregator
+from src.models.components.network_blocks.aggregation_strategy import MeanAggregation
+base='/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_T5_SMALL'
+tokenizer=transformers.AutoTokenizer.from_pretrained(base,local_files_only=True)
+m=HFLanguageModel(transformers.T5EncoderModel.from_pretrained(base,local_files_only=True),EmbeddingAggregator(MeanAggregation())).eval()
+for p in m.parameters():p.requires_grad=False
+raw=next(tf.compat.v1.io.tf_record_iterator('/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports/items/data_0.tfrecord.gz',tf.io.TFRecordOptions(compression_type='GZIP')))
+fields=tf.train.Example.FromString(raw).features.feature
+text=np.array(fields['text'].bytes_list.value).astype(str)[0]
+tokens=tokenizer.encode_plus(text,max_length=128,padding='max_length',truncation=True,add_special_tokens=True,return_tensors='pt')
+with torch.inference_mode():
+ output=m(**tokens);hidden=m.huggingface_model(**tokens).last_hidden_state
+ manual=(hidden*tokens['attention_mask'].unsqueeze(-1)).sum(1)/tokens['attention_mask'].sum(1).clamp_min(1).unsqueeze(-1)
+assert torch.equal(output,manual)
+print(json.dumps({'engineering_only':True,'GPU_used':False,'original_t5_real_weight_forward':'PASS','item_id':int(fields['id'].int64_list.value[0]),'tokenizer_class':type(tokenizer).__name__,'token_ids_sha256':hashlib.sha256(tokens['input_ids'].numpy().tobytes()).hexdigest(),'mask_sum':int(tokens['attention_mask'].sum()),'shape':list(output.shape),'dtype':str(output.dtype),'finite':bool(torch.isfinite(output).all()),'original_pooling_vs_masked_mean_tensor_exact':True,'all_frozen':all(not p.requires_grad for p in m.parameters())}))

@@ -1,0 +1,57 @@
+Seed set to 42
+GPU available: False, used: False
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=79` in the `DataLoader` to improve performance.
+/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py:310: The number of training batches (64) is smaller than the logging interval Trainer(log_every_n_steps=100). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
+/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'val_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=79` in the `DataLoader` to improve performance.
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/run.py", line 225, in <module>
+    main()
+  File "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/run.py", line 184, in main
+    value = admission(spec, output)
+  File "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/train.py", line 543, in admission
+    trainer.fit(model, datamodule=dm, ckpt_path=resume)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 539, in fit
+    call._call_and_handle_interrupt(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 47, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 575, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 982, in _run
+    results = self._run_stage()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1026, in _run_stage
+    self.fit_loop.run()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 216, in run
+    self.advance()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 455, in advance
+    self.epoch_loop.run(self._data_fetcher)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 150, in run
+    self.advance(data_fetcher)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 320, in advance
+    batch_output = self.automatic_optimization.run(trainer.optimizers[0], batch_idx, kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 185, in run
+    closure()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 146, in __call__
+    self._result = self.closure(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 131, in closure
+    step_output = self._step_fn()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 319, in _training_step
+    training_step_output = call._call_strategy_hook(trainer, "training_step", *kwargs.values())
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 323, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 391, in training_step
+    return self.lightning_module.training_step(*args, **kwargs)
+  File "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/references/wmh-original/GRID/src/models/modules/huggingface/transformer_base_module.py", line 92, in training_step
+    model_output, loss = self.model_step(
+  File "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/beauty_extensions/author/models.py", line 102, in model_step
+    return super().model_step(model_input=model_input, label_data=label_data)
+  File "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/references/wmh-original/GRID/src/models/modules/semantic_id/tiger_generation_model_shuffle.py", line 1262, in model_step
+    input = self.decoder.decoder_mlp[hierarchy](model_output[:, hierarchy])
+IndexError: index 1 is out of bounds for dimension 1 with size 1

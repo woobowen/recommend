@@ -1,0 +1,263 @@
+{
+  "remote_config": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/gpu-admission-config.json",
+  "config_sha256": "c5b3ae08f0c90e31c60bf7f7d468b391f1e6bbc84ff1e217f735296910f97de8",
+  "requests": [
+    {
+      "schema": 1,
+      "job_id": "ga-20261017-toys5300-gpu-gate-v1",
+      "host": "zwlab-01",
+      "user": "bwwu",
+      "uid": 1005,
+      "namespace": "sid-extensions-p0/new-server",
+      "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+      "capture_version": "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+      "argv": [
+        "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+        "-u",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/queue.py",
+        "run-stage",
+        "--config",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/gpu-admission-config.json",
+        "--stage",
+        "toys5300-gpu-gate"
+      ],
+      "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a",
+      "timeout_seconds": 300,
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+        "OMP_NUM_THREADS": "4",
+        "TF_CPP_MIN_LOG_LEVEL": "3",
+        "TF_NUM_INTRAOP_THREADS": "2",
+        "TF_NUM_INTEROP_THREADS": "2",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a",
+        "HF_HUB_OFFLINE": "1",
+        "WANDB_MODE": "disabled",
+        "TOKENIZERS_PARALLELISM": "false"
+      },
+      "inputs": [
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/DEPLOYMENT.json",
+          "sha256": "a7522db20625e55c5e34381a135e865a19b87eae1ff715ca69a652bf470173a3"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/specs/toys5300-gpu-gate.json",
+          "sha256": "c6690da595ed0301a15ee675f50fede0b2373dbc49bdb10f6ef1cebf72ea0102"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/train/runs/2025-10-29/23-42-04/.hydra/config.yaml",
+          "sha256": "b7008a5f603bfa76eaeb25565b8a917717895e22689a6b79a79298d23d930e78"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/inference/runs/2025-09-17/21-57-54/pickle/merged_predictions_tensor.pt",
+          "sha256": "a487a4bdadef63f3a87386ddce52ec03f4771bedbaf554f63272c45fe373e7d1"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/train/runs/2025-10-29/23-42-04/checkpoints/checkpoint_epoch=000_step=005300.ckpt",
+          "sha256": "5e88fac352f603cb0babad1935f7044072b1e75975bf9b41c30fda11f70435c5"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/training_protocol.json",
+          "sha256": "9d3823c2ada022f479fb3b8ac4e36bc2cf09267281db5b15edc636bec0a45c7e"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/queue.py",
+          "sha256": "ce5af0372ba8c3008b2c98bc3cf960b6821caca5ad33b6c844ecfa38a5e8775c"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/gpu-admission-config.json",
+          "sha256": "c5b3ae08f0c90e31c60bf7f7d468b391f1e6bbc84ff1e217f735296910f97de8"
+        }
+      ],
+      "queue_stage": {
+        "id": "toys5300-gpu-gate",
+        "workflow": "toys-a-5300",
+        "config_sha256": "c5b3ae08f0c90e31c60bf7f7d468b391f1e6bbc84ff1e217f735296910f97de8",
+        "command": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "-m",
+          "experiments.launch_20261017.run",
+          "admission-gpu",
+          "--spec",
+          "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/specs/toys5300-gpu-gate.json"
+        ],
+        "budget_group": "engineering",
+        "gpu_uuids": [
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+        ],
+        "source_commit": "85daa0f32e10883ae5704423d517e1e9bf7c12cc"
+      }
+    },
+    {
+      "schema": 1,
+      "job_id": "ga-20261017-toys5000-gpu-gate-v1",
+      "host": "zwlab-01",
+      "user": "bwwu",
+      "uid": 1005,
+      "namespace": "sid-extensions-p0/new-server",
+      "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+      "capture_version": "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+      "argv": [
+        "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+        "-u",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/queue.py",
+        "run-stage",
+        "--config",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/gpu-admission-config.json",
+        "--stage",
+        "toys5000-gpu-gate"
+      ],
+      "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a",
+      "timeout_seconds": 300,
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+        "OMP_NUM_THREADS": "4",
+        "TF_CPP_MIN_LOG_LEVEL": "3",
+        "TF_NUM_INTRAOP_THREADS": "2",
+        "TF_NUM_INTEROP_THREADS": "2",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a",
+        "HF_HUB_OFFLINE": "1",
+        "WANDB_MODE": "disabled",
+        "TOKENIZERS_PARALLELISM": "false"
+      },
+      "inputs": [
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/DEPLOYMENT.json",
+          "sha256": "a7522db20625e55c5e34381a135e865a19b87eae1ff715ca69a652bf470173a3"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/specs/toys5000-gpu-gate.json",
+          "sha256": "c9f501226f54aa2d1ebbb933d3d5b5e95d108043cbce7e111af659464a2f41ea"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/train/runs/2025-11-03/02-31-15/.hydra/config.yaml",
+          "sha256": "f14ab2ee7c5f1dbaa4a69b474eebb40118c16b3a3e4e433af8b844d8ce9b07b2"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/inference/runs/2025-09-17/21-57-54/pickle/merged_predictions_tensor.pt",
+          "sha256": "a487a4bdadef63f3a87386ddce52ec03f4771bedbaf554f63272c45fe373e7d1"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/train/runs/2025-11-03/02-31-15/checkpoints/checkpoint_epoch=000_step=005000.ckpt",
+          "sha256": "ed627a41aae73d941fe354e2c29d99d1e9d768e407c9d83eb2c401ca2f562090"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/training_protocol.json",
+          "sha256": "9d3823c2ada022f479fb3b8ac4e36bc2cf09267281db5b15edc636bec0a45c7e"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/queue.py",
+          "sha256": "ce5af0372ba8c3008b2c98bc3cf960b6821caca5ad33b6c844ecfa38a5e8775c"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/gpu-admission-config.json",
+          "sha256": "c5b3ae08f0c90e31c60bf7f7d468b391f1e6bbc84ff1e217f735296910f97de8"
+        }
+      ],
+      "queue_stage": {
+        "id": "toys5000-gpu-gate",
+        "workflow": "toys-a-5000",
+        "config_sha256": "c5b3ae08f0c90e31c60bf7f7d468b391f1e6bbc84ff1e217f735296910f97de8",
+        "command": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "-m",
+          "experiments.launch_20261017.run",
+          "admission-gpu",
+          "--spec",
+          "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/specs/toys5000-gpu-gate.json"
+        ],
+        "budget_group": "engineering",
+        "gpu_uuids": [
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+        ],
+        "source_commit": "85daa0f32e10883ae5704423d517e1e9bf7c12cc"
+      }
+    },
+    {
+      "schema": 1,
+      "job_id": "ga-20261017-sportsa1-gpu-gate-v1",
+      "host": "zwlab-01",
+      "user": "bwwu",
+      "uid": 1005,
+      "namespace": "sid-extensions-p0/new-server",
+      "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+      "capture_version": "85daa0f32e10883ae5704423d517e1e9bf7c12cc/3ef93829656b734a8370e21e4f13654cd09be8aa5b0e40bffbf8379916387279",
+      "argv": [
+        "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+        "-u",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/queue.py",
+        "run-stage",
+        "--config",
+        "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/gpu-admission-config.json",
+        "--stage",
+        "sportsa1-gpu-gate"
+      ],
+      "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a",
+      "timeout_seconds": 900,
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+        "OMP_NUM_THREADS": "4",
+        "TF_CPP_MIN_LOG_LEVEL": "3",
+        "TF_NUM_INTRAOP_THREADS": "2",
+        "TF_NUM_INTEROP_THREADS": "2",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a",
+        "HF_HUB_OFFLINE": "1",
+        "WANDB_MODE": "disabled",
+        "TOKENIZERS_PARALLELISM": "false"
+      },
+      "inputs": [
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/DEPLOYMENT.json",
+          "sha256": "a7522db20625e55c5e34381a135e865a19b87eae1ff715ca69a652bf470173a3"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/specs/sportsa1-gpu-gate.json",
+          "sha256": "fa72250f6d68f285025a915504a53fae0bdfff35f0b92892e3028cb137ae970e"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml",
+          "sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d"
+        },
+        {
+          "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+          "sha256": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/training_protocol.json",
+          "sha256": "9d3823c2ada022f479fb3b8ac4e36bc2cf09267281db5b15edc636bec0a45c7e"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/3ef93829656b734a/experiments/launch_20261017/queue.py",
+          "sha256": "ce5af0372ba8c3008b2c98bc3cf960b6821caca5ad33b6c844ecfa38a5e8775c"
+        },
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/gpu-admission-config.json",
+          "sha256": "c5b3ae08f0c90e31c60bf7f7d468b391f1e6bbc84ff1e217f735296910f97de8"
+        }
+      ],
+      "queue_stage": {
+        "id": "sportsa1-gpu-gate",
+        "workflow": "sports-a1",
+        "config_sha256": "c5b3ae08f0c90e31c60bf7f7d468b391f1e6bbc84ff1e217f735296910f97de8",
+        "command": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "-m",
+          "experiments.launch_20261017.run",
+          "train-admission",
+          "--spec",
+          "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/compiled/3ef93829656b734a/specs/sportsa1-gpu-gate.json"
+        ],
+        "budget_group": "engineering",
+        "gpu_uuids": [
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae"
+        ],
+        "source_commit": "85daa0f32e10883ae5704423d517e1e9bf7c12cc"
+      }
+    }
+  ]
+}

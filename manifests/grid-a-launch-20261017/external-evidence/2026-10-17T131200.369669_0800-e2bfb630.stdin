@@ -1,0 +1,17 @@
+import os,sys,json
+os.environ['CUDA_VISIBLE_DEVICES']=''
+os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
+sys.path.insert(0,'/home/bwwu/grid-audits/sid-extensions-p0/restored/GRID')
+import src.utils
+from src.modules.clustering.residual_quantization import ResidualQuantization
+from src.components.network_blocks.hf_language_model import HFLanguageModel
+from src.modules.semantic_embedding_inference_module import SemanticEmbeddingInferenceModule
+from omegaconf import OmegaConf
+import src.utils.custom_hydra_resolvers
+import hydra,torch
+base='/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/'
+c=OmegaConf.load(base+'A800_GRID/logs/train/runs/2025-09-15/20-27-55/.hydra/config.yaml')
+c.data_dir='/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data/sports'
+c.embedding_path=base+'A800_GRID/logs/inference/runs/2025-09-15/19-47-36/pickle/merged_predictions_tensor.pt'
+m=hydra.utils.instantiate(c.model)
+print(json.dumps({'imports':'PASS','quantizer':'PASS','train_layer_wise':m.train_layer_wise,'normalize_residuals':m.normalize_residuals,'layers':len(m.quantization_layer_list),'centroids':[list(q.centroids.shape) for q in m.quantization_layer_list]}))

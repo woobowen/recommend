@@ -1,0 +1,19 @@
+{
+  "task_revision_rounds_used": 2,
+  "maximum": 3,
+  "round1": {
+    "scope": "Small queue fixture only",
+    "cause": "60-second queue fixture consumed by fixed60-second supervisor reserve",
+    "change": "reserve=min(60,queue_seconds*0.1)",
+    "result": "CPU nested-runner fixture PASS; no formal research run affected"
+  },
+  "round2": {
+    "scope": "CPU engineering training sample only; source b44399926c98369191c2ff5c2425377c8c07d3c8",
+    "failed_job": "ga-20261017-sportsa1-cpu-gate-v1",
+    "cause": "Flattened four-code labels sliced as ordinary rows",
+    "change": "Slice target/location complete four-code row groups; explicit shapes; preserve original failure",
+    "passed_job": "ga-20261017-sportsa1-cpu-gate-v2",
+    "GPU_passed_job": "ga-20261017-sportsa1-gpu-gate-v1",
+    "formal_training_functions_and_GPU_branch_unchanged": true
+  }
+}

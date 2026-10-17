@@ -1,0 +1,15 @@
+import os
+os.environ['CUDA_VISIBLE_DEVICES']=''
+os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
+from pathlib import Path
+import tensorflow as tf,hashlib,json
+for domain in ['sports','toys']:
+ p=Path('/data/bwwu/sid-extensions-assets/563dc50b1c7e/original_assets/data/amazon_data')/domain/'items'
+ ids=[];files=[];texts=hashlib.sha256();fields=set();sample=None
+ for f in sorted(p.glob('*.tfrecord.gz')):
+  files.append({'path':str(f),'bytes':f.stat().st_size,'sha256':hashlib.sha256(f.read_bytes()).hexdigest()})
+  for raw in tf.compat.v1.io.tf_record_iterator(str(f),tf.io.TFRecordOptions(compression_type='GZIP')):
+   e=tf.train.Example.FromString(raw);v=e.features.feature
+   item=int(v['id'].int64_list.value[0]);text=v['text'].bytes_list.value[0];ids.append(item);fields.update(v.keys());texts.update(item.to_bytes(8,'little'));texts.update(len(text).to_bytes(8,'little'));texts.update(text)
+   if sample is None:sample={'id':item,'text_repr':repr(text[:160]),'num_text_fields':len(v['text'].bytes_list.value)}
+ print(json.dumps({'domain':domain,'n':len(ids),'unique':len(set(ids)),'min':min(ids),'max':max(ids),'axis_dense_zero_based':set(ids)==set(range(max(ids)+1)),'fields':sorted(fields),'sample':sample,'id_text_stream_sha256':texts.hexdigest(),'files':files}))
