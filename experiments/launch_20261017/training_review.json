@@ -1,0 +1,69 @@
+{
+  "status": "NONAUTHOR_SOURCE_AND_STAGE_BRIDGE_CONDITIONAL_PASS",
+  "reviewer": "/root/sports_training",
+  "reviewed_author": "/root",
+  "reviewed_at_utc": "2026-10-17T05:16:26.168148+00:00",
+  "source_files_sha256": {
+    "run.py": "43978ee1a359df50a663e16ba8f7f10eaa7626bfd5a22dd3e0b7ee0d05a0a98d",
+    "deploy.py": "70437c20852ef0470852b021a28644a7e1c181c6de81122440ba077036abf9c8"
+  },
+  "scope": [
+    "run.py dependency resolution and formal admission gate",
+    "deploy.py fixed Git export, transfer and manifest checks",
+    "A2 stage integration only; quantizer/T5 method review belongs to independent source evidence review"
+  ],
+  "self_authored_training_code_reviewed_here": false,
+  "checks": {
+    "same_workflow_and_capture_version_required": true,
+    "predecessor_terminal_success_exit_zero_and_cleanup_required": true,
+    "training_checkpoint_requires_training_complete_and_same_SID": true,
+    "evaluation_and_attention_require_exact_assets_condition_and_complete_test": true,
+    "canonical_template_hash_excludes_only_launch_review_to_break_identity_cycle": true,
+    "mode_and_workflow_must_exist_in_preapproved_plan": true,
+    "template_changes_and_deployed_source_byte_changes_fail_closed": true,
+    "future_result_approval_must_be_false": true,
+    "A2_embedding_resolves_exact_predecessor_asset_hash": true,
+    "A2_gpu_duty_cycle_parameter_matches_upstream_reader": true,
+    "Git_export_byte_identity_checked_against_complete_HEAD": true,
+    "remote_archive_hash_manifest_hash_and_every_file_hash_verified": true,
+    "tar_members_reject_links_absolute_paths_parent_traversal_and_duplicates": true,
+    "fixed_snapshot_files_made_read_only": true
+  },
+  "synthetic_gate_execution": {
+    "status": "PASS",
+    "model_or_GPU_calls": 0,
+    "passed_cases": [
+      "successful complete-stage dependency resolution",
+      "reject predecessor RUNNING",
+      "reject unverified cleanup",
+      "reject predecessor source mismatch",
+      "reject cross-workflow result",
+      "reject incomplete training checkpoint",
+      "reject checkpoint SID mismatch",
+      "reject incomplete evaluation",
+      "reject wrong Shuffle condition",
+      "valid canonical template admitted without circular hashes",
+      "reject workflow outside plan",
+      "reject unapproved template field",
+      "reject mismatched fixed deployment",
+      "reject mode outside workflow whitelist",
+      "reject preapproved future results",
+      "reject review/source mismatch",
+      "reject modified deployed source file"
+    ],
+    "fixture_note": "An initial local fixture used a mapping where metadata link schema requires a job-id string; fixture was corrected, then all 17 final assertions passed. This was not a model, asset, or server execution failure."
+  },
+  "resolved_findings": [
+    "Original review-plan-template hash cycle corrected with canonical template hashing excluding launch_review only.",
+    "A2 embedding dependency added to dynamic hash-bound resolution.",
+    "A2 duty-cycle argument name aligned with upstream gpu_duty_cycle."
+  ],
+  "conditions": [
+    "Actual CPU/GPU engineering receipts and remote immutable deployment must be bound by the launch controller before formal dependent compute.",
+    "GPU capacity is not approved by this source-only review; full original raw16/cap512 GPU admission must pass on a locked device.",
+    "A2 source/method identity and mechanical SID gates must pass before its dependent training.",
+    "Changes to reviewed Python bytes require renewed review of the changed parts."
+  ],
+  "future_training_results_approved": false,
+  "future_evaluation_attention_statistics_results_approved": false
+}

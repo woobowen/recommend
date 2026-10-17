@@ -1,0 +1,130 @@
+{
+  "reviewer": "assets_a2; non-author of queue.py",
+  "review_time": "2026-10-17T05:16:45.945228+00:00",
+  "queue_sha256": "ce5af0372ba8c3008b2c98bc3cf960b6821caca5ad33b6c844ecfa38a5e8775c",
+  "checks": [
+    {
+      "name": "two GPU worker wall charged twice",
+      "status": "PASS"
+    },
+    {
+      "name": "two GPU quantization request above2h rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "actual two GPU15s worker accounting equals30s",
+      "status": "PASS"
+    },
+    {
+      "name": "second worker denied held physical GPU lock",
+      "status": "PASS"
+    },
+    {
+      "name": "dual locks released after scope",
+      "status": "PASS"
+    },
+    {
+      "name": "hash and semantic dependency gate passes exact receipt",
+      "status": "PASS"
+    },
+    {
+      "name": "changed predecessor receipt blocks dependent stage",
+      "status": "PASS"
+    },
+    {
+      "name": "authorized484MiB lowutil peer accepted prelaunch",
+      "status": "PASS"
+    },
+    {
+      "name": "peer memory above2GiB rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "prelaunch utilization above30percent rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "less than8GiB free rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime own worker pgid excluded from peer memory",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime foreign pgid above threshold rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "exclusive original two GPU quantizer waits any peer",
+      "status": "PASS"
+    },
+    {
+      "name": "48hour cap allowed only exact CPU queue supervision command and original job ID",
+      "status": "PASS"
+    },
+    {
+      "name": "48hour extension rejected for changed job_id",
+      "status": "PASS"
+    },
+    {
+      "name": "48hour extension rejected for changed env",
+      "status": "PASS"
+    },
+    {
+      "name": "48hour extension rejected for changed argv",
+      "status": "PASS"
+    }
+  ],
+  "scope": "Read final queue source and accepted original runner; independent CPU mechanics fixtures. No GPU work or future experiment results reviewed.",
+  "findings": [
+    {
+      "severity": "OPERATIONAL_LIMITATION",
+      "item": "Bound final queue to172800 seconds and use reviewed CPU-only queue_runner. Requests have unchanged per-stage and total GPU hard caps. If unavailable GPUs or other external delays outlive the finite horizon, accepted children continue independently; not-yet-accepted dependencies need later user-directed original-ID query and explicit continuation.",
+      "launch_blocking": false,
+      "requires_final_configuration_readback": true
+    }
+  ],
+  "status": "SOURCE_MECHANICS_PASS_CONDITIONAL_ON_FIXED_FINAL_PLAN_AND_48H_QUEUE_BINDING",
+  "future_results_approved": false,
+  "queue_runner_sha256": "8685ab1dfbdc3d223b9d37a34355dab968e7ac94aa341edde8f655a8e99c2215",
+  "runner_diff_review": "Exact diff from accepted398768a... runner changes only bounded timeout admissibility for ga-20261017-queue-v1, CUDA_VISIBLE_DEVICES empty, exact queue supervise module prefix. Per-stage original runner unchanged.",
+  "reviewed_external_cpu_fixture": {
+    "path": "/home/addaswsw/recommend-support/grid-a-launch-20261017/queue-fixture-20261017T051555/fixture-result.json",
+    "sha256": "e15aa650ef72f9fb41d81317dcb8cbec6effa55fb1b1ed59d9aa948b654804cc",
+    "receipt": {
+      "checks": [
+        "occupied GPU defers submit",
+        "sorted dual-GPU lock and per-device budget",
+        "independent nested runner accepts stages",
+        "mechanical gate and dependency success",
+        "terminal failure blocks only its chain",
+        "no retry or duplicate submission",
+        "outer cleanup excludes detached child supervisors",
+        "fresh process query works",
+        "per-condition cap rejection",
+        "cycle rejection",
+        "opt-in sharing free-memory/peer-memory/utilization checks"
+      ],
+      "final_queue_status": "TERMINAL_PENDING_RESULT_REVIEW",
+      "finished_at": "2026-10-17T05:16:00.005265+00:00",
+      "fixture_root": "/home/addaswsw/recommend-support/grid-a-launch-20261017/queue-fixture-20261017T051555",
+      "outer_cleanup_verified": true,
+      "outer_status": "SUCCEEDED",
+      "prior_failure_root_cause": "60s queue used a fixed60s safety reserve; corrected to min60s/10percent",
+      "prior_fixture_failure": "/home/addaswsw/recommend-support/grid-a-launch-20261017/queue-fixture-20261017T051438",
+      "queue_source_sha256": "3d85b73b6f777ab57de2c2b55f2cafe91d9339bc4024963b641df48005bee3ba",
+      "real_gpu_requests": 0,
+      "reserved_gpu_seconds_simulated": 90,
+      "stages": {
+        "dual-gpu-admission-fixture": "SUCCEEDED",
+        "expected-failure": "BLOCKED_NO_RETRY",
+        "gate-success": "SUCCEEDED",
+        "must-not-run": "BLOCKED_DEPENDENCY"
+      },
+      "status": "PASS_CPU_ONLY_SCHEDULER_FIXTURE"
+    },
+    "read_by_non_author": true,
+    "fixture_source_difference": "fixture ran3d85b73...; reviewed ce5af037... differs by allowing bounded48h queue horizon; timeout gate independently checked above."
+  }
+}
