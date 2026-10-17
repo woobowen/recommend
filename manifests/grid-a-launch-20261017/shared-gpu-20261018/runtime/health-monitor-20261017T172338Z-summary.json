@@ -1,0 +1,296 @@
+{
+  "at": "2026-10-18T01:23:40.198633+08:00",
+  "record": "/home/addaswsw/recommend-support/grid-a-launch-20261017/shared-20261018/health-monitor-20261017T172338Z.json",
+  "queue_status": "RUNNING",
+  "stage_counts": {
+    "WAITING_DEPENDENCY": 14,
+    "SUCCEEDED": 17,
+    "WAITING_GPU": 2,
+    "ACCEPTED": 1
+  },
+  "toys": {
+    "toys5300": "COMPUTATION_COMPLETE_REVIEW_PENDING",
+    "toys5000": "COMPUTATION_COMPLETE_REVIEW_PENDING"
+  },
+  "jobs": {
+    "ga-20261018-shared-queue-v1": {
+      "status": "RUNNING",
+      "exit_code": null,
+      "progress": null,
+      "latest_validation": null,
+      "last_optimizer_update": null,
+      "validation_history": null,
+      "checkpoints": null,
+      "training_result": null,
+      "best_checkpoint_gate": null
+    },
+    "ga-20261017-sportsa1-train-v1": {
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "progress": {
+        "at": "2026-10-17T16:35:24.639875+00:00",
+        "stage": "complete",
+        "status": "TRAINING_COMPLETE_EVALUATION_PENDING",
+        "global_step": 9600
+      },
+      "latest_validation": {
+        "at": "2026-10-17T16:35:22.520896+00:00",
+        "validation_number": 96,
+        "global_step": 9600,
+        "exact_key_target_multiset": true,
+        "targets": 35598,
+        "batches": 4450,
+        "metrics": {
+          "val/loss": 9.222640037536621,
+          "val/ndcg@5": 0.020893985405564308,
+          "val/ndcg@10": 0.026013847440481186,
+          "val/recall@5": 0.03137816861271858,
+          "val/recall@10": 0.04722175374627113
+        },
+        "hook_seconds": 239.02488049212843,
+        "expected_index": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-metadata-v1/output/evaluation_target_index.jsonl",
+          "sha256": "dfb139f6abb4894613a43cd3a1f6692f7721958b7c7fccc0d1cf60bed6656867",
+          "bytes": 3717329,
+          "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-metadata-v1/output/evaluation_target_index.jsonl"
+        }
+      },
+      "last_optimizer_update": {
+        "at": "2026-10-17T16:31:22.930123+00:00",
+        "optimizer_update": 9600,
+        "cumulative_microbatches": 153600,
+        "cumulative_expanded_windows": 47892458,
+        "expanded_windows": [
+          345,
+          418,
+          372,
+          125,
+          497,
+          433,
+          107,
+          159,
+          237,
+          409,
+          371,
+          224,
+          407,
+          366,
+          476,
+          444
+        ],
+        "returned_training_losses": [
+          0.5310449600219727,
+          0.5527318716049194,
+          0.5187830328941345,
+          0.4982326626777649,
+          0.5312507152557373,
+          0.5363487601280212,
+          0.5589475035667419,
+          0.552970290184021,
+          0.5117656588554382,
+          0.5150111317634583,
+          0.5302308201789856,
+          0.5052468776702881,
+          0.5476381778717041,
+          0.4652940034866333,
+          0.38419482111930847,
+          0.51642245054245
+        ],
+        "optimizer": {
+          "step_before": 9599,
+          "all_available_gradients_finite": true,
+          "optimizer_covers_every_trainable_parameter": true,
+          "watched_gradient_norms": {
+            "encoder_sid": 0.2919848561286926,
+            "decoder_sid": 0.25688210129737854,
+            "decoder_bos": 0.1072215586900711,
+            "encoder_transformer": 0.09999999403953552,
+            "decoder_transformer": 0.0744977667927742
+          }
+        }
+      },
+      "validation_history": {
+        "completed_count": 96,
+        "all_full_coverage_exact": true,
+        "best_global_step": 8600,
+        "best_validation_number": 86,
+        "best_recall5": 0.03368166834115982,
+        "validations_since_first_best": 10,
+        "derived_from": "existing validations.jsonl; not a checkpoint callback read or result audit"
+      },
+      "checkpoints": [
+        {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/checkpoints/checkpoint_epoch=000_step=008600.ckpt",
+          "bytes": 161660262,
+          "mtime_utc": "2026-10-17T15:27:16.933034+00:00",
+          "hash": "NOT_REHASHED_WHILE_LIVE"
+        }
+      ],
+      "training_result": {
+        "mtime_utc": "2026-10-17T16:35:24.639832+00:00",
+        "data": {
+          "status": "TRAINING_COMPLETE_EVALUATION_PENDING",
+          "formal": true,
+          "training_complete": true,
+          "test_complete": false,
+          "attention_collected": false,
+          "workflow": "Sports-A1",
+          "fresh_initialization": true,
+          "full_parameter_training": true,
+          "independent_sid_tables": true,
+          "termination": "patience10_complete_validation_early_stop",
+          "global_step": 9600,
+          "current_epoch": 1,
+          "actual_microbatches": 153600,
+          "expanded_windows": 47892458,
+          "completed_full_validations": 96,
+          "full_validation_identity_exact": true,
+          "evaluation_index": {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-metadata-v1/output/evaluation_target_index.jsonl",
+            "sha256": "dfb139f6abb4894613a43cd3a1f6692f7721958b7c7fccc0d1cf60bed6656867",
+            "bytes": 3717329,
+            "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-metadata-v1/output/evaluation_target_index.jsonl"
+          },
+          "best_checkpoint": {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/checkpoints/checkpoint_epoch=000_step=008600.ckpt",
+            "sha256": "0f2ce9ab6155eb9864363c32972d9f9ab775291e58f392b56e1db9901f3cb6f1",
+            "bytes": 161660262,
+            "score": 0.03368166834115982,
+            "monitor": "val/recall@5",
+            "mode": "max"
+          },
+          "best_checkpoint_gate": {
+            "checkpoint": {
+              "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/checkpoints/checkpoint_epoch=000_step=008600.ckpt",
+              "sha256": "0f2ce9ab6155eb9864363c32972d9f9ab775291e58f392b56e1db9901f3cb6f1",
+              "bytes": 161660262,
+              "score": 0.03368166834115982,
+              "monitor": "val/recall@5",
+              "mode": "max"
+            },
+            "missing_keys": [],
+            "unexpected_keys": [],
+            "all_keys_shapes_values_exact": true,
+            "embedded_sid_exact": true,
+            "independent_sid_tables": true,
+            "optimizer_and_callbacks_present": true,
+            "best_global_step": 8600,
+            "selected_by": "validation only"
+          },
+          "selected_by": "complete validation Recall@5 only; test never executed",
+          "watched_parameter_max_abs_updates": {
+            "encoder_sid": 4.078071594238281,
+            "decoder_sid": 4.422206878662109,
+            "decoder_bos": 3.718477249145508,
+            "encoder_transformer": 0.3025403916835785,
+            "decoder_transformer": 0.24604007601737976
+          },
+          "final_recovery": {
+            "reason": "patience10_complete_validation_early_stop",
+            "stage": "validation",
+            "global_step": 9600,
+            "microbatches_completed": 153600,
+            "microbatches_into_unfinished_accumulation": 0,
+            "partial_parameter_gradients_in_checkpoint": false,
+            "datamodule_state_dict": {},
+            "infinite_worker_cursor_saved": false,
+            "worker_RNG_and_prefetch_queue_saved": false,
+            "exact_uninterrupted_resume_claim": false,
+            "automatic_resume_allowed": false,
+            "resume_requires_explicit_decision": true,
+            "weights_source": "current training state",
+            "checkpoint": {
+              "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/recovery/training-final/full-state.ckpt",
+              "sha256": "e67d76fdde33c228f82fde8dfa39579b698c7bfa0b793ddcc2dfe75f9a0fbc5d",
+              "bytes": 161653734
+            }
+          },
+          "early_stopping": {
+            "wait_count": 10,
+            "patience": 10
+          },
+          "fit_and_gate_wall_seconds": 39186.94958442217,
+          "gpu_peak_allocated_bytes": 10174135296,
+          "gpu_peak_reserved_bytes": 20648558592,
+          "sid": {
+            "path": "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+            "sha256": "89b2c2bbb94eda26ef0e147404fbff29e6ec8246fbdc754c5d885f313f2de293"
+          },
+          "config": {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml",
+            "sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d"
+          },
+          "training_protocol": {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/b6203414ee58a400/experiments/launch_20261017/training_protocol.json",
+            "sha256": "9d3823c2ada022f479fb3b8ac4e36bc2cf09267281db5b15edc636bec0a45c7e"
+          },
+          "safety_allowance_is_not_training_endpoint": true,
+          "automatic_resume_allowed": false
+        }
+      },
+      "best_checkpoint_gate": {
+        "mtime_utc": "2026-10-17T16:35:24.639059+00:00",
+        "data": {
+          "checkpoint": {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/checkpoints/checkpoint_epoch=000_step=008600.ckpt",
+            "sha256": "0f2ce9ab6155eb9864363c32972d9f9ab775291e58f392b56e1db9901f3cb6f1",
+            "bytes": 161660262,
+            "score": 0.03368166834115982,
+            "monitor": "val/recall@5",
+            "mode": "max"
+          },
+          "missing_keys": [],
+          "unexpected_keys": [],
+          "all_keys_shapes_values_exact": true,
+          "embedded_sid_exact": true,
+          "independent_sid_tables": true,
+          "optimizer_and_callbacks_present": true,
+          "best_global_step": 8600,
+          "selected_by": "validation only"
+        }
+      }
+    },
+    "ga-20261017-sportsa2-quantize-v1": {
+      "status": "RUNNING",
+      "exit_code": null,
+      "progress": null,
+      "latest_validation": null,
+      "last_optimizer_update": null,
+      "validation_history": null,
+      "checkpoints": null,
+      "training_result": null,
+      "best_checkpoint_gate": null
+    }
+  },
+  "accounting": {
+    "groups": {
+      "engineering": 0.0,
+      "sports-a1-eval-attention": 264.853645,
+      "sports-a1-train": 39196.161534,
+      "sports-a2-encode": 178.435799,
+      "sports-a2-eval-attention": 0.0,
+      "sports-a2-rkmeans": 0.0,
+      "sports-a2-train": 0.0,
+      "toys-5000": 593.6006870000001,
+      "toys-5300": 612.7648869999999
+    },
+    "original_absolute_queue_deadline": "2026-10-19T05:40:30.012007+00:00",
+    "original_total_gpu_budget_seconds": 143100,
+    "prior_gpu_request_seconds": 58.650573,
+    "remaining_gpu_request_seconds": 102195.183448,
+    "total_used_gpu_request_seconds_including_prior": 40904.467125,
+    "used_gpu_request_seconds": 40845.816552000004
+  },
+  "gpu": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564, 518, 23566, 7, 28\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564, 686, 23398, 16, 29\n",
+  "process_owners": {
+    "1968569": "1968569 yychen         00:19 Ssl",
+    "1965921": "1965921 yychen         06:45 Rsl"
+  },
+  "disk_free": {
+    "/home/bwwu": 619814432768,
+    "/data/bwwu": 4345897193472
+  },
+  "issues": [],
+  "source_commit": "6dafbc7215b58a2dbb47905a687c930caecf7b44",
+  "method_changes": false
+}
