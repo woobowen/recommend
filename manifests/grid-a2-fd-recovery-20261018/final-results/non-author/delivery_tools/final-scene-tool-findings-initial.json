@@ -1,0 +1,133 @@
+{
+  "reviewer": "/root/fd_repair_reviewer",
+  "reviewed_at": "2026-10-17T22:34:03.199886+00:00",
+  "status": "FINAL_SCENE_TOOL_REQUIRES_LOCAL_IDENTITY_AND_READ_ONLY_FIXES",
+  "scientific_final_pass": false,
+  "tool_before_fixes": {
+    "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/delivery_tools/capture_final_scene-before-review-fixes.py",
+    "bytes": 6850,
+    "sha256": "0b4d194a9117b053c088f85f7a1ee43b6f3c19f692462808cef785499823b454"
+  },
+  "remote_code_sha256": "bee5bd1bb0a69569ec5d1522cc53fe0600e51c1b3a7d2ed73c242f78301d41ce",
+  "test_scope": "Only exact arithmetic fragment extracted through AST from original script, existing local real raw quantization and metadata receipts; no transport call, import of research runtime, or remote/GPU operation. Mutations are in-memory malformed fixtures, not real job requests.",
+  "real_quant_and_CPU_metadata_fields": {
+    "accepted": true,
+    "new_usage": 93.09782,
+    "details": [
+      {
+        "job_id": "ga-20261018-sportsa2-quantize-fd-recovery-v1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "worker_wall_seconds": 46.54891,
+        "requested_gpus": 2,
+        "gpu_uuids": [
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+          "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+        ],
+        "gpu_requested_seconds": 93.09782,
+        "budget_group": "sports-a2-rkmeans",
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261018-sportsa2-metadata-fd-recovery-v1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "worker_wall_seconds": 47.481201,
+        "requested_gpus": 0,
+        "gpu_uuids": [],
+        "gpu_requested_seconds": 0.0,
+        "budget_group": null,
+        "cleanup_verified": true
+      }
+    ]
+  },
+  "malformed_duplicate_UUID_currently_accepted": {
+    "accepted": true,
+    "new_usage": 93.09782,
+    "details": [
+      {
+        "job_id": "ga-20261018-sportsa2-quantize-fd-recovery-v1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "worker_wall_seconds": 46.54891,
+        "requested_gpus": 2,
+        "gpu_uuids": [
+          "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+          "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+        ],
+        "gpu_requested_seconds": 93.09782,
+        "budget_group": "sports-a2-rkmeans",
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261018-sportsa2-metadata-fd-recovery-v1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "worker_wall_seconds": 47.481201,
+        "requested_gpus": 0,
+        "gpu_uuids": [],
+        "gpu_requested_seconds": 0.0,
+        "budget_group": null,
+        "cleanup_verified": true
+      }
+    ]
+  },
+  "malformed_config_binding_currently_accepted": {
+    "accepted": true,
+    "new_usage": 93.09782,
+    "details": [
+      {
+        "job_id": "ga-20261018-sportsa2-quantize-fd-recovery-v1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "worker_wall_seconds": 46.54891,
+        "requested_gpus": 2,
+        "gpu_uuids": [
+          "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+          "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+        ],
+        "gpu_requested_seconds": 93.09782,
+        "budget_group": "sports-a2-rkmeans",
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "ga-20261018-sportsa2-metadata-fd-recovery-v1",
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "worker_wall_seconds": 47.481201,
+        "requested_gpus": 0,
+        "gpu_uuids": [],
+        "gpu_requested_seconds": 0.0,
+        "budget_group": null,
+        "cleanup_verified": true
+      }
+    ]
+  },
+  "missing_start_fails_closed": {
+    "accepted": false,
+    "error_type": "KeyError",
+    "error": "'started_at'"
+  },
+  "findings": [
+    {
+      "id": "READ_ONLY_QUERY_PRECONDITION",
+      "evidence": "Preserved queue_runner.query() writes control-loss-observation.json for raw ACCEPTED/RUNNING with absent supervisor; this tool calls query before reading/asserting raw terminal status.",
+      "requested_fix": "Read raw_status and require accepted terminal status before calling query, retaining original runner bytes."
+    },
+    {
+      "id": "ACCEPTED_AND_REQUEST_IDENTITY",
+      "evidence": "Canonical request digest is not compared to accepted.request_sha256; GPU cardinality/global membership checks accept duplicated GPU UUIDs or mismatched config/source/stage/budget/environment.",
+      "requested_fix": "Bind accepted/query/canonical request digests; validate actual allocation through preserved q.allocation_stage and exact queue_stage/env bindings, while allowing originally approved single-GPU candidates."
+    },
+    {
+      "id": "HISTORICAL_RESOURCE_SCOPE",
+      "evidence": "Old34 stage/prior3 totals currently inherited from frozen constants rather than recomputed from captured actual original requests.",
+      "requested_fix": "Recompute and match those frozen baselines, or explicitly label inherited values instead of claiming full recomputation."
+    }
+  ],
+  "remote_operations": 0,
+  "GPU_requested": 0,
+  "formal_final_capture_run": false,
+  "dependencies_installed": [],
+  "GPT_UPLOAD_REQUIRED": "YES"
+}

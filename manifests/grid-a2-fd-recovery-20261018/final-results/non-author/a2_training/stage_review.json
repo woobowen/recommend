@@ -1,0 +1,163 @@
+{
+  "status": "A2_TRAINING_STAGE_EVIDENCE_CHECKED_RUNNING",
+  "final_training_pass": false,
+  "reviewer": "/root/sports_a1_result_audit",
+  "captured_at_utc": "2026-10-17T19:19:54.164195+00:00",
+  "observation_directory": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/a2_training/observation-2026-10-17T191954.164195_0000",
+  "atomic_snapshot": false,
+  "job_id": "ga-20261018-sportsa2-train-fd-recovery-v1",
+  "runner_status": "RUNNING",
+  "source_commit": "85b77f5e2a5b497fdc1f620649ba488fc783a245",
+  "snapshot_sha256": "22286966cd544773f21b96e4185d56c66afd7183fdc4e8888716d8ea1d77acb2",
+  "training_sid": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt",
+    "bytes": 588597,
+    "sha256": "06cfa6ba0f64d6c68e0e94c4111edd51d086796e8cdb474ac3fcd424a4a2adf0"
+  },
+  "effective_config_A1_comparison": "identical except chosen SID path in model+three loaders and output directories",
+  "all_effective_config_differences": [
+    [
+      ".model.codebooks._args_[0].file_path",
+      "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt"
+    ],
+    [
+      ".trainer.default_root_dir",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-train-fd-recovery-v1/output"
+    ],
+    [
+      ".callbacks.model_checkpoint.dirpath",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/checkpoints",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-train-fd-recovery-v1/output/checkpoints"
+    ],
+    [
+      ".logger.csv.save_dir",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-train-fd-recovery-v1/output"
+    ],
+    [
+      ".datamodule.train_dataloader_config.dataset_config.semantic_id_map.sequence_data._args_[0].file_path",
+      "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt"
+    ],
+    [
+      ".datamodule.val_dataloader_config.dataset_config.semantic_id_map.sequence_data._args_[0].file_path",
+      "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt"
+    ],
+    [
+      ".datamodule.test_dataloader_config.dataset_config.semantic_id_map.sequence_data._args_[0].file_path",
+      "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt"
+    ]
+  ],
+  "from_scratch_evidence": [
+    "frozen _fresh_model instantiate with seed42 and fit ckpt_path=None; no checkpoint/resume field in actual spec",
+    "actual fresh_optimizer_state_empty=true",
+    "all parameters trainable and separate encoder/decoder SID tables",
+    "monotone actual Adam updates starting at1"
+  ],
+  "architecture": {
+    "adapter_class": "AuthorShuffleModel",
+    "num_hierarchies": 4,
+    "num_embeddings_per_hierarchy": 256,
+    "embedding_dim": 128,
+    "top_k_for_generation": 10,
+    "shared_sid_table": false,
+    "encoder_sid_table_shape": [
+      1024,
+      128
+    ],
+    "decoder_sid_table_shape": [
+      1024,
+      128
+    ],
+    "has_sep": true,
+    "has_user_table": false,
+    "parameters_total": 13259136,
+    "parameters_trainable": 13259136
+  },
+  "observed_optimizer_updates": 128,
+  "actual_microbatches_in_prefix": 2048,
+  "expanded_windows_in_prefix": 651951,
+  "finite_returned_loss_range": [
+    0.8760535717010498,
+    1.4493671655654907
+  ],
+  "watched_gradient_ranges": {
+    "encoder_sid": [
+      6.097696677898057e-05,
+      0.0343124121427536
+    ],
+    "decoder_sid": [
+      0.0021127609070390463,
+      0.044417351484298706
+    ],
+    "decoder_bos": [
+      0.0015111431712284684,
+      0.062231145799160004
+    ],
+    "encoder_transformer": [
+      0.00028022026526741683,
+      0.13659745454788208
+    ],
+    "decoder_transformer": [
+      0.010151459835469723,
+      0.24493315815925598
+    ]
+  },
+  "completed_full_validations_observed": 1,
+  "first_full_validation": {
+    "at": "2026-10-17T19:19:01.022903+00:00",
+    "validation_number": 1,
+    "global_step": 100,
+    "exact_key_target_multiset": true,
+    "targets": 35598,
+    "batches": 4450,
+    "metrics": {
+      "val/loss": 15.661035537719727,
+      "val/ndcg@5": 0.0024911053478717804,
+      "val/ndcg@10": 0.0028268529567867517,
+      "val/recall@5": 0.0026967807207256556,
+      "val/recall@10": 0.0036799819208681583
+    },
+    "hook_seconds": 278.8717775149271,
+    "expected_index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-metadata-fd-recovery-v1/output/evaluation_target_index.jsonl",
+      "sha256": "87822a4b8b174bd6e4e7f49ca4bc3c413736e4c2630696898c9e488b5cdbac12",
+      "bytes": 3718397,
+      "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-metadata-fd-recovery-v1/output/evaluation_target_index.jsonl"
+    }
+  },
+  "latest_progress": {
+    "at": "2026-10-17T19:19:53.780112+00:00",
+    "stage": "train",
+    "global_step": 128,
+    "microbatches": 2048,
+    "expanded_windows": 651951,
+    "last_returned_loss": 0.9484983086585999,
+    "free_bytes": 617995501568
+  },
+  "deadline": {
+    "runner_started_at": "2026-10-17T19:10:58.920653+00:00",
+    "allowance_seconds": 43200.0,
+    "safety_reserve_seconds": 180,
+    "source": "actual runner status.started_at and min(request timeout, approved allowance)",
+    "internal_stop_timestamp": 1792307278.920653,
+    "internal_stop_at": "2026-10-18T07:07:58.920653+00:00",
+    "training_termination_condition": false
+  },
+  "GPU_or_model_calls": 0,
+  "submit_or_stop_calls": 0,
+  "pending_terminal_checks": [
+    "full optimizer/validation streams through actual final step",
+    "authorized termination, best validation selection and patience count",
+    "best and final checkpoint direct CPU strict load/finite/state/embedded SID/Adam/callback checks",
+    "terminal exit/cleanup, artifact manifest hashes and actual resource budget"
+  ],
+  "limitations": [
+    "From-scratch proof uses frozen code, actual spec, original empty optimizer state and real updates; no full initial random tensor dump exists.",
+    "This read is a bounded non-atomic training observation; no final PASS or exact resume claim."
+  ]
+}

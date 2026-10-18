@@ -1,0 +1,601 @@
+{
+  "reviewer": "/root/fd_repair_reviewer",
+  "reviewed_at": "2026-10-17T19:13:11.045428+00:00",
+  "status": "QUANTIZATION_AND_SID_INDEPENDENT_REVIEW_PASS",
+  "fd_engineering_status": "FD_ENGINEERING_EQUIVALENCE_PASS",
+  "quantization_result_approved": true,
+  "full_A2_generator_evaluation_attention_results_approved": false,
+  "full_A2_scientific_result_status": "SCIENTIFIC_RESULT_NOT_YET_AVAILABLE",
+  "author_separation": "Reviewer did not author repair/scientific code, runner, requests or quantizer producer. Directly inspected original failure/source/diff, real formal FD/batch/log evidence and terminal raw products; independently recomputed contents in a separate CPU-only process.",
+  "job_id": "ga-20261018-sportsa2-quantize-fd-recovery-v1",
+  "source_capture": "85b77f5e2a5b497fdc1f620649ba488fc783a245/22286966cd544773f21b96e4185d56c66afd7183fdc4e8888716d8ea1d77acb2",
+  "source_commit": "85b77f5e2a5b497fdc1f620649ba488fc783a245",
+  "snapshot": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/22286966cd544773",
+  "queue_config_sha256": "ddc231d33f739ec8f5282c60ad2a670023d057f8609bcca1d9526129fdfb711e",
+  "terminal": {
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "cleanup_verified": true,
+    "old_failure": {
+      "status": "INTERRUPTED",
+      "exit_code": -9
+    }
+  },
+  "effective_protocol": {
+    "old_vs_new_used_config_differences": [
+      {
+        "path": "/data_loading/datamodule/train_dataloader_config/collate_fn/_target_",
+        "before": "src.data.loading.components.collate_functions.collate_fn_items",
+        "after": "experiments.a2_fd_recovery_20261018.adapter.collate_items_contiguous"
+      },
+      {
+        "path": "/data_loading/datamodule/predict_dataloader_config/collate_fn/_target_",
+        "before": "src.data.loading.components.collate_functions.collate_fn_items",
+        "after": "experiments.a2_fd_recovery_20261018.adapter.collate_items_contiguous"
+      },
+      {
+        "path": "/trainer/default_root_dir",
+        "before": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-quantize-v1/output",
+        "after": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output"
+      }
+    ],
+    "all_other_effective_fields_exact_original": true,
+    "model": "Preserved ResidualQuantization + MiniBatchKMeans;3layers256codes512features; residual normalization; original initialization, distance, SGD/world-size scaling and layerwise training.",
+    "seed": 42,
+    "devices": 2,
+    "precision": "bf16-mixed",
+    "raw_batch_per_rank": 2048,
+    "workers_per_rank": 12,
+    "raw_train_batches_each_rank": 36,
+    "optimizer_steps_each_rank": 30,
+    "step_count_explanation": "Original preserved initialization buffers consume extra raw batches: 36 actual batches per rank produce 30 optimizer steps. Do not label this30 raw batches.",
+    "initialized_layers": [
+      true,
+      true,
+      true
+    ],
+    "final_current_layer": 2,
+    "prefetch_factor_evidence": {
+      "value": 2,
+      "basis": "Exact preserved DataloaderWithIterationRetry call does not pass prefetch_factor; preserved installed PyTorch default2; identical native loader CPU test explicitly read actual2. Formal existing loader property was not separately serialized, so do not call this a direct live property observation."
+    }
+  },
+  "runtime": {
+    "actual_ranks_workers_limits_and_FD": [
+      {
+        "rank": 0,
+        "main_pid": 1996038,
+        "main_ppid": 1995987,
+        "limits_before": [
+          1024,
+          524288
+        ],
+        "limits_after": [
+          524288,
+          524288
+        ],
+        "train_workers": [
+          {
+            "worker_id": 0,
+            "fd": 89,
+            "hard": 524288,
+            "pid": 1996128,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942441"
+          },
+          {
+            "worker_id": 1,
+            "fd": 93,
+            "hard": 524288,
+            "pid": 1996130,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942444"
+          },
+          {
+            "worker_id": 10,
+            "fd": 128,
+            "hard": 524288,
+            "pid": 1996148,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942474"
+          },
+          {
+            "worker_id": 11,
+            "fd": 133,
+            "hard": 524288,
+            "pid": 1996219,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942480"
+          },
+          {
+            "worker_id": 2,
+            "fd": 97,
+            "hard": 524288,
+            "pid": 1996132,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942447"
+          },
+          {
+            "worker_id": 3,
+            "fd": 101,
+            "hard": 524288,
+            "pid": 1996134,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942451"
+          },
+          {
+            "worker_id": 4,
+            "fd": 105,
+            "hard": 524288,
+            "pid": 1996136,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942454"
+          },
+          {
+            "worker_id": 5,
+            "fd": 109,
+            "hard": 524288,
+            "pid": 1996138,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942457"
+          },
+          {
+            "worker_id": 6,
+            "fd": 113,
+            "hard": 524288,
+            "pid": 1996140,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942461"
+          },
+          {
+            "worker_id": 7,
+            "fd": 117,
+            "hard": 524288,
+            "pid": 1996142,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942464"
+          },
+          {
+            "worker_id": 8,
+            "fd": 121,
+            "hard": 524288,
+            "pid": 1996144,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942467"
+          },
+          {
+            "worker_id": 9,
+            "fd": 124,
+            "hard": 524288,
+            "pid": 1996146,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286942471"
+          }
+        ],
+        "predict_workers": [
+          {
+            "worker_id": 0,
+            "fd": 112,
+            "hard": 524288,
+            "pid": 2000372,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286943813"
+          },
+          {
+            "worker_id": 1,
+            "fd": 116,
+            "hard": 524288,
+            "pid": 2000380,
+            "ppid": 1996038,
+            "soft": 524288,
+            "start_ticks": "286943818"
+          }
+        ],
+        "true_training_batches": 36,
+        "raw_batch": 2048,
+        "all_training_embedding_pairing_assertions_passed": true,
+        "sampled_FD_min": 78,
+        "sampled_FD_max": 168,
+        "FD_samples": 5,
+        "first_sample_at": 1792264087.948024,
+        "last_sample_at": 1792264110.1600645
+      },
+      {
+        "rank": 1,
+        "main_pid": 1996076,
+        "main_ppid": 1996038,
+        "limits_before": [
+          524288,
+          524288
+        ],
+        "limits_after": [
+          524288,
+          524288
+        ],
+        "train_workers": [
+          {
+            "worker_id": 0,
+            "fd": 78,
+            "hard": 524288,
+            "pid": 1996127,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942440"
+          },
+          {
+            "worker_id": 1,
+            "fd": 82,
+            "hard": 524288,
+            "pid": 1996129,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942444"
+          },
+          {
+            "worker_id": 10,
+            "fd": 118,
+            "hard": 524288,
+            "pid": 1996147,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942471"
+          },
+          {
+            "worker_id": 11,
+            "fd": 122,
+            "hard": 524288,
+            "pid": 1996149,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942474"
+          },
+          {
+            "worker_id": 2,
+            "fd": 86,
+            "hard": 524288,
+            "pid": 1996131,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942447"
+          },
+          {
+            "worker_id": 3,
+            "fd": 90,
+            "hard": 524288,
+            "pid": 1996133,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942450"
+          },
+          {
+            "worker_id": 4,
+            "fd": 94,
+            "hard": 524288,
+            "pid": 1996135,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942453"
+          },
+          {
+            "worker_id": 5,
+            "fd": 98,
+            "hard": 524288,
+            "pid": 1996137,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942456"
+          },
+          {
+            "worker_id": 6,
+            "fd": 102,
+            "hard": 524288,
+            "pid": 1996139,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942459"
+          },
+          {
+            "worker_id": 7,
+            "fd": 106,
+            "hard": 524288,
+            "pid": 1996141,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942462"
+          },
+          {
+            "worker_id": 8,
+            "fd": 110,
+            "hard": 524288,
+            "pid": 1996143,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942465"
+          },
+          {
+            "worker_id": 9,
+            "fd": 114,
+            "hard": 524288,
+            "pid": 1996145,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286942468"
+          }
+        ],
+        "predict_workers": [
+          {
+            "worker_id": 0,
+            "fd": 102,
+            "hard": 524288,
+            "pid": 2000371,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286943812"
+          },
+          {
+            "worker_id": 1,
+            "fd": 106,
+            "hard": 524288,
+            "pid": 2000373,
+            "ppid": 1996076,
+            "soft": 524288,
+            "start_ticks": "286943816"
+          }
+        ],
+        "true_training_batches": 36,
+        "raw_batch": 2048,
+        "all_training_embedding_pairing_assertions_passed": true,
+        "sampled_FD_min": 78,
+        "sampled_FD_max": 156,
+        "FD_samples": 5,
+        "first_sample_at": 1792264087.897277,
+        "last_sample_at": 1792264108.0125468
+      }
+    ],
+    "GPU_UUIDs": [
+      "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+      "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+    ],
+    "36_rank0_loss_events_all_finite": true,
+    "rank1_loss_check_basis": "The same callback finite-loss guard executes on both ranks before its global-zero receipt filter. Rank1 completed fit30-step assertions and produced its full prediction partition; numeric rank1 losses were not separately serialized.",
+    "all72_real_batch_ID_embedding_hashes_independently_recomputed": [
+      {
+        "rank": 0,
+        "actual_batches": 36,
+        "ids_per_batch": 2048,
+        "all_ID_to_original_embedding_hashes_independently_recomputed_exact": true,
+        "receipt": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/fd/rank-0-batches.jsonl",
+          "bytes": 485116,
+          "sha256": "1d8a392a3edf8e0f462f753a7be281788989334bdfa409769f4078d2992a3792"
+        }
+      },
+      {
+        "rank": 1,
+        "actual_batches": 36,
+        "ids_per_batch": 2048,
+        "all_ID_to_original_embedding_hashes_independently_recomputed_exact": true,
+        "receipt": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/fd/rank-1-batches.jsonl",
+          "bytes": 481325,
+          "sha256": "64d26c2e8858ac5858acb84768abe5f5a0d376b0a313fc53d9b2fb87a0638617"
+        }
+      }
+    ],
+    "no_EMFILE_timeout_FD_guard_failure": true,
+    "sampled_FD_peak_max": 168,
+    "FD_sampling_boundary": "Peak is the maximum of saved5-second samples and worker startup receipts, not an unsampled continuous maximum. Both ranks finished cleanly with no EMFILE or FD guard failure."
+  },
+  "reused_T5_embedding": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+    "bytes": 37596356,
+    "sha256": "b137cb8a006a8b950396524ed5be3bbc91d711b36068d671c01da3742d7cda6f"
+  },
+  "T5_embedding_shape": [
+    18357,
+    512
+  ],
+  "T5_embedding_dtype": "torch.float32",
+  "all_item_predictions": {
+    "rank_rows": [
+      {
+        "rank": 0,
+        "items": 9141,
+        "unique_ids": 9141,
+        "id_min": 1024,
+        "id_max": 18356,
+        "sorted_IDs_sha256": "03140d04ca1a972091c56d0848bf61fdf4f339d2408acfdfc52e6a4f557672fc",
+        "artifact": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/prediction-rank-0.pt",
+          "bytes": 2639823,
+          "sha256": "d893e6f1740e39e671676b70248feaf26b85ab00166685f9ddffa908ddd2ee84"
+        }
+      },
+      {
+        "rank": 1,
+        "items": 9216,
+        "unique_ids": 9216,
+        "id_min": 0,
+        "id_max": 17407,
+        "sorted_IDs_sha256": "d04928cd3c097640ba93d857694094c48ab7631c342a325dfd194cc73337ca99",
+        "artifact": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/prediction-rank-1.pt",
+          "bytes": 2661234,
+          "sha256": "3d8d64e6a10b8a2284b87af3aa19c45695c2e6ba992df456e0716f4f75b52f88"
+        }
+      }
+    ],
+    "all18357_dense_IDs_once": true,
+    "independent_merge_by_ID_equal_saved_codes": true,
+    "codes_shape": [
+      18357,
+      3
+    ],
+    "codes_dtype": "torch.float32",
+    "codes_range": [
+      0,
+      255
+    ],
+    "dtype_boundary": "Preserved writer merge initializes float32 output; values are exact integral codes. Export converts to long unchanged."
+  },
+  "SID": {
+    "shape": [
+      4,
+      18357
+    ],
+    "dtype": "torch.int64",
+    "all_four_code_SIDs_legal_and_unique": true,
+    "first_three_rows_match_exact_quantizer_codes_and_item_axis": true,
+    "fourth_source": "Original deterministic collision export only; singleton0, colliding triple occurrences1..N in ascending item axis.",
+    "independent_Python_collision_group_recomputation_exact": true,
+    "distinct_three_code_groups": 15647,
+    "colliding_groups": 1672,
+    "largest_collision_group": 25,
+    "fourth_range": [
+      0,
+      25
+    ],
+    "learned_fourth_layer": false
+  },
+  "checkpoint": {
+    "global_step": 30,
+    "current_layer": 2,
+    "layers_initialized": [
+      true,
+      true,
+      true
+    ],
+    "fresh_preserved_CPU_model_on_load_checkpoint_and_strict_state_load": true,
+    "all_state_values_exact_after_load": true,
+    "no_missing_or_unexpected_keys": true,
+    "only_three_finite_float32_256x512_centroid_tensors": [
+      {
+        "key": "quantization_layer_list.0.centroids",
+        "shape": [
+          256,
+          512
+        ],
+        "dtype": "torch.float32",
+        "sha256": "06976313dd31b9ed936d3e493ec89b9915fa0fc01aa20bed6bbe176e6c178c34"
+      },
+      {
+        "key": "quantization_layer_list.1.centroids",
+        "shape": [
+          256,
+          512
+        ],
+        "dtype": "torch.float32",
+        "sha256": "a1a7f364562fafaa8e109e88c4ad3446868f1dccd4275a9e27925571153528f4"
+      },
+      {
+        "key": "quantization_layer_list.2.centroids",
+        "shape": [
+          256,
+          512
+        ],
+        "dtype": "torch.float32",
+        "sha256": "1c35b73871a577971d87d4772f9e4857a124f2e52fc396adacdbd9660ed4fb1e"
+      }
+    ],
+    "runtime_strict_receipt_and_independent_CPU_check_both_passed": true
+  },
+  "asset_identities": [
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/prediction-rank-0.pt",
+      "bytes": 2639823,
+      "sha256": "d893e6f1740e39e671676b70248feaf26b85ab00166685f9ddffa908ddd2ee84"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/prediction-rank-1.pt",
+      "bytes": 2661234,
+      "sha256": "3d8d64e6a10b8a2284b87af3aa19c45695c2e6ba992df456e0716f4f75b52f88"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/predictions.pt",
+      "bytes": 221488,
+      "sha256": "f1835868b84e1b6725aeedd5f0abe8dc1fd5dde89a2dd6df404c4ce37ab03012"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt",
+      "bytes": 588597,
+      "sha256": "06cfa6ba0f64d6c68e0e94c4111edd51d086796e8cdb474ac3fcd424a4a2adf0"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/quantizer.ckpt",
+      "bytes": 151976576,
+      "sha256": "bdf869dcd188da6a97cc544c2e401117c4fd6b6040f1ebe748264a1ac831c309"
+    }
+  ],
+  "resource_actual": {
+    "worker_wall_seconds": 46.54891,
+    "GPU_request_seconds": 93.09782,
+    "new_attempt_reserved_GPU_request_seconds": 6840,
+    "original_quantizer_group_used_including_failed_attempt_GPU_seconds": 395.14729600000004,
+    "original_quantizer_group_remaining_GPU_seconds": 6804.852704,
+    "independent_review_GPU_request_seconds": 0
+  },
+  "evidence": [
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/formal-startup-review.json",
+      "bytes": 19423,
+      "sha256": "daceb2b67952d2c4c57716ad17470ca961ba728d54d2a0415f220144e73fbb31"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/quantizer-cpu-products-independent.json",
+      "bytes": 7587,
+      "sha256": "2e347d0e59b6aba0e400740d14cb659bcc327d1771516908de762e535c8230ea"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/check_quantization_products_cpu.py",
+      "bytes": 9876,
+      "sha256": "254d69d8dc67e2cb5819fdfdffbbe2fe9f42f8210e0f78362cafb272188de775"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/run_quantizer_cpu_product_review.py",
+      "bytes": 1719,
+      "sha256": "254d80b0d4dead0aa015aac759c7b1ffac253a4afff4a38645f59fb2a76de621"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/source-repair-admission.json",
+      "bytes": 8240,
+      "sha256": "0a95de7eff69db3356bedc7a5049b49324834c57f40c5cd4d7d7a5bc3869e03c"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/runner-adaptation-review.json",
+      "bytes": 4776,
+      "sha256": "711df8fc19a0511809a2cba7ee6db7ba208b5398ab108e8aa76719d5867898a9"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/final-request-admission-v2.json",
+      "bytes": 17336,
+      "sha256": "fd7c3bd5e9beda14c623e9ce0c6120e6a83ca70f587b86d06f8a6b1d75d42771"
+    }
+  ],
+  "limitations": [
+    "Only the quantization/SID portion is scientifically approved here. Generator training, full testing, fixed32 attention, statistics and final cross-route internal review remain separate mandatory work.",
+    "Original failure has no valid quantizer output for direct before/after trained-result equality. Evidence establishes dataflow equivalence, preserved method/config, real fixed-protocol completion and internally correct new products.",
+    "FD168 is a saved5-second sampled peak, not a continuous kernel-level maximum. No original FD-target classification proves the unique historical root cause.",
+    "Formal prefetch2 is established by the unchanged loader call, saved installed default and same-config CPU loader validation; no historical live DataLoader.prefetch_factor field was separately serialized.",
+    "This new Sports A2 is method reproduction, not recovery of historically unbound original Sports recommender weights.",
+    "Quantizer checkpoint is151976576bytes and remains server-side. Its file size exceeds the three learned centroid tensors because the complete original checkpoint contains additional state; full file SHA/path is supplied."
+  ],
+  "formal_retry_count_in_this_special_recovery": 1,
+  "historical_original_task_three_round_exhaustion_preserved": true,
+  "old_c31_rejected_before_submission_preserved": true,
+  "dependencies_installed": [],
+  "global_config_changes": [],
+  "GPT_UPLOAD_REQUIRED": "YES"
+}

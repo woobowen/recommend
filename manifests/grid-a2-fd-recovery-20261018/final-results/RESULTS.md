@@ -1,0 +1,160 @@
+# GRID / Semantic ID：Sports A2 FD专项恢复与A路线正式结果
+
+全部已授权计算及各项真实非作者科研审核已闭合。本报告是科研结果固定材料；最终发布回读、轻量ZIP字节校验及交付状态由独立的交付回执继续绑定，不把程序exit0或本次汇总当作最终整包验收。
+
+## A. 范围与原失败
+
+仅执行一次Sports A2专用FD工程恢复及其原10个下游阶段；原T5编码直接复用。Toys A-5300、Toys A-5000、Sports A1只读审核，没有重训或重新评价；旧Beauty A/B、Toys B、Sports B仅继承固定来源。本轮没有Parallel、MLP、额外数据域、seed搜索、测试集调参、额外生成器或预算扩张。
+
+原任务3/3集中修正耗尽历史保留。本次专项仅一次正式量化attempt；旧ga-20261017-sportsa2-quantize-v1仍INTERRUPTED/-9。24次EMFILE来自DataLoader/Tensor storage IPC路径；原-9是受控中断与清理，不是已确认GPU OOM。旧34阶段历史始终23 SUCCEEDED、1旧量化失败、10旧模板未提交；新11阶段拥有独立身份，不覆盖旧请求。
+
+## B. 工程修复与数据等价
+
+保全原件references/wmh-original/GRID不修改。原collate保留`list(field_value)`的独立小Tensor；新A2专用adapter先调用原collate，再仅将item_ids改为`torch.stack(result.item_ids, dim=0)`。原train/predict两个collate target被替换，其余DataModule配置精确还原对比。量化model_step仍读取同一个input_embedding；predict_step对每ID调用.item()，writer键值保持。
+
+固定真实2048样本逐项核对ID数量/值/顺序/dtype、512维embedding及全部feature、ID配对、model_step、predict/writer及RNG状态，均完全一致；全18357 item无重复遗漏。batch内ID storage由2048变1，包含embedding的总storage由2049变2。512样本×2worker的有界IPC原FD527/527/1040/527，新16/18/16/16；2048×12worker CPU两rank顺序模拟另有原始回执，不冒充DDP实测。
+
+仅本作业RLIMIT_NOFILE soft提高至524288且不超过hard。真实两DDP rank、每rank12训练worker、随后每rank2预测worker全部记录soft/hard524288、file_descriptor sharing strategy；rank0原soft1024、rank1继承524288。新5秒采样FD范围78–168，采样峰168，零EMFILE；这是采样上界，不是连续内核最大值。防失控门为每进程min(8192,soft×0.5)，异常仅结束本rank，由已验收runner精准清理；没有全局ulimit或sudo改动。
+
+原FD表有一项应纠正：实际原件中rank0 worker候选soft/hard524288，rank1候选soft1024/hard524288、FD1023；历史rank归属来自argv推导，缺完整PPID/worker_id原件。storage数量级支持碎片IPC放大，但没有FD类别原件能证明它是唯一历史根因。原失败无有效训练产物，不能声称新训练结果与一个不存在的旧checkpoint逐值相等。
+
+FD_ENGINEERING_EQUIVALENCE_PASS由非作者/root/fd_repair_reviewer在正式提交前签署；当时明确SCIENTIFIC_RESULT_NOT_YET_AVAILABLE。新A2-only controller还经另一非作者审核。旧长supervisor白名单曾在只读预提交检查拒绝c31候选，未提交未运行；85版本只为新CPU controller精确ID/module加入同期限白名单，不改旧runner或科研条件。
+
+## C. A2量化、SID与新双表训练
+
+实际执行source85b77f5e2a5b497fdc1f620649ba488fc783a245；不可变服务器snapshot22286966cd544773f21b96e4185d56c66afd7183fdc4e8888716d8ea1d77acb2。不是旧b443源码或6daf共享调度提交，也不是后续结果发表提交。
+
+复用T5-small FP32 [18357,512]，embedding SHA b137cb8a006a8b950396524ed5be3bbc91d711b36068d671c01da3742d7cda6f。原ResidualQuantization+MiniBatchKMeans、3层×256、残差归一化、双4090 DDP、bf16-mixed、每卡raw2048/12worker、seed42、30 optimizer steps均保持。原初始化额外消耗raw batch，实际每rank36 raw batch、30优化步；三个量化层初始化真实完成。72份真实batch ID/embedding哈希与原T5严格对应。
+
+quantizer.ckpt：151976576 B，SHA bdf869dcd188da6a97cc544c2e401117c4fd6b6040f1ebe748264a1ac831c309。非作者CPU严格加载原模型，三个[256,512]有限质心、global_step30。全量rank预测与合并精确覆盖18357 item；codes [18357,3]为原float32存储的精确整数0..255。新SID [4,18357] int64、588597 B，SHA 06cfa6ba0f64d6c68e0e94c4111edd51d086796e8cdb474ac3fcd424a4a2adf0。四位均合法且唯一；15647个不同三元组、1672碰撞组、最大第四位25。第四位沿实际原函数：单例0、碰撞组所有成员按item轴1..N，不是第4个可训练量化层。
+
+量化job为ga-20261018-sportsa2-quantize-fd-recovery-v1；训练job为ga-20261018-sportsa2-train-fd-recovery-v1。新SID经metadata/data门后，从头随机初始化完整双表生成器，不加载A1/B推荐权重。实际有效配置与A1逐项核对，除7项SID/输出路径差异外协议相同：seed42，32-true，Adam lr0.001/weight_decay0.0001，无scheduler，raw16×accumulate16，1600 loader batch验证，val/recall@5最大选模、patience10，max_steps320000/max_epochs10，K10，prefix check=False。双表独立，13259136参数、178 state tensors。
+
+训练真实7900次Adam更新、126400 microbatch、39426025窗口；79次完整validation，每次35598目标/4450 batch/目标multiset精确。best step6900，val R@5=0.031434349715709686；7000–7900十次不改善后正常patience早停，final step7900。loss有限且监测梯度有限非零。耗时32909.66135秒=9.141572597小时，低于12小时；没有将预算超时或临时checkpoint冒充完整训练。
+
+best：checkpoint_epoch=000_step=006900.ckpt，161660326 B，SHA1287c3f60404726dbda165d5242ba17d40ecaf6520ded69d6e3165170586513d。final：recovery/training-final/full-state.ckpt，161653798 B，SHA74770b7d1166fa16df1a931b6ffa221bbf9e6f9b3eb84fa2a9d2ad8055b55676。实际评价严格加载178项且SID精确；非作者另在CPU直接严格载入best/final，128个Adam state步数6900/7900，finite/完整键值/独立表均通过。weights/RNG保存不等于逐batch精确断点恢复，未授权自动resume。
+
+Sports A1保持final9600/best8600、正常早停和全部原结果。Toys两候选都保留，不按testing分数择优删除。
+
+## D. 正式原指标与逐用户配对
+
+以下为原evaluator原值；独立float64复算仅用来验收，不替换原值。全12条件完整用户/target配对，总计330060行原预测；原十候选全部保留，非法候选不额外过滤、补齐、重排或改分。
+
+| 路线 | 条件 | 用户 | Recall@5 | NDCG@5 | Recall@10 | NDCG@10 | 非法/重复 |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Toys-A-5300 | Normal | 19412 | 0.040078300982713699 | 0.027255861088633537 | 0.061302285641431808 | 0.034059926867485046 | 175/0 |
+| Toys-A-5300 | Shuffle3 | 19412 | 0.040232844650745392 | 0.026425955817103386 | 0.060271997004747391 | 0.032848287373781204 | 194/0 |
+| Toys-A-5300 | Shuffle4 | 19412 | 0.040129818022251129 | 0.02640373632311821 | 0.059859879314899445 | 0.032738946378231049 | 221/0 |
+| Toys-A-5000 | Normal | 19412 | 0.040644962340593338 | 0.026936978101730347 | 0.059859879314899445 | 0.033158622682094574 | 157/0 |
+| Toys-A-5000 | Shuffle3 | 19412 | 0.039820730686187744 | 0.026538845151662827 | 0.059396248310804367 | 0.032830830663442612 | 140/0 |
+| Toys-A-5000 | Shuffle4 | 19412 | 0.038841951638460159 | 0.026054665446281433 | 0.058056872338056564 | 0.032222375273704529 | 160/0 |
+| Sports-A1 | Normal | 35598 | 0.025816056877374649 | 0.01716848649084568 | 0.037586379796266556 | 0.020962946116924286 | 20/0 |
+| Sports-A1 | Shuffle3 | 35598 | 0.019748300313949585 | 0.013000275008380413 | 0.02949603833258152 | 0.016144171357154846 | 10/0 |
+| Sports-A1 | Shuffle4 | 35598 | 0.019860666245222092 | 0.012999451719224453 | 0.029299398884177208 | 0.016071824356913567 | 14/0 |
+| Sports-A2 | Normal | 35598 | 0.02250126376748085 | 0.014671024866402149 | 0.034215405583381653 | 0.018478265032172203 | 35/0 |
+| Sports-A2 | Shuffle3 | 35598 | 0.020282037556171417 | 0.012955863028764725 | 0.030254509299993515 | 0.016185346990823746 | 25/0 |
+| Sports-A2 | Shuffle4 | 35598 | 0.019635934382677078 | 0.012565478682518005 | 0.030928703024983406 | 0.016218414530158043 | 39/0 |
+
+每个Shuffle仅与同路线自身Normal比较。原向量重排在层级offset+embedding lookup之后、每历史item occurrence内部进行；不改整数SID、时间轴、目标SID或decoder顺序。主控独立原预测复算最大差1.937127889e-9，非作者另用独立实现核完整原件。
+
+| 路线 | 与自己Normal比较 | Top1变化 | Top10顺序/集合变化 | Hit@5丢失/获得 | Hit@10丢失/获得 | rank改善/恶化/相同 |
+|---|---|---:|---:|---:|---:|---:|
+| Toys-A-5300 | Shuffle3 | 5609 | 19289/17427 | 85/88 | 122/102 | 330/377/18705 |
+| Toys-A-5300 | Shuffle4 | 6163 | 19361/17918 | 100/101 | 134/106 | 341/403/18668 |
+| Toys-A-5000 | Shuffle3 | 4994 | 19221/16825 | 79/63 | 84/75 | 292/311/18809 |
+| Toys-A-5000 | Shuffle4 | 5521 | 19314/17433 | 99/64 | 110/75 | 299/350/18763 |
+| Sports-A1 | Shuffle3 | 21075 | 35547/35030 | 373/157 | 522/234 | 431/829/34338 |
+| Sports-A1 | Shuffle4 | 21024 | 35587/35152 | 366/154 | 515/220 | 437/796/34365 |
+| Sports-A2 | Shuffle3 | 17847 | 35530/34392 | 231/152 | 326/185 | 420/604/34574 |
+| Sports-A2 | Shuffle4 | 17012 | 35562/34516 | 236/134 | 314/197 | 432/634/34532 |
+
+rank汇总将Top10未命中编码11；独立审核逐人gzip用0表示未命中，两种约定在各自元数据中明示。完整Hit四格、rank迁移、逐人改变、目标与原预测均保留。A2 Shuffle3/4 Top1分别变化50.1348%/47.7892%，聚合值和逐人变化共同报告。
+
+## E. 注意力与CPU统计
+
+四路线×三条件，每条件固定32人、4×8batch、4 NPZ/32 PNG；总48 NPZ/384 PNG。每份保留最后层六heads、四autoregressive query、head mean、mask、shuffle source permutation、item/SID位置图、plot receipt、最终Top1完整祖先链及每步局部首parent路径。每一路线三条件同一预固定evaluation cohort，正式指标是完整testing；不将两个split的同用户强行视为相同history/target。
+
+cohort SHA：Toys两候选共同3a82afccb0d944d537039ae3da51c971c1b6abba2a869052d3197b2e6bbb2ab6；Sports A1为3935dc0c085ad6134d6b5da50c387ee59e7b990e7d21226afcc3655ad211f565；Sports A2为0a2bbfbd62ab5bbd82b3032330e1f0f411af015d674fccc6b5f23c0ddacafe01。样本在输出前固定，无结果挑选。
+
+下表每格是同条件、同路径内32人×六query pair的192项均值，不是Normal与Shuffle之间的attention距离。Cosine/Pearson用原始可见权重（含可见SEP），Pearson常量行null；TV/JS仅在计算时除可见行和，JS自然对数；原矩阵不修改。每条件384行，两路径合计全12条件4608行；原raw mask mass0、row-sum误差最大2.384185791e-7。Toys独立统计最大差5.56e-16，A1 6.67e-16，A2 7.78e-16。
+
+| 路线 | 条件 | 路径 | mean Cosine | mean Pearson | mean TV | mean JS(nats) |
+|---|---|---|---:|---:|---:|---:|
+| Toys-A-5300 | Normal | final_top1_cross | 0.922560468 | 0.843515832 | 0.208174069 | 0.061342915 |
+| Toys-A-5300 | Normal | local_first_cross | 0.923674937 | 0.844845803 | 0.208432087 | 0.060495926 |
+| Toys-A-5300 | Shuffle3 | final_top1_cross | 0.916571580 | 0.835002114 | 0.215473242 | 0.063988954 |
+| Toys-A-5300 | Shuffle3 | local_first_cross | 0.918029999 | 0.839249607 | 0.217333417 | 0.063669626 |
+| Toys-A-5300 | Shuffle4 | final_top1_cross | 0.922275906 | 0.843831613 | 0.206119224 | 0.060272369 |
+| Toys-A-5300 | Shuffle4 | local_first_cross | 0.922612940 | 0.844628808 | 0.209711390 | 0.060629565 |
+| Toys-A-5000 | Normal | final_top1_cross | 0.835023734 | 0.477951396 | 0.258415310 | 0.085673783 |
+| Toys-A-5000 | Normal | local_first_cross | 0.837000007 | 0.491397833 | 0.252595881 | 0.083725650 |
+| Toys-A-5000 | Shuffle3 | final_top1_cross | 0.827439441 | 0.453370045 | 0.266083590 | 0.090103745 |
+| Toys-A-5000 | Shuffle3 | local_first_cross | 0.828886516 | 0.456017675 | 0.262266093 | 0.087341609 |
+| Toys-A-5000 | Shuffle4 | final_top1_cross | 0.839915247 | 0.466016631 | 0.257264211 | 0.083375832 |
+| Toys-A-5000 | Shuffle4 | local_first_cross | 0.842042001 | 0.468111266 | 0.254427217 | 0.080777582 |
+| Sports-A1 | Normal | final_top1_cross | 0.842806477 | 0.277576508 | 0.173100347 | 0.050504576 |
+| Sports-A1 | Normal | local_first_cross | 0.845255244 | 0.283250396 | 0.168693421 | 0.047678936 |
+| Sports-A1 | Shuffle3 | final_top1_cross | 0.757919802 | 0.358939588 | 0.218251402 | 0.069116660 |
+| Sports-A1 | Shuffle3 | local_first_cross | 0.760653003 | 0.351342254 | 0.218745768 | 0.068581996 |
+| Sports-A1 | Shuffle4 | final_top1_cross | 0.786710231 | 0.400166961 | 0.207172997 | 0.064241003 |
+| Sports-A1 | Shuffle4 | local_first_cross | 0.781820807 | 0.386177976 | 0.207475489 | 0.064029325 |
+| Sports-A2 | Normal | final_top1_cross | 0.774638107 | 0.163903570 | 0.229967977 | 0.083350841 |
+| Sports-A2 | Normal | local_first_cross | 0.757683830 | 0.064020706 | 0.252022767 | 0.088458694 |
+| Sports-A2 | Shuffle3 | final_top1_cross | 0.674247047 | 0.232591290 | 0.289046436 | 0.112023746 |
+| Sports-A2 | Shuffle3 | local_first_cross | 0.671702784 | 0.154002761 | 0.307894037 | 0.111082820 |
+| Sports-A2 | Shuffle4 | final_top1_cross | 0.709893886 | 0.168490958 | 0.273992690 | 0.104047720 |
+| Sports-A2 | Shuffle4 | local_first_cross | 0.711061788 | 0.104808657 | 0.283527853 | 0.102175607 |
+
+A2的12 NPZ/96 PNG另由非作者从实际beam prefix独立重建父链，1152统计逐条复算；96图全部115200热力格和14400 mask格RGB与原NPZ/共同色阶相符。PNG检查没有重新渲染或修改原图。全fixed32及least-three规则均保留，未只展示有利案例；两种路径不可混为同一条最终SID轨迹。
+
+## F. 终态、共享资源与预算
+
+| 新A2阶段（均以ga-20261018-sportsa2-开头、-fd-recovery-v1结尾） | 状态/退出码 | GPU请求秒 |
+|---|---|---:|
+| quantize | SUCCEEDED/0，cleanup verified | 93.097820 |
+| metadata | SUCCEEDED/0，cleanup verified | 0.000000 |
+| gpu-gate | SUCCEEDED/0，cleanup verified | 29.133550 |
+| train | SUCCEEDED/0，cleanup verified | 32909.661350 |
+| eval-0 | SUCCEEDED/0，cleanup verified | 268.057000 |
+| eval-3 | SUCCEEDED/0，cleanup verified | 261.716181 |
+| eval-4 | SUCCEEDED/0，cleanup verified | 262.647429 |
+| attention-0 | SUCCEEDED/0，cleanup verified | 56.920913 |
+| attention-3 | SUCCEEDED/0，cleanup verified | 54.272691 |
+| attention-4 | SUCCEEDED/0，cleanup verified | 56.843037 |
+| stats | SUCCEEDED/0，cleanup verified | 0.000000 |
+
+新controller ga-20261018-a2-fd-queue-v1为SUCCEEDED/0、cleanup；内部queue状态TERMINAL_PENDING_RESULT_REVIEW仅是计算结束时的原始标记，保留不改，科研审核由本次独立回执另签。旧ga-20261017-queue-v1 FAILED/2、ga-20261018-shared-queue-v1 SUCCEEDED/0，均未重启。45个已接收known job全部终态/cleanup、10个旧模板无job目录，活动本任务worker/supervisor均0，两GPU锁释放。
+
+原历史计算41837.856885 GPU请求秒＋先前三个GPU工程门58.650573；本次新33992.349971；总75888.857429秒=21.080238175小时。原总143100秒=39.75小时，剩67211.142571秒=18.669761825小时。量化原失败302.049476＋新93.09782=395.147296秒，不重获7200秒；新正式预留6840秒/3420wall内完成。新训练32909.66135/43200、新eval+attention960.457251/9000、新GPU工程门29.13355/2641均合规。CPU等价与独立审核不请求GPU。保守配置秒数向下取整比精确余量少0.349427秒，实际预算表保留精确起止独立重算。
+
+原绝对截止2026-10-19 13:40:30.012007北京时间未重置；本链2026-10-18 12:32:11北京时间结束。共享准入按free显存+峰值+余量，其他用户任务允许共存，没有抢占或杀他人进程，GPU/batch/precision/steps不因资源改变。GPU UUID dfff0e95-1db6-e2f4-3431-55bb852fa0ae 与59cac3bd-3645-668b-79c8-839e0d878893均真实核对。最终/home剩617717571584 B（575.29 GiB），/data剩4320230797312 B（4023.53 GiB）。
+
+## G. 源码与实际运行身份
+
+原科研b44399926c98369191c2ff5c2425377c8c07d3c8对应b6203414ee58a400快照；共享调度6dafbc7215b58a2dbb47905a687c930caecf7b44对应cdfd283823bd1928。上次交付9ab3d0ea5d32db00e278f74c599a1943885453db保持历史。新修复0d18820025e7a28675ed7112be0b1b4ff0110025；正式执行85b77f5e2a5b497fdc1f620649ba488fc783a245对应22286966cd544773完整快照；接续请求/已完成旧结果审核发表acb2f395c62af074a9649e99af17a99aa60dd83e。最终科研结果发表与ZIP回执提交将另外给完整SHA及实际回读证据，不能把元数据发表提交冒充执行版本。
+
+真实执行根/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/22286966cd544773；解释器/data/bwwu/envs/grid-20261009-e61baf3/bin/python；非.git源码export按262文件与Git字节映射，并非声称服务器checkout。部署manifest SHA05defd537c43f410493ea3e1d312d1daae8d1d7c9317353e09036c6ff8b439b3；有效queue配置SHAddc231d33f739ec8f5282c60ad2a670023d057f8609bcca1d9526129fdfb711e。17旧冻结文件及262新源码最终实际重新核对无变化。独立runner、argv/cwd/请求/cleanup/UUID/源资产哈希均有原件。
+
+## H. 真实非作者审核与依据
+
+/root/fd_repair_reviewer直接读旧失败、collate/数据流、diff、CPU原始等价输出、真实rank/worker/FD、正式quantizer CPU载荷/SID、源码与预算、请求和终态；/root/sports_a1_result_audit审核原A1，并直接CPU严格核新A2 best/final训练载荷、7900步/79完整验证及选模；/root/toys_result_audit独立审两Toys全原结果及新A2完整预测、实际Shuffle、全部fixed32/两条beam路径/统计/PNG。不是作者自评或只复述主控表。主控也先独立验收原预测、量化数值、训练事件和注意力原数组。审核源码、原始回执和逐文件SHA均随包。
+
+必要非科研采集/包装工具排错记录如实保留：通用quantizer fetch已完成真实传输后因本地自动child请求镜像缺失而失败，后逐成员验证并以实际admitted request补齐镜像，无研究重跑；初始静态stage因负向fixture目录遗漏被非作者拒绝，保留旧stage后新v2排除173个合成fixture成员并重新核全部真实输入。没有把假fixture状态作为实际job。此类本地取证/包装问题不改原科研3/3历史或专项正式attempt计数。
+
+## I. 交付与可复核入口
+
+GPT_UPLOAD_REQUIRED: YES。唯一最终轻量ZIP包含原失败材料、新修复/等价性、真实FD、quantizer/SID小数值、7900步/79验证、全12组未修改原预测、48 NPZ/384 PNG、两路径统计、逐人配对、真实各项非作者审核、终态/预算/版本映射。大型模型checkpoint、T5权重、TFRecord与完整环境留服务器；assets-not-copied.json提供成员身份、真实路径/大小/SHA与只读恢复入口，目录不伪造单一hash。
+
+ZIP每payload成员有大小/SHA/CRC32、安全路径/重复/敏感信息扫描；manifest不自哈希，整体ZIP SHA置包外，实际序列化后再做主控与真实非作者完整ZIP验收。WSL/Windows UNC、字节、成员数与整包SHA以实际最终交付回执为准。本报告不编造尚未产生的整包SHA或Git提交。
+
+scientific-results.json、original-metrics.csv、paired-changes.csv、attention-means.csv是本报告逐值来源；cross-domain-original-metrics-with-a2.*与cross-domain-evidence-index-with-a2.json给8路线24条件新完整入口。旧pending index保留其历史时间点，明确不用作最终A2覆盖。旧Beauty/B固定来源仅继承，没有重复全套大档案审计。
+
+## J. 研究解释边界
+
+实现正确、运行完成、原件完整、现象是否复现和研究推论分别判定。不同或不利结果保留，不以指标接近证明实现正确。Toys历史producer仍非唯一：Qwen/3584配置与保全512维producer之间历史绑定缺口不补造；本A2是新T5/R-Kmeans条件下方法复现，不是找回学长原Sports权重。学长当前方案与历史实际源码绑定是不同事实。
+
+单seed42、固定32人样本和行间描述统计不能证明数学严格置换不变性、跨seed稳定性或Decoder不使用目标prefix。Shuffle已有大量逐人推荐变化；Sports A1与A2的SID及独立scratch训练均不同，不能把差异单独归于一种SID。旧FD缺完整归属/类别直接证据，采样峰不是连续峰；完整环境目录没有虚构统一SHA；精确逐batchresume未验证。
+
+## K. 停止与依赖变更
+
+计算已终态，停止新增实验；最终真实交叉审核、固定wbw发表和一次ZIP验收完成后停止本任务。未同步main/yinjingchen、不新分支、不清理正式证据、不进入Parallel/机制探索。新增系统包、语言包、工具链均0；未改.bashrc、全局环境/资源配置，无安装项需要清理。本轮专用源码/请求/参数文件和证据按用户授权保留。

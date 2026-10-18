@@ -1,0 +1,76 @@
+{
+  "reviewer": "/root/fd_repair_reviewer",
+  "at": "2026-10-17T19:24:51.569647+00:00",
+  "package_tool_source_sha256": "c5fd9143b287d5a64b9e70cf4f06f5953c5538d5bdaa0023d883fe0441dd7336",
+  "status": "PACKAGE_TOOL_FIXTURES_PASS",
+  "cases": [
+    {
+      "case": "normal_PARTIAL_package",
+      "accepted": true,
+      "detail": {
+        "status": "PACKAGE_INTEGRITY_PASS",
+        "zip": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/delivery_tools/fixtures/20261017T192451566122Z/normal.zip",
+        "bytes": 1084,
+        "sha256": "a6ca370128c3cb64a59a2d5b807a01e07bb5d5165e58220b49a46b16cba6808e",
+        "crc32": "f280b321",
+        "members": 3,
+        "payload_members": 2,
+        "member_sha256_pass": true,
+        "member_sizes_pass": true,
+        "crc_pass": true,
+        "safe_paths_pass": true,
+        "duplicate_paths": 0,
+        "windows_case_collisions": 0,
+        "sensitive_pattern_scan_pass": true,
+        "scan_scope": "all actual uncompressed member bytes, including manifest",
+        "manifest_sha256": "2673196d4ca9678f748de0451e169ac0e718269aa6601f2d6f2db32ba2ab3725",
+        "scientific_review_status": "PARTIAL",
+        "limitation": "Cryptographic/package integrity does not replace the separate real scientific reviews.",
+        "scan_patterns": [
+          "private_key_header",
+          "github_token",
+          "github_pat",
+          "huggingface_token",
+          "aws_access_key"
+        ],
+        "verified_utc": "2026-10-17T19:24:51.568077+00:00"
+      }
+    },
+    {
+      "case": "reject_path_alias_evidence_dot_a_vs_canonical",
+      "accepted": false,
+      "error": "AssertionError('evidence/./a.txt')"
+    },
+    {
+      "case": "reject_supported_secret_pattern_in_extensionless_payload",
+      "accepted": false,
+      "error": "AssertionError(('NOTES', 'potential secret pattern', ['github_token']))"
+    },
+    {
+      "case": "reject_env_variant_payload_with_supported_secret_pattern",
+      "accepted": false,
+      "error": "AssertionError('.env.local')"
+    },
+    {
+      "case": "reject_hash_size_manifest_mismatch",
+      "accepted": false,
+      "error": "AssertionError('rows.json')"
+    },
+    {
+      "case": "verify_independently_rejects_supported_secret_even_with_valid_hashes",
+      "accepted": false,
+      "error": "AssertionError(('payload/NOTES', 'potential secret pattern', ['github_token']))"
+    },
+    {
+      "case": "reject_actual_stored_ZIP_payload_CRC_corruption",
+      "accepted": false,
+      "error": "AssertionError('ZIP CRC check failed')"
+    }
+  ],
+  "fixtures_path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/delivery_tools/fixtures/20261017T192451566122Z",
+  "fixture_secret_is_synthetic": true,
+  "no_real_secret_used": true,
+  "production_artifact_or_experiment_modified": false,
+  "GPU_requested": 0,
+  "packaging_note": "Review fixtures intentionally include invalid paths and synthetic secret patterns. Exclude the fixtures subtree from the final evidence staging; retain this summary and test source as the verification record."
+}

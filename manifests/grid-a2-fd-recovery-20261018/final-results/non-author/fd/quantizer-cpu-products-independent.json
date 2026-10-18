@@ -1,0 +1,190 @@
+{
+  "status": "INDEPENDENT_CPU_QUANTIZER_AND_SID_CONTENT_PASS",
+  "reviewer": "/root/fd_repair_reviewer",
+  "at": "2026-10-17T19:11:55.312271+00:00",
+  "job_id": "ga-20261018-sportsa2-quantize-fd-recovery-v1",
+  "request_capture": "85b77f5e2a5b497fdc1f620649ba488fc783a245/22286966cd544773f21b96e4185d56c66afd7183fdc4e8888716d8ea1d77acb2",
+  "used_config_differences_exactly_allowed": [
+    {
+      "path": "/data_loading/datamodule/train_dataloader_config/collate_fn/_target_",
+      "before": "src.data.loading.components.collate_functions.collate_fn_items",
+      "after": "experiments.a2_fd_recovery_20261018.adapter.collate_items_contiguous"
+    },
+    {
+      "path": "/data_loading/datamodule/predict_dataloader_config/collate_fn/_target_",
+      "before": "src.data.loading.components.collate_functions.collate_fn_items",
+      "after": "experiments.a2_fd_recovery_20261018.adapter.collate_items_contiguous"
+    },
+    {
+      "path": "/trainer/default_root_dir",
+      "before": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-quantize-v1/output",
+      "after": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output"
+    }
+  ],
+  "original_model_optimizer_and_all_other_effective_fields_exact": true,
+  "reused_original_embedding": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa2-encode-v1/output/item_embeddings.pt",
+    "bytes": 37596356,
+    "sha256": "b137cb8a006a8b950396524ed5be3bbc91d711b36068d671c01da3742d7cda6f"
+  },
+  "embedding_shape": [
+    18357,
+    512
+  ],
+  "embedding_dtype": "torch.float32",
+  "rank_prediction_rows": [
+    {
+      "rank": 0,
+      "items": 9141,
+      "unique_ids": 9141,
+      "id_min": 1024,
+      "id_max": 18356,
+      "sorted_IDs_sha256": "03140d04ca1a972091c56d0848bf61fdf4f339d2408acfdfc52e6a4f557672fc",
+      "artifact": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/prediction-rank-0.pt",
+        "bytes": 2639823,
+        "sha256": "d893e6f1740e39e671676b70248feaf26b85ab00166685f9ddffa908ddd2ee84"
+      }
+    },
+    {
+      "rank": 1,
+      "items": 9216,
+      "unique_ids": 9216,
+      "id_min": 0,
+      "id_max": 17407,
+      "sorted_IDs_sha256": "d04928cd3c097640ba93d857694094c48ab7631c342a325dfd194cc73337ca99",
+      "artifact": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/prediction-rank-1.pt",
+        "bytes": 2661234,
+        "sha256": "3d8d64e6a10b8a2284b87af3aa19c45695c2e6ba992df456e0716f4f75b52f88"
+      }
+    }
+  ],
+  "all_item_IDs_dense_unique_complete": true,
+  "rank_predictions_independently_merged_by_item_ID_equal_saved_codes": true,
+  "codes_shape": [
+    18357,
+    3
+  ],
+  "codes_dtype": "torch.float32",
+  "codes_min": 0,
+  "codes_max": 255,
+  "codes_dtype_boundary": "Preserved writer merge initializes float32 output; values are exact integral codes. Export converts to long unchanged.",
+  "SID_shape": [
+    4,
+    18357
+  ],
+  "SID_dtype": "torch.int64",
+  "SID_all_unique_and_legal": true,
+  "first_three_SID_rows_exact_quantization_codes": true,
+  "fourth_independently_recomputed_with_original_1_based_collision_rule": true,
+  "distinct_three_code_groups": 15647,
+  "colliding_groups": 1672,
+  "max_collision_group": 25,
+  "fourth_min": 0,
+  "fourth_max": 25,
+  "checkpoint_global_step": 30,
+  "checkpoint_current_layer": 2,
+  "checkpoint_initialized": [
+    true,
+    true,
+    true
+  ],
+  "strict_fresh_CPU_model_load": true,
+  "no_missing_or_unexpected_state": true,
+  "checkpoint_state": [
+    {
+      "key": "quantization_layer_list.0.centroids",
+      "shape": [
+        256,
+        512
+      ],
+      "dtype": "torch.float32",
+      "sha256": "06976313dd31b9ed936d3e493ec89b9915fa0fc01aa20bed6bbe176e6c178c34"
+    },
+    {
+      "key": "quantization_layer_list.1.centroids",
+      "shape": [
+        256,
+        512
+      ],
+      "dtype": "torch.float32",
+      "sha256": "a1a7f364562fafaa8e109e88c4ad3446868f1dccd4275a9e27925571153528f4"
+    },
+    {
+      "key": "quantization_layer_list.2.centroids",
+      "shape": [
+        256,
+        512
+      ],
+      "dtype": "torch.float32",
+      "sha256": "1c35b73871a577971d87d4772f9e4857a124f2e52fc396adacdbd9660ed4fb1e"
+    }
+  ],
+  "exactly_three_learned_quantizer_layers_no_fourth_layer": true,
+  "all_72_actual_training_batch_embedding_hashes_independently_recomputed": [
+    {
+      "rank": 0,
+      "actual_batches": 36,
+      "ids_per_batch": 2048,
+      "all_ID_to_original_embedding_hashes_independently_recomputed_exact": true,
+      "receipt": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/fd/rank-0-batches.jsonl",
+        "bytes": 485116,
+        "sha256": "1d8a392a3edf8e0f462f753a7be281788989334bdfa409769f4078d2992a3792"
+      }
+    },
+    {
+      "rank": 1,
+      "actual_batches": 36,
+      "ids_per_batch": 2048,
+      "all_ID_to_original_embedding_hashes_independently_recomputed_exact": true,
+      "receipt": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/fd/rank-1-batches.jsonl",
+        "bytes": 481325,
+        "sha256": "64d26c2e8858ac5858acb84768abe5f5a0d376b0a313fc53d9b2fb87a0638617"
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/prediction-rank-0.pt",
+      "bytes": 2639823,
+      "sha256": "d893e6f1740e39e671676b70248feaf26b85ab00166685f9ddffa908ddd2ee84"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/prediction-rank-1.pt",
+      "bytes": 2661234,
+      "sha256": "3d8d64e6a10b8a2284b87af3aa19c45695c2e6ba992df456e0716f4f75b52f88"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/predictions.pt",
+      "bytes": 221488,
+      "sha256": "f1835868b84e1b6725aeedd5f0abe8dc1fd5dde89a2dd6df404c4ce37ab03012"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt",
+      "bytes": 588597,
+      "sha256": "06cfa6ba0f64d6c68e0e94c4111edd51d086796e8cdb474ac3fcd424a4a2adf0"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/quantizer.ckpt",
+      "bytes": 151976576,
+      "sha256": "bdf869dcd188da6a97cc544c2e401117c4fd6b6040f1ebe748264a1ac831c309"
+    }
+  ],
+  "worker_wall_seconds": 46.54891,
+  "actual_GPU_request_seconds": 93.09782,
+  "original_quantizer_group_total_used_GPU_seconds": 395.14729600000004,
+  "original_quantizer_group_remaining_GPU_seconds": 6804.852704,
+  "CPU_only": true,
+  "GPU_requested": 0,
+  "no_training_or_quantizer_reinference": true,
+  "recommender_training_evaluation_attention_not_approved_by_this_quantizer_review": true,
+  "executed_reader": {
+    "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/fd/check_quantization_products_cpu.py",
+    "sha256": "254d69d8dc67e2cb5819fdfdffbbe2fe9f42f8210e0f78362cafb272188de775",
+    "argv": "env CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=2 PYTHONDONTWRITEBYTECODE=1 TF_CPP_MIN_LOG_LEVEL=3 PYTHONPATH=/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/22286966cd544773 /data/bwwu/envs/grid-20261009-e61baf3/bin/python -B -",
+    "no_remote_files_written": true
+  }
+}

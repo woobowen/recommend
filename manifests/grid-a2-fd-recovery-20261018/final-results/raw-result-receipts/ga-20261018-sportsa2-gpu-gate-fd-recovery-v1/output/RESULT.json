@@ -1,0 +1,127 @@
+{
+  "status": "GPU_ADMISSION_PASS",
+  "engineering_only": true,
+  "formal_state_reuse_allowed": false,
+  "device": "gpu",
+  "gpu_capacity_verified": true,
+  "cpu_post_collation_windows": null,
+  "original_raw16_batch_collated_shape": null,
+  "unchanged_formal_collate_cap": 512,
+  "full_validation_executed": false,
+  "validation_batches_engineering_only": 2,
+  "test_executed": false,
+  "strict_checkpoint_and_optimizer_resume": true,
+  "independent_new_model_for_resume": true,
+  "traces": [
+    {
+      "attempt": 0,
+      "global_step": 1,
+      "microbatches": 16,
+      "optimizer_events": [
+        {
+          "step_before": 0,
+          "gradient_norms": {
+            "encoder_sid": 0.03510799631476402,
+            "decoder_sid": 0.04383888840675354,
+            "decoder_bos": 0.06562470644712448,
+            "encoder_transformer": 0.14559917151927948,
+            "decoder_transformer": 0.1406644731760025
+          }
+        }
+      ],
+      "parameter_changes": {
+        "encoder_sid": 0.001000046730041504,
+        "decoder_sid": 0.001000046730041504,
+        "decoder_bos": 0.001000046730041504,
+        "encoder_transformer": 0.000999998301267624,
+        "decoder_transformer": 0.000999998301267624
+      },
+      "selected": {
+        "checkpoint": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-gpu-gate-fd-recovery-v1/output/first/checkpoints/engineering-step=000001.ckpt",
+          "sha256": "d027f1e52310583a7ec5eddd1fb5605085b572d8142b76b4ec898c4279ff8b43",
+          "bytes": 161659752,
+          "score": 0.0,
+          "monitor": "val/recall@5",
+          "mode": "max"
+        },
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "all_keys_shapes_values_exact": true,
+        "embedded_sid_exact": true,
+        "independent_sid_tables": true,
+        "optimizer_and_callbacks_present": true,
+        "best_global_step": 1,
+        "selected_by": "validation only"
+      },
+      "full_state": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-gpu-gate-fd-recovery-v1/output/first/full-state.ckpt",
+        "sha256": "4d3b550ce505320da7863afc7e50d54bf25a535a1b85fe4e0ef57f0861a55792"
+      },
+      "peak_reserved_bytes": 9860808704
+    },
+    {
+      "attempt": 1,
+      "global_step": 2,
+      "microbatches": 16,
+      "optimizer_events": [
+        {
+          "step_before": 1,
+          "gradient_norms": {
+            "encoder_sid": 0.007542529609054327,
+            "decoder_sid": 0.01832159422338009,
+            "decoder_bos": 0.020473089069128036,
+            "encoder_transformer": 0.029608914628624916,
+            "decoder_transformer": 0.06098407134413719
+          }
+        }
+      ],
+      "parameter_changes": {
+        "encoder_sid": 0.0010013580322265625,
+        "decoder_sid": 0.0010013580322265625,
+        "decoder_bos": 0.0010006427764892578,
+        "encoder_transformer": 0.0010013319551944733,
+        "decoder_transformer": 0.0010013468563556671
+      },
+      "selected": {
+        "checkpoint": {
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-gpu-gate-fd-recovery-v1/output/resumed/checkpoints/engineering-step=000002.ckpt",
+          "sha256": "1a5f569a2b4aac7fb936662748679dfad44b6e60dff83ac513c7f47e0588eb1c",
+          "bytes": 161659752,
+          "score": 0.0,
+          "monitor": "val/recall@5",
+          "mode": "max"
+        },
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "all_keys_shapes_values_exact": true,
+        "embedded_sid_exact": true,
+        "independent_sid_tables": true,
+        "optimizer_and_callbacks_present": true,
+        "best_global_step": 2,
+        "selected_by": "validation only"
+      },
+      "full_state": {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-gpu-gate-fd-recovery-v1/output/resumed/full-state.ckpt",
+        "sha256": "3c6fd65ea45b1374577bdbf32027949a582f0d2dbc7b86d173ce7d74b38d9610"
+      },
+      "peak_reserved_bytes": 14048821248
+    }
+  ],
+  "training_protocol": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/snapshots/22286966cd544773/experiments/launch_20261017/training_protocol.json",
+    "sha256": "9d3823c2ada022f479fb3b8ac4e36bc2cf09267281db5b15edc636bec0a45c7e"
+  },
+  "sid": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt",
+    "sha256": "06cfa6ba0f64d6c68e0e94c4111edd51d086796e8cdb474ac3fcd424a4a2adf0",
+    "bytes": 588597
+  },
+  "workflow": "Sports-A2",
+  "config": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/grid-a-launch-20261017/assets/A800_GRID/logs/train/runs/2025-11-03/02-47-09/.hydra/config.yaml",
+    "sha256": "6f336505677ded65b16023e0cb798df2497f9c6c8fb34ff400dcb5ccc8e0dc9d"
+  },
+  "capture_version": "85b77f5e2a5b497fdc1f620649ba488fc783a245/22286966cd544773f21b96e4185d56c66afd7183fdc4e8888716d8ea1d77acb2",
+  "future_result_review": "NOT_PREAPPROVED"
+}

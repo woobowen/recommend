@@ -1,0 +1,300 @@
+{
+  "reviewer": "/root/sports_a1_result_audit",
+  "job_id": "ga-20261018-sportsa2-train-fd-recovery-v1",
+  "source_commit": "85b77f5e2a5b497fdc1f620649ba488fc783a245",
+  "GPU_or_forward_calls": 0,
+  "CPU_model_instantiations": 1,
+  "filesystem_mutations": 0,
+  "status": "A2_TRAINING_NONAUTHOR_REVIEW_PASS",
+  "termination": "patience10_complete_validation_early_stop",
+  "final_step": 7900,
+  "best_step": 6900,
+  "best_validation_recall5": 0.031434349715709686,
+  "full_validations": 79,
+  "full_validation_targets_each": 35598,
+  "full_validation_exact_multisets": true,
+  "actual_microbatches": 126400,
+  "expanded_windows": 39426025,
+  "loss_range": [
+    0.26116400957107544,
+    1.4493671655654907
+  ],
+  "gradient_ranges": {
+    "encoder_sid": [
+      6.097696677898057e-05,
+      1.4201380014419556
+    ],
+    "decoder_sid": [
+      0.0021127609070390463,
+      0.2715666592121124
+    ],
+    "decoder_bos": [
+      0.0015111431712284684,
+      0.3189072012901306
+    ],
+    "encoder_transformer": [
+      0.00028022026526741683,
+      0.6158949136734009
+    ],
+    "decoder_transformer": [
+      0.010151459835469723,
+      0.289126992225647
+    ]
+  },
+  "best": {
+    "checkpoint": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-train-fd-recovery-v1/output/checkpoints/checkpoint_epoch=000_step=006900.ckpt",
+      "sha256": "1287c3f60404726dbda165d5242ba17d40ecaf6520ded69d6e3165170586513d",
+      "bytes": 161660326,
+      "score": 0.031434349715709686,
+      "monitor": "val/recall@5",
+      "mode": "max"
+    },
+    "global_step": 6900,
+    "keys_shapes_values_exact": true,
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "state_tensors": 178,
+    "all_finite": true,
+    "embedded_sid_exact": true,
+    "independent_tables": true,
+    "optimizer": {
+      "parameter_states": 128,
+      "all_parameter_steps": 6900
+    }
+  },
+  "final_checkpoint": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-train-fd-recovery-v1/output/recovery/training-final/full-state.ckpt",
+    "sha256": "74770b7d1166fa16df1a931b6ffa221bbf9e6f9b3eb84fa2a9d2ad8055b55676",
+    "bytes": 161653798
+  },
+  "final_optimizer": {
+    "parameter_states": 128,
+    "all_parameter_steps": 7900
+  },
+  "final_callbacks": {
+    "EarlyStopping{'monitor': 'val/recall@5', 'mode': 'max'}": {
+      "wait_count": 10,
+      "stopped_epoch": 0,
+      "best_score": 0.031434349715709686,
+      "patience": 10
+    },
+    "ModelCheckpoint{'monitor': 'val/recall@5', 'mode': 'max', 'every_n_train_steps': 0, 'every_n_epochs': 1, 'train_time_interval': None}": {
+      "best_model_score": 0.031434349715709686,
+      "best_model_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-train-fd-recovery-v1/output/checkpoints/checkpoint_epoch=000_step=006900.ckpt"
+    }
+  },
+  "original_artifacts_verified": [
+    {
+      "bytes": 4476,
+      "path": "output/RESULT.json",
+      "sha256": "7ea966a292dc997313df74a193d4c20ccbbae3bb551a71b598240f809d6f65bd"
+    },
+    {
+      "bytes": 4301,
+      "path": "output/training_result.json",
+      "sha256": "e24ad71d4947d188d67ae3cf132be3e1e834ab08dc147c5a86190bee5282301b"
+    },
+    {
+      "bytes": 14254,
+      "path": "output/used_config.json",
+      "sha256": "2c012625897fc54fdd8d371b6c0b1cfe0f46a32d6e2585b538011a5cf67c18d1"
+    },
+    {
+      "bytes": 13146,
+      "path": "output/effective_config.yaml",
+      "sha256": "896b9f12fdb5533b8eaef5932f503a069030dfb492955896800e36d0a5321ea7"
+    },
+    {
+      "bytes": 15778,
+      "path": "output/structure.json",
+      "sha256": "51cf83f0d46757f60df291ffe4d55418d798bbe2f483e04f416c19c296371a05"
+    },
+    {
+      "bytes": 37816,
+      "path": "output/actual_train_loader.json",
+      "sha256": "307b0494dd6f9dfbd4dd0e469fda5a4b26b7b6dc86eff4eb257d2a2034cd5c92"
+    },
+    {
+      "bytes": 3526,
+      "path": "output/training_protocol.json",
+      "sha256": "b1629c5fc422013c559ab647c2eab5171f269e17b21383dca3519546fd08399a"
+    },
+    {
+      "bytes": 7474344,
+      "path": "output/optimizer_updates.jsonl",
+      "sha256": "08edc2de1e50cac94ea907224d1bf360eaa95c0e1b7978a1e3f114a2fb6c7808"
+    },
+    {
+      "bytes": 62002,
+      "path": "output/validations.jsonl",
+      "sha256": "b10d76b058c6cf670b5facfd258ab34388c7993b17356ad8493c651d5b2b0d5e"
+    },
+    {
+      "bytes": 634,
+      "path": "output/best_checkpoint_load.json",
+      "sha256": "6245633b6767f718a01e6987b2132abacf4280c464641353cb5c7536fd087ef9"
+    },
+    {
+      "bytes": 161660326,
+      "path": "output/checkpoints/checkpoint_epoch=000_step=006900.ckpt",
+      "sha256": "1287c3f60404726dbda165d5242ba17d40ecaf6520ded69d6e3165170586513d"
+    },
+    {
+      "bytes": 161653798,
+      "path": "output/recovery/training-final/full-state.ckpt",
+      "sha256": "74770b7d1166fa16df1a931b6ffa221bbf9e6f9b3eb84fa2a9d2ad8055b55676"
+    }
+  ],
+  "wall_GPU_request_seconds": 32909.66135,
+  "training_group_cap_seconds": 43200,
+  "runner_status": "SUCCEEDED",
+  "exit_code": 0,
+  "cleanup_verified": true,
+  "sid": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt",
+    "sha256": "06cfa6ba0f64d6c68e0e94c4111edd51d086796e8cdb474ac3fcd424a4a2adf0",
+    "bytes": 588597
+  },
+  "no_automatic_resume": true,
+  "original_live_processes": [],
+  "gpu_peak_allocated_bytes": 10177158656,
+  "gpu_peak_reserved_bytes": 20919091200,
+  "final_checkpoint_strict_load": {
+    "status": "A2_FINAL_RECOVERY_CHECKPOINT_STRICT_LOAD_PASS",
+    "checkpoint": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-train-fd-recovery-v1/output/recovery/training-final/full-state.ckpt",
+      "sha256": "74770b7d1166fa16df1a931b6ffa221bbf9e6f9b3eb84fa2a9d2ad8055b55676",
+      "bytes": 161653798
+    },
+    "global_step": 7900,
+    "state_tensors": 178,
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "keys_shapes_values_exact": true,
+    "all_finite": true,
+    "embedded_sid_exact": true,
+    "independent_tables": true,
+    "CPU_model_instantiations": 1,
+    "GPU_or_forward_calls": 0,
+    "filesystem_mutations": 0,
+    "best_checkpoint_reloaded": false
+  },
+  "first_full_validation": {
+    "at": "2026-10-17T19:19:01.022903+00:00",
+    "validation_number": 1,
+    "global_step": 100,
+    "exact_key_target_multiset": true,
+    "targets": 35598,
+    "batches": 4450,
+    "metrics": {
+      "val/loss": 15.661035537719727,
+      "val/ndcg@5": 0.0024911053478717804,
+      "val/ndcg@10": 0.0028268529567867517,
+      "val/recall@5": 0.0026967807207256556,
+      "val/recall@10": 0.0036799819208681583
+    },
+    "hook_seconds": 278.8717775149271,
+    "expected_index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-metadata-fd-recovery-v1/output/evaluation_target_index.jsonl",
+      "sha256": "87822a4b8b174bd6e4e7f49ca4bc3c413736e4c2630696898c9e488b5cdbac12",
+      "bytes": 3718397,
+      "resolved": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-metadata-fd-recovery-v1/output/evaluation_target_index.jsonl"
+    }
+  },
+  "A1_effective_protocol_comparison": "identical except chosen SID path in model+three loaders and output directories",
+  "all_effective_config_differences": [
+    [
+      ".model.codebooks._args_[0].file_path",
+      "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt"
+    ],
+    [
+      ".trainer.default_root_dir",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-train-fd-recovery-v1/output"
+    ],
+    [
+      ".callbacks.model_checkpoint.dirpath",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output/checkpoints",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-train-fd-recovery-v1/output/checkpoints"
+    ],
+    [
+      ".logger.csv.save_dir",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261017-sportsa1-train-v1/output",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-train-fd-recovery-v1/output"
+    ],
+    [
+      ".datamodule.train_dataloader_config.dataset_config.semantic_id_map.sequence_data._args_[0].file_path",
+      "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt"
+    ],
+    [
+      ".datamodule.val_dataloader_config.dataset_config.semantic_id_map.sequence_data._args_[0].file_path",
+      "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt"
+    ],
+    [
+      ".datamodule.test_dataloader_config.dataset_config.semantic_id_map.sequence_data._args_[0].file_path",
+      "/data/bwwu/sid-extensions-assets/563dc50b1c7e/experiments/sports_rkmeans_qwen_20261010_093035/semantic_ids.pt",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/ga-20261018-sportsa2-quantize-fd-recovery-v1/output/semantic_ids.pt"
+    ]
+  ],
+  "last_ten_validation_steps": [
+    7000,
+    7100,
+    7200,
+    7300,
+    7400,
+    7500,
+    7600,
+    7700,
+    7800,
+    7900
+  ],
+  "last_ten_validation_recall5": [
+    0.03014214336872101,
+    0.03132198378443718,
+    0.03050733171403408,
+    0.031125344336032867,
+    0.031265802681446075,
+    0.03129389137029648,
+    0.029608404263854027,
+    0.029973594471812248,
+    0.031209617853164673,
+    0.03132198378443718
+  ],
+  "started_at": "2026-10-17T19:10:58.920653+00:00",
+  "ended_at": "2026-10-18T04:19:28.582003+00:00",
+  "unused_training_budget_seconds": 10290.338649999998,
+  "terminal_raw_files_verified": 20,
+  "terminal_raw_bytes": 7739531,
+  "large_checkpoint_downloads": 0,
+  "CPU_model_instantiations_total_for_terminal_review": 2,
+  "scientific_test_results_approved": false,
+  "audit_evidence": [
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/a2_training/terminal-review-20261018T042225Z.json",
+      "sha256": "e03eb8d29e0257ce2d6a8e7f7abad3e2f340637f8f10a213e3fdad83afab22ac"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/a2_training/final-checkpoint-strict-review-20261018T042344Z.json",
+      "sha256": "c2543e946225b8f3e5fe7e35256694781f2135d58fcff933a188137dd9c7f5de"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/a2_training/stage_review.json",
+      "sha256": "4cfc012774690e30a0aa93c1beab9216bd4b6128cde1b8f10dbe2e470ac22f44"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/a2_training/terminal-copy-receipts.json",
+      "sha256": "0e025b5e729eb98bf98ad8491cb8031c5f3a2657533bdb3e89c914ac65367b61"
+    }
+  ],
+  "limitations": [
+    "Training PASS is separate from formal testing and attention; those still require their own result audit.",
+    "From-scratch initialization is backed by frozen source, actual config/empty optimizer and real updates; no full random initial parameter dump exists.",
+    "Past full-validation key-target equality is verified against the original complete-validation events and their frozen index identity; no GPU validation rerun.",
+    "A2 is a new T5-RKMeans-SID dual-table training method reproduction, not recovered author historical Sports recommender weights.",
+    "Timing includes requested GPU wall under shared resource conditions and is not a fair standalone speed comparison."
+  ]
+}

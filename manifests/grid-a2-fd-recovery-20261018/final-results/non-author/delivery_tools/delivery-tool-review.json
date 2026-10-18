@@ -1,0 +1,180 @@
+{
+  "reviewer": "/root/fd_repair_reviewer",
+  "reviewed_at": "2026-10-17T19:25:57.927412+00:00",
+  "status": "DELIVERY_TOOLS_SCOPED_REVIEW_PASS",
+  "scientific_task_final_review_pass": false,
+  "future_scientific_results_approved": false,
+  "author_separation": "Reviewer did not edit the five production support tools. Directly read them, raised narrow defects; primary author fixed those. Reviewer wrote only local independent fixtures and this review.",
+  "reviewed_tools": [
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/collect_terminal_evidence.py",
+      "bytes": 7059,
+      "sha256": "2e9d1552aba5ff945bcda9967de5e9f3d568b29caa2710e12c0bd6e30130efb2"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/primary_a_route_acceptance.py",
+      "bytes": 7270,
+      "sha256": "48556e3f80a2e1b5726e4295a00d3a436a018ece3cf30a98aee564c55b6ed46b"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/package_delivery.py",
+      "bytes": 7650,
+      "sha256": "c5fd9143b287d5a64b9e70cf4f06f5953c5538d5bdaa0023d883fe0441dd7336"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/monitor_v2.py",
+      "bytes": 7451,
+      "sha256": "08fce25738bedc81786655aa50cd6a8c2f46c9833e9253a3579ef1a19ab4bb52"
+    },
+    {
+      "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/watch_tick.py",
+      "bytes": 1263,
+      "sha256": "8622cc9024fd597eadb3c6610941dfd9393aad8d2fb925e214180029fceb3a2a"
+    }
+  ],
+  "identified_and_resolved": [
+    {
+      "id": "path_alias",
+      "original_observation": "Original safe_name inspected PurePosixPath.parts after normalization, permitting raw ./ and repeated-separator aliases in verify.",
+      "fix": "Require raw name == as_posix plus NFC and casefold uniqueness; reject unsafe path components and credentials filenames.",
+      "evidence": "Current canonical alias fixture is rejected."
+    },
+    {
+      "id": "suffix_limited_secret_scan",
+      "original_observation": "Original build scanned only TEXT_SUFFIXES; extensionless or .env.local payloads could bypass supported-pattern scan, while verify did not independently scan bytes.",
+      "fix": "Build scans every actual payload byte stream and verify separately scans every uncompressed member, including manifest; .env.* and extra credential filenames prohibited.",
+      "evidence": "Build rejects extensionless synthetic token and .env.local, and verify rejects a hash-valid token-bearing ZIP."
+    },
+    {
+      "id": "silent_quantizer_rank_omission",
+      "original_observation": "Original collector silently skipped .pt files outside narrow allowlist, including small rank0/1 quantizer prediction products.",
+      "fix": "Small prediction-rank-0/1.pt explicitly allowed; all other tensor skips get assets_not_copied identity or explicit unknown-identity record.",
+      "evidence": "Current collector source inspected; no remote recapture or model operation performed by reviewer."
+    }
+  ],
+  "test_evidence": {
+    "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/reviews/delivery_tools/package-fixture-review-20261017T192451566122Z.json",
+    "bytes": 3092,
+    "sha256": "6310da7143e368543e04a76b8097f8f55bc22990e87e39c37ee37bc7fee0f58d"
+  },
+  "tests": [
+    {
+      "case": "normal_PARTIAL_package",
+      "accepted": true,
+      "error": null
+    },
+    {
+      "case": "reject_path_alias_evidence_dot_a_vs_canonical",
+      "accepted": false,
+      "error": "AssertionError('evidence/./a.txt')"
+    },
+    {
+      "case": "reject_supported_secret_pattern_in_extensionless_payload",
+      "accepted": false,
+      "error": "AssertionError(('NOTES', 'potential secret pattern', ['github_token']))"
+    },
+    {
+      "case": "reject_env_variant_payload_with_supported_secret_pattern",
+      "accepted": false,
+      "error": "AssertionError('.env.local')"
+    },
+    {
+      "case": "reject_hash_size_manifest_mismatch",
+      "accepted": false,
+      "error": "AssertionError('rows.json')"
+    },
+    {
+      "case": "verify_independently_rejects_supported_secret_even_with_valid_hashes",
+      "accepted": false,
+      "error": "AssertionError(('payload/NOTES', 'potential secret pattern', ['github_token']))"
+    },
+    {
+      "case": "reject_actual_stored_ZIP_payload_CRC_corruption",
+      "accepted": false,
+      "error": "AssertionError('ZIP CRC check failed')"
+    }
+  ],
+  "old_vs_new_test_scope": "First dynamic fixture run already used the corrected source. Earlier defects were directly observed in original source, not falsely claimed as a pre-fix dynamic reproduction. Both corrected5-case and corrected7-case receipts remain preserved.",
+  "collector_scope": {
+    "remote_job_names_from_closed_A2_phase_allowlist": true,
+    "terminal_raw_status_and_cleanup_last_verified_empty_required": true,
+    "remote_no_write_no_model_no_GPU_no_submit_or_signal": true,
+    "Windows_OpenSSH_binary_stdout_direct_to_local_archive": true,
+    "member_byte_limits_and_total550MB_bound": true,
+    "safe_regular_member_paths_no_duplicate_tar_names": true,
+    "remote_per_member_SHA_and_runner_artifact_hashes_checked_when_available": true,
+    "original_assets_omitted_not_deleted": true,
+    "existing_capture_checks": [
+      {
+        "directory": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/terminal-captures/20261017T191736928559Z",
+        "status": "PRESERVED_FAILED_CAPTURE_NO_SUCCESS_RECEIPT",
+        "files": [
+          {
+            "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/terminal-captures/20261017T191736928559Z/lightweight-evidence.tar.gz",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "scientific_attempt": false
+      },
+      {
+        "directory": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/terminal-captures/20261017T191745842345Z",
+        "status": "EXISTING_TERMINAL_CAPTURE_INDEPENDENTLY_VERIFIED",
+        "receipt": {
+          "path": "/home/addaswsw/recommend-support/grid-a2-fd-recovery-20261018/terminal-captures/20261017T191745842345Z/capture-receipt.json",
+          "bytes": 869,
+          "sha256": "2d1a8e7d80f2a5cd433734720c84dc3963a63b071614159dc8ac11b6c8d242b6"
+        },
+        "actual_payload_members": 40,
+        "archive_members": 41,
+        "terminal_jobs": [
+          "ga-20261018-sportsa2-metadata-fd-recovery-v1",
+          "ga-20261018-sportsa2-gpu-gate-fd-recovery-v1"
+        ],
+        "remote_mutations": 0,
+        "scope": "Existing metadata/GPU admission evidence, not a new capture or research run."
+      }
+    ]
+  },
+  "arithmetic_scope": {
+    "full_target_multiset_and_unique_user_key_coverage": true,
+    "raw_prediction_file_runner_SHA_checked": true,
+    "ten_original_candidates_retained_no_filter_completion_reorder": true,
+    "all_four_Recall_NDCG_metrics_independent_float64_and_original_comparison": true,
+    "invalid_duplicate_candidates_and_own_Normal_pairing_checked": true,
+    "both_Toys_models_retained": true,
+    "final_full_task_review_pass_explicit_false": true,
+    "boundary": "Only arithmetic/paired acceptance. Checkpoint/SID/shuffle implementation/attention identity remain separate nonauthor reviews. Relevant target score ties fail closed and would require inspecting native evaluator handling, not altering predictions."
+  },
+  "package_scope": {
+    "manifest_payload_member_size_SHA256_CRC32": true,
+    "actual_ZIP_CRC_negative_fixture_checked": true,
+    "whole_ZIP_SHA_and_verification_receipt_outside_archive": true,
+    "manifest_self_hash_excluded_to_avoid_circularity": true,
+    "raw_canonical_paths_NFC_casefold_and_credential_name_checks": true,
+    "independent_actual_uncompressed_member_secret_pattern_scan": true,
+    "large_checkpoints_T5_weights_TFRecord_environment_excluded": true,
+    "integrity_PASS_not_scientific_PASS": true,
+    "PARTIAL_fixture_remains_PARTIAL_after_build_verify": true
+  },
+  "monitor_watch_scope": {
+    "query_only_saved_exact_immutable_config_and_jobs": true,
+    "owned_process_UID_start_ticks_proof_before_FD_read": true,
+    "no_model_load_rehash_or_GPU_research": true,
+    "no_submit_restart_signal_in_monitor_or_watch": true,
+    "append_new_timestamped_local_observations_existing_latest_summary_only": true,
+    "GPU_snapshot_and_peer_PS_metadata_only": true,
+    "status_boundary": "Mechanical RUNNING/SUCCEEDED and arithmetic summaries only; no automatic scientific final PASS. Numeric log error substring matching is a heuristic for operator review, not an automatic intervention."
+  },
+  "findings_open_for_reviewed_authorized_tool_flow": [],
+  "mandatory_final_delivery_checks": [
+    "Do not place the fixtures subtree in the final staging; it intentionally contains invalid ZIP paths and synthetic token patterns. Include only the review summary/test source if needed.",
+    "Review the actual final member manifest and all included source/result/review identities, source commit/server mapping, job states, resource totals, large-asset recovery entries and final status after real experiments terminate.",
+    "Run this reviewed packager on finalized staging, independently verify the produced real ZIP, and report actual Windows/WSL paths, bytes, member count and full outer SHA.",
+    "No FINAL_INTERNAL_REVIEW_PASS is issued by this tooling review; A2 training/evaluation/attention/statistics and final nonauthor result/delivery review remain mandatory."
+  ],
+  "dependencies_installed": [],
+  "GPU_requested": 0,
+  "production_source_or_experiment_mutation_by_reviewer": false,
+  "GPT_UPLOAD_REQUIRED": "YES"
+}
