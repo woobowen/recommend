@@ -1,0 +1,7 @@
+# 唯一最终ZIP与真实审核回执
+
+全部已授权科研计算与真实非作者审核已通过；实际唯一ZIP也已由主控、真实非作者及Windows UNC路径读数独立核验。详见DELIVERY.json、final-package-nonauthor-review.json与package-integrity-verification.json。
+
+本目录是在唯一ZIP序列化后新增的轻量回执，不能回填进原ZIP制造循环hash。ZIP固定绑定科研发表42ac9acf23ae0bdc65ed6505089e1b88101755cd，实际运行仍85b77f5e2a5b497fdc1f620649ba488fc783a245 / snapshot22286966cd544773。晚回执提交仅增加本目录，不改任何执行源码或科研值。其实际完整提交SHA与远端回读在发布后由最终交付回复/本地回读回执给出，不在此预写自己的commit SHA。
+
+GPT_UPLOAD_REQUIRED: YES。用户只需上传DELIVERY.json中那个唯一ZIP；本目录回执和科研报告可由网页GPT从固定GitHub取得，无需再上传第二包。整包SHA在FINAL_ZIP.sha256及最终回复中；所有大模型/TFRecord留服务器，完整身份与环境缺口在最终ZIP的assets-not-copied.json。无新实验、其他分支同步或清理授权。
