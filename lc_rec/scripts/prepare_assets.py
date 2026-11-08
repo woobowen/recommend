@@ -15,6 +15,12 @@ def main():
     disk=shutil.disk_usage(root);reserve=max(cfg['limits']['disk_reserve_min_bytes'],int(disk.total*.1))
     if disk.free < reserve+1024**3: raise RuntimeError('disk reserve gate')
     report={'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'argv':sys.argv,'cwd':os.getcwd(),'config_sha256':sha(a.config),'downloads':[],'weights_downloaded':False,'gpu_used':False,'initial_disk':disk._asdict()}
+    identity = json.loads(pathlib.Path(cfg['asset_manifest']).read_text()) if cfg.get('asset_manifest') else None
+    if identity:
+        for row in identity['files']:
+            file = root / row['path']
+            assert file.stat().st_size == row['bytes'] and sha(file) == row['sha256'], 'relay identity mismatch: '+str(file)
+        report['offline_asset_manifest_sha256'] = sha(cfg['asset_manifest'])
     def checkpoint(): (out/'preparation.json').write_text(json.dumps(report,indent=2)+'\n')
     def fetch(url,path,max_bytes,expected=None):
         path=pathlib.Path(path);path.parent.mkdir(parents=True,exist_ok=True)
@@ -63,11 +69,20 @@ def main():
         if not env_python.exists():
             subprocess.run([cfg['reused_python'],'-m','venv','--system-site-packages',str(env)],check=True)
             report['created_environment']=str(env)
-        install=[str(env_python),'-m','pip','install','--disable-pip-version-check','--no-cache-dir','--no-deps',*cfg['overlay_packages']]
+        install=[str(env_python),'-m','pip','install','--disable-pip-version-check','--no-cache-dir','--no-deps']
+        if cfg.get('offline_wheelhouse'): install += ['--no-index','--find-links',cfg['offline_wheelhouse']]
+        install += cfg['overlay_packages']
         report['install_argv']=install;checkpoint()
         with (out/'pip-install.log').open('w') as log: subprocess.run(install,check=True,stdout=log,stderr=subprocess.STDOUT,timeout=900)
         with (out/'pip-freeze.txt').open('w') as log: subprocess.run([str(env_python),'-m','pip','freeze','--all'],check=True,stdout=log,timeout=60)
-        code='import sys,json,importlib,importlib.metadata as m; pkgs=["torch","transformers","tokenizers","huggingface_hub","sentencepiece","numpy","safetensors"]; print(json.dumps({"python":sys.version,"executable":sys.executable,"prefix":sys.prefix,"packages":{p:{"version":m.version(p),"import_source":importlib.import_module(p).__file__} for p in pkgs}},indent=2))'
+        code='''import sys,json,importlib,importlib.metadata as m,torch
+pkgs=["torch","transformers","tokenizers","huggingface_hub","sentencepiece","numpy","safetensors"]
+optional={}
+for p in ["accelerate","deepspeed"]:
+ try: optional[p]=m.version(p)
+ except m.PackageNotFoundError: optional[p]=None
+print(json.dumps({"python":sys.version,"executable":sys.executable,"prefix":sys.prefix,"torch_cuda_build":torch.version.cuda,"cuda_context_initialized":torch.cuda.is_initialized(),"optional_training_packages":optional,"packages":{p:{"version":m.version(p),"import_source":importlib.import_module(p).__file__} for p in pkgs}},indent=2))
+'''
         p=subprocess.run([str(env_python),'-c',code],check=True,text=True,capture_output=True,timeout=90)
         (out/'environment.json').write_text(p.stdout);report['environment']=json.loads(p.stdout)
         report['status']='PREPARED_CPU_AUDIT_ONLY'

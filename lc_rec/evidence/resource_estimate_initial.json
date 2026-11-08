@@ -1,0 +1,36 @@
+{
+  "kind": "STATIC_ESTIMATE_NOT_GPU_MEASUREMENT",
+  "base_trainable_parameters": 6738415616,
+  "additional_sid_tokens": 0,
+  "trainable_parameters_after_resize": 6738415616,
+  "world_size": 2,
+  "observed_device_total_bytes": 25757220864,
+  "observed_per_device_GiB": 23.98828125,
+  "optimizer_moments_only_GiB_per_device": 25.102554321289062,
+  "optimistic_12_bytes_GiB_per_device": 37.653831481933594,
+  "with_fp32_master_16_bytes_GiB_per_device": 50.205108642578125,
+  "deepspeed_18_bytes_plus_largest_layer_base_GiB_per_device": 56.96902847290039,
+  "excluded_costs": [
+    "activation peak including representative long inputs",
+    "overlap communication/workspace",
+    "allocator fragmentation",
+    "loading FP32 full model before DS",
+    "save and conversion transient buffers"
+  ],
+  "no_offload_two_4090_status": "BLOCKED",
+  "gpu_seconds_measured": 0,
+  "training_updates_measured": 0,
+  "preferred_unapproved_resolution": "request sufficient no-offload GPU resource, e.g. two80GiB cards; re-check actual device/long-input peaks before launch",
+  "alternative_unapproved_resolution": "ZeRO3 CPU optimizer/master offload on same4090 pair; changes execution/optimizer path, needs permission and measured CPU/PCIe cost",
+  "cpu_offload_16_bytes_per_parameter_state_GiB": 100.41021728515625,
+  "cpu_offload_1_5_margin_GiB": 150.61532592773438,
+  "formal_five_seed_wall_time": "UNKNOWN: no update/sec, save/reload or inference measurements; no guarantee from zero or10updates",
+  "disk_estimate": {
+    "weights_safetensors_bytes": 13476876661,
+    "base_full_state_16_bytes": 107814649856,
+    "one_state_plus_fp32_export_plus_weights_bytes": 148245188981,
+    "all_five_training_states_16_bytes": 539073249280,
+    "task_cap_bytes": 214748364800,
+    "formal_note": "five retained optimizer states exceed this preparation200GiB cap; future retention/resources need separate approval; save_total_limit5 can also exceed cap"
+  }
+}
