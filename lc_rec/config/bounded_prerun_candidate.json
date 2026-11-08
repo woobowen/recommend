@@ -1,0 +1,23 @@
+{
+  "status": "BLOCKED_NOT_SUBMITTED",
+  "formal_config": "formal_five_seed_candidate.json",
+  "seed": 42,
+  "world_size": 2,
+  "micro_batch": 1,
+  "gradient_accumulation_steps": 64,
+  "effective_batch": 128,
+  "max_optimizer_updates": 10,
+  "stop_method_candidate": "construct full4epoch scheduler, Trainer callback at global_step10; needs actual GPU implementation/verification after resource approval",
+  "max_steps_override": null,
+  "validation_indices": "first <=32 official validation examples, seed42, fixed UID ordering, no full validation callback",
+  "evaluation_strategy_override": "no (bounded prerun only)",
+  "save_strategy_override": "no (bounded prerun only)",
+  "load_best_model_at_end_override": false,
+  "save_reload": "one complete weight/tokenizer/config set, verify reload; optimizer resume not implied",
+  "generation_users": "numeric UID order first16; all17 SeqRec templates, beam20; not submitted",
+  "timeouts_seconds": {"single_gpu_attempt":3600,"all_gpu_attempts":7200},
+  "gpu_time_used_seconds":0,
+  "optimizer_updates_observed":0,
+  "formal_training_runs":0,
+  "implementation_status": "budget and candidate recorded; GPU instrumentation/save-reload/generation are not implemented or validated by CPU data audit"
+}

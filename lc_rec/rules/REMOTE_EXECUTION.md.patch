@@ -1,0 +1,29 @@
+--- before/REMOTE_EXECUTION.md
++++ authoritative/REMOTE_EXECUTION.md
+@@ -14,7 +14,7 @@
+ |---|---|
+ | WSL 发行版/用户 | `Ubuntu-24.04` / `addaswsw` |
+ | 用户指定规则入口 | `/home/addaswsw/recommend`；三份 Markdown 均在该目录根部，不是 Git 根 |
+-| 已有实际 Git 工作副本 | `/home/addaswsw/recommend-worktrees/sid-extensions-p0`；日常分支 `wbw` |
++| 已有实际 Git 工作副本 | `/home/addaswsw/recommend-worktrees/sid-extensions-p0`；GRID 分支 `wbw-grid`；LC-Rec 使用 `wbw-lc-rec` 的独立工作树；旧三条 GRID 线对应 `wbw-grid`、`wmh-grid`、`yjc-grid` |
+ | Windows SSH / SCP | `C:\Windows\System32\OpenSSH\ssh.exe` / `scp.exe` |
+ | 既有 Windows 配置 | `C:\Users\lenovo\.ssh\config`；复用已有身份与 known_hosts，不输出私钥 |
+ | SSH 别名/已知服务器 | `new-server`；`49.52.5.92:22`；`bwwu@zwlab-01` |
+@@ -52,7 +52,7 @@
+ 
+ ## 3. 正式操作脚本化：终端用于调用，不作为唯一记录
+ 
+-训练、测试、干预、注意力采集/绘图、数据批处理和正式结果汇总，都应有可保存、可重跑的脚本入口与参数配置。代码放 `wbw` 的适当已有目录，避免为每个 seed 复制整套代码。复用公共脚本，实验差异放配置；确认过的运行方式不能只留在 Shell history 或 Codex 对话里。
++训练、测试、干预、注意力采集/绘图、数据批处理和正式结果汇总，都应有可保存、可重跑的脚本入口与参数配置。代码放对应工作分支（LC-Rec 为 `wbw-lc-rec`，GRID 为 `wbw-grid`）的适当已有目录，避免为每个 seed 复制整套代码。复用公共脚本，实验差异放配置；确认过的运行方式不能只留在 Shell history 或 Codex 对话里。
+ 
+ 写好并检查脚本后再提交，不能先跑临时命令、事后补一个相似脚本冒充原入口。必要命令参数以实际 `argv` 保存，避免引号/空格丢失。记录有效配置，包括模板、Hydra overrides、环境中会影响实验的必要项及最终生效值；排除秘密和无关环境变量。
+ 
+@@ -143,7 +143,7 @@
+ 
+ 执行退出0、结果齐全、内部审核通过、网页二次审核通过、现象重现分别表达。收尾检查任务范围、输入/版本、实际种子、训练选择、评价协议、必要输出和本任务子进程；核对实际生效设置是否对应学长依据/用户批准的补充方案，必要偏离是否已记录并获准。没有必要产物就不能仅凭退出码宣称完成。失败尝试保持原状态，成功接续建立明确关联。
+ 
+-最终代码/配置/脚本、精简结果与必要证据发布 `wbw`，回读固定提交并核对服务器映射。不要把旧部署证据改写成新版本证明，不因服务器目录叫worktree就假设有Git。报告不能包含自己的最终commit哈希并反复自引用；可用内容版本与交付版本、外部最终回执区分，并证明研究内容未变。
++最终代码/配置/脚本、精简结果与必要证据发布对应工作分支（LC-Rec 为 `wbw-lc-rec`，GRID 为 `wbw-grid`），回读固定提交并核对服务器映射。不要把旧部署证据改写成新版本证明，不因服务器目录叫worktree就假设有Git。报告不能包含自己的最终commit哈希并反复自引用；可用内容版本与交付版本、外部最终回执区分，并证明研究内容未变。
+ 
+ 按 `PROJECT_RULES.md` 输出最终状态和 `GPT_UPLOAD_REQUIRED: YES/NO`。需要ZIP时收集必要外部证据的引用闭环，检查全成员、hash与秘密，不要求用户手工找几十个文件；GitHub已足够时不重复上传。报告和机器记录足以接手即可，不另维护当前进度/交接多套文档。
+ 

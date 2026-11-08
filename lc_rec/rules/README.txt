@@ -1,0 +1,1 @@
+Frozen audit copies of the authoritative files in /home/addaswsw/recommend; not another maintained rule entry. Only branch-layout clauses changed under explicit user authorization. Web project copies were not edited and must be replaced by user.
