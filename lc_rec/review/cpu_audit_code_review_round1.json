@@ -1,0 +1,35 @@
+{
+  "reviewer": "/root/independent_review",
+  "independent_non_author": true,
+  "author_role": "/root/asset_audit",
+  "round": 1,
+  "observed_utc": "2026-11-08T18:00:51.804333+00:00",
+  "reviewed_path": "/home/addaswsw/lc-rec-task-20261108/asset_audit/audit_real_data.py",
+  "reviewed_sha256": "ff56166e9af60ab995db852c470f4f2d38a37eed5cf27534b34370827b43a880",
+  "reviewed_bytes": 45680,
+  "reviewed_lines": 719,
+  "code_review_status": "PASS_FOR_BOUNDED_CPU_DATA_TOKENIZER_AUDIT_ONLY",
+  "runtime_status": "PENDING_NOT_YET_EXECUTED",
+  "read_scope": "Entire script, then cross-reference unmodified upstream data.py, utils.py, prompt.py, collator.py and fixed model/tokenizer metadata. No implementation/Git/server mutation by reviewer. Final additions were then re-read: full raw-prefix/validation comparisons, tokenizer LFS SHA check and CPU RSS/wall usage.",
+  "verified_by_code_review": [
+    "Full official six-task dataset construction via official_utils.load_datasets before diagnostic sampling; fallback cannot silently turn full-loader failure into overall PASS.",
+    "Actual original Collator invoked; saved token IDs, label masks, BOS/EOS, padding, truncation and response-boundary prefix check are derived from real text.",
+    "Per-task directed longest/shortest-character probes plus official __getitem__ samples retain selection reasons and origin ambiguities. Character-longest is explicitly not token-longest or GPU-fit proof.",
+    "Raw mapping axes, metadata fields, four SID groups, residual conflicts and auxiliary target/history partition positions are checked.",
+    "Fixed 16 numerically first users and all 17 SeqRec templates are examined with the unmodified token constraint callback; constructed illegal cross-position combination is labelled synthetic and not model output.",
+    "No model construction, weight loading, model forward, optimizer, checkpoint, generation or metric execution; CPU visibility and CUDA context assertion are explicit.",
+    "Nonempty supervision failures and any runtime failures are retained; final overall reproduction status is always PARTIAL.",
+    "All SeqRec training rows are compared to real leave-last2 prefixes and all validation rows to penultimate targets.",
+    "tokenizer.model is asserted against provider LFS SHA-256 and original LLaMA base token IDs.",
+    "Elapsed wall time and process CPU peak RSS are captured, explicitly not a GPU memory measurement."
+  ],
+  "required_before_runtime_closeout": [
+    "Freeze this final script and source/deployment manifest before the run.",
+    "Inspect actual exit state/output and verify source/script/asset identities against the frozen snapshot."
+  ],
+  "limits": [
+    "The released interaction array and split logic can be checked; original timestamp chronology is unavailable without original timestamp-bearing input.",
+    "Natural-language auxiliary-label historical generation provenance cannot be proven by target/history index pairing alone.",
+    "The official positional constraint is not a canonical SID trie; this audit intentionally retains that unresolved method discrepancy."
+  ]
+}

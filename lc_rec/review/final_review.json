@@ -1,0 +1,121 @@
+{
+  "reviewer": "/root/independent_review",
+  "independent_non_author": true,
+  "observed_utc": "2026-11-08T18:17:48.816899+00:00",
+  "review_round": 2,
+  "scope": "Pre-publication independent review of real source, task configuration, author assets, actual CPU job evidence and delivery documentation/builder. This is not webpage GPT review.",
+  "overall_reproduction_status": "PARTIAL",
+  "original_GPU_prerun_status": "BLOCKED",
+  "prepublication_review_conclusion": "PASS for evidence consistency, truthful scope/status boundaries, preserved failures and delivery-readiness checks inspected so far. Required real publication/ZIP checks are explicitly pending below.",
+  "findings": [
+    {
+      "area": "native_branch_migration_and_lc_base",
+      "status": "PASS",
+      "basis": "Reviewed saved native rename script/responses and independently queried actual GitHub matching refs. wbw/wmh/yjc old real refs absent; new GRID SHAs unchanged; initial LC ref equals migration-before wbw 9767729a5114e21b9c949892af3d759baca6a98e."
+    },
+    {
+      "area": "unmodified_official_source_identity",
+      "status": "PASS",
+      "basis": "Independent GitHub fixed-tree query and all41 local source Git blob SHA recomputation; runtime7 source SHA values match official original payload."
+    },
+    {
+      "area": "author_assets_content_and_axes",
+      "status": "PASS_WITH_SEPARATE_SEMANTIC_BLOCKER",
+      "basis": "Independently compared all6 real server asset size/SHA values to author ZIP members; published axes parse; SID counts independently recomputed:9922 items/9897 SID/23 duplicate groups/25 extra items/930 new tokens."
+    },
+    {
+      "area": "auxiliary_split_semantic_pairing",
+      "status": "BLOCKED",
+      "basis": "Independent raw ZIP read reproduces12233 train and7473 test intention mismatches. Every full user sequence has unique item IDs.3608 train aux targets equal current validation target and1623 equal current test target, none repeated in current training prefix; last20 actual history retains1623 validation items. Do not infer original timestamp chronology or paper-run causality."
+    },
+    {
+      "area": "real_CPU_supervision_evidence",
+      "status": "PARTIAL",
+      "basis": "Job lc-rec-20261108-cpu-audit-r1 truly FAILED exit2,360 checks/2 pairing failures;18 real task samples pass saved token/label/mask consistency,32 validation rows collated,16 users/all17templates/1360 constraint callbacks.68.374629s and1644838912 peakRSS bytes; no runtime errors/CUDA context/model/optimizer/generation."
+    },
+    {
+      "area": "original_full_parameter_BF16_ZeRO3_resource",
+      "status": "BLOCKED",
+      "basis": "Even base Adam FP32 moments alone need25.10255GiB/device versus23.98828GiB present.930-token expansion increases bound. No-offload full-state estimates and omitted activations/loading buffers are documented; no deliberate OOM needed."
+    },
+    {
+      "area": "full_model_gradients_checkpoint_reload_beam20_metrics",
+      "status": "NOT_EXECUTED_BLOCKED",
+      "basis": "No weight payload downloaded, no model instantiated, no full-parameter update, weight reload, model.generate or recommendation metrics. Neither CPU scope PASS nor classifier exit0 may replace these missing checks."
+    },
+    {
+      "area": "candidate_method_and_approval_boundaries",
+      "status": "PASS_AS_CANDIDATE_ONLY",
+      "basis": "Official six tasks/global128/4epochs/loss-best/BF16/no-offload retained in candidate.2xmicro1xaccum64 is allowed layout candidate. Full-catalogue trie conflict, collisions, unknown training dependency/save path and actual generation config remain explicit. No queues or automatic next training."
+    },
+    {
+      "area": "rules_and_documentation",
+      "status": "PASS",
+      "basis": "Re-read affected authoritative rules after branch update; frozen copies equal all3 authoritative files. REVIEW_ENTRY key counts, job identities, CPU failures, static resource bounds and preferred asset-first resolution match raw evidence; it is a one-time review entry, not a maintained progress board."
+    },
+    {
+      "area": "ZIP_builder_code",
+      "status": "PASS_CODE_REVIEW_ONLY",
+      "basis": "HEAD Git blobs checked against working bytes, payload frozen before ZIP write; secret patterns/excluded weight types, safe paths, no duplicates, member hashes excluding self, CRC and actual temp extraction implemented. Actual ZIP file not yet reviewed."
+    }
+  ],
+  "critical_unresolved": [
+    "Obtain author-confirmed matching interaction/auxiliary asset set with provenance; do not rewrite/drop/regenerate current data.",
+    "After asset resolution request sufficient original no-offload GPU resources; current-pair CPU offload is a distinct unapproved option, not a completed fix.",
+    "Resolve official positional-token generation versus strict canonical-catalogue constraint requirement before method execution.",
+    "Training dependency stack, corrected ZeRO initialization order, parameter updates and full save/reload/generation remain unimplemented/unverified."
+  ],
+  "actual_CPU_run_commit": "53a0f618fc68dc2c936b4e5e10e1b5f0bbf282ad",
+  "auxiliary_classifier_run_commit": "247adcee4ae881ce6df264b61da66db1d61c65ba",
+  "reviewed_file_identities": [
+    {
+      "path": "lc_rec/REVIEW_ENTRY.md",
+      "bytes": 15366,
+      "sha256": "e5f2fcdffe4d0b3d9a6b988c5ce250ac3077b6886225a87facb89762f58cdab2"
+    },
+    {
+      "path": "lc_rec/config/formal_five_seed_candidate.json",
+      "bytes": 3910,
+      "sha256": "4c0927f7aa71e312d7571e3bcabfd29ec62d89a0a94446502d76a93ec44471b3"
+    },
+    {
+      "path": "lc_rec/config/bounded_prerun_candidate.json",
+      "bytes": 1248,
+      "sha256": "36d743113a46c5ea663369d6d63018d2322a62a62dc9f10bbcd9f171def73f96"
+    },
+    {
+      "path": "lc_rec/scripts/build_review_zip.py",
+      "bytes": 4208,
+      "sha256": "dfcaf090619de344917ff5f5b4d736c2b5f8bc73a702c670975dd22548028e1a"
+    },
+    {
+      "path": "lc_rec/scripts/prepare_assets.py",
+      "bytes": 6996,
+      "sha256": "60e11dd028cc2cfdf248d7188b68f63d1f39048089f7b724208e763b2d5112b5"
+    },
+    {
+      "path": "lc_rec/scripts/audit_real_data.py",
+      "bytes": 45680,
+      "sha256": "ff56166e9af60ab995db852c470f4f2d38a37eed5cf27534b34370827b43a880"
+    },
+    {
+      "path": "lc_rec/scripts/inspect_auxiliary_pairing.py",
+      "bytes": 3661,
+      "sha256": "1eabb0cdc815e05c3443fb2264f577cdc384a015990b4c251bc493285deb197b"
+    },
+    {
+      "path": "lc_rec/scripts/resource_estimate.py",
+      "bytes": 3102,
+      "sha256": "2a1193b79c8e050dcf3a10c18b892d8ae87daeb2fd1d2484f322f3acfad16d42"
+    },
+    {
+      "path": "lc_rec/scripts/render_candidate.py",
+      "bytes": 797,
+      "sha256": "31f613583eb3fb0edded8c3ae8e264aa281a57617bcb27a7bd930d26f8dcc2dc"
+    }
+  ],
+  "publication_status": "PENDING_MAIN_CONTROLLER_COMMIT_PUSH_AND_FIXED_READBACK",
+  "audit_ZIP_status": "PENDING_REAL_ZIP_AND_WINDOWS_PATH_VALIDATION",
+  "remaining_independent_closeout": "Read actual final receipts and independently verify fixed GitHub refs/key blobs, delivery-to-run related source identity, ZIP members/CRC/hashes/secrets and local path correspondence. No extra model experiment is needed to close these packaging checks.",
+  "artifact_purpose": "One-time independent review evidence; no ongoing status-board maintenance."
+}

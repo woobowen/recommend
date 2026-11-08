@@ -1,0 +1,47 @@
+{
+  "kind": "STATIC_ESTIMATE_NOT_GPU_MEASUREMENT",
+  "base_trainable_parameters": 6738415616,
+  "additional_sid_tokens": 930,
+  "trainable_parameters_after_resize": 6746034176,
+  "world_size": 2,
+  "observed_device_total_bytes": 25757220864,
+  "observed_per_device_GiB": 23.98828125,
+  "optimizer_moments_only_GiB_per_device": 25.130935668945312,
+  "optimistic_12_bytes_GiB_per_device": 37.69640350341797,
+  "with_fp32_master_16_bytes_GiB_per_device": 50.261871337890625,
+  "deepspeed_18_bytes_plus_largest_layer_base_GiB_per_device": 57.04707717895508,
+  "excluded_costs": [
+    "activation peak including representative long inputs",
+    "overlap communication/workspace",
+    "allocator fragmentation",
+    "loading FP32 full model before DS",
+    "save and conversion transient buffers"
+  ],
+  "no_offload_two_4090_status": "BLOCKED",
+  "gpu_seconds_measured": 0,
+  "training_updates_measured": 0,
+  "preferred_unapproved_resolution": "request sufficient no-offload GPU resource, e.g. two80GiB cards; re-check actual device/long-input peaks before launch",
+  "alternative_unapproved_resolution": "ZeRO3 CPU optimizer/master offload on same4090 pair; changes execution/optimizer path, needs permission and measured CPU/PCIe cost",
+  "cpu_offload_16_bytes_per_parameter_state_GiB": 100.52374267578125,
+  "cpu_offload_1_5_margin_GiB": 150.78561401367188,
+  "formal_five_seed_wall_time": "UNKNOWN: no update/sec, save/reload or inference measurements; no guarantee from zero or10updates",
+  "disk_estimate": {
+    "weights_safetensors_bytes": 13476876661,
+    "base_full_state_16_bytes": 107936546816,
+    "one_state_plus_fp32_export_plus_weights_bytes": 148397560181,
+    "all_five_training_states_16_bytes": 539682734080,
+    "task_cap_bytes": 214748364800,
+    "formal_note": "five retained optimizer states exceed this preparation200GiB cap; future retention/resources need separate approval; save_total_limit5 can also exceed cap"
+  },
+  "conditional_formal_schedule": {
+    "training_rows": 221225,
+    "micro_batch": 1,
+    "ddp_rows_per_rank": 110613,
+    "updates_per_epoch_floor": 1728,
+    "total_updates_per_seed": 6912,
+    "warmup_updates_per_seed": 70,
+    "five_seed_updates": 34560,
+    "wall_time_formula": "5 * (total_updates_per_seed * measured_seconds_per_update + 4*validation_and_save + final_save_and_all17template_test)",
+    "assumption": "standard distributed shard padding, no drop_last, full train dataset; actual4.31/Accelerate dataloader required"
+  }
+}

@@ -1,0 +1,1256 @@
+{
+  "kind": "REAL_ASSET_READ_ONLY_CLASSIFICATION",
+  "argv": [
+    "/home/bwwu/lc-rec/releases/247adcee4ae881ce6df264b61da66db1d61c65ba/lc_rec/scripts/inspect_auxiliary_pairing.py",
+    "--data",
+    "/data/bwwu/lc-rec/assets/data/Instruments",
+    "--output",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-20261108-aux-pairing-r1/output/auxiliary_pairing.json"
+  ],
+  "script_sha256": "1eabb0cdc815e05c3443fb2264f577cdc384a015990b4c251bc493285deb197b",
+  "input_sha256": {
+    "/data/bwwu/lc-rec/assets/data/Instruments/Instruments.inter.json": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743",
+    "/data/bwwu/lc-rec/assets/data/Instruments/Instruments.user.json": "8fe65b5de6222e665d12052c8771f8a314813323b8470f54f2ca2920bf7af5b6"
+  },
+  "changes_to_assets": false,
+  "sections": {
+    "train": {
+      "counts": {
+        "users": 24772,
+        "exact_expected_pair": 12539,
+        "mismatching_expected_pair": 12233,
+        "mismatch_target_is_validation": 3608,
+        "mismatch_target_in_training_items": 7002,
+        "mismatch_history_is_ordered_subsequence_of_expected": 7002,
+        "mismatch_target_is_test": 1623,
+        "mismatch_history_contains_validation": 1623
+      },
+      "example_rule": "first three mismatches in published auxiliary JSON insertion order per category; no metric selection",
+      "examples": {
+        "mismatch_example": [
+          {
+            "uid": "10797",
+            "full_interaction_item_ids": [
+              "5777",
+              "3160",
+              "7647",
+              "6772",
+              "4156",
+              "1217",
+              "61",
+              "3717",
+              "3586",
+              "4793",
+              "5537",
+              "771"
+            ],
+            "expected_target": "4793",
+            "expected_history": [
+              "5777",
+              "3160",
+              "7647",
+              "6772",
+              "4156",
+              "1217",
+              "61",
+              "3717",
+              "3586"
+            ],
+            "actual_aux_target": "5537",
+            "actual_aux_history": [
+              "5777",
+              "3160",
+              "7647",
+              "6772",
+              "4156",
+              "1217",
+              "61",
+              "3717",
+              "3586",
+              "4793"
+            ],
+            "target_positions": [
+              10
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": true,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "12123",
+            "full_interaction_item_ids": [
+              "8398",
+              "8341",
+              "3232",
+              "2797",
+              "483",
+              "2754",
+              "289",
+              "179",
+              "889",
+              "3726",
+              "5799"
+            ],
+            "expected_target": "889",
+            "expected_history": [
+              "8398",
+              "8341",
+              "3232",
+              "2797",
+              "483",
+              "2754",
+              "289",
+              "179"
+            ],
+            "actual_aux_target": "3726",
+            "actual_aux_history": [
+              "8398",
+              "8341",
+              "3232",
+              "2797",
+              "483",
+              "2754",
+              "289",
+              "179",
+              "889"
+            ],
+            "target_positions": [
+              9
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": true,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "17850",
+            "full_interaction_item_ids": [
+              "897",
+              "1156",
+              "371",
+              "1871",
+              "1258",
+              "7863",
+              "9157",
+              "161",
+              "245",
+              "163",
+              "164",
+              "165",
+              "1287",
+              "185"
+            ],
+            "expected_target": "165",
+            "expected_history": [
+              "897",
+              "1156",
+              "371",
+              "1871",
+              "1258",
+              "7863",
+              "9157",
+              "161",
+              "245",
+              "163",
+              "164"
+            ],
+            "actual_aux_target": "164",
+            "actual_aux_history": [
+              "897",
+              "1156",
+              "371",
+              "1871",
+              "1258",
+              "7863",
+              "9157",
+              "161",
+              "245",
+              "163"
+            ],
+            "target_positions": [
+              10
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": true,
+              "target_is_validation": false,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": true,
+              "history_same_multiset_as_expected": false
+            }
+          }
+        ],
+        "target_is_validation": [
+          {
+            "uid": "10797",
+            "full_interaction_item_ids": [
+              "5777",
+              "3160",
+              "7647",
+              "6772",
+              "4156",
+              "1217",
+              "61",
+              "3717",
+              "3586",
+              "4793",
+              "5537",
+              "771"
+            ],
+            "expected_target": "4793",
+            "expected_history": [
+              "5777",
+              "3160",
+              "7647",
+              "6772",
+              "4156",
+              "1217",
+              "61",
+              "3717",
+              "3586"
+            ],
+            "actual_aux_target": "5537",
+            "actual_aux_history": [
+              "5777",
+              "3160",
+              "7647",
+              "6772",
+              "4156",
+              "1217",
+              "61",
+              "3717",
+              "3586",
+              "4793"
+            ],
+            "target_positions": [
+              10
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": true,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "12123",
+            "full_interaction_item_ids": [
+              "8398",
+              "8341",
+              "3232",
+              "2797",
+              "483",
+              "2754",
+              "289",
+              "179",
+              "889",
+              "3726",
+              "5799"
+            ],
+            "expected_target": "889",
+            "expected_history": [
+              "8398",
+              "8341",
+              "3232",
+              "2797",
+              "483",
+              "2754",
+              "289",
+              "179"
+            ],
+            "actual_aux_target": "3726",
+            "actual_aux_history": [
+              "8398",
+              "8341",
+              "3232",
+              "2797",
+              "483",
+              "2754",
+              "289",
+              "179",
+              "889"
+            ],
+            "target_positions": [
+              9
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": true,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "19025",
+            "full_interaction_item_ids": [
+              "6332",
+              "474",
+              "195",
+              "1293",
+              "1992",
+              "90",
+              "422",
+              "68",
+              "362",
+              "2480",
+              "203",
+              "1152"
+            ],
+            "expected_target": "2480",
+            "expected_history": [
+              "6332",
+              "474",
+              "195",
+              "1293",
+              "1992",
+              "90",
+              "422",
+              "68",
+              "362"
+            ],
+            "actual_aux_target": "203",
+            "actual_aux_history": [
+              "6332",
+              "474",
+              "195",
+              "1293",
+              "1992",
+              "90",
+              "422",
+              "68",
+              "362",
+              "2480"
+            ],
+            "target_positions": [
+              10
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": true,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          }
+        ],
+        "target_is_test": [
+          {
+            "uid": "15306",
+            "full_interaction_item_ids": [
+              "5870",
+              "969",
+              "1767",
+              "2340",
+              "5632",
+              "2018",
+              "2377",
+              "690",
+              "2021",
+              "7064",
+              "407",
+              "1065",
+              "5611",
+              "2045",
+              "4807",
+              "5118",
+              "498",
+              "1869",
+              "7383",
+              "90",
+              "6915",
+              "771",
+              "4336",
+              "1392",
+              "2270",
+              "3587",
+              "1262",
+              "4937",
+              "2137",
+              "2480",
+              "4149"
+            ],
+            "expected_target": "2137",
+            "expected_history": [
+              "5870",
+              "969",
+              "1767",
+              "2340",
+              "5632",
+              "2018",
+              "2377",
+              "690",
+              "2021",
+              "7064",
+              "407",
+              "1065",
+              "5611",
+              "2045",
+              "4807",
+              "5118",
+              "498",
+              "1869",
+              "7383",
+              "90",
+              "6915",
+              "771",
+              "4336",
+              "1392",
+              "2270",
+              "3587",
+              "1262",
+              "4937"
+            ],
+            "actual_aux_target": "4149",
+            "actual_aux_history": [
+              "5870",
+              "969",
+              "1767",
+              "2340",
+              "5632",
+              "2018",
+              "2377",
+              "690",
+              "2021",
+              "7064",
+              "407",
+              "1065",
+              "5611",
+              "2045",
+              "4807",
+              "5118",
+              "498",
+              "1869",
+              "7383",
+              "90",
+              "6915",
+              "771",
+              "4336",
+              "1392",
+              "2270",
+              "3587",
+              "1262",
+              "4937",
+              "2137",
+              "2480"
+            ],
+            "target_positions": [
+              30
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": false,
+              "target_is_test": true,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": true,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "14522",
+            "full_interaction_item_ids": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160",
+              "245",
+              "162",
+              "309"
+            ],
+            "expected_target": "245",
+            "expected_history": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160"
+            ],
+            "actual_aux_target": "309",
+            "actual_aux_history": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160",
+              "245",
+              "162"
+            ],
+            "target_positions": [
+              11
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": false,
+              "target_is_test": true,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": true,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "2293",
+            "full_interaction_item_ids": [
+              "7617",
+              "4812",
+              "491",
+              "73",
+              "4542"
+            ],
+            "expected_target": "491",
+            "expected_history": [
+              "7617",
+              "4812"
+            ],
+            "actual_aux_target": "4542",
+            "actual_aux_history": [
+              "7617",
+              "4812",
+              "491",
+              "73"
+            ],
+            "target_positions": [
+              4
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": false,
+              "target_is_test": true,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": true,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          }
+        ],
+        "history_contains_validation": [
+          {
+            "uid": "15306",
+            "full_interaction_item_ids": [
+              "5870",
+              "969",
+              "1767",
+              "2340",
+              "5632",
+              "2018",
+              "2377",
+              "690",
+              "2021",
+              "7064",
+              "407",
+              "1065",
+              "5611",
+              "2045",
+              "4807",
+              "5118",
+              "498",
+              "1869",
+              "7383",
+              "90",
+              "6915",
+              "771",
+              "4336",
+              "1392",
+              "2270",
+              "3587",
+              "1262",
+              "4937",
+              "2137",
+              "2480",
+              "4149"
+            ],
+            "expected_target": "2137",
+            "expected_history": [
+              "5870",
+              "969",
+              "1767",
+              "2340",
+              "5632",
+              "2018",
+              "2377",
+              "690",
+              "2021",
+              "7064",
+              "407",
+              "1065",
+              "5611",
+              "2045",
+              "4807",
+              "5118",
+              "498",
+              "1869",
+              "7383",
+              "90",
+              "6915",
+              "771",
+              "4336",
+              "1392",
+              "2270",
+              "3587",
+              "1262",
+              "4937"
+            ],
+            "actual_aux_target": "4149",
+            "actual_aux_history": [
+              "5870",
+              "969",
+              "1767",
+              "2340",
+              "5632",
+              "2018",
+              "2377",
+              "690",
+              "2021",
+              "7064",
+              "407",
+              "1065",
+              "5611",
+              "2045",
+              "4807",
+              "5118",
+              "498",
+              "1869",
+              "7383",
+              "90",
+              "6915",
+              "771",
+              "4336",
+              "1392",
+              "2270",
+              "3587",
+              "1262",
+              "4937",
+              "2137",
+              "2480"
+            ],
+            "target_positions": [
+              30
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": false,
+              "target_is_test": true,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": true,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "14522",
+            "full_interaction_item_ids": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160",
+              "245",
+              "162",
+              "309"
+            ],
+            "expected_target": "245",
+            "expected_history": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160"
+            ],
+            "actual_aux_target": "309",
+            "actual_aux_history": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160",
+              "245",
+              "162"
+            ],
+            "target_positions": [
+              11
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": false,
+              "target_is_test": true,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": true,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "2293",
+            "full_interaction_item_ids": [
+              "7617",
+              "4812",
+              "491",
+              "73",
+              "4542"
+            ],
+            "expected_target": "491",
+            "expected_history": [
+              "7617",
+              "4812"
+            ],
+            "actual_aux_target": "4542",
+            "actual_aux_history": [
+              "7617",
+              "4812",
+              "491",
+              "73"
+            ],
+            "target_positions": [
+              4
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": false,
+              "target_is_test": true,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": true,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": false,
+              "history_same_multiset_as_expected": false
+            }
+          }
+        ]
+      },
+      "overlapping_flags": true
+    },
+    "test": {
+      "counts": {
+        "users": 24772,
+        "exact_expected_pair": 17299,
+        "mismatching_expected_pair": 7473,
+        "mismatch_target_in_training_items": 4037,
+        "mismatch_history_is_ordered_subsequence_of_expected": 7473,
+        "mismatch_target_is_validation": 3436
+      },
+      "example_rule": "first three mismatches in published auxiliary JSON insertion order per category; no metric selection",
+      "examples": {
+        "mismatch_example": [
+          {
+            "uid": "15306",
+            "full_interaction_item_ids": [
+              "5870",
+              "969",
+              "1767",
+              "2340",
+              "5632",
+              "2018",
+              "2377",
+              "690",
+              "2021",
+              "7064",
+              "407",
+              "1065",
+              "5611",
+              "2045",
+              "4807",
+              "5118",
+              "498",
+              "1869",
+              "7383",
+              "90",
+              "6915",
+              "771",
+              "4336",
+              "1392",
+              "2270",
+              "3587",
+              "1262",
+              "4937",
+              "2137",
+              "2480",
+              "4149"
+            ],
+            "expected_target": "4149",
+            "expected_history": [
+              "5870",
+              "969",
+              "1767",
+              "2340",
+              "5632",
+              "2018",
+              "2377",
+              "690",
+              "2021",
+              "7064",
+              "407",
+              "1065",
+              "5611",
+              "2045",
+              "4807",
+              "5118",
+              "498",
+              "1869",
+              "7383",
+              "90",
+              "6915",
+              "771",
+              "4336",
+              "1392",
+              "2270",
+              "3587",
+              "1262",
+              "4937",
+              "2137",
+              "2480"
+            ],
+            "actual_aux_target": "2137",
+            "actual_aux_history": [
+              "5870",
+              "969",
+              "1767",
+              "2340",
+              "5632",
+              "2018",
+              "2377",
+              "690",
+              "2021",
+              "7064",
+              "407",
+              "1065",
+              "5611",
+              "2045",
+              "4807",
+              "5118",
+              "498",
+              "1869",
+              "7383",
+              "90",
+              "6915",
+              "771",
+              "4336",
+              "1392",
+              "2270",
+              "3587",
+              "1262",
+              "4937"
+            ],
+            "target_positions": [
+              28
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": true,
+              "target_is_validation": false,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": true,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "14522",
+            "full_interaction_item_ids": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160",
+              "245",
+              "162",
+              "309"
+            ],
+            "expected_target": "309",
+            "expected_history": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160",
+              "245",
+              "162"
+            ],
+            "actual_aux_target": "162",
+            "actual_aux_history": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160",
+              "245"
+            ],
+            "target_positions": [
+              10
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": true,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": true,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "916",
+            "full_interaction_item_ids": [
+              "4259",
+              "1988",
+              "2309",
+              "306",
+              "1430",
+              "3312",
+              "28",
+              "1477",
+              "4535",
+              "5083",
+              "303",
+              "5084",
+              "1432",
+              "4264",
+              "1069",
+              "5085",
+              "1379",
+              "4564",
+              "1429"
+            ],
+            "expected_target": "1429",
+            "expected_history": [
+              "4259",
+              "1988",
+              "2309",
+              "306",
+              "1430",
+              "3312",
+              "28",
+              "1477",
+              "4535",
+              "5083",
+              "303",
+              "5084",
+              "1432",
+              "4264",
+              "1069",
+              "5085",
+              "1379",
+              "4564"
+            ],
+            "actual_aux_target": "303",
+            "actual_aux_history": [
+              "4259",
+              "1988",
+              "2309",
+              "306",
+              "1430",
+              "3312",
+              "28",
+              "1477",
+              "4535",
+              "5083"
+            ],
+            "target_positions": [
+              10
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": true,
+              "target_is_validation": false,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": true,
+              "history_same_multiset_as_expected": false
+            }
+          }
+        ],
+        "target_is_validation": [
+          {
+            "uid": "14522",
+            "full_interaction_item_ids": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160",
+              "245",
+              "162",
+              "309"
+            ],
+            "expected_target": "309",
+            "expected_history": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160",
+              "245",
+              "162"
+            ],
+            "actual_aux_target": "162",
+            "actual_aux_history": [
+              "2793",
+              "655",
+              "68",
+              "195",
+              "3210",
+              "6001",
+              "2057",
+              "3488",
+              "160",
+              "245"
+            ],
+            "target_positions": [
+              10
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": true,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": true,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "13808",
+            "full_interaction_item_ids": [
+              "7120",
+              "2502",
+              "1846",
+              "162",
+              "160",
+              "165",
+              "161",
+              "163",
+              "164"
+            ],
+            "expected_target": "164",
+            "expected_history": [
+              "7120",
+              "2502",
+              "1846",
+              "162",
+              "160",
+              "165",
+              "161",
+              "163"
+            ],
+            "actual_aux_target": "163",
+            "actual_aux_history": [
+              "7120",
+              "2502",
+              "1846",
+              "162",
+              "160",
+              "165",
+              "161"
+            ],
+            "target_positions": [
+              7
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": true,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": true,
+              "history_same_multiset_as_expected": false
+            }
+          },
+          {
+            "uid": "21392",
+            "full_interaction_item_ids": [
+              "2228",
+              "6422",
+              "3637",
+              "6881",
+              "146"
+            ],
+            "expected_target": "146",
+            "expected_history": [
+              "2228",
+              "6422",
+              "3637",
+              "6881"
+            ],
+            "actual_aux_target": "6881",
+            "actual_aux_history": [
+              "2228",
+              "6422",
+              "3637"
+            ],
+            "target_positions": [
+              3
+            ],
+            "conditions": {
+              "target_expected": false,
+              "history_expected": false,
+              "history_expected_last20": false,
+              "target_in_training_items": false,
+              "target_is_validation": true,
+              "target_is_test": false,
+              "target_absent_from_user_sequence": false,
+              "history_contains_validation": false,
+              "history_contains_test": false,
+              "history_contains_items_outside_user_sequence": false,
+              "history_is_ordered_subsequence_of_expected": true,
+              "history_same_multiset_as_expected": false
+            }
+          }
+        ]
+      },
+      "overlapping_flags": true
+    }
+  },
+  "limitations": [
+    "published inter file has no original timestamps, so raw chronological ordering and tie history cannot be reconstructed",
+    "matching item IDs/positions cannot prove the actual external model prompt or generated natural-language provenance",
+    "counts of held-out IDs in auxiliary fields establish inconsistency with this published split; historical generation cause remains unknown"
+  ],
+  "elapsed_seconds": 0.9808736126869917
+}

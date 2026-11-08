@@ -1,6 +1,6 @@
 {
   "status": "CANDIDATE_ONLY_NOT_AUTHORIZED_TO_RUN",
-  "blocking_conditions": ["two RTX4090 cannot hold no-offload full-parameter AdamW", "official positionwise SID constraint differs from exact-catalogue requirement", "training dependency stack/loading/ZeRO save path unverified"],
+  "blocking_conditions": ["two RTX4090 cannot hold no-offload full-parameter AdamW", "author-published auxiliary train/test item-history pairs do not match this published SeqRec split: real CPU audit failed; obtain confirmed matching author asset set before training", "official positionwise SID constraint differs from exact-catalogue requirement", "training dependency stack/loading/ZeRO save path unverified"],
   "source": "../vendor/original/finetune.py",
   "seeds": [42,43,44,45,46],
   "fixed_assets": "One identical Instruments data/SID/auxiliary set and pinned original LLaMA revision for all seeds",
@@ -16,6 +16,7 @@
   "world_size": 2, "effective_batch": 128,
   "derived_defaults_transformers_4_31": {"adam_beta1": 0.9, "adam_beta2": 0.999, "adam_epsilon": 1e-8, "max_grad_norm": 1.0, "metric_for_best_model": "loss", "effective_metric_key": "eval_loss", "greater_is_better": false, "load_best_model_at_end": true, "gradient_checkpointing": true, "save_total_limit": 5, "eval_delay_epochs": 1},
   "evaluation": {"task": "SeqRec", "test_prompt_ids": "all", "templates": 17, "num_beams": 20, "metrics": "hit@1,hit@5,hit@10,ndcg@5,ndcg@10", "aggregation": "official per-template metrics averaged within each seed, then five-seed mean and sample SD (ddof=1)", "constraint_status": "UNRESOLVED: official positional token sets do not enforce canonical full SID; no silent trie substitution", "checkpoint_selection": "validation loss only, never test"},
+  "generation_candidate_static_only": {"explicit_official_kwargs":{"num_beams":20,"num_return_sequences":20,"max_new_tokens":10,"early_stopping":true,"output_scores":true,"return_dict_in_generate":true},"official_filter_items_default":false,"transformers_4_31_default_do_sample":false,"actual_reloaded_generation_config":"NOT_OBSERVED; no saved model; use_cache and all inherited defaults must be read back after real reload","canonical_inverse":"author SID duplicates retained; SID maps to all matching item IDs, no arbitrary unique item selection"},
   "precision_and_sharing": "all parameters trainable, BF16 ZeRO3, no CPU/NVMe offload, untied input embedding and output head",
   "initialization": "4.31.0 legacy resize normal initializer for new SID rows, not modern mean_resizing; not yet tested with model weights",
   "original_vs_candidate": "8 processes x micro8 x accumulation2 -> 2 processes x micro1 x accumulation64; same global128 but not bitwise trajectory; no run submitted",
