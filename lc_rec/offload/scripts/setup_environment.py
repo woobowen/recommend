@@ -20,6 +20,7 @@ def sha(p):
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('--config',required=True);p.add_argument('--output',required=True)
+    p.add_argument('--reuse-new-environment',action='store_true',help='bounded repair of this task environment only')
     a=p.parse_args();cfg=json.loads(Path(a.config).read_text());out=Path(a.output);out.mkdir(parents=True,exist_ok=True)
     start=time.monotonic();report={'argv':sys.argv,'cwd':os.getcwd(),'config_sha256':sha(a.config),'commands':[],'status':'STARTED'}
     def save(): (out/'setup.json').write_text(json.dumps(report,indent=2)+'\n')
@@ -34,8 +35,12 @@ def main():
         for row in manifest['files']:
             q=pkg/row['name'];assert q.stat().st_size==row['bytes'] and sha(q)==row['sha256']
         env=Path(cfg['environment']);py=str(env/'bin/python')
-        assert not env.exists(), 'fresh environment required; inspect original attempt before a repair'
-        run([cfg['base_python'],'-m','venv','--system-site-packages',str(env)],'venv.log')
+        if env.exists():
+            assert a.reuse_new_environment and str(env)=='/data/bwwu/envs/lc-rec-offload-20261108'
+            assert not env.is_symlink() and (env/'pyvenv.cfg').is_file()
+            report['existing_task_environment_reused_after_recorded_round0_failure']=True
+        else:
+            run([cfg['base_python'],'-m','venv','--system-site-packages',str(env)],'venv.log')
         install=[py,'-m','pip','install','--no-index','--no-deps','--disable-pip-version-check','--no-cache-dir','--find-links',cfg['prior_wheelhouse'],'--find-links',str(pkg)]
         run(install+cfg['packages'],'pip-install.log')
         source=out/'deepspeed-build';source.mkdir()
