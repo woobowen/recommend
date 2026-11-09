@@ -1,0 +1,149 @@
+{
+  "status": "PASS",
+  "argv": [
+    "/home/bwwu/lc-rec/releases/02f28235d38c15428c93f08d225c2ca5aaaaf2b7/lc_rec/offload/scripts/verify_cpu_adam.py",
+    "--output",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r3/output/cpu-adam.json"
+  ],
+  "python": "/data/bwwu/envs/lc-rec-offload-20261108/bin/python",
+  "packages": {
+    "torch": {
+      "version": "2.6.0+cu124",
+      "import_source": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/__init__.py"
+    },
+    "transformers": {
+      "version": "4.31.0",
+      "import_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/__init__.py"
+    },
+    "accelerate": {
+      "version": "0.21.0",
+      "import_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/__init__.py"
+    },
+    "deepspeed": {
+      "version": "0.16.9",
+      "import_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/__init__.py"
+    },
+    "numpy": {
+      "version": "1.24.4",
+      "import_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/numpy/__init__.py"
+    },
+    "tokenizers": {
+      "version": "0.13.3",
+      "import_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/tokenizers/__init__.py"
+    },
+    "huggingface_hub": {
+      "version": "0.16.4",
+      "import_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/huggingface_hub/__init__.py"
+    },
+    "safetensors": {
+      "version": "0.3.3",
+      "import_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/safetensors/__init__.py"
+    },
+    "pydantic": {
+      "version": "2.13.5",
+      "import_source": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/pydantic/__init__.py"
+    },
+    "ninja": {
+      "version": "1.11.1.3",
+      "import_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/ninja/__init__.py"
+    },
+    "psutil": {
+      "version": "6.1.1",
+      "import_source": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/psutil/__init__.py"
+    },
+    "cpuinfo": {
+      "version": null,
+      "import_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/cpuinfo/__init__.py"
+    }
+  },
+  "cuda_build": "12.4",
+  "cuda_available": true,
+  "cuda_initialized": true,
+  "installed_ops": {
+    "async_io": false,
+    "fused_adam": false,
+    "cpu_adam": 1,
+    "cpu_adagrad": false,
+    "cpu_lion": false,
+    "dc": false,
+    "evoformer_attn": false,
+    "fp_quantizer": false,
+    "fused_lamb": false,
+    "fused_lion": false,
+    "gds": false,
+    "transformer_inference": false,
+    "inference_core_ops": false,
+    "cutlass_ops": false,
+    "quantizer": false,
+    "ragged_device_ops": false,
+    "ragged_ops": false,
+    "random_ltd": false,
+    "sparse_attn": false,
+    "spatial_inference": false,
+    "transformer": false,
+    "stochastic_transformer": false
+  },
+  "accelerator_name": "cuda",
+  "compiled_torch_info": {
+    "version": "2.6",
+    "bf16_support": true,
+    "cuda_version": "12.4",
+    "nccl_version": "2.21",
+    "hip_version": "0.0"
+  },
+  "cpu_adam_class": "deepspeed.ops.adam.cpu_adam.DeepSpeedCPUAdam",
+  "adamw_mode": true,
+  "defaults": {
+    "lr": 5e-05,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.01,
+    "bias_correction": true,
+    "amsgrad": false
+  },
+  "max_abs_vs_torch_adamw_by_step": [
+    2.384185791015625e-07,
+    4.76837158203125e-07
+  ],
+  "exact_bitwise_equivalence_claimed": false,
+  "state": {
+    "step": 2,
+    "exp_avg": {
+      "device": "cpu",
+      "dtype": "torch.float32",
+      "shape": [
+        2048
+      ]
+    },
+    "exp_avg_sq": {
+      "device": "cpu",
+      "dtype": "torch.float32",
+      "shape": [
+        2048
+      ]
+    }
+  },
+  "memlock_bytes": [
+    8388608,
+    8388608
+  ],
+  "pinned_memory_small_test": {
+    "bytes": 1048576,
+    "is_pinned": true
+  },
+  "elapsed_seconds": 1.458140547387302,
+  "native_cpu_adam": {
+    "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/adam/cpu_adam_op.cpython-310-x86_64-linux-gnu.so",
+    "bytes": 13239928,
+    "sha256": "d1d162b256c145ccda04c08d5c669ef16e130c4edacfa7cbdf1d3b532294239a",
+    "preinstalled_verified": true
+  },
+  "deepspeed_distribution_metadata": {
+    "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed-0.16.9.dist-info/METADATA": "8e76aba6014ad24645a69d7750e518c258220e4fa942cfa4f120379aba06448c",
+    "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed-0.16.9.dist-info/RECORD": "bcbe53e6532cffff51b3a78ad8c7e37fd67420403935820811532205039e59a7",
+    "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed-0.16.9.dist-info/WHEEL": "388d76b66a8c35e057a4642d5edc3a4d4a10cf925c89c193093ed3c2092e34d0"
+  }
+}

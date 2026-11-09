@@ -1,0 +1,144 @@
+{
+  "schema": "independent-offload-pre-run-closeout-v1",
+  "time_utc": "2026-11-09T05:27:30.213693+00:00",
+  "reviewer": "/root/independent_review; non-author; no implementation/Git/server mutations",
+  "overall": "PARTIAL; CPUAdam/import/runtime-loader narrow evidence passed, LLaMA model feasibility untested at this checkpoint",
+  "code_identity": {
+    "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/offload/scripts/offload_probe.py",
+    "bytes": 46978,
+    "sha256": "9cfb74c22bc1176e8d80c325170ecb35eb7f3600797def4aac96f8730f822f53",
+    "ast": "PASS"
+  },
+  "config_identities": [
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/offload/config/probe_optimizer_only.json",
+      "sha256": "13120bea250570ca2f00bc0a54439ad64cdab36d93d8038abe957fb98cf87e0c",
+      "synthetic_any_rank_threshold_seconds": 4800,
+      "prior_stage_a_seconds": 305
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/offload/config/probe_optimizer_parameter.json",
+      "sha256": "e3962c48fc5469a8bc73f7da5a17801fb1695c87ece1acff3c752ff954217c36",
+      "synthetic_any_rank_threshold_seconds": 4800,
+      "prior_stage_a_seconds": 305
+    }
+  ],
+  "resolved_finding": {
+    "previous_report": "synthetic_base_samples_static_review.json",
+    "previous_source_sha256": "586d4534a1d50af7676c4d82d980c119d6fec5175293df48e59dcec7a2e59d90",
+    "finding": "Per-rank local time branch divergence before ZeRO collectives",
+    "fix_verified": "global_flags([elapsed<4800],ReduceOp.MIN)[0] before common if; any over-threshold rank makes both skip",
+    "runtime_required": true
+  },
+  "status_table": [
+    {
+      "item": "Current probe/guard/source adaptation",
+      "status": "PASS_STATIC_ONLY",
+      "scope": "No new unresolved deterministic interface issue after targeted fixes; no GPU runtime conclusion."
+    },
+    {
+      "item": "Synthetic2048 no-update segment",
+      "status": "PASS_STATIC_ONLY",
+      "scope": "Both ranks agree MIN(time<4800), direct engine.backward only, separate synthetic input/result, final engine and CPUAdam steps remain2. Actual stress run not yet performed."
+    },
+    {
+      "item": "Pre-update HF base weight tiny slice comparison",
+      "status": "PASS_STATIC_ONLY",
+      "scope": "Correct source cast→FP32 master comparison and old-vocab row ownership, pending full verified weight payload and model load."
+    },
+    {
+      "item": "Native CPUAdam small tensor",
+      "status": "PASS_NARROW_RUNTIME",
+      "scope": "Actual2048 FP32 CPU tensor, two steps, CPU FP32 m/v, tiny AdamW-rule differences, native extension identified. These are not LLaMA optimizer updates."
+    },
+    {
+      "item": "Trainer/DS mandatory imports",
+      "status": "PASS_NARROW_RUNTIME",
+      "scope": "Actual imported Trainer/TrainingArguments/LlamaForCausalLM/DeepSpeedZeroConfig/Accelerator; raw output has log prefixes and final PASS JSON object."
+    },
+    {
+      "item": "Environment-r3 original job",
+      "status": "FAILED_PRESERVED",
+      "scope": "Actual runner status WORKERS_TERMINATED, exit1; helper environment-completion FAILED due standalone-ldd assertion. Later read-only correct loader paths resolve all; original receipt not rewritten."
+    },
+    {
+      "item": "Pinned LLaMA complete weight identity",
+      "status": "PARTIAL",
+      "scope": "No verified complete two-shard manifest at this review checkpoint; main reports final bounded segmented continuation underway. Do not infer model identity from metadata or partial chunks."
+    },
+    {
+      "item": "LLaMA optimizer-only offload probe",
+      "status": "NOT_RUN_AT_REVIEW_CHECKPOINT",
+      "scope": "No model-probe job under local control/jobs/new-server; main confirms model GPU primary attempts0. Full model forward/backward/optimizer updates, global128 real run and peaks not observed."
+    },
+    {
+      "item": "Parameter-offload second candidate",
+      "status": "NOT_RUN_NOT_ELIGIBLE_YET",
+      "scope": "Only eligible after optimizer-only candidate shows actual GPU memory insufficiency, not compiler/network/import failure."
+    },
+    {
+      "item": "Strict six-task training equivalence",
+      "status": "BLOCKED_SEPARATE_FORMAL_GATE",
+      "scope": "micro8→micro1 changes mean-loss grouping for variable answer target counts; unchanged global128/CE code is insufficient. Fixed equal-length SeqRec may avoid this particular weighting difference, not other differences."
+    },
+    {
+      "item": "Six-task/longest-real-input/resource safety conclusion",
+      "status": "NOT_TESTED",
+      "scope": "Static formulas and guard config cannot replace a real model run. Synthetic2048, if later passed, remains artificial shape pressure."
+    },
+    {
+      "item": "Save/reload/optimizer resume/generation metrics/formal seeds",
+      "status": "NOT_RUN_AS_SCOPED",
+      "scope": "No new checkpoint or formal training; explicit future gates before formal experiment."
+    },
+    {
+      "item": "New GitHub publication/server mapping/review ZIP",
+      "status": "PENDING",
+      "scope": "Parent will provide frozen new delivery/ref/file/export and actual ZIP receipts; previous task package/commit are inherited only."
+    }
+  ],
+  "actual_environment_jobs": [
+    {
+      "job_id": "lc-rec-offload-20261108-environment-r0",
+      "status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "worker_may_be_live": false,
+      "evidence": "/home/addaswsw/lc-rec-offload-20261108/control/jobs/new-server/lc-rec-offload-20261108-environment-r0/last-query.json",
+      "sha256": "a4ee4b24605bd9b76749d66a76100ca66b924aa5a8b26e33d93af8618aa92f2d"
+    },
+    {
+      "job_id": "lc-rec-offload-20261108-environment-r1",
+      "status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "worker_may_be_live": false,
+      "evidence": "/home/addaswsw/lc-rec-offload-20261108/control/jobs/new-server/lc-rec-offload-20261108-environment-r1/last-query.json",
+      "sha256": "7e06e0b2323f5241625b08cc31a5dcb56022e877a39c69f6717506004d2ffaab"
+    },
+    {
+      "job_id": "lc-rec-offload-20261108-environment-r2",
+      "status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "worker_may_be_live": false,
+      "evidence": "/home/addaswsw/lc-rec-offload-20261108/control/jobs/new-server/lc-rec-offload-20261108-environment-r2/last-query.json",
+      "sha256": "613d3e0d4552f42ee19751ab439ea2cebbf351ee1e92865cd17ef46cfc50713b"
+    },
+    {
+      "job_id": "lc-rec-offload-20261108-environment-r3",
+      "status": "WORKERS_TERMINATED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "worker_may_be_live": false,
+      "evidence": "/home/addaswsw/lc-rec-offload-20261108/control/jobs/new-server/lc-rec-offload-20261108-environment-r3/last-query.json",
+      "sha256": "6994723839a7b76574cd36ef75ff407ca712077161a4167d41d28533fe153808"
+    }
+  ],
+  "round_and_budget": "Same task; round3 remains maximum. This review adds no correction or GPU budget. Both candidates config conservatively charge305s stageA plus native-readbacks, single guard5370s/outerrunner5400s, all7200s; limits are configured, model execution not yet observed.",
+  "limits_inherited": [
+    "Original asset pairing/SID collision/positionwise-generation constraints remain as previous verified reports; no re-audit or data repair here.",
+    "loss_reduction_review.json remains formal six-task method gate.",
+    "No complete model identity, GPU update, saved checkpoint, metric, or publication inferred from static/readback evidence."
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "argv": [
+    "/home/bwwu/lc-rec/releases/02f28235d38c15428c93f08d225c2ca5aaaaf2b7/lc_rec/offload/scripts/complete_environment.py",
+    "--package-dir",
+    "/home/bwwu/lc-rec/offload-20261108/packages",
+    "--output",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r3/output"
+  ],
+  "started": 1794197668.4124527,
+  "status": "FAILED",
+  "commands": [
+    {
+      "argv": [
+        "/data/bwwu/envs/lc-rec-offload-20261108/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--no-index",
+        "--no-deps",
+        "--no-cache-dir",
+        "--find-links",
+        "/home/bwwu/lc-rec/offload-20261108/packages",
+        "einops==0.8.1",
+        "msgpack==1.1.0",
+        "nvidia-ml-py==12.570.86"
+      ],
+      "log": "mandatory-install.log"
+    },
+    {
+      "argv": [
+        "/data/bwwu/envs/lc-rec-offload-20261108/bin/python",
+        "-B",
+        "/home/bwwu/lc-rec/releases/02f28235d38c15428c93f08d225c2ca5aaaaf2b7/lc_rec/offload/scripts/verify_cpu_adam.py",
+        "--output",
+        "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r3/output/cpu-adam.json"
+      ],
+      "log": "cpu-adam.log"
+    },
+    {
+      "argv": [
+        "/data/bwwu/envs/lc-rec-offload-20261108/bin/python",
+        "-I",
+        "-B",
+        "-c",
+        "import importlib.metadata as m,json\nfrom packaging.requirements import Requirement\nfrom transformers import Trainer,TrainingArguments,LlamaForCausalLM\nfrom deepspeed.runtime.zero.config import DeepSpeedZeroConfig\nfrom accelerate import Accelerator\nrows=[]\nfor name in ['deepspeed','transformers','accelerate']:\n for spec in m.requires(name):\n  req=Requirement(spec)\n  if req.marker and not req.marker.evaluate({'extra':''}):continue\n  version=m.version(req.name);assert version in req.specifier\n  rows.append({'distribution':name,'requirement':str(req),'actual':version})\nprint(json.dumps({'status':'PASS','imports':['Trainer','TrainingArguments','LlamaForCausalLM','DeepSpeedZeroConfig','Accelerator'],'mandatory_dependencies':rows},indent=2))\n"
+      ],
+      "log": "training-imports.json"
+    },
+    {
+      "argv": [
+        "ldd",
+        "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/adam/cpu_adam_op.cpython-310-x86_64-linux-gnu.so"
+      ],
+      "log": "native-ldd.txt"
+    }
+  ],
+  "error": "AssertionError()",
+  "elapsed_seconds": 33.19649815559387
+}

@@ -1,0 +1,47 @@
+Processing /home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0/output/deepspeed-build/deepspeed-0.16.9
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'error'
+  error: subprocess-exited-with-error
+  
+  × python setup.py egg_info did not run successfully.
+  │ exit code: 1
+  ╰─> [29 lines of output]
+      [2026-11-09 03:55:14,191] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+      Traceback (most recent call last):
+        File "<string>", line 2, in <module>
+        File "<pip-setuptools-caller>", line 34, in <module>
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0/output/deepspeed-build/deepspeed-0.16.9/setup.py", line 40, in <module>
+          from op_builder import get_default_compute_capabilities, OpBuilder
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0/output/deepspeed-build/deepspeed-0.16.9/op_builder/__init__.py", line 18, in <module>
+          import deepspeed.ops.op_builder  # noqa: F401 # type: ignore
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0/output/deepspeed-build/deepspeed-0.16.9/deepspeed/__init__.py", line 25, in <module>
+          from . import ops
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0/output/deepspeed-build/deepspeed-0.16.9/deepspeed/ops/__init__.py", line 11, in <module>
+          from . import transformer
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0/output/deepspeed-build/deepspeed-0.16.9/deepspeed/ops/transformer/__init__.py", line 7, in <module>
+          from .inference.config import DeepSpeedInferenceConfig
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0/output/deepspeed-build/deepspeed-0.16.9/deepspeed/ops/transformer/inference/__init__.py", line 7, in <module>
+          from ....model_implementations.transformers.ds_transformer import DeepSpeedTransformerInference
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0/output/deepspeed-build/deepspeed-0.16.9/deepspeed/model_implementations/__init__.py", line 6, in <module>
+          from .transformers.ds_transformer import DeepSpeedTransformerInference
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0/output/deepspeed-build/deepspeed-0.16.9/deepspeed/model_implementations/transformers/ds_transformer.py", line 17, in <module>
+          if deepspeed.HAS_TRITON and get_accelerator().is_triton_supported():
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0/output/deepspeed-build/deepspeed-0.16.9/deepspeed/accelerator/cuda_accelerator.py", line 245, in is_triton_supported
+          major, _ = torch.cuda.get_device_capability()
+        File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 507, in get_device_capability
+          prop = get_device_properties(device)
+        File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 523, in get_device_properties
+          _lazy_init()  # will define _get_device_properties
+        File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 319, in _lazy_init
+          torch._C._cuda_init()
+      RuntimeError: No CUDA GPUs are available
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.

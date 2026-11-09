@@ -1,0 +1,51 @@
+Processing /home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r1/output/deepspeed-build/deepspeed-0.16.9
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'error'
+  error: subprocess-exited-with-error
+  
+  × python setup.py egg_info did not run successfully.
+  │ exit code: 1
+  ╰─> [33 lines of output]
+      [2026-11-09 03:56:35,179] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+      In file included from /data/bwwu/envs/grid-20261009-e61baf3/include/python3.10/Python.h:8,
+                       from /tmp/tmp74o29bvi/main.c:5:
+      /data/bwwu/envs/grid-20261009-e61baf3/include/python3.10/pyconfig.h:1643:9: warning: ‘_POSIX_C_SOURCE’ redefined
+       1643 | #define _POSIX_C_SOURCE 200809L
+            |         ^~~~~~~~~~~~~~~
+      In file included from /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:33,
+                       from /usr/include/stdlib.h:26,
+                       from /data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/triton/backends/nvidia/include/cuda.h:56,
+                       from /tmp/tmp74o29bvi/main.c:1:
+      /usr/include/features.h:319:10: note: this is the location of the previous definition
+        319 | # define _POSIX_C_SOURCE        202405L
+            |          ^~~~~~~~~~~~~~~
+      df: /home/bwwu/.triton/autotune: No such file or directory
+      [2026-11-09 03:56:36,073] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+      Traceback (most recent call last):
+        File "<string>", line 2, in <module>
+        File "<pip-setuptools-caller>", line 34, in <module>
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r1/output/deepspeed-build/deepspeed-0.16.9/setup.py", line 40, in <module>
+          from op_builder import get_default_compute_capabilities, OpBuilder
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r1/output/deepspeed-build/deepspeed-0.16.9/op_builder/__init__.py", line 18, in <module>
+          import deepspeed.ops.op_builder  # noqa: F401 # type: ignore
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r1/output/deepspeed-build/deepspeed-0.16.9/deepspeed/__init__.py", line 25, in <module>
+          from . import ops
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r1/output/deepspeed-build/deepspeed-0.16.9/deepspeed/ops/__init__.py", line 15, in <module>
+          from ..git_version_info import compatible_ops as __compatible_ops__
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r1/output/deepspeed-build/deepspeed-0.16.9/deepspeed/git_version_info.py", line 29, in <module>
+          op_compatible = builder.is_compatible()
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r1/output/deepspeed-build/deepspeed-0.16.9/op_builder/fp_quantizer.py", line 35, in is_compatible
+          sys_cuda_major, _ = installed_cuda_version()
+        File "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r1/output/deepspeed-build/deepspeed-0.16.9/op_builder/builder.py", line 51, in installed_cuda_version
+          raise MissingCUDAException("CUDA_HOME does not exist, unable to compile CUDA op(s)")
+      op_builder.builder.MissingCUDAException: CUDA_HOME does not exist, unable to compile CUDA op(s)
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.

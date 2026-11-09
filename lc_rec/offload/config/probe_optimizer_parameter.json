@@ -38,5 +38,14 @@
   "no_formal_checkpoint": true,
   "no_eval": true,
   "no_generation": true,
-  "monitor_interval_seconds": 5
+  "monitor_interval_seconds": 5,
+  "synthetic_length_pressure": {
+    "enabled": true,
+    "tokens": 2048,
+    "real_training_example": false,
+    "optimizer_updates": 0,
+    "after_two_real_updates_only": true,
+    "skip_if_any_rank_process_elapsed_seconds_at_least": 4800,
+    "loss": "same model CE, only last4SID+EOS supervised; no engine.step"
+  }
 }

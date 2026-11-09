@@ -1,0 +1,24 @@
+--- upstream/setup.py
++++ derived/setup.py
+@@ -107,11 +107,16 @@
+         if (rocm_major == 5 and rocm_minor == 0) or rocm_major <= 4:
+             cupy = f"cupy-rocm-{rocm_major}-{rocm_minor}"
+     else:
+-        cuda_major_ver, cuda_minor_ver = installed_cuda_version()
+-        if (cuda_major_ver < 11) or ((cuda_major_ver == 11) and (cuda_minor_ver < 3)):
+-            cupy = f"cupy-cuda{cuda_major_ver}{cuda_minor_ver}"
+-        else:
+-            cupy = f"cupy-cuda{cuda_major_ver}x"
++        from op_builder.builder import MissingCUDAException
++        try:
++            cuda_major_ver, cuda_minor_ver = installed_cuda_version()
++        except MissingCUDAException:
++            cuda_major_ver, cuda_minor_ver = None, None
++        if cuda_major_ver is not None:
++            if (cuda_major_ver < 11) or ((cuda_major_ver == 11) and (cuda_minor_ver < 3)):
++                cupy = f"cupy-cuda{cuda_major_ver}{cuda_minor_ver}"
++            else:
++                cupy = f"cupy-cuda{cuda_major_ver}x"
+ 
+     if cupy:
+         extras_require['1bit'].append(cupy)

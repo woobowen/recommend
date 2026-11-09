@@ -1,0 +1,174 @@
+{
+  "started_monotonic": 38268.306330007,
+  "downloaded_body_bytes": 1045643105,
+  "initial_range_probe_bytes": 1048576,
+  "chunks": [
+    {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 0,
+      "bytes": 268435456,
+      "sha256": "d728d2e4493946bbce5b8cde6f0e547880f91f49edc6884cf1591acf9c85ca50",
+      "elapsed_seconds": 290.2224125569992,
+      "remote_offset": 268435456
+    },
+    {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 268435456,
+      "bytes": 268435456,
+      "sha256": "1ba70fea276cd23c1dfe890317afee4b05a0f7874d535ff02c0664cf70426515",
+      "elapsed_seconds": 322.6542861170019,
+      "remote_offset": 536870912
+    }
+  ],
+  "formal_files": [],
+  "parallel_source_binding": {
+    "revision": "4782ad278652c7c71b72204d462d6d01eaaf7549",
+    "model_id": "huggyllama/llama-7b",
+    "files": {
+      "model-00001-of-00002.safetensors": {
+        "name": "model-00001-of-00002.safetensors",
+        "total_bytes": 9976579217,
+        "total_sha256": "d43476fdd2fca0c44d55ee930039dd5dafb6331764dc0b5e5f89c60b551fcc12"
+      },
+      "model-00002-of-00002.safetensors": {
+        "name": "model-00002-of-00002.safetensors",
+        "total_bytes": 3500297444,
+        "total_sha256": "94712c4b457815e0f8aaa4f78170aebba2b9ee3339ff2b40fceb983338fbafee"
+      }
+    },
+    "receiver": "/home/bwwu/lc-rec/releases/02f28235d38c15428c93f08d225c2ca5aaaaf2b7/lc_rec/offload/scripts/receive_weight_chunk.py"
+  },
+  "prefetch": {
+    "model-00001-of-00002.safetensors:805306368": {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 805306368,
+      "present_bytes_at_resume": 0,
+      "http_range": [
+        805306368,
+        1073741823
+      ],
+      "complete": false
+    },
+    "model-00001-of-00002.safetensors:1073741824": {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 1073741824,
+      "present_bytes_at_resume": 0,
+      "http_range": [
+        1073741824,
+        1342177279
+      ],
+      "complete": false
+    },
+    "model-00001-of-00002.safetensors:1342177280": {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 1342177280,
+      "present_bytes_at_resume": 0,
+      "http_range": [
+        1342177280,
+        1610612735
+      ],
+      "complete": false
+    },
+    "model-00001-of-00002.safetensors:1610612736": {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 1610612736,
+      "present_bytes_at_resume": 0,
+      "http_range": [
+        1610612736,
+        1879048191
+      ],
+      "complete": false
+    },
+    "model-00001-of-00002.safetensors:1879048192": {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 1879048192,
+      "present_bytes_at_resume": 0,
+      "http_range": [
+        1879048192,
+        2147483647
+      ],
+      "complete": false
+    },
+    "model-00001-of-00002.safetensors:536870912": {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 536870912,
+      "present_bytes_at_resume": 134217728,
+      "http_range": [
+        671088640,
+        805306367
+      ],
+      "complete": false
+    }
+  },
+  "parallel_attempts": [
+    {
+      "script_sha256": "7db3d97e5f1a43023d05f769cff8df609bf82b05a88e6bab5e93147d65dcb3bd",
+      "argv": [
+        "/home/addaswsw/lc-rec-offload-20261108/control/runtime/relay_weights_parallel-7db3d97e.py",
+        "--transport-dir",
+        "/home/addaswsw/lc-rec-offload-20261108/control/runtime",
+        "--receiver",
+        "/home/bwwu/lc-rec/releases/02f28235d38c15428c93f08d225c2ca5aaaaf2b7/lc_rec/offload/scripts/receive_weight_chunk.py",
+        "--summary",
+        "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/evidence/assets/hf_summary.json",
+        "--output",
+        "/home/addaswsw/lc-rec-offload-20261108/control/weight-transfer",
+        "--cpu-adam-evidence",
+        "/home/addaswsw/lc-rec-offload-20261108/control/evidence/cpu-adam.json"
+      ],
+      "started_monotonic": 39029.625994903,
+      "workers": 6,
+      "max_futures": 6,
+      "chunk_bytes": 268435456,
+      "starting_downloaded_body_bytes": 672137216,
+      "http_retries": 0,
+      "engineering_only": true,
+      "status": "FAILED",
+      "error": "RuntimeError('Stopped after another transfer failure')",
+      "elapsed_seconds": 282.11508905600203
+    }
+  ],
+  "status": "PARALLEL_RELAY_FAILED_PRESERVE_PARTIALS",
+  "active_reserved_http_body_bytes": 0,
+  "staging_slots": [
+    "model-00001-of-00002.safetensors.1073741824.chunk",
+    "model-00001-of-00002.safetensors.1342177280.chunk",
+    "model-00001-of-00002.safetensors.1610612736.chunk",
+    "model-00001-of-00002.safetensors.1879048192.chunk",
+    "model-00001-of-00002.safetensors.536870912.chunk",
+    "model-00001-of-00002.safetensors.805306368.chunk"
+  ],
+  "prefetch_errors": [
+    {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 1073741824,
+      "error": "AssertionError('short body; keep partial, no retry')"
+    },
+    {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 805306368,
+      "error": "RuntimeError('Stopped after another transfer failure')"
+    },
+    {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 1342177280,
+      "error": "RuntimeError('Stopped after another transfer failure')"
+    },
+    {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 1879048192,
+      "error": "RuntimeError('Stopped after another transfer failure')"
+    },
+    {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 1610612736,
+      "error": "RuntimeError('Stopped after another transfer failure')"
+    },
+    {
+      "name": "model-00001-of-00002.safetensors",
+      "offset": 536870912,
+      "error": "RuntimeError('Stopped after another transfer failure')"
+    }
+  ],
+  "elapsed_seconds": 1043.4347556339999
+}

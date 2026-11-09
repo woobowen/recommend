@@ -678,6 +678,39 @@ def run(cli, report, flush):
         raise RuntimeError("Did not actually finish exactly two optimizer boundaries")
     if len(report["losses"]) != 128:
         raise RuntimeError("Expected exactly128 local forwards/backwards at micro1/accum64/two updates")
+    report['gpu_peak_after_real_updates']={'max_allocated_bytes':torch.cuda.max_memory_allocated(local_rank),'max_reserved_bytes':torch.cuda.max_memory_reserved(local_rank)}
+    flush()
+    # Separate, explicitly synthetic length probe. It never calls engine.step(),
+    # never contributes a third optimizer update, and is not a recommendation sample.
+    # Every rank must enter or skip the collective model operations together.
+    synthetic_allowed = global_flags([report['elapsed_wall_seconds'] < 4800], dist.ReduceOp.MIN)[0]
+    report['synthetic_pressure_all_rank_time_permission'] = synthetic_allowed
+    if synthetic_allowed:
+        engine=trainer.model_wrapped
+        small=base_collator([dataset[selection[0]]])
+        answer=small['labels'][0][small['labels'][0]!=-100].tolist()
+        prefix=small['input_ids'][0][1:-len(answer)].tolist()
+        assert prefix and len(answer)==5
+        fill=(prefix*((2048-len(answer))//len(prefix)+1))[:2048-len(answer)-1]
+        ids=[tokenizer.bos_token_id]+fill+answer;assert len(ids)==2048
+        stress_inputs={'input_ids':torch.tensor([ids],device=training_args.device),'attention_mask':torch.ones((1,2048),dtype=torch.long,device=training_args.device),'labels':torch.tensor([[-100]*(2048-len(answer))+answer],device=training_args.device)}
+        evidence={'kind':'SYNTHETIC_LENGTH_PRESSURE_ONLY','tokens':2048,'real_training_example':False,'source_prefix_index_for_token_pattern':selection[0],'input_ids':ids,'supervised_tokens':5,'optimizer_updates_in_this_probe':0,'global_steps_before':engine.global_steps,'note':'Repeated real token pattern fills artificial2048 context. History semantics are not a real20-item example. Raw model CE/mask unchanged; no extra optimizer step.'}
+        report['synthetic_pressure']=evidence;report['phase']='synthetic_2048_forward_backward_no_update';flush()
+        started=time.monotonic();stress_loss=engine(**stress_inputs).loss
+        evidence['loss']=float(stress_loss.detach().float().cpu());evidence['forward_wall_seconds']=time.monotonic()-started
+        assert math.isfinite(evidence['loss'])
+        started=time.monotonic();engine.backward(stress_loss);torch.cuda.synchronize();evidence['backward_wall_seconds']=time.monotonic()-started
+        buffer=engine.optimizer.grad_partitions_flat_buffer
+        finite=True
+        for offset in range(0,buffer.numel(),1024*1024):
+            if not bool(torch.isfinite(buffer.narrow(0,offset,min(1024*1024,buffer.numel()-offset))).all()):finite=False;break
+        evidence.update(gradient_buffer_dtype=str(buffer.dtype),gradient_buffer_device=str(buffer.device),all_rank_gradient_buffers_finite=global_flags([finite],dist.ReduceOp.MIN)[0],global_steps_after=engine.global_steps)
+        assert evidence['all_rank_gradient_buffers_finite'] and engine.global_steps==2
+        evidence['status']='PASS_FORWARD_BACKWARD_NO_OPTIMIZER_UPDATE'
+        evidence['cumulative_gpu_max_allocated_bytes']=torch.cuda.max_memory_allocated(local_rank);evidence['cumulative_gpu_max_reserved_bytes']=torch.cuda.max_memory_reserved(local_rank)
+        report['scope']['resource_claim_limit']+='; additionally artificial2048-token forward/backward without another update'
+        del stress_inputs,stress_loss;flush()
+    else:report['synthetic_pressure']={'status':'NOT_TESTED','reason':'leave time for bounded job cleanup; two real updates consumed available margin'}
     final_opt = state_snapshot(trainer.model_wrapped)
     report["final_optimizer_state"] = final_opt
     for group in final_opt["states_by_subgroup"]:

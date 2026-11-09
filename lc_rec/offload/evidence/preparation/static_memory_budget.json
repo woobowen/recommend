@@ -1,0 +1,26 @@
+{
+  "kind": "STATIC_NOT_MEASURED",
+  "trainable_parameters": 6746034176,
+  "largest_direct_parameter_module": 134881280,
+  "world_size": 2,
+  "bf16_weight_partition_bytes_per_gpu": 6746034176,
+  "worst_gradient_partition_fp32_bytes_per_gpu_if_resident": 13492068352,
+  "cpu_master_bytes_both_ranks": 26984136704,
+  "cpu_adam_moment_bytes_both_ranks": 53968273408,
+  "cpu_fp32_gradient_bytes_both_ranks": 26984136704,
+  "cpu_bf16_accum_buffer_bytes_both_ranks": 13492068352,
+  "largest_module_gather_4byte_estimate_bytes": 539525120,
+  "ds_optimizer_only_gpu_model_state_estimate_bytes_per_gpu": 7285559296,
+  "ds_optimizer_only_host_state_with_factor_1_5_bytes": 161904820224,
+  "additional_not_in_model_state_estimate": [
+    "activation and gradient checkpointing",
+    "parameter-prefetch/live window up to1e9 elements",
+    "reduce buckets/overlap buffers",
+    "CUDA contexts/NCCL/allocator fragmentation",
+    "load/resize and any future save/gather transient allocations"
+  ],
+  "formal_checkpoint_static_bytes_bf16_and_master_and_moments": 94444478464,
+  "one_seed_runtime": "UNKNOWN until actual optimizer update data; seqrec-only update time is not full-six-task throughput",
+  "hardware_topology": "SYS cross-NUMA, PCIe Gen3 max; idle observed x8, must re-read link under load",
+  "microbatch_semantics": "per-micro mean CE is unchanged; variable response lengths make accumulation regrouping a strict-equivalence gap"
+}

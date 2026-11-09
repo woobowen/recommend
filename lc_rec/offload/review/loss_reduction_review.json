@@ -1,0 +1,103 @@
+{
+  "schema": "independent-offload-loss-reduction-review-v1",
+  "reviewer": "/root/independent_review; non-author",
+  "time_utc": "2026-11-09T04:18:46.904491+00:00",
+  "scope": "Directed read-only source review. No GPU, model, new dataset audit, loss change, or implementation change.",
+  "status": "PASS_SOURCE_DERIVATION; FORMAL_SIX_TASK_1_TO_1_NOT_ESTABLISHED",
+  "sources": [
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/evidence/source_audit/transformers_v4.31.0_modeling_llama.py",
+      "sha256": "2abf84a5dd3644330f93c88e036831578e407de7a9812b5454ef1bb8a18c3422",
+      "first_line": 826,
+      "last_line": 839,
+      "excerpt": "\n        loss = None\n        if labels is not None:\n            # Shift so that tokens < n predict n\n            shift_logits = logits[..., :-1, :].contiguous()\n            shift_labels = labels[..., 1:].contiguous()\n            # Flatten the tokens\n            loss_fct = CrossEntropyLoss()\n            shift_logits = shift_logits.view(-1, self.config.vocab_size)\n            shift_labels = shift_labels.view(-1)\n            # Enable model parallelism\n            shift_labels = shift_labels.to(shift_logits.device)\n            loss = loss_fct(shift_logits, shift_labels)\n"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/evidence/source_audit/transformers_v4.31.0_trainer.py",
+      "sha256": "24a579e7af77c3699020ac16c1b4ad16d64aa584dafe52a90d0807c381174f31",
+      "first_line": 2651,
+      "last_line": 2668,
+      "excerpt": "            return loss_mb.reduce_mean().detach().to(self.args.device)\n\n        with self.compute_loss_context_manager():\n            loss = self.compute_loss(model, inputs)\n\n        if self.args.n_gpu > 1:\n            loss = loss.mean()  # mean() to average on multi-gpu parallel training\n\n        if self.do_grad_scaling:\n            self.scaler.scale(loss).backward()\n        elif self.use_apex:\n            with amp.scale_loss(loss, self.optimizer) as scaled_loss:\n                scaled_loss.backward()\n        else:\n            self.accelerator.backward(loss)\n\n        return loss.detach() / self.args.gradient_accumulation_steps\n"
+    },
+    {
+      "path": "/home/addaswsw/lc-rec-offload-20261108/offload_source_audit/accelerate_v0.21.0_accelerator.py",
+      "sha256": "933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a",
+      "first_line": 1842,
+      "last_line": 1858,
+      "excerpt": "        \"\"\"\n        if self.distributed_type != DistributedType.DEEPSPEED:\n            # deepspeed handles loss scaling by gradient_accumulation_steps in its `backward`\n            loss = loss / self.gradient_accumulation_steps\n        if self.distributed_type == DistributedType.DEEPSPEED:\n            self.deepspeed_engine_wrapped.backward(loss, **kwargs)\n        elif self.distributed_type == DistributedType.MEGATRON_LM:\n            return\n        elif self.scaler is not None:\n            self.scaler.scale(loss).backward(**kwargs)\n        else:\n            loss.backward(**kwargs)\n\n    def unscale_gradients(self, optimizer=None):\n        \"\"\"\n        Unscale the gradients in mixed precision training with AMP. This is a noop in all other settings.\n"
+    },
+    {
+      "path": "/home/addaswsw/lc-rec-offload-20261108/offload_source_audit/accelerate_v0.21.0_deepspeed.py",
+      "sha256": "07e0830c0599c0059efe05cab33795e0d7032557b80023f0bc383ee50f7a3894",
+      "first_line": 160,
+      "last_line": 178,
+      "excerpt": "    \"\"\"\n\n    def __init__(self, engine):\n        self.engine = engine\n\n    def backward(self, loss, **kwargs):\n        # runs backpropagation and handles mixed precision\n        self.engine.backward(loss, **kwargs)\n\n        # Deepspeed's `engine.step` performs the following operations:\n        # - gradient accumulation check\n        # - gradient clipping\n        # - optimizer step\n        # - zero grad\n        # - checking overflow\n        # - lr_scheduler step (only if engine.lr_scheduler is not None)\n        self.engine.step()\n        # and this plugin overrides the above calls with no-ops when Accelerate runs under\n        # Deepspeed, but allows normal functionality for non-Deepspeed cases thus enabling a simple"
+    },
+    {
+      "path": "/home/addaswsw/lc-rec-offload-20261108/offload_source_audit/ds_engine.py",
+      "sha256": "88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d",
+      "first_line": 1926,
+      "last_line": 1936,
+      "excerpt": "    def _scale_loss_by_gas(self, prescaled_loss, eval_micro_batches=None):\n        # In pipeline evaluation, there is an option to use different micro-bs, which creates different number of\n        # micro batches, thus the training gas, is not valid in this case. need to use the number of eval_micro_batches\n        scaling_factor = self.gradient_accumulation_steps() if eval_micro_batches is None else eval_micro_batches\n        if isinstance(prescaled_loss, torch.Tensor):\n            scaled_loss = prescaled_loss / scaling_factor\n        elif isinstance(prescaled_loss, tuple) or isinstance(prescaled_loss, list):\n            scaled_loss = []\n            for l in prescaled_loss:\n                if isinstance(l, torch.Tensor):\n                    scaled_loss.append(l / scaling_factor)"
+    },
+    {
+      "path": "/home/addaswsw/lc-rec-offload-20261108/offload_source_audit/ds_engine.py",
+      "sha256": "88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d",
+      "first_line": 2120,
+      "last_line": 2130,
+      "excerpt": "    def _backward_prologue(self, loss, scale_wrt_gas=True):\n        see_memory_usage(\"Engine before backward\", force=self.memory_breakdown())\n        if self.scale_wrt_gas is not None:\n            scale_wrt_gas = self.scale_wrt_gas\n\n        # scale loss w.r.t. gradient accumulation if reduction is not disabled\n        do_gradient_reduction = self.enable_backward_allreduce and not self.inside_no_sync_ctxt and not self.is_deepcompile_enabled(\n        )\n        if do_gradient_reduction and self.gradient_accumulation_steps() > 1 and scale_wrt_gas:\n            loss = self._scale_loss_by_gas(loss.float())\n"
+    },
+    {
+      "source_archive": "/home/addaswsw/lc-rec-offload-20261108/control/packages/deepspeed-0.16.9.tar.gz",
+      "member": "deepspeed-0.16.9/deepspeed/runtime/comm/coalesced_collectives.py",
+      "sha256": "dad76d340ebcb8e352baa66e965fb84ffa7679aa36c028422ec454231334051f",
+      "first_line": 199,
+      "last_line": 207,
+      "excerpt": "        tensor_partition_flat_buffer = instrument_w_nvtx(torch.cat)(tensor_partitions_lst_with_padding)\n\n    tensor_partition_flat_buffer.div_(world_sz)  # pre-divide\n    tensor_partition_buffer_for_each_rank: List[Tensor] = torch.chunk(tensor_partition_flat_buffer, world_sz)\n\n    # batched reduce-scatter call\n    _torch_reduce_scatter_fn(tensor_partition_flat_buffer,\n                             tensor_partition_buffer_for_each_rank[this_rank],\n                             group=group)"
+    },
+    {
+      "source_archive": "/home/addaswsw/lc-rec-offload-20261108/control/packages/deepspeed-0.16.9.tar.gz",
+      "member": "deepspeed-0.16.9/deepspeed/runtime/fp16/loss_scaler.py",
+      "sha256": "dd28cf3ca49e4489ac299f9f2105aaa23dd697b84adcdcf626718b1a741a4512",
+      "first_line": 206,
+      "last_line": 215,
+      "excerpt": "# Although loss scaling is only defined for fp16, yet for backwards compatibility\n# we still create a scaler for other dtypes (fp32, bf16) which does not perform any scaling.\ndef CreateLossScaler(dtype, static_loss_scale, dynamic_scaling, dynamic_loss_args):\n    if dtype == torch.half and dynamic_scaling:\n        if dynamic_loss_args is None:\n            return DynamicLossScaler(dtype=dtype)\n        return DynamicLossScaler(dtype=dtype, **dynamic_loss_args)\n\n    loss_scale_value = static_loss_scale if dtype == torch.half else 1.0\n    return LossScaler(scale=loss_scale_value)"
+    },
+    {
+      "source_url": "https://raw.githubusercontent.com/pytorch/pytorch/v2.6.0/torch/nn/modules/loss.py",
+      "full_source_sha256": "7be9236522e090a0014d355c0be68d30bf5f4d370bc8cb59055d27f2fbd61fc8",
+      "excerpt_path": "/home/addaswsw/lc-rec-offload-20261108/independent_review/pytorch_v2.6.0_cross_entropy_excerpt.py",
+      "excerpt_sha256": "7ede745558c12d794e7b04fda8420bb850b67046dab5ac7d343e445e0b7b89f6"
+    }
+  ],
+  "facts": [
+    "LlamaForCausalLM HF4.31 shifts labels/logits, flattens all batch tokens, and calls default torch.nn.CrossEntropyLoss().",
+    "torch2.6 default reduction is mean and ignore_index is -100. For integer labels with no class weight, each microbatch scalar is sum CE over nonignored shifted targets divided by their count. Padding/input masks reduce this count; input length alone is not the denominator.",
+    "Trainer4.31 passes raw model loss to accelerator.backward. Its detached return division by accumulation is for training-loss accounting and does not apply an additional backward scaling.",
+    "Accelerate0.21 skips its usual loss/gradient_accumulation division under DeepSpeed and delegates to engine.backward then engine.step. DS0.16.9 scales backward loss by GAS once; ZeRO reduce-scatter averages across DP ranks. The BF16 loss scaler factor is1.0. None of these components aggregates a global unmasked-token denominator across distinct microbatches."
+  ],
+  "derivation": {
+    "notation": "n_i=number of nonignored labels AFTER causal shift; s_i=sum of their CE losses; t_i=s_i/n_i. Assume nonzero n_i and identical examples/forward semantics, before clipping/Adam and floating-point effects.",
+    "general": "L_(W,A,m)=(1/(W*A))*sum_(rank r, accumulation a)[ (sum_(i in microbatch B_ra) s_i)/(sum_(i in B_ra) n_i) ].",
+    "official_layout": "W8,A2,m8 gives average of16 separate eight-example token means. It is not generally a single global128-example token mean.",
+    "candidate_layout": "W2,A64,m1 gives (1/128)*sum_i t_i, i.e. equal-example mean of each individual answer token mean.",
+    "inequality": "With varying n_i, coefficients of each example/token generally change even when128 examples and their order are fixed. This can change task weights when response lengths differ; it is not limited to floating-point roundoff.",
+    "special_case": "When every example in the compared effective batch has the same n_i, the reduction-weight difference vanishes algebraically. Other numerical/order/topology/initialization differences remain."
+  },
+  "illustration_not_dataset_measurement": {
+    "eight_example_group": "4 short answers n5/token-mean1 and4 long answers n50/token-mean2",
+    "micro8_mean": "(4*5*1+4*50*2)/(4*5+4*50)=420/220=1.90909...",
+    "eight_micro1_means": "(4*1+4*2)/8=1.5",
+    "purpose": "Algebra only, no training or synthetic-model acceptance test."
+  },
+  "probe_conclusion_scope": [
+    "Original SeqRec prompts all answer {item}; author SID has four atomic tokens and Collator appends EOS. Actual per-rank recorded shifted supervised counts still decide whether all observed SeqRec examples share n_i; do not assume count5 if tokenizer boundary or truncation changes it.",
+    "If real two-update global128 probe passes, it can validate that observed SeqRec path and physical accumulation layout. It does not validate strict loss-weight equivalence for the variable-length six-task joint corpus."
+  ],
+  "formal_gates": [
+    "Keep current technical probe loss unchanged; no unauthorized global-token, per-task, or per-sample reweighting introduced.",
+    "Before formal six-task training, explicitly disclose this reduction difference and resolve the intended faithful layout/weighting semantics with the user; effective batch128 alone does not establish 1:1 supervision weighting.",
+    "A faithful micro8 reference grouping (with matched sample/prompt identities) or separately authorized and reviewed normalization design would require concrete implementation/gradient evidence. Do not silently replace the original groupwise mean by a new global token mean.",
+    "Existing auxiliary-data pairing, SID collisions/generation constraint, BF16-master-source, save/reload and full six-task resource gates remain independent and unresolved."
+  ]
+}

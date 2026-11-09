@@ -1,0 +1,60 @@
+{
+  "scope": "official-source and static feasibility only; zero server operations, installs, model downloads or training",
+  "suggested_versions": {
+    "torch": "existing 2.6.0+cu124",
+    "transformers": "4.31.0",
+    "accelerate": "0.21.0",
+    "deepspeed": "0.16.9",
+    "deepspeed_commit": "bdba8231bc8fc17980a5941437e6363dac69418d",
+    "pydantic": "requires >=2.0; exact lock pending principal"
+  },
+  "official_source_status": "PASS_FIXED_BLOB_IDENTITIES",
+  "runtime_status": "PENDING_NOT_EXECUTED",
+  "optimizer": "Accelerate 0.21 conversion of HF adamw_torch param_groups to DeepSpeedCPUAdam, preserving original HF cosine scheduler",
+  "precision": {
+    "model": "bf16",
+    "default_zero3_accumulation_buffer": "bf16 unless explicitly configured otherwise",
+    "optimizer_master": "cpu fp32",
+    "optimizer_facing_gradient": "cpu fp32",
+    "optimizer_moments": "cpu fp32"
+  },
+  "original_hyperparameters": {
+    "lr": 0.00005,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-8,
+    "decay_groups": [
+      0.01,
+      0
+    ],
+    "adamw_mode": true,
+    "bias_correction": true,
+    "gradient_clipping": 1
+  },
+  "prefetch_int_compatibility_fix": {
+    "problem": "HF 4.31 and Accelerate 0.21 auto yields 15099494.4 for int DS/Pydantic2 field",
+    "recommended_explicit_int": 15099494,
+    "reduce_bucket_int": 16777216,
+    "persistence_int": 40960
+  },
+  "loading_order": "Keep TrainingArguments/HfDeepSpeedConfig alive before from_pretrained; no device_map or low_cpu_mem_usage=True with HF4.31 ZeRO3; strict base 32000 then resize 32930 and engine-convert new parameters",
+  "cpu_adam_build": {
+    "jit_gpu_visible_requires_cuda_discovery": true,
+    "official_precompile_cpp_fallback_exists": true,
+    "ds_accelerator_cuda_override_supported": true,
+    "preinstalled_loader_requires_accelerator_name": "cuda",
+    "setup_optional_cupy_probe_nvcc_risk": "tag setup probes nvcc before builder when accelerator cuda; inspect actual sdist and if necessary apply narrowly recorded packaging-only MissingCUDAException handling"
+  },
+  "runtime_needed": [
+    "GPU-visible precompiled CPUAdam import and installed metadata",
+    "small FP32 CPUAdam/torch AdamW numerical check",
+    "resolved DS config parse and actual optimizer groups/scheduler LR",
+    "two-rank strict load/resize/parameter partition and initialization checks",
+    "real model long-path memory/timing check within authorized task budget"
+  ],
+  "installs": [],
+  "shared_modifications": [],
+  "gpu_pass_claim": false
+}

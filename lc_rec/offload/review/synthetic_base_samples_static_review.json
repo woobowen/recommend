@@ -1,0 +1,76 @@
+{
+  "schema": "independent-synthetic-base-sample-review-v1",
+  "time_utc": "2026-11-09T05:22:55.277558+00:00",
+  "reviewer": "/root/independent_review; non-author; shared code/Git/server untouched",
+  "source": {
+    "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/offload/scripts/offload_probe.py",
+    "bytes": 46742,
+    "sha256": "586d4534a1d50af7676c4d82d980c119d6fec5175293df48e59dcec7a2e59d90",
+    "syntax": "PASS"
+  },
+  "status": "PARTIAL_STATIC; fix cross-rank synthetic branch consensus before freeze; runtime not tested",
+  "synthetic_pressure": {
+    "source_scope": "After two real effective128 optimizer updates and local128 forward/backward count assertions. No additional Trainer.train call, no Accelerator.backward, no engine.step in synthetic segment.",
+    "no_update_proof": "Calls direct engine.backward only. Fixed DS0.16.9 engine.backward invokes backward prologue, optimizer backward and epilogue, not engine.step. Actual Adam update is inside engine._take_model_step called by engine.step. Final engine.global_steps==2 and all CPUAdam subgroup state.step==2 assertions cover unintended update changes.",
+    "mask_and_shape": "Artificial[1,2048] IDs have BOS plus repeated token pattern and the5 actual answer IDs ending EOS. All attention mask1; first2043 labels-100 and final5 answer labels. LLaMA causal-shift loss remains stock. This is synthetic length pressure; not a real20-item sequence.",
+    "gradient_buffer": "Uses actual ZeRO grad_partitions_flat_buffer, finite chunk scan then all-rank MIN. Correct buffer for new nonboundary backward; CPU master.grad may still reflect previous boundary and is not falsely used as fresh gradient.",
+    "disclosure": "Separate synthetic_pressure key; real_training_example False; optimizer_updates_in_this_probe0; separate GPU peak after real updates and cumulative peak after synthetic pass; observed real microrecords not augmented.",
+    "bound": "Per-rank elapsed<4800 gate leaves nominal10min inside90min GPU job; external guard retains actual shared and single-run wall/resource limits.",
+    "open_risk": "Gate currently local per rank. Around4800s threshold, rank divergence can make one rank run ZeRO collectives while another skips, causing hang until guard timeout. Use all-rank MIN to agree entry; any rank over threshold means all skip. Parent notified."
+  },
+  "base_weight_sample_verification": {
+    "status": "STATIC_PASS_PENDING_ACTUAL_WEIGHT_AND_MODEL_RUN",
+    "source": "HF fixed-revision, externally hash-verified safetensors payload via weight_map; source checksum gate is controller responsibility before run.",
+    "extent": "Both embedding/head original rows0/1/100/31999 times three columns, filtered by actual ZeRO partition ownership; eight distributed positions in each selected backbone parameter. No newly randomized SID row is required to equal pretrained bytes.",
+    "comparison": "safe_open.get_slice tiny row/column slices → actual BF16 parameter dtype → FP32 scalar; compare exactly to pre-update local CPU FP32 master samples. Correct expected path for documented BF16 zero.Init masters.",
+    "memory": "Mmap source with scalar slices and tiny narrow CPU master reads; no full model copy or CUDA gather.",
+    "limits": "Finite scalar sample is loading-integrity witness, not independent full-tensor semantic comparison. Complete source shard SHA is separate mandatory identity evidence."
+  },
+  "env_runtime_narrow_review": {
+    "scope": "Read fetched real artifacts; no reviewer server execution.",
+    "evidence_paths": [
+      "control/evidence/cpu-adam.json",
+      "control/light-evidence/lc-rec-offload-20261108-environment-r3/output/cpu-adam.log",
+      "control/light-evidence/lc-rec-offload-20261108-environment-r3/output/training-imports.json",
+      "control/light-evidence/lc-rec-offload-20261108-environment-r3/output/environment-completion.json",
+      "control/evidence/native_loader_linkage_readback.json"
+    ],
+    "CPUAdam_small_tensor": "PASS: native preinstalled CUDA-accelerator-compatible CPUAdam; two FP32 CPU2048-element steps; moment buffers CPU FP32; differences from torch.AdamW2.384185791015625e-7 and4.76837158203125e-7. Does not prove model feasibility.",
+    "native_sha256": "d1d162b256c145ccda04c08d5c669ef16e130c4edacfa7cbdf1d3b532294239a",
+    "training_imports": "Actual Trainer/TrainingArguments/LlamaForCausalLM/DeepSpeedZeroConfig/Accelerator import and mandatory dependency report PASS within raw mixed stdout. File named training-imports.json has log prefix; whole-file JSON parsing fails Extra data. Preserve it and label raw stdout, or add derived parsed summary.",
+    "r3_terminal": "Original environment-r3 remains FAILED after standalone ldd assertion. Correct torch/lib-path ldd readback resolves all dependencies and actual process maps confirm loaded libraries; this read-only diagnosis does not rewrite original job into success.",
+    "mandatory_packages_added": "einops0.8.1/msgpack1.1.0/nvidia-ml-py12.570.86 only new task environment; actual metadata report read."
+  },
+  "unchanged_gates": [
+    "No model/GPU update runtime PASS from this static review.",
+    "No full six-task/reproduction conclusion; loss_reduction_review.json remains applicable.",
+    "No extra correction round or compute allowance granted by this review."
+  ],
+  "evidence_identity": [
+    {
+      "path": "/home/addaswsw/lc-rec-offload-20261108/control/evidence/cpu-adam.json",
+      "bytes": 4998,
+      "sha256": "c91c90ed9e13b1a5c00360ea022537c85235a916f28615bec11df930628c3c78"
+    },
+    {
+      "path": "/home/addaswsw/lc-rec-offload-20261108/control/light-evidence/lc-rec-offload-20261108-environment-r3/output/cpu-adam.log",
+      "bytes": 716,
+      "sha256": "d9567b70b09f16b60b5244de86d3e890be55806fb112b748c24bef70fe164874"
+    },
+    {
+      "path": "/home/addaswsw/lc-rec-offload-20261108/control/light-evidence/lc-rec-offload-20261108-environment-r3/output/training-imports.json",
+      "bytes": 3600,
+      "sha256": "64cf4e0c634cfdbc1deb406144ab18d7d83e669651bddcfc034fdf55d3f9b7a7"
+    },
+    {
+      "path": "/home/addaswsw/lc-rec-offload-20261108/control/light-evidence/lc-rec-offload-20261108-environment-r3/output/environment-completion.json",
+      "bytes": 2464,
+      "sha256": "ae56a35a6dcaae08e0cb25c04720ad215098a9881b9582f1d92994f2ee91d660"
+    },
+    {
+      "path": "/home/addaswsw/lc-rec-offload-20261108/control/evidence/native_loader_linkage_readback.json",
+      "bytes": 15001,
+      "sha256": "dbd2f36999d57cb37039401b4287c5b9f62d15d77efb6b2369041d58e7424e2c"
+    }
+  ]
+}
