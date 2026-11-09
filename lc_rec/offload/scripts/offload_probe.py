@@ -463,6 +463,31 @@ def run(cli, report, flush):
                 checked += chunk.numel()
         return {"finite": not missing, "checked_numel": checked, "missing_grad_subgroups": missing}
 
+    def verify_loaded_base_samples(engine):
+        # Compare a few existing rows/elements to the hash-verified HF payload.
+        # safe_open slices mmap-backed source scalars, never clones a model tensor.
+        from safetensors import safe_open
+        index=json.loads((cli.model/'model.safetensors.index.json').read_text())['weight_map']
+        evidence=[]
+        for name in sample_names:
+            parameter=named[name];master,_,start,_,_=local_views(engine,parameter)
+            shape=list(parameter.ds_shape);end=min(start+master.numel(),parameter.ds_numel)
+            if len(shape)==2 and name in ('model.embed_tokens.weight','lm_head.weight'):
+                positions=[row*shape[1]+col for row in (0,1,100,31999) for col in (0,7,shape[1]-1)]
+            else:positions=[start+(end-start-1)*i//7 for i in range(8)] if end>start else []
+            positions=sorted({v for v in positions if start<=v<end})
+            actual=cpu_tensor_sample(master,[v-start for v in positions])['values'];expected=[]
+            with safe_open(str(cli.model/index[name]),framework='pt',device='cpu') as f:
+                source=f.get_slice(name)
+                for pos in positions:
+                    if len(shape)==2:
+                        row,col=divmod(pos,shape[1]);value=source[row:row+1,col:col+1]
+                    else:value=source[pos:pos+1]
+                    expected.append(float(value.to(dtype=parameter.dtype).float().reshape(-1)[0]))
+            assert actual==expected,'Base checkpoint sample mismatch: '+name
+            evidence.append({'parameter':name,'global_flat_indices':positions,'actual_master':actual,'expected_source_cast_to_model_dtype':expected,'exact_sample_match':True,'source_shard':index[name]})
+        return evidence
+
     def global_flags(flags, op):
         tensor = torch.tensor(flags, dtype=torch.int32, device=training_args.device)
         dist.all_reduce(tensor, op=op)
@@ -560,6 +585,7 @@ def run(cli, report, flush):
             report['gradient_accumulation_buffer']={'dtype':str(engine.optimizer.grad_partitions_flat_buffer.dtype),'device':str(engine.optimizer.grad_partitions_flat_buffer.device),'numel':engine.optimizer.grad_partitions_flat_buffer.numel()}
             report["initial_optimizer_state"] = state_snapshot(engine)
             report["initial_parameter_samples"] = parameter_samples(engine, False)
+            report['base_weight_sample_verification']=verify_loaded_base_samples(engine)
             original_step = engine.step
 
             def audited_step(*step_args, **step_kwargs):

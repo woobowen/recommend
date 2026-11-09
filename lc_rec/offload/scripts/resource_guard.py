@@ -89,7 +89,7 @@ def main():
                         g=subprocess.run(['nvidia-smi','--query-gpu=index,memory.used,memory.free,utilization.gpu','--format=csv,noheader,nounits'],capture_output=True,text=True,timeout=8)
                         row['nvidia_smi']=g.stdout.strip();row['nvidia_smi_exit']=g.returncode
                         peaks['new_disk_allocated_peak_bytes']=max(peaks['new_disk_allocated_peak_bytes'],row['new_disk_allocated_bytes'])
-                        if row['new_disk_allocated_bytes']>100*1024**3:reason='NEW_DISK_100GIB_BOUND'
+                        if row['new_disk_allocated_bytes']+cfg.get('separate_release_deploy_reserve_bytes',0)>100*1024**3:reason='NEW_DISK_100GIB_BOUND'
                         if row['data_free_bytes']<max(30*1024**3,row['data_total_bytes']//10):reason='DISK_RESERVE_BOUND'
                     peaks['cpu_rss_sum_peak_bytes']=max(peaks['cpu_rss_sum_peak_bytes'],rss)
                     peaks['min_mem_available_bytes']=min(peaks['min_mem_available_bytes'],mem['MemAvailable'])
