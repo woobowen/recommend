@@ -1,0 +1,21 @@
+{
+  "original_observation": {
+    "argv": ["python3", "lc_rec/offload/qwen_20261109/collect_metadata.py", "--tokenizer-payload"],
+    "tool_session_id": 67999,
+    "exit_code": 1,
+    "stderr_excerpt_exact": "RuntimeError: Tokenizer Git blob identity mismatch",
+    "scope": "Qwen small-file collector only; no model loading, GPU operation, or weight download",
+    "root_cause": "Qwen3-8B/tokenizer.json is LFS-managed. Its blobId names the Git LFS pointer, not the 11,422,654-byte payload. The collector incorrectly applied the ordinary Git-blob SHA1 rule to this payload.",
+    "payload_bytes": 11422654,
+    "payload_sha256_observed": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "official_lfs_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+  },
+  "minimal_fix": "If the official API entry contains lfs, verify payload SHA-256 against lfs.sha256; otherwise verify ordinary Git blob SHA1 against blobId. Persist fetch events immediately and retain prior events between calls.",
+  "research_change": false,
+  "gpu_budget_consumed_seconds": 0,
+  "task_round_accounting": "Reported to the main controller for inclusion in the task-wide correction record; this subtask does not allocate an independent repair budget.",
+  "other_observations": [
+    "An initial read-only shell probe used python, which is absent locally; reran with existing python3, without installation.",
+    "web.open could read the official model cards but returned Internal Error for both API URLs; the ordinary HTTPS metadata collector successfully retrieved the official API responses. No proxy/network settings were changed."
+  ]
+}

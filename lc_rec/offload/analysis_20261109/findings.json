@@ -1,0 +1,404 @@
+{
+  "schema": "lc-rec-offload-independent-checkpoint-budget-data-review-v1",
+  "reviewer": "/root/checkpoint_budget; non-author of implementation and prior checkpoint audit",
+  "reviewed_at_utc": "2026-11-09T17:28:12.608546+00:00",
+  "scope": "C2/C3/C4 directed static source review plus reuse of actual prior read-only data receipts. No Git, SSH, GPU, model, full data audit, checkpoint, new package or source modification.",
+  "rule_source": "Explicit external read of /home/addaswsw/recommend/{AGENTS.md,PROJECT_RULES.md,REMOTE_EXECUTION.md}; first shell command ls -la at that entrance",
+  "status": {
+    "checkpoint_static_review": "PASS_WITH_UNRESOLVED_FORMAL_GATES",
+    "checkpoint_save": "NOT TESTED",
+    "checkpoint_resume": "NOT TESTED",
+    "bf16_export": "NOT TESTED",
+    "best_model_reload": "NOT TESTED; static native-format discovery gap",
+    "formal_steps": "PASS_CONDITIONAL_DERIVATION",
+    "formal_runtime": "UNKNOWN_NO_REPRESENTATIVE_MEASUREMENT",
+    "data_dependency": "BLOCKED_FOR_CLEAN_1_TO_1_FORMAL_REPRODUCTION; independent training-prefix GPU probe allowed"
+  },
+  "N_trainable_after_930_sid_rows": 6746034176,
+  "base_safetensors_bytes": 13476876661,
+  "checkpoint_format": {
+    "current_gather16bit": false,
+    "native_tensor_payload_formula": "12N + H across both DP ranks after populated Adam states",
+    "native_major_tensors": [
+      "FP32_FLAT_GROUPS master 4N",
+      "CPUAdam exp_avg 4N",
+      "CPUAdam exp_avg_sq 4N"
+    ],
+    "not_extra_native_payload": [
+      "BF16 ds_tensor partitions",
+      "gradients",
+      "another copy of master in optimizer param_groups"
+    ],
+    "metadata_H": "Nonnegative buffers/metadata/RNG/tokenizer/config/padding/storage/container/filesystem overhead; not a measured or rigorous total upper bound",
+    "two_rank_payload_each": "6N + H_rank",
+    "cpu_parameter_offload_changes_native_formula": false
+  },
+  "disk_payload_cases": {
+    "one_native_12N": {
+      "bytes": 80952410112,
+      "GiB": 75.39280700683594
+    },
+    "one_native_plus_bf16_14N": {
+      "bytes": 94444478464,
+      "GiB": 87.9582748413086
+    },
+    "one_native_plus_fp32_plus_bf16_18N": {
+      "bytes": 121428615168,
+      "GiB": 113.0892105102539
+    },
+    "one_native_plus_original_tmp_and_final_fp32_20N": {
+      "bytes": 134920683520,
+      "GiB": 125.65467834472656
+    },
+    "four_epoch_native_plus_shared_base_48N_B": {
+      "bytes": 337286517109,
+      "GiB": 314.1225474970415
+    },
+    "four_epoch_native_plus_root_native_plus_base_60N_B": {
+      "bytes": 418238927221,
+      "GiB": 389.51535450387746
+    },
+    "five_retained_checkpoint_dirs_plus_root_plus_base_72N_B": {
+      "bytes": 499191337333,
+      "GiB": 464.9081615107134
+    },
+    "one_seed_4epochs_and_root_plus_fp32_and_bf16_66N_B": {
+      "bytes": 458715132277,
+      "GiB": 427.21175800729543
+    },
+    "five_seeds_four_native_each_plus_shared_base_240N_B": {
+      "bytes": 1632525078901,
+      "GiB": 1520.4074596064165
+    },
+    "five_seeds_four_native_and_root_each_plus_shared_base_300N_B": {
+      "bytes": 2037287129461,
+      "GiB": 1897.3714946405962
+    },
+    "five_seeds_five_retained_dirs_and_root_each_plus_base_360N_B": {
+      "bytes": 2442049180021,
+      "GiB": 2274.335529674776
+    },
+    "five_seeds_four_epoch_and_root_plus_selected_bf16_each_310N_B": {
+      "bytes": 2104747471221,
+      "GiB": 1960.1988338129595
+    },
+    "five_seeds_four_epoch_and_root_plus_selected_fp32_and_bf16_each_330N_B": {
+      "bytes": 2239668154741,
+      "GiB": 2085.853512157686
+    },
+    "one_seed_four_native_original_tmp_final_each_plus_root_base_92N_B": {
+      "bytes": 634112020853,
+      "GiB": 590.56283985544
+    },
+    "five_seeds_four_native_original_tmp_final_each_plus_root_shared_base_460N_B": {
+      "bytes": 3116652597621,
+      "GiB": 2902.6089213984087
+    }
+  },
+  "storage_gate": {
+    "current_new_server_file_cap_bytes": 107374182400,
+    "one_native_bare_payload_fits_cap": true,
+    "native_plus_fp32_and_bf16_exceeds_cap": true,
+    "two_native_exceeds_cap": true,
+    "reason_no_save_in_existing_probe": "Probe disables saving and prioritizes bounded model/update feasibility. Bare native75.393GiB is not itself prohibited by100GiB; actual optional save needs remaining task-wide new-file budget, >=max(30GiB,10%filesystem) free afterward, CPU>=40GiB free, time budget and a reviewed restore path. None was executed by this reviewer."
+  },
+  "new_static_findings": [
+    {
+      "id": "C2-01",
+      "severity": "FORMAL_GATE",
+      "claim": "HF4.31 _load_best_model checks standalone weight/adapter files or WEIGHTS_INDEX_NAME before dispatch; gather16bit=false native-only checkpoint normally has none, so the selected-best checkpoint can be missed and warning emitted rather than reloaded. Formal candidate must not be described as selected-best reload verified.",
+      "source": "tf_v4.31.0_trainer.py:2092-2107,2167-2177"
+    },
+    {
+      "id": "C2-02",
+      "severity": "ENGINEERING_GATE",
+      "claim": "Trainer epoch saving calls save_model then direct engine.save_checkpoint; with gather16bit=false the first call already falls back to engine.save_checkpoint. Same directory and default global_step tag mean repeated writes, not another distinct native tensor copy.",
+      "source": "tf_v4.31.0_trainer.py:2294-2298,2753-2766; ds_engine.py:3304-3308"
+    },
+    {
+      "id": "C2-03",
+      "severity": "PRIOR_REPORT_WORDING_CORRECTION",
+      "claim": "Prior checkpoint audit incorrectly describes vendor old zero_to_fp32 as retaining all ranks12N before dropping moments. Actual vendor parser drops each loaded rank nonmaster fields inside the loop and concatenates the rank master; no full12N simultaneity is established. It lacks mmap/lazy sharding and later reconstructs a separate full FP32 state. Exact RAM peak remains unmeasured.",
+      "source": "vendor/original/convert/zero_to_fp32.py:150-196,407-449"
+    },
+    {
+      "id": "C2-04",
+      "severity": "RESUME_GATE",
+      "claim": "DeepSpeed load_checkpoint warns save-then-load on same partitioned ZeRO3 engine needs pristine/reinitialized engine; same DP world size is required for ordinary optimizer restore. Static API presence is insufficient. Epoch checkpoint Trainer RNG is separate from DeepSpeed state, and final root save must not be presumed to contain the epoch RNG artifacts.",
+      "source": "ds_engine.py:2928-2956,3169-3174; tf_v4.31.0_trainer.py:2370-2393,2240-2277; finetune.py:105-106"
+    }
+  ],
+  "conditional_formal_schedule": {
+    "joint_rows": 221225,
+    "task_rows": {
+      "seqrec": 131837,
+      "item2index": 9922,
+      "index2item": 9922,
+      "fusionseqrec": 20000,
+      "itemsearch": 24772,
+      "preferenceobtain": 24772
+    },
+    "world_size": 2,
+    "micro_batch": 1,
+    "accumulation": 64,
+    "effective_batch": 128,
+    "standard_even_padding_rows_per_rank": 110613,
+    "updates_per_epoch_floor": 1728,
+    "epochs": 4,
+    "scheduler_steps": 6912,
+    "warmup_updates": 70,
+    "five_seed_optimizer_updates": 34560,
+    "actual_formal_loader_or_training_executed": false,
+    "qualifier": "HF4.31 floor/ceil derivation under unchanged joint rows and ordinary Accelerate even sharding; not a trace of full training or proof every example used exactly4 times."
+  },
+  "conditional_time_model": {
+    "tau128_six": "Measured steady-state seconds for a representative full-six-task effective128 update, unavailable at this review cutoff",
+    "one_seed_seconds": "T_load + 6912*tau128_six + sum_e(V_e + C_e) + T_best_reload + C_root + T_export + T_test17",
+    "five_seed_sequential_seconds": "sum_seed(T_load_seed +6912*tau128_six_seed + sum_e(V_e_seed +C_e_seed) +T_best_reload_seed+C_root_seed+T_export_seed+T_test17_seed)",
+    "no_fake_update_time": true,
+    "seqrec_only_not_full_six_task": "Even a measured SeqRec-only128 update is a conditional surrogate; answers/input lengths, dynamic prompts, CPU/PCIe/NUMA, and saves/evals are different. A micro1 accumulation1 step is not a128 update timing."
+  },
+  "data_reuse": {
+    "prior_cpu_audit_sha256": "0de5d79ef46b0b56d70f29343396da60de43faf6dcf9b9cbb55b75e89d01d8fe",
+    "aux_pairing_sha256": "ff3010700714a1e5ca563e4fa69015e440f20e5724892e86d95018f1112b65ef",
+    "users": 24772,
+    "train_mismatch": 12233,
+    "train_target_validation": 3608,
+    "train_target_test": 1623,
+    "train_target_in_training": 7002,
+    "train_history_contains_validation": 1623,
+    "test_mismatch": 7473,
+    "test_target_training": 4037,
+    "test_target_validation": 3436,
+    "flags_can_overlap": true,
+    "source_provenance_still_unknown": true,
+    "sid_items": 9922,
+    "unique_sid": 9897,
+    "collision_groups": 23,
+    "extra_items_due_to_collisions": 25,
+    "original_constraint": "position-only, not canonical SID trie",
+    "assets_modified": false,
+    "action": "Keep assets and raw failed receipts; request a bound matching author inter/user/SID/processing version before formal clean1:1 claims. No reordering, target fix, removal or regeneration."
+  },
+  "six_task_loss_faithfulness": {
+    "unchanged": "same causal CE, response-only mask, joint ConcatDataset and shared model",
+    "original": "8ranks x micro8 x accumulation2 = mean of16 eight-example token means",
+    "candidate": "2ranks x micro1 x accumulation64 = mean of128 per-example token means",
+    "formula": "L=(1/(W*A))*sum_ra[(sum_i_in_Bra s_i)/(sum_i_in_Bra n_i)], n_i excludes ignored labels AFTER causal shift",
+    "strict_1_to_1": "NOT ESTABLISHED when response lengths vary; not just roundoff. No normalization change authorized or performed. Same global128 does not fix weighting.",
+    "reference": "lc_rec/offload/review/loss_reduction_review.json"
+  },
+  "source_manifest": [
+    {
+      "path": "lc_rec/vendor/original/finetune.py",
+      "bytes": 3482,
+      "sha256": "df2753b288ce8bfdc4d3e23d8df9dfe8d01ba6312d638214bb5bd9ee6f4dc9d3"
+    },
+    {
+      "path": "lc_rec/vendor/original/utils.py",
+      "bytes": 8564,
+      "sha256": "c6ce8546daca8122ec2eb5da1bc6674667af710db8e41abd7148e4162ac52137"
+    },
+    {
+      "path": "lc_rec/vendor/original/data.py",
+      "bytes": 28009,
+      "sha256": "cfd7733325670792c0da32393752c49116cd2b0ce097ffd629cda1c224bddecc"
+    },
+    {
+      "path": "lc_rec/vendor/original/collator.py",
+      "bytes": 2283,
+      "sha256": "e1ec6dec9aadf3c123ea45656fe2c58dc102ac075ca78bf9dff7df47cb5c29b8"
+    },
+    {
+      "path": "lc_rec/vendor/original/convert/convert.sh",
+      "bytes": 818,
+      "sha256": "a87b82605cdc1faa8a5425404e7553ba33f65f47a0c53ff5828d7803b5b6cd3b"
+    },
+    {
+      "path": "lc_rec/vendor/original/convert/convert.py",
+      "bytes": 556,
+      "sha256": "1fb621cd17a1ce44dd91caf801d5434c890a67ae695a6a62c91e209bd102380e"
+    },
+    {
+      "path": "lc_rec/vendor/original/convert/zero_to_fp32.py",
+      "bytes": 25081,
+      "sha256": "31eb8f8a8fa5908640dd145207437579d7b1fd88e2d2d05d732f25a5cde8b0ba"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/ds_stage3.py",
+      "bytes": 154185,
+      "sha256": "93db9b9ff28724a1cff6b38c94c01a83db8fa677e71e941567f9244c9af7c724"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/ds_engine.py",
+      "bytes": 189329,
+      "sha256": "88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/ds_parameter_offload.py",
+      "bytes": 26261,
+      "sha256": "6de9bc8c4260e6d828a91b007851fd26e4b99ea16ff0ed93fe3662436dc056e1"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/ds_partition_parameters.py",
+      "bytes": 106381,
+      "sha256": "eea66f6cd419107a922d869b7e49f4cb4322870c95f5c6a43dee83ebcdd83a1a"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/ds_v0.16.9_cpu_adam.py",
+      "bytes": 7520,
+      "sha256": "511bb70fc15c78c212c83ffee3d3203d85911c9d924b9f5d797eec1aa9d000a4"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/ds_torch_checkpoint_engine.py",
+      "bytes": 1080,
+      "sha256": "4887c6a45c798a10c9380c4b2e809f365e63f42f8090e8c8eb9c58b56acf03b9"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/ds_v0.16.9_zero_to_fp32.py",
+      "bytes": 33272,
+      "sha256": "46497565ccf2b4a8b1f6f18c8341042f3749605a94335c81f69df1bd268af64f"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/torch_v2.6.0_optimizer.py",
+      "bytes": 47475,
+      "sha256": "354f41f784630a031195509d6b65bd5faaaa7a92402102c3b4c50423082e7ec9"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/tf_v4.31.0_trainer.py",
+      "bytes": 185906,
+      "sha256": "24a579e7af77c3699020ac16c1b4ad16d64aa584dafe52a90d0807c381174f31"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/tf_v4.31.0_training_args.py",
+      "bytes": 127381,
+      "sha256": "ac082ac7b3d3d1c6c7fc1204d2541c310db6fdc4eac538400362e44d74de59b7"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/tf_v4.31.0_deepspeed.py",
+      "bytes": 16966,
+      "sha256": "3db23e2d7699c6ab20dbd7d4695d270f5f85cf659566dd6d38c05dc8e8385ed0"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/accelerate_v0.21.0_accelerator.py",
+      "bytes": 129438,
+      "sha256": "933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/CHECKPOINT_STORAGE_STATIC_AUDIT.md",
+      "bytes": 8353,
+      "sha256": "6ff54d81a39c3dc677cb21bb7ca4f8ed53fd7eb740649021827fd14a34565d74"
+    },
+    {
+      "path": "lc_rec/offload/evidence/source_audit/CHECKPOINT_STORAGE_BUDGET_ERRATUM.json",
+      "bytes": 967,
+      "sha256": "0789679f066094d684a3095101dd55497b89cdd7626c04727a528b75f5f19506"
+    },
+    {
+      "path": "lc_rec/offload/evidence/preparation/checkpoint_storage_clarification.json",
+      "bytes": 1460,
+      "sha256": "9c173b57635cba7f327e5cabece261e65fc96cb9ba38616ca91bba88953e7ace"
+    },
+    {
+      "path": "lc_rec/offload/evidence/preparation/formal_scheduler_derivation.json",
+      "bytes": 1616,
+      "sha256": "8c28a9054762dd07f624edef53f13651e57947c4744c07acc4d4acc19eaf5873"
+    },
+    {
+      "path": "lc_rec/offload/config/ds_optimizer_only.json",
+      "bytes": 783,
+      "sha256": "73bc44b25bf360ad6677a580cded073d8497e157b2e4215890e05edc216e31e2"
+    },
+    {
+      "path": "lc_rec/offload/config/ds_optimizer_parameter.json",
+      "bytes": 896,
+      "sha256": "ab46e038d62a804b4f1507f309652bc4ce2f44dadb3718f8481b089f5b684fc5"
+    },
+    {
+      "path": "lc_rec/offload/config/formal_candidate.json",
+      "bytes": 4893,
+      "sha256": "5a2e8a31ce8053a4a934d1cd50cbc17c6b30cb1cd86513e4dda3eccbfa26ea8d"
+    },
+    {
+      "path": "lc_rec/offload/scripts/offload_probe.py",
+      "bytes": 46978,
+      "sha256": "9cfb74c22bc1176e8d80c325170ecb35eb7f3600797def4aac96f8730f822f53"
+    },
+    {
+      "path": "lc_rec/evidence/cpu_audit/output/real_data_audit.json",
+      "bytes": 1403522,
+      "sha256": "0de5d79ef46b0b56d70f29343396da60de43faf6dcf9b9cbb55b75e89d01d8fe"
+    },
+    {
+      "path": "lc_rec/evidence/aux_pairing/output/auxiliary_pairing.json",
+      "bytes": 35517,
+      "sha256": "ff3010700714a1e5ca563e4fa69015e440f20e5724892e86d95018f1112b65ef"
+    },
+    {
+      "path": "lc_rec/evidence/source_audit/aux_source_followup.md",
+      "bytes": 9139,
+      "sha256": "608e60800f37c77e2b069397e2e7adfb4934d7104bc902b8252612e521834a56"
+    },
+    {
+      "path": "lc_rec/offload/review/loss_reduction_review.json",
+      "bytes": 12255,
+      "sha256": "ed13b13b55679f38a1fe99fc8812ca70028299206372d5de259b8c8c73ba7147"
+    },
+    {
+      "path": "lc_rec/offload/review/JOINT_TRAINING_SOURCE_EVIDENCE.md",
+      "bytes": 8090,
+      "sha256": "9b27efc52ef1e920ff371b7161059dc3be7de6a3a5dbaba1317a473c87ab833f"
+    }
+  ],
+  "validation": {
+    "all_prior_checkpoint_source_hashes_match": true,
+    "prior_source_checks": [
+      {
+        "file": "ds_stage3.py",
+        "matches_prior_identity": true
+      },
+      {
+        "file": "ds_engine.py",
+        "matches_prior_identity": true
+      },
+      {
+        "file": "ds_partition_parameters.py",
+        "matches_prior_identity": true
+      },
+      {
+        "file": "ds_parameter_offload.py",
+        "matches_prior_identity": true
+      },
+      {
+        "file": "ds_v0.16.9_cpu_adam.py",
+        "matches_prior_identity": true
+      },
+      {
+        "file": "torch_v2.6.0_optimizer.py",
+        "matches_prior_identity": true
+      },
+      {
+        "file": "tf_v4.31.0_trainer.py",
+        "matches_prior_identity": true
+      },
+      {
+        "file": "accelerate_v0.21.0_accelerator.py",
+        "matches_prior_identity": true
+      },
+      {
+        "file": "ds_torch_checkpoint_engine.py",
+        "matches_prior_identity": true
+      },
+      {
+        "file": "ds_v0.16.9_zero_to_fp32.py",
+        "matches_prior_identity": true
+      }
+    ],
+    "scheduler_arithmetic_assertions": true,
+    "storage_arithmetic_assertions": true,
+    "source_chain_symbol_assertions": true,
+    "source_files_readable": true,
+    "no_model_or_checkpoint_runtime_claim": true
+  },
+  "installations": []
+}

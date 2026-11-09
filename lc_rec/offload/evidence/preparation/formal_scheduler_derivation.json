@@ -1,0 +1,37 @@
+{
+  "kind": "CONDITIONAL_SOURCE_DERIVATION_NOT_FORMAL_RUN",
+  "audited_base_commit": "2e0e26633b58d44cc4595417f4a054f6bb6b7e77",
+  "prior_cpu_audit_sha256": "0de5d79ef46b0b56d70f29343396da60de43faf6dcf9b9cbb55b75e89d01d8fe",
+  "prior_loader_counts": {
+    "status": "PASS",
+    "concat_rows": 221225,
+    "task_rows": {
+      "seqrec": 131837,
+      "item2index": 9922,
+      "index2item": 9922,
+      "fusionseqrec": 20000,
+      "itemsearch": 24772,
+      "preferenceobtain": 24772
+    },
+    "full_validation_text_rows_constructed": 49544,
+    "full_validation_executed": false,
+    "note": "Constructing official validation strings does not run validation loss or model inference."
+  },
+  "trainer_source_sha256": "24a579e7af77c3699020ac16c1b4ad16d64aa584dafe52a90d0807c381174f31",
+  "trainer_source_lines": "1562-1577: length floor divided by accumulation, max_steps ceil(epochs*updates_per_epoch)",
+  "micro_batch": 1,
+  "world_size": 2,
+  "gradient_accumulation_steps": 64,
+  "standard_shard_padding_dataloader_rows_per_rank": 110613,
+  "updates_per_epoch_floor": 1728,
+  "four_epoch_scheduler_steps": 6912,
+  "warmup_updates": 70,
+  "first_update_lr": 0.0,
+  "second_update_lr": 7.142857142857143e-07,
+  "assumptions": [
+    "no drop_last; unchanged221225 joint training rows",
+    "standard Accelerate split/pad semantics; full formal dataloader not executed this task",
+    "one scheduler tick per optimizer update, not world-size multiplied"
+  ],
+  "probe_scope": "only256 fixed real SeqRec prefixes; localmax_steps2 but explicitly use this conditional4epoch scheduler, not a2step convergence schedule"
+}

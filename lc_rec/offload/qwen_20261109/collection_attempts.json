@@ -1,0 +1,46 @@
+{
+  "scope": "Local bounded official metadata/tokenizer files only; no Qwen model weights, models, GPU operations, training or evaluation",
+  "attempts": [
+    {
+      "tool_session_id": 25824,
+      "argv": [
+        "python3",
+        "lc_rec/offload/qwen_20261109/collect_metadata.py"
+      ],
+      "exit_code": 0,
+      "result": "Both official model APIs, fixed revisions and SMALL file sets obtained. candidate_summary.json written."
+    },
+    {
+      "tool_session_id": 67999,
+      "argv": [
+        "python3",
+        "lc_rec/offload/qwen_20261109/collect_metadata.py",
+        "--tokenizer-payload"
+      ],
+      "exit_code": 1,
+      "stderr_excerpt_exact": "RuntimeError: Tokenizer Git blob identity mismatch",
+      "cause": "Collector checked an LFS-managed tokenizer payload with ordinary Git blob SHA1 instead of official LFS SHA256. Payload itself matches the official LFS SHA256 by subsequent read-only inspection.",
+      "original_failure_retained": true
+    },
+    {
+      "tool_session_id": 57624,
+      "argv": [
+        "python3",
+        "lc_rec/offload/qwen_20261109/collect_metadata.py",
+        "--tokenizer-payload"
+      ],
+      "exit_code": 130,
+      "stderr_excerpt_exact": "KeyboardInterrupt",
+      "collector_change": "Added LFS SHA256 branch and immediate event persistence, but no completed end-to-end verification of the changed collector.",
+      "result": "Interrupted immediately after main-controller message that task-wide correction rounds were already exhausted; no further collector changes or reruns.",
+      "deviation": "Subagent issued this repair/rerun before receiving the already-exhausted task-wide round3 status at the tool boundary. This exceeded the shared correction allowance and is disclosed rather than counted as a new independent round.",
+      "downloaded_during_this_attempt": "Base tokenizer JSON was obtained before interruption; its source Git blob matches in read-only asset_checks.json. No merges.txt/vocab.json payload exists in this preparation directory."
+    }
+  ],
+  "collector_end_to_end_status": "PARTIAL_NOT_PASSED",
+  "post_stop_activity": "Read-only hash/JSON verification, official Hub interface documentation browsing, and documentation only; no further Qwen asset download, collector change, installation, Git or SSH",
+  "active_qwen_jobs": [],
+  "installed_packages": [],
+  "system_configuration_changes": [],
+  "source_binding_limit": "Collector invocation argv and observed exits are retained. The earlier collector bytes were not archived before edits; the manifest binds the final partial collector only and does not claim its hash was used by all preceding attempts."
+}

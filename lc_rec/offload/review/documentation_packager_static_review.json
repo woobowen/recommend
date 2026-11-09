@@ -1,0 +1,124 @@
+{
+  "schema": "independent-documentation-packager-static-review-v1",
+  "time_utc": "2026-11-09T05:53:06.114819+00:00",
+  "reviewer": "/root/independent_review; non-author; no Git/server/implementation changes",
+  "status": "PASS_STATIC_WITH_RUNTIME_AND_DELIVERY_PENDING",
+  "files": [
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/offload/FAITHFULNESS.md",
+      "bytes": 5489,
+      "sha256": "57cc5a52a17ff665241d3df82c3b59e89eb061706836817172f3a0c1cd44ca70"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/offload/evidence/source_audit/CHECKPOINT_STORAGE_STATIC_AUDIT.md",
+      "bytes": 8353,
+      "sha256": "6ff54d81a39c3dc677cb21bb7ca4f8ed53fd7eb740649021827fd14a34565d74"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/offload/evidence/preparation/checkpoint_storage_clarification.json",
+      "bytes": 1460,
+      "sha256": "9c173b57635cba7f327e5cabece261e65fc96cb9ba38616ca91bba88953e7ace"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/offload/evidence/preparation/download_timing_scope.json",
+      "bytes": 715,
+      "sha256": "712ce608bab52da89eba7080c0e7973268f232937d31dad108cc42398c90cf06"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/offload/scripts/build_audit_zip.py",
+      "bytes": 7410,
+      "sha256": "27a04ace8422faf588632f65cb70b52baf1b9f7da2f872ee6e42d93cb2864a80"
+    }
+  ],
+  "prepared_source_commit": "f542f1b1a4ba4025b68379da9e88577c2553e7d7",
+  "prepared_identity_limit": "Candidate snapshot/deployment only; it is not an actual GPU RUN_COMMIT. Documentation corrections are intended for later DELIVERY_COMMIT; probe/config bytes remain separately fixed.",
+  "faithfulness": {
+    "status": "PASS_STATIC",
+    "evidence": "Directly read full table plus prior fixed Trainer/LLaMA/DS/Accelerate source derivations. Model/data tasks and technical-vs-formal scope separated; initialization phrasing now explicitly distinguishes BF16 discrete normal sampling from FP32 then cast; variable answer-length loss weighting, zeroLR first update, no_sync/scheduler and no save/reload/generation limits correctly disclosed.",
+    "does_not_prove": "No model update, real long-input resource feasibility, strict six-task equivalence, save/resume, metrics, or paper reproduction proven by this document."
+  },
+  "checkpoint_storage": {
+    "status": "PASS_STATIC",
+    "original_code_directly_checked": [
+      "DS_stage3._rigid_state_dict serializes optimizer state and FP32_FLAT_GROUPS, no BF16 parameter shard or gradient payload field",
+      "Torch2.6 optimizer.state_dict replaces parameter tensors in param_groups by IDs; CPUAdam state contains step/m/v",
+      "DS save_checkpoint calls checkpoint_event_prologue; parameter data becomes empty(0); model-state includes placeholders/buffers/shape/metadata; separate zero optimizer files hold master/m/v",
+      "TorchCheckpointEngine directly torch.save, no second BF16 tensor export",
+      "Accelerate0.21 gather16bit=false raises; TF4.31 save_model catches and invokes native DS save_checkpoint",
+      "Original finetune final root save_model can add a root fifth native set outside checkpoint-* rotation",
+      "Original convert.sh retains every tmp/final FP32 conversion; convert.py has no dtype conversion kwarg"
+    ],
+    "main_payload": "12N=FP32 master4N+m4N+v4N for all ranks combined, plus H (metadata/buffers/padding/storage/filesystem etc.). This is static arithmetic, not actual serialized file size.",
+    "14N": "Conditional native12N plus one separately retained BF16 export2N; not native fixed format, not unconditional peak bound.",
+    "18N": "Conditional native12N plus FP32 intermediate4N plus BF16 export2N, all retained.",
+    "memory_limit": "CPU RAM/page cache/gather/serialization transient must be budgeted independently; no assertion of full extra12N RAM copy on native save. No measured checkpoint or reload exists.",
+    "own_arithmetic_bytes": {
+      "12N": 80952410112,
+      "14N": 94444478464,
+      "18N": 121428615168,
+      "48N+B": 337286517109,
+      "54N+B": 377762722165,
+      "60N+B": 418238927221,
+      "80N+B": 553159610741,
+      "92N+B": 634112020853
+    },
+    "budget_erratum_verified": "Only old200GiB wording replaced by this-task100GiB plus previous-task caveat; reverse replacement exactly restores old SHA4166a501...; clarification SHA matches current6ff54d81....",
+    "source_closure": [
+      {
+        "name": "checkpoint_source_identity.json",
+        "repo_equals_author_source": true,
+        "sha256": "44a84ac6b3ac29047cbeda59a4dbccf08ff76afa12d7e1e9bdb728d95b762332"
+      },
+      {
+        "name": "checkpoint_static_payload_arithmetic.json",
+        "repo_equals_author_source": true,
+        "sha256": "946d7943a61a9ef7a9c02ef201b67565a47b8f4cd372b13947a3de038bbee4b4"
+      },
+      {
+        "name": "ds_torch_checkpoint_engine.py",
+        "repo_equals_author_source": true,
+        "sha256": "4887c6a45c798a10c9380c4b2e809f365e63f42f8090e8c8eb9c58b56acf03b9"
+      },
+      {
+        "name": "ds_v0.16.9_zero_to_fp32.py",
+        "repo_equals_author_source": true,
+        "sha256": "46497565ccf2b4a8b1f6f18c8341042f3749605a94335c81f69df1bd268af64f"
+      },
+      {
+        "name": "checkpoint_extracted_source_verification.json",
+        "repo_equals_author_source": true,
+        "sha256": "e56161867efeadcc77ac949c979a6da95fd849bcef4f6aee7a72c9f59174c00d"
+      },
+      {
+        "name": "CHECKPOINT_STORAGE_BUDGET_ERRATUM.json",
+        "repo_equals_author_source": true,
+        "sha256": "0789679f066094d684a3095101dd55497b89cdd7626c04727a528b75f5f19506"
+      }
+    ]
+  },
+  "packager": {
+    "status": "PASS_STATIC_ONLY; actual archive still pending",
+    "script_sha256": "27a04ace8422faf588632f65cb70b52baf1b9f7da2f872ee6e42d93cb2864a80",
+    "fixed_source": "Full40hex commit required; Git reads ls-tree/cat-file blob from fixed commit, selects LC offload/vendor/relevant tiny original asset metadata; no working-tree bytes silently substituted. Source bytes and blob IDs bound in manifest.",
+    "paths": "Prefixed source/publication relative POSIX members; rejects absolute/parent traversal/backslash; rejects symlink/submodule Git modes and external receipt symlinks. Fresh temporary extraction prevents existing target symlink traversal.",
+    "content": "Rejects LFS pointers and large source/receipt blobs. Actual stage/member inventory still must verify no full dataset/weights/checkpoint or sensitive non-pattern values slipped in.",
+    "hashes": "Manifest excludes itself, records every other member byte length/SHA256; ZIP overall hash outside; no duplicate ZIP names; actual testzip and extraction then complete member/hash recheck implemented.",
+    "secrets": "Private-key/GitHub/HF/AWS-access-key/Bearer patterns checked before package write; pattern-only scan is not proof against every credential representation; actual stage/receipt inspection remains required.",
+    "pending_external_binding": "Builder includes required DELIVERY_RECEIPT but does not validate its semantic commit/ref correctness. Final actual receipt/GitHub ref/blob/export and package audit must establish these separately. No blocker if actual receipts are correctly supplied and independently checked.",
+    "no_deterministic_failure_found": true
+  },
+  "download_timing": {
+    "status": "DISCLOSED_STATIC_LIMITATION",
+    "evidence": "download_timing_scope.json explicitly prohibits comparing persisted global monotonic across WSL restart; individual attempts/timestamps needed. Raw journal preserved and budget counters not reset.",
+    "pending": "Final cumulative body bytes, completed identities/attempt durations and final stop state must be reviewed later; current transfer progress is not complete model evidence."
+  },
+  "still_pending": [
+    "Complete pinned model payload identity",
+    "Actual LLaMA optimizer-only run and any synthetic stress evidence",
+    "GPU/time/CPU/swap/disk actual resource and cleanup terminal proof",
+    "New delivery commit/server mapping/fixed GitHub ref+blob independent readback",
+    "Final real ZIP CRC/extract/hash/member/secret and Windows path verification"
+  ],
+  "old_data": "Inherited verified earlier asset/pairing/SID findings; no re-audit in this review",
+  "rounds": "No extra task correction round or compute budget from this read-only review; documentation errata are disclosed and no runtime code or prior job state rewritten."
+}

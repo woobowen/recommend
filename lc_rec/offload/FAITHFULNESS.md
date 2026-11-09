@@ -6,7 +6,7 @@
 
 | 项目 | 作者原版 | 本轮 CPU Offload 候选 | 忠实性结论 |
 |---|---|---|---|
-| 模型及初始化 | huggyllama/llama-7b；基础词表32000，normal初始化新增SID行 | 同一模型 revision `4782ad278652c7c71b72204d462d6d01eaaf7549`；真实930个SID token；先启用ZeRO3/BF16再resize | 模型身份和初始化分布不变；新增行的BF16初始化、随机数消费和舍入与原版晚转换的FP32初始化不同，不能称逐位或严格初始化轨迹一致 |
+| 模型及初始化 | huggyllama/llama-7b；基础词表32000，normal初始化新增SID行 | 同一模型 revision `4782ad278652c7c71b72204d462d6d01eaaf7549`；真实930个SID token；先启用ZeRO3/BF16再resize | 模型身份不变；仍用legacy normal初始化，initializer_range设定相同。直接BF16采样与FP32后转换的离散分布、随机数消费和舍入不同，不能称逐位或严格初始化轨迹一致 |
 | 全参／冻结 | 全模型参数训练，输入embedding与lm_head不共享 | 所有参数requires_grad=True，保持untied；跨rank和新增行须实际检查 | 目标范围不变；是否真实更新必须看模型作业证据 |
 | 六任务及采样 | 一个ConcatDataset、一个模型、一个Trainer/optimizer；样本数与随机模板来自原版loader | 正式候选保留六任务和采样；技术探针仅固定256条真实训练SeqRec prefix | 不将探针冒充六任务训练；不采用六次顺序微调。零采样值表示不限制，不是零条 |
 | 优化器和更新规则 | Trainer AdamW/adamw_torch；lr5e-5、wd.01、betas(.9,.999)、eps1e-8、clip1.0；cosine/warmup.01 | Accelerate0.21映射为DeepSpeedCPUAdam；保留原Trainer衰减/免衰减参数组；AdamW模式、bias correction、FP32 master/m/v在CPU | 算法对应；AVX512/FMA与torch AdamW实现舍入不同。小张量实测只支持窄范围验证，不能代替7B模型更新 |

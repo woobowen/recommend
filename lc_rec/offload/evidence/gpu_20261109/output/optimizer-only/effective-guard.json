@@ -1,0 +1,52 @@
+{
+  "candidate": "optimizer-only",
+  "single_gpu_seconds": 5354,
+  "runner_outer_timeout_seconds": 5400,
+  "all_gpu_seconds": 7200,
+  "prior_stage_a_seconds": 305,
+  "prior_stage_a_scope": "Conservative sum of all GPU-visible environment-job wall times plus120s for other CUDA-capability/native-link/pin readbacks; CPU-only r0 not charged",
+  "cpu_reserve_bytes": 42949672960,
+  "task_vm_swap_limit_bytes": 67108864,
+  "host_swap_io_limit_bytes": 268435456,
+  "new_disk_peak_bytes_limit": 107374182400,
+  "budget_ledger": "/home/bwwu/lc-rec/offload-20261108/gpu-budget.json",
+  "new_disk_roots": [
+    "/data/bwwu/envs/lc-rec-offload-20261108",
+    "/data/bwwu/lc-rec/offload-20261108",
+    "/home/bwwu/lc-rec/offload-20261108",
+    "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r0",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r1",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r2",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-environment-r3",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-optimizer-only-r0",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261108-optimizer-parameter-r0",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-rec-offload-20261109-bounded/output"
+  ],
+  "disk_measurement": "sampled st_blocks, not an exact instantaneous peak; includes reused tiny model metadata conservatively; release/deploy size recorded separately <1GiB and reserve charged below",
+  "separate_release_deploy_reserve_bytes": 1073741824,
+  "seed": 42,
+  "optimizer_updates_max": 2,
+  "world_size": 2,
+  "gpu_indices": [
+    0,
+    1
+  ],
+  "micro_batch": 1,
+  "accumulation": 64,
+  "effective_batch": 128,
+  "training_dataset_scope": "fixed256 real SeqRec prefixes from author train split; formal6-task candidate not executed",
+  "no_formal_checkpoint": true,
+  "no_eval": true,
+  "no_generation": true,
+  "monitor_interval_seconds": 5,
+  "synthetic_length_pressure": {
+    "enabled": true,
+    "tokens": 2048,
+    "real_training_example": false,
+    "optimizer_updates": 0,
+    "after_two_real_updates_only": true,
+    "skip_if_any_rank_process_elapsed_seconds_at_least": 4800,
+    "loss": "same model CE, only last4SID+EOS supervised; no engine.step"
+  }
+}

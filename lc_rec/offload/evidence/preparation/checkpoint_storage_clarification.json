@@ -1,7 +1,7 @@
 {
   "kind": "STATIC_SOURCE_NOT_RUNTIME",
   "source_report": "evidence/source_audit/CHECKPOINT_STORAGE_STATIC_AUDIT.md",
-  "source_sha256": "4166a5014d6f12032748715ffb812cd710856859c7535debf40042c2e8efb283",
+  "source_sha256": "6ff54d81a39c3dc677cb21bb7ca4f8ed53fd7eb740649021827fd14a34565d74",
   "parameters": 6746034176,
   "actual_native_zero3_primary_payload_bytes_per_checkpoint_12N": 80952410112,
   "native_excludes": "BF16 partitions and gradients; metadata/padding/buffers/scheduler/RNG add H",
@@ -11,5 +11,6 @@
   "official_final_root_save_risk": "HF4.31 with gather16bit=false can add fifth native12N outside checkpoint-* rotation; retain original policy and obtain new budget before any formal seed",
   "original_conversion_risk": "Original convert.sh keeps FP32 temporary and FP32 final files per checkpoint; default no cleanup, substantially larger. See source report. No conversion attempted.",
   "cpu_parameter_offload_static_ds_host_formula_bytes": 182142922752,
-  "time_or_runtime_gpu_peaks": "UNKNOWN; no model updates yet"
+  "time_or_runtime_gpu_peaks": "UNKNOWN; no model updates yet",
+  "budget_erratum": "evidence/source_audit/CHECKPOINT_STORAGE_BUDGET_ERRATUM.json; prepared-source report had previous-task200GiB wording; current-task limit100GiB, no runtime config change"
 }
