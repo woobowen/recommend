@@ -19,6 +19,10 @@ def meminfo():
     return {x.split(':',1)[0]:int(x.split()[1])*1024 for x in Path('/proc/meminfo').read_text().splitlines() if len(x.split())>=2}
 
 
+def swap_io():
+    return {n:int(v) for n,v in (line.split() for line in Path('/proc/vmstat').read_text().splitlines()) if n in ('pswpin','pswpout')}
+
+
 def allocated(roots):
     total=0
     for root in roots:
@@ -49,13 +53,13 @@ def main():
         elapsed=sum(r['elapsed_seconds'] for r in ledger['runs'])+ledger['prior_stage_a_seconds']
         limit=min(cfg['single_gpu_seconds'],cfg['all_gpu_seconds']-elapsed)
         assert limit>0
-        baseline=meminfo();assert baseline['MemAvailable']>=cfg['cpu_reserve_bytes']
+        baseline=meminfo();baseline_swap_io=swap_io();page_size=os.sysconf('SC_PAGE_SIZE');assert baseline['MemAvailable']>=cfg['cpu_reserve_bytes']
         start=time.monotonic();entry={'job_id':a.job_id,'candidate':cfg['candidate'],'argv':command,'start_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'limit_seconds':limit}
         ledger['runs'].append(entry);atomic(ledger_path,ledger)
         child=subprocess.Popen(command,stdin=subprocess.DEVNULL)
         owner=psutil.Process(child.pid);tracked={(owner.pid,owner.create_time()):owner};reason=None
         roots=[Path(r) for r in cfg['new_disk_roots']]
-        peaks={'rss_bytes':0,'cpu_rss_sum_peak_bytes':0,'min_mem_available_bytes':baseline['MemAvailable'],'new_disk_allocated_peak_bytes':0,'max_swap_used_increase_bytes':0}
+        peaks={'cpu_rss_sum_peak_bytes':0,'min_mem_available_bytes':baseline['MemAvailable'],'new_disk_allocated_peak_bytes':0,'max_swap_used_increase_bytes':0,'task_vm_swap_peak_bytes':0}
         samples=0
         try:
             with (out/'resource-samples.jsonl').open('a',buffering=1) as stream:
@@ -69,12 +73,16 @@ def main():
                         try:
                             if q.create_time()==ident[1] and q.is_running():now.append(q)
                         except psutil.Error:pass
-                    rss=0
+                    rss=0;task_swap=0
                     for q in now:
-                        try:rss+=q.memory_info().rss
+                        try:
+                            rss+=q.memory_info().rss
+                            for line in Path('/proc',str(q.pid),'status').read_text().splitlines():
+                                if line.startswith('VmSwap:'):task_swap+=int(line.split()[1])*1024
                         except psutil.Error:pass
                     swap_increase=max(0,(baseline['SwapFree']-mem['SwapFree']))
-                    row={'elapsed_seconds':stamp,'mem_available_bytes':mem['MemAvailable'],'task_tree_rss_sum_bytes':rss,'swap_used_increase_bytes':swap_increase,'tracked_pids':[q.pid for q in now]}
+                    io=swap_io();io_delta={n:(io[n]-baseline_swap_io[n])*page_size for n in io}
+                    row={'elapsed_seconds':stamp,'mem_available_bytes':mem['MemAvailable'],'task_tree_rss_sum_bytes':rss,'swap_used_increase_bytes':swap_increase,'task_vm_swap_bytes':task_swap,'host_swap_io_delta_bytes':io_delta,'tracked_pids':[q.pid for q in now]}
                     if samples%3==0:
                         row['new_disk_allocated_bytes']=allocated(roots)
                         v=os.statvfs('/data/bwwu');row['data_free_bytes']=v.f_bavail*v.f_frsize;row['data_total_bytes']=v.f_blocks*v.f_frsize
@@ -86,9 +94,12 @@ def main():
                     peaks['cpu_rss_sum_peak_bytes']=max(peaks['cpu_rss_sum_peak_bytes'],rss)
                     peaks['min_mem_available_bytes']=min(peaks['min_mem_available_bytes'],mem['MemAvailable'])
                     peaks['max_swap_used_increase_bytes']=max(peaks['max_swap_used_increase_bytes'],swap_increase)
+                    peaks['task_vm_swap_peak_bytes']=max(peaks['task_vm_swap_peak_bytes'],task_swap)
                     stream.write(json.dumps(row)+'\n');samples+=1
                     if mem['MemAvailable']<cfg['cpu_reserve_bytes']:reason='CPU_40GIB_RESERVE_BOUND'
                     if swap_increase>256*1024**2:reason='HOST_SWAP_INCREASE_256MIB_BOUND'
+                    if task_swap>cfg.get('task_vm_swap_limit_bytes',64*1024**2):reason='TASK_SWAP_BOUND'
+                    if io_delta['pswpout']>cfg.get('host_swap_io_limit_bytes',256*1024**2):reason='HOST_SWAP_OUT_IO_BOUND'
                     if stamp>=limit:reason='GPU_WALL_CLOCK_BOUND'
                     if reason or child.poll() is not None:break
                     time.sleep(5)
