@@ -31,9 +31,34 @@ def main():
     try:
         assert int(next(x.split()[1] for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024>80*1024**3
         disk=shutil.disk_usage('/data/bwwu');assert disk.free>max(30*1024**3,int(disk.total*.1))+100*1024**3
-        pkg=Path(cfg['package_dir']);manifest=json.loads((pkg/'manifest.json').read_text())
+        pkg=Path(cfg['package_dir']);manifest=json.loads((pkg/cfg.get('package_manifest','manifest.json')).read_text())
         for row in manifest['files']:
             q=pkg/row['name'];assert q.stat().st_size==row['bytes'] and sha(q)==row['sha256']
+        if cfg.get('cuda_home'):
+            cuda=Path(cfg['cuda_home']);assert str(cuda)=='/data/bwwu/lc-rec/offload-20261108/cuda-12.4' and not cuda.exists()
+            cuda.mkdir(parents=True)
+            for name in cfg['cuda_packages']:
+                with tarfile.open(pkg/name) as tf:
+                    for member in tf.getmembers():
+                        q=Path(member.name)
+                        assert not q.is_absolute() and '..' not in q.parts
+                        assert member.isfile() or member.isdir() or member.issym()
+                        if member.issym():assert not Path(member.linkname).is_absolute() and (cuda/q).parent.joinpath(member.linkname).resolve().is_relative_to(cuda.resolve())
+                    # Keep each vendor info/ license independently; payloads share CUDA prefix.
+                    info=out/('vendor-info-'+name);info.mkdir()
+                    for member in tf.getmembers():
+                        if member.name.startswith('info/'):
+                            tf.extract(member,info)
+                        else:tf.extract(member,cuda)
+            lib=cuda/'lib64';lib.mkdir(exist_ok=True)
+            base=Path('/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/nvidia')
+            for component,library in [('cuda_runtime','libcudart.so.12'),('cublas','libcublas.so.12'),('cublas','libcublasLt.so.12'),('curand','libcurand.so.10')]:
+                original=base/component/'lib'/library;assert original.is_file()
+                for soname in [library,library.split('.so.')[0]+'.so']:
+                    dest=lib/soname
+                    if dest.is_symlink():assert dest.resolve()==original.resolve()
+                    elif not dest.exists():dest.symlink_to(original)
+            report['cuda_home']=str(cuda)
         env=Path(cfg['environment']);py=str(env/'bin/python')
         if env.exists():
             assert a.reuse_new_environment and str(env)=='/data/bwwu/envs/lc-rec-offload-20261108'
@@ -67,9 +92,13 @@ def main():
             else:
                 cupy = f"cupy-cuda{cuda_major_ver}x"'''
         assert old.count(old_probe)==1,'upstream source differs; refuse guessed patch'
-        setup.write_text(old.replace(old_probe,new_probe))
+        if not cfg.get('cuda_home'):setup.write_text(old.replace(old_probe,new_probe))
         (out/'deepspeed-packaging.patch').write_text(''.join(difflib.unified_diff(old.splitlines(True),setup.read_text().splitlines(True),fromfile='upstream/setup.py',tofile='derived/setup.py')))
         build_env=os.environ.copy();build_env.update(DS_ACCELERATOR='cuda',DS_BUILD_OPS='0',DS_BUILD_CPU_ADAM='1',MAX_JOBS='2',OMP_NUM_THREADS='4',PYTHONDONTWRITEBYTECODE='1')
+        if cfg.get('cuda_home'):
+            build_env.update(CUDA_HOME=cfg['cuda_home'],PATH=cfg['cuda_home']+'/bin:'+str(env/'bin')+':'+build_env.get('PATH',''),LD_LIBRARY_PATH=cfg['cuda_home']+'/lib64:'+build_env.get('LD_LIBRARY_PATH',''))
+            run([cfg['cuda_home']+'/bin/nvcc','-V'],'nvcc.log',build_env,30)
+            report['deepspeed_setup_unmodified']=sha(setup)==hashlib.sha256(old.encode()).hexdigest()
         # CPUAdamBuilder.builder() catches MissingCUDAException and builds CppExtension.
         # Preinstalled accelerator metadata remains cuda; no runtime JIT/skip-check patch.
         run([py,'-m','pip','install','--no-index','--no-deps','--no-build-isolation','--no-cache-dir',str(ds)],'deepspeed-build.log',build_env,1200)
