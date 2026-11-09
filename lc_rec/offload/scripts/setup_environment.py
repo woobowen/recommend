@@ -44,6 +44,8 @@ def main():
                 q=Path(m.name);assert not q.is_absolute() and '..' not in q.parts and (m.isfile() or m.isdir())
             tf.extractall(source)
         ds=source/'deepspeed-0.16.9';setup=ds/'setup.py';old=setup.read_text()
+        protected=['op_builder/cpu_adam.py','op_builder/builder.py','csrc/adam/cpu_adam.cpp','csrc/adam/cpu_adam_impl.cpp','csrc/includes/cpu_adam.h','deepspeed/ops/adam/cpu_adam.py']
+        before={n:sha(ds/n) for n in protected};report['upstream_compute_sources']=before
         old_probe='''        cuda_major_ver, cuda_minor_ver = installed_cuda_version()
         if (cuda_major_ver < 11) or ((cuda_major_ver == 11) and (cuda_minor_ver < 3)):
             cupy = f"cupy-cuda{cuda_major_ver}{cuda_minor_ver}"
@@ -66,6 +68,8 @@ def main():
         # CPUAdamBuilder.builder() catches MissingCUDAException and builds CppExtension.
         # Preinstalled accelerator metadata remains cuda; no runtime JIT/skip-check patch.
         run([py,'-m','pip','install','--no-index','--no-deps','--no-build-isolation','--no-cache-dir',str(ds)],'deepspeed-build.log',build_env,1200)
+        assert before=={n:sha(ds/n) for n in protected},'compute source modified during build'
+        report['compute_sources_unchanged']=True
         run([py,'-m','pip','freeze','--all'],'pip-freeze.txt',timeout=60)
         smoke=Path(__file__).with_name('verify_cpu_adam.py')
         run([py,'-B',str(smoke),'--output',str(out/'cpu-adam.json')],'cpu-adam.log',build_env,180)

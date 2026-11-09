@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Small CPU tensors: test native CPUAdam load, AdamW rule, imports and pinning."""
 import argparse
+import hashlib
 import importlib
 import importlib.metadata as md
 import json
@@ -19,6 +20,10 @@ def main():
     x=torch.nn.Parameter(torch.randn(2048,dtype=torch.float32));y=torch.nn.Parameter(x.detach().clone())
     kw=dict(lr=5e-5,betas=(.9,.999),eps=1e-8,weight_decay=.01)
     cpu=DeepSpeedCPUAdam([x],adamw_mode=True,fp32_optimizer_states=True,**kw)
+    assert installed_ops.get('cpu_adam') and accelerator_name=='cuda'
+    assert torch_info['version']=='2.6' and torch_info['cuda_version']=='12.4'
+    native=Path(cpu.ds_opt_adam.__file__)
+    assert 'site-packages/deepspeed/' in str(native), 'must use installed op, not JIT cache'
     ref=torch.optim.AdamW([y],foreach=False,**kw)
     diffs=[]
     for i in range(2):
@@ -34,6 +39,8 @@ def main():
     for name in ['torch','transformers','accelerate','deepspeed','numpy','tokenizers','huggingface_hub','safetensors','pydantic','ninja','psutil','cpuinfo']:
         m=importlib.import_module(name);packages[name]={'version':getattr(m,'__version__',None),'import_source':m.__file__}
     report={'status':'PASS','argv':sys.argv,'python':sys.executable,'packages':packages,'cuda_build':torch.version.cuda,'cuda_available':torch.cuda.is_available(),'cuda_initialized':torch.cuda.is_initialized(),'installed_ops':installed_ops,'accelerator_name':accelerator_name,'compiled_torch_info':torch_info,'cpu_adam_class':type(cpu).__module__+'.'+type(cpu).__name__,'adamw_mode':cpu.adam_w_mode,'defaults':cpu.defaults,'max_abs_vs_torch_adamw_by_step':diffs,'exact_bitwise_equivalence_claimed':False,'state':{k:({'device':str(v.device),'dtype':str(v.dtype),'shape':list(v.shape)} if isinstance(v,torch.Tensor) else v) for k,v in state.items()},'memlock_bytes':resource.getrlimit(resource.RLIMIT_MEMLOCK),'pinned_memory_small_test':pin,'elapsed_seconds':time.monotonic()-start}
+    report['native_cpu_adam']={'path':str(native),'bytes':native.stat().st_size,'sha256':hashlib.sha256(native.read_bytes()).hexdigest(),'preinstalled_verified':True}
+    report['deepspeed_distribution_metadata']={str(q):hashlib.sha256(q.read_bytes()).hexdigest() for q in md.distribution('deepspeed').files if str(q).endswith(('METADATA','WHEEL','RECORD')) for q in [Path(md.distribution('deepspeed').locate_file(q))]}
     Path(a.output).write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({'status':'PASS','differences':diffs,'pinning':pin}))
 
 if __name__=='__main__':main()
