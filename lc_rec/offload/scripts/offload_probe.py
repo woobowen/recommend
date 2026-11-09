@@ -492,13 +492,24 @@ def run(cli, report, flush):
             return result
 
         def compute_loss(self, model, inputs, return_outputs=False):
+            started=time.monotonic()
             result = super().compute_loss(model, inputs, return_outputs=return_outputs)
             loss = result[0] if return_outputs else result
             value = float(loss.detach().float().cpu())
             report["losses"].append({"local_micro_step": len(report["losses"]) + 1,
-                                      "raw_model_loss": value, "finite": math.isfinite(value)})
+                                      "raw_model_loss": value, "finite": math.isfinite(value),
+                                      "forward_wall_seconds_including_pending_dependencies":time.monotonic()-started})
             if not math.isfinite(value):
                 raise FloatingPointError("Nonfinite raw model loss")
+            return result
+
+        def training_step(self, model, inputs):
+            started=time.monotonic()
+            result=super().training_step(model,inputs)
+            torch.cuda.synchronize()
+            elapsed=time.monotonic()-started
+            report['losses'][-1]['training_step_wall_seconds']=elapsed
+            report['losses'][-1]['backward_plus_boundary_and_audit_wall_seconds']=elapsed-report['losses'][-1]['forward_wall_seconds_including_pending_dependencies']
             return result
 
         def save_model(self, *args, **kwargs):
@@ -512,8 +523,13 @@ def run(cli, report, flush):
 
     trainer = ProbeTrainer(model=model, args=training_args, train_dataset=ProbeDataset(),
         tokenizer=tokenizer, data_collator=AuditCollator())
+    # Accelerate0.21 otherwise advances a plain HF LambdaLR world_size times
+    # per Trainer update. Explicitly retain the declared 6912-update clock.
+    trainer.accelerator.step_scheduler_with_optimizer = False
     original_no_sync = trainer.accelerator.no_sync
     report["compatibility_shims"] = {
+        "scheduler_clock": {"step_scheduler_with_optimizer": False,
+            "reason": "One HF cosine scheduler tick per optimizer update; avoid world-size multiplication in Accelerate0.21 AcceleratedScheduler"},
         "accelerate_021_deepspeed_0169_no_sync": {
             "reason": "Old Accelerate calls model.no_sync during accumulation; DS0.16.9 now defines it but rejects ZeRO3. Older DS had no such method, yielding nullcontext.",
             "scope": "Only this Trainer's Accelerator and only a real DeepSpeedEngine; engine still performs its native64-micro accumulation",
@@ -540,6 +556,8 @@ def run(cli, report, flush):
             if type(engine.optimizer.optimizer).__name__ != "DeepSpeedCPUAdam":
                 raise RuntimeError("Actual optimizer is not DeepSpeedCPUAdam")
             report["actual_deepspeed_config"] = engine.config
+            report['native_cpu_adam']=file_record(engine.optimizer.optimizer.ds_opt_adam.__file__)
+            report['gradient_accumulation_buffer']={'dtype':str(engine.optimizer.grad_partitions_flat_buffer.dtype),'device':str(engine.optimizer.grad_partitions_flat_buffer.device),'numel':engine.optimizer.grad_partitions_flat_buffer.numel()}
             report["initial_optimizer_state"] = state_snapshot(engine)
             report["initial_parameter_samples"] = parameter_samples(engine, False)
             original_step = engine.step
@@ -566,7 +584,10 @@ def run(cli, report, flush):
                 expected_lr = 0.0 if index == 1 else 5e-5 / FORMAL_WARMUP
                 if any(abs(lr - expected_lr) > 1e-12 for lr in event["lr_before"]):
                     raise RuntimeError("Actual update LR disagrees with preserved formal warmup")
+                raw_step_started=time.monotonic()
                 result = original_step(*step_args, **step_kwargs)
+                torch.cuda.synchronize()
+                event['engine_step_wall_seconds_including_cpu_optimizer_and_partition_copies']=time.monotonic()-raw_step_started
                 after = parameter_samples(engine, False)
                 event["after"] = after
                 event["engine_global_steps_after"] = engine.global_steps

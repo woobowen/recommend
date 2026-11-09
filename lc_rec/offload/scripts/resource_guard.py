@@ -72,14 +72,14 @@ def main():
                     for ident,q in list(tracked.items()):
                         try:
                             if q.create_time()==ident[1] and q.is_running():now.append(q)
-                        except psutil.Error:pass
+                        except (psutil.Error,OSError):pass
                     rss=0;task_swap=0
                     for q in now:
                         try:
                             rss+=q.memory_info().rss
                             for line in Path('/proc',str(q.pid),'status').read_text().splitlines():
                                 if line.startswith('VmSwap:'):task_swap+=int(line.split()[1])*1024
-                        except psutil.Error:pass
+                        except (psutil.Error,OSError):pass
                     swap_increase=max(0,(baseline['SwapFree']-mem['SwapFree']))
                     io=swap_io();io_delta={n:(io[n]-baseline_swap_io[n])*page_size for n in io}
                     row={'elapsed_seconds':stamp,'mem_available_bytes':mem['MemAvailable'],'task_tree_rss_sum_bytes':rss,'swap_used_increase_bytes':swap_increase,'task_vm_swap_bytes':task_swap,'host_swap_io_delta_bytes':io_delta,'tracked_pids':[q.pid for q in now]}
