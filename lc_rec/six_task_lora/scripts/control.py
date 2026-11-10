@@ -40,7 +40,7 @@ def main():
     parser.add_argument('mode', choices=['preflight', 'deploy', 'submit', 'query', 'logs', 'collect'])
     parser.add_argument('--commit')
     parser.add_argument('--job')
-    parser.add_argument('--kind', choices=['setup', 'cpu', 'protocol', 'compatibility', 'grouping', 'gpu'])
+    parser.add_argument('--kind', choices=['setup', 'cpu', 'protocol', 'compatibility', 'grouping', 'policy', 'gpu'])
     parser.add_argument('--train-job')
     args = parser.parse_args()
     SUPPORT.mkdir(parents=True, exist_ok=True)
@@ -92,7 +92,7 @@ print(json.dumps(r))"""
         env['TORCH_EXTENSIONS_DIR']=REMOTE+'/torch_extensions'
         env['NCCL_P2P_DISABLE']='1'
         env['OMP_NUM_THREADS']='4'
-        if args.kind in ('cpu','setup','protocol','compatibility','grouping'):
+        if args.kind in ('cpu','setup','protocol','compatibility','grouping','policy'):
             env['CUDA_VISIBLE_DEVICES']=''
             env.pop('DS_ACCELERATOR',None)
             if args.kind=='setup':
@@ -103,6 +103,8 @@ print(json.dumps(r))"""
                 assert args.train_job and args.train_job.startswith('lc-six-20261110-cpu-')
                 workload=t.profile['job_root']+'/'+args.train_job+'/output/workload'
                 argv=[PYTHON,scripts+'analyze_grouping.py','--records',workload+'/records.jsonl.gz','--samples',workload+'/samples.json','--output',output+'grouping/grouping.json']
+            elif args.kind=='policy':
+                argv=[PYTHON,scripts+'validation_policy_probe.py','--protocol',t.profile['job_root']+'/lc-six-20261110-protocol-r1/output/protocol/protocol.json','--output',output+'policy/validation_policy.json']
             elif args.kind=='protocol':
                 argv=[PYTHON,scripts+'protocol_probe.py','--config',release+'/lc_rec/six_task_lora/config/candidate.json','--output',output+'protocol']
             else:
@@ -112,7 +114,7 @@ print(json.dumps(r))"""
             workload=t.profile['job_root']+'/'+args.train_job+'/output/workload'
             previous=json.loads(t.python("from pathlib import Path;import json;p=Path('/home/bwwu/lc-rec/six-task-20261110/update-budget.json');print(p.read_text() if p.exists() else '{\"used\":0}')"))
             assert 0<=previous['used']<6
-            inner=[scripts+'gpu_probe.py','--config',release+'/lc_rec/six_task_lora/config/candidate.json','--samples',workload+'/samples.json','--output-dir',output+'probe','--run-commit',commit,'--max-updates',str(min(2,6-previous['used'])),'--candidate','bf16','--micro-batch','8']
+            inner=[scripts+'gpu_probe.py','--config',release+'/lc_rec/six_task_lora/config/candidate.json','--samples',workload+'/samples.json','--output-dir',output+'probe','--run-commit',commit,'--job-id',args.job,'--max-updates',str(min(2,6-previous['used'])),'--candidate','bf16','--micro-batch','8']
             argv=[PYTHON,scripts+'resource_guard.py','--config',release+'/lc_rec/six_task_lora/config/guard.json','--output',output+'resources','--job-id',args.job,'--',PYTHON,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2',*inner]
         deploy = json.loads((SUPPORT/'receipts'/('deployment-'+commit+'.json')).read_text())
         prefixes = ('lc_rec/six_task_lora/scripts/', 'lc_rec/six_task_lora/config/', 'lc_rec/vendor/original/')
@@ -133,7 +135,7 @@ print(json.dumps(r))"""
         assert r['cleanup_verified'] and not r['worker_alive'] and not r['workgroup_live'] and r['status'] not in ['RUNNING','ACCEPTED','CONTROL_LOST']
         jobpath=t.profile['job_root']+'/'+args.job
         destination=REMOTE+'/light_exports/'+args.job+'.tar.gz'
-        code=f"""from pathlib import Path\nimport hashlib,json,tarfile\nroot=Path({jobpath!r});archive=Path({destination!r});files=[];excluded=[]\nfor p in sorted(root.rglob('*')):\n if not p.is_file() or p.is_symlink() or p.name.endswith(('.lock','.partial','.tmp')):continue\n rel=str(p.relative_to(root))\n if p.stat().st_size>8*1024**2 or p.suffix in ['.bin','.safetensors','.pt','.pth']:\n  excluded.append({{'path':rel,'bytes':p.stat().st_size,'reason':'large/payload remains on server'}});continue\n files.append({{'path':rel,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}})\nmanifest=root/'light-export-manifest.json'\nfiles=[x for x in files if x['path']!='light-export-manifest.json']\nmanifest.write_text(json.dumps({{'files':files,'excluded':excluded}},indent=2)+'\\n')\narchive.parent.mkdir(exist_ok=True)\nwith tarfile.open(archive,'w:gz') as tf:\n for row in files:tf.add(root/row['path'],arcname=row['path'],recursive=False)\n tf.add(manifest,arcname=manifest.name,recursive=False)\nprint(json.dumps({{'path':str(archive),'bytes':archive.stat().st_size,'sha256':hashlib.sha256(archive.read_bytes()).hexdigest()}}))"""
+        code=f"""from pathlib import Path\nimport hashlib,json,tarfile\nroot=Path({jobpath!r});archive=Path({destination!r});files=[];excluded=[]\nfor p in sorted(root.rglob('*')):\n if not p.is_file() or p.is_symlink() or p.name.endswith(('.lock','.partial','.tmp')):continue\n rel=str(p.relative_to(root))\n if p.stat().st_size>32*1024**2 or p.suffix in ['.bin','.safetensors','.pt','.pth']:\n  excluded.append({{'path':rel,'bytes':p.stat().st_size,'reason':'large/payload remains on server'}});continue\n files.append({{'path':rel,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}})\nmanifest=root/'light-export-manifest.json'\nfiles=[x for x in files if x['path']!='light-export-manifest.json']\nmanifest.write_text(json.dumps({{'files':files,'excluded':excluded}},indent=2)+'\\n')\narchive.parent.mkdir(exist_ok=True)\nwith tarfile.open(archive,'w:gz') as tf:\n for row in files:tf.add(root/row['path'],arcname=row['path'],recursive=False)\n tf.add(manifest,arcname=manifest.name,recursive=False)\nprint(json.dumps({{'path':str(archive),'bytes':archive.stat().st_size,'sha256':hashlib.sha256(archive.read_bytes()).hexdigest()}}))"""
         meta=json.loads(t.python(code,timeout=60))
         local=SUPPORT/'exports'/(args.job+'.tar.gz')
         t.get_verified(meta['path'],local,meta,timeout=60)

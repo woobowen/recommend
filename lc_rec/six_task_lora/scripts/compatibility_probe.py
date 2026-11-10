@@ -13,6 +13,8 @@ try:
  cfg=LlamaConfig(vocab_size=96,hidden_size=64,intermediate_size=128,num_hidden_layers=1,num_attention_heads=4,max_position_embeddings=128)
  base=LlamaForCausalLM(cfg);base.save_pretrained(out/'synthetic_base')
  model=get_peft_model(base,LoraConfig(r=8,lora_alpha=32,lora_dropout=.05,target_modules=['q_proj','k_proj','v_proj','o_proj','gate_proj','down_proj','up_proj'],modules_to_save=['embed_tokens','lm_head'],bias='none',task_type=TaskType.CAUSAL_LM))
+ for n,v in model.named_parameters():
+  if 'original_module' in n and any(m in n for m in ['embed_tokens','lm_head']):v.requires_grad=False
  r['before_bf16_dtypes']={n:str(v.dtype) for n,v in model.named_parameters() if v.requires_grad}
  model.bfloat16();model.train();ids=torch.randint(3,96,(2,12));labels=ids.clone();labels[:,:8]=-100
  loss=model(input_ids=ids,attention_mask=torch.ones_like(ids),labels=labels).loss;loss.backward()
