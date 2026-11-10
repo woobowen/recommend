@@ -1,0 +1,145 @@
+{
+  "reviewer": "/root/official_architecture; non-author of common.py/probe.py/guard/environment setup",
+  "review_type": "READ_ONLY_SOURCE_TARGETED_PRELAUNCH; no GPU, model loads, installations or implementation edits",
+  "reviewed_utc": "2026-11-10T17:19:26.934668+00:00",
+  "run_commit": "f29527de3b3f94ae5640d2e98faa1a7f74d2e0e8",
+  "status": "NO_CONCRETE_SOURCE_INCOMPATIBILITY_FOUND_RUNTIME_NOT_TESTED",
+  "input_code": {
+    "lc_rec/qwen_preflight_20261110/scripts/probe.py": {
+      "sha256": "4dc56620b9427dc58b792d427cca9d0b4af160f9d8e3027e942026e408f9bd39",
+      "matches_run_commit_bytes": true
+    },
+    "lc_rec/qwen_preflight_20261110/scripts/common.py": {
+      "sha256": "5185c6578e5716a163d33688505db62d5140fdaa6cc9512c280253a21d848c06",
+      "matches_run_commit_bytes": true
+    },
+    "lc_rec/qwen_preflight_20261110/scripts/resource_guard.py": {
+      "sha256": "668189b524ca0e137d3db3a8abbbf51f29a2ed9ccbc86add78a576a220ca1fbb",
+      "matches_run_commit_bytes": true
+    }
+  },
+  "official_sources": {
+    "modeling": {
+      "url": "https://github.com/huggingface/transformers/blob/7d9754a05193eb79b1d86aa744b622b8068008cd/src/transformers/models/qwen3_5/modeling_qwen3_5.py",
+      "tag": "v5.2.0",
+      "sha256": "d1ae3856f53763591ec65054129af46e003a1715efcf7eef2b752a31e85526b8",
+      "bytes": 97339
+    },
+    "modeling_utils": {
+      "url": "https://github.com/huggingface/transformers/blob/7d9754a05193eb79b1d86aa744b622b8068008cd/src/transformers/modeling_utils.py",
+      "tag": "v5.2.0",
+      "sha256": "2f45c2139ce633e6e3eae9290675dd5815643b37c27f2cc4dd83586fb648f7bb",
+      "bytes": 247340
+    },
+    "generation": {
+      "url": "https://github.com/huggingface/transformers/blob/7d9754a05193eb79b1d86aa744b622b8068008cd/src/transformers/generation/utils.py",
+      "tag": "v5.2.0",
+      "sha256": "fc980c5ce0e6e45ffcaf2a37135e01afe657df91b99d684af145130608419652",
+      "bytes": 214388
+    },
+    "modeling_layers": {
+      "url": "https://github.com/huggingface/transformers/blob/7d9754a05193eb79b1d86aa744b622b8068008cd/src/transformers/modeling_layers.py",
+      "tag": "v5.2.0",
+      "sha256": "9e4726c07cfc895d95f9a75b0e7d23b8561575080811695e70fa879b0a18dae4",
+      "bytes": 11476
+    },
+    "trainer": {
+      "url": "https://github.com/huggingface/transformers/blob/7d9754a05193eb79b1d86aa744b622b8068008cd/src/transformers/trainer.py",
+      "tag": "v5.2.0",
+      "sha256": "fa7764933aaff94ae272cf3a545ed78e85c54c0b62ab1e309e3af6321095a095",
+      "bytes": 215960
+    },
+    "trainer_optimizer": {
+      "url": "https://github.com/huggingface/transformers/blob/7d9754a05193eb79b1d86aa744b622b8068008cd/src/transformers/trainer_optimizer.py",
+      "tag": "v5.2.0",
+      "sha256": "143f95e58ee78d731b5fd3379ca402207cdbb37eaa2520f4f5e9a3a3a2390fa8",
+      "bytes": 23082
+    },
+    "conversion_mapping": {
+      "url": "https://github.com/huggingface/transformers/blob/7d9754a05193eb79b1d86aa744b622b8068008cd/src/transformers/conversion_mapping.py",
+      "tag": "v5.2.0",
+      "sha256": "c8efcc6ce2224939299804d495ba4f361ab596e59f33e3db28e9b4629fc481e0",
+      "bytes": 19302
+    },
+    "ds_engine": {
+      "url": "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/runtime/engine.py",
+      "sha256": "88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d",
+      "bytes": 189329
+    },
+    "ds_zero2": {
+      "url": "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/runtime/zero/stage_1_and_2.py",
+      "sha256": "7e03bb5b2c923b2291ed28b663b1b605aa1384f68aa23b5744951183cc42fef6",
+      "bytes": 121833
+    }
+  },
+  "scope": {
+    "model_id": "Qwen/Qwen3.5-0.8B-Base",
+    "revision": "dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68",
+    "official_class": "Qwen3_5ForCausalLM",
+    "config_class": "Qwen3_5TextConfig",
+    "route": "F; BF16 full-parameter training of instantiated official text submodel only",
+    "original_text_parameters": 752393024,
+    "expanded_text_parameters": 753084224,
+    "excluded_source_components": {
+      "visual_parameters": 100592896,
+      "visual_tensors": 153,
+      "mtp_parameters": 20452864,
+      "mtp_tensors": 15
+    },
+    "lora": "BLOCKED_MAPPING_REQUIRES_APPROVAL; no new DeltaNet mapping in this review"
+  },
+  "findings": [
+    {
+      "area": "Trainer/create_optimizer",
+      "source": "trainer.py:1132-1284; trainer_optimizer.py:201-208",
+      "finding": "The fixed TF5.2 Trainer groups all requires_grad named_parameters once into decay/no-decay groups. adamw_torch resolves to native torch.optim.AdamW with configured lr, beta1/beta2/eps; fused=True is set only for the different adamw_torch_fused enum. Probe asserts original parameter-ID membership exact before and after DS. No concrete TF5.2 API mismatch found; no Trainer.train invocation replaces the manual author-temperature CE."
+    },
+    {
+      "area": "Full instantiated parameter reachability",
+      "source": "modeling_qwen3_5.py:447-627,827-880,1299-1400,1711-1791",
+      "finding": "The official text forward visits every 24 decoder layers, final norm, tied embedding/head. Each DeltaNet forward uses qkv,z,b,a projections, conv1d, A_log, dt_bias, gated norm, out_proj; each FFN and six full-attention blocks are connected. The probe requires all instantiated params trainable, checks every trainable tensor hook called and finite, samples representative attention/FFN/DeltaNet/A_log/norm changes plus all SID rows. Source connectivity is not a runtime nonzero-gradient guarantee."
+    },
+    {
+      "area": "Non-reentrant checkpointing",
+      "source": "modeling_layers.py:34-94; modeling_utils.py:3034-3096",
+      "finding": "Official decoder subclasses GradientCheckpointingLayer. gradient_checkpointing_enable forwards use_reentrant=False to torch checkpoint and installs it on decoder layers; training call already uses use_cache=False with no prior cache. The official layer clears any cache kwargs under checkpointing. No architecture replacement or manual detached recurrence is introduced."
+    },
+    {
+      "area": "DS BF16 and native fallback precision",
+      "source": "DeepSpeed engine.py:1241-1260; modeling_qwen3_5.py:323-444,587-588",
+      "finding": "DS BF16 casts instantiated model parameters BF16; native DeltaNet fallback deliberately converts q/k/v/g/beta and recurrence to FP32, returns original activation dtype. A_log.float and a.float guard exponent/softplus. BF16 route therefore includes official FP32 recurrence/math and FP32 author CE/master/moments. Header source F32 scalar/vector tensors may be cast BF16 by load/DS; actual before/after dtypes and finite grads must be confirmed from raw run."
+    },
+    {
+      "area": "Native model-only save/reload",
+      "source": "modeling_utils.py:3170-3320; conversion_mapping.py:70; probe.py route-F save/reload branch",
+      "finding": "Official tied mapping is lm_head.weight -> model.embed_tokens.weight. Native safetensors save removes declared alias storage and may reverse original checkpoint prefix conversion; built-in qwen3_5_text conversion supports model.language_model -> model on reload. Helper accepts saved qwen3_5_text config. Probe hashes every state key before save and compares all keys/shapes/dtypes/full hashes after reload on both ranks, with sharing assertion. This is a suitable runtime gate, not evidence it has passed. No optimizer/scheduler/RNG checkpoint is saved or restored."
+    },
+    {
+      "area": "Beam20/custom hybrid cache",
+      "source": "generation/utils.py:1583-1603,1929-1990,3468-3474; modeling_qwen3_5.py:67-148,1328-1334",
+      "finding": "_is_stateful=True prevents generic default DynamicCache allocation and assisted generation; fixed TF5.2 does not reject ordinary beam search for this flag. Official text forward creates Qwen3_5DynamicCache. Beam search calls cache.reorder_cache, which index_selects all attention KV and linear conv/recurrent state batch axes. prepare_inputs_for_generation and cache_position update retain single-token incremental path. Prefix_allowed_tokens_fn remains standard logits processor input; no source-level requirement to replace beam20, remove callback or change position-only constraints was found."
+    },
+    {
+      "area": "Finite fallback cost and resource gate",
+      "source": "modeling_qwen3_5.py:323-401; CPU q35 work.log",
+      "finding": "CPU receipt confirms official slow torch fallback because fast kernels are absent. Chunk kernel pads to64 and performs63 triangular recurrence-row updates per DeltaNet layer; it can be materially slower than full attention. This is an implementation identity/cost boundary, not a demonstrated compatibility failure. Guard time/memory budgets remain binding, and no optional fast-kernel installation is proposed."
+    }
+  ],
+  "must_fix_before_gpu": [],
+  "required_real_runtime_gates": [
+    "official asset SHA/publish complete and original/expanded parameter counts match CPU audit",
+    "all actual instantiated trainable tensors receive finite gradients under checkpointing",
+    "native AdamW GPU master/moments plus first state-allocation step stay within memory budget",
+    "at least one nonzero-LR global step changes SID and representative model parameters and both ranks synchronize",
+    "native model-only save and strict all-state reload with preserved tying",
+    "eight distinct real users beam20,20 returns, max_new_tokens10, exact per-position callback+EOS and recorded cache failure if any"
+  ],
+  "not_tested": [
+    "no q35 GPU run performed by this reviewer",
+    "no full training-state checkpoint or recovery",
+    "no formal seed/epoch or Recall/NDCG",
+    "no new Qwen3.5 LoRA mapping",
+    "no assurance of BF16 numerical stability or throughput from static review alone"
+  ],
+  "conclusion": "Read-only pinned-source review identifies no concrete additional engineering incompatibility that justifies speculative changes before the authorized F35 probe. Full-text-submodel scope and official slow fallback must remain explicit. Only actual raw GPU evidence can determine F35 technical terminal status."
+}

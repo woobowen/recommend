@@ -6,6 +6,11 @@ from common import write
 def main():
  p=argparse.ArgumentParser();p.add_argument('--key',required=True);p.add_argument('--job-id',required=True);p.add_argument('--output',required=True);p.add_argument('command',nargs=argparse.REMAINDER);a=p.parse_args()
  assert a.command[0]=='--' and os.environ['CUDA_VISIBLE_DEVICES']=='0,1' and os.environ['GRID_JOB_ID']==a.job_id
+ # Keep every potentially new compiler/runtime cache in the accounted task tree.
+ cache_root=Path('/data/bwwu/lc-rec/qwen-preflight-20261110').resolve()
+ for variable in ['TMPDIR','TORCHINDUCTOR_CACHE_DIR','TRITON_CACHE_DIR','TORCH_EXTENSIONS_DIR','XDG_CACHE_HOME','HF_HOME','CUDA_CACHE_PATH']:
+  if variable in os.environ:
+   folder=Path(os.environ[variable]);assert folder.resolve().is_relative_to(cache_root);folder.mkdir(parents=True,exist_ok=True)
  import psutil
  root=Path('/home/bwwu/lc-rec/qwen-preflight-20261110');root.mkdir(parents=True,exist_ok=True);out=Path(a.output);out.mkdir(parents=True,exist_ok=True)
  ledger_path=root/'gpu-budget.json'
@@ -40,6 +45,14 @@ def main():
       try:
        if not q.is_symlink():total+=q.stat().st_blocks*512
       except FileNotFoundError:pass
+   # Accepted transport keeps task archives/requests in shared support paths.
+   # Count only this task's known prefixes; do not scan unrelated artifacts.
+   support=jobs.parent
+   for folder,pattern in [('transfers','qwen-preflight-*'),('requests','qwen-20261110-*')]:
+    for q in (support/folder).glob(pattern):
+     try:
+      if q.is_file() and not q.is_symlink():total+=q.stat().st_blocks*512
+     except FileNotFoundError:pass
    return total
   def mem():return psutil.virtual_memory().available
   assert mem()>=40*1024**3

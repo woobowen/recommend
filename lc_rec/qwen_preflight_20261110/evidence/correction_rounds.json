@@ -1,5 +1,5 @@
 {
-  "current_round": 1,
+  "current_round": 2,
   "maximum_correction_rounds": 3,
   "round0": "Initial source review, official metadata and first wheel relay execution; no GPU run yet",
   "rounds": [
@@ -8,6 +8,13 @@
       "cause": "Wheel unpack SSH -c included entire dependency Requires-Dist metadata, exceeding Windows command-line length; archive transfer itself verified",
       "fix": "Transmit compact filename/bytes/SHA mapping only; no dependency or method change",
       "verification": "PASS: 15 official wheel sizes/SHA verified and both fixed setup jobs SUCCEEDED/exit0/cleanup_verified"
+    },
+    {
+      "round": 2,
+      "cause": "Non-author packaging audit found task-specific shared transfers and request files omitted from new server file accounting in guard and final collector. Previous GPU q06-L computation is unaffected; preserve its raw accounting and disclose missing small files.",
+      "fix": "Count exact qwen-preflight-* shared transfer prefix and qwen-20261110-* requests in allocated/logical totals, without scanning unrelated files or deleting artifacts. No probe/common, optimizer, data, loss, quantization or model method change. All subsequent GPU job compiler/runtime/cache paths explicitly point inside the counted task data root; guard creates only those task directories before launching child.",
+      "verification": "PENDING corrected collector real readback and next authorized GPU guard execution; syntax checks passed.",
+      "previous_successful_training_rerun": false
     }
   ]
 }

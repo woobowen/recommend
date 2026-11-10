@@ -33,6 +33,11 @@ for base in [root,data]+envs+sorted(jobs.glob('qwen-20261110-*')):
    try:s=p.stat();allocated+=s.st_blocks*512;logical+=s.st_size
    except FileNotFoundError:pass
  r['allocated_and_logical_bytes'][str(base)]={'allocated':allocated,'logical':logical}
+r['task_shared_transfer_and_request_files']=[]
+for folder,pattern in [('transfers','qwen-preflight-*'),('requests','qwen-20261110-*')]:
+ for p in sorted((jobs.parent/folder).glob(pattern)):
+  if p.is_file() and not p.is_symlink():
+   s=p.stat();r['allocated_and_logical_bytes'][str(p)]={'allocated':s.st_blocks*512,'logical':s.st_size};r['task_shared_transfer_and_request_files'].append({'path':str(p),'bytes':s.st_size,'allocated':s.st_blocks*512,'sha256':sha(p)})
 for job in sorted(jobs.glob('qwen-20261110-*')):
  r['jobs'][job.name]={name:json.loads((job/name).read_text()) for name in ['request.json','status.json','cleanup.json','attempt.json','accepted.json'] if (job/name).exists()}
 for release in sorted((root/'releases').iterdir()):

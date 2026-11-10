@@ -83,5 +83,13 @@ def main():
    else:record['seed_estimate']={'status':'BLOCKED','center':None,'conservative':None,'reason':item.get('reason','No safe authorized training run')}
    model['routes'][route]=record
   result['models'][key]=model
+ sample_sets={key:json.loads((jobs/('qwen-20261110-cpu-'+key+'-r0')/'output/audit/samples.json').read_text()) for key in MODELS}
+ reference=sample_sets['q06'];fields=['label','row_idx','prompt_id','input_text','full_text','input_text_sha256','full_text_sha256']
+ for key,samples in sample_sets.items():
+  assert [{field:x[field] for field in fields} for x in samples]==[{field:x[field] for field in fields} for x in reference]
+  assert result['models'][key]['data']==result['models']['q06']['data']
+  assert result['models'][key]['tokenizer']['sid_tokens']==result['models']['q06']['tokenizer']['sid_tokens']
+ selections={key:sha(jobs/('qwen-20261110-cpu-'+key+'-r0')/'output/audit/selection.json') for key in MODELS};assert len(set(selections.values()))==1
+ result['cross_model_inputs']={'actual_raw_train_sample_texts_identical':True,'samples_per_model':len(reference),'sample_identity_sha256':{key:sha(jobs/('qwen-20261110-cpu-'+key+'-r0')/'output/audit/samples.json') for key in MODELS},'full_selection_files_sha256':selections,'fixed_selection_rows_prompts_users_and_validation_indices_identical':True,'original_data_hashes_and_counts_identical':True,'all_918_sid_token_strings_order_identical':True,'different_tokenizer_ids_lengths_and_padding_retained':True}
  write(a.output,result);print(json.dumps({key:{route:data['seed_estimate']['status'] for route,data in value['routes'].items()} for key,value in result['models'].items()},indent=2))
 if __name__=='__main__':main()
