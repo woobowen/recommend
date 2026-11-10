@@ -1,0 +1,24 @@
+{
+  "task": "LETTER-LC-Rec PEFT0.5 out-of-place autograd compatibility continuation",
+  "authorization": "User task in this conversation explicitly authorizes one-time directed fix, bounded tests, independent review, wbw-lc-rec publication and light review ZIP. No formal train/full epoch/metric evaluation.",
+  "prior_delivery_commit": "61854bb1df0f26a71e68d95ab8eb564f7c762f76",
+  "prior_correction_rounds_used": 3,
+  "prior_correction_record_sha256": "778d99d6a8463606719e3d3e48b585f4a7fe3d1ef184d4808f00bb6f79a6a32d",
+  "current_initial_round": 0,
+  "current_correction_rounds_used": 0,
+  "current_correction_rounds_limit": 3,
+  "current_gpu_update_cap_across_attempts": 9,
+  "round0": {
+    "fix": "Runtime class-level PEFT0.5 int8 forward, exact wheel/class/MRO/source guards; pinned explicit bnb parent and differentiable non-inplace residual. No package or vendor edits.",
+    "cpu_job": "letter-20261110-autograd-cpu-r0",
+    "cpu_status": "SUCCEEDED / PASS_CPU_SYNTHETIC / cleanup_verified",
+    "cpu_run_commit": "059f9feb55fde067187afbf3b80f285a00a63ec3",
+    "prelaunch_instrumentation": "Nine-update task-wide cap, per-module checkpoint call counters, trainable/optimizer/gradient/SID/frozen checks, synchronized timing, strict adapter save/reload and original beam20."
+  },
+  "current_failures": [],
+  "gpu_budget_inherited_device_seconds": 467.3264223076403,
+  "gpu_budget_total_device_seconds": 7200,
+  "packages_installed_this_task": [],
+  "environment_configuration_changes_this_task": [],
+  "formal_training_authorized": false
+}

@@ -1,0 +1,94 @@
+{
+  "schema": "letter_autograd_non_author_pregpu_source_review_v1",
+  "reviewer": "/root/independent_review",
+  "reviewed_utc": "2026-11-10T11:09:44.197086+00:00",
+  "status": "PASS_FOR_BOUNDED_FULL_MODEL_GPU_PROBE",
+  "scope": "Non-author direct read of complete changed compat/gpu/inference/budget/guard/controller paths and retained author train/test/collator relevant sections; CPU actual result/request/status/manifest/Git-blob verification. No GPU or model execution by reviewer.",
+  "checks": [
+    {
+      "component": "patch",
+      "result": "PASS_STATIC_AND_CPU",
+      "detail": "Original PEFT/bnb version+source guards,exact MRO,explicit parent,out-of-place sum,AST-only-two-computational-edits proof; actual CPU test verified execution method hash."
+    },
+    {
+      "component": "trainable_set",
+      "result": "PASS_STATIC_ASSERTIONS",
+      "detail": "224 exact target modules,450 trainable tensors/448LoRA+2active SID/289652736elements,original freeze and exact Trainer+ZeRO2 bit16-group optimizer IDs; no duplicate groups."
+    },
+    {
+      "component": "checkpoint",
+      "result": "PASS_STATIC_ASSERTIONS",
+      "detail": "Every224 target must record no_grad and grad-enabled calls at least requested microbatch count; base-only and rank0 shortcuts forbidden."
+    },
+    {
+      "component": "updates",
+      "result": "PASS_STATIC_ASSERTIONS",
+      "detail": "Micro8*accum4*world2,1..9max updates; each micro boundary/global/micro step observed,underlying Adam state.step update+1 and both-rank progress checked. Read actual installed DS initializer/_optimizer_step source: AdamW initialization performs no dummy step."
+    },
+    {
+      "component": "numerical",
+      "result": "PASS_STATIC_ASSERTIONS",
+      "detail": "No global autocast; original dtype failure observed before approved A-only shim with allRNG/optimizer/sample restoration; independent temperature0.8 CE; every loss/all gradients/all trainable elements finite checks."
+    },
+    {
+      "component": "gradient_and_delta",
+      "result": "PASS_STATIC_ASSERTIONS",
+      "detail": "All450 grads/hooks plus embedding output gradient; actual inputSID/targetSID per-row maxima/deltas; allLoRA values and alladdedSIDcolumns snapshotted; complete frozen originals before/after hashes; end values cross-rank equality."
+    },
+    {
+      "component": "timing",
+      "result": "PASS_STATIC_WITH_LIMITS",
+      "detail": "3warmup,3mixed timing,short/mid/long phases; synchronized phase walltimes/globalMAX,token/padding counts,CPUprep/host stats,whole-jobGPU peaks retained. 128unique mixed row/prompts repeated; fullhooks/sync observer overhead included."
+    },
+    {
+      "component": "validation_save",
+      "result": "PASS_STATIC_ASSERTIONS",
+      "detail": "Original two-template valid dataset/collator,response-mask/length and finite loss checks; ordinary/mixed/long phases; adapter exactly direct450trainables and fulltensor values,dtypes,tokenizer SID order; rank0 errors broadcast to other rank."
+    },
+    {
+      "component": "reload_generation",
+      "result": "PASS_STATIC_ASSERTIONS",
+      "detail": "Separate authored fullBF16 vanillaHF inference, strict actual.bin open and450key/shape/allvalue+SID restore,8distinct length-stratified realusers,original positionalcallback token-by-token/EOS,beam20return20max10,no reduction."
+    },
+    {
+      "component": "budget",
+      "result": "PASS_STATIC_WITH_REQUIRED_LABELS",
+      "detail": "Conditional mean3mixed/maxpostwarmup+validation/reload/beam components; actual8240 scheduler/ceiling arithmetic; full testlength histogram weights; unmeasured formalTrainer/DScheckpoint/bestrestore and sustained throughput remain INCONCLUSIVE. ValidationCPUprep is included in both center and conservative totals; pure-GPU and end-to-end times are separate."
+    },
+    {
+      "component": "guard",
+      "result": "PASS_STATIC_ASSERTIONS",
+      "detail": "Original historical ledger path and467.3264223076403device-second floor+prior job IDs required; missing ledger blocks,allnewjob roots included,max7200device seconds/40GiBavailable/30GiBdisk."
+    },
+    {
+      "component": "publication",
+      "result": "PENDING_MAIN",
+      "detail": "Actual GPU launch requires fixedGit commit/release file mapping,live device/ledger/resources and unique jobID; main serial Git management. Runtime/source mapping and final GitHub/ZIP not established by this prelaunch review."
+    }
+  ],
+  "files_sha256": {
+    "lc_rec/letter/scripts/compat.py": "c8135e5eeda3c1f528065cbe717a31582cbb4b5043ea13bfa76f01b370604a20",
+    "lc_rec/letter/scripts/gpu_probe.py": "3065cea45e56a1bee86c0fd7a834c8dfcd1a9684ef29c32084651d27d0325055",
+    "lc_rec/letter/scripts/inference_probe.py": "e2f178c5af1d8d1509c76384c265248e537406850472f1420254120c418d2ddb",
+    "lc_rec/letter/scripts/estimate_budget.py": "f334ff9660c0bea0358ca3cbc69cedf76506398a783f1372d853f3b114ed06e3",
+    "lc_rec/letter/scripts/resource_guard.py": "4aa17156837927f6def5b4e74554e9d8a4f92bf43137119913a2791161d714c3",
+    "lc_rec/letter/scripts/continuation_control.py": "f628ab2845f478a7b4c074f685cc6c6329ff5c01e83dfcf70a3353e81b88ce43",
+    "lc_rec/letter/config/guard_autograd.json": "5281472a4810bc4e0783d5e76e0936c7822a2bd5f7f9094b854ea049c58f737f",
+    "lc_rec/letter/config/probe_instruments.json": "950e04df16be12f248c941b7b505e39a8a876b54d835b3a229ecf12225be228f",
+    "lc_rec/letter/config/budget.json": "f57e46499073a02536e1c1cc70d5babe62a61a3b2812ff81b2e2e021c390ea02",
+    "lc_rec/letter/evidence/autograd_20261110/deepspeed_optimizer_source.json": "8a15b770dd7c22e105c987da5c884423f665b4766dbec04ec1129d2dc9390268",
+    "lc_rec/letter/evidence/autograd_20261110/installed_peft_identity.json": "557d5c8d169b53367171dbdced365088d7d399ac402f171fe63c917bd804c363",
+    "lc_rec/letter/review/autograd_20261110/cpu_result_review.json": "2592cff97caca75e83b9227fbd9276858ab98e84bd8a8bba646519a73a67059a"
+  },
+  "runtime_assertions_not_yet_verified": true,
+  "remaining_final_requirements": [
+    "Read both real rank results and full failures if any",
+    "Confirm final nonzeroAdam/LoRA/SID update and all finite/optimizer/module counts from observed JSON",
+    "Review actual adapter reload andbeam20 outputs/denominators",
+    "Independently recalculate96h components and preserve conditional/INCONCLUSIVE limitations",
+    "Historical evidence hashes unchanged,new task corrections and totalGPUbudget distinct",
+    "GitHub fixedSHA readback,server release mapping,ZIP receipt,terminal cleanup/no live jobs"
+  ],
+  "reviewer_installs": [],
+  "reviewer_gpu_jobs": []
+}

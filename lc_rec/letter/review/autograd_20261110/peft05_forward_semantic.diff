@@ -1,0 +1,18 @@
+# NON-INSTALLABLE SEMANTIC EXCERPT: frozen original forward with only the two approved computational edits.
+# Actual derived method also has guarded observation counters; actual source diff and AST check are separate artifacts.
+--- peft==0.5.0/Linear8bitLt.forward (frozen wheel)
++++ derived computational path (observation omitted)
+@@ -1,5 +1,5 @@
+ def forward(self, x: torch.Tensor):
+-    result = super().forward(x)
++    result = bnb.nn.Linear8bitLt.forward(self, x)
+ 
+     if self.disable_adapters or self.active_adapter not in self.lora_A.keys():
+         return result
+@@ -22,5 +22,5 @@
+                 )
+                 * self.scaling[self.active_adapter]
+             )
+-        result += output
++        result = result + output
+     return result

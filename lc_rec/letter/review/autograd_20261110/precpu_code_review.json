@@ -1,0 +1,72 @@
+{
+  "schema": "letter_autograd_non_author_precpu_code_review_v1",
+  "reviewer": "/root/independent_review",
+  "reviewed_utc": "2026-11-10T11:02:43.637652+00:00",
+  "status": "PASS_FOR_BOUNDED_CPU_SYNTHETIC_TEST",
+  "scope": "Direct read of new compatibility/test/controller/resource-guard source, frozen original forward and CPU-hidden installed identity receipt. No code implementation, model/GPU execution or package installation by reviewer.",
+  "findings": [
+    {
+      "id": "C01",
+      "result": "PASS_STATIC",
+      "detail": "Exact original PEFT source SHA matches independently extracted frozen-wheel method and installed-source receipt: df705367a1512d2f8bc3ff067a2617218a0a69ca5f151f2d2d1e233462d06088. Whole lora.py hash and MRO/signature/version checks reject unexpected installed source."
+    },
+    {
+      "id": "C02",
+      "result": "PASS_STATIC_AST",
+      "detail": "Independent AST check proves derived computational path is unchanged after exactly two approved transformations: explicit pinned parent forward and out-of-place addition. Observation-only counters/registration guard are excluded explicitly. No detach/data/no_grad in derived computational graph."
+    },
+    {
+      "id": "C03",
+      "result": "PASS_STATIC",
+      "detail": "Installer changes original class forward in memory, preserves parameter IDs/shapes/dtypes/trainability and state key set with before/after assertions, consumes no constructor initialization RNG, and records target call/grad-enabled/checkpoint phases."
+    },
+    {
+      "id": "C04",
+      "result": "PASS_TEST_DESIGN",
+      "detail": "Synthetic fixture keeps the actual PEFT class and original super closure, replaces only CUDA-dependent base with custom Autograd view, exercises original error, actual patched output/input/A/B gradients under fixed dropout RNG, checkpoint replay, zero-B legitimate zero-A gradient, and disabled/missing/r0 base-only branches."
+    },
+    {
+      "id": "C05",
+      "result": "PASS_SCOPE",
+      "detail": "Tests accurately identify CPU synthetic scope. Real bnb CUDA, BF16 autocast, complete model, ZeRO and optimizer acceptance remain untested here."
+    },
+    {
+      "id": "C06",
+      "result": "PASS_STATIC_GUARD",
+      "detail": "New guard retains existing ledger path, requires historical jobs and usage floor, adds new job roots; no historical budget reset. Controller exports fixed commit archive, verifies every deployed file, uses prior runner/transport and excludes adapter/model payloads from light export."
+    }
+  ],
+  "nonblocking_notes": [
+    {
+      "item": "Original and runtime forward identity labels",
+      "detail": "peft05_lora_a_targets currently records original source hash with current derived signature after patch; recommend explicit original/runtime labels."
+    },
+    {
+      "item": "Parent forward identity",
+      "detail": "Runtime installed receipt directly shows bnb parent body/signature-compatible return; full probe should record/verify bnb version and parent source hash. CPU test intentionally overrides parent only after guarded installer runs and restores it before process exit."
+    }
+  ],
+  "required_before_full_gpu": [
+    "Actual CPU synthetic PASS result and terminal/cleanup evidence",
+    "Final full-model probe code review with exact patch installation order,224 target-module and450 tensor assertions",
+    "Live ledger/GPU/resources check and fixed release/run commit binding"
+  ],
+  "not_established": [
+    "Actual GPU backward",
+    "Actual nonzero optimizer update",
+    "Numerical BF16 equivalence",
+    "Adapter reload/beam20",
+    "96h estimate"
+  ],
+  "files_sha256": {
+    "lc_rec/letter/scripts/compat.py": "3ca5347e9fa1d6c53e26948735946be1b101cc9d9b98fa8e33db616fcef50190",
+    "lc_rec/letter/scripts/test_autograd_compat.py": "caebc3e6e675c05b6868ce36249b7856809e82920120b2be0c0497d31aa11c26",
+    "lc_rec/letter/scripts/resource_guard.py": "4aa17156837927f6def5b4e74554e9d8a4f92bf43137119913a2791161d714c3",
+    "lc_rec/letter/scripts/continuation_control.py": "8480b0339719d262575c4ad0b479c7a1263a2d509e0fd1652d15155e342f8fbe",
+    "lc_rec/letter/config/guard_autograd.json": "5281472a4810bc4e0783d5e76e0936c7822a2bd5f7f9094b854ea049c58f737f",
+    "lc_rec/letter/evidence/autograd_20261110/installed_peft_identity.json": "557d5c8d169b53367171dbdced365088d7d399ac402f171fe63c917bd804c363",
+    "lc_rec/letter/review/autograd_20261110/derived_forward_ast_result.json": "49def83da130f2475cffa228466734c865b6362a02d3a3d59dc3e4c4c555a196"
+  },
+  "reviewer_packages_installed": [],
+  "reviewer_gpu_jobs_started": []
+}

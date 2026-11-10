@@ -1,0 +1,166 @@
+{
+  "status": "PASS_CPU_SYNTHETIC",
+  "scope": "CPU synthetic custom-Function base with real PEFT class/derived method",
+  "RUN_COMMIT": "059f9feb55fde067187afbf3b80f285a00a63ec3",
+  "argv": [
+    "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/test_autograd_compat.py",
+    "--output",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r0/output/cpu",
+    "--run-commit",
+    "059f9feb55fde067187afbf3b80f285a00a63ec3"
+  ],
+  "tests": [
+    {
+      "test": "original_custom_function_view_inplace",
+      "status": "EXPECTED_ERROR",
+      "error": "Output 0 of BaseViewBackward is a view and is being modified inplace. This view was created inside a custom Function (or because an input was returned as-is) and the autograd logic to handle view+inplace would override the custom backward associated with the custom Function, leading to incorrect gradients. This behavior is forbidden. You can fix this by cloning the output of the custom Function."
+    },
+    {
+      "test": "reference_forward_and_gradients",
+      "checkpointed": false,
+      "B_zero_initialized": false,
+      "dropout": 0.05,
+      "scale": 2.0,
+      "output_max_abs_difference": 0.0,
+      "input_A_B_gradient_max_abs_differences": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "input_A_B_gradient_max_abs": [
+        5.422987461090088,
+        10.65622329711914,
+        5.562759876251221
+      ],
+      "tolerance": {
+        "atol": 1e-06,
+        "rtol": 1e-06,
+        "dtype": "float32"
+      },
+      "status": "PASS"
+    },
+    {
+      "test": "reference_forward_and_gradients",
+      "checkpointed": true,
+      "B_zero_initialized": false,
+      "dropout": 0.05,
+      "scale": 2.0,
+      "output_max_abs_difference": 0.0,
+      "input_A_B_gradient_max_abs_differences": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "input_A_B_gradient_max_abs": [
+        5.422987461090088,
+        10.65622329711914,
+        5.562759876251221
+      ],
+      "tolerance": {
+        "atol": 1e-06,
+        "rtol": 1e-06,
+        "dtype": "float32"
+      },
+      "status": "PASS"
+    },
+    {
+      "test": "reference_forward_and_gradients",
+      "checkpointed": true,
+      "B_zero_initialized": true,
+      "dropout": 0.05,
+      "scale": 2.0,
+      "output_max_abs_difference": 0.0,
+      "input_A_B_gradient_max_abs_differences": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "input_A_B_gradient_max_abs": [
+        5.609050750732422,
+        0.0,
+        5.562759876251221
+      ],
+      "tolerance": {
+        "atol": 1e-06,
+        "rtol": 1e-06,
+        "dtype": "float32"
+      },
+      "status": "PASS"
+    },
+    {
+      "test": "disable_adapters",
+      "base_output_and_input_gradient": "PASS",
+      "lora_calls": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "missing_active_adapter",
+      "base_output_and_input_gradient": "PASS",
+      "lora_calls": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "rank_zero",
+      "base_output_and_input_gradient": "PASS",
+      "lora_calls": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "checkpoint_recomputation_observed",
+      "calls": {
+        "calls": 8,
+        "grad_enabled_calls": 6,
+        "no_grad_calls": 2,
+        "base_only_calls": 2,
+        "lora_add_calls": 5,
+        "rank_zero_calls": 1
+      },
+      "status": "PASS"
+    }
+  ],
+  "patch": {
+    "adaptation": "Probe-only PEFT 0.5 int8 differentiable out-of-place LoRA residual",
+    "original_source_file": "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/tuners/lora.py",
+    "original_file_sha256": "cbcab4d64b5254d0e1a0018f5e870f7bd93f0178ed1b14d2b750e033f871aa01",
+    "original_source_sha256": "df705367a1512d2f8bc3ff067a2617218a0a69ca5f151f2d2d1e233462d06088",
+    "original_signature": "(self, x: torch.Tensor)",
+    "derived_source_file": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/compat.py",
+    "derived_source_sha256": "976afde20397526a0be194d4629f34edc1b945d099299322cf61ac09b5c0bf33",
+    "derived_signature": "(self, x)",
+    "class": "peft.tuners.lora.Linear8bitLt",
+    "mro": [
+      "peft.tuners.lora.Linear8bitLt",
+      "bitsandbytes.nn.modules.Linear8bitLt",
+      "torch.nn.modules.linear.Linear",
+      "torch.nn.modules.module.Module",
+      "peft.tuners.lora.LoraLayer",
+      "peft.tuners.tuners_utils.BaseTunerLayer",
+      "abc.ABC",
+      "builtins.object"
+    ],
+    "parent_forward": "bitsandbytes.nn.Linear8bitLt.forward",
+    "parent_forward_source_sha256": "d3f4146d34e7100027694d30fa36bac6c8691c244f865a15ff55e3c462b12665",
+    "semantic_diff": [
+      "super().forward(x) -> explicit pinned bnb.nn.Linear8bitLt.forward(self, x)",
+      "result += output -> result = result + output"
+    ],
+    "target_count": 1,
+    "module_calls": {
+      "target": {
+        "calls": 8,
+        "grad_enabled_calls": 6,
+        "no_grad_calls": 2,
+        "base_only_calls": 2,
+        "lora_add_calls": 5,
+        "rank_zero_calls": 1
+      }
+    },
+    "parameter_and_state_identity_unchanged": true,
+    "parameter_tensors_before_after": 3,
+    "state_dict_keys_before_after": 3
+  },
+  "real_parent_source_sha256": "d3f4146d34e7100027694d30fa36bac6c8691c244f865a15ff55e3c462b12665",
+  "cuda_initialized": false,
+  "CUDA_bnb_and_BF16_acceptance": "NOT_TESTED_REQUIRES_REAL_GPU_PROBE",
+  "elapsed_seconds": 7.70837162155658
+}

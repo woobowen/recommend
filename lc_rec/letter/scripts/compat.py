@@ -210,7 +210,8 @@ def peft05_lora_a_targets(model):
     if not targets:
         raise RuntimeError("No inspected PEFT 0.5 int8 LoRA A modules found")
     identity = {"class": Linear8bitLt.__module__ + "." + Linear8bitLt.__qualname__,
-                "forward_signature": str(inspect.signature(Linear8bitLt.forward)),
+                "original_forward_signature": str(inspect.signature(original)),
+                "runtime_forward_signature": str(inspect.signature(Linear8bitLt.forward)),
                 "forward_source_sha256": hashlib.sha256(source.encode()).hexdigest(),
                 "target_count": len(targets)}
     return targets, identity

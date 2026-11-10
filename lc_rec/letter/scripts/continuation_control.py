@@ -89,7 +89,11 @@ def main():
             argv = [PYTHON, scripts+'test_autograd_compat.py', '--output', output+'cpu', '--run-commit', commit]
         else:
             if args.kind == 'gpu':
-                inner = [scripts+'gpu_probe.py', '--source-root', source+'LETTER-LC-Rec', '--data-root', source+'data', '--model', model, '--audit-dir', audit, '--output', output+'probe', '--source-commit', commit]
+                # Enforce the task-wide nine-update cap across failed attempts.
+                cap_code = """from pathlib import Path\nimport json\nledger=json.loads(Path('/home/bwwu/lc-rec/letter-20261110/gpu-budget.json').read_text());jobs=[]\nfor run in ledger['runs']:\n if not run['job_id'].startswith('letter-20261110-autograd-gpu-'):continue\n assert run.get('end_utc'),'query unresolved original GPU job; never relaunch'\n seen=[]\n for rank in [0,1]:\n  p=Path('/home/bwwu/grid-audits/sid-extensions-p0/jobs')/run['job_id']/'output/probe'/('rank%d.json'%rank)\n  assert p.is_file(),'missing previous rank evidence; update cap cannot be recovered safely'\n  r=json.loads(p.read_text());counts=[int(x['engine_global_steps']) for x in r.get('updates',[])]\n  for step in r.get('current_update',{}).get('microsteps',[]):\n   counts.append(int(step.get('engine_global_steps_after',step.get('engine_global_steps_before',0))))\n   if step.get('accumulation_boundary') and step.get('step')=='RUNNING':counts.append(int(step['engine_global_steps_before'])+1)\n  seen.append(max(counts,default=0))\n jobs.append({'job_id':run['job_id'],'counted_updates_conservative':max(seen)})\nused=sum(x['counted_updates_conservative'] for x in jobs)\nassert 0<=used<9,'No task-wide optimizer update allowance remains'\nprint(json.dumps({'previous_jobs':jobs,'used_updates':used,'remaining_updates':9-used}))"""
+                cap = json.loads(t.python(cap_code))
+                write(SUPPORT/'receipts'/('update-cap-'+args.job+'.json'),cap)
+                inner = [scripts+'gpu_probe.py', '--source-root', source+'LETTER-LC-Rec', '--data-root', source+'data', '--model', model, '--audit-dir', audit, '--output', output+'probe', '--source-commit', commit, '--max-updates', str(cap['remaining_updates'])]
             else:
                 assert args.train_job and args.train_job.startswith('letter-20261110-autograd-')
                 train = t.profile['job_root']+'/'+args.train_job+'/output/probe'

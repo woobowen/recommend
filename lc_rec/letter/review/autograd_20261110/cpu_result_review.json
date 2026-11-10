@@ -1,0 +1,91 @@
+{
+  "schema": "letter_cpu_autograd_non_author_result_review_v1",
+  "reviewer": "/root/independent_review",
+  "reviewed_utc": "2026-11-10T11:04:56.752685+00:00",
+  "status": "PASS_CPU_SYNTHETIC_WITH_EXPLICIT_SCOPE",
+  "job_id": "letter-20261110-autograd-cpu-r0",
+  "RUN_COMMIT": "059f9feb55fde067187afbf3b80f285a00a63ec3",
+  "result_sha256": "88b50aefe674c81ba7d6e295eda0bfd12a44f64c951529171b13ea34026262e3",
+  "direct_read": [
+    "actual request",
+    "actual status and cleanup",
+    "actual work.log",
+    "actual eight-test JSON",
+    "light-export manifest and every listed member hash",
+    "git blobs for every request source/config input"
+  ],
+  "request_source_config_blob_hashes_checked": [
+    "lc_rec/letter/config/author_instruments.json",
+    "lc_rec/letter/config/budget.json",
+    "lc_rec/letter/config/guard.json",
+    "lc_rec/letter/config/guard_autograd.json",
+    "lc_rec/letter/config/probe_instruments.json",
+    "lc_rec/letter/scripts/audit_data.py",
+    "lc_rec/letter/scripts/build_review_zip.py",
+    "lc_rec/letter/scripts/check_environment.py",
+    "lc_rec/letter/scripts/compat.py",
+    "lc_rec/letter/scripts/continuation_control.py",
+    "lc_rec/letter/scripts/estimate_budget.py",
+    "lc_rec/letter/scripts/final_resources.py",
+    "lc_rec/letter/scripts/gpu_probe.py",
+    "lc_rec/letter/scripts/inference_probe.py",
+    "lc_rec/letter/scripts/inspect_remote.py",
+    "lc_rec/letter/scripts/materialize_upstream.py",
+    "lc_rec/letter/scripts/prepare_dependencies.py",
+    "lc_rec/letter/scripts/prepare_peft_compatibility.py",
+    "lc_rec/letter/scripts/resource_guard.py",
+    "lc_rec/letter/scripts/setup_environment.py",
+    "lc_rec/letter/scripts/test_autograd_compat.py",
+    "lc_rec/letter/scripts/verify_delivery.py"
+  ],
+  "assertions": {
+    "runner_exit0_cleanup_verified": true,
+    "no_live_recorded_worker": true,
+    "original_view_inplace_error_reproduced": true,
+    "patched_output_and_input_A_B_gradients_match_reference": true,
+    "checkpoint_nonzeroB_and_zeroB_branches_pass": true,
+    "dropout_fixed_rng_preserved_in_checkpoint_reference": true,
+    "disable_missing_r0_branches_base_output_and_input_grad_pass": true,
+    "parameter_ids_and_state_keys_unchanged": true,
+    "patch_installation_rng_unchanged": "test assertion passed",
+    "current_derived_method_hash_equals_executed_method": true
+  },
+  "gradient_max_abs_difference": [
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "module_calls": {
+    "target": {
+      "calls": 8,
+      "grad_enabled_calls": 6,
+      "no_grad_calls": 2,
+      "base_only_calls": 2,
+      "lora_add_calls": 5,
+      "rank_zero_calls": 1
+    }
+  },
+  "limits": [
+    "Base was a CPU synthetic custom Function returning a view, not bnb CUDA matmul.",
+    "No CUDA initialization; no BF16 CUDA, full LLaMA, ZeRO2, optimizer, adapter or beam acceptance established by this test.",
+    "CPU-hidden bitsandbytes GPU-support warning in work.log is expected for this explicitly hidden-CUDA process, not an actual GPU runtime verdict."
+  ],
+  "semantic_diff": {
+    "path": "lc_rec/letter/review/autograd_20261110/peft05_forward_semantic.diff",
+    "scope": "Two approved computational edits exported from frozen original; not full installable patch. Full actual derived source and independent AST result must accompany it."
+  },
+  "packages_installed_by_reviewer": [],
+  "gpu_jobs_started_by_reviewer": []
+}
