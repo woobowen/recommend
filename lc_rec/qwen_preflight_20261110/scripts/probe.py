@@ -2,6 +2,7 @@
 import argparse, datetime as dt, gc, hashlib, importlib.metadata as md, inspect, json, math, os, random, resource, sys, time, traceback
 from pathlib import Path
 from common import *
+from update_budget import charged_attempts
 
 def main():
  p=argparse.ArgumentParser();p.add_argument('--key',choices=MODELS,required=True);p.add_argument('--route',choices=['L','F'],required=True);p.add_argument('--precision',choices=['int8','bf16'],required=True);p.add_argument('--model',required=True);p.add_argument('--letter',required=True);p.add_argument('--audit',required=True);p.add_argument('--output',required=True);p.add_argument('--run-commit',required=True);p.add_argument('--micro',type=int,default=8);a=p.parse_args()
@@ -32,6 +33,7 @@ def main():
   random.seed(42);np.random.seed(42);torch.manual_seed(42);torch.cuda.manual_seed_all(42)
   r['versions']={name:md.version(name) for name in ['torch','transformers','peft','accelerate','bitsandbytes','deepspeed']}
   r['gpu']={'name':torch.cuda.get_device_name(local),'total_bytes':torch.cuda.get_device_properties(local).total_memory,'visible_devices':os.environ['CUDA_VISIBLE_DEVICES']}
+  r['allocator_environment']=os.environ.get('PYTORCH_CUDA_ALLOC_CONF')
   train,valid,test=datasets(a.letter);tok,tokenmap=tokenizer_for(a.model,train.get_new_tokens());collator=Collator(tok)
   audit=json.loads((Path(a.audit)/'audit.json').read_text());selection=json.loads((Path(a.audit)/'selection.json').read_text())
   assert tokenmap=={k:v for k,v in audit['tokenizer'].items() if k not in ['save_reload_vocab_exact','all_9922_item_sids_encode_decode_before_and_after_reload_exact']}
@@ -130,13 +132,13 @@ def main():
   handles.append(model.get_input_embeddings().register_forward_hook(embed_forward))
   budget=Path('/home/bwwu/lc-rec/qwen-preflight-20261110/update-budget.json')
   counts=json.loads(budget.read_text()) if budget.exists() else {'attempted_updates':[]}
-  consumed=sum(x['key']==a.key and x['route']==a.route for x in counts['attempted_updates']);maximum=(4 if a.route=='L' else 2)-consumed;assert maximum>0
+  charged,reconciled=charged_attempts(counts['attempted_updates']);r['update_budget_accounting']={'prior_attempts':len(counts['attempted_updates']),'prior_conservative_update_charges':len(charged),'certified_failed_zero_update_jobs':reconciled,'ledger_history_modified':False};consumed=sum(x['key']==a.key and x['route']==a.route for x in charged);maximum=(4 if a.route=='L' else 2)-consumed;assert maximum>0
   r['remaining_update_allowance_at_start']=maximum
   def charge_update(index):
    if rank==0:
     state=json.loads(budget.read_text()) if budget.exists() else {'attempted_updates':[]}
-    entries=state['attempted_updates'];assert sum(x['route']==a.route for x in entries)<(12 if a.route=='L' else 6)
-    assert sum(x['key']==a.key and x['route']==a.route for x in entries)<(4 if a.route=='L' else 2)
+    entries=state['attempted_updates'];charged,_=charged_attempts(entries);assert sum(x['route']==a.route for x in charged)<(12 if a.route=='L' else 6)
+    assert sum(x['key']==a.key and x['route']==a.route for x in charged)<(4 if a.route=='L' else 2)
     entries.append({'job_id':os.environ['GRID_JOB_ID'],'key':a.key,'route':a.route,'index_in_job':index,'run_commit':a.run_commit,'charged_before_boundary_step':True,'utc':dt.datetime.now(dt.timezone.utc).isoformat()});write(budget,state)
    dist.barrier()
   stage('bounded_training');engine.train()

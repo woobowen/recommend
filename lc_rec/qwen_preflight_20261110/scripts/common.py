@@ -17,7 +17,10 @@ def sha(path):
  return h.hexdigest()
 
 def write(path,value):
- path=Path(path);path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_name(path.name+'.tmp');tmp.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n');tmp.replace(path)
+ def container_default(obj):
+  if isinstance(obj,(set,frozenset)):return sorted(obj)
+  raise TypeError('Unsupported evidence JSON type: '+type(obj).__name__)
+ path=Path(path);path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_name(path.name+'.tmp');tmp.write_text(json.dumps(value,ensure_ascii=False,indent=2,default=container_default)+'\n');tmp.replace(path)
 
 def datasets(letter):
  import numpy as np

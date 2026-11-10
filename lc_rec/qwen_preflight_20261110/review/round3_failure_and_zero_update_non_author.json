@@ -1,0 +1,150 @@
+{
+  "schema": 1,
+  "reviewer": "/root/official_architecture",
+  "is_implementation_author": false,
+  "reviewed_utc": "2026-11-10T18:03:50.000363+00:00",
+  "status": "FAILED_INITIAL_ATTEMPTS_VERIFIED_ZERO_COMPLETED_GLOBAL_UPDATES_ROUND3_SOURCE_PATCH_REVIEW_PENDING",
+  "run_commit": "e775a226270f9b3b772e8891a805ad62d7bf2fb2",
+  "q17_f_initial_failure": {
+    "job_id": "qwen-20261110-q17-f-r0",
+    "micro": 4,
+    "accumulation": 8,
+    "global_batch": 64,
+    "both_ranks_failure": "CUDA OOM in torch AdamW _multi_tensor_adamw foreach_sqrt at first boundary",
+    "rank_failure_peaks": [
+      {
+        "allocated_gib": 17.80385684967041,
+        "reserved_gib": 22.67578125
+      },
+      {
+        "allocated_gib": 17.782708168029785,
+        "reserved_gib": 22.68359375
+      }
+    ],
+    "rank_error_rounded_live_allocated_gib": [
+      17.8,
+      17.78
+    ],
+    "rank_error_rounded_cached_unallocated_gib": [
+      3.07,
+      3.09
+    ],
+    "rank_error_driver_free_gib": [
+      2.04,
+      2.04
+    ],
+    "new_requested_block_gib": 3.21,
+    "exact_foreach_partition_sqrt_bytes_basis_gib": 3.207304000854492,
+    "GPU_device_seconds_kept": 104.61382330581546,
+    "real_runner_terminal": "FAILED/nonzero/cleanup_verified/no live worker supervisor or workgroup",
+    "precharged_attempts_observed_in_controller_context": 1,
+    "completed_global_updates_independently_proven": 0,
+    "nonzero_LR_updates": 0,
+    "no_training_or_generation_PASS_claim": true
+  },
+  "zero_completed_update_proof": [
+    "Both raw ranks show current_update.index=0; lr_before=[0,0]; engine_step_before=0; updates=[]; seven previously recorded microsteps are non-boundary with global_steps_after0.",
+    "Both exact tracebacks reach the first optimizer parameter-group foreach_sqrt at installed AdamW line699; failure occurs before denominator normalization and foreach_addcdiv_ parameter update.",
+    "Torch AdamW has already incremented scalar step and updated first/second moments before sqrt. These are partial optimizer side effects, not an absence of all activity. LR0 means earlier parameter weight-decay multiplication has factor1.",
+    "Verified installed DS ZeRO2 source calls _optimizer_step before BF16 master-partition copyback and all-gather; the exception prevents those model-weight commit operations.",
+    "Verified installed DS engine calls optimizer.step before scheduler.step and global_steps+=1. Its first global update did not return/complete.",
+    "A restart must discard partial in-memory optimizer state and load the same official model, seed, scheduler at original step0. It must not skip warmup or change LR to obtain a nonzero update."
+  ],
+  "allocator_candidate": {
+    "requested_environment": "PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True",
+    "identity": "CUDA native allocator engineering option only; no optimizer/loss/precision/trainable/model/batch change",
+    "official_source": "https://github.com/pytorch/pytorch/blob/v2.6.0/c10/cuda/CUDACachingAllocator.cpp#L265",
+    "official_source_sha256": "23626f91858e9a4e21d0f84f346f23c8f60eb3ae1bc19a941fff53082cf5bc96",
+    "mechanism": "Per-stream expandable virtual segment with CUDA page mapping; permits fewer stranded small slices and unmapping empty physical pages. Directly addresses recorded large cached-unallocated fragments plus insufficient new contiguous driver allocation.",
+    "rough_live_plus_requested_plus_non_torch_gib": 21.6,
+    "observed_capacity_gib": 23.5184326171875,
+    "rough_remaining_gib": 1.92,
+    "headroom_is_conditional_not_allocator_success_guarantee": true,
+    "runtime_boundary": "IPC/peer memory limitations exist in official allocator source. Probe does not transfer CUDA tensors through Python data-loader/multiprocessing IPC; actual dual-rank NCCL and allocator support still require real bounded execution.",
+    "one_final_retry_recommendation": "One combined round3 same-micro4 restart is technically justified if explicit accounting reconciliation is frozen first. If unsupported or still fails, record BLOCKED with no new optimizer/offload or extra correction round."
+  },
+  "required_update_ledger_reconciliation": {
+    "original_attempt_entry": "KEEP UNMODIFIED as a historical failed boundary attempt; no deletion, silent clear or budget reset",
+    "completion_annotation": "Add explicit reconciliation record tied to job/request/rank/traceback/source hashes: attempted_boundary1, completed_global_updates0, nonzero0, partial optimizer temporary state discarded.",
+    "remaining_true_update_allowance": 2,
+    "real_retry_schedule": "Original LR0 warmup first completed update; second is first nonzero-LR update; never exceed2 completed global updates for F17 or6 F total.",
+    "all_device_time_still_charged": true,
+    "new_job_id_and_RUN_COMMIT_required": true,
+    "source_accounting_patch_not_reviewed_yet": true
+  },
+  "q35_f_initial_failure": {
+    "job_id": "qwen-20261110-q35-f-r0",
+    "root_cause": "TF5.2 loading_info contains empty Python sets; common.write default JSON encoder rejects set in r when stage(deepspeed_initialize) persists it; exception handler repeats same serialization failure.",
+    "actual_phase": "Official text weights loaded and CPU Trainer/AdamW objects instantiated; failure is in stage write immediately before deepspeed.initialize, not before Trainer construction.",
+    "forward_backward_and_optimizer_boundary_reached": false,
+    "completed_global_updates": 0,
+    "partial_optimizer_state_updates": false,
+    "new_attempt_ledger_entry_expected": false,
+    "GPU_device_seconds_kept": 73.44887300394475,
+    "proposed_minimal_fix": "common.write JSON default maps only set to sorted list; all unknown types must still raise TypeError. Do not stringify all objects or loosen load assertions.",
+    "source_patch_not_reviewed_yet": true,
+    "real_terminal": "FAILED/nonzero/cleanup_verified/no live worker supervisor or workgroup",
+    "rank_json_limitation": "Last successfully written rank JSON can remain RUNNING/load_model because later evidence write and exception write both fail. Raw runner/work.log are authoritative failure evidence."
+  },
+  "actual_server_source_readback": {
+    "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/optim/adamw.py": {
+      "bytes": 35079,
+      "sha256": "e680a255db9c53c4248a55f414b7af9aab90bb672312ac960bb459903a161c1d"
+    },
+    "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/zero/stage_1_and_2.py": {
+      "bytes": 121833,
+      "sha256": "7e03bb5b2c923b2291ed28b663b1b605aa1384f68aa23b5744951183cc42fef6"
+    },
+    "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py": {
+      "bytes": 189329,
+      "sha256": "88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d"
+    }
+  },
+  "evidence_sha256": {
+    "evidence/jobs/qwen-20261110-q17-f-r0/output/probe/rank0.json": {
+      "bytes": 148234,
+      "sha256": "5fcbea721cf4af19abe21c1c63a81e16ea2c14569bfcd6228002dd60bc80eff6"
+    },
+    "evidence/jobs/qwen-20261110-q17-f-r0/output/probe/rank1.json": {
+      "bytes": 148246,
+      "sha256": "ca7f6d97a575f0901d47f1bc8bc26aed1f366fa4192ae2b460adf857bdeeef3f"
+    },
+    "evidence/jobs/qwen-20261110-q17-f-r0/work.log": {
+      "bytes": 31914,
+      "sha256": "6326744cd8f699d8a192dd806b0d2c1ef80c99a9a6ef2744f6e634c98549c3db"
+    },
+    "evidence/jobs/qwen-20261110-q17-f-r0/request.json": {
+      "bytes": 18198,
+      "sha256": "4ab241ba6862ff25c27750ad92ba40883d9a3747e0186bc500a5ae39506250bc"
+    },
+    "evidence/jobs/qwen-20261110-q17-f-r0/controller-query.json": {
+      "bytes": 5552,
+      "sha256": "ad58887894918ed48ecda1d91dc73be01a66f0ba0dffafc7e6d7f9a1589ff0aa"
+    },
+    "evidence/jobs/qwen-20261110-q17-f-r0/output/resources/resource-summary.json": {
+      "bytes": 1604,
+      "sha256": "c424ae8bc2f97aefdc6d03ce8543e825b8b31478d63bc8ef66411fed7a21f931"
+    },
+    "evidence/jobs/qwen-20261110-q35-f-r0/work.log": {
+      "bytes": 194085,
+      "sha256": "34e7539318bbd6d2bae0f6c0ac40f7db63188b9abb1ae4789226b878a4a1f039"
+    },
+    "evidence/jobs/qwen-20261110-q35-f-r0/request.json": {
+      "bytes": 18202,
+      "sha256": "615cb28e37fae00b75cca335ec6eee03f30db3c13ad10bef0dba5ad5a29e463a"
+    },
+    "evidence/jobs/qwen-20261110-q35-f-r0/controller-query.json": {
+      "bytes": 5554,
+      "sha256": "f627ba1c5fad921b9db039840de5f537b627f6dcb36788f51d3bb7429cab3487"
+    },
+    "evidence/jobs/qwen-20261110-q35-f-r0/output/resources/resource-summary.json": {
+      "bytes": 1605,
+      "sha256": "39180bb0f60042df7e7bb9744b397b31c753349b9d40def334907c27d0e2279d"
+    }
+  },
+  "limits": [
+    "Initial F17 prediction did not establish allocator success: fragmentation prevented the first large foreach temporary despite a plausible live-tensor budget. Original conditional memory report is preserved and this actual failure supersedes its runtime-pending inference.",
+    "This is independent raw/source analysis, no new GPU execution by reviewer.",
+    "Proposed round3 fixes and retry have not passed merely because source analysis supports them."
+  ]
+}

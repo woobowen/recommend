@@ -3,7 +3,7 @@
 Never labels a complete seed CONFIRMED. Formal DS optimizer/scheduler/RNG saves
 are forbidden in this preflight; their time is an explicit I/O proxy, not zero.
 """
-import argparse, json, math, statistics, sys
+import argparse, datetime, json, math, statistics, sys
 from pathlib import Path
 from common import MODELS,write,sha
 
@@ -69,14 +69,14 @@ def estimate(ranks,cpu,guard):
  return result
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--task',type=Path,default=Path(__file__).parents[1]);p.add_argument('--outcomes',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();jobs=a.task/'evidence/jobs';outcomes=json.loads(a.outcomes.read_text());result={'analysis':{'script_sha256':sha(Path(__file__)),'common_sha256':sha(Path(__file__).with_name('common.py')),'argv':sys.argv,'interpreter':sys.executable},'source_outcomes_sha256':sha(a.outcomes),'models':{},'recommendation_metrics':'NOT TESTED; technical preflight cannot rank formal Recall/NDCG'}
+ p=argparse.ArgumentParser();p.add_argument('--task',type=Path,default=Path(__file__).parents[1]);p.add_argument('--run-commit',default='UNSPECIFIED');p.add_argument('--outcomes',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();jobs=a.task/'evidence/jobs';outcomes=json.loads(a.outcomes.read_text());result={'analysis':{'run_commit':a.run_commit,'script_sha256':sha(Path(__file__)),'common_sha256':sha(Path(__file__).with_name('common.py')),'argv':sys.argv,'interpreter':sys.executable,'cwd':str(Path.cwd()),'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()},'source_outcomes_sha256':sha(a.outcomes),'models':{},'recommendation_metrics':'NOT TESTED; technical preflight cannot rank formal Recall/NDCG'}
  for key,identity in MODELS.items():
   model={};cpu=json.loads((jobs/('qwen-20261110-cpu-'+key+'-r0')/'output/audit/audit.json').read_text());model['cpu_status']=cpu['status'];model['data']=cpu['data'];model['tokenizer']=cpu['tokenizer'];model['model']=cpu['model'];model['static_full_parameter_resources']=cpu['full_parameter_static'];model['routes']={}
   for route in ['L','F']:
    item=outcomes[key][route];record={'status':item['status'],'reason':item.get('reason'),'jobs':item.get('jobs',[])}
    if item.get('training_job'):
-    directory=jobs/item['training_job'];ranks=[json.loads((directory/'output/probe'/f'rank{i}.json').read_text()) for i in [0,1]]
-    record['run_commit']=ranks[0]['run_commit'];record['core_training_status']=[r.get('core_training_status','NOT PASSED') for r in ranks];record['updates_per_rank']=[len(r['updates']) for r in ranks];record['nonzero_lr_updates_per_rank']=[sum(x['nonzero_lr'] for x in r['updates']) for r in ranks];record['training_peak_per_rank']=[r.get('training_peak',r.get('failure_peak')) for r in ranks];record['trainable']=ranks[0].get('trainable');record['precision']=ranks[0]['precision'];record['training']=ranks[0].get('training')
+    directory=jobs/item['training_job'];ranks=[json.loads(path.read_text()) if path.exists() else {'status':'MISSING_RANK_RECORD','updates':[],'missing_path':str(path)} for path in [directory/'output/probe'/f'rank{i}.json' for i in [0,1]]]
+    record['run_commit']=ranks[0].get('run_commit',json.loads((directory/'request.json').read_text())['capture_version']);record['core_training_status']=[r.get('core_training_status','NOT PASSED') for r in ranks];record['updates_per_rank']=[len(r.get('updates',[])) for r in ranks];record['nonzero_lr_updates_per_rank']=[sum(x['nonzero_lr'] for x in r.get('updates',[])) for r in ranks];record['training_peak_per_rank']=[r.get('training_peak',r.get('failure_peak')) for r in ranks];record['recorded_job_phase_peak_per_rank']=[r.get('job_peak_from_recorded_phases') for r in ranks];record['complete_allocator_phase_coverage_per_rank']=['validation_and_post_train_check_peak' in r for r in ranks];record['trainable']=ranks[0].get('trainable');record['precision']=ranks[0].get('precision','NOT OBSERVED');record['training']=ranks[0].get('training')
     if all(r.get('status')=='PASS_TECHNICAL' for r in ranks):
      guard=json.loads((directory/'output/resources/resource-summary.json').read_text());record['seed_estimate']=estimate(ranks,cpu,guard)
     else:record['seed_estimate']={'status':'BLOCKED' if record['core_training_status']!=['PASS','PASS'] else 'INCONCLUSIVE','center':None,'conservative':None,'reason':'Missing composite training/restore/generation measurements; never substitute zero for unknown costs'}
@@ -91,5 +91,5 @@ def main():
   assert result['models'][key]['tokenizer']['sid_tokens']==result['models']['q06']['tokenizer']['sid_tokens']
  selections={key:sha(jobs/('qwen-20261110-cpu-'+key+'-r0')/'output/audit/selection.json') for key in MODELS};assert len(set(selections.values()))==1
  result['cross_model_inputs']={'actual_raw_train_sample_texts_identical':True,'samples_per_model':len(reference),'sample_identity_sha256':{key:sha(jobs/('qwen-20261110-cpu-'+key+'-r0')/'output/audit/samples.json') for key in MODELS},'full_selection_files_sha256':selections,'fixed_selection_rows_prompts_users_and_validation_indices_identical':True,'original_data_hashes_and_counts_identical':True,'all_918_sid_token_strings_order_identical':True,'different_tokenizer_ids_lengths_and_padding_retained':True}
- write(a.output,result);print(json.dumps({key:{route:data['seed_estimate']['status'] for route,data in value['routes'].items()} for key,value in result['models'].items()},indent=2))
+ result['analysis']['completed_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();result['analysis']['status']='PASS_ANALYSIS_FROM_RAW_RECORDS';write(a.output,result);print(json.dumps({key:{route:data['seed_estimate']['status'] for route,data in value['routes'].items()} for key,value in result['models'].items()},indent=2))
 if __name__=='__main__':main()

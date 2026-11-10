@@ -1,5 +1,5 @@
 {
-  "current_round": 2,
+  "current_round": 3,
   "maximum_correction_rounds": 3,
   "round0": "Initial source review, official metadata and first wheel relay execution; no GPU run yet",
   "rounds": [
@@ -7,14 +7,31 @@
       "round": 1,
       "cause": "Wheel unpack SSH -c included entire dependency Requires-Dist metadata, exceeding Windows command-line length; archive transfer itself verified",
       "fix": "Transmit compact filename/bytes/SHA mapping only; no dependency or method change",
-      "verification": "PASS: 15 official wheel sizes/SHA verified and both fixed setup jobs SUCCEEDED/exit0/cleanup_verified"
+      "verification": "PASS: 15 official wheel sizes/SHA verified and both fixed setup jobs SUCCEEDED/exit0/cleanup_verified",
+      "evidence_limit": "Original interactive Windows command-length exception stderr was not separately retained. Do not reconstruct it as raw evidence; preserve actual old/new source and successful verified transfer/setup receipts."
     },
     {
       "round": 2,
       "cause": "Non-author packaging audit found task-specific shared transfers and request files omitted from new server file accounting in guard and final collector. Previous GPU q06-L computation is unaffected; preserve its raw accounting and disclose missing small files.",
       "fix": "Count exact qwen-preflight-* shared transfer prefix and qwen-20261110-* requests in allocated/logical totals, without scanning unrelated files or deleting artifacts. No probe/common, optimizer, data, loss, quantization or model method change. All subsequent GPU job compiler/runtime/cache paths explicitly point inside the counted task data root; guard creates only those task directories before launching child. Before any remaining GPU launch, add an allocator-peak read immediately before validation/post-train counters are reset; computations and data unchanged. q06-L retains exact training peaks and recorded phase peaks, but its unsaved validation interval is disclosed as a coverage limitation (no rerun).",
-      "verification": "PENDING corrected collector real readback and next authorized GPU guard execution; syntax checks passed.",
+      "verification": "PASS corrected guard ran real q17-L and q06-F successfully including shared transfers/requests and directed caches; corrected collector ran real round2 snapshot; exact legacy cache and final totals will be captured again at end. q06-L original evidence remains unchanged.",
       "previous_successful_training_rerun": false
+    },
+    {
+      "round": 3,
+      "causes": [
+        "F17 micro4 first LR0 AdamW foreach temporary3.21GiB OOM due to allocator fragmentation;1 failed boundary attempt,0 completed global updates. All actual GPU time retained.",
+        "Q35 loading-info empty set is not JSON serializable at pre-DeepSpeed stage; Trainer/optimizer objects exist but no DS initialize/forward/backward/global attempt."
+      ],
+      "fixes": [
+        "F17 only: native allocator expandable_segments=True, same micro4/global64/native AdamW/seed/scheduler/BF16/all-parameter scope/no offload.",
+        "Evidence writer serializes set/frozenset as sorted arrays, unknown objects still TypeError; strict model-loading assertions unchanged.",
+        "Add separately frozen independently certified zero-completed-update reconciliation; append-only original attempt ledger unchanged, all ambiguous attempts still charged, both global/per-model completed-update ceilings enforced. Retry starts original LR0 schedule, not elevated LR."
+      ],
+      "verification": "PENDING mandatory CPU metadata/quota regression and exactly one GPU retry per failed route. No further repair round permitted.",
+      "formal_method_changes": false,
+      "remaining_correction_rounds": 0,
+      "original_F17_failure_charged_gpu_device_seconds": 104.61382330581546
     }
   ]
 }
