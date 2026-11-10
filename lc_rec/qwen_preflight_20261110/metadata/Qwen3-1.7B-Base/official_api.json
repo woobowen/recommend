@@ -1,0 +1,156 @@
+{
+  "_id": "680f0cb340199096ff7bae3e",
+  "id": "Qwen/Qwen3-1.7B-Base",
+  "private": false,
+  "pipeline_tag": "text-generation",
+  "library_name": "transformers",
+  "tags": [
+    "transformers",
+    "safetensors",
+    "qwen3",
+    "text-generation",
+    "conversational",
+    "arxiv:2505.09388",
+    "license:apache-2.0",
+    "text-generation-inference",
+    "endpoints_compatible",
+    "region:us"
+  ],
+  "downloads": 635733,
+  "likes": 98,
+  "modelId": "Qwen/Qwen3-1.7B-Base",
+  "author": "Qwen",
+  "sha": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+  "lastModified": "2025-07-26T03:50:48.000Z",
+  "gated": false,
+  "disabled": false,
+  "widgetData": [
+    {
+      "text": "Hi, what can you help me with?"
+    },
+    {
+      "text": "What is 84 * 3 / 2?"
+    },
+    {
+      "text": "Tell me an interesting fact about the universe!"
+    },
+    {
+      "text": "Explain quantum computing in simple terms."
+    }
+  ],
+  "model-index": null,
+  "config": {
+    "architectures": [
+      "Qwen3ForCausalLM"
+    ],
+    "model_type": "qwen3",
+    "tokenizer_config": {
+      "bos_token": null,
+      "eos_token": "<|endoftext|>",
+      "unk_token": null,
+      "pad_token": "<|endoftext|>",
+      "chat_template": "{%- if tools %}\n    {{- '<|im_start|>system\\n' }}\n    {%- if messages[0].role == 'system' %}\n        {{- messages[0].content + '\\n\\n' }}\n    {%- endif %}\n    {{- \"# Tools\\n\\nYou may call one or more functions to assist with the user query.\\n\\nYou are provided with function signatures within <tools></tools> XML tags:\\n<tools>\" }}\n    {%- for tool in tools %}\n        {{- \"\\n\" }}\n        {{- tool | tojson }}\n    {%- endfor %}\n    {{- \"\\n</tools>\\n\\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\\n<tool_call>\\n{\\\"name\\\": <function-name>, \\\"arguments\\\": <args-json-object>}\\n</tool_call><|im_end|>\\n\" }}\n{%- else %}\n    {%- if messages[0].role == 'system' %}\n        {{- '<|im_start|>system\\n' + messages[0].content + '<|im_end|>\\n' }}\n    {%- endif %}\n{%- endif %}\n{%- set ns = namespace(multi_step_tool=true, last_query_index=messages|length - 1) %}\n{%- for message in messages[::-1] %}\n    {%- set index = (messages|length - 1) - loop.index0 %}\n    {%- if ns.multi_step_tool and message.role == \"user\" and not(message.content.startswith('<tool_response>') and message.content.endswith('</tool_response>')) %}\n        {%- set ns.multi_step_tool = false %}\n        {%- set ns.last_query_index = index %}\n    {%- endif %}\n{%- endfor %}\n{%- for message in messages %}\n    {%- if (message.role == \"user\") or (message.role == \"system\" and not loop.first) %}\n        {{- '<|im_start|>' + message.role + '\\n' + message.content + '<|im_end|>' + '\\n' }}\n    {%- elif message.role == \"assistant\" %}\n        {%- set content = message.content %}\n        {%- set reasoning_content = '' %}\n        {%- if message.reasoning_content is defined and message.reasoning_content is not none %}\n            {%- set reasoning_content = message.reasoning_content %}\n        {%- else %}\n            {%- if '</think>' in message.content %}\n                {%- set content = message.content.split('</think>')[-1].lstrip('\\n') %}\n                {%- set reasoning_content = message.content.split('</think>')[0].rstrip('\\n').split('<think>')[-1].lstrip('\\n') %}\n            {%- endif %}\n        {%- endif %}\n        {%- if loop.index0 > ns.last_query_index %}\n            {%- if loop.last or (not loop.last and reasoning_content) %}\n                {{- '<|im_start|>' + message.role + '\\n<think>\\n' + reasoning_content.strip('\\n') + '\\n</think>\\n\\n' + content.lstrip('\\n') }}\n            {%- else %}\n                {{- '<|im_start|>' + message.role + '\\n' + content }}\n            {%- endif %}\n        {%- else %}\n            {{- '<|im_start|>' + message.role + '\\n' + content }}\n        {%- endif %}\n        {%- if message.tool_calls %}\n            {%- for tool_call in message.tool_calls %}\n                {%- if (loop.first and content) or (not loop.first) %}\n                    {{- '\\n' }}\n                {%- endif %}\n                {%- if tool_call.function %}\n                    {%- set tool_call = tool_call.function %}\n                {%- endif %}\n                {{- '<tool_call>\\n{\"name\": \"' }}\n                {{- tool_call.name }}\n                {{- '\", \"arguments\": ' }}\n                {%- if tool_call.arguments is string %}\n                    {{- tool_call.arguments }}\n                {%- else %}\n                    {{- tool_call.arguments | tojson }}\n                {%- endif %}\n                {{- '}\\n</tool_call>' }}\n            {%- endfor %}\n        {%- endif %}\n        {{- '<|im_end|>\\n' }}\n    {%- elif message.role == \"tool\" %}\n        {%- if loop.first or (messages[loop.index0 - 1].role != \"tool\") %}\n            {{- '<|im_start|>user' }}\n        {%- endif %}\n        {{- '\\n<tool_response>\\n' }}\n        {{- message.content }}\n        {{- '\\n</tool_response>' }}\n        {%- if loop.last or (messages[loop.index0 + 1].role != \"tool\") %}\n            {{- '<|im_end|>\\n' }}\n        {%- endif %}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|im_start|>assistant\\n' }}\n    {%- if enable_thinking is defined and enable_thinking is false %}\n        {{- '<think>\\n\\n</think>\\n\\n' }}\n    {%- endif %}\n{%- endif %}"
+    }
+  },
+  "cardData": {
+    "license": "apache-2.0",
+    "library_name": "transformers"
+  },
+  "transformersInfo": {
+    "auto_model": "AutoModelForCausalLM",
+    "pipeline_tag": "text-generation",
+    "processor": "AutoTokenizer"
+  },
+  "siblings": [
+    {
+      "rfilename": ".gitattributes",
+      "blobId": "a6344aac8c09253b3b630fb776ae94478aa0275b",
+      "size": 1519
+    },
+    {
+      "rfilename": "LICENSE",
+      "blobId": "6634c8cc3133b3848ec74b9f275acaaa1ea618ab",
+      "size": 11343
+    },
+    {
+      "rfilename": "README.md",
+      "blobId": "4a6b3c10eca8ca9c6d5a321c88287454da894f0d",
+      "size": 2941
+    },
+    {
+      "rfilename": "config.json",
+      "blobId": "78f3deadbfd84408806f8f8c46abbc9647f673d2",
+      "size": 727
+    },
+    {
+      "rfilename": "generation_config.json",
+      "blobId": "cbbb3133034e192527e5321b4c679154e4819ab8",
+      "size": 138
+    },
+    {
+      "rfilename": "merges.txt",
+      "blobId": "31349551d90c7606f325fe0f11bbb8bd5fa0d7c7",
+      "size": 1671853
+    },
+    {
+      "rfilename": "model.safetensors",
+      "blobId": "59613a33c2a8a673abc35b1d59207fe6fc74611f",
+      "size": 3441185608,
+      "lfs": {
+        "sha256": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841",
+        "size": 3441185608,
+        "pointerSize": 135
+      }
+    },
+    {
+      "rfilename": "tokenizer.json",
+      "blobId": "443909a61d429dff23010e5bddd28ff530edda00",
+      "size": 7031645
+    },
+    {
+      "rfilename": "tokenizer_config.json",
+      "blobId": "6a3829ee9491f36113e64df37573be81df0366f5",
+      "size": 9678
+    },
+    {
+      "rfilename": "vocab.json",
+      "blobId": "4783fe10ac3adce15ac8f358ef5462739852c569",
+      "size": 2776833
+    }
+  ],
+  "spaces": [
+    "dqy08/InfoLens1",
+    "Ex0bit/qwen-scope-live",
+    "Jellyfish042/Compression-Lens",
+    "GiacomoDeLuca/orrery-demo",
+    "Girlz/TokenTrace",
+    "ArchitSharma/FeatureLens",
+    "VladTruTru/DockerOllama",
+    "VladTruTru/TruVoiceHFbot",
+    "Level-Up-2025/Qwen-Qwen3-1.7B",
+    "perachon/p14-space",
+    "Marintosti/chsa-triage-api",
+    "Sean1999888777666/InfoLens",
+    "cnyoki/InfoLens",
+    "IdealDestructor/InfoLens",
+    "RemDev-AI/medical-triage-agent-ai-poc-api",
+    "dqy08/InfoLens",
+    "ghislaindelabie/oc14-triage-demo",
+    "hplisiecki/pinocchio-inventory-explorer",
+    "syvb/future-oracle",
+    "mombasstic/chsa-triage-api",
+    "vler0ux/triage-chsa-demo",
+    "yutkom/awai",
+    "AlekseyCalvin/NEURONeyes",
+    "AlekseyCalvin/NEURONAUT_gpu",
+    "AlekseyCalvin/neuronaut"
+  ],
+  "createdAt": "2025-04-28T05:05:55.000Z",
+  "safetensors": {
+    "parameters": {
+      "BF16": 1720574976
+    },
+    "total": 1720574976
+  },
+  "usedStorage": 3441185608
+}
