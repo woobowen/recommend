@@ -1,0 +1,233 @@
+[2026-11-10 17:45:06,516] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+[2026-11-10 17:45:06,553] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+In file included from /data/bwwu/envs/grid-20261009-e61baf3/include/python3.10/Python.h:8,
+                 from /data/bwwu/lc-rec/qwen-preflight-20261110/tmp/tmp5thwtdtj/main.c:5:
+/data/bwwu/envs/grid-20261009-e61baf3/include/python3.10/pyconfig.h:1643:9: warning: ‘_POSIX_C_SOURCE’ redefined
+ 1643 | #define _POSIX_C_SOURCE 200809L
+      |         ^~~~~~~~~~~~~~~
+In file included from /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:33,
+                 from /usr/include/stdlib.h:26,
+                 from /data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/triton/backends/nvidia/include/cuda.h:56,
+                 from /data/bwwu/lc-rec/qwen-preflight-20261110/tmp/tmp5thwtdtj/main.c:1:
+/usr/include/features.h:319:10: note: this is the location of the previous definition
+  319 | # define _POSIX_C_SOURCE        202405L
+      |          ^~~~~~~~~~~~~~~
+In file included from /data/bwwu/envs/grid-20261009-e61baf3/include/python3.10/Python.h:8,
+                 from /data/bwwu/lc-rec/qwen-preflight-20261110/tmp/tmpdk48elcg/main.c:5:
+/data/bwwu/envs/grid-20261009-e61baf3/include/python3.10/pyconfig.h:1643:9: warning: ‘_POSIX_C_SOURCE’ redefined
+ 1643 | #define _POSIX_C_SOURCE 200809L
+      |         ^~~~~~~~~~~~~~~
+In file included from /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:33,
+                 from /usr/include/stdlib.h:26,
+                 from /data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/triton/backends/nvidia/include/cuda.h:56,
+                 from /data/bwwu/lc-rec/qwen-preflight-20261110/tmp/tmpdk48elcg/main.c:1:
+/usr/include/features.h:319:10: note: this is the location of the previous definition
+  319 | # define _POSIX_C_SOURCE        202405L
+      |          ^~~~~~~~~~~~~~~
+{"rank": 0, "stage": "load_model"}
+`torch_dtype` is deprecated! Use `dtype` instead!
+{"rank": 1, "stage": "load_model"}
+`torch_dtype` is deprecated! Use `dtype` instead!
+{"rank": 0, "stage": "deepspeed_initialize"}
+[2026-11-10 17:45:22,084] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.9, git-hash=unknown, git-branch=unknown
+[2026-11-10 17:45:22,084] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-11-10 17:45:22,084] [INFO] [config.py:735:__init__] Config mesh_device None world_size = 2
+{"rank": 1, "stage": "deepspeed_initialize"}
+[2026-11-10 17:45:22,407] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.9, git-hash=unknown, git-branch=unknown
+[2026-11-10 17:45:22,407] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-11-10 17:45:22,408] [INFO] [config.py:735:__init__] Config mesh_device None world_size = 2
+[2026-11-10 17:45:22,842] [INFO] [logging.py:107:log_dist] [Rank 0] DeepSpeed Flops Profiler Enabled: False
+[2026-11-10 17:45:22,842] [INFO] [logging.py:107:log_dist] [Rank 0] Using client Optimizer as basic optimizer
+[2026-11-10 17:45:22,842] [INFO] [logging.py:107:log_dist] [Rank 0] Removing param_group that has no 'params' in the basic Optimizer
+[2026-11-10 17:45:22,889] [INFO] [logging.py:107:log_dist] [Rank 0] DeepSpeed Basic Optimizer = AdamW
+[2026-11-10 17:45:22,890] [INFO] [utils.py:59:is_zero_supported_optimizer] Checking ZeRO support for optimizer=AdamW type=<class 'torch.optim.adamw.AdamW'>
+[2026-11-10 17:45:22,890] [INFO] [logging.py:107:log_dist] [Rank 0] Creating torch.bfloat16 ZeRO stage 2 optimizer
+[2026-11-10 17:45:22,890] [INFO] [stage_1_and_2.py:150:__init__] Reduce bucket size 50000000
+[2026-11-10 17:45:22,890] [INFO] [stage_1_and_2.py:151:__init__] Allgather bucket size 50000000
+[2026-11-10 17:45:22,890] [INFO] [stage_1_and_2.py:152:__init__] CPU Offload: False
+[2026-11-10 17:45:22,890] [INFO] [stage_1_and_2.py:153:__init__] Round robin gradient partitioning: False
+[2026-11-10 17:45:24,574] [INFO] [utils.py:781:see_memory_usage] Before initializing optimizer states
+[2026-11-10 17:45:24,575] [INFO] [utils.py:782:see_memory_usage] MA 3.09 GB         Max_MA 3.39 GB         CA 3.77 GB         Max_CA 4 GB 
+[2026-11-10 17:45:24,575] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 11.57 GB, percent = 4.7%
+{"rank": 1, "stage": "bounded_training"}
+[2026-11-10 17:45:24,801] [INFO] [utils.py:781:see_memory_usage] After initializing optimizer states
+[2026-11-10 17:45:24,802] [INFO] [utils.py:782:see_memory_usage] MA 3.09 GB         Max_MA 3.69 GB         CA 4.37 GB         Max_CA 4 GB 
+[2026-11-10 17:45:24,802] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 11.57 GB, percent = 4.7%
+[2026-11-10 17:45:24,802] [INFO] [stage_1_and_2.py:557:__init__] optimizer state initialized
+[2026-11-10 17:45:25,027] [INFO] [utils.py:781:see_memory_usage] After initializing ZeRO optimizer
+[2026-11-10 17:45:25,028] [INFO] [utils.py:782:see_memory_usage] MA 3.09 GB         Max_MA 3.09 GB         CA 4.37 GB         Max_CA 4 GB 
+[2026-11-10 17:45:25,028] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 11.55 GB, percent = 4.7%
+[2026-11-10 17:45:25,029] [INFO] [logging.py:107:log_dist] [Rank 0] DeepSpeed Final Optimizer = DeepSpeedZeroOptimizer
+[2026-11-10 17:45:25,029] [INFO] [logging.py:107:log_dist] [Rank 0] DeepSpeed using client LR scheduler
+[2026-11-10 17:45:25,029] [INFO] [logging.py:107:log_dist] [Rank 0] DeepSpeed LR Scheduler = <torch.optim.lr_scheduler.LambdaLR object at 0x7161cc18e710>
+[2026-11-10 17:45:25,029] [INFO] [logging.py:107:log_dist] [Rank 0] step=0, skipped=0, lr=[0.0], mom=[(0.9, 0.999)]
+[2026-11-10 17:45:25,036] [INFO] [config.py:1003:print] DeepSpeedEngine configuration:
+[2026-11-10 17:45:25,036] [INFO] [config.py:1007:print]   activation_checkpointing_config  {
+    "partition_activations": false, 
+    "contiguous_memory_optimization": false, 
+    "cpu_checkpointing": false, 
+    "number_checkpoints": null, 
+    "synchronize_checkpoint_boundary": false, 
+    "profile": false
+}
+[2026-11-10 17:45:25,036] [INFO] [config.py:1007:print]   aio_config ................... {'block_size': 1048576, 'queue_depth': 8, 'intra_op_parallelism': 1, 'single_submit': False, 'overlap_events': True, 'use_gds': False}
+[2026-11-10 17:45:25,036] [INFO] [config.py:1007:print]   amp_enabled .................. False
+[2026-11-10 17:45:25,036] [INFO] [config.py:1007:print]   amp_params ................... False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   autotuning_config ............ {
+    "enabled": false, 
+    "start_step": null, 
+    "end_step": null, 
+    "metric_path": null, 
+    "arg_mappings": null, 
+    "metric": "throughput", 
+    "model_info": null, 
+    "results_dir": "autotuning_results", 
+    "exps_dir": "autotuning_exps", 
+    "overwrite": true, 
+    "fast": true, 
+    "start_profile_step": 3, 
+    "end_profile_step": 5, 
+    "tuner_type": "gridsearch", 
+    "tuner_early_stopping": 5, 
+    "tuner_num_trials": 50, 
+    "model_info_path": null, 
+    "mp_size": 1, 
+    "max_train_batch_size": null, 
+    "min_train_batch_size": 1, 
+    "max_train_micro_batch_size_per_gpu": 1.024000e+03, 
+    "min_train_micro_batch_size_per_gpu": 1, 
+    "num_tuning_micro_batch_sizes": 3
+}
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   bfloat16_enabled ............. True
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   bfloat16_immediate_grad_update  True
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   checkpoint_parallel_write_pipeline  False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   checkpoint_tag_validation_enabled  True
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   checkpoint_tag_validation_fail  False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   comms_config ................. <deepspeed.comm.config.DeepSpeedCommsConfig object at 0x7161cc18f100>
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   communication_data_type ...... None
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   compile_config ............... deepcompile=False free_activation=False offload_activation=False offload_opt_states=False double_buffer=True symmetric_memory=False debug_log=False offload_parameters=False sync_before_reduce=False sync_after_reduce=False sync_before_allgather=False sync_after_allgather=False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   compression_config ........... {'weight_quantization': {'shared_parameters': {'enabled': False, 'quantizer_kernel': False, 'schedule_offset': 0, 'quantize_groups': 1, 'quantize_verbose': False, 'quantization_type': 'symmetric', 'quantize_weight_in_forward': False, 'rounding': 'nearest', 'fp16_mixed_quantize': False, 'quantize_change_ratio': 0.001}, 'different_groups': {}}, 'activation_quantization': {'shared_parameters': {'enabled': False, 'quantization_type': 'symmetric', 'range_calibration': 'dynamic', 'schedule_offset': 1000}, 'different_groups': {}}, 'sparse_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'row_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'head_pruning': {'shared_parameters': {'enabled': False, 'method': 'topk', 'schedule_offset': 1000}, 'different_groups': {}}, 'channel_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'layer_reduction': {'enabled': False}}
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   curriculum_enabled_legacy .... False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   curriculum_params_legacy ..... False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   data_efficiency_config ....... {'enabled': False, 'seed': 1234, 'data_sampling': {'enabled': False, 'num_epochs': 1000, 'num_workers': 0, 'pin_memory': False, 'curriculum_learning': {'enabled': False}, 'dynamic_batching': {'enabled': False, 'lr_scaling_method': 'linear', 'min_batch_size': 1, 'max_batch_size': None, 'sequence_picking_order': 'dataloader', 'verbose': False}}, 'data_routing': {'enabled': False, 'random_ltd': {'enabled': False, 'layer_token_lr_schedule': {'enabled': False}}}}
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   data_efficiency_enabled ...... False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   dataloader_drop_last ......... False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   disable_allgather ............ False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   dump_state ................... False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   dynamic_loss_scale_args ...... None
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   eigenvalue_enabled ........... False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   eigenvalue_gas_boundary_resolution  1
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   eigenvalue_layer_name ........ bert.encoder.layer
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   eigenvalue_layer_num ......... 0
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   eigenvalue_max_iter .......... 100
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   eigenvalue_stability ......... 1e-06
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   eigenvalue_tol ............... 0.01
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   eigenvalue_verbose ........... False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   elasticity_enabled ........... False
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   flops_profiler_config ........ {
+    "enabled": false, 
+    "recompute_fwd_factor": 0.0, 
+    "profile_step": 1, 
+    "module_depth": -1, 
+    "top_modules": 1, 
+    "detailed": true, 
+    "output_file": null
+}
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   fp16_auto_cast ............... None
+[2026-11-10 17:45:25,037] [INFO] [config.py:1007:print]   fp16_enabled ................. False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   fp16_master_weights_and_gradients  False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   global_rank .................. 0
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   grad_accum_dtype ............. None
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   gradient_accumulation_steps .. 4
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   gradient_clipping ............ 1.0
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   gradient_predivide_factor .... 1.0
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   graph_harvesting ............. False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   hybrid_engine ................ enabled=False max_out_tokens=512 inference_tp_size=1 release_inference_cache=False pin_parameters=True tp_gather_partition_size=8
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   initial_dynamic_scale ........ 1
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   load_universal_checkpoint .... False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   loss_scale ................... 1.0
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   memory_breakdown ............. False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   mics_hierarchial_params_gather  False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   mics_shard_size .............. -1
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   monitor_config ............... tensorboard=TensorBoardConfig(enabled=False, output_path='', job_name='DeepSpeedJobName') comet=CometConfig(enabled=False, samples_log_interval=100, project=None, workspace=None, api_key=None, experiment_name=None, experiment_key=None, online=None, mode=None) wandb=WandbConfig(enabled=False, group=None, team=None, project='deepspeed') csv_monitor=CSVConfig(enabled=False, output_path='', job_name='DeepSpeedJobName')
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   nebula_config ................ {
+    "enabled": false, 
+    "persistent_storage_path": null, 
+    "persistent_time_interval": 100, 
+    "num_of_version_in_retention": 2, 
+    "enable_nebula_load": true, 
+    "load_path": null
+}
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   optimizer_legacy_fusion ...... False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   optimizer_name ............... None
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   optimizer_params ............. None
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   pipeline ..................... {'stages': 'auto', 'partition': 'best', 'seed_layers': False, 'activation_checkpoint_interval': 0, 'pipe_partitioned': True, 'grad_partitioned': True}
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   pld_enabled .................. False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   pld_params ................... False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   prescale_gradients ........... False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   scheduler_name ............... None
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   scheduler_params ............. None
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   seq_parallel_communication_data_type  torch.float32
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   sparse_attention ............. None
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   sparse_gradients_enabled ..... False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   steps_per_print .............. 100000
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   tensor_parallel_config ....... dtype=torch.float16 autotp_size=0 tp_overlap_comm=False tensor_parallel=TPConfig(tp_size=1, tp_grain_size=1, mpu=None, tp_group=None) injection_policy_tuple=None keep_module_on_host=False replace_with_kernel_inject=False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   timers_config ................ enabled=True synchronized=True
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   train_batch_size ............. 64
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   train_micro_batch_size_per_gpu  8
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   use_data_before_expert_parallel_  False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   use_node_local_storage ....... False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   wall_clock_breakdown ......... False
+[2026-11-10 17:45:25,038] [INFO] [config.py:1007:print]   weight_quantization_config ... None
+[2026-11-10 17:45:25,039] [INFO] [config.py:1007:print]   world_size ................... 2
+[2026-11-10 17:45:25,039] [INFO] [config.py:1007:print]   zero_allow_untested_optimizer  True
+[2026-11-10 17:45:25,039] [INFO] [config.py:1007:print]   zero_config .................. stage=2 contiguous_gradients=True reduce_scatter=True reduce_bucket_size=50000000 use_multi_rank_bucket_allreduce=True allgather_partitions=True allgather_bucket_size=50000000 overlap_comm=True load_from_fp32_weights=True elastic_checkpoint=False offload_param=None offload_optimizer=None sub_group_size=1000000000 cpu_offload_param=None cpu_offload_use_pin_memory=None cpu_offload=None prefetch_bucket_size=50000000 param_persistence_threshold=100000 model_persistence_threshold=9223372036854775807 max_live_parameters=1000000000 max_reuse_distance=1000000000 gather_16bit_weights_on_model_save=False module_granularity_threshold=0 use_all_reduce_for_fetch_params=False stage3_gather_fp16_weights_on_model_save=False ignore_unused_parameters=True legacy_stage1=False round_robin_gradients=False zero_hpz_partition_size=1 zero_quantized_weights=False zero_quantized_nontrainable_weights=False zero_quantized_gradients=False zeropp_loco_param=None mics_shard_size=-1 mics_hierarchical_params_gather=False memory_efficient_linear=True pipeline_loading_checkpoint=False override_module_apply=True log_trace_cache_warnings=False
+[2026-11-10 17:45:25,039] [INFO] [config.py:1007:print]   zero_enabled ................. True
+[2026-11-10 17:45:25,039] [INFO] [config.py:1007:print]   zero_force_ds_cpu_optimizer .. True
+[2026-11-10 17:45:25,039] [INFO] [config.py:1007:print]   zero_optimization_stage ...... 2
+[2026-11-10 17:45:25,039] [INFO] [config.py:993:print_user_config]   json = {
+    "bf16": {
+        "enabled": true
+    }, 
+    "zero_optimization": {
+        "stage": 2, 
+        "allgather_partitions": true, 
+        "allgather_bucket_size": 5.000000e+07, 
+        "overlap_comm": true, 
+        "reduce_scatter": true, 
+        "reduce_bucket_size": 5.000000e+07, 
+        "contiguous_gradients": true
+    }, 
+    "gradient_accumulation_steps": 4, 
+    "gradient_clipping": 1.0, 
+    "train_batch_size": 64, 
+    "train_micro_batch_size_per_gpu": 8, 
+    "steps_per_print": 1.000000e+05, 
+    "wall_clock_breakdown": false, 
+    "zero_allow_untested_optimizer": true
+}
+{"rank": 0, "stage": "bounded_training"}
+/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/bitsandbytes/autograd/_functions.py:315: UserWarning: MatMul8bitLt: inputs will be cast from torch.bfloat16 to float16 during quantization
+  warnings.warn(f"MatMul8bitLt: inputs will be cast from {A.dtype} to float16 during quantization")
+/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/bitsandbytes/autograd/_functions.py:315: UserWarning: MatMul8bitLt: inputs will be cast from torch.bfloat16 to float16 during quantization
+  warnings.warn(f"MatMul8bitLt: inputs will be cast from {A.dtype} to float16 during quantization")
+[rank0]:[W1110 17:45:32.675183672 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank1]:[W1110 17:45:32.676519845 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+{"rank": 1, "update": 0, "seconds": 8.469160079956055, "loss": 20.758130073547363, "lr": [0.0]}
+{"rank": 0, "update": 0, "seconds": 8.469160079956055, "loss": 20.4454927444458, "lr": [0.0]}
+{"rank": 1, "update": 1, "seconds": 6.462682723999023, "loss": 20.936887741088867, "lr": [2.4096385542168676e-06]}
+{"rank": 0, "update": 1, "seconds": 6.462682723999023, "loss": 21.325846672058105, "lr": [2.4096385542168676e-06]}
+{"rank": 1, "update": 2, "seconds": 6.930606842041016, "loss": 20.533658981323242, "lr": [4.819277108433735e-06]}
+{"rank": 0, "update": 2, "seconds": 6.930606842041016, "loss": 20.602917194366455, "lr": [4.819277108433735e-06]}
+{"rank": 0, "update": 3, "seconds": 6.326653480529785, "loss": 21.014954566955566, "lr": [7.228915662650602e-06]}
+{"rank": 1, "update": 3, "seconds": 6.326653480529785, "loss": 21.046693325042725, "lr": [7.228915662650602e-06]}
+{"rank": 0, "stage": "validation"}
+{"rank": 1, "stage": "validation"}
+{"rank": 0, "stage": "save_and_reload"}
+{"rank": 1, "stage": "save_and_reload"}
+{"rank": 1, "stage": "reload_bf16_base"}
+{"rank": 0, "stage": "reload_bf16_base"}
+{"rank": 1, "stage": "beam20"}
+{"rank": 0, "stage": "beam20"}
+{"rank": 1, "stage": "complete"}
+{"rank": 0, "stage": "complete"}

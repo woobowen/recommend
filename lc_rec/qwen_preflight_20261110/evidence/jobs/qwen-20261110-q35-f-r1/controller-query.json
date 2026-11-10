@@ -1,0 +1,205 @@
+{
+  "artifacts": [
+    {
+      "bytes": 7755,
+      "path": "output/probe/full_model/chat_template.jinja",
+      "sha256": "273d8e0e683b885071fb17e08d71e5f2a5ddfb5309756181681de4f5a1822d80"
+    },
+    {
+      "bytes": 1792,
+      "path": "output/probe/full_model/config.json",
+      "sha256": "e287cb1b7249521a60a5f01fe852d9f9c2b4a4df903699c8c74adf88e7005563"
+    },
+    {
+      "bytes": 115,
+      "path": "output/probe/full_model/generation_config.json",
+      "sha256": "0c35bb39fbaed1ac0656baabc4f4e9bda20214e12336d0e4e8755aac1f487c2e"
+    },
+    {
+      "bytes": 1506210008,
+      "path": "output/probe/full_model/model.safetensors",
+      "sha256": "921953e6b5ba2b19adb5ae08b975d2bbe9d0d4513c404f659f37814b2db89b72"
+    },
+    {
+      "bytes": 20157865,
+      "path": "output/probe/full_model/tokenizer.json",
+      "sha256": "56c4472cf29361077c86e6c167e2434d9aa0e52606c96a50f3be34e00c2b5790"
+    },
+    {
+      "bytes": 1126,
+      "path": "output/probe/full_model/tokenizer_config.json",
+      "sha256": "00155216388615389c5b639585b1d5cd7f276ffd5952ee9016faa0f35fae0d4b"
+    },
+    {
+      "bytes": 377565,
+      "path": "output/probe/rank0.json",
+      "sha256": "7f6d1df15a5d2da9397e7648989dbbbfbdef526fe001d59489311decdd520e6c"
+    },
+    {
+      "bytes": 301516,
+      "path": "output/probe/rank1.json",
+      "sha256": "02babf4c65cface1400933b073c2f3e5ab7ba8d063b9cb01f3a787a958b7557a"
+    },
+    {
+      "bytes": 4749,
+      "path": "output/resources/resource-samples.jsonl",
+      "sha256": "81f3c6f2d559bbc62181ba6e4ac90acb218ebf8e74d1d06d30987793e826d037"
+    },
+    {
+      "bytes": 1607,
+      "path": "output/resources/resource-summary.json",
+      "sha256": "a61e3c8765a36ea1b4049ac773d8910e704edc389da7e24455d7236b527110a7"
+    }
+  ],
+  "cleanup": {
+    "ended_at": "2026-11-10T18:12:09.083921+00:00",
+    "events": [],
+    "initial_observation": {
+      "boot_changed": false,
+      "observed_at": "2026-11-10T18:12:09.001825+00:00",
+      "owned_live": [],
+      "scan_complete": true,
+      "scan_errors": [],
+      "source": "captured_at_launch",
+      "unconfirmed_live": [],
+      "unsupported_live": [],
+      "verified_empty": true,
+      "zombies": []
+    },
+    "last_observation": {
+      "boot_changed": false,
+      "observed_at": "2026-11-10T18:12:09.043260+00:00",
+      "owned_live": [],
+      "scan_complete": true,
+      "scan_errors": [],
+      "source": "captured_at_launch",
+      "unconfirmed_live": [],
+      "unsupported_live": [],
+      "verified_empty": true,
+      "zombies": []
+    },
+    "reason": "NORMAL_EXIT_CHECK",
+    "started_at": "2026-11-10T18:12:09.001768+00:00",
+    "verified": true
+  },
+  "ended_at": "2026-11-10T18:12:09.086476+00:00",
+  "exit_code": 0,
+  "job_id": "qwen-20261110-q35-f-r1",
+  "received_at": "2026-11-10T18:10:24.645682+00:00",
+  "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q35-f-r1/output",
+  "started_at": "2026-11-10T18:10:24.735537+00:00",
+  "status": "SUCCEEDED",
+  "supervisor": {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+      "supervise",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q35-f-r1"
+    ],
+    "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+    "pid": 3193043,
+    "start_ticks": "493956154",
+    "uid": 1005
+  },
+  "worker": {
+    "argv": [
+      "/data/bwwu/envs/qwen-preflight-20261110-qwen35/bin/python",
+      "/home/bwwu/lc-rec/qwen-preflight-20261110/releases/a0903189686329b1029e535dbe2b00a1c34ef427/lc_rec/qwen_preflight_20261110/scripts/resource_guard.py",
+      "--key",
+      "q35",
+      "--job-id",
+      "qwen-20261110-q35-f-r1",
+      "--output",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q35-f-r1/output/resources",
+      "--",
+      "/data/bwwu/envs/qwen-preflight-20261110-qwen35/bin/python",
+      "-m",
+      "torch.distributed.run",
+      "--standalone",
+      "--nnodes=1",
+      "--nproc_per_node=2",
+      "/home/bwwu/lc-rec/qwen-preflight-20261110/releases/a0903189686329b1029e535dbe2b00a1c34ef427/lc_rec/qwen_preflight_20261110/scripts/probe.py",
+      "--key",
+      "q35",
+      "--route",
+      "F",
+      "--precision",
+      "bf16",
+      "--model",
+      "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3.5-0.8B-Base/dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68",
+      "--letter",
+      "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER",
+      "--audit",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-cpu-q35-r0/output/audit",
+      "--output",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q35-f-r1/output/probe",
+      "--run-commit",
+      "a0903189686329b1029e535dbe2b00a1c34ef427",
+      "--micro",
+      "8"
+    ],
+    "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+    "pid": 3193045,
+    "start_ticks": "493956163",
+    "uid": 1005
+  },
+  "worker_group": {
+    "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+    "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q35-f-r1",
+    "job_id": "qwen-20261110-q35-f-r1",
+    "known_members": [
+      {
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pgid": 3193045,
+        "pid": 3193045,
+        "session_id": 3193045,
+        "start_ticks": "493956163",
+        "uid": 1005
+      },
+      {
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pgid": 3193045,
+        "pid": 3193048,
+        "session_id": 3193045,
+        "start_ticks": "493956176",
+        "uid": 1005
+      }
+    ],
+    "leader": {
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "pgid": 3193045,
+      "pid": 3193045,
+      "session_id": 3193045,
+      "start_ticks": "493956163",
+      "uid": 1005
+    },
+    "ownership_schema": 1,
+    "pgid": 3193045,
+    "session_id": 3193045,
+    "source": "captured_at_launch",
+    "uid": 1005
+  },
+  "worker_may_be_live": false,
+  "request_sha256": "40d58b95e5938d6747d69a3855cd0f6879f832f68723f328e6220159817ed71c",
+  "supervisor_alive": false,
+  "worker_alive": false,
+  "workgroup_observation": {
+    "observed_at": "2026-11-10T18:12:55.935683+00:00",
+    "source": "captured_at_launch",
+    "boot_changed": false,
+    "owned_live": [],
+    "unconfirmed_live": [],
+    "unsupported_live": [],
+    "zombies": [],
+    "scan_errors": [],
+    "scan_complete": true,
+    "verified_empty": true
+  },
+  "workgroup_live": false,
+  "cleanup_verified": true,
+  "cleanup_evidence_level": "captured_at_launch",
+  "local_request_verified": true
+}

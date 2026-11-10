@@ -1,0 +1,114 @@
+{
+  "q06": {
+    "L": {
+      "status": "PASS_TECHNICAL",
+      "reason": "Bounded technical chain passed; no formal seed/metrics.",
+      "jobs": [
+        "qwen-20261110-q06-l-r0"
+      ],
+      "training_job": "qwen-20261110-q06-l-r0",
+      "run_commit": "f29527de3b3f94ae5640d2e98faa1a7f74d2e0e8",
+      "precision": "int8",
+      "global_batch": 64,
+      "micro": 8,
+      "accumulation": 4,
+      "completed_global_updates": 4,
+      "nonzero_lr_updates": 3,
+      "rank_records_sha256": [
+        "6271fc9c8839562a14c922e111b192eb4cc457e014a2e6a5ccf17d2c53bb6165",
+        "813288e49bdcd8843d394f6cbc352e9b8285464fc425ac9f71db1c563095a44c"
+      ]
+    },
+    "F": {
+      "status": "PASS_TECHNICAL",
+      "reason": "Bounded technical chain passed; no formal seed/metrics.",
+      "jobs": [
+        "qwen-20261110-q06-f-r0"
+      ],
+      "training_job": "qwen-20261110-q06-f-r0",
+      "run_commit": "98206e447d21acc53aa0366911c804e01a6ca63f",
+      "precision": "bf16",
+      "global_batch": 64,
+      "micro": 8,
+      "accumulation": 4,
+      "completed_global_updates": 2,
+      "nonzero_lr_updates": 1,
+      "rank_records_sha256": [
+        "c19ae49d7a162f63047b272b27ead2f18c6ad12b82ac37113a2210fb268ca615",
+        "e0a56f4c798f74b4d89fae6d72b31ea21f80bab951c0e6cb4ce58df393a487b6"
+      ]
+    }
+  },
+  "q17": {
+    "L": {
+      "status": "PASS_TECHNICAL",
+      "reason": "Bounded technical chain passed; no formal seed/metrics.",
+      "jobs": [
+        "qwen-20261110-q17-l-r0"
+      ],
+      "training_job": "qwen-20261110-q17-l-r0",
+      "run_commit": "98206e447d21acc53aa0366911c804e01a6ca63f",
+      "precision": "int8",
+      "global_batch": 64,
+      "micro": 8,
+      "accumulation": 4,
+      "completed_global_updates": 4,
+      "nonzero_lr_updates": 3,
+      "rank_records_sha256": [
+        "a8ffc966c4556a4ab8581816c28ba2ede71710f0b7fadc2d18ba616849998936",
+        "2769e480bd247eead989667785aba7902e1c0713bde3e794ad90c61e03c634c0"
+      ]
+    },
+    "F": {
+      "status": "PASS_TECHNICAL",
+      "reason": "Round3 allocator retry after certified first-LR0 zero-completed-update failure; old attempt and all GPU time retained.",
+      "jobs": [
+        "qwen-20261110-q17-f-r0",
+        "qwen-20261110-q17-f-r1"
+      ],
+      "training_job": "qwen-20261110-q17-f-r1",
+      "run_commit": "a0903189686329b1029e535dbe2b00a1c34ef427",
+      "precision": "bf16",
+      "global_batch": 64,
+      "micro": 4,
+      "accumulation": 8,
+      "completed_global_updates": 2,
+      "nonzero_lr_updates": 1,
+      "rank_records_sha256": [
+        "820ba311ebeb69f608a55b1fd13d42dbc826a60b4db91570d06ac8907e79fa06",
+        "462d5ce7d54796dc8e61d68a7cccbd414ef2295e8367dbc40c476e022532f7e9"
+      ]
+    }
+  },
+  "q35": {
+    "L": {
+      "status": "BLOCKED_MAPPING_REQUIRES_APPROVAL",
+      "reason": "18 DeltaNet mixers require an approved semantic mapping; author seven projections do not cover them. No invented LoRA mapping, no GPU LoRA execution.",
+      "jobs": [
+        "qwen-20261110-cpu-q35-r0"
+      ],
+      "training_job": null,
+      "seed_status": "BLOCKED"
+    },
+    "F": {
+      "status": "PASS_TECHNICAL",
+      "reason": "Official text-only class; all753084224 instantiated expanded language parameters, excludes official visual100592896 and MTP20452864, not full multimodal finetuning.",
+      "jobs": [
+        "qwen-20261110-q35-f-r0",
+        "qwen-20261110-q35-f-r1"
+      ],
+      "training_job": "qwen-20261110-q35-f-r1",
+      "run_commit": "a0903189686329b1029e535dbe2b00a1c34ef427",
+      "precision": "bf16",
+      "global_batch": 64,
+      "micro": 8,
+      "accumulation": 4,
+      "completed_global_updates": 2,
+      "nonzero_lr_updates": 1,
+      "rank_records_sha256": [
+        "7f6d1df15a5d2da9397e7648989dbbbfbdef526fe001d59489311decdd520e6c",
+        "02babf4c65cface1400933b073c2f3e5ab7ba8d063b9cb01f3a787a958b7557a"
+      ]
+    }
+  }
+}
