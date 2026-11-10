@@ -1,0 +1,43 @@
+[
+  {
+    "argv": [
+      "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+      "-m",
+      "venv",
+      "--system-site-packages",
+      "/data/bwwu/envs/letter-20261110"
+    ],
+    "returncode": 0,
+    "output": "",
+    "seconds": 3.9078376293182373
+  },
+  {
+    "argv": [
+      "/data/bwwu/envs/letter-20261110/bin/python",
+      "-m",
+      "pip",
+      "install",
+      "--no-index",
+      "--no-deps",
+      "--no-cache-dir",
+      "/home/bwwu/lc-rec/letter-20261110/wheels/peft-0.5.0-py3-none-any.whl",
+      "/home/bwwu/lc-rec/letter-20261110/wheels/bitsandbytes-0.45.5-py3-none-manylinux_2_24_x86_64.whl",
+      "/home/bwwu/lc-rec/letter-20261110/wheels/fschat-0.2.31-py3-none-any.whl",
+      "/home/bwwu/lc-rec/letter-20261110/wheels/einops-0.8.1-py3-none-any.whl",
+      "/home/bwwu/lc-rec/letter-20261110/wheels/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp310-cp310-linux_x86_64.whl"
+    ],
+    "returncode": 0,
+    "output": "Processing /home/bwwu/lc-rec/letter-20261110/wheels/peft-0.5.0-py3-none-any.whl\nProcessing /home/bwwu/lc-rec/letter-20261110/wheels/bitsandbytes-0.45.5-py3-none-manylinux_2_24_x86_64.whl\nProcessing /home/bwwu/lc-rec/letter-20261110/wheels/fschat-0.2.31-py3-none-any.whl\nProcessing /home/bwwu/lc-rec/letter-20261110/wheels/einops-0.8.1-py3-none-any.whl\nProcessing /home/bwwu/lc-rec/letter-20261110/wheels/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp310-cp310-linux_x86_64.whl\neinops is already installed with the same version as the provided wheel. Use --force-reinstall to force an installation of the wheel.\nInstalling collected packages: peft, fschat, flash-attn, bitsandbytes\nSuccessfully installed bitsandbytes-0.45.5 flash-attn-2.7.4.post1 fschat-0.2.31 peft-0.5.0\n",
+    "seconds": 6.873559474945068
+  },
+  {
+    "argv": [
+      "/data/bwwu/envs/letter-20261110/bin/python",
+      "-c",
+      "import torch,transformers,peft,bitsandbytes,flash_attn,fastchat,einops,deepspeed,importlib.metadata as m,json; from fastchat.train.llama2_flash_attn_monkey_patch import replace_llama_attn_with_flash_attn; from peft import prepare_model_for_int8_training; print(json.dumps({p:m.version(p) for p in ['torch','transformers','peft','bitsandbytes','flash-attn','fschat','einops','deepspeed','accelerate']})); print('CUDA_CONTEXT',torch.cuda.is_initialized())"
+    ],
+    "returncode": 1,
+    "output": "The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers, 8-bit multiplication, and GPU quantization are unavailable.\n[2026-11-10 05:48:11,391] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/__init__.py\", line 22, in <module>\n    from .auto import (\n  File \"/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/auto.py\", line 30, in <module>\n    from .config import PeftConfig\n  File \"/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/config.py\", line 24, in <module>\n    from .utils import CONFIG_NAME, PeftType, TaskType\n  File \"/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/__init__.py\", line 22, in <module>\n    from .other import (\n  File \"/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/other.py\", line 21, in <module>\n    import accelerate\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/__init__.py\", line 3, in <module>\n    from .accelerator import Accelerator\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/accelerator.py\", line 35, in <module>\n    from .checkpointing import load_accelerator_state, load_custom_state, save_accelerator_state, save_custom_state\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/checkpointing.py\", line 24, in <module>\n    from .utils import (\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/utils/__init__.py\", line 133, in <module>\n    from .launch import (\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/utils/launch.py\", line 33, in <module>\n    from ..utils.other import is_port_in_use, merge_dicts\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/utils/other.py\", line 30, in <module>\n    from deepspeed import DeepSpeedEngine\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/__init__.py\", line 25, in <module>\n    from . import ops\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/__init__.py\", line 11, in <module>\n    from . import transformer\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/transformer/__init__.py\", line 7, in <module>\n    from .inference.config import DeepSpeedInferenceConfig\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/transformer/inference/__init__.py\", line 7, in <module>\n    from ....model_implementations.transformers.ds_transformer import DeepSpeedTransformerInference\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/model_implementations/__init__.py\", line 6, in <module>\n    from .transformers.ds_transformer import DeepSpeedTransformerInference\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/model_implementations/transformers/ds_transformer.py\", line 17, in <module>\n    if deepspeed.HAS_TRITON and get_accelerator().is_triton_supported():\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/accelerator/cuda_accelerator.py\", line 245, in is_triton_supported\n    major, _ = torch.cuda.get_device_capability()\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py\", line 507, in get_device_capability\n    prop = get_device_properties(device)\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py\", line 523, in get_device_properties\n    _lazy_init()  # will define _get_device_properties\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py\", line 319, in _lazy_init\n    torch._C._cuda_init()\nRuntimeError: No CUDA GPUs are available\n",
+    "seconds": 3.9595611095428467
+  }
+]

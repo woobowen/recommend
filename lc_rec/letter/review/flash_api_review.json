@@ -1,0 +1,168 @@
+{
+  "schema": "letter_flash_api_non_author_review_v1",
+  "reviewer": "/root/data_audit",
+  "status": "PASS_STATIC_API_AND_PRELAUNCH",
+  "reviewed_utc": "2026-11-10T06:23:49.007331+00:00",
+  "task_correction_round": 3,
+  "next_attempt": "letter-20261110-gpu-r1",
+  "reviewed_files": {
+    "lc_rec/letter/scripts/compat.py": "921e6a4b1d2968489fde46daec49f75933da0aca9793640c0b45e8a0465bc514",
+    "lc_rec/letter/scripts/gpu_probe.py": "e525b38aaa9fc18ef2c0e49534d4f6a07df16f074357d907bf2ad9e6a3dc37f5"
+  },
+  "actual_source_identities": {
+    "bert_padding.py": "805d449ac749f87a50f3a3114385710f0f926ff45521275000b74d9e80721e5c",
+    "flash_attn_interface.py": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+    "fastchat/train/llama2_flash_attn_monkey_patch.py": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e"
+  },
+  "actual_sources_read": [
+    "evidence/bert_padding.py.actual.txt",
+    "evidence/flash_attn_interface.py.actual.txt",
+    "/home/addaswsw/letter-task-20261110/dependencies/fschat-0.2.31-py3-none-any.whl::fastchat/train/llama2_flash_attn_monkey_patch.py"
+  ],
+  "unpad_semantics": {
+    "fastchat_call_count": 2,
+    "fastchat_uses_only_two_positional_arguments": true,
+    "actual_new_return_count": 5,
+    "extra_output": "used_seqlens_in_batch = attention_mask.sum(-1,int32)",
+    "why_redundant": "unused_mask=None forces all_masks=attention_mask. cu_seqlens differences, used_seqlens and mask sums are equal. FastChat has no unused allocation mask and its FlashAttention calls take ordinary cumulative lengths.",
+    "preserved_outputs": [
+      "unpad hidden states with same autograd tensor",
+      "same flattened indices",
+      "same cumulative sequence lengths",
+      "same integer maximum sequence length"
+    ],
+    "shim_scope": "Only FastChat module unpad_input alias; underlying flash_attn package function, attention kernel, masks, softmax and numerical dtype contexts unchanged.",
+    "checks": "All extra positional/keyword arguments are rejected. Return arity must be4 or5. At first observed5 result, extra==mask.sum(int32)==cu_deltas is asserted and dtype/shape recorded. Returning result[:4] preserves exact object identities and existing autograd edges; no clone/detach/cast/reorder.",
+    "static_result": "PASS"
+  },
+  "remaining_api_bindings": [
+    {
+      "name": "flash_attn_varlen_kvpacked_func",
+      "signature": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+      "binding": {
+        "q": "q",
+        "kv": "kv",
+        "cu_seqlens_q": "cu_q_lens",
+        "cu_seqlens_k": "cu_k_lens",
+        "max_seqlen_q": "max_s",
+        "max_seqlen_k": "max_k",
+        "dropout_p": 0.0,
+        "softmax_scale": null,
+        "causal": true,
+        "window_size": [
+          -1,
+          -1
+        ],
+        "softcap": 0.0,
+        "alibi_slopes": null,
+        "deterministic": false,
+        "return_attn_probs": false
+      },
+      "status": "PASS"
+    },
+    {
+      "name": "flash_attn_func",
+      "signature": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+      "binding": {
+        "q": "q",
+        "k": "k",
+        "v": "v",
+        "dropout_p": 0.0,
+        "softmax_scale": null,
+        "causal": true,
+        "window_size": [
+          -1,
+          -1
+        ],
+        "softcap": 0.0,
+        "alibi_slopes": null,
+        "deterministic": false,
+        "return_attn_probs": false
+      },
+      "status": "PASS"
+    },
+    {
+      "name": "pad_input",
+      "signature": "(hidden_states, indices, batch, seqlen)",
+      "binding": {
+        "hidden_states": "output_unpad",
+        "indices": "indices",
+        "batch": "bsz",
+        "seqlen": "q_len"
+      },
+      "status": "PASS"
+    },
+    {
+      "name": "unpad_input",
+      "signature": "(hidden_states, attention_mask, unused_mask=None)",
+      "binding": {
+        "hidden_states": "hidden",
+        "attention_mask": "attention_mask",
+        "unused_mask": null
+      },
+      "status": "PASS"
+    }
+  ],
+  "attention_definition_preserved": {
+    "dropout_p": 0.0,
+    "softmax_scale": null,
+    "causal": true,
+    "window_size": [
+      -1,
+      -1
+    ],
+    "softcap": 0.0,
+    "alibi_slopes": null,
+    "deterministic_backward": false,
+    "return_attn_probs": false,
+    "return_contract": "FlashAttnVarlenKVPackedFunc returns single output Tensor when return_attn_probs=False, matching FastChat reshape; pad_input returns padded [batch,q_len,hidden].",
+    "cache_boundary": "Training/validation use_cache=False and q/k sequence lengths coincide. This review does not assert old-vs-new causal alignment equivalence for arbitrary cached generation; actual beam probe uses original vanilla HF inference attention."
+  },
+  "raw_r0_evidence": {
+    "job_id": "letter-20261110-gpu-r0",
+    "verified_light_export_member_count": 11,
+    "rank_facts": [
+      {
+        "file": "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r0/output/probe/rank0.json",
+        "sha256": "6a445271b93a2a20d553517304d21ffe8138ab63d15df6cb2f5f120f0333aaa4",
+        "status": "FAIL",
+        "updates": 0,
+        "error": "too many values to unpack (expected 4)",
+        "actual_error_site": "FastChat forward line84, first unpad_input unpack",
+        "original_dtype_diagnostic_and_rng_restore_pass": true,
+        "a_only_calls_proven": 3,
+        "gpu_peak_allocated_gib": 7.8178582191467285,
+        "gpu_peak_reserved_gib": 8.310546875
+      },
+      {
+        "file": "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r0/output/probe/rank1.json",
+        "sha256": "d5b8f730dedd60c85665cc8aa340bb08ffef516f720ae8e89554441c7aeba7c6",
+        "status": "FAIL",
+        "updates": 0,
+        "error": "too many values to unpack (expected 4)",
+        "actual_error_site": "FastChat forward line84, first unpad_input unpack",
+        "original_dtype_diagnostic_and_rng_restore_pass": true,
+        "a_only_calls_proven": 3,
+        "gpu_peak_allocated_gib": 7.8184685707092285,
+        "gpu_peak_reserved_gib": 8.310546875
+      }
+    ],
+    "charged_gpu_device_seconds": 294.55685999803245,
+    "child_exit_code": 1,
+    "max_sum_rss_bytes": 22475055104,
+    "minimum_memavailable_bytes": 253208846336,
+    "interpretation": "Actual A-only dtype adaptation advanced to attention, then both ranks failed before any optimizer update. This is not training/throughput/96h PASS."
+  },
+  "launch_scope": {
+    "micro_batch": 8,
+    "accumulation": 4,
+    "world_size": 2,
+    "global_batch": 64,
+    "same_data_and_loss_and_lora": true,
+    "new_hyperparameter_search": false,
+    "round_limit": "This is root-designated task correction round3. Another failure does not authorize further method changes or an additional autonomous correction round."
+  },
+  "gpu_execution_by_reviewer": false,
+  "environment_or_original_author_file_edits_by_reviewer": false,
+  "conclusion": "The local alias arity adapter is a method-preserving ordinary API repair for these exact calls. No additional deterministic FastChat/FlashAttention argument/return mismatch was found in the inspected source. Authorized bounded r1 may launch under existing guards; actual kernel forward/backward and optimizer acceptance remain pending."
+}

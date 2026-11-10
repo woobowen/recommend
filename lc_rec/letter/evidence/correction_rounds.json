@@ -1,5 +1,5 @@
 {
-  "task_level_correction_round": 2,
+  "task_level_correction_round": 3,
   "initial_round": 0,
   "max_correction_rounds": 3,
   "changes": [
@@ -36,5 +36,12 @@
     "Fixed public dependency wheels resumed from retained suffix; all PyPI hashes and wheel CRCs verified.",
     "No full model weights downloaded."
   ],
-  "round2": "User-approved, necessary-path BF16 adaptation prepared after independent prelaunch review; fixed PEFT0.5 retained. No GPU attempt has yet occurred; original dtype error will be measured within the first bounded job before the approved shim."
+  "round2": "User-approved, necessary-path BF16 adaptation prepared after independent prelaunch review; fixed PEFT0.5 retained. No GPU attempt has yet occurred; original dtype error will be measured within the first bounded job before the approved shim.",
+  "round3": {
+    "failed_job": "letter-20261110-gpu-r0",
+    "root_cause": "FastChat0.2.31 expects 4 unpad_input results; flash-attn2.7.4 returns a fifth redundant seqused tensor",
+    "change": "Only FastChat module alias drops fifth value, preserves original first four, forbids unused_mask, checks extra against mask sums and cu deltas on first call",
+    "scope": "ordinary API arity compatibility; no attention kernel, padding mask, loss or optimization change",
+    "repeat_policy": "No fourth task-level concentrated correction round"
+  }
 }

@@ -1,6 +1,6 @@
 --- AUTHOR_UNMODIFIED/LETTER-LC-Rec/lora_finetune.py
 +++ DERIVED_TECHNICAL_ONLY/scripts/gpu_probe.py
-@@ -1,168 +1,594 @@
+@@ -1,168 +1,596 @@
 +#!/usr/bin/env python3
 +"""Nine-update LETTER A technical probe; never a full-epoch training entry.
 +
@@ -232,6 +232,8 @@
 +        from modeling_letter import LETTER
 +        from fastchat.train.llama2_flash_attn_monkey_patch import replace_llama_attn_with_flash_attn
 +        replace_llama_attn_with_flash_attn()
++        from compat import adapt_fastchat_unpad_arity
++        report["fastchat_unpad_arity_compatibility"] = adapt_fastchat_unpad_arity()
 +        from transformers.models.llama.modeling_llama import LlamaAttention
 +        from data import SeqRecDataset
 +        from collator import Collator

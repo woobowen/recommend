@@ -150,3 +150,43 @@ def install_peft05_lora_a_bf16_autocast(model, original_failure):
     return {"adaptation": "User-approved probe-only PEFT 0.5 LoRA A BF16 autocast after original dtype error",
             "parent_forward_identity": identity, "targets": records,
             "state_dict_effect": "No keys/parameters added; runtime instance forward override only"}
+
+
+def adapt_fastchat_unpad_arity():
+    """Retain FastChat's four-result API when flash-attn adds redundant seqused.
+
+    FastChat passes no unused_mask. The first four outputs retain identical
+    tensor objects/values. Only the extra per-sequence used length is dropped.
+    This does not replace any attention kernel or change the padding mask.
+    """
+    import torch
+    import fastchat.train.llama2_flash_attn_monkey_patch as patch
+    original = patch.unpad_input
+    source = inspect.getsource(original)
+    record = {"target": "fastchat.train.llama2_flash_attn_monkey_patch.unpad_input",
+              "original_signature": str(inspect.signature(original)),
+              "original_source_sha256": hashlib.sha256(source.encode()).hexdigest(),
+              "calls": 0, "observed_arities": [],
+              "change": "Return original first four results; unused_mask is forbidden; extra used_seqlens checked once then ignored"}
+
+    @functools.wraps(original)
+    def four_results(hidden_states, attention_mask, *args, **kwargs):
+        if args or kwargs:
+            raise RuntimeError("This compatibility scope accepts only FastChat's original two positional arguments")
+        result = original(hidden_states, attention_mask)
+        if len(result) not in (4, 5):
+            raise RuntimeError(f"Unexpected unpad_input return arity {len(result)}")
+        record["calls"] += 1
+        if len(result) not in record["observed_arities"]:
+            record["observed_arities"].append(len(result))
+            if len(result) == 5:
+                expected = attention_mask.sum(dim=-1, dtype=torch.int32)
+                if not torch.equal(result[4], expected) or not torch.equal(result[2][1:] - result[2][:-1], expected):
+                    raise RuntimeError("Extra seqused is not redundant with original mask/cu_seqlens")
+                record["extra_seqused_equals_mask_sum_and_cu_deltas"] = True
+                record["extra_shape"] = list(result[4].shape)
+                record["extra_dtype"] = str(result[4].dtype)
+        return result[:4]
+
+    patch.unpad_input = four_results
+    return record
