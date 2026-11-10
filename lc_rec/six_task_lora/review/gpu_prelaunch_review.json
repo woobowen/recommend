@@ -52,6 +52,9 @@
   "source_review_addendum": {
     "reason": "Public DS engine.destroy before fresh-base loading clears global module/parameter debug references and optimizer hooks; engine.py direct read confirms API does not destroy distributed group. Actual stage2 source readback pending; runtime stores file/method hashes.",
     "implementation": "Explicit engine.destroy, synchronize, then del all model/optimizer references, gc and empty_cache; report memory before/after",
-    "research_effect": "No training target/model/parameter-set or evaluation change"
+    "research_effect": "No training target/model/parameter-set or evaluation change",
+    "stage2_destroy_directly_read": true,
+    "stage2_file_sha256": "7e03bb5b2c923b2291ed28b663b1b605aa1384f68aa23b5744951183cc42fef6",
+    "direct_source_receipt": "lc_rec/six_task_lora/evidence/ds_destroy_source.json"
   }
 }

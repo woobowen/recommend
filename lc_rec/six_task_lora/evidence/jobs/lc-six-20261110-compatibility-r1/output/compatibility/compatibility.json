@@ -1,0 +1,27 @@
+{
+  "scope": "Synthetic tiny CPU LLaMA+PEFT API only; not real7B/GPU feasibility",
+  "optimizer_updates": 0,
+  "status": "FAILED",
+  "before_bf16_dtypes": {
+    "base_model.model.model.embed_tokens.original_module.weight": "torch.float32",
+    "base_model.model.model.embed_tokens.modules_to_save.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.self_attn.q_proj.lora_A.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.self_attn.q_proj.lora_B.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.self_attn.k_proj.lora_A.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.self_attn.k_proj.lora_B.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.self_attn.v_proj.lora_A.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.self_attn.v_proj.lora_B.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.self_attn.o_proj.lora_A.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.self_attn.o_proj.lora_B.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.mlp.gate_proj.lora_A.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.mlp.gate_proj.lora_B.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.mlp.up_proj.lora_A.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.mlp.up_proj.lora_B.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.mlp.down_proj.lora_A.default.weight": "torch.float32",
+    "base_model.model.model.layers.0.mlp.down_proj.lora_B.default.weight": "torch.float32",
+    "base_model.model.lm_head.original_module.weight": "torch.float32",
+    "base_model.model.lm_head.modules_to_save.default.weight": "torch.float32"
+  },
+  "error": "TypeError(\"isfinite(): argument 'input' (position 1) must be Tensor, not NoneType\")",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/bwwu/lc-rec/six-task-20261110/releases/9f1a164a9e470d9a41861fc9238e735222d673a0/lc_rec/six_task_lora/scripts/compatibility_probe.py\", line 19, in <module>\n    r['finite_forward_backward']=bool(torch.isfinite(loss)) and all(torch.isfinite(v.grad).all().item() for v in model.parameters() if v.requires_grad)\n  File \"/home/bwwu/lc-rec/six-task-20261110/releases/9f1a164a9e470d9a41861fc9238e735222d673a0/lc_rec/six_task_lora/scripts/compatibility_probe.py\", line 19, in <genexpr>\n    r['finite_forward_backward']=bool(torch.isfinite(loss)) and all(torch.isfinite(v.grad).all().item() for v in model.parameters() if v.requires_grad)\nTypeError: isfinite(): argument 'input' (position 1) must be Tensor, not NoneType\n"
+}

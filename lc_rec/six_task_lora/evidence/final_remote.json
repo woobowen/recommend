@@ -1,0 +1,363 @@
+{
+  "observed_utc": "2026-11-10T14:38:53Z",
+  "gpu": "index, uuid, name, memory.total [MiB], memory.used [MiB], utilization.gpu [%]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB, 0 %\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB, 0 %\n",
+  "gpu_processes": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\n",
+  "memory": "MemTotal:       259268452 kB\nMemFree:        112075692 kB\nMemAvailable:   250912724 kB\nBuffers:         1479820 kB\nCached:         136023272 kB\nSwapCached:        21248 kB\nActive:         14907432 kB\nInactive:       122648116 kB\nActive(anon):      48476 kB\nInactive(anon):    13528 kB\nActive(file):   14858956 kB\nInactive(file): 122634588 kB\nUnevictable:       11900 kB\nMlocked:            8828 kB\nSwapTotal:      67108860 kB\nSwapFree:       66827496 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              6580 kB\nWriteback:             0 kB\nAnonPages:         60920 kB\nMapped:           133968 kB\nShmem:              3432 kB\nKReclaimable:    3069188 kB\nSlab:            4261204 kB\nSReclaimable:    2963484 kB\nSUnreclaim:      1297720 kB\nKernelStack:       17648 kB\nPageTables:        16404 kB\nSecPageTables:         0 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    196743084 kB\nCommitted_AS:     976480 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      376972 kB\nVmallocChunk:          0 kB\nPercpu:           176000 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:  89735168 kB\nFilePmdMapped:         0 kB\nCmaTotal:              0 kB\nCmaFree:        11648008 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:    54502656 kB\nDirectMap2M:    181059584 kB\nDirectMap1G:    34603008 kB\n",
+  "disk": "Filesystem                   1B-blocks          Used     Available Use% Mounted on\n/dev/nvme0n1p3            913593581568  252600819712  614509232128  30% /\n/dev/mapper/vg0-lv--data 7937302376448 4547573977088 3309696004096  58% /data\n",
+  "gpu_ledger": {
+    "runs": [
+      {
+        "job_id": "lc-six-20261110-gpu-r2",
+        "candidate": "lc_rec_six_task_original_sid_bf16_lora_zero2",
+        "argv": [
+          "/data/bwwu/envs/lc-six-task-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/six-task-20261110/releases/c4a8aef801074f1579d113e041ebf3a24380746c/lc_rec/six_task_lora/scripts/gpu_probe.py",
+          "--config",
+          "/home/bwwu/lc-rec/six-task-20261110/releases/c4a8aef801074f1579d113e041ebf3a24380746c/lc_rec/six_task_lora/config/candidate.json",
+          "--samples",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-cpu-r0/output/workload/samples.json",
+          "--output-dir",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-gpu-r2/output/probe",
+          "--run-commit",
+          "c4a8aef801074f1579d113e041ebf3a24380746c",
+          "--job-id",
+          "lc-six-20261110-gpu-r2",
+          "--max-updates",
+          "2",
+          "--candidate",
+          "bf16",
+          "--micro-batch",
+          "8"
+        ],
+        "start_utc": "2026-11-10T14:02:08.308070+00:00",
+        "limit_seconds": 2670,
+        "elapsed_seconds": 319.8586618397385,
+        "end_utc": "2026-11-10T14:07:28.166802+00:00",
+        "child_exit_code": 1,
+        "stop_reason": null,
+        "peaks": {
+          "cpu_rss_sum_peak_bytes": 26702442496,
+          "min_mem_available_bytes": 248445120512,
+          "new_disk_allocated_peak_bytes": 681291776,
+          "max_swap_used_increase_bytes": 0,
+          "task_vm_swap_peak_bytes": 0
+        },
+        "samples": 64,
+        "charged_gpu_device_seconds": 639.717323679477
+      },
+      {
+        "job_id": "lc-six-20261110-gpu-r3",
+        "candidate": "lc_rec_six_task_original_sid_bf16_lora_zero2",
+        "argv": [
+          "/data/bwwu/envs/lc-six-task-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/six-task-20261110/releases/fa51f82f1a2f341e7c33e72dc2db0dd5ada5c6c9/lc_rec/six_task_lora/scripts/gpu_probe.py",
+          "--config",
+          "/home/bwwu/lc-rec/six-task-20261110/releases/fa51f82f1a2f341e7c33e72dc2db0dd5ada5c6c9/lc_rec/six_task_lora/config/candidate.json",
+          "--samples",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-cpu-r0/output/workload/samples.json",
+          "--output-dir",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-gpu-r3/output/probe",
+          "--run-commit",
+          "fa51f82f1a2f341e7c33e72dc2db0dd5ada5c6c9",
+          "--job-id",
+          "lc-six-20261110-gpu-r3",
+          "--max-updates",
+          "2",
+          "--candidate",
+          "bf16",
+          "--micro-batch",
+          "4"
+        ],
+        "start_utc": "2026-11-10T14:23:19.461433+00:00",
+        "limit_seconds": 2670,
+        "elapsed_seconds": 365.65690758638084,
+        "end_utc": "2026-11-10T14:29:25.118340+00:00",
+        "child_exit_code": 0,
+        "stop_reason": null,
+        "peaks": {
+          "cpu_rss_sum_peak_bytes": 18448662528,
+          "min_mem_available_bytes": 249365184512,
+          "new_disk_allocated_peak_bytes": 1266786304,
+          "max_swap_used_increase_bytes": 0,
+          "task_vm_swap_peak_bytes": 0
+        },
+        "samples": 73,
+        "charged_gpu_device_seconds": 731.3138151727617
+      }
+    ],
+    "prior_stage_a_seconds": 0
+  },
+  "update_ledger": {
+    "used": 4,
+    "limit": 6,
+    "reservations": [
+      {
+        "number": 1,
+        "job_id": "lc-six-20261110-gpu-r2",
+        "run_commit": "c4a8aef801074f1579d113e041ebf3a24380746c",
+        "local_update": 0,
+        "utc": "2026-11-10T14:05:00.141197+00:00",
+        "meaning": "Reserved before optimizer boundary; failures and zero LR count"
+      },
+      {
+        "number": 2,
+        "job_id": "lc-six-20261110-gpu-r2",
+        "run_commit": "c4a8aef801074f1579d113e041ebf3a24380746c",
+        "local_update": 1,
+        "utc": "2026-11-10T14:05:11.340575+00:00",
+        "meaning": "Reserved before optimizer boundary; failures and zero LR count"
+      },
+      {
+        "number": 3,
+        "job_id": "lc-six-20261110-gpu-r3",
+        "run_commit": "fa51f82f1a2f341e7c33e72dc2db0dd5ada5c6c9",
+        "local_update": 0,
+        "utc": "2026-11-10T14:26:21.287294+00:00",
+        "meaning": "Reserved before optimizer boundary; failures and zero LR count"
+      },
+      {
+        "number": 4,
+        "job_id": "lc-six-20261110-gpu-r3",
+        "run_commit": "fa51f82f1a2f341e7c33e72dc2db0dd5ada5c6c9",
+        "local_update": 1,
+        "utc": "2026-11-10T14:26:37.123271+00:00",
+        "meaning": "Reserved before optimizer boundary; failures and zero LR count"
+      }
+    ]
+  },
+  "charged_gpu_device_seconds": 1371.0311388522387,
+  "new_task_disk_roots": [
+    {
+      "path": "/home/bwwu/lc-rec/six-task-20261110",
+      "logical_bytes": 41847308,
+      "allocated_bytes": 42905600
+    },
+    {
+      "path": "/data/bwwu/envs/lc-six-task-20261110",
+      "logical_bytes": 19317490,
+      "allocated_bytes": 23674880
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-gpu-r3",
+      "logical_bytes": 583333266,
+      "allocated_bytes": 583413760
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-setup-r0",
+      "logical_bytes": 21592,
+      "allocated_bytes": 45056
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-cost-r3",
+      "logical_bytes": 46720,
+      "allocated_bytes": 69632
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-protocol-r1",
+      "logical_bytes": 59020,
+      "allocated_bytes": 81920
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-compatibility-r2",
+      "logical_bytes": 293815,
+      "allocated_bytes": 335872
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-cpu-r0",
+      "logical_bytes": 35548237,
+      "allocated_bytes": 35581952
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-protocol-r0",
+      "logical_bytes": 18214,
+      "allocated_bytes": 36864
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-grouping-r2",
+      "logical_bytes": 495226,
+      "allocated_bytes": 520192
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-compatibility-r1",
+      "logical_bytes": 241781,
+      "allocated_bytes": 274432
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-policy-r2",
+      "logical_bytes": 25574,
+      "allocated_bytes": 49152
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-gpu-r2",
+      "logical_bytes": 582089043,
+      "allocated_bytes": 582160384
+    }
+  ],
+  "new_task_allocated_bytes": 1269149696,
+  "jobs": [
+    {
+      "job_id": "lc-six-20261110-compatibility-r1",
+      "status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "09e801c14909b5512e7380b9eaf402b6794acb903418c474f3b59706e3328db9"
+    },
+    {
+      "job_id": "lc-six-20261110-compatibility-r2",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "9e68d62aca35c8c8e3fe8e25fd5a0965da23b1b67841da61acf1b787cf90f802"
+    },
+    {
+      "job_id": "lc-six-20261110-cost-r3",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "fbe17dda5aa21314753d10d491d3a6163deb5486777b1601719a15bfc78fbec8"
+    },
+    {
+      "job_id": "lc-six-20261110-cpu-r0",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "f55fe977e14e96e6a1d180a91a8d1309fd26f10c6f355ac789b196373421a55c"
+    },
+    {
+      "job_id": "lc-six-20261110-gpu-r2",
+      "status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "7c70f3f1c40e4dc42087c5836fe930c5e7d9f7d63b3e09bd354b96ebb672e999"
+    },
+    {
+      "job_id": "lc-six-20261110-gpu-r3",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "27a7221de66a330def8fd613292564a521cd23b2d40ed252ca0776e5df4120ff"
+    },
+    {
+      "job_id": "lc-six-20261110-grouping-r2",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "56b3ff25b9a2be691f18f5da9ecd2ea330f63fe43e05ea5ead270a5b7bd8bbdb"
+    },
+    {
+      "job_id": "lc-six-20261110-policy-r2",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "25f4fa60ccf59b306ff37f66cb8de4de410dec1e92efddedc6b298e3a2b5be0d"
+    },
+    {
+      "job_id": "lc-six-20261110-protocol-r0",
+      "status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "4531e91c949830315206c76db3e113d3234198e30452d78cbb44aae6e51ee23a"
+    },
+    {
+      "job_id": "lc-six-20261110-protocol-r1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "dfbba272f9f07b09294747b698eb806a248d285a5d06afd6a4c3854fe8fc79f0"
+    },
+    {
+      "job_id": "lc-six-20261110-setup-r0",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true,
+      "worker_alive": false,
+      "workgroup_live": false,
+      "supervisor_alive": false,
+      "request_sha256": "42e4f442f368479ff80e80c15c8f4b4a70aee1af8a20f89fb2e840d04308834a"
+    }
+  ],
+  "task_transfer_archives": [
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/lc-six-task-c4a8aef801074f1579d113e041ebf3a24380746c.tar.gz",
+      "logical_bytes": 955070,
+      "allocated_bytes": 958464
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/lc-six-task-05d38188266d9fcec6f304c6fe6f11ee60b2bab8.tar.gz",
+      "logical_bytes": 954295,
+      "allocated_bytes": 954368
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/lc-six-task-05ecb772bbb8c8940a5515fb13a2b4563895f2cd.tar.gz",
+      "logical_bytes": 964177,
+      "allocated_bytes": 966656
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/lc-six-task-9f1a164a9e470d9a41861fc9238e735222d673a0.tar.gz",
+      "logical_bytes": 931087,
+      "allocated_bytes": 933888
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-autograd-a8547adac2dcf0eb2b32e7be932a94f868d11fb1.tar.gz",
+      "logical_bytes": 925481,
+      "allocated_bytes": 925696
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/lc-six-task-b0896f644167344d91b83c4180fb05913078f437.tar.gz",
+      "logical_bytes": 927835,
+      "allocated_bytes": 929792
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-autograd-e5ff6bcdb438e5266f25d9fd6fbe4edf45cc0e67.tar.gz",
+      "logical_bytes": 913370,
+      "allocated_bytes": 913408
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/lc-six-task-fa51f82f1a2f341e7c33e72dc2db0dd5ada5c6c9.tar.gz",
+      "logical_bytes": 962648,
+      "allocated_bytes": 966656
+    }
+  ],
+  "new_task_allocated_bytes_with_transfer_archives": 1276698624,
+  "storage_accounting_boundary": "Runtime guard sampled configured roots; final targeted audit additionally counts known source-transfer archives and every task job directory, including policy; no unrelated temporary folders scanned."
+}

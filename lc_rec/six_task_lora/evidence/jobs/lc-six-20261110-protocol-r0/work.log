@@ -1,0 +1,13 @@
+The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers, 8-bit multiplication, and GPU quantization are unavailable.
+[2026-11-10 13:41:45,958] [WARNING] [real_accelerator.py:209:get_accelerator] Setting accelerator to CPU. If you have GPU or other accelerator, we were unable to detect it.
+[2026-11-10 13:41:45,970] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cpu (auto detect)
+2026-11-10 13:41:48.142244: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Traceback (most recent call last):
+  File "/home/bwwu/lc-rec/six-task-20261110/releases/a8547adac2dcf0eb2b32e7be932a94f868d11fb1/lc_rec/six_task_lora/scripts/protocol_probe.py", line 20, in <module>
+    prepared=prepare_data_loader(loader,num_processes=2,process_index=rank,split_batches=False,put_on_device=False,rng_types=[],even_batches=True)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/data_loader.py", line 705, in prepare_data_loader
+    state = AcceleratorState()
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/state.py", line 734, in __init__
+    raise ValueError(
+ValueError: Please make sure to properly initialize your accelerator via `accelerator = Accelerator()` before using any functionality from the `accelerate` library.

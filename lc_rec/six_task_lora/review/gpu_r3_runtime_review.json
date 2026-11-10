@@ -1,0 +1,263 @@
+{
+  "reviewer": "/root/independent_review",
+  "observed_utc": "2026-11-10T14:38:57.021069+00:00",
+  "status": "PASS_BOUNDED_BF16_ZERO2_MICRO2_CHAIN_WITH_FORMAL_LIMITS",
+  "RUN_COMMIT": "fa51f82f1a2f341e7c33e72dc2db0dd5ada5c6c9",
+  "job_id": "lc-six-20261110-gpu-r3",
+  "direct_read_scope": "Both complete realrankJSONs,actualrequest/status/worklog,alllight-manifestmembers/resources,eachsource/configGitblob; independentlyreadfixedauthorfullindexfileforcanonicalandpositionoutputchecks. Reviewer doesnotloadmodel orrunGPU.",
+  "verified_manifest_member_count": 26,
+  "source_config_gitblob_matches": [
+    "lc_rec/six_task_lora/config/candidate.json",
+    "lc_rec/six_task_lora/config/guard.json",
+    "lc_rec/six_task_lora/scripts/analyze_grouping.py",
+    "lc_rec/six_task_lora/scripts/analyze_workload.py",
+    "lc_rec/six_task_lora/scripts/build_review_zip.py",
+    "lc_rec/six_task_lora/scripts/compatibility_probe.py",
+    "lc_rec/six_task_lora/scripts/control.py",
+    "lc_rec/six_task_lora/scripts/data_support.py",
+    "lc_rec/six_task_lora/scripts/estimate_budget.py",
+    "lc_rec/six_task_lora/scripts/gpu_probe.py",
+    "lc_rec/six_task_lora/scripts/inference_only.py",
+    "lc_rec/six_task_lora/scripts/inference_probe.py",
+    "lc_rec/six_task_lora/scripts/protocol_probe.py",
+    "lc_rec/six_task_lora/scripts/resource_guard.py",
+    "lc_rec/six_task_lora/scripts/setup_env.py",
+    "lc_rec/six_task_lora/scripts/validation_policy_probe.py",
+    "lc_rec/vendor/original/README.md",
+    "lc_rec/vendor/original/asset/model.jpg",
+    "lc_rec/vendor/original/collator.py",
+    "lc_rec/vendor/original/config/ds_z2_bf16.json",
+    "lc_rec/vendor/original/config/ds_z2_fp16.json",
+    "lc_rec/vendor/original/config/ds_z3_bf16.json",
+    "lc_rec/vendor/original/config/ds_z3_bf16_save16bit.json",
+    "lc_rec/vendor/original/config/ds_z3_fp16.json",
+    "lc_rec/vendor/original/config/ds_z3_fp16_save16bit.json",
+    "lc_rec/vendor/original/convert/convert.py",
+    "lc_rec/vendor/original/convert/convert.sh",
+    "lc_rec/vendor/original/convert/convert_fp16.py",
+    "lc_rec/vendor/original/convert/make_delta.py",
+    "lc_rec/vendor/original/convert/merge_delta.py",
+    "lc_rec/vendor/original/convert/zero_to_fp32.py",
+    "lc_rec/vendor/original/data.py",
+    "lc_rec/vendor/original/data_process/amazon18_data_process.py",
+    "lc_rec/vendor/original/data_process/amazon18_recbole_data_process.py",
+    "lc_rec/vendor/original/data_process/amazon_text_emb.py",
+    "lc_rec/vendor/original/data_process/get_llm_output.py",
+    "lc_rec/vendor/original/data_process/utils.py",
+    "lc_rec/vendor/original/evaluate.py",
+    "lc_rec/vendor/original/finetune.py",
+    "lc_rec/vendor/original/index/datasets.py",
+    "lc_rec/vendor/original/index/generate_indices.py",
+    "lc_rec/vendor/original/index/main.py",
+    "lc_rec/vendor/original/index/models/layers.py",
+    "lc_rec/vendor/original/index/models/rq.py",
+    "lc_rec/vendor/original/index/models/rqvae.py",
+    "lc_rec/vendor/original/index/models/vq.py",
+    "lc_rec/vendor/original/index/run.sh",
+    "lc_rec/vendor/original/index/trainer.py",
+    "lc_rec/vendor/original/index/utils.py",
+    "lc_rec/vendor/original/lora_finetune.py",
+    "lc_rec/vendor/original/prompt.py",
+    "lc_rec/vendor/original/run.sh",
+    "lc_rec/vendor/original/run_test.sh",
+    "lc_rec/vendor/original/run_test_ddp.sh",
+    "lc_rec/vendor/original/test.py",
+    "lc_rec/vendor/original/test_ddp.py",
+    "lc_rec/vendor/original/utils.py"
+  ],
+  "job_terminal": {
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "cleanup_verified": true,
+    "worker_may_be_live": false
+  },
+  "configuration": {
+    "micro_batch": 2,
+    "accumulation": 32,
+    "global_batch": 128,
+    "max_updates": 2,
+    "formal_epochs_estimated_only": 4,
+    "formal_loader_length": 55307,
+    "formal_steps": 6912,
+    "formal_warmup_steps": 70,
+    "loss_normalization": "HF CE mean over all valid shifted tokens in each rank microbatch; DeepSpeed divides by accumulation then averages ranks"
+  },
+  "trainable_count": {
+    "tensors": 450,
+    "elements": 289751040,
+    "lora_elements": 19988480,
+    "full_active_embedding_head": 269762560,
+    "actualoptimizer450membership": true,
+    "BF16originalweights_and_trainables": true,
+    "ZeRO2FP32masters_moments": "On2GPUs,144875520elements eachGPU partition; scalarstepCPU doesnotmeanoffload"
+  },
+  "all6tasks_original_dataset_mask": true,
+  "all24per_task_F_B_diagnostics": true,
+  "micro4_longtail_OOM_preserved": true,
+  "micro2_observed_longtail": {
+    "pre_engine_shape": [
+      2,
+      1626
+    ],
+    "resident_real_Adam_state_no_step_F_B": "PASS",
+    "no_ZeRO_gradient_communication_during_capacity_case": true,
+    "engine_Adam_counters_and450fullparameterSHAs_unchanged": true,
+    "full_optimizer_step_on_extreme_sample": "NOT_RUN"
+  },
+  "real_updates": [
+    {
+      "update": 0,
+      "lr": [
+        0.0
+      ],
+      "seconds_max_rank": 15.529846031218767,
+      "samples_per_second": 8.242193756634089,
+      "effective_tokens_per_second": 904.2588040969727,
+      "shift_label_tokens_per_second": 159.95007258968027,
+      "global_counts": {
+        "samples": 128,
+        "tokens": 14043,
+        "padded_tokens": 17338,
+        "label_tokens": 2484,
+        "shift_label_tokens": 2484
+      },
+      "padding_ratio": 0.19004498788787638
+    },
+    {
+      "update": 1,
+      "lr": [
+        7.142857142857143e-07
+      ],
+      "seconds_max_rank": 15.394780168309808,
+      "samples_per_second": 8.31450651458397,
+      "effective_tokens_per_second": 1014.7595372721155,
+      "shift_label_tokens_per_second": 196.23534516061073,
+      "global_counts": {
+        "samples": 128,
+        "tokens": 15622,
+        "padded_tokens": 20008,
+        "label_tokens": 3021,
+        "shift_label_tokens": 3021
+      },
+      "padding_ratio": 0.21921231507397043
+    }
+  ],
+  "global_update_reservation_numbers": [
+    3,
+    4
+  ],
+  "all450gradients_finite_each32micro": true,
+  "finite_nonzero_SID_gradient_and_real_delta": {
+    "base_model.model.lm_head.modules_to_save.default.weight": {
+      "changed_values": 32552,
+      "max_abs": 9.5367431640625e-07,
+      "finite": true
+    },
+    "base_model.model.model.embed_tokens.modules_to_save.default.weight": {
+      "changed_values": 28012,
+      "max_abs": 9.5367431640625e-07,
+      "finite": true
+    }
+  },
+  "lora_delta": {
+    "A_changed_tensors": 0,
+    "B_changed_tensors": 224,
+    "explanation": "All224Agradientsarezero inbothtrainingupdates becauseBzero init plusfirststepLR0; firstnonzeroLRupdatesall224B. Aoptimizerupdatenotverified,not evidenceofBF16roundingstagnation.",
+    "A_gradient_nonzero_tensor_counts_by_update": [
+      0,
+      0
+    ]
+  },
+  "rank_full450_parameter_byte_sync": {
+    "scope": "All bytes of all450 complete active/LoRA tensors",
+    "equal": true,
+    "sha256": "21d22b104621d060aef6d6c91505e92ad8cfdf2241c526c1c429aa535e3dab89"
+  },
+  "frozen_original_complete_embedding_head_hashes_match": true,
+  "save_and_fresh_reload": {
+    "adapter_keys": 450,
+    "elements": 289751040,
+    "allkey_shape_value_exact_and_inverse_saved_dtype_bytes": true,
+    "native_PEFT_BF16_to_FP32_LoRA_conversions": 448,
+    "active_embedding_head_stays_BF16": 2,
+    "saved_tokenizer930SID_order": true,
+    "full_Trainer_DeepSpeed_state_restore": "NOT_RUN"
+  },
+  "validation": {
+    "actual_fixed_rows": 6,
+    "allfinite": true,
+    "originalsampled2templates_peruser": true,
+    "fullscan_or_checkpointselection": "NOT_RUN"
+  },
+  "generation_independent": {
+    "prompts": 17,
+    "distinct_real_users_each": 3,
+    "cases": 51,
+    "beam": 20,
+    "beams_checked": 1020,
+    "every4SID_position_and_EOS_legal": true,
+    "all_generated_text_exactly_decodes4SIDtokenIDs": true,
+    "canonical_catalog_count": 9897,
+    "all_noncanonical_count_independently_verified": 1020,
+    "duplicate_SID_count": 0,
+    "full_index_file_sha256": "b94d16398a178220a117abda5effd5508069beaccc2b8110eab25ae50f2af600",
+    "scope": "Originalpositioncallback/beam20/evaluatorinterfacePASS; all1020noncanonicalmeansno validcatalogrecommendationqualityclaim,not astricttrie/evaluationchange"
+  },
+  "resources": {
+    "job_id": "lc-six-20261110-gpu-r3",
+    "candidate": "lc_rec_six_task_original_sid_bf16_lora_zero2",
+    "argv": [
+      "/data/bwwu/envs/lc-six-task-20261110/bin/python",
+      "-m",
+      "torch.distributed.run",
+      "--standalone",
+      "--nnodes=1",
+      "--nproc_per_node=2",
+      "/home/bwwu/lc-rec/six-task-20261110/releases/fa51f82f1a2f341e7c33e72dc2db0dd5ada5c6c9/lc_rec/six_task_lora/scripts/gpu_probe.py",
+      "--config",
+      "/home/bwwu/lc-rec/six-task-20261110/releases/fa51f82f1a2f341e7c33e72dc2db0dd5ada5c6c9/lc_rec/six_task_lora/config/candidate.json",
+      "--samples",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-cpu-r0/output/workload/samples.json",
+      "--output-dir",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-gpu-r3/output/probe",
+      "--run-commit",
+      "fa51f82f1a2f341e7c33e72dc2db0dd5ada5c6c9",
+      "--job-id",
+      "lc-six-20261110-gpu-r3",
+      "--max-updates",
+      "2",
+      "--candidate",
+      "bf16",
+      "--micro-batch",
+      "4"
+    ],
+    "start_utc": "2026-11-10T14:23:19.461433+00:00",
+    "limit_seconds": 2670,
+    "elapsed_seconds": 365.65690758638084,
+    "end_utc": "2026-11-10T14:29:25.118340+00:00",
+    "child_exit_code": 0,
+    "stop_reason": null,
+    "peaks": {
+      "cpu_rss_sum_peak_bytes": 18448662528,
+      "min_mem_available_bytes": 249365184512,
+      "new_disk_allocated_peak_bytes": 1266786304,
+      "max_swap_used_increase_bytes": 0,
+      "task_vm_swap_peak_bytes": 0
+    },
+    "samples": 73,
+    "charged_gpu_device_seconds": 731.3138151727617
+  },
+  "actual_attempt_peaks_including_failed_micro4": {
+    "allocated_gib_max": 20.40457773208618,
+    "reserved_gib_max": 22.658203125
+  },
+  "limits": [
+    "4taskwideoptimizerupdates includingr2;noformalepoch/seed",
+    "One nonzeroLRsteady update perlayout; nohour-scaleperformance/stability",
+    "Poststate extreme test isordinaryF/B withactualAdamstateresident afterDShookremoval; not aZeROoptimizerstep onlongtail",
+    "micro2 changesoriginalmicro-token-mean CEweights despiteglobal128; formalmethoddecisionrequired",
+    "Auxiliary split/provenance blocker persists",
+    "No fulltraining-state save/resume orbestTrainer/DSrestore",
+    "R2failure andmicro8/micro4OOM retained;noInt8/QLoRA/offload/othermodel/data run"
+  ]
+}

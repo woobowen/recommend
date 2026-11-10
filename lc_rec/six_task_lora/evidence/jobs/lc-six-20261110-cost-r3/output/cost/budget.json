@@ -1,0 +1,750 @@
+{
+  "status": "INCONCLUSIVE",
+  "calculation_run_commit": "05ecb772bbb8c8940a5515fb13a2b4563895f2cd",
+  "scope": "One Instruments seed, official six tasks/full originalSID,4epochs,global128,original sampled SeqRecvalidation and17prompt beam20; no formal training launched",
+  "inputs": [
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-cpu-r0/output/workload/workload_summary.json",
+      "sha256": "e22369522613e8bd2305474d500fe1205e7b648e5de726cc98d30de63ad3ebc4"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-grouping-r2/output/grouping/grouping.json",
+      "sha256": "e168d0cbf5d7cfa95285deeda1cf61d8c1bb2ab0dccc1715c57ec47c04b0065a"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-protocol-r1/output/protocol/protocol.json",
+      "sha256": "d0a059b39b568fcfc4e3cc61915743b51cb318e8e7d190930da678568d8e1db5"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-policy-r2/output/policy/validation_policy.json",
+      "sha256": "b3f403122b96d367b93cb9855912f7b346f27483d2a479f0302d58e64da17d41"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-gpu-r3/output/probe/probe_rank0.json",
+      "sha256": "2da57306dd20e71ee2423f51ab2424a02ef1e082b46b61ce2b5f510695f79d29"
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-six-20261110-gpu-r3/output/probe/probe_rank1.json",
+      "sha256": "737679d4477940e88977d28e78a5ac71a301afb92736356851c9e5b5cf735201"
+    }
+  ],
+  "counts": {
+    "train_per_epoch": 221225,
+    "nominal_full4epoch_presentations": 884900,
+    "validation_records_per_call": 49544,
+    "test_users": 24772,
+    "test_prompts": 17,
+    "test_user_prompt_pairs": 421124,
+    "formal_scheduler_steps": 6912,
+    "warmup": 70,
+    "actual_selected_micro": 2,
+    "actual_accum": 32,
+    "effective_validation_calls_from_callback": 3
+  },
+  "unquantified_overheads": [
+    "Actual Trainer/DeepSpeed complete training-state serialization, disk flush, and restore (adapter alone is not a resume checkpoint)",
+    "Long-run GPU/host/I/O variation and allocator fragmentation",
+    "Full random-sampler epoch-tail gradient behavior under real Trainer+DeepSpeed",
+    "All-prompt stochastic long-tail layouts beyond this one realized workload; capacity diagnostics are bounded",
+    "Validation throughput at formal per-device microbatch; measured validation is bounded batch1",
+    "Full-test CPU dataloader/decode/evaluator aggregation across all users and17 prompts"
+  ],
+  "limitations": [
+    "One seed42 stochastic Dataset realization; prompt/query/preference answers vary across epochs",
+    "Only two global128 updates targeted; at most one nonzero-LR steady timing if both pass",
+    "Technical update auxiliary samples have verified training pairing; their within-task lengths can differ from all raw auxiliary records",
+    "Original data mismatches,505EOS-only records and51token-boundary cases retained; no clean formal corpus claim",
+    "No optimizer checkpoint/selection/best restore/full epoch/full test was run",
+    "Calibration uses local bounded six-task runs only; LETTER14.66samples/s is not used"
+  ],
+  "gpu_statuses": [
+    "PASS",
+    "PASS"
+  ],
+  "measured_joint_updates": [
+    {
+      "update": 0,
+      "nonzero_lr": false,
+      "seconds": 15.529846031218767,
+      "samples_per_second": 8.242193756634089,
+      "effective_tokens_per_second": 904.2588040969727,
+      "compute_seconds": 15.299535498954356,
+      "other_timed_seconds": 0.23031053226441145,
+      "unclipped_wall_minus_chosen_rank_fb_seconds": 0.23031053226441145,
+      "cpu_collator_seconds": 0.233401651494205,
+      "plan": "mixed_global128_0",
+      "global_counts": {
+        "samples": 128,
+        "tokens": 14043,
+        "padded_tokens": 17338,
+        "label_tokens": 2484,
+        "shift_label_tokens": 2484
+      },
+      "padding_ratio": 0.19004498788787638
+    },
+    {
+      "update": 1,
+      "nonzero_lr": true,
+      "seconds": 15.394780168309808,
+      "samples_per_second": 8.31450651458397,
+      "effective_tokens_per_second": 1014.7595372721155,
+      "compute_seconds": 15.223228042013943,
+      "other_timed_seconds": 0.17155212629586458,
+      "unclipped_wall_minus_chosen_rank_fb_seconds": 0.17155212629586458,
+      "cpu_collator_seconds": 0.2383708953857422,
+      "plan": "mixed_global128_1",
+      "global_counts": {
+        "samples": 128,
+        "tokens": 15622,
+        "padded_tokens": 20008,
+        "label_tokens": 3021,
+        "shift_label_tokens": 3021
+      },
+      "padding_ratio": 0.21921231507397043
+    }
+  ],
+  "actual_microstep_fb_fit": {
+    "method": "Nonnegative3-term least-squares of paired-rank MAX(forward+backward) per actual nonzero-LR microstep; exhaustive7 active feature subsets, no test metrics",
+    "features": [
+      "constant_per_microstep",
+      "max_rank_padded_slots/1000",
+      "max_rank_micro_times_max_length_squared/1e6"
+    ],
+    "coefficients_seconds": [
+      0.4635371812924449,
+      0.0,
+      0.1104487665363922
+    ],
+    "observations": 32,
+    "observed_width_min": 92,
+    "observed_width_max": 503,
+    "rmse_seconds": 0.010766422832430463,
+    "observed_y_min_seconds": 0.46331585850566626,
+    "observed_y_max_seconds": 0.5508182710036635,
+    "raw_design_X": [
+      [
+        1.0,
+        0.82,
+        0.3362
+      ],
+      [
+        1.0,
+        0.796,
+        0.316808
+      ],
+      [
+        1.0,
+        0.256,
+        0.032768
+      ],
+      [
+        1.0,
+        0.49,
+        0.12005
+      ],
+      [
+        1.0,
+        0.312,
+        0.048672
+      ],
+      [
+        1.0,
+        0.428,
+        0.091592
+      ],
+      [
+        1.0,
+        0.228,
+        0.025992
+      ],
+      [
+        1.0,
+        0.894,
+        0.399618
+      ],
+      [
+        1.0,
+        1.006,
+        0.506018
+      ],
+      [
+        1.0,
+        0.224,
+        0.025088
+      ],
+      [
+        1.0,
+        0.222,
+        0.024642
+      ],
+      [
+        1.0,
+        0.216,
+        0.023328
+      ],
+      [
+        1.0,
+        0.484,
+        0.117128
+      ],
+      [
+        1.0,
+        0.356,
+        0.063368
+      ],
+      [
+        1.0,
+        0.32,
+        0.0512
+      ],
+      [
+        1.0,
+        0.31,
+        0.04805
+      ],
+      [
+        1.0,
+        0.184,
+        0.016928
+      ],
+      [
+        1.0,
+        0.24,
+        0.0288
+      ],
+      [
+        1.0,
+        0.322,
+        0.051842
+      ],
+      [
+        1.0,
+        0.336,
+        0.056448
+      ],
+      [
+        1.0,
+        0.316,
+        0.049928
+      ],
+      [
+        1.0,
+        0.678,
+        0.229842
+      ],
+      [
+        1.0,
+        0.42,
+        0.0882
+      ],
+      [
+        1.0,
+        0.224,
+        0.025088
+      ],
+      [
+        1.0,
+        0.598,
+        0.178802
+      ],
+      [
+        1.0,
+        0.272,
+        0.036992
+      ],
+      [
+        1.0,
+        0.34,
+        0.0578
+      ],
+      [
+        1.0,
+        0.326,
+        0.053138
+      ],
+      [
+        1.0,
+        0.316,
+        0.049928
+      ],
+      [
+        1.0,
+        0.234,
+        0.027378
+      ],
+      [
+        1.0,
+        0.446,
+        0.099458
+      ],
+      [
+        1.0,
+        0.714,
+        0.254898
+      ]
+    ],
+    "raw_timing_y_seconds": [
+      0.5065235514193773,
+      0.47760459035634995,
+      0.4655372891575098,
+      0.4681110819801688,
+      0.46926338225603104,
+      0.5067434376105666,
+      0.46331585850566626,
+      0.5023692883551121,
+      0.5508182710036635,
+      0.47068238258361816,
+      0.46710167080163956,
+      0.464768148958683,
+      0.465780352242291,
+      0.4693086091428995,
+      0.46897976845502853,
+      0.4670394379645586,
+      0.47251198068261147,
+      0.4737883200868964,
+      0.4715297855436802,
+      0.4709349572658539,
+      0.46972047816962004,
+      0.4689140981063247,
+      0.47020485159009695,
+      0.46957325655966997,
+      0.47558774147182703,
+      0.4746998054906726,
+      0.46794544998556376,
+      0.4704958815127611,
+      0.4663024200126529,
+      0.4700434301048517,
+      0.47082938347011805,
+      0.4767067953944206
+    ],
+    "maximum_absolute_residual_seconds": 0.03309003289352047,
+    "active_feature_indices": [
+      0,
+      2
+    ],
+    "design_matrix_condition_number": 55.68805916005265,
+    "paired_max_sum_to_whole_update_rank_normalizer": 0.9999666498266279,
+    "normalizer_meaning": "Sum of paired microstep MAX(F+B) can exceed whole-update slow-rank F+B. Scale fitted compute by measured whole-rank/paired-MAX ratio before adding the separately measured whole-rank non-F+B overhead. No required unmeasured cost is subtracted.",
+    "four_epoch_raw_paired_max_compute_seconds": 104837.25376275115,
+    "four_epoch_compute_seconds": 104833.7574221623,
+    "four_epoch_compute_plus_2rmse_each_micro_seconds": 109597.26693374178,
+    "boundary": "Engineering elapsed-time predictor, not a confidence interval. Full data may exceed fitted length range; actual extreme F/B capacity probes and separate static sensitivity estimates are retained."
+  },
+  "train_extrapolation": {
+    "method": "Static sensitivity comparator: calibrate actual slow-rank F+B seconds to full221225-row mixed-padding workload (original data, including mismatches) using4H\u00b2L+3HIL+2HL\u00b2;4epochs as conservative work accounting,6912optimizer overheads",
+    "eta_quadratic_per_linear": 4.0479274611398965e-05,
+    "central_compute_seconds": [
+      96888.206803889
+    ],
+    "linear_only_compute_seconds": [
+      96970.16252203201
+    ],
+    "quadratic_only_compute_seconds": [
+      89256.87653926258
+    ],
+    "conservative_multiplier_on_max_cost_covariate": 1.25,
+    "multiplier_meaning": "Explicit resource/runtime scenario; unknown checkpoint or evaluation overhead is never folded into it",
+    "counts_boundary": "Full4epoch workload slightly exceeds Trainer floor-step truncation; actual full Trainer+DS epoch tail not executed",
+    "full_epoch_workload": {
+      "world_size": 2,
+      "micro_batch_per_rank": 2,
+      "target_accumulation_for_global128": 32,
+      "original_records": 221225,
+      "presented_records_after_diagnostic_pair_padding": 221228,
+      "tail_duplicate_records": 3,
+      "rank_micro_steps": 55307,
+      "global128_complete_groups_by_this_layout": 1728,
+      "remaining_rank_micro_steps_after_complete_groups": 11,
+      "useful_token_sum_including_tail_duplicates": 26524254,
+      "gpu_token_slots_sum_both_ranks": 33494762,
+      "gpu_attention_quadratic_sum_both_ranks": 6708241062,
+      "synchronized_wall_token_slots_max_rank_sum": 21224446,
+      "synchronized_wall_attention_quadratic_max_rank_sum": 5183059738,
+      "padding_token_sum": 6970508,
+      "padding_ratio": 0.2081074049727536,
+      "per_pair_padding_ratio": {
+        "count": 55307,
+        "min": 0.0,
+        "p10": 0.06703910614525144,
+        "p50": 0.17689530685920574,
+        "p90": 0.30182623468025727,
+        "p99": 0.3813658423197575,
+        "max": 0.45570698466780235,
+        "mean": 0.18109515786204372,
+        "sum": 10015.829895876052
+      },
+      "per_rank_micro_max_length": {
+        "count": 110614,
+        "min": 48.0,
+        "p10": 81.0,
+        "p50": 126.0,
+        "p90": 244.0,
+        "p99": 521.0,
+        "max": 1626.0,
+        "mean": 151.40380964434883,
+        "sum": 16747381.0
+      },
+      "per_pair_slowest_rank_max_length": {
+        "count": 55307,
+        "min": 64.0,
+        "p10": 103.0,
+        "p50": 165.0,
+        "p90": 312.0,
+        "p99": 565.9400000000023,
+        "max": 1626.0,
+        "mean": 191.87847831196774,
+        "sum": 10612223.0
+      },
+      "zero_shift_label_rank_microbatches": 0,
+      "label_mean_loss_nan_risk": false,
+      "timing_boundary": "Quadratic/linear work units are cost covariates, not elapsed seconds or measured kernel FLOPs."
+    }
+  },
+  "validation_extrapolation": {
+    "batch1_forward_seconds_mean": 0.08599260589107871,
+    "batch1_forward_seconds_max": 0.09057581145316362,
+    "center_calls": 3,
+    "conservative_calls": 4,
+    "dual_rank_denominator": 2,
+    "formal_microbatch_throughput_unmeasured": true
+  },
+  "adapter_save_extrapolation": {
+    "seconds_each_measured": 1.0234956610947847,
+    "calls_assumed": 4,
+    "training_state_included": false,
+    "serialized_bytes_rank0": 580120808
+  },
+  "restore_extrapolation": {
+    "measured_fresh_adapter_reload_seconds": 110.9067104877904,
+    "scope": "Proxy for best-adapter inference restoration; actual Trainer/DS best-checkpoint path is not verified"
+  },
+  "test_extrapolation": {
+    "per_prompt": [
+      {
+        "prompt_id": 0,
+        "wall_max_rank_seconds": 1.5646603582426906,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6429866999387741,
+          0.6978943208232522,
+          0.6923787696287036
+        ],
+        "mean_user_generation_seconds": 0.6777532634635767,
+        "max_user_generation_seconds": 0.6978943208232522,
+        "central_full_prompt_two_rank_seconds": 8394.65192125986,
+        "conservative_full_prompt_two_rank_seconds": 8644.119057716802,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 1,
+        "wall_max_rank_seconds": 1.4167459048330784,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6453638263046741,
+          0.5300152078270912,
+          0.5602401969954371
+        ],
+        "mean_user_generation_seconds": 0.5785397437090675,
+        "max_user_generation_seconds": 0.6453638263046741,
+        "central_full_prompt_two_rank_seconds": 7165.79326558051,
+        "conservative_full_prompt_two_rank_seconds": 7993.476352609694,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 2,
+        "wall_max_rank_seconds": 1.4701876705512404,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6619440289214253,
+          0.5379223609343171,
+          0.5600377200171351
+        ],
+        "mean_user_generation_seconds": 0.5866347032909592,
+        "max_user_generation_seconds": 0.6619440289214253,
+        "central_full_prompt_two_rank_seconds": 7266.057434961821,
+        "conservative_full_prompt_two_rank_seconds": 8198.838742220774,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 3,
+        "wall_max_rank_seconds": 1.4008332714438438,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6363774621859193,
+          0.5254582082852721,
+          0.5429238993674517
+        ],
+        "mean_user_generation_seconds": 0.5682531899462143,
+        "max_user_generation_seconds": 0.6363774621859193,
+        "central_full_prompt_two_rank_seconds": 7038.384010673811,
+        "conservative_full_prompt_two_rank_seconds": 7882.171246634796,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 4,
+        "wall_max_rank_seconds": 1.3904508836567402,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6297861896455288,
+          0.5191139755770564,
+          0.532047119922936
+        ],
+        "mean_user_generation_seconds": 0.5603157617151737,
+        "max_user_generation_seconds": 0.6297861896455288,
+        "central_full_prompt_two_rank_seconds": 6940.071024604142,
+        "conservative_full_prompt_two_rank_seconds": 7800.53174494952,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 5,
+        "wall_max_rank_seconds": 1.4225760316476226,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.629679593257606,
+          0.5146057168021798,
+          0.5329136634245515
+        ],
+        "mean_user_generation_seconds": 0.5590663244947791,
+        "max_user_generation_seconds": 0.629679593257606,
+        "central_full_prompt_two_rank_seconds": 6924.595495192334,
+        "conservative_full_prompt_two_rank_seconds": 7799.211442088708,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 6,
+        "wall_max_rank_seconds": 1.3701671306043863,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6218184418976307,
+          0.5030589792877436,
+          0.5287609491497278
+        ],
+        "mean_user_generation_seconds": 0.5512127901117007,
+        "max_user_generation_seconds": 0.6218184418976307,
+        "central_full_prompt_two_rank_seconds": 6827.3216183235245,
+        "conservative_full_prompt_two_rank_seconds": 7701.843221344054,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 7,
+        "wall_max_rank_seconds": 1.4538395162671804,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6308749644085765,
+          0.5298585640266538,
+          0.5303963171318173
+        ],
+        "mean_user_generation_seconds": 0.5637099485223492,
+        "max_user_generation_seconds": 0.6308749644085765,
+        "central_full_prompt_two_rank_seconds": 6982.1114223978175,
+        "conservative_full_prompt_two_rank_seconds": 7814.017309164628,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 8,
+        "wall_max_rank_seconds": 1.4232777440920472,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6309494152665138,
+          0.5138661209493876,
+          0.5313241118565202
+        ],
+        "mean_user_generation_seconds": 0.5587132160241405,
+        "max_user_generation_seconds": 0.6309494152665138,
+        "central_full_prompt_two_rank_seconds": 6920.221893675004,
+        "conservative_full_prompt_two_rank_seconds": 7814.93945749104,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 9,
+        "wall_max_rank_seconds": 1.398122824728489,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6366006191819906,
+          0.5230226367712021,
+          0.5418680254369974
+        ],
+        "mean_user_generation_seconds": 0.5671637604633967,
+        "max_user_generation_seconds": 0.6366006191819906,
+        "central_full_prompt_two_rank_seconds": 7024.890337099631,
+        "conservative_full_prompt_two_rank_seconds": 7884.935269188136,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 10,
+        "wall_max_rank_seconds": 1.4438464445993304,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.630682629533112,
+          0.5221076728776097,
+          0.5290329782292247
+        ],
+        "mean_user_generation_seconds": 0.5606077602133155,
+        "max_user_generation_seconds": 0.630682629533112,
+        "central_full_prompt_two_rank_seconds": 6943.687718002126,
+        "conservative_full_prompt_two_rank_seconds": 7811.635049397126,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 11,
+        "wall_max_rank_seconds": 1.425677726045251,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6326202247291803,
+          0.5137123623862863,
+          0.5305045079439878
+        ],
+        "mean_user_generation_seconds": 0.5589456983531514,
+        "max_user_generation_seconds": 0.6326202247291803,
+        "central_full_prompt_two_rank_seconds": 6923.101419802134,
+        "conservative_full_prompt_two_rank_seconds": 7835.634103495628,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 12,
+        "wall_max_rank_seconds": 1.5166184781119227,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6632244708016515,
+          0.5561262834817171,
+          0.5700390646234155
+        ],
+        "mean_user_generation_seconds": 0.596463272968928,
+        "max_user_generation_seconds": 0.6632244708016515,
+        "central_full_prompt_two_rank_seconds": 7387.794098993142,
+        "conservative_full_prompt_two_rank_seconds": 8214.698295349255,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 13,
+        "wall_max_rank_seconds": 1.544841113500297,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6678532063961029,
+          0.5569021822884679,
+          0.564611186273396
+        ],
+        "mean_user_generation_seconds": 0.596455524985989,
+        "max_user_generation_seconds": 0.6678532063961029,
+        "central_full_prompt_two_rank_seconds": 7387.698132476459,
+        "conservative_full_prompt_two_rank_seconds": 8272.02981442213,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 14,
+        "wall_max_rank_seconds": 1.472294831648469,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6628148891031742,
+          0.5386903397738934,
+          0.5607404867187142
+        ],
+        "mean_user_generation_seconds": 0.5874152385319272,
+        "max_user_generation_seconds": 0.6628148891031742,
+        "central_full_prompt_two_rank_seconds": 7275.725144456451,
+        "conservative_full_prompt_two_rank_seconds": 8209.625216431916,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 15,
+        "wall_max_rank_seconds": 1.4319004053249955,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6501866653561592,
+          0.5388012072071433,
+          0.5555347530171275
+        ],
+        "mean_user_generation_seconds": 0.5815075418601433,
+        "max_user_generation_seconds": 0.6501866653561592,
+        "central_full_prompt_two_rank_seconds": 7202.552413479735,
+        "conservative_full_prompt_two_rank_seconds": 8053.212037101388,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      },
+      {
+        "prompt_id": 16,
+        "wall_max_rank_seconds": 1.4927746895700693,
+        "users_measured": 3,
+        "successful_users": 3,
+        "individual_generation_seconds": [
+          0.6760861864313483,
+          0.5570604642853141,
+          0.570168050006032
+        ],
+        "mean_user_generation_seconds": 0.6011049002408981,
+        "max_user_generation_seconds": 0.6760861864313483,
+        "central_full_prompt_two_rank_seconds": 7445.285294383764,
+        "conservative_full_prompt_two_rank_seconds": 8374.00350513868,
+        "extrapolation_limit": "Three history-length proxy users/template, batch1; excludes full-test data preparation/aggregation and fluctuations"
+      }
+    ],
+    "batch_size": 1,
+    "beam": 20,
+    "all17_templates_measured": true,
+    "users_per_template": 3,
+    "denominator": "Per-user GPU generation time,24,772users per prompt divided by2 simultaneous ranks; uneven3-user diagnostic wall not misused as saturated throughput",
+    "conservative_multiplier": 1.25
+  },
+  "center": {
+    "component_hours": {
+      "train": 29.120488172822864,
+      "validation": 1.7751740276115016,
+      "adapter_save": 0.0011372174012164275,
+      "full_training_state_save": null,
+      "best_restore": 0.030807419579941778,
+      "test": 33.90276184593396,
+      "test_cpu_decode_evaluator_aggregation": null,
+      "init": 0.033349283022754306,
+      "data_preparation": 0.457672119140625,
+      "measured_python_transfer_optimizer_overhead": 0.32938008248806
+    },
+    "known_subtotal_hours": 65.65077016800092,
+    "total_hours": null,
+    "missing_components": [
+      "full_training_state_save",
+      "test_cpu_decode_evaluator_aggregation"
+    ],
+    "training_plus_measured_overhead_hours": 29.90754037445155,
+    "evaluation_hours": 35.67793587354546
+  },
+  "conservative": {
+    "component_hours": {
+      "train": 38.05460657421589,
+      "validation": 3.116311112941346,
+      "adapter_save": 0.0014215217515205344,
+      "full_training_state_save": null,
+      "best_restore": 0.038509274474927226,
+      "test": 47.32809786970287,
+      "test_cpu_decode_evaluator_aggregation": null,
+      "init": 0.04168660377844288,
+      "data_preparation": 0.5720901489257812,
+      "measured_python_transfer_optimizer_overhead": 0.5527452774345875
+    },
+    "known_subtotal_hours": 89.70546838322538,
+    "total_hours": null,
+    "missing_components": [
+      "full_training_state_save",
+      "test_cpu_decode_evaluator_aggregation"
+    ],
+    "training_plus_measured_overhead_hours": 39.17944200057626,
+    "evaluation_hours": 50.44440898264422
+  },
+  "decision_reason": "Bounded timing does not sufficiently constrain all required full-seed components; explicit unmeasured checkpoint/long-tail/aggregation terms prevent a96h guarantee.",
+  "formal_data_status": "BLOCKED_UNRESOLVED_AUXILIARY_PROVENANCE_AND_SPLIT_PAIRING",
+  "created_utc": "2026-11-10T14:33:24Z"
+}
