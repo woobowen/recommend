@@ -40,8 +40,10 @@ def main():
     parser.add_argument('mode', choices=['preflight', 'deploy', 'submit', 'query', 'logs', 'collect'])
     parser.add_argument('--commit')
     parser.add_argument('--job')
-    parser.add_argument('--kind', choices=['setup', 'cpu', 'protocol', 'compatibility', 'grouping', 'policy', 'gpu'])
+    parser.add_argument('--kind', choices=['setup', 'cpu', 'protocol', 'compatibility', 'grouping', 'policy', 'cost', 'gpu', 'inference'])
     parser.add_argument('--train-job')
+    parser.add_argument('--gpu-job')
+    parser.add_argument('--micro-batch',type=int,choices=[8,4,2,1],default=8)
     args = parser.parse_args()
     SUPPORT.mkdir(parents=True, exist_ok=True)
     t = transport.Transport('new-server')
@@ -92,7 +94,7 @@ print(json.dumps(r))"""
         env['TORCH_EXTENSIONS_DIR']=REMOTE+'/torch_extensions'
         env['NCCL_P2P_DISABLE']='1'
         env['OMP_NUM_THREADS']='4'
-        if args.kind in ('cpu','setup','protocol','compatibility','grouping','policy'):
+        if args.kind in ('cpu','setup','protocol','compatibility','grouping','policy','cost'):
             env['CUDA_VISIBLE_DEVICES']=''
             env.pop('DS_ACCELERATOR',None)
             if args.kind=='setup':
@@ -105,6 +107,10 @@ print(json.dumps(r))"""
                 argv=[PYTHON,scripts+'analyze_grouping.py','--records',workload+'/records.jsonl.gz','--samples',workload+'/samples.json','--output',output+'grouping/grouping.json']
             elif args.kind=='policy':
                 argv=[PYTHON,scripts+'validation_policy_probe.py','--protocol',t.profile['job_root']+'/lc-six-20261110-protocol-r1/output/protocol/protocol.json','--output',output+'policy/validation_policy.json']
+            elif args.kind=='cost':
+                assert args.train_job and args.gpu_job
+                jobs=t.profile['job_root']
+                argv=[PYTHON,scripts+'estimate_budget.py','--workload',jobs+'/'+args.train_job+'/output/workload/workload_summary.json','--grouping',jobs+'/lc-six-20261110-grouping-r2/output/grouping/grouping.json','--protocol',jobs+'/lc-six-20261110-protocol-r1/output/protocol/protocol.json','--policy',jobs+'/lc-six-20261110-policy-r2/output/policy/validation_policy.json','--gpu',jobs+'/'+args.gpu_job+'/output/probe','--output',output+'cost/budget.json','--run-commit',commit]
             elif args.kind=='protocol':
                 argv=[PYTHON,scripts+'protocol_probe.py','--config',release+'/lc_rec/six_task_lora/config/candidate.json','--output',output+'protocol']
             else:
@@ -112,17 +118,25 @@ print(json.dumps(r))"""
         else:
             assert args.train_job and args.train_job.startswith('lc-six-20261110-cpu-')
             workload=t.profile['job_root']+'/'+args.train_job+'/output/workload'
-            previous=json.loads(t.python("from pathlib import Path;import json;p=Path('/home/bwwu/lc-rec/six-task-20261110/update-budget.json');print(p.read_text() if p.exists() else '{\"used\":0}')"))
-            assert 0<=previous['used']<6
-            inner=[scripts+'gpu_probe.py','--config',release+'/lc_rec/six_task_lora/config/candidate.json','--samples',workload+'/samples.json','--output-dir',output+'probe','--run-commit',commit,'--job-id',args.job,'--max-updates',str(min(2,6-previous['used'])),'--candidate','bf16','--micro-batch','8']
+            if args.kind=='gpu':
+                previous=json.loads(t.python("from pathlib import Path;import json;p=Path('/home/bwwu/lc-rec/six-task-20261110/update-budget.json');print(p.read_text() if p.exists() else '{\"used\":0}')"))
+                assert 0<=previous['used']<6
+                inner=[scripts+'gpu_probe.py','--config',release+'/lc_rec/six_task_lora/config/candidate.json','--samples',workload+'/samples.json','--output-dir',output+'probe','--run-commit',commit,'--job-id',args.job,'--max-updates',str(min(2,6-previous['used'])),'--candidate','bf16','--micro-batch',str(args.micro_batch)]
+            else:
+                assert args.kind=='inference' and args.gpu_job and args.gpu_job.startswith('lc-six-20261110-gpu-')
+                parent=t.profile['job_root']+'/'+args.gpu_job+'/output/probe'
+                inner=[scripts+'inference_only.py','--config',release+'/lc_rec/six_task_lora/config/candidate.json','--samples',workload+'/samples.json','--adapter',parent+'/adapter','--parent-job',args.gpu_job,'--output-dir',output+'inference','--run-commit',commit]
             argv=[PYTHON,scripts+'resource_guard.py','--config',release+'/lc_rec/six_task_lora/config/guard.json','--output',output+'resources','--job-id',args.job,'--',PYTHON,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2',*inner]
         deploy = json.loads((SUPPORT/'receipts'/('deployment-'+commit+'.json')).read_text())
         prefixes = ('lc_rec/six_task_lora/scripts/', 'lc_rec/six_task_lora/config/', 'lc_rec/vendor/original/')
         inputs = [{'path':release+'/'+row['path'], 'sha256':row['sha256']} for row in deploy['files'] if row['path'].startswith(prefixes)]
-        if args.kind=='gpu':
+        if args.kind in ('gpu','inference'):
             evidence_code="from pathlib import Path;import json,hashlib\nroot=Path("+repr(workload)+");summary=json.loads((root/'workload_summary.json').read_text());rows=[]\nfor name in ['samples.json','validation_samples.json','output_manifest.json','workload_summary.json']:\n p=root/name;rows.append({'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})\nrows.extend({'path':v['path'],'sha256':v['sha256']} for v in summary['assets'].values());print(json.dumps(rows))"
             inputs.extend(json.loads(t.python(evidence_code)))
-        req.update(job_id=args.job, capture_version=commit, cwd=release, argv=argv, env=env, inputs=inputs, timeout_seconds=2850 if args.kind=='gpu' else 3600)
+        if args.kind=='inference':
+            parent_inputs="from pathlib import Path;import json\nroot=Path("+repr(parent)+");r=json.loads((root/'probe_rank0.json').read_text());assert r['reload']['status']=='PASS';print(json.dumps([{'path':v['path'],'sha256':v['sha256']} for v in r['save']['files']]))"
+            inputs.extend(json.loads(t.python(parent_inputs)))
+        req.update(job_id=args.job, capture_version=commit, cwd=release, argv=argv, env=env, inputs=inputs, timeout_seconds=2850 if args.kind in ('gpu','inference') else 3600)
         path = SUPPORT/'requests'/(args.job+'.json')
         if path.exists():
             assert json.loads(path.read_text()) == req

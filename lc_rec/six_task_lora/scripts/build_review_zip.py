@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build and actually extract a fixed Git delivery plus external readback receipts."""
-import argparse,hashlib,json,pathlib,re,subprocess,tempfile,zipfile,shutil
+import argparse,hashlib,json,pathlib,re,subprocess,tempfile,zipfile,shutil,gzip
 
 def digest(p):
     h=hashlib.sha256()
@@ -13,6 +13,13 @@ def safe(n):
 def scan(name,b):
     for p in [rb'-----BEGIN (?:OPENSSH|RSA|EC|DSA) PRIVATE KEY-----',rb'gh[pousr]_[A-Za-z0-9]{25,}',rb'github_pat_[A-Za-z0-9_]{20,}',rb'hf_[A-Za-z0-9]{25,}',rb'AKIA[A-Z0-9]{16}']:
         if re.search(p,b):raise ValueError('Secret-like payload '+name)
+    if name.endswith('.jsonl.gz'):
+        with gzip.GzipFile(fileobj=__import__('io').BytesIO(b)) as stream:
+            tail=b''
+            while True:
+                chunk=stream.read(1024**2)
+                if not chunk:break
+                scan(name[:-3],tail+chunk);tail=chunk[-256:]
     if pathlib.PurePosixPath(name).suffix in ['.safetensors','.bin','.whl','.pt','.pth','.ckpt'] or pathlib.PurePosixPath(name).name in ['id_rsa','id_ed25519','hosts.yml']:raise ValueError('Forbidden artifact '+name)
 def main():
     p=argparse.ArgumentParser();p.add_argument('--repo',required=True,type=pathlib.Path);p.add_argument('--receipts',required=True,type=pathlib.Path);p.add_argument('--output',required=True,type=pathlib.Path);p.add_argument('--windows-copy',required=True,type=pathlib.Path);a=p.parse_args()
@@ -51,7 +58,10 @@ def main():
     assert a.windows_copy.parent.is_dir() and not a.windows_copy.exists()
     shutil.copyfile(a.output,a.windows_copy);assert digest(a.output)==digest(a.windows_copy)
     win=subprocess.check_output(['wslpath','-w',str(a.windows_copy)],text=True).strip()
-    receipt={'DELIVERY_COMMIT':commit,'wsl_path':str(a.output.resolve()),'windows_path':win,'windows_wsl_path':str(a.windows_copy),'bytes':a.output.stat().st_size,'sha256':digest(a.output),'member_count':len(names),'crc_verified':True,'full_extraction_verified':True,'every_member_size_sha256_verified':True,'duplicate_members':False,'dangerous_paths':False,'secret_pattern_scan':'PASS','windows_copy_sha256_verified':True,'scan_limit':'Pattern scan and review of included paths; not a universal proof about all possible secrets.'}
+    ps="$p='"+win.replace("'","''")+"'; $i=Get-Item -LiteralPath $p -ErrorAction Stop; $h=Get-FileHash -LiteralPath $p -Algorithm SHA256 -ErrorAction Stop; @{Bytes=$i.Length; SHA256=$h.Hash; Path=$i.FullName} | ConvertTo-Json -Compress"
+    got=json.loads(subprocess.check_output(['/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe','-NoProfile','-NonInteractive','-Command',ps],text=True))
+    assert int(got['Bytes'])==a.output.stat().st_size and got['SHA256'].lower()==digest(a.output)
+    receipt={'DELIVERY_COMMIT':commit,'wsl_path':str(a.output.resolve()),'windows_path':win,'windows_wsl_path':str(a.windows_copy),'bytes':a.output.stat().st_size,'sha256':digest(a.output),'member_count':len(names),'crc_verified':True,'full_extraction_verified':True,'every_member_size_sha256_verified':True,'duplicate_members':False,'dangerous_paths':False,'secret_pattern_scan':'PASS','windows_copy_sha256_verified':True,'native_windows_GetItem_GetFileHash':got,'compressed_metadata_secret_scan':True,'scan_limit':'Pattern scan and review of included paths; not a universal proof about all possible secrets.'}
     for q in [a.output,a.windows_copy]:
         q.with_suffix(q.suffix+'.sha256').write_text(receipt['sha256']+'  '+q.name+'\n')
         q.with_suffix(q.suffix+'.receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')

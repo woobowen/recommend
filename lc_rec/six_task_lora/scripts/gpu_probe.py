@@ -510,6 +510,32 @@ def run(args, report, flush, event):
     mixed = plans["mixed_global128_0"]
     if len(mixed) != 128:
         raise AssertionError("Mixed update plan must contain exactly128 records")
+    stress_pool = sorted(set(plans.get("padding_stress", [])),
+                         key=lambda sample_id: (records[sample_id]["metrics"]["full_tokens"], sample_id))
+    if len(stress_pool) < args.micro_batch:
+        raise AssertionError("The audited global padding-stress pool is missing or too small")
+
+    def stress_ids_for(micro):
+        # Start with the global longest legal original record. For micro>1,
+        # alternate longest and shortest remaining rows so the entire batch
+        # pads to the global maximum. This selection is diagnostic only.
+        selected = []
+        low, high = 0, len(stress_pool) - 1
+        while len(selected) < micro:
+            selected.append(stress_pool[high])
+            high -= 1
+            if len(selected) < micro:
+                selected.append(stress_pool[low])
+                low += 1
+        return selected
+
+    report["stress_selection"] = {
+        "algorithm": "Stable full_tokens/sample_id sort of the complete audited stress pool; alternate global longest, shortest, second longest, second shortest; micro1 is global longest",
+        "pool_records": len(stress_pool), "global_longest_sample_id": stress_pool[-1],
+        "global_longest_full_tokens": records[stress_pool[-1]]["metrics"]["full_tokens"],
+        "global_shortest_sample_id": stress_pool[0],
+        "global_shortest_full_tokens": records[stress_pool[0]]["metrics"]["full_tokens"],
+        "formal_sampler_changed": False}
     selected_micro = None
     for micro in [m for m in (8, 4, 2, 1) if m <= args.micro_batch]:
         # Probe the largest actual padded batch of the two fixed mixed plans,
@@ -528,25 +554,32 @@ def run(args, report, flush, event):
         row["micro_batch"] = micro
         row["accumulation"] = 128 // (world * micro)
         row["is_actual_zero2_layout_test"] = False
+        row["mixed_trial_status"] = row["status"]
+        stress_ids = stress_ids_for(micro)
+        stress = plain_trial(stress_ids, "capacity_global_padding_stress_micro" + str(micro))
+        stress["sample_ids"] = stress_ids
+        stress["selection"] = report["stress_selection"]["algorithm"]
+        row["padding_stress_trial"] = stress
+        if row["status"] != "PASS" or stress["status"] != "PASS":
+            row["status"] = "OOM" if "OOM" in (row["status"], stress["status"]) else "FAIL"
         # Reserve FP32 masters/Adam states, partitioned grads, and communications.
         reserve_gib = float(cfg.get("pre_engine_free_reserve_gib", 3.0))
-        peaks = [value["memory"]["peak_allocated_gib"] for value in row["all_rank_statuses"]]
+        peaks = [value["memory"]["peak_allocated_gib"] for trial in (row, stress) for value in trial["all_rank_statuses"]]
         total = torch.cuda.get_device_properties(local).total_memory / GIB
         row["optimizer_and_communication_reserve_gib"] = reserve_gib
+        row["mixed_and_stress_max_peak_allocated_gib"] = max(peaks)
         row["passes_reserve_gate"] = row["status"] == "PASS" and max(peaks) + reserve_gib < total
         report["layout_probes"].append(row)
         event("layout_probe", micro=micro, status=row["status"], reserve_gate=row["passes_reserve_gate"])
         if row["passes_reserve_gate"]:
             selected_micro = micro
+            report["padding_stress"] = stress
             break
     if selected_micro is None:
         report["training_status"] = "BLOCKED_NO_BF16_LAYOUT_WITH_RESERVE"
         raise RuntimeError("No permitted microbatch fits the measured pre-engine reserve gate")
     accumulation = 128 // (world * selected_micro)
-    if plans.get("padding_stress"):
-        stress_ids = plans["padding_stress"][:selected_micro]
-        report["padding_stress"] = plain_trial(stress_ids, "length_padding_stress")
-        event("padding_stress", status=report["padding_stress"]["status"])
+    event("padding_stress_gate_selected", micro=selected_micro, status=report["padding_stress"]["status"])
 
     # Inspect the actual pinned Trainer/Accelerate loader and its scheduler.
     # train() is never called; only the finite explicit engine loop below updates.
@@ -741,6 +774,52 @@ def run(args, report, flush, event):
         report.pop("current_update", None)
         event("global_update_complete", update=update, nonzero_lr=row["nonzero_learning_rate"], samples_per_second=row["samples_per_second"])
     report["training_status"] = "PASS" if report["updates"] else "NO_UPDATES_REQUESTED"
+    # Keep the real GPU FP32 masters and Adam moments resident, but remove the
+    # ZeRO autograd hooks before a no-step diagnostic. Calling raw backward with
+    # those hooks still installed could otherwise communicate/alter reduction
+    # buffers despite never calling engine.step. Public destroy was source-
+    # checked and does not free the optimizer state or distributed group.
+    before_stress_fingerprints = {name: tensor_digest(named[name]) for name in train_names}
+    post_stress_progress_before = optimizer_progress()
+    engine_destroy = inspect.getsource(type(engine).destroy)
+    optimizer_destroy = inspect.getsource(type(engine.optimizer).destroy)
+    report["engine_cleanup"] = {
+        "stage": "After real updates, before no-step resident-Adam stress",
+        "engine_destroy_file": record_file(inspect.getfile(type(engine).destroy)),
+        "engine_destroy_source_sha256": hashlib.sha256(engine_destroy.encode()).hexdigest(),
+        "optimizer_destroy_file": record_file(inspect.getfile(type(engine.optimizer).destroy)),
+        "optimizer_destroy_source_sha256": hashlib.sha256(optimizer_destroy.encode()).hexdigest(),
+        "memory_before_destroy": memory(),
+        "semantics": "Verified DS0.16.9 public destroy removes ZeRO gradient hooks/HP mapping and global debug references; model, FP32 master/moment tensors and distributed group are retained"}
+    engine.destroy()
+    torch.cuda.synchronize()
+    report["engine_cleanup"].update(called=True, memory_after_destroy=memory())
+    model.zero_grad(set_to_none=True)
+    gradient_scalars.clear()
+    gradient_sid_scalars.clear()
+    event("before_post_optimizer_stress", micro=selected_micro)
+    post_stress = plain_trial(stress_ids_for(selected_micro), "post_optimizer_resident_adam_global_padding_stress")
+    post_stress.update(micro_batch=selected_micro, accumulation=accumulation,
+        optimizer_steps=0, global_batch_for_training=128,
+        communication="Ordinary module forward/backward after verified ZeRO hook removal; no gradient all-reduce. Only timing/status synchronization uses collectives",
+        actual_adam_state_retained=True, engine_destroy_called_before_backward=True,
+        progress_before=post_stress_progress_before, progress_after=optimizer_progress(),
+        all_model_grads_cleared=all(parameter.grad is None for parameter in model.parameters()))
+    post_stress["optimizer_and_engine_counters_unchanged"] = post_stress["progress_before"] == post_stress["progress_after"]
+    post_stress["resident_adam_state_tensors"] = [
+        {"state": key, "shape": list(value.shape), "dtype": str(value.dtype), "device": str(value.device)}
+        for state in engine.optimizer.optimizer.state.values() for key, value in state.items() if torch.is_tensor(value)]
+    post_stress["resident_master_partitions"] = [
+        {"shape": list(value.shape), "dtype": str(value.dtype), "device": str(value.device)}
+        for value in getattr(engine.optimizer, "single_partition_of_fp32_groups", [])]
+    moments = [value for value in post_stress["resident_adam_state_tensors"] if value["state"] in ("exp_avg", "exp_avg_sq")]
+    post_stress["actual_adam_state_retained"] = bool(moments) and all(value["device"].startswith("cuda") for value in moments)
+    report["post_optimizer_stress"] = post_stress
+    if not post_stress["optimizer_and_engine_counters_unchanged"] or not post_stress["all_model_grads_cleared"]:
+        raise AssertionError("No-step resident-Adam stress changed progress or left model gradients")
+    if report["updates"] and not post_stress["actual_adam_state_retained"]:
+        raise AssertionError("No-step stress did not retain the actual real-update Adam moments on GPU")
+    event("post_optimizer_stress_complete", micro=selected_micro, status=post_stress["status"])
     changes = {}
     for name in train_names:
         current = small_snapshot(name)
@@ -770,6 +849,10 @@ def run(args, report, flush, event):
         if not all(value["finite"] for value in changes.values()):
             raise FloatingPointError("Nonfinite post-update parameters")
     fingerprints = {name: tensor_digest(named[name]) for name in train_names}
+    report["post_optimizer_stress"]["all_trainable_parameters_unchanged"] = fingerprints == before_stress_fingerprints
+    if not report["post_optimizer_stress"]["all_trainable_parameters_unchanged"]:
+        raise AssertionError("No-step resident-Adam stress changed a trained parameter")
+    del before_stress_fingerprints
     all_fingerprints = [None] * world
     dist.all_gather_object(all_fingerprints, fingerprints)
     report["rank_parameter_sync"] = {"scope": "All bytes of all450 complete active/LoRA tensors", "equal": all_fingerprints[0] == all_fingerprints[1],
@@ -859,18 +942,8 @@ def run(args, report, flush, event):
     # Release the old GPU model and every optimizer reference before loading a
     # genuinely fresh base. No Int8/LoRA path is silently substituted.
     report["reload"] = {"status": "RUNNING", "kind": "Fresh fixed base + real PEFT PeftModel.from_pretrained", "memory_before_release": memory()}
-    engine_destroy = inspect.getsource(type(engine).destroy)
-    optimizer_destroy = inspect.getsource(type(engine.optimizer).destroy)
-    report["reload"]["engine_cleanup"] = {
-        "engine_destroy_file": record_file(inspect.getfile(type(engine).destroy)),
-        "engine_destroy_source_sha256": hashlib.sha256(engine_destroy.encode()).hexdigest(),
-        "optimizer_destroy_file": record_file(inspect.getfile(type(engine.optimizer).destroy)),
-        "optimizer_destroy_source_sha256": hashlib.sha256(optimizer_destroy.encode()).hexdigest(),
-        "semantics": "Verified DS0.16.9 public destroy removes ZeRO gradient hooks/HP mapping and global debug references; distributed group is retained"}
-    engine.destroy()
-    torch.cuda.synchronize()
-    report["reload"]["engine_cleanup"]["called"] = True
-    report["reload"]["engine_cleanup"]["memory_after_destroy_before_del"] = memory()
+    report["reload"]["engine_cleanup"] = report["engine_cleanup"]
+    report["reload"]["engine_already_destroyed_for_no_step_stress"] = True
     del named, optimizer, scheduler, engine, model, sid_tensor, parameter
     gc.collect(); torch.cuda.empty_cache(); torch.cuda.synchronize()
     report["reload"]["memory_after_release"] = memory()
@@ -911,6 +984,7 @@ def run(args, report, flush, event):
         event=event, guard=guard, max_rank_seconds=max_rank_seconds)
     report["status"] = "PASS" if (report["training_status"] == "PASS" and report["reload"]["status"] == "PASS"
         and report["validation"]["status"] == "PASS" and report["generation"]["status"] == "PASS"
+        and report["post_optimizer_stress"]["status"] == "PASS"
         and not report.get("diagnostic_failures") and not report.get("diagnostic_deadline_reached")) else "PARTIAL"
     report["final_memory"] = memory()
     report["sample_replay_verified"] = {"records": len(replayed), "original_dataset_getitem": True, "original_collator_exact": True}

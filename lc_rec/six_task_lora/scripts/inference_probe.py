@@ -128,8 +128,8 @@ def run_inference_probe(*, model, tokenizer, data_args, sample_doc, config,
                         lowered_beam=False)
                     failures.append({"prompt_id": prompt_id, "user_index": user_index, "status": row["status"]})
                 finally:
-                    row["peak_allocated_gib"] = torch.cuda.max_memory_allocated(local) / 1024 ** 3
-                    row["peak_reserved_gib"] = torch.cuda.max_memory_reserved(local) / 1024 ** 3
+                    row["peak_allocated_gib"] = torch.cuda.max_memory_allocated(local_rank) / 1024 ** 3
+                    row["peak_reserved_gib"] = torch.cuda.max_memory_reserved(local_rank) / 1024 ** 3
                     del batch, output
                     torch.cuda.empty_cache()
                 prompt_rows.append(row)
