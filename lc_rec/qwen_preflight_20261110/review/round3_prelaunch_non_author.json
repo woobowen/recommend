@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "reviewer": "/root/official_architecture",
+  "is_implementation_author": false,
+  "reviewed_utc": "2026-11-10T18:06:56.670841+00:00",
+  "status": "PASS_TARGETED_ROUND3_SOURCE_AND_ACTUAL_CPU_REGRESSION_GPU_RETRIES_PENDING",
+  "base_commit": "e775a226270f9b3b772e8891a805ad62d7bf2fb2",
+  "new_fixed_RUN_COMMIT": "a0903189686329b1029e535dbe2b00a1c34ef427",
+  "reviewed_worktree_file_identities": {
+    "scripts/common.py": {
+      "bytes": 9528,
+      "sha256": "87bad9be604f55ca555f942b938cbd113a80da36297beb9756aaa869d5b2a9f6"
+    },
+    "scripts/probe.py": {
+      "bytes": 31356,
+      "sha256": "45ab6a7bd04c04d69422588bcd833821b0457c3eff113d53bff8845681aadb10"
+    },
+    "scripts/update_budget.py": {
+      "bytes": 2518,
+      "sha256": "675714f63f07316ef171368a0bcee537c97089818c0496887fe6866ecad47379"
+    },
+    "scripts/check_round3.py": {
+      "bytes": 3156,
+      "sha256": "73e8c4ab8f9d6c795bde5f85d0f84e8cd55587cd5c5a816f91b0ad6b9931daa7"
+    },
+    "config/update_reconciliations.json": {
+      "bytes": 1478,
+      "sha256": "9119a50369a60de77cc9b5cfc21c0d3c3f46ffc8fbf9bf38d752a36c84394640"
+    },
+    "config/job_probe_q17_F_round3.json": {
+      "bytes": 1806,
+      "sha256": "8a6fbf15ee87af8397fae4f9276635705a250e0c87e52956a60c619098f41d8a"
+    },
+    "config/job_probe_q35_F_round3.json": {
+      "bytes": 1751,
+      "sha256": "8487e799cef1a5ce3adb9a79c3817b696995b96e307e4094ccf824f019abeba2"
+    },
+    "evidence/before_round3_update-budget.json": {
+      "bytes": 3069,
+      "sha256": "46f0cf2e728febfb3ce11edd44c34118b289da5241d036017533219404cb8078"
+    },
+    "review/round3_failure_and_zero_update_non_author.json": {
+      "bytes": 9137,
+      "sha256": "89e45f8fae3ff71682fd65435333baf2d7d437ea5080bcb9da30e29425293a86"
+    }
+  },
+  "checks": {
+    "training_validation_save_and_generation_substring_after_bounded_training_stage_identical_to_base": true,
+    "common_module_AST_except_write_identical_to_base": true,
+    "frozen_failure_review_89e45_preserved": true,
+    "all_seven_raw_failure_file_SHA_match_proof": true,
+    "same_F17_micro4_and_F35_micro8": true
+  },
+  "implementation_review": {
+    "json": "write accepts only set/frozenset conversion to sorted list and rejects every other unknown type. Empty loading-info sets are serialized without relaxing model loading or loss assertions.",
+    "accounting": "charged_attempts returns a conservative filtered charge view; caller retains original attempt array and appends new attempts to it. Exactly one fixed q17-F r0 can be excluded after frozen independent report and seven raw file SHA/status/cleanup/dual-rank LR0/step0/seven non-boundary microsteps/foreach OOM checks. Ambiguous or other failed jobs remain charged.",
+    "scope": "One failed boundary attempt stays in ledger, classified as0 completed global updates; partial moments/step mutations discarded. Original104.61382330581546 GPU-device seconds remain charged. Retry starts original seed/model/scheduler0; no warmup skipping or new LR.",
+    "caps": "L limits12 task/4model; F6 task/2model remain for conservatively charged completed-or-unknown attempts. Certified prior0 permits only two completed F17 globals in its new attempt.",
+    "allocator": "F17 new job r1 same micro4 and numerical config, only native expandable_segments environment plus diagnostics. F35 r1 same micro8 without allocator change. Both retain task cache/resource/time guard.",
+    "separation": "This is the task final concentrated round3; initial raw jobs remain FAILED, and no further correction round is authorized by this review."
+  },
+  "planned_CPU_gate_review": {
+    "set_metadata": "Check empty sets and stable sorted set output; unknown object must raise TypeError.",
+    "real_failure_fixture": "Read actual original ledger and raw F17 failure fixtures; one and only one certified failed attempt omitted from charge view while ledger bytes stay unchanged.",
+    "synthetic_bookkeeping": "Append only synthetic future events in memory to verify totalF6 andpermodel2 arithmetic. This is not a real optimizer/GPU update.",
+    "tamper": "A changed raw proof digest must reject rather than grant quota.",
+    "CPU_only": "Assert torch absent from sys.modules; no CUDA/framework imported by this regression."
+  },
+  "required_actual_followup": [
+    "Freeze new commit and verify its script/config hashes match this review.",
+    "Actual CPU regression job must succeed with raw request/log/result/cleanup before GPU retry.",
+    "Read new exact GPU requests and allocator_environment on F17; retain failed original jobs and every GPU-device second.",
+    "Each last retry must terminate within caps and have actual nonzero update/save/reload/beam evidence or a verifiable BLOCKED state.",
+    "No optimizer, CPU offload, trainable-scope or research-method alteration to obtain PASS."
+  ],
+  "limits": [
+    "Static audit is not actual CPU regression or retry success.",
+    "Allocator has meaningful free-tensor headroom based on raw failure but fragmentation/IPC/runtime support is not guaranteed.",
+    "Original independent failure report is frozen and intentionally not updated; subsequent review is this separate file."
+  ],
+  "actual_CPU_regression": {
+    "path": "evidence/round3_cpu_regression.json",
+    "bytes": 1668,
+    "sha256": "c27331cc4b10040f22ebe8c3ec060a53f39fa57e37094a9424a7b5e25a78301b",
+    "run_commit": "a0903189686329b1029e535dbe2b00a1c34ef427",
+    "source_hashes_match_fixed_Git": true,
+    "actual_ledger_unchanged": true,
+    "real_failure_fixture_validated": true,
+    "synthetic_only_6F_and2per_model_limits": true,
+    "tamper_and_unknown_type_rejected": true,
+    "no_Torch_or_CUDA": true
+  }
+}

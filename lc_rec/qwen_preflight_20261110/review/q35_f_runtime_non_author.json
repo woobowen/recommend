@@ -1,0 +1,400 @@
+{
+  "schema": 1,
+  "reviewer": "/root/official_architecture",
+  "is_implementation_author": false,
+  "reviewed_utc": "2026-11-10T18:14:17.505488+00:00",
+  "status": "PASS_TECHNICAL_RUNTIME_WITH_RESEARCH_LIMITS",
+  "job_id": "qwen-20261110-q35-f-r1",
+  "run_commit": "a0903189686329b1029e535dbe2b00a1c34ef427",
+  "source_sha256": {
+    "probe.py": "45ab6a7bd04c04d69422588bcd833821b0457c3eff113d53bff8845681aadb10",
+    "common.py": "87bad9be604f55ca555f942b938cbd113a80da36297beb9756aaa869d5b2a9f6",
+    "resource_guard.py": "afe6d6fa172811a399f4bf39e53339a47a6eff57c4c8ba2cee3ef9f44242ec73",
+    "update_budget.py": "675714f63f07316ef171368a0bcee537c97089818c0496887fe6866ecad47379"
+  },
+  "allocator_environment": null,
+  "update_budget_accounting": [
+    {
+      "prior_attempts": 13,
+      "prior_conservative_update_charges": 12,
+      "certified_failed_zero_update_jobs": [
+        {
+          "job_id": "qwen-20261110-q17-f-r0",
+          "failed_boundary_attempts": 1,
+          "completed_global_updates": 0,
+          "original_attempt_retained": true,
+          "partial_optimizer_state_discarded": true,
+          "gpu_device_seconds_never_excluded": true,
+          "independent_review_sha256": "89e45f8fae3ff71682fd65435333baf2d7d437ea5080bcb9da30e29425293a86"
+        }
+      ],
+      "ledger_history_modified": false
+    },
+    {
+      "prior_attempts": 13,
+      "prior_conservative_update_charges": 12,
+      "certified_failed_zero_update_jobs": [
+        {
+          "job_id": "qwen-20261110-q17-f-r0",
+          "failed_boundary_attempts": 1,
+          "completed_global_updates": 0,
+          "original_attempt_retained": true,
+          "partial_optimizer_state_discarded": true,
+          "gpu_device_seconds_never_excluded": true,
+          "independent_review_sha256": "89e45f8fae3ff71682fd65435333baf2d7d437ea5080bcb9da30e29425293a86"
+        }
+      ],
+      "ledger_history_modified": false
+    }
+  ],
+  "asset_revision": "dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68",
+  "raw_inputs": {
+    "evidence/jobs/qwen-20261110-q35-f-r1/output/probe/rank0.json": {
+      "bytes": 377565,
+      "sha256": "7f6d1df15a5d2da9397e7648989dbbbfbdef526fe001d59489311decdd520e6c"
+    },
+    "evidence/jobs/qwen-20261110-q35-f-r1/output/probe/rank1.json": {
+      "bytes": 301516,
+      "sha256": "02babf4c65cface1400933b073c2f3e5ab7ba8d063b9cb01f3a787a958b7557a"
+    },
+    "evidence/jobs/qwen-20261110-q35-f-r1/controller-query.json": {
+      "bytes": 6626,
+      "sha256": "50f63afdbd1eca17dedf93bd4c286180a681ed82004b1b05c2dd499f68ab3fae"
+    },
+    "evidence/jobs/qwen-20261110-q35-f-r1/request.json": {
+      "bytes": 19406,
+      "sha256": "471db7299d862e458e590f7a26dfcdbae44ab98b55e99a2a3d1bc0f925bc3948"
+    },
+    "evidence/jobs/qwen-20261110-q35-f-r1/cleanup.json": {
+      "bytes": 664,
+      "sha256": "2bbbc186067ff703e4f056b1492a1ffe77d76f816b33cfa80ce6ebb3fb35999e"
+    },
+    "evidence/jobs/qwen-20261110-q35-f-r1/output/resources/resource-summary.json": {
+      "bytes": 1607,
+      "sha256": "a61e3c8765a36ea1b4049ac773d8910e704edc389da7e24455d7236b527110a7"
+    },
+    "evidence/jobs/qwen-20261110-cpu-q35-r0/output/audit/audit.json": {
+      "bytes": 84228,
+      "sha256": "2a7b53c9f40b2b63ff8870b85f0394be0f348e6d18a26fd587e43a2413eecfd3"
+    },
+    "evidence/jobs/qwen-20261110-cpu-q35-r0/output/audit/selection.json": {
+      "bytes": 17437,
+      "sha256": "173bfea48a77db6a1dfb842dc78bde60834021e67932216897dfba85d41dc74a"
+    },
+    "metadata/Qwen3.5-0.8B-Base/manifest.json": {
+      "bytes": 4074,
+      "sha256": "6ade2c6e519166a8b19e6db70a1311c853b4b953a6250255b0727ebce6f9a511"
+    }
+  },
+  "job_terminal": {
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "runner_cleanup_verified": true,
+    "guard_cleanup_verified": true,
+    "remaining_owned_pids": [],
+    "wall_seconds": 104.04717116523534,
+    "charged_gpu_device_seconds_independently_recomputed": 208.09434233047068,
+    "minimum_host_available_bytes": 249866227712,
+    "sampled_task_tree_rss_peak_bytes": 7551229952,
+    "counted_new_disk_peak_bytes": 27003830272
+  },
+  "rank_results": [
+    {
+      "rank": 0,
+      "original_parameters": 752393024,
+      "expanded_parameters": 753084224,
+      "actual_trainable_parameters": 753084224,
+      "trainable_tensors": 320,
+      "trainable_fraction_effective_base": 1.0,
+      "trainable_fraction_with_frozen_clones": 1.0,
+      "gradient_call_nonzero_finite_histogram": [
+        {
+          "calls": 8,
+          "nonzero_calls": 8,
+          "finite": true,
+          "tensors": 320
+        }
+      ],
+      "sampled_parameter_tensors_changed": 65,
+      "sampled_parameter_tensors": 146,
+      "SID_changes": {
+        "sampled_elements": 940032,
+        "changed_elements": 17435,
+        "max_abs_change": 3.814697265625e-06
+      },
+      "SID_weight_gradient_max": 20.875,
+      "actual_input_SID_position_gradient_max": 20.875,
+      "actual_supervised_SID_logit_gradient_max": 0.0078125,
+      "optimizer_master_parameters": 376542112,
+      "optimizer_groups": [
+        {
+          "weight_decay": 0.01,
+          "parameter_tensors": 223
+        },
+        {
+          "weight_decay": 0.0,
+          "parameter_tensors": 97
+        }
+      ],
+      "update_seconds": [
+        11.948196411132812,
+        10.960395812988281
+      ],
+      "update_LR": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          2.4096385542168676e-06,
+          2.4096385542168676e-06
+        ]
+      ],
+      "training_peak": {
+        "allocated_gib": 11.43476390838623,
+        "reserved_gib": 21.576171875,
+        "ru_maxrss_gib": 4.1190032958984375
+      },
+      "validation_post_guard_peak": {
+        "allocated_gib": 11.43476390838623,
+        "reserved_gib": 21.576171875,
+        "ru_maxrss_gib": 4.1190032958984375
+      },
+      "all_recorded_phases_peak": {
+        "allocated_gib": 11.43476390838623,
+        "reserved_gib": 21.576171875,
+        "ru_maxrss_gib": 4.708366394042969
+      },
+      "temperature_independent_CE_delta": 1.9073486328125e-06
+    },
+    {
+      "rank": 1,
+      "original_parameters": 752393024,
+      "expanded_parameters": 753084224,
+      "actual_trainable_parameters": 753084224,
+      "trainable_tensors": 320,
+      "trainable_fraction_effective_base": 1.0,
+      "trainable_fraction_with_frozen_clones": 1.0,
+      "gradient_call_nonzero_finite_histogram": [
+        {
+          "calls": 8,
+          "nonzero_calls": 8,
+          "finite": true,
+          "tensors": 320
+        }
+      ],
+      "sampled_parameter_tensors_changed": 65,
+      "sampled_parameter_tensors": 146,
+      "SID_changes": {
+        "sampled_elements": 940032,
+        "changed_elements": 17435,
+        "max_abs_change": 3.814697265625e-06
+      },
+      "SID_weight_gradient_max": 5.34375,
+      "actual_input_SID_position_gradient_max": 5.25,
+      "actual_supervised_SID_logit_gradient_max": 0.0078125,
+      "optimizer_master_parameters": 376542112,
+      "optimizer_groups": [
+        {
+          "weight_decay": 0.01,
+          "parameter_tensors": 223
+        },
+        {
+          "weight_decay": 0.0,
+          "parameter_tensors": 97
+        }
+      ],
+      "update_seconds": [
+        11.948196411132812,
+        10.960395812988281
+      ],
+      "update_LR": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          2.4096385542168676e-06,
+          2.4096385542168676e-06
+        ]
+      ],
+      "training_peak": {
+        "allocated_gib": 11.358788967132568,
+        "reserved_gib": 16.494140625,
+        "ru_maxrss_gib": 4.1293487548828125
+      },
+      "validation_post_guard_peak": {
+        "allocated_gib": 11.358788967132568,
+        "reserved_gib": 16.494140625,
+        "ru_maxrss_gib": 4.1293487548828125
+      },
+      "all_recorded_phases_peak": {
+        "allocated_gib": 11.358788967132568,
+        "reserved_gib": 16.494140625,
+        "ru_maxrss_gib": 4.1293487548828125
+      },
+      "temperature_independent_CE_delta": 0.0
+    }
+  ],
+  "optimizer_scope": "native Torch2.6 AdamW, ZeRO2 CUDA FP32 master and moments, BF16 model/grads, no CPU optimizer offload; scalar step on CPU is native AdamW bookkeeping",
+  "cross_rank": {
+    "all_monitored_hashes_equal": true,
+    "optimizer_step_values_equal": true,
+    "global_update_count_equal": true,
+    "full_LoRA_tensors_hashed": 0,
+    "full_finetune_note": "F hashes all918 SID rows and representative layer slices; full native reload asserts all state values separately"
+  },
+  "serialization": {
+    "model_only": true,
+    "saved_logical_state_keys": 321,
+    "all_state_shapes_dtypes_match_actual_training_inventory": true,
+    "embedding_head_alias_full_shape_sha_equal": true,
+    "files": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q35-f-r1/output/probe/full_model/model.safetensors",
+        "bytes": 1506210008,
+        "sha256": "921953e6b5ba2b19adb5ae08b975d2bbe9d0d4513c404f659f37814b2db89b72"
+      }
+    ],
+    "save_seconds": 2.912607363425195,
+    "reload_seconds": [
+      0.6764795025810599,
+      0.6535686934366822
+    ],
+    "both_rank_all_state_key_shape_dtype_and_value_hash_exact": true,
+    "optimizer_scheduler_rng_saved": false
+  },
+  "generation_independent_recount": {
+    "users": 8,
+    "distinct_user_and_row_ids": 8,
+    "sequences": 160,
+    "position_legal": 160,
+    "canonical_sequences": 0,
+    "canonical_fraction": 0.0,
+    "all_EOS_at_position4_and_only_PAD_tail": true,
+    "decoded_from_independently_rebuilt_SID_ID_map": true,
+    "allowed_sizes_from_original_author_index": [
+      150,
+      256,
+      256,
+      256
+    ],
+    "callback_positions_all0_through4_actual_calls": true,
+    "same_CPU_selected_users_context_separator_and_input_lengths": true,
+    "finite_sorted_sequence_scores": true,
+    "paired_dual_rank_seconds": [
+      0.6270877122879028,
+      0.6681758761405945,
+      0.5826942324638367,
+      0.5769093632698059
+    ],
+    "users_per_second_for_8_users": 3.2588321077461653
+  },
+  "precision": "BF16 instantiated model/full trainable set; CUDA FP32 master/moments and FP32 author temperature CE; official native DeltaNet FP32 recurrence when q35",
+  "limits": [
+    "Bounded technical probes only; no formal epoch/seed or full recommendation metrics.",
+    "Only5 finite validation batches80 examples and8beam users.",
+    "Canonical fraction after1 or3 nonzero warmup updates does not predict final recommendation quality.",
+    "Large adapter/full model payload not transferred or reloaded independently by reviewer; pinned source all-key/value comparisons and raw dual-rank assertions plus parameter/storage/hash inventories were reviewed.",
+    "Full optimizer/scheduler/RNG checkpoint and full training-state recovery NOT TESTED.",
+    "Finite gradient and parameter checks are code-backed execution evidence; review did not perform a second GPU run.",
+    "The F route is the user-authorized full-finetune technical comparison, not LETTER original LoRA recipe.",
+    "Qwen3.5 LoRA remains BLOCKED_MAPPING_REQUIRES_APPROVAL; this full text-submodel result does not resolve or approve a new DeltaNet LoRA mapping."
+  ],
+  "actual_hybrid_text_structure": {
+    "official_class": "transformers.models.qwen3_5.modeling_qwen3_5.Qwen3_5ForCausalLM",
+    "actual_config_type": "qwen3_5_text",
+    "class_source_sha256": "d1ae3856f53763591ec65054129af46e003a1715efcf7eef2b752a31e85526b8",
+    "decoder_layer_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+    ],
+    "DeltaNet_layer_indices": [
+      0,
+      1,
+      2,
+      4,
+      5,
+      6,
+      8,
+      9,
+      10,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      20,
+      21,
+      22
+    ],
+    "full_attention_layer_indices": [
+      3,
+      7,
+      11,
+      15,
+      19,
+      23
+    ],
+    "actual_unique_tensor_categories": {
+      "embedding_and_final_norm_parameters": 2,
+      "DeltaNet_parameters": 162,
+      "FFN_parameters": 72,
+      "decoder_norm_parameters": 48,
+      "full_attention_parameters": 36
+    },
+    "all320_actual_parameters_BF16_before_and_after_DS": true,
+    "all320_gradient_hooks_called8times_and_all8_nonzero_finite": true,
+    "all18_A_log_and_dt_bias_connected_and_nonzero": true,
+    "vision_or_MTP_instantiated_parameters": 0,
+    "official_source_visual_excluded_parameters": 100592896,
+    "official_source_MTP_excluded_parameters": 20452864,
+    "official_source_asset_preserved_in_full": true,
+    "scope_description": "All753084224 instantiated official text-submodel parameters trained. This is not all873438784 full multimodal/MTP asset parameters."
+  },
+  "native_kernel_and_cache_evidence": {
+    "read_only_actual_env_module_availability_without_torch_import": {
+      "fla_spec_present": false,
+      "causal_conv1d_spec_present": false,
+      "torch_imported": false,
+      "interpreter": "/data/bwwu/envs/qwen-preflight-20261110-qwen35/bin/python"
+    },
+    "runtime_work_log_reports_official_torch_fallback": true,
+    "pinned_official_source_dispatch": "With both optional modules absent, selects torch_chunk_gated_delta_rule, torch_recurrent_gated_delta_rule, torch_causal_conv1d_update and native RMSNormGated; no layer replacement or installed alternative kernel.",
+    "training_cache_disabled": true,
+    "generation_cache_enabled_in_pinned_probe": true,
+    "actual_beam_callback_called_all5_positions_for_all8users": true,
+    "official_cache_reorders_attention_KV_and_DeltaNet_conv_recurrent_states": "Read in pinned model source; actual beam20 execution completed. No separate runtime cache-state tensor dump is claimed.",
+    "no_chat_template_or_multimodal_inputs": true
+  },
+  "original_failure_kept": {
+    "job_id": "qwen-20261110-q35-f-r0",
+    "cause": "Evidence JSON cannot serialize empty sets after Trainer/AdamW construction, before DS initialize and any training boundary.",
+    "completed_global_updates": 0,
+    "source_review": "review/round3_failure_and_zero_update_non_author.json",
+    "retry": "One final round3 retry with stable set/frozenset evidence serialization only; no architecture/training algorithm change."
+  }
+}

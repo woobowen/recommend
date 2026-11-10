@@ -1,0 +1,267 @@
+{
+  "schema": 1,
+  "reviewer": "/root/official_architecture",
+  "is_implementation_author": false,
+  "reviewed_utc": "2026-11-10T18:04:08.824738+00:00",
+  "status": "PASS_TECHNICAL_RUNTIME_WITH_RESEARCH_LIMITS",
+  "job_id": "qwen-20261110-q06-f-r0",
+  "run_commit": "98206e447d21acc53aa0366911c804e01a6ca63f",
+  "source_sha256": {
+    "probe.py": "dccb39fc74d0acccc8da4b9bcc7cfcfe1337c6542b21ce02df2cc28dc02680a7",
+    "common.py": "5185c6578e5716a163d33688505db62d5140fdaa6cc9512c280253a21d848c06",
+    "resource_guard.py": "afe6d6fa172811a399f4bf39e53339a47a6eff57c4c8ba2cee3ef9f44242ec73"
+  },
+  "asset_revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+  "raw_inputs": {
+    "evidence/jobs/qwen-20261110-q06-f-r0/output/probe/rank0.json": {
+      "bytes": 378288,
+      "sha256": "c19ae49d7a162f63047b272b27ead2f18c6ad12b82ac37113a2210fb268ca615"
+    },
+    "evidence/jobs/qwen-20261110-q06-f-r0/output/probe/rank1.json": {
+      "bytes": 304899,
+      "sha256": "e0a56f4c798f74b4d89fae6d72b31ea21f80bab951c0e6cb4ce58df393a487b6"
+    },
+    "evidence/jobs/qwen-20261110-q06-f-r0/controller-query.json": {
+      "bytes": 7326,
+      "sha256": "32d831e53261d39da2156492cb9ef3895fc90a21c48c395d57cbe41a1b604cc3"
+    },
+    "evidence/jobs/qwen-20261110-q06-f-r0/request.json": {
+      "bytes": 18198,
+      "sha256": "fc23d3ad45f175914333f8b7c3fd14df1d19293e9ff2614d24f055b11db469a0"
+    },
+    "evidence/jobs/qwen-20261110-q06-f-r0/cleanup.json": {
+      "bytes": 664,
+      "sha256": "664f10b0e499c015446976fefd5a8233ef500a759a65854f993611af45074e18"
+    },
+    "evidence/jobs/qwen-20261110-q06-f-r0/output/resources/resource-summary.json": {
+      "bytes": 1603,
+      "sha256": "70195cd80132ddf420c7f4879491f38dec372a176c84d0f6b4dbb9e46c4f2a1e"
+    },
+    "evidence/jobs/qwen-20261110-cpu-q06-r0/output/audit/audit.json": {
+      "bytes": 82793,
+      "sha256": "9e52bdc696d0c63df23402d4fb51ab579789702ca9761264c667cb3c4079b11a"
+    },
+    "evidence/jobs/qwen-20261110-cpu-q06-r0/output/audit/selection.json": {
+      "bytes": 17437,
+      "sha256": "173bfea48a77db6a1dfb842dc78bde60834021e67932216897dfba85d41dc74a"
+    },
+    "metadata/Qwen3-0.6B-Base/manifest.json": {
+      "bytes": 3366,
+      "sha256": "1f6c3b670aa117fe0e992a5efe07d05957c80ddeaabc53994bc91ab1f8ef5d1a"
+    }
+  },
+  "job_terminal": {
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "runner_cleanup_verified": true,
+    "guard_cleanup_verified": true,
+    "remaining_owned_pids": [],
+    "wall_seconds": 72.84074710402638,
+    "charged_gpu_device_seconds_independently_recomputed": 145.68149420805275,
+    "minimum_host_available_bytes": 251270414336,
+    "sampled_task_tree_rss_peak_bytes": 5519171584,
+    "counted_new_disk_peak_bytes": 22003572736
+  },
+  "rank_results": [
+    {
+      "rank": 0,
+      "original_parameters": 596049920,
+      "expanded_parameters": 596716544,
+      "actual_trainable_parameters": 596716544,
+      "trainable_tensors": 310,
+      "trainable_fraction_effective_base": 1.0,
+      "trainable_fraction_with_frozen_clones": 1.0,
+      "gradient_call_nonzero_finite_histogram": [
+        {
+          "calls": 8,
+          "nonzero_calls": 8,
+          "finite": true,
+          "tensors": 310
+        }
+      ],
+      "sampled_parameter_tensors_changed": 107,
+      "sampled_parameter_tensors": 170,
+      "SID_changes": {
+        "sampled_elements": 940032,
+        "changed_elements": 27890,
+        "max_abs_change": 3.814697265625e-06
+      },
+      "SID_weight_gradient_max": 7.25,
+      "actual_input_SID_position_gradient_max": 5.15625,
+      "actual_supervised_SID_logit_gradient_max": 0.0078125,
+      "optimizer_master_parameters": 298358272,
+      "optimizer_groups": [
+        {
+          "weight_decay": 0.01,
+          "parameter_tensors": 197
+        },
+        {
+          "weight_decay": 0.0,
+          "parameter_tensors": 113
+        }
+      ],
+      "update_seconds": [
+        5.251353740692139,
+        3.7618331909179688
+      ],
+      "update_LR": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          2.4096385542168676e-06,
+          2.4096385542168676e-06
+        ]
+      ],
+      "training_peak": {
+        "allocated_gib": 8.211846351623535,
+        "reserved_gib": 14.6171875,
+        "ru_maxrss_gib": 3.4679336547851562
+      },
+      "validation_post_guard_peak": {
+        "allocated_gib": 8.211846351623535,
+        "reserved_gib": 14.6171875,
+        "ru_maxrss_gib": 3.4679336547851562
+      },
+      "all_recorded_phases_peak": {
+        "allocated_gib": 8.211846351623535,
+        "reserved_gib": 14.6171875,
+        "ru_maxrss_gib": 3.546154022216797
+      },
+      "temperature_independent_CE_delta": 0.0
+    },
+    {
+      "rank": 1,
+      "original_parameters": 596049920,
+      "expanded_parameters": 596716544,
+      "actual_trainable_parameters": 596716544,
+      "trainable_tensors": 310,
+      "trainable_fraction_effective_base": 1.0,
+      "trainable_fraction_with_frozen_clones": 1.0,
+      "gradient_call_nonzero_finite_histogram": [
+        {
+          "calls": 8,
+          "nonzero_calls": 8,
+          "finite": true,
+          "tensors": 310
+        }
+      ],
+      "sampled_parameter_tensors_changed": 107,
+      "sampled_parameter_tensors": 170,
+      "SID_changes": {
+        "sampled_elements": 940032,
+        "changed_elements": 27890,
+        "max_abs_change": 3.814697265625e-06
+      },
+      "SID_weight_gradient_max": 10.4375,
+      "actual_input_SID_position_gradient_max": 10.625,
+      "actual_supervised_SID_logit_gradient_max": 0.0078125,
+      "optimizer_master_parameters": 298358272,
+      "optimizer_groups": [
+        {
+          "weight_decay": 0.01,
+          "parameter_tensors": 197
+        },
+        {
+          "weight_decay": 0.0,
+          "parameter_tensors": 113
+        }
+      ],
+      "update_seconds": [
+        5.251353740692139,
+        3.7618331909179688
+      ],
+      "update_LR": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          2.4096385542168676e-06,
+          2.4096385542168676e-06
+        ]
+      ],
+      "training_peak": {
+        "allocated_gib": 8.160649299621582,
+        "reserved_gib": 12.13671875,
+        "ru_maxrss_gib": 3.4646949768066406
+      },
+      "validation_post_guard_peak": {
+        "allocated_gib": 8.160649299621582,
+        "reserved_gib": 12.13671875,
+        "ru_maxrss_gib": 3.4646949768066406
+      },
+      "all_recorded_phases_peak": {
+        "allocated_gib": 8.160649299621582,
+        "reserved_gib": 12.13671875,
+        "ru_maxrss_gib": 3.4646949768066406
+      },
+      "temperature_independent_CE_delta": 0.0
+    }
+  ],
+  "optimizer_scope": "native Torch2.6 AdamW, ZeRO2 CUDA FP32 master and moments, BF16 model/grads, no CPU optimizer offload; scalar step on CPU is native AdamW bookkeeping",
+  "cross_rank": {
+    "all_monitored_hashes_equal": true,
+    "optimizer_step_values_equal": true,
+    "global_update_count_equal": true,
+    "full_LoRA_tensors_hashed": 0,
+    "full_finetune_note": "F hashes all918 SID rows and representative layer slices; full native reload asserts all state values separately"
+  },
+  "serialization": {
+    "model_only": true,
+    "saved_logical_state_keys": 311,
+    "all_state_shapes_dtypes_match_actual_training_inventory": true,
+    "embedding_head_alias_full_shape_sha_equal": true,
+    "files": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q06-f-r0/output/probe/full_model/model.safetensors",
+        "bytes": 1193468344,
+        "sha256": "8a5675e5bc8f10c10e933d2d8925aa42e170c32006b73d191b6a03887472544e"
+      }
+    ],
+    "save_seconds": 2.391871149651706,
+    "reload_seconds": [
+      0.42191486433148384,
+      0.4551559388637543
+    ],
+    "both_rank_all_state_key_shape_dtype_and_value_hash_exact": true,
+    "optimizer_scheduler_rng_saved": false
+  },
+  "generation_independent_recount": {
+    "users": 8,
+    "distinct_user_and_row_ids": 8,
+    "sequences": 160,
+    "position_legal": 160,
+    "canonical_sequences": 0,
+    "canonical_fraction": 0.0,
+    "all_EOS_at_position4_and_only_PAD_tail": true,
+    "decoded_from_independently_rebuilt_SID_ID_map": true,
+    "allowed_sizes_from_original_author_index": [
+      150,
+      256,
+      256,
+      256
+    ],
+    "callback_positions_all0_through4_actual_calls": true,
+    "same_CPU_selected_users_context_separator_and_input_lengths": true,
+    "finite_sorted_sequence_scores": true,
+    "paired_dual_rank_seconds": [
+      0.4157926142215729,
+      0.35165858268737793,
+      0.3536076247692108,
+      0.35140201449394226
+    ],
+    "users_per_second_for_8_users": 5.433081684397985
+  },
+  "precision": "BF16 instantiated model/full trainable set; CUDA FP32 master/moments and FP32 author temperature CE; official native DeltaNet FP32 recurrence when q35",
+  "limits": [
+    "Bounded technical probes only; no formal epoch/seed or full recommendation metrics.",
+    "Only5 finite validation batches80 examples and8beam users.",
+    "Canonical fraction after1 or3 nonzero warmup updates does not predict final recommendation quality.",
+    "Large adapter/full model payload not transferred or reloaded independently by reviewer; pinned source all-key/value comparisons and raw dual-rank assertions plus parameter/storage/hash inventories were reviewed.",
+    "Full optimizer/scheduler/RNG checkpoint and full training-state recovery NOT TESTED.",
+    "Finite gradient and parameter checks are code-backed execution evidence; review did not perform a second GPU run.",
+    "The F route is the user-authorized full-finetune technical comparison, not LETTER original LoRA recipe."
+  ]
+}

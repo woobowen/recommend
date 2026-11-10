@@ -1,0 +1,134 @@
+{
+  "reviewer": "/root/official_architecture; non-author of collector/guard/ZIP implementation",
+  "review_type": "READ_ONLY_STATIC_DELIVERY_REVIEW_AND_EXISTING_REAL_COLLECTOR_RECEIPT; no final archive created or verified",
+  "reviewed_utc": "2026-11-10T17:32:57.851553+00:00",
+  "static_comparison_commit": "011d0f3620dc64ff168619e6fcf736f9a236c6ac",
+  "status": "PASS_TARGETED_ROUND2_SOURCE_AND_COLLECTOR_RECHECK_FINAL_ZIP_AND_NEXT_GPU_GUARD_PENDING",
+  "fixed_code": {
+    "scripts/final_receipts.py": {
+      "sha256": "07cfc24b5c977e8c6e47a1119f1e738cae82bdf84a087711a36a34ce5462aaac",
+      "bytes": 7556
+    },
+    "scripts/build_review_zip.py": {
+      "sha256": "d332f0930085b71721d9c9c400b54c7f12c8827042c959fb3363632bae04b785",
+      "bytes": 5403
+    },
+    "scripts/resource_guard.py": {
+      "sha256": "afe6d6fa172811a399f4bf39e53339a47a6eff57c4c8ba2cee3ef9f44242ec73",
+      "bytes": 7867
+    },
+    "metadata/method_basis.json": {
+      "sha256": "72f92c1273f66125af2e76ad9f422d09b17e7a7bb560b52b84d343998cf4d21d",
+      "bytes": 3844
+    }
+  },
+  "probe_and_common_identical_to_f29527de": true,
+  "round2_finding_and_resolution": {
+    "finding": "Original directory sum excluded task-created shared transfers and requests outside task root.",
+    "resolution": "Known task prefix qwen-preflight-* under shared transfers and qwen-20261110-* under shared requests are counted as regular nonsymlink files; no unrelated recursion or removal. Corrected real collector returns path/size/allocated/SHA.",
+    "actual_receipt": "/home/addaswsw/recommend-support/qwen-preflight-20261110/receipts/resource-capture-round2.json",
+    "actual_receipt_commit": "3fb71a0134a1c6f17e37482d5921bf13295b644c",
+    "actual_receipt_bytes": 479326,
+    "actual_receipt_sha256": "fe2937d7a63dfe1f562a56ac21fb14a7fdcfd275cb6f8a39b48034ce3dd80869",
+    "independently_recounted_allocated_bytes": 8637018112,
+    "independently_recounted_logical_bytes": 8600880495,
+    "external_files": 15,
+    "external_allocated_bytes": 76414976,
+    "external_logical_bytes": 76375866,
+    "live_snapshot_during_transfer_not_final_task_storage": true,
+    "old_q06_l_raw_guard_preserved": true,
+    "no_rerun_required_for_unchanged_training_algorithm": true
+  },
+  "runtime_cache_source_analysis": {
+    "official_sources": {
+      "deepspeed/__init__.py": {
+        "url": "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/__init__.py",
+        "sha256": "b5c4b7797c761ef30baf7f3fa1f83ed910bd97d935b3702c617f93c89101ac95"
+      },
+      "deepspeed/ops/__init__.py": {
+        "url": "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/ops/__init__.py",
+        "sha256": "8ebef6cd17d901d111ecf4c79d973ef46ce26299f15bcd2c042c81b616166212"
+      },
+      "deepspeed/ops/transformer/__init__.py": {
+        "url": "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/ops/transformer/__init__.py",
+        "sha256": "00397158fba382ae634ff5cbf32b91b5383d8dd42204afb9c9dce09cdc1aa7ea"
+      },
+      "deepspeed/model_implementations/transformers/ds_transformer.py": {
+        "url": "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/model_implementations/transformers/ds_transformer.py",
+        "sha256": "cbdf352c36b4b2d1014def015bf16743fd56c47a094821cdb7b16b2e2a1d073a"
+      },
+      "deepspeed/ops/transformer/inference/triton/__init__.py": {
+        "url": "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/ops/transformer/inference/triton/__init__.py",
+        "sha256": "15545ce5c7e3a2dc2c16d701ee09009b4f655c56cd974d606a87adebbc7807f9"
+      },
+      "deepspeed/ops/transformer/inference/triton/matmul_ext.py": {
+        "url": "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/ops/transformer/inference/triton/matmul_ext.py",
+        "sha256": "eb4db4f8e1a5a5266ff32b5c2839dcb66c2080a090f5774b70e8e38242b747ed"
+      }
+    },
+    "q35_fallback": "No torch.compile/autotune decorator or call on official pure torch chunk/recurrent DeltaNet fallback. TF5.2 automatic generation compile requires a Cache instance with is_compileable=True; Qwen3_5DynamicCache does not meet it. No compile call in probe or compile request in DS config.",
+    "concrete_ds_import_side_effect": "DS imports ops/transformer/ds_transformer, which imports Triton implementations under HAS_TRITON and supported accelerator. matmul_ext globally constructs Fp16Matmul and registers an atexit cache update. AutotuneCacheManager defaults to ~/.triton/autotune unless TRITON_CACHE_DIR is set; it can create/replace Fp16Matmul_2d/4d_kernel.pickle and lock/tmp files even without invoking DS inference kernels.",
+    "corrected_config": "All five runnable probe specs set seven task-scoped cache/TMP paths. Guard validates resolved paths under counted DATA root and creates them before child GPU-framework imports. Guard itself imports no GPU framework. This changes file placement, not method.",
+    "legacy_source_fix_011d": "Collector and guard stat only exact default Fp16Matmul_2d/4d pickle and lock paths, counting their current full sizes conservatively. Collector labels lack of a pre-task baseline and does not attribute all content to this task. No deletion or unrelated-account scan.",
+    "legacy_exact_file_runtime_receipt_pending": true,
+    "next_real_gpu_request_and_actual_cache_files_pending": true
+  },
+  "existing_real_collector_checks": {
+    "all_seven_jobs_terminal_succeeded_exit0_cleanup_no_worker_supervisor_workgroup": true,
+    "actual_gpu_process_list_empty": true,
+    "both_gpu_memory_used_mib": [
+      1,
+      1
+    ],
+    "frozen_letter_files": 11,
+    "reference_total_bytes": 87955,
+    "all_reference_git_bytes_and_actual_server_digests_independently_matched": true,
+    "source_comparisons": 134,
+    "historical_nonidentical_comparisons_explicit": 24
+  },
+  "prearchive_fixed_tree_screen": {
+    "task_tree_members": 180,
+    "total_uncompressed_bytes": 3945800,
+    "largest_member_bytes": 746736,
+    "regular_blob_safe_paths_no_duplicates": true,
+    "configured_secret_patterns_no_matches": true,
+    "review_entry_count_in_fixed_tree": 0,
+    "review_entry_is_current_untracked_draft": true,
+    "zip_crc_or_unpack_test_performed": false
+  },
+  "zip_implementation_review": {
+    "fixed_tree": "Each task member is read from explicit full Git commit with commit/path/blob identity; old required sources use frozen commits and verified SHA. All Git entries must be regular files.",
+    "member_safety": "Absolute POSIX paths, parent traversal and backslashes rejected; external symlink files rejected. Current names safe. Blocklist and size caps exclude weight/archive payloads; generated manifest name absent from current tracked tree.",
+    "integrity_steps": "testzip CRC, exact unique member set, temporary complete extraction, every member size/SHA, and exact manifest bytes are implemented. Actual execution on final artifact remains necessary.",
+    "sensitive_scan": "Known private-key/GitHub/HF/AWS patterns applied to each payload; bounded pattern scan, not proof against arbitrary unknown secret formats.",
+    "windows": "Actual Windows copy is read by PowerShell Get-Item/Get-FileHash and exact byte size/SHA compared with WSL. No final invocation claimed here.",
+    "self_reference": "ZIP SHA/validation receipt are external to archive."
+  },
+  "remaining_final_gates": [
+    "Commit single REVIEW_ENTRY, all required source/config/results/reviews/download terminal receipts. Do not build from earlier tree missing them.",
+    "Complete remaining jobs and inspect actual corrected guard requests/summaries, cache paths, all terminal/cleanup/residual processes, GPU emptiness, CPU/disk reserves.",
+    "Independently recompute task/per-model device seconds and L/F update caps; collector records but does not assert every final claim.",
+    "Capture fresh final resource snapshot, including shared archives/requests and conservative exact legacy cache paths.",
+    "Push only wbw-lc-rec and retain actual GitHub branch-ref plus source/config/results/review content readback. Collector does not itself perform GitHub readback.",
+    "Run builder with fixed delivery commit and frozen external receipts; inspect actual CRC/full unpack/all-member SHA/path/duplicates/secret scan/Windows hash and independently inspect final archive."
+  ],
+  "not_tested": [
+    "next GPU job under round2 guard",
+    "final ZIP CRC/unpack/Windows verification",
+    "final GitHub publication/readback",
+    "final all-model terminal and cumulative resources"
+  ],
+  "conclusion": "Targeted source review plus actual corrected collector resolves shared-file accounting. Exact legacy cache accounting is now present in source. No additional ZIP implementation must-fix found. Final guard and archive/publication execution remain pending; this is not a final ZIP PASS.",
+  "subsequent_measurement_only_probe_review": {
+    "compared_with_commit": "011d0f3620dc64ff168619e6fcf736f9a236c6ac",
+    "previous_probe_sha256": "4dc56620b9427dc58b792d427cca9d0b4af160f9d8e3027e942026e408f9bd39",
+    "reviewed_worktree_probe_sha256": "dccb39fc74d0acccc8da4b9bcc7cfcfe1337c6542b21ce02df2cc28dc02680a7",
+    "change": "Read peak() after validation/post-training guards before the existing allocator counter reset; include this retained field in the final phase maximum.",
+    "independent_ast_comparison": "After removing exactly that new measurement assignment and the corresponding dict-list read, Python AST is identical to pinned prior probe.",
+    "no_forward_backward_data_optimizer_step_rng_or_generation_change": true,
+    "new_fixed_commit": "98206e447d21acc53aa0366911c804e01a6ca63f",
+    "old_q06_l_evidence": "Preserved; independently documented incomplete whole-job peak coverage, no rerun.",
+    "fixed_git_bytes_match_reviewed_sha256": true,
+    "actual_gpu_runtime": "PENDING"
+  }
+}

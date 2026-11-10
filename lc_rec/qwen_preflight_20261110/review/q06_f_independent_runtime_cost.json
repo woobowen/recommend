@@ -1,0 +1,348 @@
+{
+  "schema": "independent_qwen_raw_runtime_cost_v1",
+  "reviewer": "/root/letter_semantics",
+  "job": "qwen-20261110-q06-f-r0",
+  "key": "q06",
+  "route": "F",
+  "run_commit": "98206e447d21acc53aa0366911c804e01a6ca63f",
+  "status": "PASS_RAW_RUNTIME_AND_INDEPENDENT_CONDITIONAL_ARITHMETIC",
+  "formal_seed_confirmed": false,
+  "reviewed_utc": "2026-11-10T18:16:13.890468+00:00",
+  "review_environment": {
+    "interpreter": "/usr/bin/python3",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "numpy": "1.26.4",
+    "GPU_execution": false
+  },
+  "script_sha256": "9efe83c3d842163a045b494d08af3c8c55ed4a33c406efa2eea1095256a51677",
+  "source_checks": [
+    {
+      "path": "lc_rec/qwen_preflight_20261110/scripts/common.py",
+      "sha256": "5185c6578e5716a163d33688505db62d5140fdaa6cc9512c280253a21d848c06",
+      "git_run_commit_equal": true
+    },
+    {
+      "path": "lc_rec/qwen_preflight_20261110/scripts/probe.py",
+      "sha256": "dccb39fc74d0acccc8da4b9bcc7cfcfe1337c6542b21ce02df2cc28dc02680a7",
+      "git_run_commit_equal": true
+    },
+    {
+      "path": "lc_rec/qwen_preflight_20261110/scripts/resource_guard.py",
+      "sha256": "afe6d6fa172811a399f4bf39e53339a47a6eff57c4c8ba2cee3ef9f44242ec73",
+      "git_run_commit_equal": true
+    }
+  ],
+  "raw_input_sha256": {
+    "evidence/jobs/qwen-20261110-q06-f-r0/request.json": "fc23d3ad45f175914333f8b7c3fd14df1d19293e9ff2614d24f055b11db469a0",
+    "evidence/jobs/qwen-20261110-q06-f-r0/output/probe/rank0.json": "c19ae49d7a162f63047b272b27ead2f18c6ad12b82ac37113a2210fb268ca615",
+    "evidence/jobs/qwen-20261110-q06-f-r0/output/probe/rank1.json": "e0a56f4c798f74b4d89fae6d72b31ea21f80bab951c0e6cb4ce58df393a487b6",
+    "evidence/jobs/qwen-20261110-q06-f-r0/output/resources/resource-summary.json": "70195cd80132ddf420c7f4879491f38dec372a176c84d0f6b4dbb9e46c4f2a1e",
+    "evidence/jobs/qwen-20261110-cpu-q06-r0/output/audit/audit.json": "9e52bdc696d0c63df23402d4fb51ab579789702ca9761264c667cb3c4079b11a"
+  },
+  "independent_encoder": {
+    "official_tokenizer_path": "/tmp/qwen_official_review/Qwen3-0.6B-Base/tokenizer.json",
+    "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "method": "Own ASCII regex, GPT2 byte map and ranked BPE; no HF tokenizer/main adapter used",
+    "cpu_samples_exact": 20
+  },
+  "updates": [
+    {
+      "index": 0,
+      "kind": "mixed",
+      "global_samples": 64,
+      "effective_tokens_reencoded": 5417,
+      "tensor_positions_recounted": 9400,
+      "padding_positions_recounted": 3983,
+      "supervised_targets_recounted": 320,
+      "seconds_MAX_rank": 5.251353740692139,
+      "nonzero_lr": false
+    },
+    {
+      "index": 1,
+      "kind": "boundary",
+      "global_samples": 64,
+      "effective_tokens_reencoded": 11024,
+      "tensor_positions_recounted": 11624,
+      "padding_positions_recounted": 600,
+      "supervised_targets_recounted": 320,
+      "seconds_MAX_rank": 3.7618331909179688,
+      "nonzero_lr": true
+    }
+  ],
+  "gradient_checks": [
+    {
+      "rank": 0,
+      "trainable_tensors": 310,
+      "calls_per_tensor": 8,
+      "actual_nonzero_lr_updates": 1,
+      "finite_and_gradient_counts_pass": true,
+      "SID_paths_nonzero": true,
+      "Adam_master_and_moments_gpu_fp32": true
+    },
+    {
+      "rank": 1,
+      "trainable_tensors": 310,
+      "calls_per_tensor": 8,
+      "actual_nonzero_lr_updates": 1,
+      "finite_and_gradient_counts_pass": true,
+      "SID_paths_nonzero": true,
+      "Adam_master_and_moments_gpu_fp32": true
+    }
+  ],
+  "validation": [
+    {
+      "label": "short",
+      "tokens_reencoded": 1040,
+      "padding_recounted": 0,
+      "seconds": 0.38766181468963623
+    },
+    {
+      "label": "middle",
+      "tokens_reencoded": 1312,
+      "padding_recounted": 0,
+      "seconds": 0.3878118693828583
+    },
+    {
+      "label": "long",
+      "tokens_reencoded": 1984,
+      "padding_recounted": 0,
+      "seconds": 0.3843635618686676
+    },
+    {
+      "label": "boundary",
+      "tokens_reencoded": 2944,
+      "padding_recounted": 0,
+      "seconds": 0.3898387551307678
+    },
+    {
+      "label": "mixed",
+      "tokens_reencoded": 1467,
+      "padding_recounted": 573,
+      "seconds": 0.39478808641433716
+    }
+  ],
+  "sampling": {
+    "presentations": 128,
+    "unique_train_rows": 65,
+    "unique_row_prompt_pairs": 81,
+    "central_presentations": 64,
+    "central_unique_rows": 1
+  },
+  "throughput": {
+    "central_indices": [
+      1
+    ],
+    "central_seconds": 3.7618331909179688,
+    "central_effective_tokens": 11024,
+    "central_tensor_positions": 11624,
+    "central_padding_positions": 600,
+    "samples_per_second": 17.01298190321475,
+    "effective_tokens_per_second": 2930.4861328287407
+  },
+  "formal_work": {
+    "loader_batches_per_rank": 8240,
+    "updates_per_epoch": 2060,
+    "four_epoch_updates": 8240,
+    "original_rows_four_epochs": 527348,
+    "global64_equivalent_presentations": 527360,
+    "validation_presentations": 198176,
+    "test_users": 24772
+  },
+  "native_save_reload": {
+    "file_bytes": 1193468344,
+    "save_seconds": 2.391871149651706,
+    "write_bytes_per_second": 498968493.4214737,
+    "best_restore_proxy_seconds_MAX_rank": 0.4551559388637543,
+    "extra_inference_base_load_seconds_MAX_rank": 0.0
+  },
+  "native_save_reload_identity": {
+    "scope": "all instantiated official text-model parameters, model-only save",
+    "full_parameter_scope": {
+      "official_text_class_only": false,
+      "excluded_vision_tensors": 0,
+      "excluded_vision_parameters": 0,
+      "excluded_mtp_tensors": 0,
+      "excluded_mtp_parameters": 0,
+      "all_instantiated_parameters_trainable": true
+    },
+    "serialized_weight_files": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q06-f-r0/output/probe/full_model/model.safetensors",
+        "bytes": 1193468344,
+        "sha256": "8a5675e5bc8f10c10e933d2d8925aa42e170c32006b73d191b6a03887472544e"
+      }
+    ],
+    "serialized_state_keys": 311,
+    "tied_embedding_head_saved_hashes_equal": true,
+    "strict_keys_shapes_dtypes_values_reload_all_ranks": true,
+    "optimizer_scheduler_rng_checkpoint_and_restore": "NOT TESTED / NOT WRITTEN"
+  },
+  "beam_review": {
+    "users": 8,
+    "beams": 160,
+    "all_positional_tokens_and_eos_pass": true,
+    "noncanonical_beams": 160,
+    "strata": [
+      {
+        "label": "short",
+        "mean_input_tokens": 71.0,
+        "dual_user_seconds": 0.4157926142215729,
+        "seconds_per_user": 0.20789630711078644
+      },
+      {
+        "label": "middle",
+        "mean_input_tokens": 77.0,
+        "dual_user_seconds": 0.35165858268737793,
+        "seconds_per_user": 0.17582929134368896
+      },
+      {
+        "label": "long",
+        "mean_input_tokens": 119.0,
+        "dual_user_seconds": 0.3536076247692108,
+        "seconds_per_user": 0.1768038123846054
+      },
+      {
+        "label": "boundary",
+        "mean_input_tokens": 167.0,
+        "dual_user_seconds": 0.35140201449394226,
+        "seconds_per_user": 0.17570100724697113
+      }
+    ],
+    "histogram_users_by_stratum": {
+      "short": 7859,
+      "middle": 11410,
+      "long": 4185,
+      "boundary": 1318
+    }
+  },
+  "cost_inputs": {
+    "measured_mean_tokens": 172.25,
+    "full_mean_tokens": 86.05969492631051,
+    "upward_token_scale": 1.0,
+    "cold_excess_once": 1.48952054977417,
+    "current_parameter_bytes": 1193433088,
+    "trainable_elements": 596716544,
+    "checkpoint_proxy_bytes": 10621206528,
+    "launcher_teardown_seconds": 14.158722893334925
+  },
+  "center": {
+    "seconds_by_component": {
+      "train": 30997.505493164062,
+      "validation": 4889.84523832798,
+      "checkpoint": 87.53717926455406,
+      "best_restore": 0.4551559388637543,
+      "beam20_test": 4611.567174196243,
+      "init": 24.641318630427122,
+      "overhead": 4075.313878845548
+    },
+    "total_seconds": 44686.86543836768,
+    "hours": 12.413018177324355,
+    "days": 0.5172090907218481
+  },
+  "conservative": {
+    "seconds_by_component": {
+      "train": 30997.505493164062,
+      "validation": 4889.84523832798,
+      "checkpoint": 585.3649747589128,
+      "best_restore": 0.9103118777275085,
+      "beam20_test": 5150.007319748402,
+      "init": 49.282637260854244,
+      "overhead": 10432.38771667782
+    },
+    "total_seconds": 52105.30369181576,
+    "hours": 14.473695469948822,
+    "days": 0.603070644581201
+  },
+  "96h_status": "INCONCLUSIVE",
+  "resource_receipt": {
+    "job_id": "qwen-20261110-q06-f-r0",
+    "key": "q06",
+    "argv": [
+      "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+      "-m",
+      "torch.distributed.run",
+      "--standalone",
+      "--nnodes=1",
+      "--nproc_per_node=2",
+      "/home/bwwu/lc-rec/qwen-preflight-20261110/releases/98206e447d21acc53aa0366911c804e01a6ca63f/lc_rec/qwen_preflight_20261110/scripts/probe.py",
+      "--key",
+      "q06",
+      "--route",
+      "F",
+      "--precision",
+      "bf16",
+      "--model",
+      "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-0.6B-Base/da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+      "--letter",
+      "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER",
+      "--audit",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-cpu-q06-r0/output/audit",
+      "--output",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q06-f-r0/output/probe",
+      "--run-commit",
+      "98206e447d21acc53aa0366911c804e01a6ca63f",
+      "--micro",
+      "8"
+    ],
+    "start_utc": "2026-11-10T17:47:02.957251+00:00",
+    "limit_seconds": 2660,
+    "charging": "two devices x entire child lifetime, including imports/load/save/error/inference",
+    "end_utc": "2026-11-10T17:48:15.797974+00:00",
+    "elapsed_seconds": 72.84074710402638,
+    "child_exit_code": 0,
+    "stop_reason": null,
+    "mem_available_min_bytes": 251270414336,
+    "task_tree_rss_sample_peak_bytes": 5519171584,
+    "new_disk_allocated_peak_bytes": 22003572736,
+    "tracked_live_pids_after_cleanup": [],
+    "cleanup_verified": true,
+    "charged_gpu_device_seconds": 145.68149420805275
+  },
+  "limitations": [
+    "No second GPU execution or independent recomputation from unretained gradient/logit arrays; counters and equality checks are verified against raw logs and reviewed code.",
+    "Checkpoint byte/time formulas are explicit assumptions; optimizer/scheduler/RNG checkpoint and formal restore were not written or tested.",
+    "Generation CPU decoding/aggregation and sustained four-epoch behavior remain unknown; overhead percentages are assumptions.",
+    "No recommendation metrics or formal model-quality ranking."
+  ],
+  "main_summary_comparison": {
+    "sha256": "c18f22933d830c183761b96ceac9af5924257a61d62cc0b1b29f5ea7d6e694ad",
+    "main_analysis_identity": {
+      "run_commit": "b84526eadd6b3edc1a40c8110894221c28f96cd6",
+      "script_sha256": "a936035eebd79b7040bd06d2d0d7620766022aada48357e38109b06058669277",
+      "common_sha256": "87bad9be604f55ca555f942b938cbd113a80da36297beb9756aaa869d5b2a9f6",
+      "argv": [
+        "lc_rec/qwen_preflight_20261110/scripts/summarize.py",
+        "--run-commit",
+        "b84526eadd6b3edc1a40c8110894221c28f96cd6",
+        "--outcomes",
+        "lc_rec/qwen_preflight_20261110/evidence/execution_results.json",
+        "--output",
+        "lc_rec/qwen_preflight_20261110/evidence/summary.json"
+      ],
+      "interpreter": "/usr/bin/python3",
+      "cwd": "/home/addaswsw/recommend-worktrees/lc-rec",
+      "started_utc": "2026-11-10T18:15:36.204528+00:00",
+      "completed_utc": "2026-11-10T18:15:36.228923+00:00",
+      "status": "PASS_ANALYSIS_FROM_RAW_RECORDS"
+    },
+    "scope": "q06 F only; independently derived values precede comparison",
+    "all_components_match_within_1e6_seconds": true,
+    "absolute_differences": {
+      "center.train": 0.0,
+      "center.validation": 0.0,
+      "center.checkpoint": 0.0,
+      "center.best_restore": 0.0,
+      "center.beam20_test": 0.0,
+      "center.init": 0.0,
+      "center.overhead": 0.0,
+      "conservative.train": 0.0,
+      "conservative.validation": 0.0,
+      "conservative.checkpoint": 0.0,
+      "conservative.best_restore": 0.0,
+      "conservative.beam20_test": 0.0,
+      "conservative.init": 0.0,
+      "conservative.overhead": 0.0
+    },
+    "parameter_checkpoint_bytes_steps_histogram_sampling_and_totals_match": true
+  }
+}

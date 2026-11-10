@@ -1,0 +1,333 @@
+{
+  "schema": 1,
+  "reviewer": "/root/official_architecture",
+  "is_implementation_author": false,
+  "reviewed_utc": "2026-11-10T18:11:45.245466+00:00",
+  "status": "PASS_TECHNICAL_RUNTIME_WITH_RESEARCH_LIMITS",
+  "job_id": "qwen-20261110-q17-f-r1",
+  "run_commit": "a0903189686329b1029e535dbe2b00a1c34ef427",
+  "source_sha256": {
+    "probe.py": "45ab6a7bd04c04d69422588bcd833821b0457c3eff113d53bff8845681aadb10",
+    "common.py": "87bad9be604f55ca555f942b938cbd113a80da36297beb9756aaa869d5b2a9f6",
+    "resource_guard.py": "afe6d6fa172811a399f4bf39e53339a47a6eff57c4c8ba2cee3ef9f44242ec73",
+    "update_budget.py": "675714f63f07316ef171368a0bcee537c97089818c0496887fe6866ecad47379"
+  },
+  "allocator_environment": "expandable_segments:True",
+  "update_budget_accounting": [
+    {
+      "prior_attempts": 11,
+      "prior_conservative_update_charges": 10,
+      "certified_failed_zero_update_jobs": [
+        {
+          "job_id": "qwen-20261110-q17-f-r0",
+          "failed_boundary_attempts": 1,
+          "completed_global_updates": 0,
+          "original_attempt_retained": true,
+          "partial_optimizer_state_discarded": true,
+          "gpu_device_seconds_never_excluded": true,
+          "independent_review_sha256": "89e45f8fae3ff71682fd65435333baf2d7d437ea5080bcb9da30e29425293a86"
+        }
+      ],
+      "ledger_history_modified": false
+    },
+    {
+      "prior_attempts": 11,
+      "prior_conservative_update_charges": 10,
+      "certified_failed_zero_update_jobs": [
+        {
+          "job_id": "qwen-20261110-q17-f-r0",
+          "failed_boundary_attempts": 1,
+          "completed_global_updates": 0,
+          "original_attempt_retained": true,
+          "partial_optimizer_state_discarded": true,
+          "gpu_device_seconds_never_excluded": true,
+          "independent_review_sha256": "89e45f8fae3ff71682fd65435333baf2d7d437ea5080bcb9da30e29425293a86"
+        }
+      ],
+      "ledger_history_modified": false
+    }
+  ],
+  "asset_revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+  "raw_inputs": {
+    "evidence/jobs/qwen-20261110-q17-f-r1/output/probe/rank0.json": {
+      "bytes": 384205,
+      "sha256": "820ba311ebeb69f608a55b1fd13d42dbc826a60b4db91570d06ac8907e79fa06"
+    },
+    "evidence/jobs/qwen-20261110-q17-f-r1/output/probe/rank1.json": {
+      "bytes": 310629,
+      "sha256": "462d5ce7d54796dc8e61d68a7cccbd414ef2295e8367dbc40c476e022532f7e9"
+    },
+    "evidence/jobs/qwen-20261110-q17-f-r1/controller-query.json": {
+      "bytes": 7726,
+      "sha256": "cc79ba235c4f792fee31554912a65b02b9592a7426d9258d909217cf4e18ce98"
+    },
+    "evidence/jobs/qwen-20261110-q17-f-r1/request.json": {
+      "bytes": 19455,
+      "sha256": "7c80bbb2a779fddbbfd43bfd1a32b949bf579595977535c56da287f8d630bdd6"
+    },
+    "evidence/jobs/qwen-20261110-q17-f-r1/cleanup.json": {
+      "bytes": 664,
+      "sha256": "8cd9e355c83e89d75dfb3f0c2373dfa9cbe0d0a23c6829dc27916fb0d7b1ff23"
+    },
+    "evidence/jobs/qwen-20261110-q17-f-r1/output/resources/resource-summary.json": {
+      "bytes": 1604,
+      "sha256": "1a58ccaeb2866a06fd6d5aea10d43c2ad4d888eedeca0c8f763f5c132c19eb67"
+    },
+    "evidence/jobs/qwen-20261110-cpu-q17-r0/output/audit/audit.json": {
+      "bytes": 82883,
+      "sha256": "f52ea41c4d9072e1c90ce898aa724fbeaec9762432a9d4a84a60971736551443"
+    },
+    "evidence/jobs/qwen-20261110-cpu-q17-r0/output/audit/selection.json": {
+      "bytes": 17437,
+      "sha256": "173bfea48a77db6a1dfb842dc78bde60834021e67932216897dfba85d41dc74a"
+    },
+    "metadata/Qwen3-1.7B-Base/manifest.json": {
+      "bytes": 3368,
+      "sha256": "a0cf3b97988ef80b02fe1170f50398e721f11234e0dda1e3c46675237a28c3cc"
+    }
+  },
+  "job_terminal": {
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "runner_cleanup_verified": true,
+    "guard_cleanup_verified": true,
+    "remaining_owned_pids": [],
+    "wall_seconds": 130.19896384701133,
+    "charged_gpu_device_seconds_independently_recomputed": 260.39792769402266,
+    "minimum_host_available_bytes": 248293179392,
+    "sampled_task_tree_rss_peak_bytes": 9122459648,
+    "counted_new_disk_peak_bytes": 25476186112
+  },
+  "rank_results": [
+    {
+      "rank": 0,
+      "original_parameters": 1720574976,
+      "expanded_parameters": 1721908224,
+      "actual_trainable_parameters": 1721908224,
+      "trainable_tensors": 310,
+      "trainable_fraction_effective_base": 1.0,
+      "trainable_fraction_with_frozen_clones": 1.0,
+      "gradient_call_nonzero_finite_histogram": [
+        {
+          "calls": 16,
+          "nonzero_calls": 16,
+          "finite": true,
+          "tensors": 310
+        }
+      ],
+      "sampled_parameter_tensors_changed": 117,
+      "sampled_parameter_tensors": 170,
+      "SID_changes": {
+        "sampled_elements": 1880064,
+        "changed_elements": 52420,
+        "max_abs_change": 3.814697265625e-06
+      },
+      "SID_weight_gradient_max": 19.375,
+      "actual_input_SID_position_gradient_max": 22.875,
+      "actual_supervised_SID_logit_gradient_max": 0.0078125,
+      "optimizer_master_parameters": 860954112,
+      "optimizer_groups": [
+        {
+          "weight_decay": 0.01,
+          "parameter_tensors": 197
+        },
+        {
+          "weight_decay": 0.0,
+          "parameter_tensors": 113
+        }
+      ],
+      "update_seconds": [
+        11.95700740814209,
+        10.335780143737793
+      ],
+      "update_LR": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          2.4096385542168676e-06,
+          2.4096385542168676e-06
+        ]
+      ],
+      "training_peak": {
+        "allocated_gib": 21.06255578994751,
+        "reserved_gib": 22.89453125,
+        "ru_maxrss_gib": 7.661354064941406
+      },
+      "validation_post_guard_peak": {
+        "allocated_gib": 21.06255578994751,
+        "reserved_gib": 22.89453125,
+        "ru_maxrss_gib": 7.661354064941406
+      },
+      "all_recorded_phases_peak": {
+        "allocated_gib": 21.06255578994751,
+        "reserved_gib": 22.89453125,
+        "ru_maxrss_gib": 7.661354064941406
+      },
+      "temperature_independent_CE_delta": 0.0
+    },
+    {
+      "rank": 1,
+      "original_parameters": 1720574976,
+      "expanded_parameters": 1721908224,
+      "actual_trainable_parameters": 1721908224,
+      "trainable_tensors": 310,
+      "trainable_fraction_effective_base": 1.0,
+      "trainable_fraction_with_frozen_clones": 1.0,
+      "gradient_call_nonzero_finite_histogram": [
+        {
+          "calls": 16,
+          "nonzero_calls": 16,
+          "finite": true,
+          "tensors": 310
+        }
+      ],
+      "sampled_parameter_tensors_changed": 117,
+      "sampled_parameter_tensors": 170,
+      "SID_changes": {
+        "sampled_elements": 1880064,
+        "changed_elements": 52420,
+        "max_abs_change": 3.814697265625e-06
+      },
+      "SID_weight_gradient_max": 39.25,
+      "actual_input_SID_position_gradient_max": 34.5,
+      "actual_supervised_SID_logit_gradient_max": 0.0078125,
+      "optimizer_master_parameters": 860954112,
+      "optimizer_groups": [
+        {
+          "weight_decay": 0.01,
+          "parameter_tensors": 197
+        },
+        {
+          "weight_decay": 0.0,
+          "parameter_tensors": 113
+        }
+      ],
+      "update_seconds": [
+        11.95700740814209,
+        10.335780143737793
+      ],
+      "update_LR": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          2.4096385542168676e-06,
+          2.4096385542168676e-06
+        ]
+      ],
+      "training_peak": {
+        "allocated_gib": 21.082336902618408,
+        "reserved_gib": 22.85546875,
+        "ru_maxrss_gib": 7.658145904541016
+      },
+      "validation_post_guard_peak": {
+        "allocated_gib": 21.082336902618408,
+        "reserved_gib": 22.85546875,
+        "ru_maxrss_gib": 7.658145904541016
+      },
+      "all_recorded_phases_peak": {
+        "allocated_gib": 21.082336902618408,
+        "reserved_gib": 22.85546875,
+        "ru_maxrss_gib": 7.658145904541016
+      },
+      "temperature_independent_CE_delta": 0.0
+    }
+  ],
+  "optimizer_scope": "native Torch2.6 AdamW, ZeRO2 CUDA FP32 master and moments, BF16 model/grads, no CPU optimizer offload; scalar step on CPU is native AdamW bookkeeping",
+  "cross_rank": {
+    "all_monitored_hashes_equal": true,
+    "optimizer_step_values_equal": true,
+    "global_update_count_equal": true,
+    "full_LoRA_tensors_hashed": 0,
+    "full_finetune_note": "F hashes all918 SID rows and representative layer slices; full native reload asserts all state values separately"
+  },
+  "serialization": {
+    "model_only": true,
+    "saved_logical_state_keys": 311,
+    "all_state_shapes_dtypes_match_actual_training_inventory": true,
+    "embedding_head_alias_full_shape_sha_equal": true,
+    "files": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q17-f-r1/output/probe/full_model/model-00001-of-00002.safetensors",
+        "bytes": 1178695688,
+        "sha256": "a9e698b39a2190be187040d52851586fa1dfa4e3997c952a8d548ade8f25f238"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q17-f-r1/output/probe/full_model/model-00002-of-00002.safetensors",
+        "bytes": 2265156216,
+        "sha256": "f46926c4dab75eb0eb60d538a6eb58bc6f43f1d0bb6549bd105f8e32181d9a5b"
+      }
+    ],
+    "save_seconds": 7.003661094233394,
+    "reload_seconds": [
+      1.0116086350753903,
+      0.9351547379046679
+    ],
+    "both_rank_all_state_key_shape_dtype_and_value_hash_exact": true,
+    "optimizer_scheduler_rng_saved": false
+  },
+  "generation_independent_recount": {
+    "users": 8,
+    "distinct_user_and_row_ids": 8,
+    "sequences": 160,
+    "position_legal": 160,
+    "canonical_sequences": 0,
+    "canonical_fraction": 0.0,
+    "all_EOS_at_position4_and_only_PAD_tail": true,
+    "decoded_from_independently_rebuilt_SID_ID_map": true,
+    "allowed_sizes_from_original_author_index": [
+      150,
+      256,
+      256,
+      256
+    ],
+    "callback_positions_all0_through4_actual_calls": true,
+    "same_CPU_selected_users_context_separator_and_input_lengths": true,
+    "finite_sorted_sequence_scores": true,
+    "paired_dual_rank_seconds": [
+      0.41069602966308594,
+      0.27040985226631165,
+      0.28388598561286926,
+      0.307969868183136
+    ],
+    "users_per_second_for_8_users": 6.284556538882266
+  },
+  "precision": "BF16 instantiated model/full trainable set; CUDA FP32 master/moments and FP32 author temperature CE; official native DeltaNet FP32 recurrence when q35",
+  "limits": [
+    "Bounded technical probes only; no formal epoch/seed or full recommendation metrics.",
+    "Only5 finite validation batches80 examples and8beam users.",
+    "Canonical fraction after1 or3 nonzero warmup updates does not predict final recommendation quality.",
+    "Large adapter/full model payload not transferred or reloaded independently by reviewer; pinned source all-key/value comparisons and raw dual-rank assertions plus parameter/storage/hash inventories were reviewed.",
+    "Full optimizer/scheduler/RNG checkpoint and full training-state recovery NOT TESTED.",
+    "Finite gradient and parameter checks are code-backed execution evidence; review did not perform a second GPU run.",
+    "The F route is the user-authorized full-finetune technical comparison, not LETTER original LoRA recipe.",
+    "F17 memory success is narrow: actual micro4/acc8 and expandable allocator are required tested conditions; initial default-allocator OOM and its full resource charge remain part of terminal history."
+  ],
+  "high_memory_boundary": {
+    "actual_CUDA_capacity_gib": 23.5184326171875,
+    "maximum_training_allocated_gib": 21.082336902618408,
+    "allocated_below_capacity_gib": 2.436095714569092,
+    "maximum_training_reserved_gib": 22.89453125,
+    "reserved_below_capacity_gib": 0.6239013671875,
+    "non_torch_context_not_in_allocator_metrics": true,
+    "meaning": "Successful bounded F17 requires the tested micro4/acc8 plus native expandable_segments=True. Reserved memory is close to capacity, though some cached blocks are reusable. Do not generalize to micro8,2048-token data, extra GPU workload or long-running full-state checkpoint behavior.",
+    "prior_attempt": "Initial same-micro4 default allocator failed at first foreach sqrt; retain failure, not hidden by final success."
+  },
+  "failed_attempt_accounting": {
+    "original_failed_job": "qwen-20261110-q17-f-r0",
+    "original_failed_device_seconds": 104.61382330581546,
+    "original_failed_completed_global_updates": 0,
+    "frozen_independent_zero_update_proof_sha256": "89e45f8fae3ff71682fd65435333baf2d7d437ea5080bcb9da30e29425293a86",
+    "both_retry_ranks_prior_attempts": 11,
+    "both_retry_ranks_prior_charged_updates": 10,
+    "retry_completed_globals": 2,
+    "retry_nonzero_LR_globals": 1,
+    "retry_device_seconds": 260.39792769402266,
+    "failed_and_success_device_seconds_total": 365.0117509998381,
+    "history_preserved_by_hash_checked_append_only_source_and_recorded_in_both_ranks": true,
+    "final_live_ledger_prefix_comparison_pending_final_receipt": true
+  }
+}

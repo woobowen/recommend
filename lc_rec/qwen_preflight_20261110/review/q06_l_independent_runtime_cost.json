@@ -7,8 +7,14 @@
   "run_commit": "f29527de3b3f94ae5640d2e98faa1a7f74d2e0e8",
   "status": "PASS_RAW_RUNTIME_AND_INDEPENDENT_CONDITIONAL_ARITHMETIC",
   "formal_seed_confirmed": false,
-  "reviewed_utc": "2026-11-10T17:14:27.611209+00:00",
-  "script_sha256": "b271e868c8f403dc24a3fab563bee2f49c414664e81d5bd47e8c789f879ffd9e",
+  "reviewed_utc": "2026-11-10T18:16:13.939484+00:00",
+  "review_environment": {
+    "interpreter": "/usr/bin/python3",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "numpy": "1.26.4",
+    "GPU_execution": false
+  },
+  "script_sha256": "9efe83c3d842163a045b494d08af3c8c55ed4a33c406efa2eea1095256a51677",
   "source_checks": [
     {
       "path": "lc_rec/qwen_preflight_20261110/scripts/common.py",
@@ -172,6 +178,13 @@
     "best_restore_proxy_seconds_MAX_rank": 2.0068339612334967,
     "extra_inference_base_load_seconds_MAX_rank": 11.093184664845467
   },
+  "native_save_reload_identity": {
+    "scope": "LoRA adapter plus complete shared active embedding/head",
+    "serialized_file_sha256": "616d5deb0e205d9f81d0623386ad91436790c6b6497ecaf24b06639477e9ef04",
+    "serialized_tensor_keys": 394,
+    "strict_reload_values_all_ranks": true,
+    "optimizer_scheduler_rng_checkpoint_and_restore": "NOT TESTED / NOT WRITTEN"
+  },
   "beam_review": {
     "users": 8,
     "beams": 160,
@@ -300,18 +313,25 @@
     "No recommendation metrics or formal model-quality ranking."
   ],
   "main_summary_comparison": {
-    "sha256": "7d4be857b57acc6433acc31d77b3c3bd6b98d0f0d08d2717a0fb24505133917f",
+    "sha256": "c18f22933d830c183761b96ceac9af5924257a61d62cc0b1b29f5ea7d6e694ad",
     "main_analysis_identity": {
-      "script_sha256": "2d7d3b792006dcde6397338eaad63505e6604a3a36dc2c01cfd9538701433694",
-      "common_sha256": "5185c6578e5716a163d33688505db62d5140fdaa6cc9512c280253a21d848c06",
+      "run_commit": "b84526eadd6b3edc1a40c8110894221c28f96cd6",
+      "script_sha256": "a936035eebd79b7040bd06d2d0d7620766022aada48357e38109b06058669277",
+      "common_sha256": "87bad9be604f55ca555f942b938cbd113a80da36297beb9756aaa869d5b2a9f6",
       "argv": [
         "lc_rec/qwen_preflight_20261110/scripts/summarize.py",
+        "--run-commit",
+        "b84526eadd6b3edc1a40c8110894221c28f96cd6",
         "--outcomes",
-        "/tmp/qwen_q06_l_comparison_outcomes.json",
+        "lc_rec/qwen_preflight_20261110/evidence/execution_results.json",
         "--output",
-        "/tmp/qwen_q06_l_main_summary_comparison.json"
+        "lc_rec/qwen_preflight_20261110/evidence/summary.json"
       ],
-      "interpreter": "/usr/bin/python3"
+      "interpreter": "/usr/bin/python3",
+      "cwd": "/home/addaswsw/recommend-worktrees/lc-rec",
+      "started_utc": "2026-11-10T18:15:36.204528+00:00",
+      "completed_utc": "2026-11-10T18:15:36.228923+00:00",
+      "status": "PASS_ANALYSIS_FROM_RAW_RECORDS"
     },
     "scope": "q06 L only; independently derived values precede comparison",
     "all_components_match_within_1e6_seconds": true,

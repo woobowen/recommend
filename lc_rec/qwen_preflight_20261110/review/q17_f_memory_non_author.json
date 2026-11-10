@@ -2,8 +2,8 @@
   "schema": "qwen17_full_parameter_memory_non_author_source_analysis_v1",
   "reviewer": "/root/official_architecture",
   "is_implementation_author": false,
-  "reviewed_utc": "2026-11-10T17:10:53.770892+00:00",
-  "status": "SOURCE_ANALYSIS_COMPLETE_F06_CALIBRATION_PENDING",
+  "reviewed_utc": "2026-11-10T17:56:34.499627+00:00",
+  "status": "ACTUAL_MICRO4_EXPANDABLE_RETRY_PASS_HIGH_MEMORY_MARGIN",
   "no_GPU_or_install_performed": true,
   "expanded_unique_parameters": 1721908224,
   "vocab": 152587,
@@ -71,11 +71,14 @@
     }
   ],
   "recommendation": {
-    "immediate": "Run the already authorized F06 path first and read both rank actual allocated/reserved/NVML peaks through its first zero-LR AdamW state allocation and second nonzero update. No extra standalone CUDA test required.",
-    "F17_micro8_condition": "Keep preferred micro8×acc4 only if F06-calibrated conservative peak plus non-PyTorch/context allowance leaves at least1.5–2GiB below observed23.518GiB; current static22GiB envelope alone is not a safety confirmation.",
-    "fallback": "If calibration does not leave that headroom, choose authorized micro4×acc8 before the first F17 update. It reduces logits/activations/cache pressure without changing global64 or optimizer mathematics.",
-    "hard_boundary": "Micro reduction does not reduce the approximately19.244GiB optimizer tensor floor. If that phase plus actual overhead cannot fit safely, mark F17 resource BLOCKED; do not change optimizer/offload/trainable scope.",
-    "budget_caution": "First LR0 update still allocates moments and foreach temporary; an OOM there can consume the conservative charged update allowance before useful nonzero update. Avoid trial-and-error optimizer changes."
+    "immediate": "Choose user-authorized micro4 × accumulation8 = global64 before the first F17 update. No standalone trial/OOM is needed. This is a resource choice within allowed batch candidates, not a change to AdamW/offload/trainable scope.",
+    "why_not_preferred_micro8": "F06 supports an encouraging ~20.787GiB base extrapolation, but the original micro8 forward/backward bound plus0.75GiB context leaves only0.825GiB on observed23.518GiB CUDA capacity. F06 aggregate peak alone does not exclude first-state-allocation fragmentation and the larger model temporary layout.",
+    "conditional_micro4_budget": "Max of corrected forward/backward estimate and source/actual calibrated estimate is approximately21.637GiB including context, giving1.882GiB engineering margin. Read actual F17 peaks, allocation state and guard after the bounded probe; this is not a safety guarantee or feasibility PASS.",
+    "architecture_basis": "Both models have28 layers,16 attention heads,8 KV heads,head_dim128. Hidden/MLP widths double1024→2048 and3072→6144; halving micro offsets major hidden/FFN activations, while all full-vocabulary logits halve. Checkpoint boundary delta from F06micro8 to F17micro4 is small;0.10GiB explicit residual allowance is conditional.",
+    "hard_boundary": "Micro reduction does not reduce ~19.244GiB optimizer tensor floor. If actual allocation cannot fit, mark resource BLOCKED without new optimizer/offload/frozen scope or infinite retries.",
+    "numeric_fairness": "Every real sample has5 supervised tokens, so equal-size micro means retain intended global64 loss weighting. Different accumulation/dropout/BF16 reduction can change numerical trajectories and must be reported.",
+    "budget_caution": "First LR0 optimizer step initializes GPU moments/foreach temporaries and is charged before boundary. Keep task-wide update/device-time caps unchanged; no q06 rerun.",
+    "old_generic_optimizer_2GiB_allowance": "Prior table plus2GiB was a generic aggregate runtime allowance, not a measured extra to stack on top of all calibrated context/residual terms. New conditional calibration replaces that generic allowance."
   },
   "source_files": {
     "DeepSpeed.v0.16.9.stage_1_and_2.py": {
@@ -98,5 +101,85 @@
     "https://github.com/pytorch/pytorch/blob/v2.6.0/torch/optim/adamw.py#L699",
     "https://github.com/pytorch/pytorch/blob/v2.6.0/torch/optim/adamw.py#L851"
   ],
-  "limits": "Source-derived conditional engineering estimate; not an actual F17 resource measurement or training feasibility PASS."
+  "limits": "Source-derived conditional engineering estimate; not an actual F17 resource measurement or training feasibility PASS.",
+  "F06_real_calibration": {
+    "job_id": "qwen-20261110-q06-f-r0",
+    "run_commit": "98206e447d21acc53aa0366911c804e01a6ca63f",
+    "source_probe_sha256": "dccb39fc74d0acccc8da4b9bcc7cfcfe1337c6542b21ce02df2cc28dc02680a7",
+    "full_unique_parameters": 596716544,
+    "trainable_tensors": 310,
+    "first_zero_LR_update_real_AdamW_moment_allocation_seen": true,
+    "second_nonzero_LR_update_seen": true,
+    "GPU_FP32_master_and_moments_actual_shapes_recomputed": true,
+    "per_rank_training_allocated_gib": [
+      8.211846351623535,
+      8.160649299621582
+    ],
+    "per_rank_training_reserved_gib": [
+      14.6171875,
+      12.13671875
+    ],
+    "per_rank_validation_post_guard_peak": [
+      {
+        "allocated_gib": 8.211846351623535,
+        "reserved_gib": 14.6171875,
+        "ru_maxrss_gib": 3.4679336547851562
+      },
+      {
+        "allocated_gib": 8.160649299621582,
+        "reserved_gib": 12.13671875,
+        "ru_maxrss_gib": 3.4646949768066406
+      }
+    ],
+    "observed_max_input_shape": [
+      8,
+      184
+    ],
+    "max_training_allocated_minus_12N_gib": 1.5430192947387695,
+    "sample_NVML_minus_max_reserved_context_gap_gib_approx": 0.603515625,
+    "context_gap_is_sample_vs_phase_max_not_synchronized_exact_measurement": true,
+    "raw_rank_sha256": {
+      "rank0.json": "c19ae49d7a162f63047b272b27ead2f18c6ad12b82ac37113a2210fb268ca615",
+      "rank1.json": "e0a56f4c798f74b4d89fae6d72b31ea21f80bab951c0e6cb4ce58df393a487b6"
+    }
+  },
+  "calibrated_F17_micro4_safety_envelope": {
+    "optimizer_12N_tensor_floor_gib": 19.243824005126953,
+    "empirical_F06_whole_training_peak_residual_gib": 1.5430192947387695,
+    "additional_width_checkpoint_guard_allowance_gib": 0.1,
+    "non_torch_context_allowance_gib": 0.75,
+    "conditional_calibrated_peak_gib": 21.636843299865724,
+    "observed_CUDA_capacity_gib": 23.5184326171875,
+    "conditional_headroom_gib": 1.881589317321776,
+    "original_micro4_forward_backward_bound_plus_context_gib": 21.437963366508484,
+    "original_micro8_forward_backward_bound_plus_context_gib": 22.693058729171753,
+    "micro8_original_bound_headroom_after_context_gib": 0.8253738880157471,
+    "calibration_is_a_source_informed_conditional_estimate_not_a_mathematical_upper_bound": true
+  },
+  "actual_initial_run_supersedes_forecast": {
+    "job_id": "qwen-20261110-q17-f-r0",
+    "raw_failure_review": "review/round3_failure_and_zero_update_non_author.json",
+    "reason": "The conditional tensor-headroom forecast did not ensure a3.21GiB contiguous foreach sqrt allocation. Both ranks failed firstLR0 attempt with0 completed global updates. Preserve failed forecast and raw evidence.",
+    "runtime_training_PASS": false
+  },
+  "actual_final_runtime": {
+    "job_id": "qwen-20261110-q17-f-r1",
+    "run_commit": "a0903189686329b1029e535dbe2b00a1c34ef427",
+    "review": "review/q17_f_runtime_non_author.json",
+    "micro": 4,
+    "accumulation": 8,
+    "allocator": "expandable_segments:True",
+    "per_rank_training_allocated_gib": [
+      21.06255578994751,
+      21.082336902618408
+    ],
+    "per_rank_training_reserved_gib": [
+      22.89453125,
+      22.85546875
+    ],
+    "completed_updates": 2,
+    "nonzero_updates": 1,
+    "original_failed_job_retained": true,
+    "not_an_epoch_or_full_seed_confirmation": true
+  }
 }

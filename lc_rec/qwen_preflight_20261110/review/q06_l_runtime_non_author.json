@@ -313,6 +313,19 @@
     "Canonical0/160 after tiny preflight is an observed outcome and cannot establish final recommendation quality",
     "Full optimizer/scheduler/RNG checkpoint and training-state restoration NOT TESTED",
     "Formal full-seed96h estimation not independently finalized here; timing includes instrumentation overhead",
-    "Runtime gradient and value assertions are code-backed raw execution evidence, not a second independent GPU rerun"
-  ]
+    "Runtime gradient and value assertions are code-backed raw execution evidence, not a second independent GPU rerun",
+    "Original f295 probe records exact cumulative training peak and save/reload/beam phase peaks, but resets allocator counters before preserving post-training finite/parameter checks and validation. job_peak_from_recorded_phases is therefore a maximum over recorded phases, not a proven exact peak for the entire job. NVML resource samples (queried every third five-second guard poll) are sampled observations, not exact allocator maxima. Later round2 measurement-only change captures this interval; q06-L is not rerun."
+  ],
+  "resource_peak_coverage_clarification": {
+    "training_peak_exact_for_that_interval": true,
+    "rank0_training_allocated_gib": 6.37784481048584,
+    "rank0_training_reserved_gib": 16.88671875,
+    "whole_job_exact_allocator_peak": "NOT FULLY CAPTURED: post-training guard/validation interval not retained before reset in f295",
+    "sampled_nvml_max_mib": [
+      17918,
+      17020
+    ],
+    "training_chain_result_unchanged": true,
+    "new_gpu_run_used_to_repair_old_evidence": false
+  }
 }

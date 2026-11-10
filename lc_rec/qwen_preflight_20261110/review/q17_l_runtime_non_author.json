@@ -1,0 +1,290 @@
+{
+  "schema": 1,
+  "reviewer": "/root/official_architecture",
+  "is_implementation_author": false,
+  "reviewed_utc": "2026-11-10T18:04:08.748238+00:00",
+  "status": "PASS_TECHNICAL_RUNTIME_WITH_RESEARCH_LIMITS",
+  "job_id": "qwen-20261110-q17-l-r0",
+  "run_commit": "98206e447d21acc53aa0366911c804e01a6ca63f",
+  "source_sha256": {
+    "probe.py": "dccb39fc74d0acccc8da4b9bcc7cfcfe1337c6542b21ce02df2cc28dc02680a7",
+    "common.py": "5185c6578e5716a163d33688505db62d5140fdaa6cc9512c280253a21d848c06",
+    "resource_guard.py": "afe6d6fa172811a399f4bf39e53339a47a6eff57c4c8ba2cee3ef9f44242ec73"
+  },
+  "asset_revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+  "raw_inputs": {
+    "evidence/jobs/qwen-20261110-q17-l-r0/output/probe/rank0.json": {
+      "bytes": 747271,
+      "sha256": "a8ffc966c4556a4ab8581816c28ba2ede71710f0b7fadc2d18ba616849998936"
+    },
+    "evidence/jobs/qwen-20261110-q17-l-r0/output/probe/rank1.json": {
+      "bytes": 644420,
+      "sha256": "2769e480bd247eead989667785aba7902e1c0713bde3e794ad90c61e03c634c0"
+    },
+    "evidence/jobs/qwen-20261110-q17-l-r0/controller-query.json": {
+      "bytes": 7291,
+      "sha256": "ed380a6f5b5c9927367268c338c90708c22fc159e4c57e5de5822730289b8d09"
+    },
+    "evidence/jobs/qwen-20261110-q17-l-r0/request.json": {
+      "bytes": 18198,
+      "sha256": "9c7cf0523206a18ebb00f642d3fffa058deae439804f4a37b635ad9856a5ad96"
+    },
+    "evidence/jobs/qwen-20261110-q17-l-r0/cleanup.json": {
+      "bytes": 664,
+      "sha256": "449614df67186edcd970ce65d37eee70f59348fb51b2bd0f99367bf18aeff9c1"
+    },
+    "evidence/jobs/qwen-20261110-q17-l-r0/output/resources/resource-summary.json": {
+      "bytes": 1605,
+      "sha256": "d5ff432f8ec14e00e7c647e601f26193177b84ac0e9f052da7cd3d112f5766d2"
+    },
+    "evidence/jobs/qwen-20261110-cpu-q17-r0/output/audit/audit.json": {
+      "bytes": 82883,
+      "sha256": "f52ea41c4d9072e1c90ce898aa724fbeaec9762432a9d4a84a60971736551443"
+    },
+    "evidence/jobs/qwen-20261110-cpu-q17-r0/output/audit/selection.json": {
+      "bytes": 17437,
+      "sha256": "173bfea48a77db6a1dfb842dc78bde60834021e67932216897dfba85d41dc74a"
+    },
+    "metadata/Qwen3-1.7B-Base/manifest.json": {
+      "bytes": 3368,
+      "sha256": "a0cf3b97988ef80b02fe1170f50398e721f11234e0dda1e3c46675237a28c3cc"
+    }
+  },
+  "job_terminal": {
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "runner_cleanup_verified": true,
+    "guard_cleanup_verified": true,
+    "remaining_owned_pids": [],
+    "wall_seconds": 103.99241947475821,
+    "charged_gpu_device_seconds_independently_recomputed": 207.98483894951642,
+    "minimum_host_available_bytes": 246499684352,
+    "sampled_task_tree_rss_peak_bytes": 10915233792,
+    "counted_new_disk_peak_bytes": 20792872960
+  },
+  "rank_results": [
+    {
+      "rank": 0,
+      "original_parameters": 1720574976,
+      "expanded_parameters": 1721908224,
+      "actual_trainable_parameters": 321214464,
+      "trainable_tensors": 393,
+      "trainable_fraction_effective_base": 0.18654563554718234,
+      "trainable_fraction_with_frozen_clones": 0.1572174132697018,
+      "gradient_call_nonzero_finite_histogram": [
+        {
+          "calls": 16,
+          "nonzero_calls": 16,
+          "finite": true,
+          "tensors": 197
+        },
+        {
+          "calls": 16,
+          "nonzero_calls": 8,
+          "finite": true,
+          "tensors": 196
+        }
+      ],
+      "sampled_parameter_tensors_changed": 393,
+      "sampled_parameter_tensors": 393,
+      "SID_changes": {
+        "sampled_elements": 1880064,
+        "changed_elements": 322028,
+        "max_abs_change": 1.52587890625e-05
+      },
+      "SID_weight_gradient_max": 111.0,
+      "actual_input_SID_position_gradient_max": 71.0,
+      "actual_supervised_SID_logit_gradient_max": 0.0078125,
+      "optimizer_master_parameters": 160607232,
+      "optimizer_groups": [
+        {
+          "weight_decay": 0.01,
+          "parameter_tensors": 393
+        },
+        {
+          "weight_decay": 0.0,
+          "parameter_tensors": 0
+        }
+      ],
+      "update_seconds": [
+        8.469160079956055,
+        6.462682723999023,
+        6.930606842041016,
+        6.326653480529785
+      ],
+      "update_LR": [
+        [
+          0.0
+        ],
+        [
+          2.4096385542168676e-06
+        ],
+        [
+          4.819277108433735e-06
+        ],
+        [
+          7.228915662650602e-06
+        ]
+      ],
+      "training_peak": {
+        "allocated_gib": 10.060107231140137,
+        "reserved_gib": 19.71875,
+        "ru_maxrss_gib": 4.245521545410156
+      },
+      "validation_post_guard_peak": {
+        "allocated_gib": 10.060107231140137,
+        "reserved_gib": 19.71875,
+        "ru_maxrss_gib": 4.245521545410156
+      },
+      "all_recorded_phases_peak": {
+        "allocated_gib": 10.060107231140137,
+        "reserved_gib": 19.71875,
+        "ru_maxrss_gib": 7.334980010986328
+      },
+      "temperature_independent_CE_delta": 1.9073486328125e-06
+    },
+    {
+      "rank": 1,
+      "original_parameters": 1720574976,
+      "expanded_parameters": 1721908224,
+      "actual_trainable_parameters": 321214464,
+      "trainable_tensors": 393,
+      "trainable_fraction_effective_base": 0.18654563554718234,
+      "trainable_fraction_with_frozen_clones": 0.1572174132697018,
+      "gradient_call_nonzero_finite_histogram": [
+        {
+          "calls": 16,
+          "nonzero_calls": 16,
+          "finite": true,
+          "tensors": 197
+        },
+        {
+          "calls": 16,
+          "nonzero_calls": 8,
+          "finite": true,
+          "tensors": 196
+        }
+      ],
+      "sampled_parameter_tensors_changed": 393,
+      "sampled_parameter_tensors": 393,
+      "SID_changes": {
+        "sampled_elements": 1880064,
+        "changed_elements": 322028,
+        "max_abs_change": 1.52587890625e-05
+      },
+      "SID_weight_gradient_max": 147.0,
+      "actual_input_SID_position_gradient_max": 147.0,
+      "actual_supervised_SID_logit_gradient_max": 0.0078125,
+      "optimizer_master_parameters": 160607232,
+      "optimizer_groups": [
+        {
+          "weight_decay": 0.01,
+          "parameter_tensors": 393
+        },
+        {
+          "weight_decay": 0.0,
+          "parameter_tensors": 0
+        }
+      ],
+      "update_seconds": [
+        8.469160079956055,
+        6.462682723999023,
+        6.930606842041016,
+        6.326653480529785
+      ],
+      "update_LR": [
+        [
+          0.0
+        ],
+        [
+          2.4096385542168676e-06
+        ],
+        [
+          4.819277108433735e-06
+        ],
+        [
+          7.228915662650602e-06
+        ]
+      ],
+      "training_peak": {
+        "allocated_gib": 10.012364864349365,
+        "reserved_gib": 19.98828125,
+        "ru_maxrss_gib": 4.257102966308594
+      },
+      "validation_post_guard_peak": {
+        "allocated_gib": 10.012364864349365,
+        "reserved_gib": 19.98828125,
+        "ru_maxrss_gib": 4.257102966308594
+      },
+      "all_recorded_phases_peak": {
+        "allocated_gib": 10.012364864349365,
+        "reserved_gib": 19.98828125,
+        "ru_maxrss_gib": 6.737373352050781
+      },
+      "temperature_independent_CE_delta": 3.814697265625e-06
+    }
+  ],
+  "optimizer_scope": "native Torch2.6 AdamW, ZeRO2 CUDA FP32 master and moments, BF16 model/grads, no CPU optimizer offload; scalar step on CPU is native AdamW bookkeeping",
+  "cross_rank": {
+    "all_monitored_hashes_equal": true,
+    "optimizer_step_values_equal": true,
+    "global_update_count_equal": true,
+    "full_LoRA_tensors_hashed": 392,
+    "full_finetune_note": null
+  },
+  "serialization": {
+    "format": "native PEFT bin with full shared active embedding/head; no optimizer",
+    "file_bytes": 642491386,
+    "file_sha256": "e442b995accff9473bfb475ed830d69bca730021ddec618b1acd3f79f8869df7",
+    "logical_saved_keys": 394,
+    "complete_LoRA_saved_hashes_independently_matched_to_both_rank_training_hashes": 392,
+    "embedding_head_alias_full_shape_sha_equal": true,
+    "actual_size_consistent_with_single_shared_embedding_storage": true,
+    "save_seconds": 1.400501934811473,
+    "BF16_base_reload_seconds": [
+      22.387514805421233,
+      22.4013253422454
+    ],
+    "adapter_reload_seconds": [
+      3.770106166601181,
+      3.755782230757177
+    ],
+    "both_rank_all_saved_keys_values_and_tokenizer_reload_exact": true
+  },
+  "generation_independent_recount": {
+    "users": 8,
+    "distinct_user_and_row_ids": 8,
+    "sequences": 160,
+    "position_legal": 160,
+    "canonical_sequences": 0,
+    "canonical_fraction": 0.0,
+    "all_EOS_at_position4_and_only_PAD_tail": true,
+    "decoded_from_independently_rebuilt_SID_ID_map": true,
+    "allowed_sizes_from_original_author_index": [
+      150,
+      256,
+      256,
+      256
+    ],
+    "callback_positions_all0_through4_actual_calls": true,
+    "same_CPU_selected_users_context_separator_and_input_lengths": true,
+    "finite_sorted_sequence_scores": true,
+    "paired_dual_rank_seconds": [
+      0.4117916226387024,
+      0.36054518818855286,
+      0.3621755540370941,
+      0.39224207401275635
+    ],
+    "users_per_second_for_8_users": 5.239873417943899
+  },
+  "precision": "Official int8 base; bnb warns BF16 activations internally cast FP16 for int8 quantization. BF16 active tied embedding/LoRA. Inference reload BF16 official base+adapter.",
+  "limits": [
+    "Bounded technical probes only; no formal epoch/seed or full recommendation metrics.",
+    "Only5 finite validation batches80 examples and8beam users.",
+    "Canonical fraction after1 or3 nonzero warmup updates does not predict final recommendation quality.",
+    "Large adapter/full model payload not transferred or reloaded independently by reviewer; pinned source all-key/value comparisons and raw dual-rank assertions plus parameter/storage/hash inventories were reviewed.",
+    "Full optimizer/scheduler/RNG checkpoint and full training-state recovery NOT TESTED.",
+    "Finite gradient and parameter checks are code-backed execution evidence; review did not perform a second GPU run.",
+    "The F route is the user-authorized full-finetune technical comparison, not LETTER original LoRA recipe."
+  ]
+}

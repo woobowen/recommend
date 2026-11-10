@@ -15,6 +15,7 @@ import math
 from pathlib import Path
 import re
 import subprocess
+import sys
 
 import numpy as np
 
@@ -204,6 +205,12 @@ def main():
     trainable_names = {name for name, row in r["parameter_inventory"].items() if row["requires_grad"]}
     trainable_elements = sum(math.prod(r["parameter_inventory"][n]["shape"]) for n in trainable_names)
     assert trainable_elements == r["trainable"]["parameters"]
+    if r["route"] == "F":
+        assert trainable_names == set(r["parameter_inventory"])
+        assert trainable_elements == cpu["model"]["expanded_unique_parameters"]
+        assert r["full_parameter_scope"]["all_instantiated_parameters_trainable"]
+        assert r["full_parameter_scope"]["official_text_class_only"] == (args.key == "q35")
+        assert not any("visual" in n or n.startswith("mtp.") for n in trainable_names)
     for row in r["parameter_inventory"].values():
         assert math.prod(row["shape"]) == row["numel"]
         parameter_bytes += row["numel"] * width[row["dtype_after_ds"].removeprefix("torch.")]
@@ -299,10 +306,26 @@ def main():
         restore = max(x["adapter_reload_seconds"] for x in ranks)
         extra_init = max(x["inference_base_reload_seconds"] for x in ranks)
         assert all(x["adapter_reload"]["all_keys_and_values_exact"] and x["adapter_reload"]["sharing"]["same_parameter_object"] for x in ranks)
+        native_evidence = {"scope": "LoRA adapter plus complete shared active embedding/head",
+                           "serialized_file_sha256": r["adapter_save"]["sha256"],
+                           "serialized_tensor_keys": len(r["adapter_save"]["keys"]),
+                           "strict_reload_values_all_ranks": True}
     else:
         native_bytes = sum(x["bytes"] for x in r["full_model_save"]["files"]); native_seconds = r["full_model_save"]["seconds"]
         restore = max(x["full_model_reload_seconds"] for x in ranks); extra_init = 0.
         assert all(x["full_model_reload"]["all_keys_shapes_dtypes_values_exact"] for x in ranks)
+        states = r["full_model_save"]["parameter_state"]
+        embedding_key = next(n for n in states if n.endswith("embed_tokens.weight"))
+        assert states[embedding_key]["sha256"] == states["lm_head.weight"]["sha256"]
+        assert all(x["full_model_reload"]["state_tensors"] == len(states) for x in ranks)
+        assert all(x["full_model_reload"]["sharing"]["same_parameter_object"] for x in ranks)
+        native_evidence = {"scope": "all instantiated official text-model parameters, model-only save",
+                           "full_parameter_scope": r["full_parameter_scope"],
+                           "serialized_weight_files": r["full_model_save"]["files"],
+                           "serialized_state_keys": len(states), "tied_embedding_head_saved_hashes_equal": True,
+                           "strict_keys_shapes_dtypes_values_reload_all_ranks": True}
+    assert all(not x["full_optimizer_checkpoint_written"] for x in ranks)
+    native_evidence["optimizer_scheduler_rng_checkpoint_and_restore"] = "NOT TESTED / NOT WRITTEN"
     checkpoint_bytes = 2 * parameter_bytes + 12 * trainable_elements + 2 ** 30
     bandwidth = native_bytes / native_seconds
     initialization = next(x["elapsed_seconds"] for x in r["stages"] if x["stage"] == "bounded_training") + extra_init + cold_excess
@@ -323,6 +346,7 @@ def main():
               "job": args.job, "key": args.key, "route": r["route"], "run_commit": run_commit,
               "status": "PASS_RAW_RUNTIME_AND_INDEPENDENT_CONDITIONAL_ARITHMETIC", "formal_seed_confirmed": False,
               "reviewed_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              "review_environment": {"interpreter": sys.executable, "python": sys.version, "numpy": np.__version__, "GPU_execution": False},
               "script_sha256": sha(Path(__file__)), "source_checks": source_checks,
               "raw_input_sha256": {str(q.relative_to(TASK)): sha(q) for q in [directory / "request.json", directory / "output/probe/rank0.json", directory / "output/probe/rank1.json", directory / "output/resources/resource-summary.json", cpu_dir / "audit.json", args.tokenizer] if q.is_relative_to(TASK)},
               "independent_encoder": {"official_tokenizer_path": str(args.tokenizer), "sha256": sha(args.tokenizer), "method": "Own ASCII regex, GPT2 byte map and ranked BPE; no HF tokenizer/main adapter used", "cpu_samples_exact": 20},
@@ -331,12 +355,41 @@ def main():
               "throughput": {"central_indices": center_indices, "central_seconds": chosen_seconds, "central_effective_tokens": chosen_tokens, "central_tensor_positions": chosen_positions, "central_padding_positions": chosen_positions - chosen_tokens, "samples_per_second": 64 * len(chosen) / chosen_seconds, "effective_tokens_per_second": chosen_tokens / chosen_seconds},
               "formal_work": {"loader_batches_per_rank": r["formal_loader"]["length_per_rank"], "updates_per_epoch": steps_per_epoch, "four_epoch_updates": formal_steps, "original_rows_four_epochs": 527348, "global64_equivalent_presentations": 64 * formal_steps, "validation_presentations": 4 * len(valid_rows), "test_users": len(test_rows)},
               "native_save_reload": {"file_bytes": native_bytes, "save_seconds": native_seconds, "write_bytes_per_second": bandwidth, "best_restore_proxy_seconds_MAX_rank": restore, "extra_inference_base_load_seconds_MAX_rank": extra_init},
+              "native_save_reload_identity": native_evidence,
               "beam_review": {"users": len(user_ids), "beams": beams_checked, "all_positional_tokens_and_eos_pass": True, "noncanonical_beams": noncanonical, "strata": strata, "histogram_users_by_stratum": assigned},
               "cost_inputs": {"measured_mean_tokens": observed_mean, "full_mean_tokens": target_mean, "upward_token_scale": scaling, "cold_excess_once": cold_excess, "current_parameter_bytes": parameter_bytes, "trainable_elements": trainable_elements, "checkpoint_proxy_bytes": checkpoint_bytes, "launcher_teardown_seconds": launch_overhead},
               "center": {"seconds_by_component": center, "total_seconds": sum(center.values()), "hours": sum(center.values()) / 3600, "days": sum(center.values()) / 86400},
               "conservative": {"seconds_by_component": conservative, "total_seconds": sum(conservative.values()), "hours": sum(conservative.values()) / 3600, "days": sum(conservative.values()) / 86400},
               "96h_status": status, "resource_receipt": guard,
               "limitations": ["No second GPU execution or independent recomputation from unretained gradient/logit arrays; counters and equality checks are verified against raw logs and reviewed code.", "Checkpoint byte/time formulas are explicit assumptions; optimizer/scheduler/RNG checkpoint and formal restore were not written or tested.", "Generation CPU decoding/aggregation and sustained four-epoch behavior remain unknown; overhead percentages are assumptions.", "No recommendation metrics or formal model-quality ranking."]}
+    reconciliation = TASK / "config/update_reconciliations.json"
+    if reconciliation.exists():
+        certified = []
+        for record in read(reconciliation)["certified_failed_zero_update_jobs"]:
+            if record["key"] != args.key or record["route"] != r["route"]:
+                continue
+            original = TASK / "evidence/jobs" / record["job_id"]
+            for relative, expected_sha in record["raw_files_sha256"].items():
+                assert sha(original / relative) == expected_sha
+            review = TASK / record["independent_review_path"]
+            assert sha(review) == record["independent_review_sha256"]
+            failed = [read(original / "output/probe" / ("rank" + str(i) + ".json")) for i in range(2)]
+            for failed_rank in failed:
+                assert failed_rank["updates"] == []
+                pending = failed_rank["current_update"]
+                assert pending["index"] == pending["engine_step_before"] == 0 and not any(pending["lr_before"])
+                assert all(m["global_steps_after"] == 0 and not m["boundary"] for m in pending["microsteps"])
+            prior_resources = read(original / "output/resources/resource-summary.json")
+            assert prior_resources["child_exit_code"] != 0 and prior_resources["cleanup_verified"]
+            certified.append({"job_id": record["job_id"], "completed_global_updates": 0,
+                              "failed_attempt_retained": True, "precharged_attempts_retained": record["attempts_retained"],
+                              "prior_device_seconds_still_charged": prior_resources["charged_gpu_device_seconds"],
+                              "certification_config_sha256": sha(reconciliation),
+                              "non_author_source_failure_review_sha256": sha(review),
+                              "raw_file_hashes_verified": True,
+                              "partial_Adam_state_not_reused": "Retry starts a new job from original model, seed and warmup; first successful update is again LR0"})
+        if certified:
+            result["prior_failed_attempt_reconciliation"] = certified
     if args.summary:
         main_output = read(args.summary)
         published = main_output["models"][args.key]["routes"][r["route"]]["seed_estimate"]

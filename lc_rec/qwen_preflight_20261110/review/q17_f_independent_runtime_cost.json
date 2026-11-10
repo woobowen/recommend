@@ -1,0 +1,366 @@
+{
+  "schema": "independent_qwen_raw_runtime_cost_v1",
+  "reviewer": "/root/letter_semantics",
+  "job": "qwen-20261110-q17-f-r1",
+  "key": "q17",
+  "route": "F",
+  "run_commit": "a0903189686329b1029e535dbe2b00a1c34ef427",
+  "status": "PASS_RAW_RUNTIME_AND_INDEPENDENT_CONDITIONAL_ARITHMETIC",
+  "formal_seed_confirmed": false,
+  "reviewed_utc": "2026-11-10T18:16:13.939832+00:00",
+  "review_environment": {
+    "interpreter": "/usr/bin/python3",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "numpy": "1.26.4",
+    "GPU_execution": false
+  },
+  "script_sha256": "9efe83c3d842163a045b494d08af3c8c55ed4a33c406efa2eea1095256a51677",
+  "source_checks": [
+    {
+      "path": "lc_rec/qwen_preflight_20261110/scripts/common.py",
+      "sha256": "87bad9be604f55ca555f942b938cbd113a80da36297beb9756aaa869d5b2a9f6",
+      "git_run_commit_equal": true
+    },
+    {
+      "path": "lc_rec/qwen_preflight_20261110/scripts/probe.py",
+      "sha256": "45ab6a7bd04c04d69422588bcd833821b0457c3eff113d53bff8845681aadb10",
+      "git_run_commit_equal": true
+    },
+    {
+      "path": "lc_rec/qwen_preflight_20261110/scripts/resource_guard.py",
+      "sha256": "afe6d6fa172811a399f4bf39e53339a47a6eff57c4c8ba2cee3ef9f44242ec73",
+      "git_run_commit_equal": true
+    }
+  ],
+  "raw_input_sha256": {
+    "evidence/jobs/qwen-20261110-q17-f-r1/request.json": "7c80bbb2a779fddbbfd43bfd1a32b949bf579595977535c56da287f8d630bdd6",
+    "evidence/jobs/qwen-20261110-q17-f-r1/output/probe/rank0.json": "820ba311ebeb69f608a55b1fd13d42dbc826a60b4db91570d06ac8907e79fa06",
+    "evidence/jobs/qwen-20261110-q17-f-r1/output/probe/rank1.json": "462d5ce7d54796dc8e61d68a7cccbd414ef2295e8367dbc40c476e022532f7e9",
+    "evidence/jobs/qwen-20261110-q17-f-r1/output/resources/resource-summary.json": "1a58ccaeb2866a06fd6d5aea10d43c2ad4d888eedeca0c8f763f5c132c19eb67",
+    "evidence/jobs/qwen-20261110-cpu-q17-r0/output/audit/audit.json": "f52ea41c4d9072e1c90ce898aa724fbeaec9762432a9d4a84a60971736551443"
+  },
+  "independent_encoder": {
+    "official_tokenizer_path": "/tmp/qwen_official_review/Qwen3-1.7B-Base/tokenizer.json",
+    "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "method": "Own ASCII regex, GPT2 byte map and ranked BPE; no HF tokenizer/main adapter used",
+    "cpu_samples_exact": 20
+  },
+  "updates": [
+    {
+      "index": 0,
+      "kind": "mixed",
+      "global_samples": 64,
+      "effective_tokens_reencoded": 5417,
+      "tensor_positions_recounted": 7796,
+      "padding_positions_recounted": 2379,
+      "supervised_targets_recounted": 320,
+      "seconds_MAX_rank": 11.95700740814209,
+      "nonzero_lr": false
+    },
+    {
+      "index": 1,
+      "kind": "boundary",
+      "global_samples": 64,
+      "effective_tokens_reencoded": 11024,
+      "tensor_positions_recounted": 11320,
+      "padding_positions_recounted": 296,
+      "supervised_targets_recounted": 320,
+      "seconds_MAX_rank": 10.335780143737793,
+      "nonzero_lr": true
+    }
+  ],
+  "gradient_checks": [
+    {
+      "rank": 0,
+      "trainable_tensors": 310,
+      "calls_per_tensor": 16,
+      "actual_nonzero_lr_updates": 1,
+      "finite_and_gradient_counts_pass": true,
+      "SID_paths_nonzero": true,
+      "Adam_master_and_moments_gpu_fp32": true
+    },
+    {
+      "rank": 1,
+      "trainable_tensors": 310,
+      "calls_per_tensor": 16,
+      "actual_nonzero_lr_updates": 1,
+      "finite_and_gradient_counts_pass": true,
+      "SID_paths_nonzero": true,
+      "Adam_master_and_moments_gpu_fp32": true
+    }
+  ],
+  "validation": [
+    {
+      "label": "short",
+      "tokens_reencoded": 1040,
+      "padding_recounted": 0,
+      "seconds": 0.3913748562335968
+    },
+    {
+      "label": "middle",
+      "tokens_reencoded": 1312,
+      "padding_recounted": 0,
+      "seconds": 0.3889201581478119
+    },
+    {
+      "label": "long",
+      "tokens_reencoded": 1984,
+      "padding_recounted": 0,
+      "seconds": 0.3896980881690979
+    },
+    {
+      "label": "boundary",
+      "tokens_reencoded": 2944,
+      "padding_recounted": 0,
+      "seconds": 0.39672693610191345
+    },
+    {
+      "label": "mixed",
+      "tokens_reencoded": 1467,
+      "padding_recounted": 573,
+      "seconds": 0.39821526408195496
+    }
+  ],
+  "sampling": {
+    "presentations": 128,
+    "unique_train_rows": 65,
+    "unique_row_prompt_pairs": 81,
+    "central_presentations": 64,
+    "central_unique_rows": 1
+  },
+  "throughput": {
+    "central_indices": [
+      1
+    ],
+    "central_seconds": 10.335780143737793,
+    "central_effective_tokens": 11024,
+    "central_tensor_positions": 11320,
+    "central_padding_positions": 296,
+    "samples_per_second": 6.192082175700699,
+    "effective_tokens_per_second": 1066.5861547644454
+  },
+  "formal_work": {
+    "loader_batches_per_rank": 16480,
+    "updates_per_epoch": 2060,
+    "four_epoch_updates": 8240,
+    "original_rows_four_epochs": 527348,
+    "global64_equivalent_presentations": 527360,
+    "validation_presentations": 198176,
+    "test_users": 24772
+  },
+  "native_save_reload": {
+    "file_bytes": 3443851904,
+    "save_seconds": 7.003661094233394,
+    "write_bytes_per_second": 491721666.3775415,
+    "best_restore_proxy_seconds_MAX_rank": 1.0116086350753903,
+    "extra_inference_base_load_seconds_MAX_rank": 0.0
+  },
+  "native_save_reload_identity": {
+    "scope": "all instantiated official text-model parameters, model-only save",
+    "full_parameter_scope": {
+      "official_text_class_only": false,
+      "excluded_vision_tensors": 0,
+      "excluded_vision_parameters": 0,
+      "excluded_mtp_tensors": 0,
+      "excluded_mtp_parameters": 0,
+      "all_instantiated_parameters_trainable": true
+    },
+    "serialized_weight_files": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q17-f-r1/output/probe/full_model/model-00001-of-00002.safetensors",
+        "bytes": 1178695688,
+        "sha256": "a9e698b39a2190be187040d52851586fa1dfa4e3997c952a8d548ade8f25f238"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q17-f-r1/output/probe/full_model/model-00002-of-00002.safetensors",
+        "bytes": 2265156216,
+        "sha256": "f46926c4dab75eb0eb60d538a6eb58bc6f43f1d0bb6549bd105f8e32181d9a5b"
+      }
+    ],
+    "serialized_state_keys": 311,
+    "tied_embedding_head_saved_hashes_equal": true,
+    "strict_keys_shapes_dtypes_values_reload_all_ranks": true,
+    "optimizer_scheduler_rng_checkpoint_and_restore": "NOT TESTED / NOT WRITTEN"
+  },
+  "beam_review": {
+    "users": 8,
+    "beams": 160,
+    "all_positional_tokens_and_eos_pass": true,
+    "noncanonical_beams": 160,
+    "strata": [
+      {
+        "label": "short",
+        "mean_input_tokens": 71.0,
+        "dual_user_seconds": 0.41069602966308594,
+        "seconds_per_user": 0.20534801483154297
+      },
+      {
+        "label": "middle",
+        "mean_input_tokens": 77.0,
+        "dual_user_seconds": 0.27040985226631165,
+        "seconds_per_user": 0.13520492613315582
+      },
+      {
+        "label": "long",
+        "mean_input_tokens": 119.0,
+        "dual_user_seconds": 0.28388598561286926,
+        "seconds_per_user": 0.14194299280643463
+      },
+      {
+        "label": "boundary",
+        "mean_input_tokens": 167.0,
+        "dual_user_seconds": 0.307969868183136,
+        "seconds_per_user": 0.153984934091568
+      }
+    ],
+    "histogram_users_by_stratum": {
+      "short": 7859,
+      "middle": 11410,
+      "long": 4185,
+      "boundary": 1318
+    }
+  },
+  "cost_inputs": {
+    "measured_mean_tokens": 172.25,
+    "full_mean_tokens": 86.05969492631051,
+    "upward_token_scale": 1.0,
+    "cold_excess_once": 1.6212272644042969,
+    "current_parameter_bytes": 3443816448,
+    "trainable_elements": 1721908224,
+    "checkpoint_proxy_bytes": 28624273408,
+    "launcher_teardown_seconds": 9.646386266686022
+  },
+  "center": {
+    "seconds_by_component": {
+      "train": 85166.82838439941,
+      "validation": 4932.294260919094,
+      "checkpoint": 239.85305834672235,
+      "best_restore": 1.0116086350753903,
+      "beam20_test": 3953.5018237680197,
+      "init": 40.20920031145215,
+      "overhead": 9443.016219904664
+    },
+    "total_seconds": 103776.71455628444,
+    "hours": 28.826865154523453,
+    "days": 1.2011193814384773
+  },
+  "conservative": {
+    "seconds_by_component": {
+      "train": 85166.82838439941,
+      "validation": 4932.294260919094,
+      "checkpoint": 1185.4049111984227,
+      "best_restore": 2.0232172701507807,
+      "beam20_test": 5086.881023406982,
+      "init": 80.4184006229043,
+      "overhead": 24123.108935720928
+    },
+    "total_seconds": 120576.9591335379,
+    "hours": 33.49359975931608,
+    "days": 1.3955666566381701
+  },
+  "96h_status": "INCONCLUSIVE",
+  "resource_receipt": {
+    "job_id": "qwen-20261110-q17-f-r1",
+    "key": "q17",
+    "argv": [
+      "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+      "-m",
+      "torch.distributed.run",
+      "--standalone",
+      "--nnodes=1",
+      "--nproc_per_node=2",
+      "/home/bwwu/lc-rec/qwen-preflight-20261110/releases/a0903189686329b1029e535dbe2b00a1c34ef427/lc_rec/qwen_preflight_20261110/scripts/probe.py",
+      "--key",
+      "q17",
+      "--route",
+      "F",
+      "--precision",
+      "bf16",
+      "--model",
+      "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+      "--letter",
+      "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER",
+      "--audit",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-cpu-q17-r0/output/audit",
+      "--output",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q17-f-r1/output/probe",
+      "--run-commit",
+      "a0903189686329b1029e535dbe2b00a1c34ef427",
+      "--micro",
+      "4"
+    ],
+    "start_utc": "2026-11-10T18:07:13.640120+00:00",
+    "limit_seconds": 2660,
+    "charging": "two devices x entire child lifetime, including imports/load/save/error/inference",
+    "end_utc": "2026-11-10T18:09:23.839062+00:00",
+    "elapsed_seconds": 130.19896384701133,
+    "child_exit_code": 0,
+    "stop_reason": null,
+    "mem_available_min_bytes": 248293179392,
+    "task_tree_rss_sample_peak_bytes": 9122459648,
+    "new_disk_allocated_peak_bytes": 25476186112,
+    "tracked_live_pids_after_cleanup": [],
+    "cleanup_verified": true,
+    "charged_gpu_device_seconds": 260.39792769402266
+  },
+  "limitations": [
+    "No second GPU execution or independent recomputation from unretained gradient/logit arrays; counters and equality checks are verified against raw logs and reviewed code.",
+    "Checkpoint byte/time formulas are explicit assumptions; optimizer/scheduler/RNG checkpoint and formal restore were not written or tested.",
+    "Generation CPU decoding/aggregation and sustained four-epoch behavior remain unknown; overhead percentages are assumptions.",
+    "No recommendation metrics or formal model-quality ranking."
+  ],
+  "prior_failed_attempt_reconciliation": [
+    {
+      "job_id": "qwen-20261110-q17-f-r0",
+      "completed_global_updates": 0,
+      "failed_attempt_retained": true,
+      "precharged_attempts_retained": 1,
+      "prior_device_seconds_still_charged": 104.61382330581546,
+      "certification_config_sha256": "9119a50369a60de77cc9b5cfc21c0d3c3f46ffc8fbf9bf38d752a36c84394640",
+      "non_author_source_failure_review_sha256": "89e45f8fae3ff71682fd65435333baf2d7d437ea5080bcb9da30e29425293a86",
+      "raw_file_hashes_verified": true,
+      "partial_Adam_state_not_reused": "Retry starts a new job from original model, seed and warmup; first successful update is again LR0"
+    }
+  ],
+  "main_summary_comparison": {
+    "sha256": "c18f22933d830c183761b96ceac9af5924257a61d62cc0b1b29f5ea7d6e694ad",
+    "main_analysis_identity": {
+      "run_commit": "b84526eadd6b3edc1a40c8110894221c28f96cd6",
+      "script_sha256": "a936035eebd79b7040bd06d2d0d7620766022aada48357e38109b06058669277",
+      "common_sha256": "87bad9be604f55ca555f942b938cbd113a80da36297beb9756aaa869d5b2a9f6",
+      "argv": [
+        "lc_rec/qwen_preflight_20261110/scripts/summarize.py",
+        "--run-commit",
+        "b84526eadd6b3edc1a40c8110894221c28f96cd6",
+        "--outcomes",
+        "lc_rec/qwen_preflight_20261110/evidence/execution_results.json",
+        "--output",
+        "lc_rec/qwen_preflight_20261110/evidence/summary.json"
+      ],
+      "interpreter": "/usr/bin/python3",
+      "cwd": "/home/addaswsw/recommend-worktrees/lc-rec",
+      "started_utc": "2026-11-10T18:15:36.204528+00:00",
+      "completed_utc": "2026-11-10T18:15:36.228923+00:00",
+      "status": "PASS_ANALYSIS_FROM_RAW_RECORDS"
+    },
+    "scope": "q17 F only; independently derived values precede comparison",
+    "all_components_match_within_1e6_seconds": true,
+    "absolute_differences": {
+      "center.train": 0.0,
+      "center.validation": 0.0,
+      "center.checkpoint": 0.0,
+      "center.best_restore": 0.0,
+      "center.beam20_test": 0.0,
+      "center.init": 0.0,
+      "center.overhead": 0.0,
+      "conservative.train": 0.0,
+      "conservative.validation": 0.0,
+      "conservative.checkpoint": 0.0,
+      "conservative.best_restore": 0.0,
+      "conservative.beam20_test": 0.0,
+      "conservative.init": 0.0,
+      "conservative.overhead": 0.0
+    },
+    "parameter_checkpoint_bytes_steps_histogram_sampling_and_totals_match": true
+  }
+}

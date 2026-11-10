@@ -1,0 +1,361 @@
+{
+  "schema": "qwen_three_model_final_cost_non_author_v1",
+  "reviewer": "/root/letter_semantics",
+  "is_main_probe_or_estimator_author": false,
+  "environment_author_conflict_exclusion": "setup_env/prepare_wheels/dependency manifests were implemented by this reviewer and excluded from independent environment review; independent scope here is root-authored probes, original data/token evidence and costs.",
+  "status": "PASS_INDEPENDENT_RECALCULATION_OF_FIVE_TECHNICAL_ROUTES_AND_ONE_METHOD_BLOCKED_ROUTE",
+  "overall_task_implication": "PARTIAL: five technical routes passed; Qwen3.5 LoRA remains method-blocked. No formal seed/metrics verified.",
+  "reviewed_utc": "2026-11-10T18:17:41.103639+00:00",
+  "summary": {
+    "path": "evidence/summary.json",
+    "sha256": "c18f22933d830c183761b96ceac9af5924257a61d62cc0b1b29f5ea7d6e694ad",
+    "analysis": {
+      "run_commit": "b84526eadd6b3edc1a40c8110894221c28f96cd6",
+      "script_sha256": "a936035eebd79b7040bd06d2d0d7620766022aada48357e38109b06058669277",
+      "common_sha256": "87bad9be604f55ca555f942b938cbd113a80da36297beb9756aaa869d5b2a9f6",
+      "argv": [
+        "lc_rec/qwen_preflight_20261110/scripts/summarize.py",
+        "--run-commit",
+        "b84526eadd6b3edc1a40c8110894221c28f96cd6",
+        "--outcomes",
+        "lc_rec/qwen_preflight_20261110/evidence/execution_results.json",
+        "--output",
+        "lc_rec/qwen_preflight_20261110/evidence/summary.json"
+      ],
+      "interpreter": "/usr/bin/python3",
+      "cwd": "/home/addaswsw/recommend-worktrees/lc-rec",
+      "started_utc": "2026-11-10T18:15:36.204528+00:00",
+      "completed_utc": "2026-11-10T18:15:36.228923+00:00",
+      "status": "PASS_ANALYSIS_FROM_RAW_RECORDS"
+    },
+    "source_outcomes_sha256": "824554ade0dedb6efd2cf65214e790a70914c26841f2332722e5c3c2a8e76aa6"
+  },
+  "independent_recompute_script": {
+    "path": "review/recompute_runtime_independently.py",
+    "sha256": "9efe83c3d842163a045b494d08af3c8c55ed4a33c406efa2eea1095256a51677",
+    "method": "Own original leave-two-out/history reconstruction; original literal prompt parser; own ASCII byte-BPE from official tokenizer vocab/merge ranks; source-bound raw tensor/gradient/update/save/generation checks; independent math for seed components. Main estimate only compared after independent results exist.",
+    "GPU_or_model_execution": false,
+    "network_or_package_install": false
+  },
+  "routes": {
+    "q06_L": {
+      "job": "qwen-20261110-q06-l-r0",
+      "RUN_COMMIT": "f29527de3b3f94ae5640d2e98faa1a7f74d2e0e8",
+      "independent_report": "review/q06_l_independent_runtime_cost.json",
+      "independent_report_sha256": "576a455384ee27b5cf64480c73a77674a5ac149c4dae48e394ea1b0d12d76cb9",
+      "raw_evidence_and_token_reconstruction": "PASS",
+      "summary_components_denominators_hours_days_status": "PASS",
+      "center_hours": 18.016715638394082,
+      "conservative_hours": 21.75963980938599,
+      "center_days": 0.7506964849330868,
+      "conservative_days": 0.9066516587244162,
+      "96h_status": "LIKELY_WITHIN_96H",
+      "completed_global_updates": 4,
+      "nonzero_lr_updates": 3,
+      "sampling": {
+        "presentations": 256,
+        "unique_train_rows": 193,
+        "unique_row_prompt_pairs": 209,
+        "central_presentations": 128,
+        "central_unique_rows": 128
+      },
+      "native_save_restore_scope": {
+        "scope": "LoRA adapter plus complete shared active embedding/head",
+        "serialized_file_sha256": "616d5deb0e205d9f81d0623386ad91436790c6b6497ecaf24b06639477e9ef04",
+        "serialized_tensor_keys": 394,
+        "strict_reload_values_all_ranks": true,
+        "optimizer_scheduler_rng_checkpoint_and_restore": "NOT TESTED / NOT WRITTEN"
+      },
+      "full_optimizer_training_state_restore": "NOT TESTED"
+    },
+    "q17_L": {
+      "job": "qwen-20261110-q17-l-r0",
+      "RUN_COMMIT": "98206e447d21acc53aa0366911c804e01a6ca63f",
+      "independent_report": "review/q17_l_independent_runtime_cost.json",
+      "independent_report_sha256": "8be1573fd7330ee98e7ca179ec2a7ddf580ed713950c515055739b8c3d9c5408",
+      "raw_evidence_and_token_reconstruction": "PASS",
+      "summary_components_denominators_hours_days_status": "PASS",
+      "center_hours": 20.55815543198652,
+      "conservative_hours": 24.402448370041174,
+      "center_days": 0.856589809666105,
+      "conservative_days": 1.016768682085049,
+      "96h_status": "LIKELY_WITHIN_96H",
+      "completed_global_updates": 4,
+      "nonzero_lr_updates": 3,
+      "sampling": {
+        "presentations": 256,
+        "unique_train_rows": 193,
+        "unique_row_prompt_pairs": 209,
+        "central_presentations": 128,
+        "central_unique_rows": 128
+      },
+      "native_save_restore_scope": {
+        "scope": "LoRA adapter plus complete shared active embedding/head",
+        "serialized_file_sha256": "e442b995accff9473bfb475ed830d69bca730021ddec618b1acd3f79f8869df7",
+        "serialized_tensor_keys": 394,
+        "strict_reload_values_all_ranks": true,
+        "optimizer_scheduler_rng_checkpoint_and_restore": "NOT TESTED / NOT WRITTEN"
+      },
+      "full_optimizer_training_state_restore": "NOT TESTED"
+    },
+    "q06_F": {
+      "job": "qwen-20261110-q06-f-r0",
+      "RUN_COMMIT": "98206e447d21acc53aa0366911c804e01a6ca63f",
+      "independent_report": "review/q06_f_independent_runtime_cost.json",
+      "independent_report_sha256": "4e5c596c540e82c19ae59109ff5fef00bbfa6fcca0b4547576dc0af3665d3364",
+      "raw_evidence_and_token_reconstruction": "PASS",
+      "summary_components_denominators_hours_days_status": "PASS",
+      "center_hours": 12.413018177324355,
+      "conservative_hours": 14.473695469948822,
+      "center_days": 0.5172090907218481,
+      "conservative_days": 0.603070644581201,
+      "96h_status": "INCONCLUSIVE",
+      "completed_global_updates": 2,
+      "nonzero_lr_updates": 1,
+      "sampling": {
+        "presentations": 128,
+        "unique_train_rows": 65,
+        "unique_row_prompt_pairs": 81,
+        "central_presentations": 64,
+        "central_unique_rows": 1
+      },
+      "native_save_restore_scope": {
+        "scope": "all instantiated official text-model parameters, model-only save",
+        "full_parameter_scope": {
+          "official_text_class_only": false,
+          "excluded_vision_tensors": 0,
+          "excluded_vision_parameters": 0,
+          "excluded_mtp_tensors": 0,
+          "excluded_mtp_parameters": 0,
+          "all_instantiated_parameters_trainable": true
+        },
+        "serialized_weight_files": [
+          {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q06-f-r0/output/probe/full_model/model.safetensors",
+            "bytes": 1193468344,
+            "sha256": "8a5675e5bc8f10c10e933d2d8925aa42e170c32006b73d191b6a03887472544e"
+          }
+        ],
+        "serialized_state_keys": 311,
+        "tied_embedding_head_saved_hashes_equal": true,
+        "strict_keys_shapes_dtypes_values_reload_all_ranks": true,
+        "optimizer_scheduler_rng_checkpoint_and_restore": "NOT TESTED / NOT WRITTEN"
+      },
+      "full_optimizer_training_state_restore": "NOT TESTED"
+    },
+    "q17_F": {
+      "job": "qwen-20261110-q17-f-r1",
+      "RUN_COMMIT": "a0903189686329b1029e535dbe2b00a1c34ef427",
+      "independent_report": "review/q17_f_independent_runtime_cost.json",
+      "independent_report_sha256": "b2306a58cc2890289f53f2597476f989ffd234f93a1f74535790f135f7c6df41",
+      "raw_evidence_and_token_reconstruction": "PASS",
+      "summary_components_denominators_hours_days_status": "PASS",
+      "center_hours": 28.826865154523453,
+      "conservative_hours": 33.49359975931608,
+      "center_days": 1.2011193814384773,
+      "conservative_days": 1.3955666566381701,
+      "96h_status": "INCONCLUSIVE",
+      "completed_global_updates": 2,
+      "nonzero_lr_updates": 1,
+      "sampling": {
+        "presentations": 128,
+        "unique_train_rows": 65,
+        "unique_row_prompt_pairs": 81,
+        "central_presentations": 64,
+        "central_unique_rows": 1
+      },
+      "native_save_restore_scope": {
+        "scope": "all instantiated official text-model parameters, model-only save",
+        "full_parameter_scope": {
+          "official_text_class_only": false,
+          "excluded_vision_tensors": 0,
+          "excluded_vision_parameters": 0,
+          "excluded_mtp_tensors": 0,
+          "excluded_mtp_parameters": 0,
+          "all_instantiated_parameters_trainable": true
+        },
+        "serialized_weight_files": [
+          {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q17-f-r1/output/probe/full_model/model-00001-of-00002.safetensors",
+            "bytes": 1178695688,
+            "sha256": "a9e698b39a2190be187040d52851586fa1dfa4e3997c952a8d548ade8f25f238"
+          },
+          {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q17-f-r1/output/probe/full_model/model-00002-of-00002.safetensors",
+            "bytes": 2265156216,
+            "sha256": "f46926c4dab75eb0eb60d538a6eb58bc6f43f1d0bb6549bd105f8e32181d9a5b"
+          }
+        ],
+        "serialized_state_keys": 311,
+        "tied_embedding_head_saved_hashes_equal": true,
+        "strict_keys_shapes_dtypes_values_reload_all_ranks": true,
+        "optimizer_scheduler_rng_checkpoint_and_restore": "NOT TESTED / NOT WRITTEN"
+      },
+      "full_optimizer_training_state_restore": "NOT TESTED"
+    },
+    "q35_F": {
+      "job": "qwen-20261110-q35-f-r1",
+      "RUN_COMMIT": "a0903189686329b1029e535dbe2b00a1c34ef427",
+      "independent_report": "review/q35_f_independent_runtime_cost.json",
+      "independent_report_sha256": "9a950d0d4f0745a582cda3b963917730d024eb79f9fef8eeb4d90b651ee7b806",
+      "raw_evidence_and_token_reconstruction": "PASS",
+      "summary_components_denominators_hours_days_status": "PASS",
+      "center_hours": 34.45865015439796,
+      "conservative_hours": 39.911466496343735,
+      "center_days": 1.4357770897665814,
+      "conservative_days": 1.662977770680989,
+      "96h_status": "INCONCLUSIVE",
+      "completed_global_updates": 2,
+      "nonzero_lr_updates": 1,
+      "sampling": {
+        "presentations": 128,
+        "unique_train_rows": 65,
+        "unique_row_prompt_pairs": 81,
+        "central_presentations": 64,
+        "central_unique_rows": 1
+      },
+      "native_save_restore_scope": {
+        "scope": "all instantiated official text-model parameters, model-only save",
+        "full_parameter_scope": {
+          "official_text_class_only": true,
+          "excluded_vision_tensors": 153,
+          "excluded_vision_parameters": 100592896,
+          "excluded_mtp_tensors": 15,
+          "excluded_mtp_parameters": 20452864,
+          "all_instantiated_parameters_trainable": true
+        },
+        "serialized_weight_files": [
+          {
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/qwen-20261110-q35-f-r1/output/probe/full_model/model.safetensors",
+            "bytes": 1506210008,
+            "sha256": "921953e6b5ba2b19adb5ae08b975d2bbe9d0d4513c404f659f37814b2db89b72"
+          }
+        ],
+        "serialized_state_keys": 321,
+        "tied_embedding_head_saved_hashes_equal": true,
+        "strict_keys_shapes_dtypes_values_reload_all_ranks": true,
+        "optimizer_scheduler_rng_checkpoint_and_restore": "NOT TESTED / NOT WRITTEN"
+      },
+      "full_optimizer_training_state_restore": "NOT TESTED"
+    },
+    "q35_L": {
+      "technical_status": "BLOCKED_MAPPING_REQUIRES_APPROVAL",
+      "center": null,
+      "conservative": null,
+      "96h_status": "BLOCKED",
+      "GPU_LoRA_job": null,
+      "reason": "18 DeltaNet mixers have no authorized meaningful mapping to the author seven projections; no invented targets, no LoRA GPU run"
+    }
+  },
+  "component_comparison": {
+    "successful_routes_compared": 5,
+    "components_per_estimate": 7,
+    "center_and_conservative": true,
+    "maximum_absolute_component_difference_seconds": 1.8189894035458565e-12,
+    "actual_loader_ceil_steps_tokens_padding_supervised_samples_histogram_save_proxy_bytes_hours_days_and_status_match": true,
+    "whole_epoch_tail_not_executed": true
+  },
+  "cross_model_raw_input_identity": {
+    "actual_20_sample_text_identities_equal": true,
+    "selection_file_sha256_each": [
+      "173bfea48a77db6a1dfb842dc78bde60834021e67932216897dfba85d41dc74a",
+      "173bfea48a77db6a1dfb842dc78bde60834021e67932216897dfba85d41dc74a",
+      "173bfea48a77db6a1dfb842dc78bde60834021e67932216897dfba85d41dc74a"
+    ],
+    "all918SID_strings_order_equal": true,
+    "tokenizer_lengths_and_ID_differences_preserved": true
+  },
+  "true_update_totals": {
+    "L": 8,
+    "F": 6,
+    "nonzero_L": 6,
+    "nonzero_F": 3,
+    "all_completed": 14,
+    "all_nonzero_LR": 9,
+    "Qwen3.5_L_updates": 0,
+    "F17_failed_LR0_boundary_completed_updates": 0,
+    "F17_failed_attempt_and_partial_optimizer_state_are_distinct": "Failed attempt and all device time retained; only independently hash-certified zero completed global update reconciled. No partial state reused."
+  },
+  "GPU_budget_independent_sum": {
+    "device_seconds_total": 1145.7106556259096,
+    "device_minutes_total": 19.09517759376516,
+    "device_seconds_per_model": {
+      "q06": 291.1708503421396,
+      "q17": 572.9965899493545,
+      "q35": 281.54321533441544
+    },
+    "limits_device_seconds_task": 21600,
+    "limits_device_seconds_model": 7200,
+    "actual_guard_jobs": [
+      {
+        "job_id": "qwen-20261110-q06-f-r0",
+        "model": "q06",
+        "exit_code": 0,
+        "device_seconds": 145.68149420805275,
+        "receipt_sha256": "70195cd80132ddf420c7f4879491f38dec372a176c84d0f6b4dbb9e46c4f2a1e",
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "qwen-20261110-q06-l-r0",
+        "model": "q06",
+        "exit_code": 0,
+        "device_seconds": 145.48935613408685,
+        "receipt_sha256": "4af6e835a1925cf1825d3f9c136cd21473e8b96da60eaf4ddb1fa696a5e5785b",
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "qwen-20261110-q17-f-r0",
+        "model": "q17",
+        "exit_code": 1,
+        "device_seconds": 104.61382330581546,
+        "receipt_sha256": "c424ae8bc2f97aefdc6d03ce8543e825b8b31478d63bc8ef66411fed7a21f931",
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "qwen-20261110-q17-f-r1",
+        "model": "q17",
+        "exit_code": 0,
+        "device_seconds": 260.39792769402266,
+        "receipt_sha256": "1a58ccaeb2866a06fd6d5aea10d43c2ad4d888eedeca0c8f763f5c132c19eb67",
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "qwen-20261110-q17-l-r0",
+        "model": "q17",
+        "exit_code": 0,
+        "device_seconds": 207.98483894951642,
+        "receipt_sha256": "d5ff432f8ec14e00e7c647e601f26193177b84ac0e9f052da7cd3d112f5766d2",
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "qwen-20261110-q35-f-r0",
+        "model": "q35",
+        "exit_code": 1,
+        "device_seconds": 73.44887300394475,
+        "receipt_sha256": "39180bb0f60042df7e7bb9744b397b31c753349b9d40def334907c27d0e2279d",
+        "cleanup_verified": true
+      },
+      {
+        "job_id": "qwen-20261110-q35-f-r1",
+        "model": "q35",
+        "exit_code": 0,
+        "device_seconds": 208.09434233047068,
+        "receipt_sha256": "a61e3c8765a36ea1b4049ac773d8910e704edc389da7e24455d7236b527110a7",
+        "cleanup_verified": true
+      }
+    ],
+    "failed_jobs_kept": 2,
+    "guard_vs_whole_task_ledger": "These are summed independent per-job guard receipts; final server ledger/source mapping and all remaining processes require root/architecture final receipt too."
+  },
+  "interpretation_limits": [
+    "All five outputs are bounded technical training/save/reload/generation PASS, not complete training-state restore or completed formal seed.",
+    "LoRA matches author SID/SeqRec/CE temperature/rank/alpha/dropout intent with explicit Qwen tied-weight/architecture and precision adaptations. Full BF16 is a separate method, not original paper LoRA.",
+    "All F costs are INCONCLUSIVE: only one nonzero-LR boundary update on one repeated row, not repeated steady mixed throughput.",
+    "L costs rely on two post-first mixed timings of128 unique rows. Neither L nor F benchmark traverses an epoch.",
+    "Full checkpoint costs use stated parameter-byte/state assumptions, page-cache-dependent native I/O bandwidth and fixed margins. Full optimizer/scheduler/RNG restore, final Trainer behavior and long-run costs remain unmeasured.",
+    "F17 uses micro4/acc8 and expandable-segment allocator; other successful routes use micro8/acc4. Raw throughput is not a controlled model-only speed ranking.",
+    "Qwen3.5 F applies only to its official text class; visual100592896 and MTP20452864 source parameters are excluded, rather than claimed trained.",
+    "All800 checked beams across five routes obey original per-position masks/EOS and all800 are noncanonical. This untrained bounded probe does not establish final Recall/NDCG or lack of future recommendation ability.",
+    "Two failed attempts remain raw evidence and budget costs. Task-level correction count and repository/ZIP publication remain root delivery checks."
+  ]
+}
