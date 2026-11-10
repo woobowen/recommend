@@ -1,0 +1,46 @@
+{
+  "one_shot": true,
+  "seed": 42,
+  "source_letter_commit": "8d0154e28de37dbb6e24871c508ad8ddb1921cda",
+  "reuse_letter_engineering_commit": "8e6399c2a1269dfde58d705eef25a499400dc59b",
+  "data": "LETTER author Instruments A 918SID",
+  "train": "seqrec17random author templates, answer-only fourSID+EOS, temperature0.8 full-vocab FP32 causal CE",
+  "validation": "author sample_valid two templates per user, teacher-forced loss, no test selection",
+  "generation": "prompt0 beam20 return20 max_new_tokens10 position-only callback; original untempered sequence scores",
+  "lora": {
+    "r": 8,
+    "alpha": 16,
+    "dropout": 0.05,
+    "targets": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "down_proj",
+      "up_proj"
+    ],
+    "modules_to_save": [
+      "embed_tokens",
+      "lm_head"
+    ],
+    "ensure_weight_tying": true,
+    "max_updates_per_model": 4,
+    "q35_status": "BLOCKED_MAPPING_REQUIRES_APPROVAL"
+  },
+  "full": {
+    "identity": "extra technical comparison, not author LETTER LoRA recipe",
+    "precision": "bf16",
+    "max_updates_per_model": 2,
+    "q35": "official text-only model excluding visual and MTP; not complete multimodal model"
+  },
+  "optimizer": "AdamW lr2e-4 wd0.01 cosine warmup0.01; formal4epochs budget only",
+  "batch": "2 GPU x micro8 x accum4=64; authorized OOM fallback 4x8,2x16,1x32 if evidence needed",
+  "max_gpu_device_seconds": 21600,
+  "max_model_gpu_device_seconds": 7200,
+  "max_job_wall_seconds": 2700,
+  "max_weight_payload_bytes": 25769803776,
+  "max_server_new_bytes": 64424509440,
+  "minimum_host_memory_available_bytes": 42949672960,
+  "formal_seed_started": false
+}

@@ -1,0 +1,237 @@
+{
+  "schema": "qwen_three_model_letter_semantics_static_review_v1",
+  "reviewer": "/root/letter_semantics",
+  "reviewed_utc": "2026-11-10T16:22:43.755967+00:00",
+  "status": "PASS_STATIC_WITH_RUNTIME_REQUIREMENTS",
+  "runtime_gpu_status": "NOT TESTED BY THIS REVIEW",
+  "scope": "Non-author review of root-authored common.py/cpu_audit.py/probe.py/resource_guard.py, frozen LETTER semantics, independent standard-library data/header counts and batch/Trainer arithmetic. No claim of executing GPU or approving a formal seed.",
+  "author_conflict_exclusion": "Reviewer implemented setup_env.py/prepare_wheels.py/dependencies*.json; those environment implementations are NOT independently reviewed here.",
+  "source_binding": {
+    "worktree": "/home/addaswsw/recommend-worktrees/lc-rec",
+    "files": {
+      "lc_rec/qwen_preflight_20261110/scripts/common.py": {
+        "sha256": "8d4863c14f6a78188f71b110ff9297f45472ab4b763db0ccc0b8551450ab88a6",
+        "ast_parse": "PASS"
+      },
+      "lc_rec/qwen_preflight_20261110/scripts/cpu_audit.py": {
+        "sha256": "5a8e6ec2a1eeff8f89fe386b7ea1731b0a6827620ef694e2db59ec0cdc370224",
+        "ast_parse": "PASS"
+      },
+      "lc_rec/qwen_preflight_20261110/scripts/probe.py": {
+        "sha256": "8d551349ace0d196fedbdd1f4ddfc7077688c1f5780d1f74dd8b20be1fcd9ebf",
+        "ast_parse": "PASS"
+      },
+      "lc_rec/qwen_preflight_20261110/scripts/resource_guard.py": {
+        "sha256": "668189b524ca0e137d3db3a8abbbf51f29a2ed9ccbc86add78a576a220ca1fbb",
+        "ast_parse": "PASS"
+      }
+    },
+    "note": "Bind to exact source SHA values; this review does not claim unpublished files belong to the earlier working-tree HEAD."
+  },
+  "rules_read_explicitly": [
+    "/home/addaswsw/recommend/AGENTS.md",
+    "/home/addaswsw/recommend/PROJECT_RULES.md",
+    "/home/addaswsw/recommend/REMOTE_EXECUTION.md",
+    "/home/addaswsw/.codex/AGENTS.md"
+  ],
+  "original_method": {
+    "upstream_commit": "8d0154e28de37dbb6e24871c508ad8ddb1921cda",
+    "source_files": {
+      "data.py": "cfd7733325670792c0da32393752c49116cd2b0ce097ffd629cda1c224bddecc",
+      "prompt.py": "2415f1a2bece1fd27f961efd5beb3a52e0e997ba39c1f3825fec1292bf84f7d7",
+      "collator.py": "e1ec6dec9aadf3c123ea45656fe2c58dc102ac075ca78bf9dff7df47cb5c29b8",
+      "modeling_letter.py": "c4798e82bfd0c5a16acebb551e08d0e421765d028981288ee6680cdc7f49c9fc",
+      "lora_finetune.py": "84475c87a6d8184f94b8f6fdd35ce7bf6d68e62fe1033b611d005f8e2fcc1ab3",
+      "test_ddp.py": "a639395ba42d2e914fc5b8d9bbc73785160badfb80299053b1e359c36bbf6f0c",
+      "evaluate.py": "6bcbf22965b59edebe2b37ff57c374cb6d3127d9c6254e0eba2b873459c6b357"
+    },
+    "author_parameter_record_sha256": "a4f55eaef4a471625c40adc949fa5507cc57b5118b4b9492f8d3318a687f757c",
+    "author_parameter_link_evidence": "lc_rec/letter/review/identity/issue_19.json; author comment 2798745616",
+    "semantic_findings": [
+      "Training prefixes exclude the final two interactions; each target uses the last at most 20 prior items, joined by comma+space, without numbering.",
+      "Training samples one of the 17 original SeqRec templates per access. Validation constructs two templates without replacement per user, then remains fixed. Test uses prompt0 and the final interaction target.",
+      "Original active modules_to_save train the complete embedding and output matrices; original_module clones are frozen. Tied Qwen input/output uses one active shared parameter, an explicit architecture adaptation from untied LLaMA.",
+      "Qwen collator retains exact original natural-language bytes, masks prompt and attention-mask padding, and asserts four target SID IDs plus real EOS. Attention-mask padding is required when PAD equals EOS.",
+      "Training CE is float32 full-vocabulary causal shift, logits divided by 0.8, ignore_index=-100 and mean reduction. Each checked sample has five supervised targets, so equal micro-batch means preserve the global sample weighting.",
+      "The original callback permits per-position sets, not a trie. Adapted callback binds the unchanged prompt end and context-aware Response delimiter, then returns positions 0/1/2/3 and EOS. No candidate filtering or beam reduction is introduced."
+    ]
+  },
+  "independent_data_recalculation": {
+    "assets": {
+      "Instruments.inter.json": {
+        "bytes": 3312848,
+        "sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743"
+      },
+      "Instruments.index.json": {
+        "bytes": 518041,
+        "sha256": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd"
+      },
+      "Instruments.item.json": {
+        "bytes": 7526890,
+        "sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2"
+      }
+    },
+    "counts": {
+      "users": 24772,
+      "items": 9922,
+      "interactions": 206153,
+      "train_rows_per_epoch": 131837,
+      "validation_users": 24772,
+      "validation_two_prompt_rows_per_epoch": 49544,
+      "test_prompt0_users": 24772,
+      "sid_token_count": 918,
+      "sid_positions": 4,
+      "position_allowed_counts": [
+        150,
+        256,
+        256,
+        256
+      ],
+      "unique_canonical_sids": 9897,
+      "sid_collision_groups": 23,
+      "sid_colliding_items": 48,
+      "four_epoch_rows": 527348
+    },
+    "source": "Direct json loads and standard-library independent iteration over frozen author A files, not copied from root summary",
+    "wrong_asset_warning": "lc_rec/letter/evidence/assets/B and /data/bwwu/lc-rec/assets/data/Instruments use original LC-Rec index (930 tokens), not author LETTER index (918 tokens)."
+  },
+  "independent_parameter_metadata_recalculation": {
+    "Qwen3-0.6B-Base": {
+      "header_receipt_sha256": "79e7fd9bb3c58c9e6114ccf57dd20dc9a13feb5c0cc04b0e0a35eca92954447f",
+      "revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+      "original_stored_elements": 596049920,
+      "original_elements_by_component": {
+        "language": 596049920
+      },
+      "seven_projection_r8_lora_elements": 5046272
+    },
+    "Qwen3-1.7B-Base": {
+      "header_receipt_sha256": "2239c76884f81c071d8fa590f9f470427901cde24a60b00e873c31e25de7e681",
+      "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+      "original_stored_elements": 1720574976,
+      "original_elements_by_component": {
+        "language": 1720574976
+      },
+      "seven_projection_r8_lora_elements": 8716288
+    },
+    "Qwen3.5-0.8B-Base": {
+      "header_receipt_sha256": "1c9f378bac7c578a54f56aa3073bcadf1484e92c2ca6b4dcdade795f25b56da6",
+      "revision": "dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68",
+      "original_stored_elements": 873438784,
+      "original_elements_by_component": {
+        "language": 752393024,
+        "visual": 100592896,
+        "mtp": 20452864
+      },
+      "seven_projection_r8_lora_elements": "NOT APPLICABLE: DeltaNet mapping not authorized"
+    }
+  },
+  "batch_and_loader": {
+    "independent_slot_checks": [
+      {
+        "micro_per_rank": 8,
+        "accumulation": 4,
+        "world_size": 2,
+        "global_batch": 64,
+        "independent_slot_partition": "PASS_NO_DUPLICATES_OR_OMISSIONS"
+      },
+      {
+        "micro_per_rank": 4,
+        "accumulation": 8,
+        "world_size": 2,
+        "global_batch": 64,
+        "independent_slot_partition": "PASS_NO_DUPLICATES_OR_OMISSIONS"
+      },
+      {
+        "micro_per_rank": 2,
+        "accumulation": 16,
+        "world_size": 2,
+        "global_batch": 64,
+        "independent_slot_partition": "PASS_NO_DUPLICATES_OR_OMISSIONS"
+      },
+      {
+        "micro_per_rank": 1,
+        "accumulation": 32,
+        "world_size": 2,
+        "global_batch": 64,
+        "independent_slot_partition": "PASS_NO_DUPLICATES_OR_OMISSIONS"
+      }
+    ],
+    "actual_loader_required": true,
+    "official_trainer_source_checks": [
+      {
+        "transformers": "4.57.6",
+        "official_wheel_sha256": "4c9e9de11333ddfe5114bc872c9f370509198acf0b87a832a0ab9458e2bd0550",
+        "trainer_py_sha256": "c3eac8fa28bda6330fd4dee131e7fe7d9bdc0fa35d9de944fce52cb97b379bab",
+        "num_update_steps_per_epoch": "ceil(len(actual_train_dataloader)/gradient_accumulation_steps)"
+      },
+      {
+        "transformers": "5.2.0",
+        "official_wheel_sha256": "9ecaf243dc45bee11a7d93f8caf03746accc0cb069181bbf4ad8566c53e854b4",
+        "trainer_py_sha256": "fa7764933aaff94ae272cf3a545ed78e85c54c0b62ab1e309e3af6321095a095",
+        "num_update_steps_per_epoch": "ceil(len(actual_train_dataloader)/gradient_accumulation_steps)"
+      }
+    ],
+    "tail_note": "No complete epoch is executed. Runtime loader class/length and tail behavior must remain distinguishable from arithmetic; formal step denominator must use actual loader."
+  },
+  "gpu_static_findings": [
+    {
+      "check": "Trainable and optimizer identity",
+      "result": "PASS_STATIC",
+      "detail": "requires_grad set is compared exactly to unique Trainer optimizer members and DeepSpeed bit16_groups. F explicitly enables all instantiated official text-model parameters; q35 L is blocked pending a meaningful authorized DeltaNet mapping."
+    },
+    {
+      "check": "True nonzero update evidence",
+      "result": "PASS_STATIC",
+      "detail": "Records pre-step LR, actual engine global_steps, Adam step values, finite gradients, SID input-activation and supervised-target-logit gradients, parameter changes and cross-rank hashes. Runtime values must actually pass."
+    },
+    {
+      "check": "Bounded update ledger",
+      "result": "PASS_STATIC",
+      "detail": "Task-wide L<=12/F<=6 and each model L<=4/F<=2; rank0 precharges the global boundary before optimizer step. Existing attempts are consumed across jobs/precision/micro-batch retries; precharge on a failed step is conservatively counted."
+    },
+    {
+      "check": "GPU resource ledger",
+      "result": "PASS_STATIC",
+      "detail": "One shared flock serializes probes. Sum of full child lifetime is charged for both devices including imports/load/errors/save/inference. Limits are 21600 device seconds/task,7200/model,<=2660 child wall seconds/job, with 30 seconds reserved from cumulative ceilings for polling/cleanup; unresolved old jobs prevent reset. Runtime cleanup and final ledger still require review."
+    },
+    {
+      "check": "Timing and token denominators",
+      "result": "PASS_STATIC",
+      "detail": "CUDA synchronization, MAX rank duration, SUM nonpadding input tokens, padded tensor positions and supervised targets are distinct. Global64 timing includes collator/check/JSON/instrumentation overhead. F has only two updates and no stable repeated representative throughput series."
+    },
+    {
+      "check": "Save/reload",
+      "result": "PASS_STATIC",
+      "detail": "Both ranks snapshot all actual adapter trainable values, strict disk/loaded key and value checks, complete tokenizer vocab equality and tied identity; full optimizer-state restoration is explicitly NOT TESTED."
+    },
+    {
+      "check": "Generation",
+      "result": "PASS_STATIC",
+      "detail": "Eight fixed actual users, prompt0,20 beams/returns,<=10 new tokens; asserts four position-permitted SID IDs followed by EOS, finite sequence scores and actual callback calls. Canonical-fraction is recorded without forcing legal directory combinations."
+    }
+  ],
+  "review_findings_resolved_before_initial_gpu": [
+    "Deleted retained inner Adam optimizer reference (and quantized module list) before BF16 base reload.",
+    "Both ranks now compare actual reloaded state against their own expected values; rank1 no longer asserts unmeasured equality.",
+    "Independent CE recomputation uses no_grad and releases temporary selected logits.",
+    "Longest-history boundary update cycles all 17 author prompt templates.",
+    "Gradient evidence now separately tests actual input SID positions and supervised target SID logits despite tied shared gradients.",
+    "GPU budget reserves cleanup time, verifies tracked descendants after normal/error exits, and generation/save-reload memory peaks are reset by phase."
+  ],
+  "runtime_requirements_and_limits": [
+    "No runtime PASS is issued by this static review; inspect raw requests, worker exits, source mapping, both ranks, resources and ledger after actual jobs.",
+    "Full-parameter two-update route cannot establish steady representative throughput. Report conditional budget and INCONCLUSIVE when key costs remain unknown.",
+    "Resource static 9*N per-card ZeRO2 persistence assumes BF16 gradients and partitioned FP32 master/moments. Verify actual optimizer and gradient dtypes/devices; static estimates are not measured peaks.",
+    "Parameter change snapshots use all SID rows and representative parameter slices; cross-rank hashes cover full LoRA tensors. Do not describe sliced change checks as full tensor element-by-element change checks.",
+    "Qwen3.5 official text-only class excludes source visual/MTP components; its full-parameter result applies to that instantiated text model only, not the complete multimodal checkpoint.",
+    "Beam rates include the first generation without a distinct extra warmup; extrapolation must state cold/representative-sample limits.",
+    "No complete checkpoint/optimizer/scheduler/RNG restore, formal four-epoch seed, best-checkpoint selection, full recommendation metric evaluation or Recall/NDCG quality conclusion is verified."
+  ],
+  "installation_and_execution": {
+    "reviewer_new_packages": 0,
+    "reviewer_GPU_execution": false,
+    "reviewer_server_mutations": false,
+    "only_written_file": "lc_rec/qwen_preflight_20261110/review/letter_semantics_prelaunch.json"
+  }
+}

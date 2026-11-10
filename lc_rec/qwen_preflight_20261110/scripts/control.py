@@ -91,5 +91,6 @@ print(json.dumps({{'path':str(archive),'bytes':archive.stat().st_size,'sha256':h
     p=dest/x['path'];assert p.stat().st_size==x['bytes'] and transport.sha(p)==x['sha256']
    transport.atomic(dest/'controller-query.json',r)
   transport.atomic(SUPPORT/(a.mode+'-'+a.job+'.json'),r)
- print(json.dumps({k:v for k,v in r.items() if k not in ['artifacts','files']},indent=2))
+ keys=['RUN_COMMIT','release','not_a_git_checkout','archive_sha256','job_id','status','exit_code','cleanup_verified','worker_alive','supervisor_alive','workgroup_live','request_sha256','submission','observed_utc','runner_sha256']
+ print(json.dumps({k:r[k] for k in keys if k in r},indent=2))
 if __name__=='__main__':main()
