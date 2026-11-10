@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Conditional96h estimate from this run's real six-task load; no LETTER rate."""
-import argparse,hashlib,json,math,statistics,time
+import argparse,hashlib,json,math,statistics,time,itertools
 from pathlib import Path
 
 def read(p):return json.loads(Path(p).read_text())
@@ -8,11 +8,33 @@ def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def scenario(components):
  known=sum(v for v in components.values() if v is not None)
  return {'component_hours':{k:None if v is None else v/3600 for k,v in components.items()},'known_subtotal_hours':known/3600,'total_hours':None if any(v is None for v in components.values()) else known/3600,'missing_components':[k for k,v in components.items() if v is None]}
+def nonnegative_fb_fit(ranks,micro,full):
+ import numpy as np
+ X=[];y=[];widths=[];whole_rank_fb_total=0.
+ for left,right in zip(ranks[0].get('updates',[]),ranks[1].get('updates',[])):
+  if not(left.get('status')=='PASS' and right.get('status')=='PASS' and left.get('nonzero_learning_rate') and right.get('nonzero_learning_rate')):continue
+  chosen=max([left,right],key=lambda z:z['rank_seconds']);whole_rank_fb_total+=chosen['phase_seconds']['forward_seconds']+chosen['phase_seconds']['backward_seconds']
+  for a,b in zip(left['microsteps'],right['microsteps']):
+   width=max(a['counts']['shape'][1],b['counts']['shape'][1]);slots=micro*width;quad=micro*width*width
+   X.append([1.,slots/1000,quad/1000000]);y.append(max(a['forward_seconds']+a['backward_seconds'],b['forward_seconds']+b['backward_seconds']));widths.append(width)
+ if len(X)<3:return None
+ X=np.asarray(X,dtype=float);y=np.asarray(y,dtype=float);best=None
+ for k in range(1,4):
+  for active in itertools.combinations(range(3),k):
+   c=np.linalg.lstsq(X[:,active],y,rcond=None)[0]
+   if np.any(c<0):continue
+   coef=np.zeros(3);coef[list(active)]=c;residual=X@coef-y;err=float(residual@residual)
+   if best is None or err<best[0]:best=(err,coef,residual)
+ assert best is not None
+ err,coef,res=best;target=np.asarray([full['rank_micro_steps'],full['synchronized_wall_token_slots_max_rank_sum']/1000,full['synchronized_wall_attention_quadratic_max_rank_sum']/1000000],dtype=float)
+ raw_seconds=float(target@coef)*4;rmse=float(np.sqrt(err/len(y)));normalizer=whole_rank_fb_total/float(y.sum());seconds=raw_seconds*normalizer
+ return {'method':'Nonnegative3-term least-squares of paired-rank MAX(forward+backward) per actual nonzero-LR microstep; exhaustive7 active feature subsets, no test metrics','features':['constant_per_microstep','max_rank_padded_slots/1000','max_rank_micro_times_max_length_squared/1e6'],'coefficients_seconds':coef.tolist(),'observations':len(y),'observed_width_min':min(widths),'observed_width_max':max(widths),'rmse_seconds':rmse,'observed_y_min_seconds':float(y.min()),'observed_y_max_seconds':float(y.max()),'raw_design_X':X.tolist(),'raw_timing_y_seconds':y.tolist(),'maximum_absolute_residual_seconds':float(np.max(np.abs(res))),'active_feature_indices':[int(i) for i in np.flatnonzero(coef)],'design_matrix_condition_number':float(np.linalg.cond(X)),'paired_max_sum_to_whole_update_rank_normalizer':normalizer,'normalizer_meaning':'Sum of paired microstep MAX(F+B) can exceed whole-update slow-rank F+B. Scale fitted compute by measured whole-rank/paired-MAX ratio before adding the separately measured whole-rank non-F+B overhead. No required unmeasured cost is subtracted.','four_epoch_raw_paired_max_compute_seconds':raw_seconds,'four_epoch_compute_seconds':seconds,'four_epoch_compute_plus_2rmse_each_micro_seconds':seconds+8*rmse*normalizer*full['rank_micro_steps'],'boundary':'Engineering elapsed-time predictor, not a confidence interval. Full data may exceed fitted length range; actual extreme F/B capacity probes and separate static sensitivity estimates are retained.'}
+
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--workload',required=True);ap.add_argument('--grouping',required=True);ap.add_argument('--protocol',required=True);ap.add_argument('--policy',required=True);ap.add_argument('--gpu',required=True);ap.add_argument('--output',required=True);ap.add_argument('--run-commit',required=True);a=ap.parse_args()
  w,g,p,policy=map(read,[a.workload,a.grouping,a.protocol,a.policy]);root=Path(a.gpu)
  paths=[root/('probe_rank%d.json'%i) for i in [0,1]];ranks=[read(q) for q in paths if q.exists()]
- r={'status':'INCONCLUSIVE','calculation_run_commit':a.run_commit,'scope':'One Instruments seed, official six tasks/full originalSID,4epochs,global128,original sampled SeqRecvalidation and17prompt beam20; no formal training launched','inputs':[{ 'path':str(q),'sha256':sha(q)} for q in [a.workload,a.grouping,a.protocol,a.policy,*[q for q in paths if q.exists()]]],'counts':{'train_per_epoch':w['concat_rows'],'nominal_full4epoch_presentations':4*w['concat_rows'],'validation_records_per_call':49544,'test_users':24772,'test_prompts':17,'test_user_prompt_pairs':24772*17},'unquantified_overheads':['Actual Trainer/DeepSpeed complete training-state serialization, disk flush, and restore (adapter alone is not a resume checkpoint)','Long-run GPU/host/I/O variation and allocator fragmentation','Full random-sampler epoch-tail gradient behavior under real Trainer+DeepSpeed','Validation throughput at formal per-device microbatch; measured validation is bounded batch1','Full-test CPU dataloader/decode/evaluator aggregation across all users and17 prompts'],'limitations':['One seed42 stochastic Dataset realization; prompt/query/preference answers vary across epochs','Only two global128 updates targeted; at most one nonzero-LR steady timing if both pass','Technical update auxiliary samples have verified training pairing; their within-task lengths can differ from all raw auxiliary records','Original data mismatches,505EOS-only records and51token-boundary cases retained; no clean formal corpus claim','No optimizer checkpoint/selection/best restore/full epoch/full test was run','Calibration uses local bounded six-task runs only; LETTER14.66samples/s is not used']}
+ r={'status':'INCONCLUSIVE','calculation_run_commit':a.run_commit,'scope':'One Instruments seed, official six tasks/full originalSID,4epochs,global128,original sampled SeqRecvalidation and17prompt beam20; no formal training launched','inputs':[{ 'path':str(q),'sha256':sha(q)} for q in [a.workload,a.grouping,a.protocol,a.policy,*[q for q in paths if q.exists()]]],'counts':{'train_per_epoch':w['concat_rows'],'nominal_full4epoch_presentations':4*w['concat_rows'],'validation_records_per_call':49544,'test_users':24772,'test_prompts':17,'test_user_prompt_pairs':24772*17},'unquantified_overheads':['Actual Trainer/DeepSpeed complete training-state serialization, disk flush, and restore (adapter alone is not a resume checkpoint)','Long-run GPU/host/I/O variation and allocator fragmentation','Full random-sampler epoch-tail gradient behavior under real Trainer+DeepSpeed','All-prompt stochastic long-tail layouts beyond this one realized workload; capacity diagnostics are bounded','Validation throughput at formal per-device microbatch; measured validation is bounded batch1','Full-test CPU dataloader/decode/evaluator aggregation across all users and17 prompts'],'limitations':['One seed42 stochastic Dataset realization; prompt/query/preference answers vary across epochs','Only two global128 updates targeted; at most one nonzero-LR steady timing if both pass','Technical update auxiliary samples have verified training pairing; their within-task lengths can differ from all raw auxiliary records','Original data mismatches,505EOS-only records and51token-boundary cases retained; no clean formal corpus claim','No optimizer checkpoint/selection/best restore/full epoch/full test was run','Calibration uses local bounded six-task runs only; LETTER14.66samples/s is not used']}
  components_center={k:None for k in ['train','validation','adapter_save','full_training_state_save','best_restore','test','test_cpu_decode_evaluator_aggregation','init','data_preparation','measured_python_transfer_optimizer_overhead']};components_slow=dict(components_center)
  if len(ranks)==2:
   r['gpu_statuses']=[x['status'] for x in ranks]
@@ -25,8 +47,9 @@ def main():
    for x,y in zip(ranks[0].get('updates',[]),ranks[1].get('updates',[])):
     if x.get('status')!='PASS' or y.get('status')!='PASS':continue
     assert x['update']==y['update'] and x['global_counts']==y['global_counts'] and x['global_counts']['samples']==128
-    chosen=max([x,y],key=lambda z:z['rank_seconds']);compute=chosen['phase_seconds']['forward_seconds']+chosen['phase_seconds']['backward_seconds'];wall=max(x['max_rank_seconds'],y['max_rank_seconds'])
-    paired.append({'update':x['update'],'nonzero_lr':x['nonzero_learning_rate'] and y['nonzero_learning_rate'],'seconds':wall,'samples_per_second':128/wall,'effective_tokens_per_second':x['global_counts']['tokens']/wall,'compute_seconds':compute,'other_timed_seconds':max(0.,wall-compute),'cpu_collator_seconds':max(x['cpu_collator_seconds'],y['cpu_collator_seconds']),'plan':'mixed_global128_'+str(x['update']%2),'global_counts':x['global_counts'],'padding_ratio':x['padding_ratio']})
+    chosen=max([x,y],key=lambda z:z['rank_seconds']);compute=chosen['phase_seconds']['forward_seconds']+chosen['phase_seconds']['backward_seconds'];wall=max(x['max_rank_seconds'],y['max_rank_seconds']);raw_gap=wall-compute
+    assert raw_gap>=0,'F+B phase times exceed complete slow-rank wall; do not conceal negative overhead'
+    paired.append({'update':x['update'],'nonzero_lr':x['nonzero_learning_rate'] and y['nonzero_learning_rate'],'seconds':wall,'samples_per_second':128/wall,'effective_tokens_per_second':x['global_counts']['tokens']/wall,'compute_seconds':compute,'other_timed_seconds':raw_gap,'unclipped_wall_minus_chosen_rank_fb_seconds':raw_gap,'cpu_collator_seconds':max(x['cpu_collator_seconds'],y['cpu_collator_seconds']),'plan':'mixed_global128_'+str(x['update']%2),'global_counts':x['global_counts'],'padding_ratio':x['padding_ratio']})
    r['measured_joint_updates']=paired
    steady=[x for x in paired if x['nonzero_lr']]
    if steady:
@@ -38,14 +61,17 @@ def main():
     for x in steady:
      m=g['mixed_global128'][x['plan']][str(micro)]['workload'];mL=m['synchronized_wall_token_slots_max_rank_sum'];mQ=m['synchronized_wall_attention_quadratic_max_rank_sum']
      central.append(4*x['compute_seconds']*(fL+eta*fQ)/(mL+eta*mQ));linear.append(4*x['compute_seconds']*fL/mL);quad.append(4*x['compute_seconds']*fQ/mQ)
-    components_center['train']=statistics.mean(central)
+    fit=nonnegative_fb_fit(ranks,micro,full)
+    r['actual_microstep_fb_fit']=fit
+    components_center['train']=fit['four_epoch_compute_seconds'] if fit else statistics.mean(central)
     # Conservative scenario is explicit, not a confidence interval or guarantee.
-    components_slow['train']=max(central+linear+quad)*1.25
+    candidates=central+linear+quad+([fit['four_epoch_compute_plus_2rmse_each_micro_seconds']] if fit else [])
+    components_slow['train']=max(candidates)*1.25
     components_center['measured_python_transfer_optimizer_overhead']=steps*statistics.mean(x['other_timed_seconds'] for x in steady)
     components_slow['measured_python_transfer_optimizer_overhead']=steps*max(x['other_timed_seconds'] for x in paired)*1.25
     components_center['data_preparation']=steps*statistics.mean(x['cpu_collator_seconds'] for x in steady)
     components_slow['data_preparation']=steps*max(x['cpu_collator_seconds'] for x in paired)*1.25
-    r['train_extrapolation']={'method':'Calibrate actual slow-rank F+B seconds to full221225-row mixed-padding workload (original data, including mismatches) using4H²L+3HIL+2HL²;4epochs as conservative work accounting,6912optimizer overheads','eta_quadratic_per_linear':eta,'central_compute_seconds':central,'linear_only_compute_seconds':linear,'quadratic_only_compute_seconds':quad,'conservative_multiplier_on_max_cost_covariate':1.25,'multiplier_meaning':'Explicit resource/runtime scenario; unknown checkpoint or evaluation overhead is never folded into it','counts_boundary':'Full4epoch workload slightly exceeds Trainer floor-step truncation; actual full Trainer+DS epoch tail not executed','full_epoch_workload':full}
+    r['train_extrapolation']={'method':'Static sensitivity comparator: calibrate actual slow-rank F+B seconds to full221225-row mixed-padding workload (original data, including mismatches) using4H²L+3HIL+2HL²;4epochs as conservative work accounting,6912optimizer overheads','eta_quadratic_per_linear':eta,'central_compute_seconds':central,'linear_only_compute_seconds':linear,'quadratic_only_compute_seconds':quad,'conservative_multiplier_on_max_cost_covariate':1.25,'multiplier_meaning':'Explicit resource/runtime scenario; unknown checkpoint or evaluation overhead is never folded into it','counts_boundary':'Full4epoch workload slightly exceeds Trainer floor-step truncation; actual full Trainer+DS epoch tail not executed','full_epoch_workload':full}
    validation=[z for x in ranks for z in x.get('validation',{}).get('timings',[]) if z.get('finite')]
    if validation:
     mean=statistics.mean(z['seconds_max_rank'] for z in validation);mx=max(z['seconds_max_rank'] for z in validation)
