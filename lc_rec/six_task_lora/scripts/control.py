@@ -66,7 +66,7 @@ print(json.dumps(r))"""
         commit = subprocess.check_output(['git', 'rev-parse', args.commit or 'HEAD'], cwd=REPO, text=True).strip()
         archive = SUPPORT / (commit + '.tar.gz')
         subprocess.run(['git', 'archive', '--format=tar.gz', '--output=' + str(archive), commit, 'lc_rec/six_task_lora', 'lc_rec/vendor/original'], cwd=REPO, check=True)
-        upload = t.profile['remote_support'] + '/transfers/letter-autograd-' + commit + '.tar.gz'
+        upload = t.profile['remote_support'] + '/transfers/lc-six-task-' + commit + '.tar.gz'
         receipt = t.put(archive, upload)
         release = REMOTE + '/releases/' + commit
         code = f"""from pathlib import Path,PurePosixPath\nimport hashlib,json,tarfile\na=Path({upload!r});root=Path({release!r});rows=[]\nassert hashlib.sha256(a.read_bytes()).hexdigest()=={receipt['sha256']!r}\nwith tarfile.open(a,'r:gz') as tf:\n members=tf.getmembers();names=[m.name for m in members];assert len(names)==len(set(names))\n for m in members:\n  p=PurePosixPath(m.name);assert not p.is_absolute() and '..' not in p.parts and (m.isfile() or m.isdir())\n if not root.exists():\n  root.mkdir(parents=True);tf.extractall(root,filter='data')\n for m in members:\n  if m.isfile():\n   b=tf.extractfile(m).read();p=root/m.name;assert p.is_file() and not p.is_symlink() and p.read_bytes()==b\n   rows.append({{'path':m.name,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}})\nr={{'RUN_COMMIT':{commit!r},'release':str(root),'not_a_git_checkout':True,'archive_sha256':{receipt['sha256']!r},'files':rows}}\nmanifest=root/'RUN_VERSION.json'\nif manifest.exists():assert json.loads(manifest.read_text())==r\nelse:manifest.write_text(json.dumps(r,indent=2)+'\\n')\nprint(json.dumps(r))"""
@@ -85,7 +85,6 @@ print(json.dumps(r))"""
         jobdir = t.profile['job_root'] + '/' + args.job
         output = jobdir + '/output/'
         model = '/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549'
-        audit = t.profile['job_root'] + '/letter-20261110-data-r1/output/audit'
         old = json.loads((REPO / 'lc_rec/letter/evidence/jobs/letter-20261110-gpu-r1/request.json').read_text())
         req = {k: old[k] for k in ['schema', 'host', 'user', 'uid', 'namespace', 'deployment_sha256']}
         env = dict(old['env'])
@@ -147,7 +146,8 @@ print(json.dumps(r))"""
         write(dest/'controller-query.json',r)
         r={'job_id':args.job,'status':r['status'],'exit_code':r['exit_code'],'cleanup_verified':r['cleanup_verified'],'files_verified':len(manifest['files']),'excluded_payloads':manifest['excluded']}
     write(SUPPORT/'receipts'/(args.mode+'-'+args.job+'.json'),r)
-    print(json.dumps({k:v for k,v in r.items() if k!='artifacts'},indent=2))
+    summary_keys=('job_id','status','exit_code','cleanup_verified','worker_alive','workgroup_live','files_verified','excluded_payloads','submission')
+    print(json.dumps({k:r[k] for k in summary_keys if k in r},indent=2))
 
 
 if __name__=='__main__':

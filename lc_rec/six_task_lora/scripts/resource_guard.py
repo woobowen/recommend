@@ -55,7 +55,7 @@ def main():
         elapsed=sum(r.get('charged_gpu_device_seconds',2*r['elapsed_seconds']) for r in ledger['runs'])+ledger['prior_stage_a_seconds']
         assert elapsed >= cfg.get('historical_gpu_device_seconds_floor',0), 'Historical GPU usage must not be reset'
         assert set(cfg.get('required_prior_job_ids',[])) <= {r['job_id'] for r in ledger['runs']}, 'Missing historical job identities'
-        limit=min(cfg['single_gpu_seconds'],(cfg['all_gpu_seconds']-elapsed)/2)
+        limit=min(cfg['single_gpu_seconds'],(cfg['all_gpu_seconds']-elapsed)/2-30) # reserve bounded monitor/termination overhead
         assert limit>0
         baseline=meminfo();baseline_swap_io=swap_io();page_size=os.sysconf('SC_PAGE_SIZE');assert baseline['MemAvailable']>=cfg['cpu_reserve_bytes']
         gpu_active=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader,nounits'],text=True).strip()
@@ -92,11 +92,12 @@ def main():
                     if samples%3==0:
                         row['new_disk_allocated_bytes']=allocated(roots)
                         v=os.statvfs('/data/bwwu');row['data_free_bytes']=v.f_bavail*v.f_frsize;row['data_total_bytes']=v.f_blocks*v.f_frsize
+                        hv=os.statvfs('/home/bwwu');row['home_free_bytes']=hv.f_bavail*hv.f_frsize;row['home_total_bytes']=hv.f_blocks*hv.f_frsize
                         g=subprocess.run(['nvidia-smi','--query-gpu=index,memory.used,memory.free,utilization.gpu','--format=csv,noheader,nounits'],capture_output=True,text=True,timeout=8)
                         row['nvidia_smi']=g.stdout.strip();row['nvidia_smi_exit']=g.returncode
                         peaks['new_disk_allocated_peak_bytes']=max(peaks['new_disk_allocated_peak_bytes'],row['new_disk_allocated_bytes'])
                         if row['new_disk_allocated_bytes']+cfg.get('separate_release_deploy_reserve_bytes',0)>30*1024**3:reason='NEW_DISK_30GIB_BOUND'
-                        if row['data_free_bytes']<max(30*1024**3,row['data_total_bytes']//10):reason='DISK_RESERVE_BOUND'
+                        if row['data_free_bytes']<max(30*1024**3,row['data_total_bytes']//10) or row['home_free_bytes']<max(30*1024**3,row['home_total_bytes']//10):reason='DISK_RESERVE_BOUND'
                     peaks['cpu_rss_sum_peak_bytes']=max(peaks['cpu_rss_sum_peak_bytes'],rss)
                     peaks['min_mem_available_bytes']=min(peaks['min_mem_available_bytes'],mem['MemAvailable'])
                     peaks['max_swap_used_increase_bytes']=max(peaks['max_swap_used_increase_bytes'],swap_increase)

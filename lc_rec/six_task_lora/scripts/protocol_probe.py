@@ -8,9 +8,11 @@ assert os.environ.get('CUDA_VISIBLE_DEVICES')==''
 import torch
 from torch.utils.data import DataLoader,RandomSampler,SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
+from accelerate import Accelerator
 from accelerate.data_loader import prepare_data_loader
 from transformers import Trainer
 r={'kind':'CPU_PROTOCOL_AND_SAMPLER_PROBE_NO_MODEL','observed_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'cuda_initialized_before':torch.cuda.is_initialized(),'candidate_config':cfg,'layouts':[]}
+accelerator=Accelerator(cpu=True)
 # Actual Accelerate0.21 sharding iterator, not merely ceil arithmetic.
 for micro,accum in [(8,8),(4,16),(2,32),(1,64)]:
     ranks=[]
