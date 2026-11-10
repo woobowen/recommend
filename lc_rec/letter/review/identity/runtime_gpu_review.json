@@ -1,0 +1,308 @@
+{
+  "schema": "letter_gpu_runtime_negative_non_author_review_v1",
+  "reviewer": "/root/identity_audit",
+  "status": "FAIL_GPU_TECHNICAL_ACCEPTANCE",
+  "evidence_assessment": "NEGATIVE_RESULT_CORROBORATED",
+  "review_scope": "Read-only independent review of both real GPU attempts, exact published source, actual dependency source, parameter inventories, label/mask records, CE observations, traces, guards, budget ledger and terminal states. No GPU/model execution, code repair or fourth correction by reviewer.",
+  "run_source_commits": {
+    "gpu_r0": "66c903a70ea709f7fc07c7ef211c7a35cbc3394a",
+    "gpu_r1": "6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f",
+    "author_upstream": "8d0154e28de37dbb6e24871c508ad8ddb1921cda"
+  },
+  "evidence_verification": {
+    "machine_check": "gpu_negative_artifact_verification.json",
+    "verification_script": "verify_gpu_negative_artifacts.py",
+    "light_manifest_members_verified_per_job": 11,
+    "both_last_queries_requests_statuses_checked": true,
+    "published_r0_gpu_and_compat_bytes_match_executed_request": true,
+    "published_r1_gpu_compat_guard_bytes_match_executed_request_and_local_source": true,
+    "publication_readback_provider": "Connected GitHub fetch_file at both full immutable commits",
+    "publication_receipts": [
+      "gpu_r0_published_source_readback.json",
+      "gpu_published_source_readback.json"
+    ],
+    "fresh_server_dependency_and_budget_read": "gpu_failure_dependencies.json",
+    "read_only_remote_inspection_script": "read_gpu_failure_dependencies.py",
+    "no_paper_or_training_success_inferred_from_setup": true
+  },
+  "actual_configuration": {
+    "gpu_names": [
+      "NVIDIA GeForce RTX4090",
+      "NVIDIA GeForce RTX4090"
+    ],
+    "visible_devices": "0,1",
+    "world_size": 2,
+    "per_rank_total_memory_gib": 23.5184326171875,
+    "seed": 42,
+    "tasks": "seqrec",
+    "author_sid": true,
+    "base_model_revision": "4782ad278652c7c71b72204d462d6d01eaaf7549",
+    "micro_batch": 8,
+    "accumulation": 4,
+    "configured_global_batch": 64,
+    "LoRA": {
+      "r": 8,
+      "alpha": 16,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "v_proj",
+        "k_proj",
+        "o_proj",
+        "gate_proj",
+        "down_proj",
+        "up_proj"
+      ],
+      "modules_to_save": [
+        "embed_tokens",
+        "lm_head"
+      ]
+    },
+    "temperature": 0.8,
+    "base_load": "8-bit bitsandbytes Int8Params",
+    "bf16_deepspeed": true,
+    "zero_stage": 2,
+    "only_train_response": true,
+    "versions": {
+      "torch": "2.6.0",
+      "transformers": "4.31.0",
+      "peft": "0.5.0",
+      "bitsandbytes": "0.45.5",
+      "deepspeed": "0.16.9",
+      "accelerate": "0.21.0",
+      "fschat": "0.2.31",
+      "flash_attn": "2.7.4.post1"
+    },
+    "original_author_files_unmodified": true
+  },
+  "completed_evidence": {
+    "model_and_lora_initialized_on_both4090": true,
+    "deepspeed_zero2_initialized_on_both_ranks": true,
+    "first_real_batch_source_cpu_tokenizer_identity_and_masks": true,
+    "first_batch_full_lengths_by_rank": [
+      [
+        124,
+        102,
+        73,
+        75,
+        114,
+        68,
+        88,
+        99
+      ],
+      [
+        63,
+        80,
+        71,
+        93,
+        90,
+        93,
+        68,
+        125
+      ]
+    ],
+    "response_labels": "Each row exactly4 mapped SID tokens plusEOS; prefix and right padding=-100; independently matched to CPU real train_mixed row/target/length manifests.",
+    "full_forward_after_approved_A_only_adaptation": "Exactly one finite real training microbatch per rank in r1",
+    "loss_observations": [
+      {
+        "rank": 0,
+        "model": 13.968113899230957,
+        "independent_ce_temp08": 13.968113899230957,
+        "independent_ce_temp1": 11.858251571655273
+      },
+      {
+        "rank": 1,
+        "model": 13.420120239257812,
+        "independent_ce_temp08": 13.420120239257812,
+        "independent_ce_temp1": 11.429338455200195
+      }
+    ],
+    "loss_evidence_limit": "Reviewer inspected original LETTER CE and worker's independent F.cross_entropy calculation/record; full logits are not exported for an independent offline recomputation. All observations are before any completed update.",
+    "parameter_inventory": {
+      "objects": 741,
+      "trainable_objects": 450,
+      "trainable_numel": 289652736,
+      "LoRA_objects": 448,
+      "modules_to_save_active_objects": 2,
+      "frozen_int8_parameter_objects": 224,
+      "active_embed_and_head_shape_each": [
+        32918,
+        4096
+      ],
+      "active_embed_and_head_requires_grad": true,
+      "active_embed_and_head_in_trainer_optimizer_before_ds": true,
+      "original_module_embed_and_head_requires_grad": false,
+      "original_module_embed_and_head_in_optimizer": false,
+      "all_trainable_object_ids_equal_pre_ds_optimizer_membership": true,
+      "post_ds_dtype_of_active_embed_head_and_lora": "torch.bfloat16",
+      "scope": "Exact logical parameter/optimizer membership established at setup; DeepSpeed creates its optimizer partitions. This is not gradient delivery or successful update evidence.",
+      "issue12_implication": "Freezing original_module copies does not freeze active modules_to_save.default copies in this PEFT0.5 stack; it cannot prove authors' historical freeze claim."
+    }
+  },
+  "precision_scope": {
+    "approval_receipt": "../../evidence/precision_decision.json",
+    "approval_status": "APPROVED_BOUNDED_TECHNICAL_ONLY",
+    "formal_baseline_precision_authorized": false,
+    "historical_numerical_equivalence": "NOT_CLAIMED",
+    "native_no_amp_diagnostic": "Both attempts/ranks actually hit FP32 LoRA A input vsCUDA BF16 A weight at layer0 q_proj, before any backward/step; engine global step0 before/after, optimizer states[0,0], RNG restored and sampled parameters unchanged.",
+    "native_original_full_forward": "NOT_COMPLETED",
+    "adaptation": "Only necessary FP32-input/BF16-weight ordinary LoRA A nn.Linear calls received local BF16 autocast; all224 target modules identified;225 adapted calls per rank in r1 include the start of checkpoint recomputation.",
+    "observed_scope": {
+      "outer_global_amp": false,
+      "LoRA_A_linear_amp": true,
+      "LoRA_A_output_dtype": "torch.bfloat16",
+      "global_amp_after_call": false,
+      "CE_global_amp": false,
+      "CE_logits_dtype": "torch.float32"
+    },
+    "excluded_paths": [
+      "whole-model global AMP",
+      "parent PEFT forward AMP",
+      "bnb base projection AMP wrapper",
+      "LoRA B AMP wrapper",
+      "LETTER CE AMP wrapper"
+    ],
+    "successful_scope_limit": "Forward/loss only. Gradient numerical correctness and optimizer updates remain unverified."
+  },
+  "failures": [
+    {
+      "job_id": "letter-20261110-gpu-r0",
+      "runner_status": "FAILED",
+      "exit_code": 1,
+      "both_ranks": "FAIL",
+      "complete_optimizer_updates": 0,
+      "actual_terminal_error": "FastChat expects4 unpad_input results but flash-attn2.7.4 returns5; too many values to unpack(expected4).",
+      "preceding_original_dtype_diagnostic": "Observed then user-approved A-only adaptation installed.",
+      "forward_loss_completed": false,
+      "correction_followup": "Task round3 local FastChat alias retains first4 original results, rejects unused_mask, verifies fifth used-length tensor equals mask sums/cu deltas."
+    },
+    {
+      "job_id": "letter-20261110-gpu-r1",
+      "runner_status": "FAILED",
+      "exit_code": 1,
+      "both_ranks": "FAIL",
+      "complete_optimizer_updates": 0,
+      "finite_forward_microbatches_per_rank": 1,
+      "actual_terminal_error": "MatMul8bitLtBackward output is a view modified inplace at PEFT0.5 Linear8bitLt.forward result += output.",
+      "failure_location": "The first engine.backward triggers gradient-checkpoint recomputation. Recomputed FastChat projection calls PEFT int8 forward in grad mode; its inplace add to the custom Function view is prohibited by PyTorch autograd.",
+      "source_corroboration": {
+        "peft_file": "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/tuners/lora.py",
+        "peft_sha256": "cbcab4d64b5254d0e1a0018f5e870f7bd93f0178ed1b14d2b750e033f871aa01",
+        "peft_location": "Linear8bitLt.forward L1148-1173, inplace add L1172",
+        "bnb_file": "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/bitsandbytes/autograd/_functions.py",
+        "bnb_sha256": "95be0ca8bedc839935ef8e5bcc10fc940e7544ea91ac1b44a37094b41e8d9bcc",
+        "bnb_fact": "MatMul8bitLt.forward reshapes3D activation output via output.reshape(output_shape), yielding the custom-function view implicated by the trace."
+      },
+      "fastchat_arity_fix_observed": "64 calls/rank returned5, preserved first4; redundant extra used lengths checked true.",
+      "classification": "Current exact PEFT/bnb/PyTorch autograd compatibility blocker under retained author loss/data/LoRA scope and user-approved local precision adaptation. Neither observed OOM nor proof of an intrinsic method/hardware time limit."
+    }
+  ],
+  "not_completed": {
+    "complete_backward": false,
+    "complete_optimizer_updates": 0,
+    "global_batch64_update_executed": false,
+    "all_trainable_gradients_finite_nonzero": false,
+    "active_SID_embedding_head_gradient_validation": false,
+    "all_trainable_parameter_delta_validation": false,
+    "adapter_save": false,
+    "adapter_reload": false,
+    "beam20_generation": false,
+    "short_middle_long_update_timings": false,
+    "warmup_steady_samples_s": false,
+    "effective_tokens_s": false,
+    "bounded_validation_timing": false,
+    "full_epoch": false,
+    "full_metrics": false,
+    "note": "finite_checks.gradient_scope and parameter_scope strings in rank JSON describe planned checks. Counters/stages show they were never reached; no gradient_evidence/adapter_save/parameter_delta result exists."
+  },
+  "resource_boundaries": {
+    "gpu_device_seconds_total": 467.3264223076403,
+    "gpu_device_minutes_total": 7.788773705127339,
+    "gpu_device_minutes_cap": 120,
+    "job_wall_seconds": [
+      147.27842999901623,
+      86.38478115480393
+    ],
+    "r1_gpu_peaks_gib": [
+      {
+        "rank": 0,
+        "allocated": 10.641379356384277,
+        "reserved": 11.451171875
+      },
+      {
+        "rank": 1,
+        "allocated": 10.645933628082275,
+        "reserved": 11.3359375
+      }
+    ],
+    "r1_process_ru_maxrss_gib": [
+      10.665397644042969,
+      10.680137634277344
+    ],
+    "r1_guard_sampled_task_rss_sum_peak_gib": 4.931407928466797,
+    "rss_limit": "Guard samples every5s; sampled process-tree RSS missed short loading peaks. Per-process ru_maxrss is an independent high-water mark. Neither the sampled4.93GiB nor sum of per-rank maxima is an exact simultaneous whole-job CPU peak.",
+    "minimum_sampled_host_memavailable_gib": 235.25500869750977,
+    "required_host_memavailable_floor_gib": 40,
+    "guard_stop_reason": null,
+    "host_swap_or_task_swap_increase_observed": 0,
+    "max_recorded_new_disk_allocated_bytes": 1469108224,
+    "storage_limit_bytes": 32212254720,
+    "memory_feasibility_limit": "All GPU memory numbers are from the failed first-microbatch prefix. Full backward, optimizer-state materialization, long175-token update and later save/reload peaks were not measured; cannot certify micro8 training fits merely from11.45GiB reserved.",
+    "final_observer_evidence": "final_resources.json reports both4090 at1MiB/0% and no compute processes. Reviewer read this captured observation; did not invoke nvidia-smi.",
+    "both_last_queries_no_live_worker_or_workgroup": true,
+    "both_cleanup_verified": true
+  },
+  "budget96h": {
+    "status": "UNKNOWN",
+    "counts": {
+      "train_per_epoch": 131837,
+      "epochs": 4,
+      "train_presentations": 527348,
+      "valid_texts_per_epoch": 49544,
+      "total_valid_texts": 198176,
+      "test_users_prompt0": 24772,
+      "test_presentations_17prompts": 421124,
+      "planned_optimizer_updates": 8240,
+      "warmup_steps": 83
+    },
+    "missing_measurements": [
+      "successful complete update and settled training throughput",
+      "length-dependent training update times",
+      "validation forward timing",
+      "checkpoint selection/save and optimizer-state I/O",
+      "adapter save/reload",
+      "beam20 user latency"
+    ],
+    "algebraic_thresholds_only": "If all96h were training,527348 presentations need1.5259samples/s; reserve12h for other stages requires1.7439samples/s. These are required rates, not measured capabilities.",
+    "table1_test_prompt": "Unknown historically; public script0 is candidate and17-prompt cost is separate.",
+    "not_concluded": [
+      "cannot fit4090",
+      "exceeds96hours",
+      "meets96hours",
+      "paper metrics reproduction"
+    ]
+  },
+  "correction_and_stop": {
+    "task_level_rounds_used": 3,
+    "max": 3,
+    "record": "../../evidence/correction_rounds.json",
+    "interpretation": "Round1 initial CPU/interface and prelaunch compatibility concentration; round2 user-approved necessary A-only precision scope; round3 FastChat arity repair after GPUr0. GPU job suffixes are attempts, not a reset of task-level correction budget.",
+    "observed_gpu_ledger_runs_only": [
+      "letter-20261110-gpu-r0",
+      "letter-20261110-gpu-r1"
+    ],
+    "fourth_correction_performed": false,
+    "decision": "Stop new GPU work and dependent adapter/inference tasks; preserve negative artifacts and return for web GPT/user decision. Remaining GPU minutes do not authorize a fourth autonomous repair.",
+    "unapplied_future_options": "A separately authorized follow-up may evaluate an explicitly pinned compatible dependency set or a reviewed non-inplace autograd compatibility change. Neither was implemented or validated here."
+  },
+  "final_status_review": {
+    "file": "../../evidence/final_status.json",
+    "overall": "PARTIAL_TECHNICAL_BLOCKED",
+    "consistent_with_directly_reviewed_failure": true,
+    "no_full_training_or_B_Qwen_Shuffle_run_evidence": true
+  },
+  "blocking_finding": "Mandatory full backward/real parameter-changing update, full-gradient evidence, save/reload/beam20 and throughput acceptance remain unfulfilled because the fixed stack fails. This task is partial, not a successful feasibility precheck.",
+  "reviewer_no_gpu_execution": true,
+  "reviewer_no_installation": true,
+  "reviewer_no_source_modification": true
+}

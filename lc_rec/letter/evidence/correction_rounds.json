@@ -23,7 +23,7 @@
     {
       "component": "prelaunch numeric definition",
       "root_cause": "PEFT0.5 int8 dtype path conflicts with DS BF16 without autocast",
-      "fix": "explicit BF16 autocast proposal, pending user approval; no GPU run"
+      "fix": "Proposed necessary-path BF16 autocast, later approved explicitly for bounded technical probe only. Actual original dtype error was measured in both GPU jobs before applying the shim."
     },
     {
       "component": "unselected dependency alternative",
@@ -36,12 +36,21 @@
     "Fixed public dependency wheels resumed from retained suffix; all PyPI hashes and wheel CRCs verified.",
     "No full model weights downloaded."
   ],
-  "round2": "User-approved, necessary-path BF16 adaptation prepared after independent prelaunch review; fixed PEFT0.5 retained. No GPU attempt has yet occurred; original dtype error will be measured within the first bounded job before the approved shim.",
+  "round2": "User approved only necessary-path BF16 adaptation; fixed PEFT0.5 retained. GPU r0/r1 both first observed the original real dtype error, then applied only LoRA A nn.Linear BF16 autocast. No formal-use authorization.",
   "round3": {
     "failed_job": "letter-20261110-gpu-r0",
     "root_cause": "FastChat0.2.31 expects 4 unpad_input results; flash-attn2.7.4 returns a fifth redundant seqused tensor",
     "change": "Only FastChat module alias drops fifth value, preserves original first four, forbids unused_mask, checks extra against mask sums and cu deltas on first call",
     "scope": "ordinary API arity compatibility; no attention kernel, padding mask, loss or optimization change",
     "repeat_policy": "No fourth task-level concentrated correction round"
+  },
+  "terminal_outcome": {
+    "last_job": "letter-20261110-gpu-r1",
+    "failure": "PEFT0.5 in-place addition on bitsandbytes custom Function output view rejected during checkpoint backward recomputation",
+    "complete_optimizer_updates": 0,
+    "correction_rounds_used": 3,
+    "further_repairs_or_gpu_jobs": "STOPPED_AT_AUTHORIZED_TASK_CAP",
+    "proposed_out_of_place_addition": "NOT_IMPLEMENTED_NOT_TESTED_REQUIRES_NEW_AUTHORIZATION",
+    "gpu_and_96h_acceptance": "FAILED_GPU_TECHNICAL / UNKNOWN96h"
   }
 }

@@ -1,5 +1,7 @@
 {
   "status": "MISSING_GPU_MEASUREMENTS",
+  "audit_sha256": "59b02c50a25681d894130c1f243f32d5479c60ac8ffaa3e1bdb4c882f481ac92",
+  "count_source": "Completed CPU audit budget_counts, cross-checked with actual original dataset execution",
   "observed_counts": {
     "train_per_epoch": 131837,
     "epochs": 4,
@@ -14,15 +16,21 @@
     "optimizer_updates_four_epochs": 8240,
     "scheduler_warmup_steps": 83
   },
-  "publication_prompt_protocol": "unknown; public run_test_ddp.sh specifies prompt0; 17 prompts is a separate cost scenario",
-  "identity_limit": "fixed author supplement is not bound to historical checkpoint/argv; time feasibility is not metric reproduction",
-  "measurement_notes": [],
-  "reason": "No approved successful real forward/backward/update and beam20 timing record set.",
-  "time_limit_assessment": "UNKNOWN; cannot certify <=96 hours or hardware execution",
+  "rounding_limit": "Exact Trainer/DeepSpeed terminal accumulation behavior must be bound to the runtime versions; ceil here is the conservative work estimate.",
+  "actual_complete_optimizer_updates_by_rank": [
+    0,
+    0
+  ],
+  "publication_prompt_protocol": "Unknown historically; public run_test_ddp.sh specifies prompt0. 17 prompts is a separate cost scenario.",
+  "reason": "Approved local precision adaptation completed one real forward/loss per rank, but first backward failed. No stable update throughput, validation timing, checkpoint I/O, adapter reload or beam20 measurements exist.",
+  "time_limit_assessment": "UNKNOWN; cannot certify <=96 hours or hardware execution; failure is not proof of OOM or >96h",
   "required_train_samples_per_second_if_other_hours": {
     "0": 1.5258912037037038,
     "6": 1.6276172839506173,
     "12": 1.7438756613756614,
     "24": 2.0345216049382717
-  }
+  },
+  "hours_formula": "train_presentations/r_train/3600 + total_validation_texts/r_valid/3600 + test_users_per_prompt*P/r_gen/3600 + initialization + checkpoint_selection_save + adapter_reload + margin",
+  "rates_definition": "All r are dual-GPU aggregate actual samples or user-prompts per second; P=1 or17 are separate scenarios.",
+  "identity_limit": "Author supplement is not bound to historical checkpoint/argv; technical feasibility is not metric reproduction."
 }

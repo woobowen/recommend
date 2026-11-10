@@ -1,0 +1,121 @@
+{
+  "observed_utc": "2026-11-10T06:35:47.564609+00:00",
+  "host": "zwlab-01",
+  "sources": {
+    "peft/tuners/lora.py": {
+      "path": "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/tuners/lora.py",
+      "resolved_path": "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/tuners/lora.py",
+      "sha256": "cbcab4d64b5254d0e1a0018f5e870f7bd93f0178ed1b14d2b750e033f871aa01",
+      "methods": {
+        "Linear8bitLt.forward": {
+          "line": 1148,
+          "source": "def forward(self, x: torch.Tensor):\n            result = super().forward(x)\n\n            if self.disable_adapters or self.active_adapter not in self.lora_A.keys():\n                return result\n            elif self.r[self.active_adapter] > 0:\n                if not torch.is_autocast_enabled():\n                    expected_dtype = result.dtype\n\n                    if x.dtype != torch.float32:\n                        x = x.float()\n                    output = (\n                        self.lora_B[self.active_adapter](\n                            self.lora_A[self.active_adapter](self.lora_dropout[self.active_adapter](x))\n                        ).to(expected_dtype)\n                        * self.scaling[self.active_adapter]\n                    )\n                else:\n                    output = (\n                        self.lora_B[self.active_adapter](\n                            self.lora_A[self.active_adapter](self.lora_dropout[self.active_adapter](x))\n                        )\n                        * self.scaling[self.active_adapter]\n                    )\n                result += output\n            return result"
+        }
+      }
+    },
+    "bitsandbytes/autograd/_functions.py": {
+      "path": "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/bitsandbytes/autograd/_functions.py",
+      "resolved_path": "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/bitsandbytes/autograd/_functions.py",
+      "sha256": "95be0ca8bedc839935ef8e5bcc10fc940e7544ea91ac1b44a37094b41e8d9bcc",
+      "methods": {
+        "MatMul8bitLt.forward": {
+          "line": 289,
+          "source": "def forward(\n        ctx: torch.autograd.function.FunctionCtx,\n        A: torch.Tensor,\n        B: torch.Tensor,\n        out: Optional[torch.Tensor] = None,\n        bias: Optional[torch.Tensor] = None,\n        state: Optional[MatmulLtState] = None,\n    ):\n        state = state or MatmulLtState()\n\n        # default of pytorch behavior if inputs are empty\n        ctx.is_empty = False\n        if prod(A.shape) == 0:\n            ctx.is_empty = True\n            ctx.A = A\n            ctx.B = B\n            ctx.bias = bias\n            if A.shape[-1] == B.shape[0]:\n                return torch.empty(A.shape[:-1] + B.shape[1:], dtype=A.dtype, device=A.device)\n            else:\n                return torch.empty(A.shape[:-1] + B.shape[:1], dtype=A.dtype, device=A.device)\n\n        input_shape = A.shape\n\n        # Cast A to fp16\n        if A.dtype != torch.float16:\n            warnings.warn(f\"MatMul8bitLt: inputs will be cast from {A.dtype} to float16 during quantization\")\n\n        if len(A.shape) == 3:\n            A = A.reshape(-1, A.shape[-1])\n\n        # 1. Quantize A. Note that as a side-effect, outliers are suppressed in CA/CAt.\n        if ctx.needs_input_grad[1]:\n            # Slower path\n            CA, CAt, SCA, SCAt, outlier_cols = F.int8_double_quant(A.to(torch.float16), threshold=state.threshold)\n        else:\n            # Fast path\n            CA, SCA, outlier_cols = F.int8_vectorwise_quant(A.to(torch.float16), threshold=state.threshold)\n            CAt = SCAt = None\n\n        has_grad = False\n\n        if state.has_fp16_weights or state.CB is None:\n            has_grad = getattr(B, \"grad\", None) is not None\n            is_transposed = not B.is_contiguous() and B.shape[0] == B.stride(1)\n            if is_transposed:\n                B = B.contiguous()\n\n            if (state.is_training and not has_grad) or state.CB is None or state.SCB is None:\n                state.reset_grads()\n\n                # 2. Quantize B\n                state.CB, state.SCB, _ = F.int8_vectorwise_quant(B.to(torch.float16))\n\n        # Handle sparse decomposition. In some instances, we may have not found any\n        # outlier columns at all. In that case, we'll skip this part completely.\n        if state.threshold > 0.0 and outlier_cols is not None and outlier_cols.numel():\n            state.idx = outlier_cols\n\n            # Zero out the outliers in the transposed 8bit inputs.\n            if CAt is not None:\n                CAt[:, state.idx] = 0\n\n            # Extract the input outliers in original precision\n            subA = A[:, state.idx].contiguous()\n\n            # Extract the corresponding weights\n            if state.has_fp16_weights:\n                state.subB = B[:, state.idx].t()\n            else:\n                # To dequantize our weights associated with the input outliers,\n                # we want to divide by 127. It's however more performant to multiply\n                # by the reciprocal.\n                outliers = state.CB[:, state.idx]\n                state.subB = (outliers.t() * state.SCB * 7.874015718698502e-3).to(A.dtype)\n        else:\n            subA = None\n\n        # 3. Int8 Matmul\n        out32 = F.int8_linear_matmul(CA, state.CB)\n\n        # Dequantize matmul result\n        if bias is None or bias.dtype == torch.float16:\n            # we apply the fused bias here\n            output = F.int8_mm_dequant(out32, SCA, state.SCB, bias=bias).to(A.dtype)\n        else:  # apply bias separately\n            # TODO: Fused bias for fp32/bf16?\n            output = F.int8_mm_dequant(out32, SCA, state.SCB, bias=None).to(A.dtype).add_(bias)\n\n        # 4. Mixed-precision decomposition matmul\n        if subA is not None and state.subB is not None:\n            output = output.addmm(subA, state.subB)\n\n        # 5. Save state\n        ctx.state = state\n\n        ctx.grad_shape = input_shape\n        ctx.dtype_A, ctx.dtype_B, ctx.dtype_bias = A.dtype, B.dtype, None if bias is None else bias.dtype\n\n        if any(ctx.needs_input_grad[:2]):\n            ctx.tensors = (CAt, subA, A)\n            ctx.tensor_states = (SCAt, state.idx)\n        else:\n            ctx.tensors = [None, None, None]\n            ctx.tensor_states = (None, None)\n            ctx.save_for_backward(None, None)\n\n        output_shape = (*input_shape[:-1], state.CB.shape[0])\n\n        if len(input_shape) == 3:\n            return output.reshape(output_shape)\n\n        return output"
+        },
+        "MatMul8bitLt.backward": {
+          "line": 404,
+          "source": "def backward(ctx: torch.autograd.function.FunctionCtx, grad_output: torch.Tensor):\n        if ctx.is_empty:\n            bias_grad = None if ctx.bias is None else torch.zeros_like(ctx.bias)\n            return torch.zeros_like(ctx.A), torch.zeros_like(ctx.B), None, bias_grad, None\n\n        req_gradA, req_gradB, _, req_gradBias, _ = ctx.needs_input_grad\n        CAt, subA, A = ctx.tensors\n        SCAt, idx = ctx.tensor_states\n        state: MatmulLtState = ctx.state\n        grad_A = grad_B = grad_bias = None\n\n        if req_gradBias:\n            # compute grad_bias first before changing grad_output dtype\n            grad_bias = grad_output.sum(0, dtype=ctx.dtype_bias)\n\n        # Cast grad_output to fp16\n        if len(grad_output.shape) == 3:\n            grad_output = grad_output.reshape(-1, grad_output.shape[-1]).contiguous()\n\n        if req_gradB:\n            Cgrad, _, _, SCgradt, _ = F.int8_double_quant(grad_output.to(torch.float16))\n\n            gradB32 = F.int8_linear_matmul(Cgrad.t().contiguous(), CAt.t())\n            grad_B = F.int8_mm_dequant(gradB32, SCgradt, SCAt)\n            if state.threshold > 0.0 and subA is not None:\n                grad_B[:, idx] += torch.matmul(grad_output.t(), subA)\n\n        if req_gradA:\n            if state.CB is not None:\n                CB = state.CB.to(ctx.dtype_A, copy=True).mul_(state.SCB.unsqueeze(1).mul(1.0 / 127.0))\n                grad_A = torch.matmul(grad_output.to(ctx.dtype_A), CB).view(ctx.grad_shape)\n            else:\n                raise Exception(\"State must contain CB matrix for backward\")\n\n        return grad_A, grad_B, None, grad_bias, None"
+        }
+      }
+    }
+  },
+  "gpu_budget": {
+    "path": "/home/bwwu/lc-rec/letter-20261110/gpu-budget.json",
+    "sha256": "747b71aa16bd94bac12232879134fa19bca7007dcc681e21153860392a520a61",
+    "value": {
+      "runs": [
+        {
+          "job_id": "letter-20261110-gpu-r0",
+          "candidate": "letter_author_sid_int8_lora_zero2",
+          "argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "-m",
+            "torch.distributed.run",
+            "--standalone",
+            "--nnodes=1",
+            "--nproc_per_node=2",
+            "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/scripts/gpu_probe.py",
+            "--source-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+            "--data-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/vendor/LETTER/data",
+            "--model",
+            "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+            "--audit-dir",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r0/output/probe",
+            "--source-commit",
+            "66c903a70ea709f7fc07c7ef211c7a35cbc3394a"
+          ],
+          "start_utc": "2026-11-10T06:14:55.075237+00:00",
+          "limit_seconds": 3480,
+          "elapsed_seconds": 147.27842999901623,
+          "end_utc": "2026-11-10T06:17:22.353668+00:00",
+          "child_exit_code": 1,
+          "stop_reason": null,
+          "peaks": {
+            "cpu_rss_sum_peak_bytes": 22475055104,
+            "min_mem_available_bytes": 253208846336,
+            "new_disk_allocated_peak_bytes": 1448890368,
+            "max_swap_used_increase_bytes": 0,
+            "task_vm_swap_peak_bytes": 0
+          },
+          "samples": 30,
+          "charged_gpu_device_seconds": 294.55685999803245
+        },
+        {
+          "job_id": "letter-20261110-gpu-r1",
+          "candidate": "letter_author_sid_int8_lora_zero2",
+          "argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "-m",
+            "torch.distributed.run",
+            "--standalone",
+            "--nnodes=1",
+            "--nproc_per_node=2",
+            "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/scripts/gpu_probe.py",
+            "--source-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+            "--data-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/vendor/LETTER/data",
+            "--model",
+            "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+            "--audit-dir",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r1/output/probe",
+            "--source-commit",
+            "6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f"
+          ],
+          "start_utc": "2026-11-10T06:25:27.949349+00:00",
+          "limit_seconds": 3452.721570000984,
+          "elapsed_seconds": 86.38478115480393,
+          "end_utc": "2026-11-10T06:26:54.334132+00:00",
+          "child_exit_code": 1,
+          "stop_reason": null,
+          "peaks": {
+            "cpu_rss_sum_peak_bytes": 5295058944,
+            "min_mem_available_bytes": 252603142144,
+            "new_disk_allocated_peak_bytes": 1469108224,
+            "max_swap_used_increase_bytes": 0,
+            "task_vm_swap_peak_bytes": 0
+          },
+          "samples": 18,
+          "charged_gpu_device_seconds": 172.76956230960786
+        }
+      ],
+      "prior_stage_a_seconds": 0
+    }
+  }
+}

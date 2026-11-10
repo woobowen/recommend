@@ -1,0 +1,148 @@
+{
+  "schema": "letter_final_compatibility_blocker_non_author_review_v1",
+  "reviewer": "/root/data_audit",
+  "status": "BLOCKED_COMPATIBILITY_CORRECTION_LIMIT_REACHED",
+  "reviewed_utc": "2026-11-10T06:37:24.616427+00:00",
+  "scope": "Static independent source cross-check and next-step recommendation only. No implementation, package upgrade, model loading or new GPU job. Root designated task correction round3 as exhausted.",
+  "current_code_identity": {
+    "gpu_probe.py": "e525b38aaa9fc18ef2c0e49534d4f6a07df16f074357d907bf2ad9e6a3dc37f5",
+    "compat.py": "921e6a4b1d2968489fde46daec49f75933da0aca9793640c0b45e8a0465bc514"
+  },
+  "actual_wheel_identities": {
+    "peft==0.5.0": {
+      "wheel": "peft-0.5.0-py3-none-any.whl",
+      "wheel_sha256": "82b307830f946bcc1e8e19419a55aac50fcf670a55d6be04eb6adbcbc5c21042",
+      "members": {
+        "peft/tuners/lora.py": "cbcab4d64b5254d0e1a0018f5e870f7bd93f0178ed1b14d2b750e033f871aa01"
+      }
+    },
+    "bitsandbytes==0.45.5": {
+      "wheel": "bitsandbytes-0.45.5-py3-none-manylinux_2_24_x86_64.whl",
+      "wheel_sha256": "a5453f30cc6aab6ccaac364e6bf51a7808d3da5f71763dffeb6d9694c59136e4",
+      "members": {
+        "bitsandbytes/nn/modules.py": "e97af1a69794f192bf58e0154efb660f3d2ed0a00dade672c7d8f9a3d14b9e53",
+        "bitsandbytes/autograd/_functions.py": "95be0ca8bedc839935ef8e5bcc10fc940e7544ea91ac1b44a37094b41e8d9bcc"
+      }
+    },
+    "peft==0.10.0": {
+      "wheel": "peft-0.10.0-py3-none-any.whl",
+      "wheel_sha256": "d5249c97e818d3e31f92553c73c2953acd0ec12649b8b749afff7152cbc86cbb",
+      "members": {
+        "peft/tuners/lora/bnb.py": "7c57e97a1b2df6446a411db1045da8e9d08b9b12086a21d53055cefab2c2b07e"
+      }
+    }
+  },
+  "runtime_cross_check": {
+    "path": "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r1/output/probe/rank0.json",
+    "sha256": "53ae9ea28e72f144126e49bbfa19fda4b9b7825f83d7be450a15d8a0e4c932a4",
+    "source_commit": "6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f",
+    "direct_read_scope": "rank0 error traceback, completed-update list, first temperature/loss evidence and finite-check count only; independent complete raw/job/resource audit is assigned to /root/identity_audit",
+    "status": "FAIL",
+    "completed_optimizer_updates": 0,
+    "loss_microbatches_finite_before_failure": 1,
+    "original_letter_loss": 13.968113899230957,
+    "independent_ce_temperature08": 13.968113899230957,
+    "independent_ce_temperature1": 11.858251571655273,
+    "temperature08_exact_agreement": true,
+    "failure_call": "engine.backward(result.loss), during reentrant checkpoint recomputation",
+    "failure_site": "installed peft/tuners/lora.py:1172 result += output",
+    "error_class": "RuntimeError",
+    "error_summary": "MatMul8bitLtBackward returned a view that PEFT attempts to modify in place; PyTorch forbids replacing a custom-function backward through view mutation."
+  },
+  "source_root_cause_chain": [
+    {
+      "source": "PEFT0.5.0 wheel peft/tuners/lora.py",
+      "lines": [
+        1148,
+        1149,
+        1172,
+        1173
+      ],
+      "fact": "The int8 LoRA forward obtains the quantized base output from super().forward(x), computes the scaled LoRA branch, then mutates the custom-function output through result += output."
+    },
+    {
+      "source": "bitsandbytes0.45.5 wheel bitsandbytes/nn/modules.py",
+      "lines": [
+        981,
+        990,
+        995
+      ],
+      "fact": "Linear8bitLt.forward returns the result of bnb.matmul, without cloning that returned tensor."
+    },
+    {
+      "source": "bitsandbytes0.45.5 wheel bitsandbytes/autograd/_functions.py",
+      "lines": [
+        289,
+        311,
+        396,
+        398,
+        399,
+        401
+      ],
+      "fact": "MatMul8bitLt.forward retains original input_shape; for the 3D LLaMA input it returns output.reshape(output_shape), a view produced inside the custom autograd Function."
+    },
+    {
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/v2.6.0/torch/csrc/autograd/variable.cpp",
+      "sha256": "42fc2cdb679e22d3b14be0746db79f74eca16763444f25b9b5fbf3b7b392c69d",
+      "lines": [
+        840,
+        841,
+        842,
+        843,
+        844,
+        845,
+        846
+      ],
+      "fact": "The IN_CUSTOM_FUNCTION branch rejects view mutations that would override the custom backward; it points to differentiable cloning as one remedy. This guard is observed in the current2.6 stack; no claim that it first appeared in2.6."
+    },
+    {
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/v2.6.0/torch/utils/checkpoint.py",
+      "sha256": "7a05799e678085df1b81d512bed679c35053fb6225ea90c96661306f93140f6c",
+      "lines": [
+        263,
+        264,
+        303,
+        304
+      ],
+      "fact": "Reentrant checkpoint runs initial forward under no_grad and repeats the function with grad enabled during backward. This explains why the real forward/loss can succeed while the same in-place expression fails in backward recomputation."
+    }
+  ],
+  "first_choice_for_future_explicit_authorization": {
+    "status": "PROPOSED_NOT_IMPLEMENTED_NOT_TESTED",
+    "choice": "Retain the current pinned environment and all already-approved settings. In isolated derived PEFT0.5 int8 forward code replace only the LoRA residual mutation with out-of-place addition.",
+    "proposed_semantic_diff": {
+      "before": "result += output",
+      "after": "result = result + output"
+    },
+    "why_first": "Avoids mutating the custom-function view while preserving the original quantized base call, LoRA branch, scaling, dropout invocation, parameter objects, initialization RNG, data, temperature/loss, mask, global64 and checkpointing. Keeps the new change smaller than another dependency-version switch.",
+    "implementation_boundary": "Do not edit the installed wheel or author vendor source. A saved derived forward must retain the original base-call semantics and all branch/dtype behavior, with a reviewable source diff and source/version guards. Binding a copied standalone method must handle the original zero-argument super closure correctly; do not assume copying its text is sufficient.",
+    "mathematical_gradient_definition": "For R = base(x) + scaling*B(A(dropout(x))), out-of-place addition leaves the ordinary derivative of each summed branch equal to the incoming gradient. The base parameters remain frozen, but its input gradient must still flow to upstream LoRA and saved embeddings.",
+    "precision_limit": "The proposal changes tensor aliasing/storage, not the intended sum or scalar hyperparameters. Forward rounding and actual autograd/ZeRO behavior still require measurement; historical bitwise equivalence is not claimed.",
+    "alternative_same_method": "A differentiable result.clone() before the in-place residual addition also avoids mutating the custom output and preserves an identity gradient edge; it adds a copy. Never use detach(), .data manipulation or no_grad to bypass this failure.",
+    "required_new_authorization": "This remains unexecuted because the task-level three correction rounds are exhausted. A future repair/verification scope and any additional GPU budget must be explicitly authorized; do not silently reset the current task counters.",
+    "future_acceptance_if_authorized": [
+      "Verify the minimal derived forward diff and exact installed source/parameter identities.",
+      "Check the proposed addition and input/LoRA gradients against an explicit differentiable addition reference with fixed tensors; distinguish this small correctness test from real-data feasibility measurement.",
+      "Complete a bounded real-data forward/backward and actual optimizer update with checkpoint recomputation, finite loss/gradients/parameters, exact optimizer membership, active SID changes and frozen originals unchanged.",
+      "Only after those pass measure the same real-data mixed/length throughput, validation, adapter save/reload and beam20 required for the original96h budget estimate."
+    ]
+  },
+  "secondary_static_option": {
+    "status": "NOT_SELECTED_NOT_INSTALLED_FOR_THIS_TASK",
+    "choice": "PEFT0.10 standard int8 LoRA wrapper",
+    "source": "PEFT0.10.0 wheel peft/tuners/lora/bnb.py:204-242, especially240",
+    "fact": "Uses result = result + output and casts non-AMP input to the actual LoRA A weight dtype. It statically avoids the two observed old-PEFT dtype/view issues.",
+    "tradeoffs": "Additional hub/dependency checks and changed wrapper construction/RNG consumption; same initialization distribution does not guarantee same seed42 parameter tensors. Still needs legacy bnb state-field compatibility and actual gradient/save/reload validation.",
+    "reference": "review/peft_version_compatibility.json"
+  },
+  "not_established_by_this_failure": [
+    "Insufficient24GiB GPU memory: the terminating exception is an autograd aliasing error, not a CUDA OOM. Full optimizer-update peak remains unmeasured.",
+    "One seed exceeding96hours: no complete optimizer update or warm steady throughput was measured, so a defensible end-to-end timing estimate cannot be derived.",
+    "A theoretical hardware impossibility for this method: another compatible implementation may be feasible, but it is untested here.",
+    "Published Recall/NDCG reproduction or failure: no complete training/evaluation was run."
+  ],
+  "current_stop": "No additional code repair, dependency switch, GPU attempt, formal training or hyperparameter search is performed. Preserve both failed attempts and their true status for review.",
+  "new_code_change_applied": false,
+  "packages_installed_or_upgraded": [],
+  "new_gpu_execution": false
+}

@@ -1,0 +1,156 @@
+{
+  "status": "NEGATIVE_GPU_EVIDENCE_CONSISTENT",
+  "gpu_acceptance": "FAIL",
+  "jobs": [
+    {
+      "job_id": "letter-20261110-gpu-r0",
+      "source_commit": "66c903a70ea709f7fc07c7ef211c7a35cbc3394a",
+      "manifest_files_verified": 11,
+      "published_source_bytes_matched": [
+        "compat.py",
+        "gpu_probe.py"
+      ],
+      "runner_status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "ranks": [
+        {
+          "rank": 0,
+          "completed_update_records": 0,
+          "finite_forward_microbatches": 0,
+          "first_batch_real_lengths": [
+            124,
+            102,
+            73,
+            75,
+            114,
+            68,
+            88,
+            99
+          ],
+          "cpu_ru_maxrss_gib": 10.66775894165039,
+          "gpu_peak_allocated_gib": 7.8178582191467285,
+          "gpu_peak_reserved_gib": 8.310546875,
+          "temperature_loss": null,
+          "error": "too many values to unpack (expected 4)"
+        },
+        {
+          "rank": 1,
+          "completed_update_records": 0,
+          "finite_forward_microbatches": 0,
+          "first_batch_real_lengths": [
+            63,
+            80,
+            71,
+            93,
+            90,
+            93,
+            68,
+            125
+          ],
+          "cpu_ru_maxrss_gib": 10.6802978515625,
+          "gpu_peak_allocated_gib": 7.8184685707092285,
+          "gpu_peak_reserved_gib": 8.310546875,
+          "temperature_loss": null,
+          "error": "too many values to unpack (expected 4)"
+        }
+      ],
+      "resources": {
+        "elapsed_seconds": 147.27842999901623,
+        "charged_gpu_device_seconds": 294.55685999803245,
+        "samples": 30,
+        "peaks": {
+          "cpu_rss_sum_peak_bytes": 22475055104,
+          "min_mem_available_bytes": 253208846336,
+          "new_disk_allocated_peak_bytes": 1448890368,
+          "max_swap_used_increase_bytes": 0,
+          "task_vm_swap_peak_bytes": 0
+        },
+        "stop_reason": null
+      }
+    },
+    {
+      "job_id": "letter-20261110-gpu-r1",
+      "source_commit": "6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f",
+      "manifest_files_verified": 11,
+      "published_source_bytes_matched": [
+        "gpu_probe.py",
+        "compat.py",
+        "resource_guard.py"
+      ],
+      "runner_status": "FAILED",
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "ranks": [
+        {
+          "rank": 0,
+          "completed_update_records": 0,
+          "finite_forward_microbatches": 1,
+          "first_batch_real_lengths": [
+            124,
+            102,
+            73,
+            75,
+            114,
+            68,
+            88,
+            99
+          ],
+          "cpu_ru_maxrss_gib": 10.665397644042969,
+          "gpu_peak_allocated_gib": 10.641379356384277,
+          "gpu_peak_reserved_gib": 11.451171875,
+          "temperature_loss": {
+            "model": 13.968113899230957,
+            "independent_ce_temp08": 13.968113899230957,
+            "independent_ce_temp1": 11.858251571655273,
+            "exact_temp08_agreement": true
+          },
+          "error": "Output 0 of MatMul8bitLtBackward is a view and is being modified inplace. This view was created inside a custom Function (or because an input was returned as-is) and the autograd logic to handle view+inplace would override the custom backward associated with the custom Function, leading to incorrect gradients. This behavior is forbidden. You can fix this by cloning the output of the custom Function."
+        },
+        {
+          "rank": 1,
+          "completed_update_records": 0,
+          "finite_forward_microbatches": 1,
+          "first_batch_real_lengths": [
+            63,
+            80,
+            71,
+            93,
+            90,
+            93,
+            68,
+            125
+          ],
+          "cpu_ru_maxrss_gib": 10.680137634277344,
+          "gpu_peak_allocated_gib": 10.645933628082275,
+          "gpu_peak_reserved_gib": 11.3359375,
+          "temperature_loss": {
+            "model": 13.420120239257812,
+            "independent_ce_temp08": 13.420120239257812,
+            "independent_ce_temp1": 11.429338455200195,
+            "exact_temp08_agreement": true
+          },
+          "error": "Output 0 of MatMul8bitLtBackward is a view and is being modified inplace. This view was created inside a custom Function (or because an input was returned as-is) and the autograd logic to handle view+inplace would override the custom backward associated with the custom Function, leading to incorrect gradients. This behavior is forbidden. You can fix this by cloning the output of the custom Function."
+        }
+      ],
+      "resources": {
+        "elapsed_seconds": 86.38478115480393,
+        "charged_gpu_device_seconds": 172.76956230960786,
+        "samples": 18,
+        "peaks": {
+          "cpu_rss_sum_peak_bytes": 5295058944,
+          "min_mem_available_bytes": 252603142144,
+          "new_disk_allocated_peak_bytes": 1469108224,
+          "max_swap_used_increase_bytes": 0,
+          "task_vm_swap_peak_bytes": 0
+        },
+        "stop_reason": null
+      }
+    }
+  ],
+  "charged_gpu_device_seconds_total": 467.3264223076403,
+  "charged_gpu_device_minutes_total": 7.788773705127339,
+  "task_correction_rounds_used": 3,
+  "fourth_correction_forbidden": true,
+  "96h_feasibility": "UNKNOWN"
+}
