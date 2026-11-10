@@ -40,7 +40,7 @@ def main():
     parser.add_argument('mode', choices=['preflight', 'deploy', 'submit', 'query', 'logs', 'collect'])
     parser.add_argument('--commit')
     parser.add_argument('--job')
-    parser.add_argument('--kind', choices=['setup', 'cpu', 'protocol', 'gpu'])
+    parser.add_argument('--kind', choices=['setup', 'cpu', 'protocol', 'compatibility', 'grouping', 'gpu'])
     parser.add_argument('--train-job')
     args = parser.parse_args()
     SUPPORT.mkdir(parents=True, exist_ok=True)
@@ -92,11 +92,17 @@ print(json.dumps(r))"""
         env['TORCH_EXTENSIONS_DIR']=REMOTE+'/torch_extensions'
         env['NCCL_P2P_DISABLE']='1'
         env['OMP_NUM_THREADS']='4'
-        if args.kind in ('cpu','setup','protocol'):
+        if args.kind in ('cpu','setup','protocol','compatibility','grouping'):
             env['CUDA_VISIBLE_DEVICES']=''
             env.pop('DS_ACCELERATOR',None)
             if args.kind=='setup':
                 argv=['/data/bwwu/envs/grid-20261009-e61baf3/bin/python',scripts+'setup_env.py','--output',output+'environment']
+            elif args.kind=='compatibility':
+                argv=[PYTHON,scripts+'compatibility_probe.py','--output',output+'compatibility']
+            elif args.kind=='grouping':
+                assert args.train_job and args.train_job.startswith('lc-six-20261110-cpu-')
+                workload=t.profile['job_root']+'/'+args.train_job+'/output/workload'
+                argv=[PYTHON,scripts+'analyze_grouping.py','--records',workload+'/records.jsonl.gz','--samples',workload+'/samples.json','--output',output+'grouping/grouping.json']
             elif args.kind=='protocol':
                 argv=[PYTHON,scripts+'protocol_probe.py','--config',release+'/lc_rec/six_task_lora/config/candidate.json','--output',output+'protocol']
             else:
