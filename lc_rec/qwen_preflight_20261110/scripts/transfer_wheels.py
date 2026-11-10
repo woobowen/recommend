@@ -14,8 +14,9 @@ def main():
   for name,row in sorted(packages.items()):
    p=wheelhouse/name;assert p.stat().st_size==row['bytes'] and transport.sha(p)==row['sha256'];tf.add(p,arcname=name,recursive=False)
  receipt=t.put(archive,t.profile['remote_support']+'/transfers/qwen-preflight-20261110-official-wheels.tar');destination=DATA+'/wheels'
+ compact={name:{'bytes':row['bytes'],'sha256':row['sha256']} for name,row in packages.items()}
  code=f"""import json,hashlib,tarfile;from pathlib import Path
-archive=Path({receipt['path']!r});assert hashlib.sha256(archive.read_bytes()).hexdigest()=={receipt['sha256']!r};rows={packages!r};root=Path({destination!r});root.mkdir(parents=True,exist_ok=True)
+archive=Path({receipt['path']!r});assert hashlib.sha256(archive.read_bytes()).hexdigest()=={receipt['sha256']!r};rows={compact!r};root=Path({destination!r});root.mkdir(parents=True,exist_ok=True)
 with tarfile.open(archive) as tf:
  members=tf.getmembers();assert len(members)==len(set(m.name for m in members)) and set(m.name for m in members)==set(rows)
  for m in members:
