@@ -1,0 +1,318 @@
+{
+  "schema": "qwen_q06_l_runtime_non_author_review_v1",
+  "reviewer": "/root/official_architecture",
+  "is_implementation_author": false,
+  "reviewed_utc": "2026-11-10T17:04:23.569590+00:00",
+  "status": "PASS_TECHNICAL_RUNTIME_WITH_RESEARCH_LIMITS",
+  "job_id": "qwen-20261110-q06-l-r0",
+  "run_commit": "f29527de3b3f94ae5640d2e98faa1a7f74d2e0e8",
+  "source_sha256": "4dc56620b9427dc58b792d427cca9d0b4af160f9d8e3027e942026e408f9bd39",
+  "job_terminal": {
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "runner_cleanup_verified": true,
+    "guard_cleanup_verified": true,
+    "tracked_live_pids_after_cleanup": [],
+    "gpu_device_seconds": 145.48935613408685,
+    "wall_seconds": 72.74467806704342,
+    "mem_available_min_gib": 232.06304931640625,
+    "task_tree_rss_sample_peak_gib": 7.142810821533203,
+    "sampled_nvml_memory_peak_mib_by_device": {
+      "0": 17918,
+      "1": 17020
+    }
+  },
+  "independently_hash_checked_retained_artifacts": [
+    "output/probe/adapter/README.md",
+    "output/probe/adapter/adapter_config.json",
+    "output/probe/adapter/added_tokens.json",
+    "output/probe/adapter/chat_template.jinja",
+    "output/probe/adapter/special_tokens_map.json",
+    "output/probe/adapter/tokenizer_config.json",
+    "output/probe/rank0.json",
+    "output/probe/rank1.json",
+    "output/resources/resource-samples.jsonl",
+    "output/resources/resource-summary.json"
+  ],
+  "omitted_large_artifacts_with_original_runner_identity": [
+    {
+      "bytes": 322653178,
+      "path": "output/probe/adapter/adapter_model.bin",
+      "sha256": "616d5deb0e205d9f81d0623386ad91436790c6b6497ecaf24b06639477e9ef04"
+    },
+    {
+      "bytes": 1671853,
+      "path": "output/probe/adapter/merges.txt",
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    {
+      "bytes": 11591176,
+      "path": "output/probe/adapter/tokenizer.json",
+      "sha256": "a65b6872ff61bcfba1e617d065654eba58d678e876ada9547a4c2cc78ba619c4"
+    },
+    {
+      "bytes": 2776833,
+      "path": "output/probe/adapter/vocab.json",
+      "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    }
+  ],
+  "rank_results": [
+    {
+      "rank": 0,
+      "run_commit": "f29527de3b3f94ae5640d2e98faa1a7f74d2e0e8",
+      "model_identity": {
+        "class": "transformers.models.qwen3.modeling_qwen3.Qwen3ForCausalLM",
+        "source_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py",
+        "source_sha256": "4b95c371fd26d40c69083dab36ac1eafd8cf82b415a0bb827275097c5ad2305b",
+        "config_model_type": "qwen3"
+      },
+      "gpu": {
+        "name": "NVIDIA GeForce RTX 4090",
+        "total_bytes": 25252724736,
+        "visible_devices": "0,1"
+      },
+      "trainable_tensors": 393,
+      "trainable_parameters": 161295360,
+      "lora_parameters": 5046272,
+      "optimizer_master_fp32_elements_on_gpu": 80647680,
+      "optimizer_moments_fp32_elements_on_gpu": 161295360,
+      "gradient_calls_per_tensor": 16,
+      "all393_parameter_monitors_changed": true,
+      "SID_embedding_change": {
+        "sampled_elements": 940032,
+        "changed_elements": 163754,
+        "max_abs_change": 1.52587890625e-05
+      },
+      "SID_gradient": {
+        "calls": 16,
+        "nonzero_calls": 16,
+        "finite": true,
+        "max_l2_norm": 114.01453399658203,
+        "sid_gradient_max_abs": 18.5,
+        "input_sid_gradient_max_abs": 18.5
+      },
+      "actual_input_output_SID_gradients": {
+        "input_embedding_backward_calls": 16,
+        "head_logits_backward_calls": 16,
+        "output_sid_gradient_abs_max": 0.0078125,
+        "actual_supervised_sid_logit_gradient_abs_max": 0.0078125,
+        "input_embedding_gradient_abs_max": 18.375,
+        "actual_input_sid_position_gradient_abs_max": 18.375
+      },
+      "temperature_CE_abs_diff": 9.5367431640625e-07,
+      "training_peak": {
+        "allocated_gib": 6.37784481048584,
+        "reserved_gib": 16.88671875,
+        "ru_maxrss_gib": 2.325469970703125
+      },
+      "save_reload_peak": {
+        "allocated_gib": 3.865300178527832,
+        "reserved_gib": 16.88671875,
+        "ru_maxrss_gib": 4.336334228515625
+      },
+      "adapter_full_key_value_reload_source_assertions_completed": true,
+      "beams": [
+        {
+          "user_id": "10178",
+          "row_idx": 10178,
+          "label": "short",
+          "input_tokens": 71,
+          "position_legal_sequences": 20,
+          "canonical_sequences": 0,
+          "distinct_sequences": 20,
+          "seconds_two_rank_max": 0.42169129848480225
+        },
+        {
+          "user_id": "17099",
+          "row_idx": 17099,
+          "label": "middle",
+          "input_tokens": 77,
+          "position_legal_sequences": 20,
+          "canonical_sequences": 0,
+          "distinct_sequences": 20,
+          "seconds_two_rank_max": 0.3503345549106598
+        },
+        {
+          "user_id": "12353",
+          "row_idx": 12353,
+          "label": "long",
+          "input_tokens": 119,
+          "position_legal_sequences": 20,
+          "canonical_sequences": 0,
+          "distinct_sequences": 20,
+          "seconds_two_rank_max": 0.3542214035987854
+        },
+        {
+          "user_id": "1475",
+          "row_idx": 1475,
+          "label": "boundary",
+          "input_tokens": 167,
+          "position_legal_sequences": 20,
+          "canonical_sequences": 0,
+          "distinct_sequences": 20,
+          "seconds_two_rank_max": 0.35641270875930786
+        }
+      ]
+    },
+    {
+      "rank": 1,
+      "run_commit": "f29527de3b3f94ae5640d2e98faa1a7f74d2e0e8",
+      "model_identity": {
+        "class": "transformers.models.qwen3.modeling_qwen3.Qwen3ForCausalLM",
+        "source_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py",
+        "source_sha256": "4b95c371fd26d40c69083dab36ac1eafd8cf82b415a0bb827275097c5ad2305b",
+        "config_model_type": "qwen3"
+      },
+      "gpu": {
+        "name": "NVIDIA GeForce RTX 4090",
+        "total_bytes": 25252724736,
+        "visible_devices": "0,1"
+      },
+      "trainable_tensors": 393,
+      "trainable_parameters": 161295360,
+      "lora_parameters": 5046272,
+      "optimizer_master_fp32_elements_on_gpu": 80647680,
+      "optimizer_moments_fp32_elements_on_gpu": 161295360,
+      "gradient_calls_per_tensor": 16,
+      "all393_parameter_monitors_changed": true,
+      "SID_embedding_change": {
+        "sampled_elements": 940032,
+        "changed_elements": 163754,
+        "max_abs_change": 1.52587890625e-05
+      },
+      "SID_gradient": {
+        "calls": 16,
+        "nonzero_calls": 16,
+        "finite": true,
+        "max_l2_norm": 108.80217742919922,
+        "sid_gradient_max_abs": 31.5,
+        "input_sid_gradient_max_abs": 31.5
+      },
+      "actual_input_output_SID_gradients": {
+        "input_embedding_backward_calls": 16,
+        "head_logits_backward_calls": 16,
+        "output_sid_gradient_abs_max": 0.0078125,
+        "actual_supervised_sid_logit_gradient_abs_max": 0.0078125,
+        "input_embedding_gradient_abs_max": 31.25,
+        "actual_input_sid_position_gradient_abs_max": 31.25
+      },
+      "temperature_CE_abs_diff": 9.5367431640625e-07,
+      "training_peak": {
+        "allocated_gib": 6.335069179534912,
+        "reserved_gib": 14.337890625,
+        "ru_maxrss_gib": 2.3172149658203125
+      },
+      "save_reload_peak": {
+        "allocated_gib": 3.8581337928771973,
+        "reserved_gib": 16.009765625,
+        "ru_maxrss_gib": 4.029136657714844
+      },
+      "adapter_full_key_value_reload_source_assertions_completed": true,
+      "beams": [
+        {
+          "user_id": "10181",
+          "row_idx": 10181,
+          "label": "short",
+          "input_tokens": 71,
+          "position_legal_sequences": 20,
+          "canonical_sequences": 0,
+          "distinct_sequences": 20,
+          "seconds_two_rank_max": 0.42169129848480225
+        },
+        {
+          "user_id": "17266",
+          "row_idx": 17266,
+          "label": "middle",
+          "input_tokens": 77,
+          "position_legal_sequences": 20,
+          "canonical_sequences": 0,
+          "distinct_sequences": 20,
+          "seconds_two_rank_max": 0.3503345549106598
+        },
+        {
+          "user_id": "14314",
+          "row_idx": 14314,
+          "label": "long",
+          "input_tokens": 119,
+          "position_legal_sequences": 20,
+          "canonical_sequences": 0,
+          "distinct_sequences": 20,
+          "seconds_two_rank_max": 0.3542214035987854
+        },
+        {
+          "user_id": "4283",
+          "row_idx": 4283,
+          "label": "boundary",
+          "input_tokens": 167,
+          "position_legal_sequences": 20,
+          "canonical_sequences": 0,
+          "distinct_sequences": 20,
+          "seconds_two_rank_max": 0.35641270875930786
+        }
+      ]
+    }
+  ],
+  "cross_rank": {
+    "complete_all392_LoRA_tensor_hashes_equal": true,
+    "all918_SID_rows_hash_equal": true,
+    "optimizer_steps": [
+      4,
+      4
+    ],
+    "global_updates": 4,
+    "nonzero_lr_updates": 3,
+    "training_samples_processed": 256,
+    "unique_training_row_indices": 193,
+    "boundary_templates": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "adapter_serialization": {
+    "file_bytes": 322653178,
+    "sha256": "616d5deb0e205d9f81d0623386ad91436790c6b6497ecaf24b06639477e9ef04",
+    "state_key_count": 394,
+    "lora_key_count": 392,
+    "embedding_and_head_alias_key_count": 2,
+    "embedding_and_head_full_sha_equal": true,
+    "saved_LoRA_hashes_independently_match_synchronized_training_tensors": 392,
+    "embedding_head_trained_unique_parameter_count": 156249088,
+    "logical_key_elements_with_embedding_alias_counted_twice": 317544448,
+    "actual_file_size_consistent_with_single_shared_storage": true,
+    "strict_reload_check": "Both original rank code executions compare complete saved/reloaded key sets and every tensor value, then verify tied Parameter/storage. Reviewer rechecked raw receipts/source and all LoRA hashes; did not redownload or independently unpickle the322MB adapter."
+  },
+  "generation_independent_recount": {
+    "users": 8,
+    "sequences": 160,
+    "position_legal": 160,
+    "EOS_at_position4": 160,
+    "canonical_count": 0,
+    "canonical_fraction": 0.0,
+    "distinct_SIDs_across_all_users": 160,
+    "method": "Rehash original author Instruments.index.json, derive each allowed SID position directly, reconstruct every output SID from918-token ID map, recompute canonical catalog membership and scores order."
+  },
+  "important_precision_observation": "Raw bitsandbytes warning reports BF16 activations are internally cast to FP16 during Int8 quantization. This is an Int8+BF16-compute adapter path with FP32 CE/masters/moments, not a claim that every backend operation is BF16.",
+  "limits": [
+    "Four updates include one zero-LR warmup update and three nonzero updates; no complete epoch or seed",
+    "Only bounded80 validation examples and8 beam20 users, not complete validation/test metrics",
+    "Canonical0/160 after tiny preflight is an observed outcome and cannot establish final recommendation quality",
+    "Full optimizer/scheduler/RNG checkpoint and training-state restoration NOT TESTED",
+    "Formal full-seed96h estimation not independently finalized here; timing includes instrumentation overhead",
+    "Runtime gradient and value assertions are code-backed raw execution evidence, not a second independent GPU rerun"
+  ]
+}

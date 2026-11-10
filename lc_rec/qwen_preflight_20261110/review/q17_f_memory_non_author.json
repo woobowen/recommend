@@ -1,0 +1,102 @@
+{
+  "schema": "qwen17_full_parameter_memory_non_author_source_analysis_v1",
+  "reviewer": "/root/official_architecture",
+  "is_implementation_author": false,
+  "reviewed_utc": "2026-11-10T17:10:53.770892+00:00",
+  "status": "SOURCE_ANALYSIS_COMPLETE_F06_CALIBRATION_PENDING",
+  "no_GPU_or_install_performed": true,
+  "expanded_unique_parameters": 1721908224,
+  "vocab": 152587,
+  "max_real_train_tokens": 184,
+  "actual_torch_total_memory_gib": 23.5184326171875,
+  "card_capacity_note": "Use observed Torch total_memory23.518GiB, not nominal4090/24GB or NVML nominal capacity.",
+  "persistent_and_transient_by_phase": {
+    "BF16_replicated_weights_gib": 3.207304000854492,
+    "FP32_master_partition_gib": 3.207304000854492,
+    "FP32_Adam_moments_partition_gib": 6.414608001708984,
+    "base_without_gradients_8N_gib": 12.829216003417969,
+    "BF16_partition_gradients_1N_gib": 1.603652000427246,
+    "FP32_master_step_gradient_2N_gib": 3.207304000854492,
+    "foreach_AdamW_denominator_2N_gib": 3.207304000854492,
+    "optimizer_tensor_peak_12N_gib": 19.243824005126953,
+    "max_embedding_FP64_norm_temporary_gib": 2.3282928466796875,
+    "two_BF16_50M_overlap_buckets_gib": 0.1862645149230957
+  },
+  "phase_lifetime_evidence": [
+    "DeepSpeed stage_1_and_2.py step creates a flat BF16 gradient partition and casts it to FP32, then frees parameter grads and sets averaged_gradients[group]=None before calling native optimizer.",
+    "Therefore9N+FP32 gradient+foreach buffer is an overcount if all are treated simultaneously; the optimizer-state phase has model2N+master2N+moments4N+mastergrad2N+sqrt temporary2N=12N, with logits and runtime overhead additional.",
+    "Native Torch2.6 AdamW allocates exp_avg and exp_avg_sq lazily in _init_group on first step even when learning rate is zero.",
+    "Native default CUDA AdamW uses foreach when foreach/fused unspecified. With standard scalar betas, no maximize/amsgrad/capturable variants, denominator _foreach_sqrt is the principal extra FP32 partition-sized tensor, followed by in-place transformations.",
+    "DeepSpeed grad norm uses per-gradient double() temporary; rank owning the large embedding may transiently need up to2.328GiB for that conversion.",
+    "Gradient accumulation can briefly retain previous averaged BF16 partition plus new current partition; the5GiB original forward/backward reserve must cover this, communication and checkpointed activations.",
+    "The probe retains BF16 logits through engine.step; include0.418GiB at micro8/max184.",
+    "GPU reserved memory includes reusable cached blocks; the LoRA16.89GiB reserved peak must not be scaled as irreducible full-finetune live tensor memory. Fragmentation and non-PyTorch allocations still require actual F06 calibration."
+  ],
+  "batch_candidates": [
+    {
+      "micro": 8,
+      "accumulation": 4,
+      "global_batch": 64,
+      "fp32_logits_gib": 0.8367302417755127,
+      "live_bf16_logits_at_step_gib": 0.41836512088775635,
+      "forward_backward_original_conservative_gib": 21.943058729171753,
+      "optimizer_phase_12N_plus_live_logits_plus2GiB_gib": 21.66218912601471
+    },
+    {
+      "micro": 4,
+      "accumulation": 8,
+      "global_batch": 64,
+      "fp32_logits_gib": 0.41836512088775635,
+      "live_bf16_logits_at_step_gib": 0.20918256044387817,
+      "forward_backward_original_conservative_gib": 20.687963366508484,
+      "optimizer_phase_12N_plus_live_logits_plus2GiB_gib": 21.45300656557083
+    },
+    {
+      "micro": 2,
+      "accumulation": 16,
+      "global_batch": 64,
+      "fp32_logits_gib": 0.20918256044387817,
+      "live_bf16_logits_at_step_gib": 0.10459128022193909,
+      "forward_backward_original_conservative_gib": 20.06041568517685,
+      "optimizer_phase_12N_plus_live_logits_plus2GiB_gib": 21.348415285348892
+    },
+    {
+      "micro": 1,
+      "accumulation": 32,
+      "global_batch": 64,
+      "fp32_logits_gib": 0.10459128022193909,
+      "live_bf16_logits_at_step_gib": 0.05229564011096954,
+      "forward_backward_original_conservative_gib": 19.746641844511032,
+      "optimizer_phase_12N_plus_live_logits_plus2GiB_gib": 21.296119645237923
+    }
+  ],
+  "recommendation": {
+    "immediate": "Run the already authorized F06 path first and read both rank actual allocated/reserved/NVML peaks through its first zero-LR AdamW state allocation and second nonzero update. No extra standalone CUDA test required.",
+    "F17_micro8_condition": "Keep preferred micro8×acc4 only if F06-calibrated conservative peak plus non-PyTorch/context allowance leaves at least1.5–2GiB below observed23.518GiB; current static22GiB envelope alone is not a safety confirmation.",
+    "fallback": "If calibration does not leave that headroom, choose authorized micro4×acc8 before the first F17 update. It reduces logits/activations/cache pressure without changing global64 or optimizer mathematics.",
+    "hard_boundary": "Micro reduction does not reduce the approximately19.244GiB optimizer tensor floor. If that phase plus actual overhead cannot fit safely, mark F17 resource BLOCKED; do not change optimizer/offload/trainable scope.",
+    "budget_caution": "First LR0 update still allocates moments and foreach temporary; an OOM there can consume the conservative charged update allowance before useful nonzero update. Avoid trial-and-error optimizer changes."
+  },
+  "source_files": {
+    "DeepSpeed.v0.16.9.stage_1_and_2.py": {
+      "sha256": "7e03bb5b2c923b2291ed28b663b1b605aa1384f68aa23b5744951183cc42fef6",
+      "bytes": 121833
+    },
+    "pytorch.v2.6.0.adamw.py": {
+      "sha256": "e680a255db9c53c4248a55f414b7af9aab90bb672312ac960bb459903a161c1d",
+      "bytes": 35079
+    },
+    "pytorch.v2.6.0.optimizer.py": {
+      "sha256": "354f41f784630a031195509d6b65bd5faaaa7a92402102c3b4c50423082e7ec9",
+      "bytes": 47475
+    }
+  },
+  "primary_sources": [
+    "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/runtime/zero/stage_1_and_2.py#L1871",
+    "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/runtime/zero/stage_1_and_2.py#L1676",
+    "https://github.com/pytorch/pytorch/blob/v2.6.0/torch/optim/adamw.py#L170",
+    "https://github.com/pytorch/pytorch/blob/v2.6.0/torch/optim/adamw.py#L699",
+    "https://github.com/pytorch/pytorch/blob/v2.6.0/torch/optim/adamw.py#L851"
+  ],
+  "limits": "Source-derived conditional engineering estimate; not an actual F17 resource measurement or training feasibility PASS."
+}

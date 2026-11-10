@@ -1,7 +1,7 @@
 {
   "schema": "qwen_three_model_letter_semantics_static_review_v1",
   "reviewer": "/root/letter_semantics",
-  "reviewed_utc": "2026-11-10T16:22:43.755967+00:00",
+  "reviewed_utc": "2026-11-10T16:45:20.028105+00:00",
   "status": "PASS_STATIC_WITH_RUNTIME_REQUIREMENTS",
   "runtime_gpu_status": "NOT TESTED BY THIS REVIEW",
   "scope": "Non-author review of root-authored common.py/cpu_audit.py/probe.py/resource_guard.py, frozen LETTER semantics, independent standard-library data/header counts and batch/Trainer arithmetic. No claim of executing GPU or approving a formal seed.",
@@ -10,19 +10,23 @@
     "worktree": "/home/addaswsw/recommend-worktrees/lc-rec",
     "files": {
       "lc_rec/qwen_preflight_20261110/scripts/common.py": {
-        "sha256": "8d4863c14f6a78188f71b110ff9297f45472ab4b763db0ccc0b8551450ab88a6",
+        "sha256": "5185c6578e5716a163d33688505db62d5140fdaa6cc9512c280253a21d848c06",
         "ast_parse": "PASS"
       },
       "lc_rec/qwen_preflight_20261110/scripts/cpu_audit.py": {
-        "sha256": "5a8e6ec2a1eeff8f89fe386b7ea1731b0a6827620ef694e2db59ec0cdc370224",
+        "sha256": "9cee4476071f4bbb9bdba95e375788929f90e741a889f8285ef2f4ed51f10d27",
         "ast_parse": "PASS"
       },
       "lc_rec/qwen_preflight_20261110/scripts/probe.py": {
-        "sha256": "8d551349ace0d196fedbdd1f4ddfc7077688c1f5780d1f74dd8b20be1fcd9ebf",
+        "sha256": "4dc56620b9427dc58b792d427cca9d0b4af160f9d8e3027e942026e408f9bd39",
         "ast_parse": "PASS"
       },
       "lc_rec/qwen_preflight_20261110/scripts/resource_guard.py": {
         "sha256": "668189b524ca0e137d3db3a8abbbf51f29a2ed9ccbc86add78a576a220ca1fbb",
+        "ast_parse": "PASS"
+      },
+      "lc_rec/qwen_preflight_20261110/scripts/summarize.py": {
+        "sha256": "c09bc61cce22e72ecb854b270515d056a7e3017e3d0434b9b7b5d92a37ac41eb",
         "ast_parse": "PASS"
       }
     },
@@ -233,5 +237,84 @@
     "reviewer_GPU_execution": false,
     "reviewer_server_mutations": false,
     "only_written_file": "lc_rec/qwen_preflight_20261110/review/letter_semantics_prelaunch.json"
+  },
+  "earlier_source_bindings": [
+    {
+      "lc_rec/qwen_preflight_20261110/scripts/common.py": {
+        "sha256": "8d4863c14f6a78188f71b110ff9297f45472ab4b763db0ccc0b8551450ab88a6",
+        "ast_parse": "PASS"
+      },
+      "lc_rec/qwen_preflight_20261110/scripts/cpu_audit.py": {
+        "sha256": "5a8e6ec2a1eeff8f89fe386b7ea1731b0a6827620ef694e2db59ec0cdc370224",
+        "ast_parse": "PASS"
+      },
+      "lc_rec/qwen_preflight_20261110/scripts/probe.py": {
+        "sha256": "8d551349ace0d196fedbdd1f4ddfc7077688c1f5780d1f74dd8b20be1fcd9ebf",
+        "ast_parse": "PASS"
+      },
+      "lc_rec/qwen_preflight_20261110/scripts/resource_guard.py": {
+        "sha256": "668189b524ca0e137d3db3a8abbbf51f29a2ed9ccbc86add78a576a220ca1fbb",
+        "ast_parse": "PASS"
+      }
+    }
+  ],
+  "followup_static_review": {
+    "scope": "Direct reread of current common/cpu_audit/probe additions and summarize.py; no call to summarize.estimate and no GPU execution.",
+    "new_probe_paths_checked": [
+      "Official qwen3_5_text configuration is accepted when strictly reloading an official-class model-only save.",
+      "CPU audit independently asserts every 9922 canonical item SID encodes as exactly four declared token IDs and decodes unchanged before/after tokenizer save.",
+      "GPU probe binds the formal ASSET_MANIFEST, pinned revision directory, file sizes and exact original/expanded parameter counts to earlier full asset hash receipts.",
+      "DeepSpeed FP32 master partitions and both Adam moments are asserted GPU resident; actual accumulation dtype is recorded rather than inferred.",
+      "F model-only safetensors save/reload compares all state keys, shapes, dtypes and exact SHA on both ranks. It remains separate from optimizer/scheduler/RNG checkpoint restoration."
+    ],
+    "summarize_formula_review": {
+      "status": "PASS_STATIC_CONDITIONAL_COST_FORMULAS",
+      "optimizer_steps": "Four times ceil(actual per-rank loader length / actual accumulation), not an unaudited raw N/64 quotient.",
+      "training_center": "L uses post-first mixed updates; F falls back to nonzero length-envelope update and remains INCONCLUSIVE. Upward-only token scale is an explicitly limited effective-token proxy.",
+      "training_conservative": "Maximum measured update duration, including cold first update/long-envelope measurements, times the same upward-only token scale.",
+      "validation": "Measured global16 batches, center=mixed and conservative=max per-user batch duration, multiplied by four times 49544 validation presentations.",
+      "generation": "Two synchronized users per stratum: pair MAX duration is divided by two exactly once. Actual prompt0 token histogram is assigned to nearest measured mean input length, with shorter-length tie break; conservative uses slowest stratum for all24772 users.",
+      "checkpoint": "For four hypothetical epoch checkpoints, size proxy=2*actual unique parameter-inventory bytes + 12*trainable elements +1GiB assumption. Observed native adapter/model-only bytes/seconds gives bandwidth; conservative uses quarter bandwidth plus60seconds/checkpoint. No full-state checkpoint time is represented as a direct measurement.",
+      "restore_and_init": "Native actual adapter/model-only reload is a proxy for best restore; training init is elapsed stage-to-bounded_training and L additionally counts BF16 inference-base load.",
+      "overhead": "Center adds10%, conservative25%, each calculated on its own component subtotal, plus measured guard-minus-rank launcher/teardown proxy.",
+      "classification": "Only L with at least two post-first mixed updates and conservative margin can receive LIKELY_WITHIN_96H; F remains INCONCLUSIVE unless its conservative estimate already exceeds96h.",
+      "qualifications": [
+        "Effective-token mean scaling does not model padding maxima or attention quadratic cost.",
+        "Beam test times are generation-only. Complete CPU preparation/decoding/filtering/metric aggregation remain unmeasured and conditional.",
+        "Four checkpoint proxies do not separately time the original Trainer final save_state/save_model after its epoch saves; retain these as unknown final-save costs.",
+        "The observed model-only/adapter save may use OS page cache; quarter-bandwidth and fixed60second allowances are assumptions, not confidence bounds.",
+        "Actual L mixed indices0/1/2 use192 unique pool rows; central mixed indices1/2 use128. The boundary update repeats one row across17 templates. Pool256 must not be reported as256 independently trained rows."
+      ]
+    },
+    "cpu_job_denominators_observed": {
+      "q06": {
+        "raw_audit_sha256": "9e52bdc696d0c63df23402d4fb51ab579789702ca9761264c667cb3c4079b11a",
+        "reported_cpu_status": "PASS_CPU_TOKENIZER_AND_STATIC",
+        "histogram_rows_and_token_totals_independently_recomputed": true,
+        "train_mean_tokens": 86.05969492631051,
+        "train_max_tokens": 184,
+        "validation_rows": 49544,
+        "test_users": 24772
+      },
+      "q17": {
+        "raw_audit_sha256": "f52ea41c4d9072e1c90ce898aa724fbeaec9762432a9d4a84a60971736551443",
+        "reported_cpu_status": "PASS_CPU_TOKENIZER_AND_STATIC",
+        "histogram_rows_and_token_totals_independently_recomputed": true,
+        "train_mean_tokens": 86.05969492631051,
+        "train_max_tokens": 184,
+        "validation_rows": 49544,
+        "test_users": 24772
+      },
+      "q35": {
+        "raw_audit_sha256": "2a7b53c9f40b2b63ff8870b85f0394be0f348e6d18a26fd587e43a2413eecfd3",
+        "reported_cpu_status": "PASS_CPU_TOKENIZER_AND_STATIC",
+        "histogram_rows_and_token_totals_independently_recomputed": true,
+        "train_mean_tokens": 89.05969492631051,
+        "train_max_tokens": 187,
+        "validation_rows": 49544,
+        "test_users": 24772
+      }
+    },
+    "independent_numeric_runtime_recalculation": "PENDING actual both-rank GPU outputs and root-generated summary; this review does not substitute a call to root estimate for independent calculation."
   }
 }
