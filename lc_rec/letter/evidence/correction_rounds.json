@@ -1,0 +1,40 @@
+{
+  "task_level_correction_round": 2,
+  "initial_round": 0,
+  "max_correction_rounds": 3,
+  "changes": [
+    {
+      "component": "CPU runner interface",
+      "failure_job": "letter-20261110-data-r0",
+      "root_cause": "accepted runner creates output directory; audit requires exclusive new directory",
+      "fix": "output/audit child in r1 request; exact audit code unchanged"
+    },
+    {
+      "component": "CPU environment import",
+      "failure_job": "letter-20261110-environment-r0",
+      "root_cause": "CPU-hidden CUDA plus forced DS_ACCELERATOR=cuda triggers device query",
+      "fix": "remove forced DS accelerator from isolated CPU check; no reinstall or framework change"
+    },
+    {
+      "component": "prelaunch LoRA API review",
+      "root_cause": "PEFT0.5 copies removed bnb state field and constructor kwarg",
+      "fix": "signature-gated compatibility drops only obsolete False field; original numerical operations unchanged"
+    },
+    {
+      "component": "prelaunch numeric definition",
+      "root_cause": "PEFT0.5 int8 dtype path conflicts with DS BF16 without autocast",
+      "fix": "explicit BF16 autocast proposal, pending user approval; no GPU run"
+    },
+    {
+      "component": "unselected dependency alternative",
+      "result": "PEFT0.10 + hub0.20.3 small wheels downloaded but NOT INSTALLED; native BF16 alternative reviewed but not used after user approved narrower existing-stack adaptation."
+    }
+  ],
+  "transport_notes": [
+    "Original Windows SSH/scp retained.",
+    "Task-local Python query helper changed stdin script to shlex-quoted python -c after intermittent EOF timeouts; no SSH/VPN/system config changed.",
+    "Fixed public dependency wheels resumed from retained suffix; all PyPI hashes and wheel CRCs verified.",
+    "No full model weights downloaded."
+  ],
+  "round2": "User-approved, necessary-path BF16 adaptation prepared after independent prelaunch review; fixed PEFT0.5 retained. No GPU attempt has yet occurred; original dtype error will be measured within the first bounded job before the approved shim."
+}

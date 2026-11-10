@@ -1,0 +1,212 @@
+{
+  "schema": "letter_runtime_cpu_non_author_review_v1",
+  "reviewer": "/root/identity_audit",
+  "status": "PASS_CPU_DATA_EVIDENCE_ONLY",
+  "job_id": "letter-20261110-data-r1",
+  "capture_version": "7a7365c6033864c232a4c2b042bcc9c494c938b3",
+  "scope": "Direct review of original source, existing complete CPU artifacts and fresh server B asset reads. No GPU/model load, training update, recommendation metrics or 96-hour feasibility acceptance.",
+  "directly_read": [
+    "request.json, last-query.json, status.json, work.log, export-manifest.json",
+    "output/audit/audit.json, probe_samples.json, tokenizer_a_ids.json, tokenizer_b_ids.json",
+    "output/audit/length_rows.npz and all tokenizer_a saved files",
+    "saved actual LlamaTokenizer tokenize/_tokenize implementations",
+    "fresh server B Instruments.inter.json, Instruments.item.json, Instruments.index.json via existing task Windows SSH transport",
+    "fresh installed Transformers4.31 PreTrainedTokenizer._add_tokens/tokenize source"
+  ],
+  "non_author_checks": {
+    "executed_script_sha256": "f7dc03f8efdc3b6943854077ce33dee3b9099d77476ab7bc9ec00284f2f88ccf",
+    "audit_json_sha256": "59b02c50a25681d894130c1f243f32d5479c60ac8ffaa3e1bdb4c882f481ac92",
+    "export_manifest_members_verified": 18,
+    "audit_output_members_verified": 10,
+    "request_input_hashes_verified": 20,
+    "original_source_hashes_verified": 10,
+    "script_equals_prior_reviewed_bytes": true,
+    "all_output_hashes_match_export_manifest": true,
+    "fresh_remote_request_matches_local_raw_bytes": true,
+    "canonical_request_matches_last_query": true,
+    "npz_all_rows_all17_class_table_mapping_checked": true,
+    "npz_all_per_prompt_histograms_and_means_checked": true,
+    "validation_randomstate42_ids_checked": true,
+    "probe_real_row_user_history_target_prompt_binding_checked": true,
+    "mask_supervised_ids_independently_rebuilt_from_real_target_sid": true,
+    "a_token_ids_rebuilt_as_lexically_sorted_sid_tokens_from32000": true,
+    "new_verification_artifacts": [
+      "cpu_artifact_verification.json",
+      "verify_cpu_artifacts.py",
+      "remote_cpu_identity.json",
+      "read_remote_cpu_identity.py"
+    ]
+  },
+  "data_identity": {
+    "a_inter_sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743",
+    "a_item_sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2",
+    "a_index_sha256": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd",
+    "b_index_sha256": "b94d16398a178220a117abda5effd5508069beaccc2b8110eab25ae50f2af600",
+    "fresh_b_read_matches_cpu_and_prior_asset_hashes": true,
+    "a_b_inter_and_item_byte_equal": true,
+    "a_b_inter_and_item_dict_and_order_equal": true,
+    "a_b_index_key_sets_and_order_equal": true,
+    "a_b_same_item_sid_values_equal": 0,
+    "a_b_same_item_sid_values_differ": 9922,
+    "users": 24772,
+    "items": 9922,
+    "interactions": 206153,
+    "all_interaction_items_have_metadata_and_sid": true,
+    "raw_external_mapping_limit": "Equality covers the supplied numeric user/item axes, ordered interactions and metadata. Neither A nor B supplies a new proof of unavailable historical original-ASIN/user identity or paper checkpoint pairing."
+  },
+  "split_and_labels": {
+    "train_rows": 131837,
+    "valid_users": 24772,
+    "test_users": 24772,
+    "valid_texts_with2prompts": 49544,
+    "actual_source_dataset_all_rows_match_independent_leave_two_out": true,
+    "a_b_labels_and_histories_identical_for_every_user_position": true,
+    "validation_penultimate_test_last": true,
+    "max_history": 20,
+    "auxiliary_user_intention_files_opened": false,
+    "colliding_target_rows": {
+      "train": 941,
+      "valid": 165,
+      "test": 122
+    },
+    "sid_target_hashes_differ_between_a_b_in_all_splits": true
+  },
+  "sid_and_tokenizer": {
+    "a_new_tokens": 918,
+    "a_expanded_vocab": 32918,
+    "b_new_tokens": 930,
+    "b_expanded_vocab": 32930,
+    "base_vocab": 32000,
+    "preexisting_sid_tokens_a": 0,
+    "preexisting_sid_tokens_b": 0,
+    "token_order": "Python sorted of unique SID strings; lexical",
+    "all_9922_concatenated_sids_tokenize_to_expected_ids_in_a_and_b": true,
+    "all_9922_a_sid_decode_normalize_roundtrips": true,
+    "a_saved_reloaded_full_vocab_and_pad_equal": true,
+    "special_ids": {
+      "bos": 1,
+      "eos": 2,
+      "pad": 0,
+      "unk": 0
+    },
+    "a_and_b_sid_length": 4,
+    "a_and_b_unique_sid_count": 9897,
+    "a_and_b_collision_groups": 23,
+    "a_and_b_colliding_items": 48,
+    "a_and_b_extra_collisions": 25,
+    "collision_item_groups_identical": true,
+    "collision_implication": "Source evaluator compares SID strings; it cannot disambiguate these colliding item identities. Original assets preserved; no collision repair or re-tokenization.",
+    "generation_mapping": "Same A index supplies input/target/candidate set and actual position masks; 85 response-prefix cases checked across17 prompts; this is positionwise vocabulary constraint, not a Trie.",
+    "position_mask_sizes": [
+      150,
+      256,
+      256,
+      256,
+      1
+    ],
+    "position_cross_product": 2516582400,
+    "invalid_complete_sid_combinations_possible": true
+  },
+  "mask_and_lengths": {
+    "actual_original_collator_executed": true,
+    "probe_batch_shape": [
+      4,
+      175
+    ],
+    "response_only_exact_mask": true,
+    "supervised_ids_per_probe": "Exactly4 real SID IDs plusEOS2; input and right-padding labels=-100",
+    "probe_full_lengths": [
+      68,
+      83,
+      136,
+      175
+    ],
+    "full_training_length_range_all_prompt_classes": [
+      62,
+      175
+    ],
+    "training_uniform_prompt_full_length_mean": 92.53888915412035,
+    "training_uniform_prompt_full_length_quantiles": {
+      "q10": 68,
+      "q50": 83,
+      "q90": 136,
+      "q95": 159,
+      "q99": 172
+    },
+    "training_max_actual_real_probe_length": 175,
+    "test_prompt0_input_length_range": [
+      79,
+      159
+    ],
+    "test_prompt0_input_length_mean": 93.90412562570644,
+    "actual_seed42_valid_full_mean": 94.78358630712094,
+    "model_max_length": 2048,
+    "no_training_or_validation_truncation": true,
+    "method": "Every181381 real row normalized and matched to fixed prompt/history-length text class; every real row directly tokenized at prompt0; additional15760 nonzero-prompt real text pairs verified; finite class tokenization derives other row×prompt lengths.",
+    "analytic_conditions_now_supported": "Actual4.31 _add_tokens converts all SID entries to ordinary strings and extends unique_no_split_tokens/trie; ordinary SID strings use the same left/right strip behavior in parent tokenize. Saved LlamaTokenizer uses legacy=True and tokenizes each remaining fragment independently via SentencePiece. Together with uniform4 atomic SID tokens and identical normalized non-SID fragments for every row, substitution preserves lengths. Source and runtime checks support the finite class inference.",
+    "distinction": "Other prompts were not each fully tokenized over every row. All-row×17 distribution represents uniform-prompt expected exposure, not a future exact stochastic epoch draw. No synthetic-string GPU speed is present."
+  },
+  "runtime_and_runner": {
+    "program_audit_status": "PASS",
+    "leader_exit_code": 0,
+    "elapsed_seconds": 370.69527189899236,
+    "cpu_process_peak_rss_gib": 1.862579345703125,
+    "runner_status": "WORKERS_TERMINATED",
+    "reason": "LEADER_EXITED_WITH_MEMBERS",
+    "cleanup_verified": true,
+    "cleanup_action": "SIGTERM sent only to captured owned task descendant pid3167193; terminal scan verified empty.",
+    "last_query_all_task_members_gone": true,
+    "last_query_supervisor_alive": false,
+    "last_query_worker_alive": false,
+    "must_not_relabel_runner_as_SUCCEEDED": true,
+    "gpu_execution": false,
+    "model_weights_loaded": false
+  },
+  "packaging_correction": {
+    "observed": "Initial local request.json bytes differed from export-manifest while semantic canonical hash matched last-query.",
+    "root_cause": "Main agent reported overwriting the retrieved raw request with a pretty-printed local equivalent in the repository working copy; remote and retrieved originals remained unchanged.",
+    "correction": "Main agent restored retrieved raw request and stored local-request.json separately.",
+    "independent_reverification": "All18 export members now pass bytes/SHA256; fresh server request is5871bytes SHA256 ba8d6d55c5bc2463490985129ca992c710287daed22fb50f2325ab4b423bd271, matching local raw request/export manifest; canonical hash f90accbdae987f876e858b26173b69bd5f15f99f288f9bc54176c03df431a0df matches last-query.",
+    "classification": "Packaging correction; no CPU rerun, data change or research-method correction."
+  },
+  "model_and_environment_boundaries": {
+    "tokenizer_model_sha256": "9e556afd44213b6bd1be2b850ebbbd98f5481437a8021afaf58ee7fb1818d347",
+    "existing_model_revision": "4782ad278652c7c71b72204d462d6d01eaaf7549",
+    "model_path": "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+    "cpu_data_environment": {
+      "torch": "2.6.0",
+      "transformers": "4.31.0",
+      "tokenizers": "0.13.3",
+      "sentencepiece": "0.1.99",
+      "numpy": "1.24.4"
+    },
+    "new_isolated_environment_import_only": {
+      "python": "/data/bwwu/envs/letter-20261110/bin/python",
+      "peft": "0.5.0",
+      "bitsandbytes": "0.45.5",
+      "flash_attn": "2.7.4.post1",
+      "fschat": "0.2.31",
+      "deepspeed": "0.16.9",
+      "accelerate": "0.21.0",
+      "torch_cuda_context": false,
+      "status": "CPU_IMPORT_PASS_GPU_NOT_EXECUTED"
+    },
+    "environment_warning_limit": "CUDA was hidden for CPU import. The bitsandbytes CPU/no-GPU warning is not evidence that CUDA124 backend works or fails on actual GPUs.",
+    "historical_author_model_limit": "Author document provides a local LLaMA7B directory without model hash/revision. Existing checkpoint family/tokenizer identity is evidenced, exact equality to historical author checkpoint is not.",
+    "not_accepted": [
+      "PEFT actual active parameter trainability/gradients/optimizer membership",
+      "8bit+BF16+LoRA+ZeRO2 GPU execution",
+      "optimizer update",
+      "adapter model save/reload equivalence",
+      "beam20 GPU generation throughput",
+      "warmup steady GPU throughput",
+      "one-seed96hour feasibility",
+      "paper metrics reproduction"
+    ]
+  },
+  "blocking_findings_in_cpu_scope": [],
+  "pending_research_decisions": "Explicit BF16 autocast numerical definition remains pending user decision per main agent; this CPU review does not authorize it or any GPU run.",
+  "no_packages_installed_by_reviewer": true,
+  "no_remote_writes_by_review_code": true,
+  "no_model_or_gpu_rerun": true
+}

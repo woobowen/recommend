@@ -1,0 +1,142 @@
+{
+  "schema": "letter_data_script_non_author_review_v1",
+  "reviewer": "/root/identity_audit",
+  "review_date_client": "2026-11-10",
+  "status": "PASS_FOR_BOUNDED_CPU_RUN",
+  "reviewed_script": "lc_rec/letter/scripts/audit_data.py",
+  "reviewed_script_sha256": "f7dc03f8efdc3b6943854077ce33dee3b9099d77476ab7bc9ec00284f2f88ccf",
+  "author": "/root",
+  "independence": "Reviewer did not author or edit audit_data.py; reviewed source and directly parsed all three local A JSON files.",
+  "blocking_issues": [],
+  "actual_checks": {
+    "syntax": "AST parsing passed; script is importable using Python stdlib only before main, without model/framework imports.",
+    "a_json_identities": {
+      "inter": {
+        "bytes": 3312848,
+        "sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743",
+        "entries": 24772
+      },
+      "item": {
+        "bytes": 7526890,
+        "sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2",
+        "entries": 9922
+      },
+      "index": {
+        "bytes": 518041,
+        "sha256": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd",
+        "entries": 9922
+      }
+    },
+    "a_split_comparison": {
+      "method": "Executed reviewed split_records on every real A interaction; independently reconstructed source-equivalent seq[:-2] prefix training, seq[-2] validation, seq[-1] test and last20 histories; compared every (user_id,target_position,history,target).",
+      "all_rows_equal": true,
+      "train": 131837,
+      "valid": 24772,
+      "test": 24772
+    },
+    "source_logic_read": [
+      "Original data.py L130-163: same index remapping and prefix training",
+      "L165-204: leave-one-out labels with validation penultimate and test last",
+      "L210-237: 2 fixed sampled validation templates per user",
+      "L239-270: input/full response strings and random train prompt, fixed test prompt",
+      "BaseDataset L43-89: lexical tokens, positionwise generation mask",
+      "Original collator.py L23-44: full input copy, response-only pad/prefix mask",
+      "Original prompt.py: 17 SeqRec templates; fixed SFT wrapper"
+    ],
+    "a_axes": "Metadata keys=index keys=interaction item set=9922; no missing SID or metadata; 24772 users; minimum sequence length5.",
+    "a_collisions": {
+      "unique_sid": 9897,
+      "groups": 23,
+      "items_in_groups": 48,
+      "extra_collisions": 25
+    },
+    "historical_b_comparison": "Existing lc_rec/evidence/cpu_input_asset_hashes.json records byte-identical inter/item SHA-256 and a different B index SHA-256 b94d16398a178220a117abda5effd5508069beaccc2b8110eab25ae50f2af600. These are historical receipts; not a fresh read of server B JSON in this subtask."
+  },
+  "implementation_findings": [
+    {
+      "area": "split/data identity",
+      "verdict": "PASS",
+      "lines": "49-172,255-275,496-510",
+      "reason": "Actual dict values and ordering compared independently of file bytes; all mode labels/history keyed by user/position. A original Dataset.inter_data is exhaustively checked. B source Dataset is not instantiated, but B explicit split logic is the same and full inter/item comparison suffices if equal. The report correctly avoids inventing unavailable historical external-ID/checkpoint identity."
+    },
+    {
+      "area": "token IDs",
+      "verdict": "PASS pending runtime",
+      "lines": "223-252,543-558",
+      "reason": "A/B fresh tokenizers are isolated; lexically sorted SID strings added; each SID component atomic and every concatenated SID checked; A tokenizer save/reload compares full vocabulary and pad ID. Uses only tokenizer files, not base model weights."
+    },
+    {
+      "area": "validation sampling",
+      "verdict": "PASS pending runtime",
+      "lines": "255-261,574-587",
+      "reason": "Original construction is seeded just before validation; training SeqRec construction uses no NumPy draws. Independent RandomState reconstruction is compared to every original valid text. valid_prompt_id0 is correctly not treated as fixed prompt when sample_valid=True."
+    },
+    {
+      "area": "labels/masks",
+      "verdict": "PASS pending runtime",
+      "lines": "378-408",
+      "reason": "Runs original Collator on true short/median/long/max rows, verifies full input prefix identity, exact -100 mask, SID+EOS targets and attention length. This is an actual source call, not a hand-written substitute. Four representative rows do not constitute every-row dynamic mask verification; derived max/no-truncation and fixed response structure cover broader applicability conditionally."
+    },
+    {
+      "area": "finite length extrapolation",
+      "verdict": "CONDITIONALLY_VALID",
+      "lines": "278-360",
+      "reason": "For current data all SID pieces are added atomic tokens with uniform 4-token length. Every actual row is normalized and compared to a canonical row for its history length, so non-SID strings and separator structure are fixed. Tokenizer added-token splitting with identical AddedToken whitespace metadata makes content substitution length invariant. Prompt0 is exhaustively tokenized on all real rows; every other prompt/history/split class has bounded real-text checks. This is an analytical conditional exhaustive bound, not direct tokenization of all row×prompt pairs; the script states that distinction."
+    },
+    {
+      "area": "evaluation mapping",
+      "verdict": "PASS pending runtime",
+      "lines": "411-459",
+      "reason": "Actual allowed_fn invoked at every output position for all 17 prompts; map compared to exact audited token IDs; all SID decode normalization roundtrips checked. Correctly labels constraint positionwise and exposes invalid combinations. No recommendation metric is computed."
+    },
+    {
+      "area": "probe samples",
+      "verdict": "PASS",
+      "lines": "363-375,588-609",
+      "reason": "All train quantiles taken over real rows×17 prompts; explicit row/user/target IDs and prompt IDs retained. Mixed sample is deterministic and row-unique before batching. These are real source samples for GPU timings; canonical synthetic strings are used only for CPU length reasoning."
+    },
+    {
+      "area": "resource and closure",
+      "verdict": "PASS for CPU bounded run",
+      "lines": "198-220,462-644",
+      "reason": "Hides CUDA before framework imports; reads no model shard; monotonic CPU time and MemAvailable40GiB guards; exclusive fresh output; retains PARTIAL/FAIL and traceback; real exit2 on failure. Long individual operations only check guard between stages/batches, so wall bound is cooperative; an existing runner timeout should provide the hard limit."
+    }
+  ],
+  "recommended_nonblocking_improvements": [
+    {
+      "priority": "P2",
+      "location": "finite_length_tables/report runtime review",
+      "recommendation": "Before accepting derived nonzero-prompt lengths, inspect saved tokenizer tokenize/_tokenize implementations and confirm all 918 SID AddedToken objects share lstrip/rstrip/normalization/special handling; current base should have preexisting_sid_token_count=0. If these conditions differ, treat derived bound as unproved and use direct lengths for dependent claims.",
+      "requires_method_change": false
+    },
+    {
+      "priority": "P2",
+      "location": "length_distributions/all_prompt_* and train representatives",
+      "recommendation": "Budget report should call all-row×17-prompt distribution the uniform-prompt expected exposure distribution; it is not the exact randomly sampled prompt sequence of any future four-epoch run.",
+      "requires_method_change": false
+    },
+    {
+      "priority": "P3",
+      "location": "538,584,613",
+      "recommendation": "Several output labels hard-code seed42 even though --seed exists. The user fixed42, so current run is unaffected; reject other seeds or make labels use actual args.seed in a future generalization.",
+      "requires_method_change": false
+    },
+    {
+      "priority": "P3",
+      "location": "original_dataset_checks/all_rows_match_explicit_split_reconstruction",
+      "recommendation": "Current exhaustive comparison checks original .inter_data and recreates text with original prompts/template, while mask probe does not call training Dataset.__getitem__ for those exact probe selections. State that scope; optionally add a bounded seeded __getitem__ equivalence call if actual text-generation evidence is requested.",
+      "requires_method_change": false
+    }
+  ],
+  "required_runtime_review_before_final_acceptance": [
+    "Fresh server A/B asset SHA-256, dict equality, all three split comparisons and B SID counts/tokenizer IDs.",
+    "Runtime exact package versions; tokenizer atomic/new-token and concatenated checks; A save/reload.",
+    "Exhaustive prompt0 equality, finite-class nonzero checks and saved tokenizer implementation conditions.",
+    "Original collator probe targets/masks, no truncation, generation mask/roundtrip.",
+    "Actual CPU elapsed/peak RSS, server memory floor and runner terminal state.",
+    "GPU speeds/parameter updates/adapter restore and 96-hour budget are outside this script review."
+  ],
+  "no_gpu_or_model_execution": true,
+  "no_packages_installed": true,
+  "script_was_not_modified": true
+}

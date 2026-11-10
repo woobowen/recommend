@@ -17,7 +17,10 @@ def get(r):
  if not p.exists() or p.stat().st_size!=r['size']:
   partial=p.with_suffix(p.suffix+'.partial')
   with (root/(r['filename']+'.download.log')).open('ab') as log:
-   subprocess.run(['curl','--fail','--location','--continue-at','-','--retry','3','--retry-delay','1','--connect-timeout','15','--max-time','360','--output',str(partial),r['url']],stdout=log,stderr=log,check=True)
+   for attempt in range(4):
+    completed=subprocess.run(['curl','--fail','--location','--continue-at','-','--retry','0','--connect-timeout','15','--max-time','300','--output',str(partial),r['url']],stdout=log,stderr=log)
+    if partial.exists() and partial.stat().st_size==r['size']:break
+   else: raise RuntimeError('bounded resumable dependency transfer exhausted: '+r['filename'])
   assert partial.stat().st_size==r['size'];partial.replace(p)
  h=hashlib.sha256(p.read_bytes()).hexdigest()
  if 'digests' in r:assert h==r['digests']['sha256']

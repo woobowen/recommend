@@ -1,0 +1,175 @@
+{
+  "observed_utc": "2026-11-10T05:57:20.985415+00:00",
+  "host": "zwlab-01",
+  "assets": {
+    "inter": {
+      "path": "/data/bwwu/lc-rec/assets/data/Instruments/Instruments.inter.json",
+      "bytes": 3312848,
+      "sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743",
+      "canonical_sha256": "fcd1de083284234f45124d20eb2546adbddeb908d2b2bc16f44ed5fe3f0c0f8a",
+      "entries": 24772
+    },
+    "item": {
+      "path": "/data/bwwu/lc-rec/assets/data/Instruments/Instruments.item.json",
+      "bytes": 7526890,
+      "sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2",
+      "canonical_sha256": "36430a4147ba5d0d6a4f30bc25e7ee65ce080d7bbe35e9a452445f7e03474cec",
+      "entries": 9922
+    },
+    "index": {
+      "path": "/data/bwwu/lc-rec/assets/data/Instruments/Instruments.index.json",
+      "bytes": 516781,
+      "sha256": "b94d16398a178220a117abda5effd5508069beaccc2b8110eab25ae50f2af600",
+      "canonical_sha256": "9a5bee4613b97ed85986fdebfa8cae5817e2b633431ede4564015138baf729a4",
+      "entries": 9922
+    }
+  },
+  "semantics": {
+    "users": 24772,
+    "metadata_items": 9922,
+    "index_items": 9922,
+    "used_items": 9922,
+    "all_axes_equal": true,
+    "interactions": 206153,
+    "train_rows": 131837,
+    "unique_sid": 9897,
+    "sid_length_histogram": {
+      "4": 9922
+    },
+    "collision_groups": 23,
+    "colliding_items": 48,
+    "extra_collisions": 25,
+    "collision_item_groups": [
+      [
+        "112",
+        "175"
+      ],
+      [
+        "1173",
+        "9617"
+      ],
+      [
+        "1512",
+        "1513"
+      ],
+      [
+        "1519",
+        "1520"
+      ],
+      [
+        "212",
+        "4465"
+      ],
+      [
+        "2513",
+        "2514"
+      ],
+      [
+        "2744",
+        "2746"
+      ],
+      [
+        "2851",
+        "5311",
+        "7489"
+      ],
+      [
+        "3016",
+        "4231"
+      ],
+      [
+        "3070",
+        "3071"
+      ],
+      [
+        "3241",
+        "5528"
+      ],
+      [
+        "3893",
+        "3895"
+      ],
+      [
+        "4138",
+        "7483",
+        "9082"
+      ],
+      [
+        "4463",
+        "4464"
+      ],
+      [
+        "5467",
+        "9169"
+      ],
+      [
+        "5828",
+        "7773"
+      ],
+      [
+        "6434",
+        "6438"
+      ],
+      [
+        "6791",
+        "6792"
+      ],
+      [
+        "7151",
+        "7848"
+      ],
+      [
+        "7686",
+        "9335"
+      ],
+      [
+        "7971",
+        "8865"
+      ],
+      [
+        "9678",
+        "9679"
+      ],
+      [
+        "9768",
+        "9769"
+      ]
+    ],
+    "unique_sid_tokens": 930
+  },
+  "split_labels": {
+    "train": {
+      "rows": 131837,
+      "labels_sha256": "cecee22f74926dbf6640d868742492cfd55a72eaa6bdcc5e1513780fd7379af1",
+      "colliding_target_rows": 941
+    },
+    "valid": {
+      "rows": 24772,
+      "labels_sha256": "c8a337b4d4d7d6c447f8ae9691f8ab1af1a340bac78af0ab77b85f9867073c17",
+      "colliding_target_rows": 165
+    },
+    "test": {
+      "rows": 24772,
+      "labels_sha256": "e47a1acd50b195afcc27cdb5523020a2f8291a0e6a1f18821b48f985392dec0c",
+      "colliding_target_rows": 122
+    }
+  },
+  "tokenizer_parent_implementation": {
+    "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/tokenization_utils.py",
+    "sha256": "a2caef389763c9ec3103af792bf52736597187611c686c8612aee168eb02bff8",
+    "_add_tokens": {
+      "start_line": 384,
+      "source": "def _add_tokens(self, new_tokens: Union[List[str], List[AddedToken]], special_tokens: bool = False) -> int:\n        \"\"\"\n        Add a list of new tokens to the tokenizer class. If the new tokens are not in the vocabulary, they are added to\n        it with indices starting from length of the current vocabulary.\n\n        Args:\n            new_tokens (`List[str]`or `List[tokenizers.AddedToken]`):\n                Token(s) to add in vocabulary. A token is only added if it's not already in the vocabulary (tested by\n                checking if the tokenizer assign the index of the `unk_token` to them).\n            special_tokens (`bool`, *optional*, defaults to `False`):\n                Whether or not the tokens should be added as special tokens.\n\n        Returns:\n            `int`: The number of tokens actually added to the vocabulary.\n\n        Examples:\n\n        ```python\n        # Let's see how to increase the vocabulary of Bert model and tokenizer\n        tokenizer = BertTokenizer.from_pretrained(\"bert-base-uncased\")\n        model = BertModel.from_pretrained(\"bert-base-uncased\")\n\n        num_added_toks = tokenizer.add_tokens([\"new_tok1\", \"my_new-tok2\"])\n        print(\"We have added\", num_added_toks, \"tokens\")\n        # Note: resize_token_embeddings expects to receive the full size of the new vocabulary, i.e. the length of the tokenizer.\n        model.resize_token_embeddings(len(tokenizer))\n        ```\"\"\"\n        new_tokens = [str(tok) for tok in new_tokens]\n\n        tokens_to_add = []\n        for token in new_tokens:\n            if not isinstance(token, str):\n                raise TypeError(f\"Token {token} is not a string but a {type(token)}.\")\n            if not special_tokens and hasattr(self, \"do_lower_case\") and self.do_lower_case:\n                token = token.lower()\n            if (\n                token != self.unk_token\n                and self.convert_tokens_to_ids(token) == self.convert_tokens_to_ids(self.unk_token)\n                and token not in tokens_to_add\n            ):\n                tokens_to_add.append(token)\n                if self.verbose:\n                    logger.info(f\"Adding {token} to the vocabulary\")\n\n        added_tok_encoder = {tok: len(self) + i for i, tok in enumerate(tokens_to_add)}\n        added_tok_decoder = {v: k for k, v in added_tok_encoder.items()}\n        self.added_tokens_encoder.update(added_tok_encoder)\n        self.added_tokens_decoder.update(added_tok_decoder)\n\n        # Make sure we don't split on any special tokens (even they were already in the vocab before e.g. for Albert)\n        if special_tokens:\n            if len(new_tokens) == 1:\n                _insert_one_token_to_ordered_list(self.unique_no_split_tokens, new_tokens[0])\n            else:\n                self.unique_no_split_tokens = sorted(set(self.unique_no_split_tokens).union(set(new_tokens)))\n        else:\n            # Or on the newly added tokens\n            if len(tokens_to_add) == 1:\n                _insert_one_token_to_ordered_list(self.unique_no_split_tokens, tokens_to_add[0])\n            else:\n                self.unique_no_split_tokens = sorted(set(self.unique_no_split_tokens).union(set(tokens_to_add)))\n        self._create_trie(self.unique_no_split_tokens)\n\n        return len(tokens_to_add)"
+    },
+    "tokenize": {
+      "start_line": 481,
+      "source": "def tokenize(self, text: TextInput, **kwargs) -> List[str]:\n        \"\"\"\n        Converts a string in a sequence of tokens, using the tokenizer.\n\n        Split in words for word-based vocabulary or sub-words for sub-word-based vocabularies\n        (BPE/SentencePieces/WordPieces). Takes care of added tokens.\n\n        Args:\n            text (`str`):\n                The sequence to be encoded.\n            **kwargs (additional keyword arguments):\n                Passed along to the model-specific `prepare_for_tokenization` preprocessing method.\n\n        Returns:\n            `List[str]`: The list of tokens.\n        \"\"\"\n        # Simple mapping string => AddedToken for special tokens with specific tokenization behaviors\n        all_special_tokens_extended = {\n            str(t): t for t in self.all_special_tokens_extended if isinstance(t, AddedToken)\n        }\n\n        text, kwargs = self.prepare_for_tokenization(text, **kwargs)\n\n        if kwargs:\n            logger.warning(f\"Keyword arguments {kwargs} not recognized.\")\n\n        # TODO: should this be in the base class?\n        if hasattr(self, \"do_lower_case\") and self.do_lower_case:\n            # convert non-special tokens to lowercase\n            escaped_special_toks = [\n                re.escape(s_tok) for s_tok in (self.unique_no_split_tokens + self.all_special_tokens)\n            ]\n            pattern = r\"(\" + r\"|\".join(escaped_special_toks) + r\")|\" + r\"(.+?)\"\n            text = re.sub(pattern, lambda m: m.groups()[0] or m.groups()[1].lower(), text)\n\n        no_split_token = set(self.unique_no_split_tokens)\n        tokens = self.tokens_trie.split(text)\n        # [\"This is something\", \"<special_token_1>\", \"  else\"]\n        for i, token in enumerate(tokens):\n            if token in no_split_token:\n                tok_extended = all_special_tokens_extended.get(token, None)\n                left = tokens[i - 1] if i > 0 else None\n                right = tokens[i + 1] if i < len(tokens) - 1 else None\n                if isinstance(tok_extended, AddedToken):\n                    if tok_extended.rstrip and right:\n                        # A bit counter-intuitive but we strip the left of the string\n                        # since tok_extended.rstrip means the special token is eating all white spaces on its right\n                        tokens[i + 1] = right.lstrip()\n                    # Strip white spaces on the left\n                    if tok_extended.lstrip and left:\n                        tokens[i - 1] = left.rstrip()  # Opposite here\n                else:\n                    # We strip left and right by default\n                    if right:\n                        tokens[i + 1] = right.lstrip()\n                    if left:\n                        tokens[i - 1] = left.rstrip()\n        # [\"This is something\", \"<special_token_1>\", \"else\"]\n        tokenized_text = []\n        for token in tokens:\n            # Need to skip eventual empty (fully stripped) tokens\n            if not token:\n                continue\n            if token in no_split_token:\n                tokenized_text.append(token)\n            else:\n                tokenized_text.extend(self._tokenize(token))\n        # [\"This\", \" is\", \" something\", \"<special_token_1>\", \"else\"]\n        return tokenized_text"
+    }
+  },
+  "remote_request": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/request.json",
+    "bytes": 5871,
+    "sha256": "ba8d6d55c5bc2463490985129ca992c710287daed22fb50f2325ab4b423bd271",
+    "canonical_sha256": "f90accbdae987f876e858b26173b69bd5f15f99f288f9bc54176c03df431a0df"
+  }
+}

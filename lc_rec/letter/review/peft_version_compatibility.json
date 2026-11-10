@@ -1,0 +1,146 @@
+{
+  "schema": "letter_peft_version_static_comparison_v1",
+  "reviewer_agent": "/root/data_audit",
+  "status": "NOT_SELECTED_STATIC_ALTERNATIVE",
+  "scope": "Read official release source and PyPI 199070-byte wheel in memory; no install, no GPU, no model load, no environment edit.",
+  "decision": "Root reports user approved a narrowly scoped PEFT0.5 BF16 dtype compatibility path. PEFT0.10/hub upgrade is not selected; retain this as a documented static alternative only.",
+  "peft010_wheel": {
+    "filename": "peft-0.10.0-py3-none-any.whl",
+    "bytes": 199070,
+    "sha256": "d5249c97e818d3e31f92553c73c2953acd0ec12649b8b749afff7152cbc86cbb",
+    "url": "https://files.pythonhosted.org/packages/b4/5d/758c00ba637bc850f35fff7fad442c470ac3d606fe586d881b0bed7ef5a5/peft-0.10.0-py3-none-any.whl"
+  },
+  "peft010_source_sha256": {
+    "peft/tuners/lora/bnb.py": "7c57e97a1b2df6446a411db1045da8e9d08b9b12086a21d53055cefab2c2b07e",
+    "peft/tuners/lora/layer.py": "b0ad749f3dac50ef1830aaceb9ee3cf84cbbaa394d3d1a466a81059c208a70da",
+    "peft/tuners/lora/model.py": "1366d2c46c4afad46412170cf7af5f83ee567f90531fb42510a3cd0ec0c7be9a",
+    "peft/utils/other.py": "803995ad61b11822b42a5c01b7726e784ecedbcba1a0fb826c0357d1071b53ff",
+    "peft/tuners/lora/config.py": "d3684240b3676b6903f29e4fc5d4cac754e9c14b998f486a59e3a6f0602869c2"
+  },
+  "primary_sources": [
+    "https://raw.githubusercontent.com/huggingface/peft/v0.10.0/src/peft/tuners/lora/bnb.py",
+    "https://raw.githubusercontent.com/huggingface/peft/v0.10.0/src/peft/tuners/lora/layer.py",
+    "https://raw.githubusercontent.com/huggingface/peft/v0.10.0/src/peft/utils/other.py",
+    "https://raw.githubusercontent.com/huggingface/peft/v0.10.0/src/peft/tuners/lora/model.py",
+    "https://raw.githubusercontent.com/huggingface/peft/v0.10.0/src/peft/tuners/lora/config.py",
+    "https://raw.githubusercontent.com/huggingface/peft/v0.10.0/setup.py"
+  ],
+  "comparison": [
+    {
+      "item": "LoRA rank/alpha/dropout/scaling",
+      "result": "Same standard LoRA definition with explicit r=8, alpha=16, dropout=0.05, bias=none and use_rslora=False: W(x)+2*B(A(dropout(x))). New DoRA must remain disabled; init_lora_weights=True."
+    },
+    {
+      "item": "Initialization distribution",
+      "result": "Both versions use A Kaiming uniform with a=sqrt(5), B zero. Therefore adapter delta starts at zero, but exact seeded tensors are NOT guaranteed equal."
+    },
+    {
+      "item": "RNG and object topology",
+      "result": "0.5 reconstructs a bnb Linear8bitLt subclass; 0.10 composes the existing base_layer. Constructor allocations consume RNG differently, so seed42 is not enough to claim identical A tensors or bitwise updates. This is an explicit reproducibility limitation."
+    },
+    {
+      "item": "Frozen base and modules_to_save",
+      "result": "Both freeze non-LoRA base parameters. 0.5 temporarily makes embedding/head originals and deep-copied active wrappers trainable, then author's explicit original_module freeze loop restores originals to frozen. 0.10 freezes originals within ModulesToSaveWrapper.update and trains active copies. With author's same freeze loop, intended trainable tensor families match: LoRA A/B plus active full embedding/head copies."
+    },
+    {
+      "item": "Preparation API",
+      "result": "0.5 prepare_model_for_int8_training is a deprecated direct alias to prepare_model_for_kbit_training. For ordinary LLaMA bnb int8, 0.10 prepare_kbit freezes every base parameter, preserves int8, promotes nonquantized FP16/BF16 parameters to FP32, enables input grad hook and gradient checkpointing. New AQLM/Params4bit/kwargs branches are not active in this task."
+    },
+    {
+      "item": "Native DeepSpeed BF16 forward",
+      "result": "0.5 non-autocast int8 LoRA forward unconditionally promotes x to FP32, conflicting with DS BF16 LoRA weights. 0.10 casts x to lora_A.weight.dtype, allowing native DS BF16 without whole-model autocast. Base weight quantization, CE and temperature need no algorithm change for this API compatibility path."
+    },
+    {
+      "item": "Legacy bnb flag",
+      "result": "0.10 dispatch_bnb_8bit still reads target.state.memory_efficient_backward, so bnb0.45.5 needs the False state-field shim. The 0.10 wrapper does not call the bnb constructor with that keyword, so the old 0.5 constructor shim must not be applied on this path."
+    },
+    {
+      "item": "Runtime object inspection",
+      "result": "0.10 PEFT int8 wrapper is an nn.Module/LoraLayer, not a bnb subclass. Select actual quantized modules by isinstance(m,bnb.nn.Linear8bitLt), or wrapper.get_base_layer(), not the common class name string."
+    }
+  ],
+  "standard_int8_prepare_branch_check": {
+    "method": "Executed official 0.5 and 0.10 prepare-function bodies against standard-library fake model/parameter objects; this checks branch/freeze/dtype/hook policy only, not actual Torch numeric execution.",
+    "inputs": {
+      "loaded_in_8bit": true,
+      "loaded_in_4bit": false,
+      "quantization_method": "bitsandbytes",
+      "dtypes": [
+        "int8",
+        "float16",
+        "bfloat16",
+        "float32"
+      ],
+      "gradient_checkpointing_kwargs": "default empty"
+    },
+    "both_outputs": {
+      "dtypes": [
+        "int8",
+        "float32",
+        "float32",
+        "float32"
+      ],
+      "requires_grad": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "events": [
+        "input_require_grads_hook",
+        "gradient_checkpointing_enable"
+      ]
+    },
+    "result": "PASS_STATIC_SEMANTICS"
+  },
+  "dependency_constraints": {
+    "peft010": [
+      "Requires-Dist: numpy (>=1.17)",
+      "Requires-Dist: packaging (>=20.0)",
+      "Requires-Dist: psutil",
+      "Requires-Dist: pyyaml",
+      "Requires-Dist: torch (>=1.13.0)",
+      "Requires-Dist: transformers",
+      "Requires-Dist: tqdm",
+      "Requires-Dist: accelerate (>=0.21.0)",
+      "Requires-Dist: safetensors",
+      "Requires-Dist: huggingface-hub (>=0.17.0)"
+    ],
+    "other_metadata": {
+      "transformers": [
+        "filelock",
+        "huggingface-hub (<1.0,>=0.14.1)",
+        "numpy (>=1.17)",
+        "packaging (>=20.0)",
+        "pyyaml (>=5.1)",
+        "regex (!=2019.12.17)",
+        "requests",
+        "tokenizers (!=0.11.3,<0.14,>=0.11.1)",
+        "safetensors (>=0.3.1)",
+        "tqdm (>=4.27)"
+      ],
+      "accelerate": [
+        "numpy (>=1.17)",
+        "packaging (>=20.0)",
+        "psutil",
+        "pyyaml",
+        "torch (>=1.10.0)"
+      ],
+      "huggingface-hub": [
+        "filelock",
+        "fsspec >=2023.5.0",
+        "requests",
+        "tqdm >=4.42.1",
+        "pyyaml >=5.1",
+        "typing-extensions >=3.7.4.3",
+        "packaging >=20.9"
+      ]
+    },
+    "assessment": "PEFT0.10 requires accelerate>=0.21 and huggingface-hub>=0.17. Transformers4.31 permits hub>=0.14.1,<1.0, so hub0.20.3 is metadata-compatible. Hub0.20.3 additionally requires fsspec>=2023.5.0 and its other transitive requirements; current installed versions must be checked before any future selection.",
+    "runtime_import_status": "NOT_TESTED. No import smoke, install, GPU or DeepSpeed execution was performed for 0.10; metadata compatibility does not prove all runtime contracts."
+  },
+  "conclusion": "PEFT0.10 is a plausible method-preserving isolated dependency/API adaptation for ordinary standard LoRA plus native DeepSpeed BF16, subject to actual gradient/parameter/save-reload checks. It cannot establish historical author environment or seeded bitwise identity. Root selected the user-approved narrower 0.5 adaptation instead.",
+  "historical_author_environment": "UNKNOWN. Neither this comparison nor a matching config establishes the author's PEFT/DeepSpeed versions or exact historical checkpoint/command binding.",
+  "packages_installed_by_reviewer": [],
+  "environment_configuration_modified_by_reviewer": []
+}

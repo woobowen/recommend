@@ -1,0 +1,66 @@
+
+Processing /home/bwwu/lc-rec/letter-20261110/wheels/peft-0.5.0-py3-none-any.whl
+Processing /home/bwwu/lc-rec/letter-20261110/wheels/bitsandbytes-0.45.5-py3-none-manylinux_2_24_x86_64.whl
+Processing /home/bwwu/lc-rec/letter-20261110/wheels/fschat-0.2.31-py3-none-any.whl
+Processing /home/bwwu/lc-rec/letter-20261110/wheels/einops-0.8.1-py3-none-any.whl
+Processing /home/bwwu/lc-rec/letter-20261110/wheels/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp310-cp310-linux_x86_64.whl
+einops is already installed with the same version as the provided wheel. Use --force-reinstall to force an installation of the wheel.
+Installing collected packages: peft, fschat, flash-attn, bitsandbytes
+Successfully installed bitsandbytes-0.45.5 flash-attn-2.7.4.post1 fschat-0.2.31 peft-0.5.0
+
+The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers, 8-bit multiplication, and GPU quantization are unavailable.
+[2026-11-10 05:48:11,391] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/__init__.py", line 22, in <module>
+    from .auto import (
+  File "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/auto.py", line 30, in <module>
+    from .config import PeftConfig
+  File "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/config.py", line 24, in <module>
+    from .utils import CONFIG_NAME, PeftType, TaskType
+  File "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/__init__.py", line 22, in <module>
+    from .other import (
+  File "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/other.py", line 21, in <module>
+    import accelerate
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/__init__.py", line 3, in <module>
+    from .accelerator import Accelerator
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/accelerator.py", line 35, in <module>
+    from .checkpointing import load_accelerator_state, load_custom_state, save_accelerator_state, save_custom_state
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/checkpointing.py", line 24, in <module>
+    from .utils import (
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/utils/__init__.py", line 133, in <module>
+    from .launch import (
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/utils/launch.py", line 33, in <module>
+    from ..utils.other import is_port_in_use, merge_dicts
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/utils/other.py", line 30, in <module>
+    from deepspeed import DeepSpeedEngine
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/__init__.py", line 11, in <module>
+    from . import transformer
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/transformer/__init__.py", line 7, in <module>
+    from .inference.config import DeepSpeedInferenceConfig
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/transformer/inference/__init__.py", line 7, in <module>
+    from ....model_implementations.transformers.ds_transformer import DeepSpeedTransformerInference
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/model_implementations/__init__.py", line 6, in <module>
+    from .transformers.ds_transformer import DeepSpeedTransformerInference
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/model_implementations/transformers/ds_transformer.py", line 17, in <module>
+    if deepspeed.HAS_TRITON and get_accelerator().is_triton_supported():
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/accelerator/cuda_accelerator.py", line 245, in is_triton_supported
+    major, _ = torch.cuda.get_device_capability()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 507, in get_device_capability
+    prop = get_device_properties(device)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 523, in get_device_properties
+    _lazy_init()  # will define _get_device_properties
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 319, in _lazy_init
+    torch._C._cuda_init()
+RuntimeError: No CUDA GPUs are available
+
+Traceback (most recent call last):
+  File "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/setup_environment.py", line 21, in <module>
+    run([str(env/'bin/python'),'-c',"import torch,transformers,peft,bitsandbytes,flash_attn,fastchat,einops,deepspeed,importlib.metadata as m,json; from fastchat.train.llama2_flash_attn_monkey_patch import replace_llama_attn_with_flash_attn; from peft import prepare_model_for_int8_training; print(json.dumps({p:m.version(p) for p in ['torch','transformers','peft','bitsandbytes','flash-attn','fschat','einops','deepspeed','accelerate']})); print('CUDA_CONTEXT',torch.cuda.is_initialized())"])
+  File "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/setup_environment.py", line 12, in run
+    steps.append({'argv':argv,'returncode':p.returncode,'output':p.stdout,'seconds':time.time()-start});(out/'install_log.json').write_text(json.dumps(steps,indent=2)+'\n');print(p.stdout,flush=True);p.check_returncode()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/subprocess.py", line 457, in check_returncode
+    raise CalledProcessError(self.returncode, self.args, self.stdout,
+subprocess.CalledProcessError: Command '['/data/bwwu/envs/letter-20261110/bin/python', '-c', "import torch,transformers,peft,bitsandbytes,flash_attn,fastchat,einops,deepspeed,importlib.metadata as m,json; from fastchat.train.llama2_flash_attn_monkey_patch import replace_llama_attn_with_flash_attn; from peft import prepare_model_for_int8_training; print(json.dumps({p:m.version(p) for p in ['torch','transformers','peft','bitsandbytes','flash-attn','fschat','einops','deepspeed','accelerate']})); print('CUDA_CONTEXT',torch.cuda.is_initialized())"]' returned non-zero exit status 1.
