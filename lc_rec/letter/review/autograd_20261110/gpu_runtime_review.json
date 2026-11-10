@@ -1,0 +1,366 @@
+{
+  "schema": "letter_non_author_gpu_runtime_review_v1",
+  "reviewer": "/root/independent_review",
+  "reviewed_utc": "2026-11-10T11:17:56.315652+00:00",
+  "status": "PASS_CORE_GPU_TRAINING_AND_ADAPTER_SAVE",
+  "RUN_COMMIT": "8e6399c2a1269dfde58d705eef25a499400dc59b",
+  "job_id": "letter-20261110-autograd-gpu-r0",
+  "direct_read_scope": "Complete local light export of actual two-rank results; actual request,status,work.log,resources and all18manifest-member hashes; request source/configGitblob hashes independently checked. Reviewer did not load model or launch GPU.",
+  "assertions_verified": [
+    "Every rank9global64updates and36microbatches",
+    "Every microForward/Backward/step PASS,unique fourth-micro optimizer boundary",
+    "UnderlyingAdam step1..9 with exact450original trainableoptimizer membership inTrainer andDSZeRO2",
+    "All450gradienttensors observed36times,allfinite/nonzero;alltrainableelementsfinite",
+    "All224LoRAmodules observed real checkpoint forward/no_grad and backward/grad-enabled replay",
+    "All224Aand224Btensors changed; allactuallyusedSIDrows have finitepositivegradients",
+    "Frozenembedding/headfullbytehashesunchanged;allLoRAandaddedSIDvaluesidenticalacrossranks",
+    "ActualbnbInt8baseandscopedA-onlyBF16autocast",
+    "Temperature0.8loss independently exact andsame initial losses as oldfailedr1",
+    "Adapterstrict450trainedkey/shape/dtype/valueequality plus savedtokenizerIDidentity"
+  ],
+  "rank_summaries": [
+    {
+      "rank": 0,
+      "status": "PASS",
+      "updates": 9,
+      "microbatches": 36,
+      "nonzero_lr_updates": 8,
+      "gradient_tensors": 450,
+      "minimum_gradient_calls": 36,
+      "zero_trainable_gradient_tensor_names": [],
+      "LoRA_A_changed_tensors": 224,
+      "LoRA_B_changed_tensors": 224,
+      "input_embedding_output_gradient": {
+        "calls": 12,
+        "max_abs": 20.0
+      },
+      "SID_gradients": {
+        "base_model.model.lm_head.modules_to_save.default.weight": {
+          "used_rows": 189,
+          "zero_gradient_rows": [],
+          "minimum_positive_gradient_max": 0.1396484375
+        },
+        "base_model.model.model.embed_tokens.modules_to_save.default.weight": {
+          "used_rows": 615,
+          "zero_gradient_rows": [],
+          "minimum_positive_gradient_max": 0.003997802734375
+        }
+      },
+      "SID_deltas": {
+        "base_model.model.lm_head.modules_to_save.default.weight": {
+          "used_rows": 189,
+          "nonzero_delta_used_rows": 189,
+          "zero_delta_used_rows": [],
+          "maximum_delta": 0.0001220703125
+        },
+        "base_model.model.model.embed_tokens.modules_to_save.default.weight": {
+          "used_rows": 615,
+          "nonzero_delta_used_rows": 615,
+          "zero_delta_used_rows": [],
+          "maximum_delta": 0.0001220703125
+        }
+      },
+      "temperature_loss": {
+        "model": 13.968113899230957,
+        "independent_ce_temp08": 13.968113899230957,
+        "independent_ce_temp1": 11.858251571655273,
+        "exact_temp08_agreement": true
+      },
+      "first_loss_matches_old_r1_same_rank": true,
+      "checkpoint_replay": {
+        "all_224_modules_hit": true,
+        "minimum_grad_enabled_calls_per_module": 36,
+        "minimum_no_grad_checkpoint_forward_calls_per_module": 36,
+        "minimum_lora_add_calls_per_module": 72,
+        "real_training_microbatches_per_rank": 36,
+        "interpretation": "Every int8 LoRA projection ran in no-grad checkpoint forward and grad-enabled backward recomputation; no adapter-disabled/rank-zero shortcut"
+      },
+      "all_parameters_finite": true,
+      "frozen_originals": {
+        "base_model.model.model.embed_tokens.original_module.weight": {
+          "before_sha256": "bf6050dbf0675cc1c622acefac1dd8552568cdde9930830b62385e4ea25921ca",
+          "after_sha256": "bf6050dbf0675cc1c622acefac1dd8552568cdde9930830b62385e4ea25921ca",
+          "all_bytes_identical": true,
+          "requires_grad": false,
+          "in_original_optimizer_set": false
+        },
+        "base_model.model.lm_head.original_module.weight": {
+          "before_sha256": "2a8f4dd30e76eb06b233ae095b9e6e7573bf1915f57c8a4092d8bdace0204efb",
+          "after_sha256": "2a8f4dd30e76eb06b233ae095b9e6e7573bf1915f57c8a4092d8bdace0204efb",
+          "all_bytes_identical": true,
+          "requires_grad": false,
+          "in_original_optimizer_set": false
+        }
+      },
+      "global_parameter_sync": true,
+      "A_only_autocast_modules": 224,
+      "A_only_autocast_minimum_adapted_calls": 77,
+      "unpad_arity_observed": [
+        5
+      ],
+      "gpu_entire_job_peak_allocated_gib": 12.033432006835938,
+      "gpu_entire_job_peak_reserved_gib": 14.26953125,
+      "cpu_process_peak_rss_gib": 10.669685363769531,
+      "validation_timings": [
+        {
+          "phase": "warmup",
+          "global_samples": 16,
+          "global_effective_tokens": 1512,
+          "max_rank_seconds": 0.2993979752063751,
+          "rank_cpu_preparation_seconds": 0.019961107522249222,
+          "loss": 12.380233764648438
+        },
+        {
+          "phase": "mixed",
+          "global_samples": 16,
+          "global_effective_tokens": 1512,
+          "max_rank_seconds": 0.26077184081077576,
+          "rank_cpu_preparation_seconds": 0.01963660679757595,
+          "loss": 12.380233764648438
+        },
+        {
+          "phase": "short",
+          "global_samples": 16,
+          "global_effective_tokens": 1184,
+          "max_rank_seconds": 0.24726596474647522,
+          "rank_cpu_preparation_seconds": 0.016100834123790264,
+          "loss": 12.511826515197754
+        },
+        {
+          "phase": "middle",
+          "global_samples": 16,
+          "global_effective_tokens": 1424,
+          "max_rank_seconds": 0.23652173578739166,
+          "rank_cpu_preparation_seconds": 0.018924683332443237,
+          "loss": 12.078082084655762
+        },
+        {
+          "phase": "long",
+          "global_samples": 16,
+          "global_effective_tokens": 2800,
+          "max_rank_seconds": 0.24695679545402527,
+          "rank_cpu_preparation_seconds": 0.03301549516618252,
+          "loss": 9.388317108154297
+        }
+      ]
+    },
+    {
+      "rank": 1,
+      "status": "PASS",
+      "updates": 9,
+      "microbatches": 36,
+      "nonzero_lr_updates": 8,
+      "gradient_tensors": 450,
+      "minimum_gradient_calls": 36,
+      "zero_trainable_gradient_tensor_names": [],
+      "LoRA_A_changed_tensors": 224,
+      "LoRA_B_changed_tensors": 224,
+      "input_embedding_output_gradient": {
+        "calls": 12,
+        "max_abs": 14.625
+      },
+      "SID_gradients": {
+        "base_model.model.lm_head.modules_to_save.default.weight": {
+          "used_rows": 180,
+          "zero_gradient_rows": [],
+          "minimum_positive_gradient_max": 0.1552734375
+        },
+        "base_model.model.model.embed_tokens.modules_to_save.default.weight": {
+          "used_rows": 620,
+          "zero_gradient_rows": [],
+          "minimum_positive_gradient_max": 0.01025390625
+        }
+      },
+      "SID_deltas": {
+        "base_model.model.lm_head.modules_to_save.default.weight": {
+          "used_rows": 180,
+          "nonzero_delta_used_rows": 180,
+          "zero_delta_used_rows": [],
+          "maximum_delta": 0.0001220703125
+        },
+        "base_model.model.model.embed_tokens.modules_to_save.default.weight": {
+          "used_rows": 620,
+          "nonzero_delta_used_rows": 620,
+          "zero_delta_used_rows": [],
+          "maximum_delta": 0.0001220703125
+        }
+      },
+      "temperature_loss": {
+        "model": 13.420120239257812,
+        "independent_ce_temp08": 13.420120239257812,
+        "independent_ce_temp1": 11.429338455200195,
+        "exact_temp08_agreement": true
+      },
+      "first_loss_matches_old_r1_same_rank": true,
+      "checkpoint_replay": {
+        "all_224_modules_hit": true,
+        "minimum_grad_enabled_calls_per_module": 36,
+        "minimum_no_grad_checkpoint_forward_calls_per_module": 36,
+        "minimum_lora_add_calls_per_module": 72,
+        "real_training_microbatches_per_rank": 36,
+        "interpretation": "Every int8 LoRA projection ran in no-grad checkpoint forward and grad-enabled backward recomputation; no adapter-disabled/rank-zero shortcut"
+      },
+      "all_parameters_finite": true,
+      "frozen_originals": {
+        "base_model.model.model.embed_tokens.original_module.weight": {
+          "before_sha256": "bf6050dbf0675cc1c622acefac1dd8552568cdde9930830b62385e4ea25921ca",
+          "after_sha256": "bf6050dbf0675cc1c622acefac1dd8552568cdde9930830b62385e4ea25921ca",
+          "all_bytes_identical": true,
+          "requires_grad": false,
+          "in_original_optimizer_set": false
+        },
+        "base_model.model.lm_head.original_module.weight": {
+          "before_sha256": "2a8f4dd30e76eb06b233ae095b9e6e7573bf1915f57c8a4092d8bdace0204efb",
+          "after_sha256": "2a8f4dd30e76eb06b233ae095b9e6e7573bf1915f57c8a4092d8bdace0204efb",
+          "all_bytes_identical": true,
+          "requires_grad": false,
+          "in_original_optimizer_set": false
+        }
+      },
+      "global_parameter_sync": true,
+      "A_only_autocast_modules": 224,
+      "A_only_autocast_minimum_adapted_calls": 77,
+      "unpad_arity_observed": [
+        5
+      ],
+      "gpu_entire_job_peak_allocated_gib": 12.03842306137085,
+      "gpu_entire_job_peak_reserved_gib": 14.275390625,
+      "cpu_process_peak_rss_gib": 10.682296752929688,
+      "validation_timings": [
+        {
+          "phase": "warmup",
+          "global_samples": 16,
+          "global_effective_tokens": 1512,
+          "max_rank_seconds": 0.2993979752063751,
+          "rank_cpu_preparation_seconds": 0.02103899698704481,
+          "loss": 13.161989212036133
+        },
+        {
+          "phase": "mixed",
+          "global_samples": 16,
+          "global_effective_tokens": 1512,
+          "max_rank_seconds": 0.26077184081077576,
+          "rank_cpu_preparation_seconds": 0.021055201068520546,
+          "loss": 13.161989212036133
+        },
+        {
+          "phase": "short",
+          "global_samples": 16,
+          "global_effective_tokens": 1184,
+          "max_rank_seconds": 0.24726596474647522,
+          "rank_cpu_preparation_seconds": 0.01610320806503296,
+          "loss": 12.511826515197754
+        },
+        {
+          "phase": "middle",
+          "global_samples": 16,
+          "global_effective_tokens": 1424,
+          "max_rank_seconds": 0.23652173578739166,
+          "rank_cpu_preparation_seconds": 0.0188893498852849,
+          "loss": 12.078082084655762
+        },
+        {
+          "phase": "long",
+          "global_samples": 16,
+          "global_effective_tokens": 2800,
+          "max_rank_seconds": 0.24695679545402527,
+          "rank_cpu_preparation_seconds": 0.032813722267746925,
+          "loss": 9.388317108154297
+        }
+      ]
+    }
+  ],
+  "performance": {
+    "steady_global_samples": 192,
+    "steady_synchronized_gpu_seconds": 13.0986647605896,
+    "steady_global_samples_per_second": 14.65798258900991,
+    "steady_effective_tokens_per_second": 1372.888025511277,
+    "steady_update_seconds": [
+      4.388676643371582,
+      4.344507217407227,
+      4.365480899810791
+    ],
+    "steady_cpu_preparation_max_seconds": [
+      0.08418170735239983,
+      0.07984296791255474,
+      0.08573906775563955
+    ],
+    "limits": "Only128unique mixed samples/prompts reused; 3steady timing observations, synchronizations/hooks included; no epoch or sustained-hour validation."
+  },
+  "adapter_save": {
+    "keys": 450,
+    "bytes": 579376762,
+    "sha256": "1069b6df364d21ac2ecdab25b97f30b1ee03d5182203d5fe909bdfe2d5c0624a",
+    "write_seconds": 1.0109477331861854,
+    "write_plus_strict_verification_seconds": 4.521939261816442,
+    "actual_full_model_reload": "PENDING_SEPARATE_INFERENCE_JOB",
+    "full_Trainer_DS_checkpoint": "NOT_TESTED_PROHIBITED_BY_TASK"
+  },
+  "resource_guard": {
+    "job_id": "letter-20261110-autograd-gpu-r0",
+    "candidate": "letter_author_sid_int8_lora_zero2",
+    "argv": [
+      "/data/bwwu/envs/letter-20261110/bin/python",
+      "-m",
+      "torch.distributed.run",
+      "--standalone",
+      "--nnodes=1",
+      "--nproc_per_node=2",
+      "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/gpu_probe.py",
+      "--source-root",
+      "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+      "--data-root",
+      "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER/data",
+      "--model",
+      "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+      "--audit-dir",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+      "--output",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output/probe",
+      "--source-commit",
+      "8e6399c2a1269dfde58d705eef25a499400dc59b",
+      "--max-updates",
+      "9"
+    ],
+    "start_utc": "2026-11-10T11:12:35.675084+00:00",
+    "limit_seconds": 3366.33678884618,
+    "elapsed_seconds": 137.37620746903121,
+    "end_utc": "2026-11-10T11:14:53.051294+00:00",
+    "child_exit_code": 0,
+    "stop_reason": null,
+    "peaks": {
+      "cpu_rss_sum_peak_bytes": 6735175680,
+      "min_mem_available_bytes": 251339280384,
+      "new_disk_allocated_peak_bytes": 2092130304,
+      "max_swap_used_increase_bytes": 0,
+      "task_vm_swap_peak_bytes": 0
+    },
+    "samples": 28,
+    "charged_gpu_device_seconds": 274.75241493806243
+  },
+  "resource_interpretation": {
+    "all28samples_host_available_above40GiB": true,
+    "sampled_min_mem_available_gib": 234.07794570922852,
+    "sampled_process_tree_peak_rss_gib": 6.272621154785156,
+    "process_ru_maxrss_limit": "Per-rank ru_maxrss can exceed5second sampled RSS; ranks maxima need not be simultaneous and cannot be added as a measured concurrent peak.",
+    "observed_gpu_utilization_scope": "nvidia-smi every15seconds; training observations include33..77percent, not a sustainedutilizationbenchmark.",
+    "swap_io_and_task_swap_zero": true
+  },
+  "prior_evidence_files_hash_preserved_count": 19,
+  "old_task_corrections": 3,
+  "new_task_corrections_so_far": 0,
+  "remaining": [
+    "Actual adapter reload andbeam20",
+    "96hcomponentestimate anduncertainty",
+    "FinalpublishedSHA/readback,ZIPandservermapping"
+  ],
+  "evidence_hashes": {
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/request.json": "ddba644aca502e1328d83c1157643866459663c62d9c349edc038bf598346c2e",
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/status.json": "175312b506505754e36232d59d2bd96eb364bc70bff217fc2a54bf3d68389680",
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/work.log": "ee3d7cf4f29c27ddcc94efb1d5a1835550aa929bdf35a76791667eb5a50d8452",
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/output/probe/rank0.json": "a7998375d0e073649571052ce74d92f39ee75f056470fa6204a5bc514aa061af",
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/output/probe/rank1.json": "7c2966f77bb5c05130a4076e9714f133053462cdbb162c8a16854b046c892f12",
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/output/resources/resource-summary.json": "7318ac5c31ed40e5bf0660ffb0cfaab42b9329a6a129679bb5aa0a6990af3670",
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/output/resources/resource-samples.jsonl": "de42bf012a9f5793017a36fbda8de756c2f0b71a1f6a8dd6647148dc52c0d851"
+  }
+}

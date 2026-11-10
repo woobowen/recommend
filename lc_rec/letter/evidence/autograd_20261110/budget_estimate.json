@@ -1,0 +1,291 @@
+{
+  "schema": "letter_seed96h_bounded_estimate_v2",
+  "status": "CONDITIONAL_ESTIMATE_WITH_UNMEASURED_FORMAL_CHECKPOINT_OVERHEAD",
+  "observed_counts": {
+    "train_per_epoch": 131837,
+    "epochs": 4,
+    "train_presentations": 527348,
+    "validation_texts_per_epoch": 49544,
+    "total_validation_texts": 198176,
+    "test_users_prompt0": 24772,
+    "effective_global_batch": 64,
+    "conservative_optimizer_updates_four_epochs": 8240,
+    "trainer431_floor_scheduler_updates_four_epochs": 8240,
+    "dataloader_batches_per_rank_per_epoch": 8240,
+    "distributed_sampler_rows_per_rank": 65919,
+    "distributed_sampler_total_rows_including_padding_per_epoch": 131838
+  },
+  "dataloader_tail_semantics": {
+    "binding": "Transformers4.31 Trainer default drop_last=False; two-rank sample/batch accounting; micro8 accumulation4; actual sharding is runtime-bound",
+    "scheduler": "floor(len(dataloader)/4)*4 epochs; verified against training_definition when available",
+    "wall_estimate": "ceil(131837/64)*4 = 8240 global64-equivalent updates is conservative work accounting",
+    "partial_accumulation_limit": "Bounded nine full global64 updates do not execute an epoch tail. Scheduler arithmetic gives 8240 updates; conservative work accounting gives 8240. DistributedSampler arithmetic alone would give last rank microbatch7/global accumulation62, while Accelerate even_batches may fill it; actual runtime shard/tail behavior has not been measured."
+  },
+  "actual_complete_optimizer_updates_by_rank": [
+    9,
+    9
+  ],
+  "train_statuses": [
+    "PASS",
+    "PASS"
+  ],
+  "inference_statuses": [
+    "RELOAD_BEAM20_TECHNICAL_PASS",
+    "RELOAD_BEAM20_TECHNICAL_PASS"
+  ],
+  "scope": "Conditional one-seed cost: four train epochs, two-template validation per epoch, four adapter serializations, one final reload and prompt0 beam20 for 24772 users; formal Trainer/DS state checkpoint/selection/best restore cost remains unmeasured",
+  "rates_definition": "Dual-GPU aggregate samples/users divided by synchronized MAX-rank wall duration. Rank totals are never added to duplicate the denominator.",
+  "minimum_train_samples_per_second_if_other_hours": {
+    "0": 1.5258912037037038,
+    "6": 1.6276172839506173,
+    "12": 1.7438756613756614,
+    "24": 2.0345216049382717
+  },
+  "method_and_precision_limits": [
+    "Training uses approved technical-only PEFT0.5 non-inplace residual plus LoRA-A-only BF16 adaptation.",
+    "Author test_ddp.py LoRA inference reloads full BF16 base with vanilla HF attention; training is int8/flash-attention. These are separate measured paths.",
+    "No complete epoch, best-checkpoint selection, sustained multi-hour run, or recommendation metric reproduction was performed."
+  ],
+  "center_estimate": {
+    "component_hours": {
+      "train": 10.184356562013702,
+      "validation": 0.9696415946436011,
+      "adapter_checkpoint_serialization_proxy": 0.0011232752590957615,
+      "adapter_reload": 0.026235031322058705,
+      "beam20_prompt0_test": 1.9254506042087451,
+      "initialization": 0.026815391580781174,
+      "environment_io_margin": 1.3133622459027985
+    },
+    "margin_fraction_assumption": 0.1,
+    "total_hours": 14.446984704930783,
+    "remaining_to_96_hours": 81.55301529506922,
+    "known_components_plus_margin_hours": 14.446984704930783,
+    "missing_components": [],
+    "is_full_seed_cost_validation": false,
+    "unquantified_formal_checkpoint_overheads": [
+      "Formal Trainer/DeepSpeed optimizer, scheduler, RNG and other state checkpoint writes.",
+      "Best-checkpoint selection/restore and final Trainer state/model saves. Full checkpoints were prohibited in this probe.",
+      "Validation loader/worker and distributed aggregation overhead beyond measured collator/forward; CPU recommendation filtering/metric aggregation were not executed."
+    ],
+    "total_hours_definition": "Conditional measured-component estimate plus stated margin; excludes additional formal checkpoint/selection/state restore costs"
+  },
+  "conservative_estimate": {
+    "component_hours": {
+      "train": 10.237875780546004,
+      "validation": 0.9696415946436011,
+      "adapter_checkpoint_serialization_proxy": 0.005024376957573825,
+      "adapter_reload": 0.026235031322058705,
+      "beam20_prompt0_test": 2.668407618450518,
+      "initialization": 0.026815391580781174,
+      "environment_io_margin": 3.483499948375134
+    },
+    "margin_fraction_assumption": 0.25,
+    "total_hours": 17.41749974187567,
+    "remaining_to_96_hours": 78.58250025812433,
+    "known_components_plus_margin_hours": 17.41749974187567,
+    "missing_components": [],
+    "is_full_seed_cost_validation": false,
+    "unquantified_formal_checkpoint_overheads": [
+      "Formal Trainer/DeepSpeed optimizer, scheduler, RNG and other state checkpoint writes.",
+      "Best-checkpoint selection/restore and final Trainer state/model saves. Full checkpoints were prohibited in this probe.",
+      "Validation loader/worker and distributed aggregation overhead beyond measured collator/forward; CPU recommendation filtering/metric aggregation were not executed."
+    ],
+    "total_hours_definition": "Conditional measured-component estimate plus stated margin; excludes additional formal checkpoint/selection/state restore costs"
+  },
+  "measurements": {
+    "steady_mixed_update_count": 3,
+    "steady_mixed_update_seconds_with_data": [
+      4.472858350723982,
+      4.424350185319781,
+      4.451219967566431
+    ],
+    "steady_mixed_global_samples_per_second": 14.65798258900991,
+    "steady_mixed_effective_tokens_per_second": 1372.888025511277,
+    "postwarmup_length_phases": [
+      {
+        "phase": "mixed_steady",
+        "seconds": 4.388676643371582,
+        "seconds_with_data": 4.472858350723982,
+        "global_samples": 64,
+        "effective_tokens": 6088,
+        "padded_tokens": 9112
+      },
+      {
+        "phase": "mixed_steady",
+        "seconds": 4.344507217407227,
+        "seconds_with_data": 4.424350185319781,
+        "global_samples": 64,
+        "effective_tokens": 5807,
+        "padded_tokens": 8872
+      },
+      {
+        "phase": "mixed_steady",
+        "seconds": 4.365480899810791,
+        "seconds_with_data": 4.451219967566431,
+        "global_samples": 64,
+        "effective_tokens": 6088,
+        "padded_tokens": 9112
+      },
+      {
+        "phase": "short",
+        "seconds": 4.0032196044921875,
+        "seconds_with_data": 4.064385102130473,
+        "global_samples": 64,
+        "effective_tokens": 4352,
+        "padded_tokens": 4352
+      },
+      {
+        "phase": "middle",
+        "seconds": 4.023503303527832,
+        "seconds_with_data": 4.095981370657682,
+        "global_samples": 64,
+        "effective_tokens": 5312,
+        "padded_tokens": 5312
+      },
+      {
+        "phase": "long",
+        "seconds": 4.0968804359436035,
+        "seconds_with_data": 4.226356614381075,
+        "global_samples": 64,
+        "effective_tokens": 11200,
+        "padded_tokens": 11200
+      }
+    ],
+    "validation": [
+      {
+        "phase": "mixed",
+        "seconds": 0.26077184081077576,
+        "seconds_with_data": 0.2818270418792963,
+        "global_samples": 16
+      },
+      {
+        "phase": "short",
+        "seconds": 0.24726596474647522,
+        "seconds_with_data": 0.2633691728115082,
+        "global_samples": 16
+      },
+      {
+        "phase": "middle",
+        "seconds": 0.23652173578739166,
+        "seconds_with_data": 0.2554464191198349,
+        "global_samples": 16
+      },
+      {
+        "phase": "long",
+        "seconds": 0.24695679545402527,
+        "seconds_with_data": 0.2799722906202078,
+        "global_samples": 16
+      }
+    ],
+    "generation": [
+      {
+        "selection": "q10",
+        "seconds": 0.5191209316253662,
+        "global_users": 2,
+        "input_length": 79
+      },
+      {
+        "selection": "q50",
+        "seconds": 0.5291937589645386,
+        "global_users": 2,
+        "input_length": 84
+      },
+      {
+        "selection": "q90",
+        "seconds": 0.6439600586891174,
+        "global_users": 2,
+        "input_length": 119
+      },
+      {
+        "selection": "max",
+        "seconds": 0.7741015553474426,
+        "global_users": 2,
+        "input_length": 159
+      }
+    ],
+    "beam_center_full_user_histogram_assignments": {
+      "q10": {
+        "user_count": 7859,
+        "measured_input_length": 79,
+        "seconds_per_user": 0.2601480516605079
+      },
+      "q50": {
+        "user_count": 11410,
+        "measured_input_length": 84,
+        "seconds_per_user": 0.2651988030411303
+      },
+      "q90": {
+        "user_count": 4185,
+        "measured_input_length": 119,
+        "seconds_per_user": 0.32260373001918197
+      },
+      "max": {
+        "user_count": 1318,
+        "measured_input_length": 159,
+        "seconds_per_user": 0.387787317391485
+      }
+    }
+  },
+  "train_length_representativeness": {
+    "full_train_rows_x_uniform17_prompt_distribution": {
+      "count": 2241229,
+      "min": 62,
+      "max": 175,
+      "mean": 92.53888915412035,
+      "quantiles": {
+        "0.1": 68.0,
+        "0.25": 74.0,
+        "0.5": 83.0,
+        "0.75": 102.0,
+        "0.9": 136.0,
+        "0.95": 159.0,
+        "0.99": 172.0
+      }
+    },
+    "steady_mixed_observed_length_count_including_repeats": 192,
+    "steady_mixed_observed_mean": 93.66145833333333,
+    "steady_mixed_observed_min": 63,
+    "steady_mixed_observed_max": 175,
+    "limitation": "The retained probe uses 128 fixed unique mixed train rows. Updates0/2/4 repeat one64-row half,1/3/5 the other. Three steady timings cover128 unique rows, not192 independent new rows. Short/middle/long are homogeneous length-envelope checks, excluded from center."
+  },
+  "time_limit_assessment": "INCONCLUSIVE_FORMAL_CHECKPOINT_AND_SUSTAINED_RUNTIME",
+  "conditional_measured_scenarios_within_96h": {
+    "center": true,
+    "conservative": true
+  },
+  "evidence_interpretation": "Conditional center/conservative scenarios use actual steady mixed updates and real validation/adapter serialization/reload/beam20. Additional formal Trainer/DS checkpoint, selection and best restore costs are NOT TESTED. Remaining_to_96_hours is the combined capacity for these costs beyond the stated margin. Only three steady mixed updates and eight distinct measured generation users are available; no statistically calibrated 96h completion guarantee or sustained throughput validation is claimed.",
+  "minimum_train_samples_per_second_with_measured_other_costs_and_center_margin": 1.737186225110852,
+  "conditional_measured_components_support_96h_feasibility": true,
+  "remaining_risks": [
+    "Unmeasured multi-hour thermal, scheduling, memory fragmentation and shared I/O changes.",
+    "Only one adapter serialization/reload observation; best checkpoint selection itself was not exercised.",
+    "Generation uses a small fixed length-stratified user sample; histogram-weighted center is a proxy.",
+    "Guard/finite checks and synchronized component timers add probe overhead; formal dataloader workers/prefetch may differ."
+  ],
+  "evidence_sources": {
+    "audit": {
+      "path": "lc_rec/letter/evidence/jobs/letter-20261110-data-r1/output/audit/audit.json",
+      "sha256": "59b02c50a25681d894130c1f243f32d5479c60ac8ffaa3e1bdb4c882f481ac92"
+    },
+    "training": [
+      {
+        "path": "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/output/probe/rank0.json",
+        "sha256": "a7998375d0e073649571052ce74d92f39ee75f056470fa6204a5bc514aa061af"
+      },
+      {
+        "path": "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/output/probe/rank1.json",
+        "sha256": "7c2966f77bb5c05130a4076e9714f133053462cdbb162c8a16854b046c892f12"
+      }
+    ],
+    "inference": [
+      {
+        "path": "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-inference-r0/output/inference/inference_rank0.json",
+        "sha256": "e4f2e437389c3474ddd4eb68f90b8240bc8a395c0aeed2ba1c5e587af6899fc5"
+      },
+      {
+        "path": "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-inference-r0/output/inference/inference_rank1.json",
+        "sha256": "8e2dc05c7d479b7bf06b9ef585e076b299ba9b8cda8d4156333241abedb298a9"
+      }
+    ]
+  }
+}

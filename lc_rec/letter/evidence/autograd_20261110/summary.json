@@ -1,0 +1,347 @@
+{
+  "schema": "letter_autograd_continuation_summary_v1",
+  "overall": "GPU_TECHNICAL_PASS_BOUNDED_CHAIN",
+  "full_seed_96h_acceptance": "INCONCLUSIVE_FORMAL_CHECKPOINT_AND_SUSTAINED_RUNTIME",
+  "source": {
+    "RUN_COMMIT": "8e6399c2a1269dfde58d705eef25a499400dc59b",
+    "CPU_RUN_COMMIT": "059f9feb55fde067187afbf3b80f285a00a63ec3",
+    "prior_delivery": "61854bb1df0f26a71e68d95ab8eb564f7c762f76",
+    "author_LETTER_commit": "8d0154e28de37dbb6e24871c508ad8ddb1921cda",
+    "model_revision": "4782ad278652c7c71b72204d462d6d01eaaf7549",
+    "server_run_release": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b",
+    "DELIVERY_COMMIT_resolution": "Exact full SHA is bound by the final reply and ZIP final_receipts/publication.json; not self-embedded in its own commit.",
+    "runtime_and_estimator_files_unchanged_from_RUN_COMMIT": {
+      "lc_rec/letter/scripts/compat.py": "c8135e5eeda3c1f528065cbe717a31582cbb4b5043ea13bfa76f01b370604a20",
+      "lc_rec/letter/scripts/gpu_probe.py": "3065cea45e56a1bee86c0fd7a834c8dfcd1a9684ef29c32084651d27d0325055",
+      "lc_rec/letter/scripts/inference_probe.py": "e2f178c5af1d8d1509c76384c265248e537406850472f1420254120c418d2ddb",
+      "lc_rec/letter/scripts/resource_guard.py": "4aa17156837927f6def5b4e74554e9d8a4f92bf43137119913a2791161d714c3",
+      "lc_rec/letter/scripts/estimate_budget.py": "f334ff9660c0bea0358ca3cbc69cedf76506398a783f1372d853f3b114ed06e3",
+      "lc_rec/letter/config/probe_instruments.json": "950e04df16be12f248c941b7b505e39a8a876b54d835b3a229ecf12225be228f",
+      "lc_rec/letter/config/budget.json": "f57e46499073a02536e1c1cc70d5babe62a61a3b2812ff81b2e2e021c390ea02",
+      "lc_rec/letter/config/guard_autograd.json": "5281472a4810bc4e0783d5e76e0936c7822a2bd5f7f9094b854ea049c58f737f"
+    }
+  },
+  "versions": {
+    "torch": "2.6.0",
+    "transformers": "4.31.0",
+    "peft": "0.5.0",
+    "accelerate": "0.21.0",
+    "bitsandbytes": "0.45.5",
+    "deepspeed": "0.16.9",
+    "fschat": "0.2.31",
+    "flash-attn": "2.7.4.post1"
+  },
+  "trainable_identity": {
+    "parameter_tensors": 450,
+    "lora_tensors": 448,
+    "active_wrapper_tensors": 2,
+    "parameter_elements": 289652736,
+    "active_wrapper_names": [
+      "base_model.model.lm_head.modules_to_save.default.weight",
+      "base_model.model.model.embed_tokens.modules_to_save.default.weight"
+    ],
+    "names_shapes_sha256": "5dcfbbd3bd57f1e20c4784aba79fe4cb8d8f9c8c44f800e122b234f335416681"
+  },
+  "training": {
+    "completed_global64_updates_per_rank": [
+      9,
+      9
+    ],
+    "complete_microsteps_per_rank": [
+      36,
+      36
+    ],
+    "nonzero_lr_updates_per_rank": [
+      8,
+      8
+    ],
+    "finite_gradient_tensors_per_rank": [
+      450,
+      450
+    ],
+    "changed_A_tensors_per_rank": [
+      224,
+      224
+    ],
+    "changed_B_tensors_per_rank": [
+      224,
+      224
+    ],
+    "active_SID_max_abs_changes": [
+      {
+        "base_model.model.model.embed_tokens.modules_to_save.default.weight": 0.0001220703125,
+        "base_model.model.lm_head.modules_to_save.default.weight": 0.0001220703125
+      },
+      {
+        "base_model.model.model.embed_tokens.modules_to_save.default.weight": 0.0001220703125,
+        "base_model.model.lm_head.modules_to_save.default.weight": 0.0001220703125
+      }
+    ],
+    "frozen_originals_all_bytes_unchanged": true,
+    "cross_rank_parameters_equal": true,
+    "steady_global_samples_per_second": 14.65798258900991,
+    "steady_effective_tokens_per_second": 1372.888025511277,
+    "steady_global_seconds_with_data": [
+      4.472858350723982,
+      4.424350185319781,
+      4.451219967566431
+    ],
+    "all_update_seconds": [
+      {
+        "phase": "warmup",
+        "global64_seconds": 5.699153900146484
+      },
+      {
+        "phase": "warmup",
+        "global64_seconds": 4.7215657234191895
+      },
+      {
+        "phase": "warmup",
+        "global64_seconds": 4.39078950881958
+      },
+      {
+        "phase": "mixed_steady",
+        "global64_seconds": 4.388676643371582
+      },
+      {
+        "phase": "mixed_steady",
+        "global64_seconds": 4.344507217407227
+      },
+      {
+        "phase": "mixed_steady",
+        "global64_seconds": 4.365480899810791
+      },
+      {
+        "phase": "short",
+        "global64_seconds": 4.0032196044921875
+      },
+      {
+        "phase": "middle",
+        "global64_seconds": 4.023503303527832
+      },
+      {
+        "phase": "long",
+        "global64_seconds": 4.0968804359436035
+      }
+    ],
+    "temperature_loss": [
+      {
+        "model": 13.968113899230957,
+        "independent_ce_temp08": 13.968113899230957,
+        "independent_ce_temp1": 11.858251571655273,
+        "exact_temp08_agreement": true
+      },
+      {
+        "model": 13.420120239257812,
+        "independent_ce_temp08": 13.420120239257812,
+        "independent_ce_temp1": 11.429338455200195,
+        "exact_temp08_agreement": true
+      }
+    ],
+    "forward_backward_optimizer_boundary": "PASS all36microsteps/rank, Adam step1..9, exact optimizer membership",
+    "nan_inf": "No nonfinite loss/gradient/trainable parameter observed",
+    "sampling_limit": "Six mixed updates reuse the fixed CPU-audited 128 real row/prompt pool; steady updates 3/4/5 provide three timings of only two distinct global64 groups. Length-envelope updates repeat one real row. No full-epoch performance measurement."
+  },
+  "validation": [
+    {
+      "phase": "mixed",
+      "seconds": 0.26077184081077576,
+      "seconds_with_data": 0.2818270418792963,
+      "global_samples": 16
+    },
+    {
+      "phase": "short",
+      "seconds": 0.24726596474647522,
+      "seconds_with_data": 0.2633691728115082,
+      "global_samples": 16
+    },
+    {
+      "phase": "middle",
+      "seconds": 0.23652173578739166,
+      "seconds_with_data": 0.2554464191198349,
+      "global_samples": 16
+    },
+    {
+      "phase": "long",
+      "seconds": 0.24695679545402527,
+      "seconds_with_data": 0.2799722906202078,
+      "global_samples": 16
+    }
+  ],
+  "adapter": {
+    "save_keys": 450,
+    "strict_direct_trainable_save": true,
+    "file": {
+      "bytes": 579376762,
+      "sha256": "1069b6df364d21ac2ecdab25b97f30b1ee03d5182203d5fe909bdfe2d5c0624a"
+    },
+    "server_directory": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output/probe/adapter",
+    "write_seconds": 1.0109477331861854,
+    "save_and_verification_seconds": 4.521939261816442,
+    "reload_keys_per_rank": [
+      450,
+      450
+    ],
+    "reload_seconds_per_rank": [
+      94.33558400720358,
+      94.44611275941133
+    ],
+    "base_reload_seconds_per_rank": [
+      15.759210619144142,
+      16.064014887437224
+    ],
+    "actual_bin_read_and_all_values_verified": true,
+    "safetensors_adapter": "NOT_TESTED; pinned PEFT0.5 path explicitly required .bin and rejected ambiguous formats"
+  },
+  "beam20": {
+    "protocol": {
+      "num_beams": 20,
+      "num_return_sequences": 20,
+      "max_new_tokens": 10,
+      "prefix_constraint": "original positional allowed-token callback; no Trie",
+      "prompt": 0,
+      "per_rank_batch": 1,
+      "distinct_users_per_synchronized_batch": 2,
+      "warmup": "q10 users once; excluded from throughput",
+      "metrics_or_filtering_executed": false,
+      "oom_beam_reduction": false,
+      "allowed_callback_source_sha256": "19b381838a03cc2273e6e2baf75606520ffe77f28e2525bc791578542d5bd93e"
+    },
+    "timed_distinct_users": 8,
+    "warmup_user_presentations": 2,
+    "all20_beams_per_user_callback_and_EOS_verified": true,
+    "timings": [
+      {
+        "selection": "q10",
+        "seconds": 0.5191209316253662,
+        "global_users": 2,
+        "input_length": 79
+      },
+      {
+        "selection": "q50",
+        "seconds": 0.5291937589645386,
+        "global_users": 2,
+        "input_length": 84
+      },
+      {
+        "selection": "q90",
+        "seconds": 0.6439600586891174,
+        "global_users": 2,
+        "input_length": 119
+      },
+      {
+        "selection": "max",
+        "seconds": 0.7741015553474426,
+        "global_users": 2,
+        "input_length": 159
+      }
+    ],
+    "attention_and_dtype": "Author inference LoRA branch: full BF16 base, vanilla HF attention; training uses int8/FastChat",
+    "recommendation_metrics": "NOT_RUN"
+  },
+  "resources": {
+    "training_allocated_peak_gib_per_rank": [
+      12.033432006835938,
+      12.03842306137085
+    ],
+    "training_reserved_peak_gib_per_rank": [
+      14.26953125,
+      14.275390625
+    ],
+    "inference_allocated_peak_gib_per_rank": [
+      18.314716815948486,
+      18.314716815948486
+    ],
+    "inference_reserved_peak_gib_per_rank": [
+      21.912109375,
+      21.912109375
+    ],
+    "training_rank_ru_maxrss_gib": [
+      10.669685363769531,
+      10.682296752929688
+    ],
+    "inference_rank_ru_maxrss_gib": [
+      10.488029479980469,
+      10.499820709228516
+    ],
+    "minimum_sampled_host_available_gib": 234.07794570922852,
+    "sampled_task_tree_rss_max_gib_per_job": [
+      6.272621154785156,
+      17.910400390625
+    ],
+    "cpu_peak_limit": "5-second task-tree sampling can miss peaks; rank ru_maxrss is per-process history and is not summed as a measured concurrent peak.",
+    "sampled_swap_increase_and_task_swap_bytes": [
+      0,
+      0
+    ],
+    "guard_tracked_storage_peak_bytes": 2092994560
+  },
+  "budget": {
+    "center_conditional_hours": 14.446984704930783,
+    "conservative_conditional_hours": 17.41749974187567,
+    "center_remaining_to_96_hours": 81.55301529506922,
+    "conservative_remaining_to_96_hours": 78.58250025812433,
+    "conditional_measured_components_support_96h_feasibility": true,
+    "minimum_training_samples_s_with_measured_other_costs": 1.737186225110852,
+    "formal_full_seed_guarantee": false,
+    "unmeasured_formal_overheads": [
+      "Formal Trainer/DeepSpeed optimizer, scheduler, RNG and other state checkpoint writes.",
+      "Best-checkpoint selection/restore and final Trainer state/model saves. Full checkpoints were prohibited in this probe.",
+      "Validation loader/worker and distributed aggregation overhead beyond measured collator/forward; CPU recommendation filtering/metric aggregation were not executed."
+    ]
+  },
+  "gpu_budget": {
+    "historical_gpu_device_minutes": 7.788773705127339,
+    "current_gpu_device_minutes": 9.158350529024998,
+    "cumulative_gpu_device_minutes": 16.947124234152337,
+    "limit_gpu_device_minutes": 120,
+    "remaining_gpu_device_minutes": 103.05287576584766
+  },
+  "corrections": {
+    "historical_used": 3,
+    "this_task_used": 1,
+    "this_task_initial_round": 0,
+    "this_task_limit": 3,
+    "round1_scope": "Correct delivery-draft sampler wording; no GPU source/config change or new computation"
+  },
+  "reviews": {
+    "cpu_result_review.json": {
+      "reviewer": "/root/independent_review",
+      "status": "PASS_CPU_SYNTHETIC_WITH_EXPLICIT_SCOPE"
+    },
+    "gpu_runtime_review.json": {
+      "reviewer": "/root/independent_review",
+      "status": "PASS_CORE_GPU_TRAINING_AND_ADAPTER_SAVE"
+    },
+    "inference_budget_runtime_review.json": {
+      "reviewer": "/root/independent_review",
+      "status": "PASS_RELOAD_BEAM20_AND_BUDGET_ARITHMETIC"
+    }
+  },
+  "jobs": [
+    {
+      "job_id": "letter-20261110-autograd-cpu-r0",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true
+    },
+    {
+      "job_id": "letter-20261110-autograd-gpu-r0",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true
+    },
+    {
+      "job_id": "letter-20261110-autograd-inference-r0",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "cleanup_verified": true
+    }
+  ],
+  "active_task_jobs": [],
+  "formal_training_and_metrics_run": false,
+  "Qwen_or_Shuffle_run": false,
+  "new_packages_toolchains_or_environment_configuration": [],
+  "formal_adaptation_approval": "BF16 A-only and PEFT non-inplace adaptation are approved only for this bounded technical probe; formal baseline adoption remains unapproved.",
+  "GPT_UPLOAD_REQUIRED": "YES"
+}

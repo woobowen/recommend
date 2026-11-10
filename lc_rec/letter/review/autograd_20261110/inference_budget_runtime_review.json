@@ -1,0 +1,132 @@
+{
+  "schema": "letter_non_author_reload_beam_budget_runtime_review_v1",
+  "reviewer": "/root/independent_review",
+  "reviewed_utc": "2026-11-10T11:27:15.938479+00:00",
+  "status": "PASS_RELOAD_BEAM20_AND_BUDGET_ARITHMETIC",
+  "GPU_technical_scope": "PASS",
+  "formal96h_certification": "INCONCLUSIVE_FORMAL_CHECKPOINT_AND_SUSTAINED_RUNTIME",
+  "RUN_COMMIT": "8e6399c2a1269dfde58d705eef25a499400dc59b",
+  "job_id": "letter-20261110-autograd-inference-r0",
+  "direct_read_scope": "Both complete actual inference JSONs,request/status/work.log/resource-summary and all11light-export members; allrequest source/config Gitblobs checked. Budget independently recalculated directly from raw rank measurements and frozen audited counts/histogram,without importing estimator. NoGPU/model load by reviewer.",
+  "strict_reload": {
+    "keys": 450,
+    "elements": 289652736,
+    "all_key_shape_value_checks_pass": true,
+    "max_value_difference_after_explicit_dtype_conversion": 0,
+    "dtypes": "SavedBF16 LoRA reloadsFP32 exactly; active embed/head remainBF16; all918SIDrows restored",
+    "actual_local_bin_open_observed": true,
+    "payload_sha256": "1069b6df364d21ac2ecdab25b97f30b1ee03d5182203d5fe909bdfe2d5c0624a",
+    "payload_not_downloaded_by_reviewer": true,
+    "saved_token_ids_match_audited918_mapping": true,
+    "independent_save_reload_metadata_key_set_shape_and_saved_dtype_match": true
+  },
+  "beam_protocol": {
+    "prompt": 0,
+    "num_beams": 20,
+    "num_return_sequences": 20,
+    "max_new_tokens": 10,
+    "author_positional_callback_unchanged": true,
+    "independent_check": "Rebuilt eachposition allowedtokenID sets directly from frozen authorSID index and audited tokenmapping; checked every output token includingEOS for all200beams,including40warmup beams. NoTrie/candidatevalidity/metricclaim.",
+    "total_beams_checked_including_warmup": 200,
+    "distinct_timed_users": 8,
+    "warmup_users_repeated_then_excluded": 2,
+    "observed_EOS_position": 4,
+    "timed_dual_gpu_users_per_second": [
+      3.8526668414968466,
+      3.779334064546329,
+      3.1057826848319077,
+      2.5836403326981214
+    ],
+    "aggregate_timed_users_per_second": 3.2436250644289286,
+    "actual_callback_source_hash_matches_frozen_author_file": true
+  },
+  "loading_seconds_by_rank": {
+    "base": [
+      15.759210619144142,
+      16.064014887437224
+    ],
+    "adapter": [
+      94.33558400720358,
+      94.44611275941133
+    ],
+    "strict_verification": [
+      3.5387595063075423,
+      3.281101495027542
+    ]
+  },
+  "whole_job_inference_gpu_peaks_gib": {
+    "allocated": [
+      18.314716815948486,
+      18.314716815948486
+    ],
+    "reserved": [
+      21.912109375,
+      21.912109375
+    ]
+  },
+  "independent_budget_recalculation": {
+    "center_component_hours": {
+      "train": 10.184356562013702,
+      "validation": 0.9696415946436011,
+      "adapter_checkpoint_serialization_proxy": 0.0011232752590957615,
+      "adapter_reload": 0.026235031322058705,
+      "initialization": 0.026815391580781174,
+      "beam20_prompt0_test": 1.9254506042087451
+    },
+    "conservative_component_hours": {
+      "train": 10.237875780546004,
+      "validation": 0.9696415946436011,
+      "adapter_checkpoint_serialization_proxy": 0.005024376957573825,
+      "adapter_reload": 0.026235031322058705,
+      "initialization": 0.026815391580781174,
+      "beam20_prompt0_test": 2.668407618450518
+    },
+    "center_hours": 14.446984704930783,
+    "conservative_hours": 17.41749974187567,
+    "center_headroom_hours": 81.55301529506922,
+    "conservative_headroom_hours": 78.58250025812433,
+    "all_component_arithmetic_matches": true,
+    "minimum_train_rate_no_other_costs_samples_s": 1.5258912037037038,
+    "minimum_train_rate_measured_other_costs_with10pct_margin_samples_s": 1.737186225110852,
+    "conditional_support_only": true,
+    "limits": [
+      "Only3steadyupdate observations on128unique mixedrows; meanobservedlength93.66 vsfulluniformprompt92.54,not fullbatchdistribution proof.",
+      "8timedlength-stratified beam20users; histogramweightedcenter isapproximation,conservative observedmax plus25pctmargin.",
+      "FormalTrainer/DSoptimizer/scheduler/RNGcheckpoint,bestrestore,epoch-tail/sharding andlongdurationenvironmentremainunmeasured.",
+      "Noformal4epochtraining,fullmetricsevaluation,5seed,QwenorShuffle."
+    ]
+  },
+  "gpu_budget": {
+    "historical_device_seconds": 467.3264223076403,
+    "new_train_device_seconds": 274.75241493806243,
+    "new_inference_device_seconds": 274.74861680343747,
+    "total_device_seconds": 1016.8274540491402,
+    "total_device_minutes": 16.947124234152337,
+    "remaining_device_minutes": 103.05287576584766,
+    "total120minute_bound_pass": true
+  },
+  "job_terminal": {
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "cleanup_verified": true,
+    "worker_may_be_live": false,
+    "all28resource_samples_memory_swap_bounds_pass": true
+  },
+  "publication_zip_gate": "PENDING_MAIN_FINAL_DELIVERY",
+  "evidence_sha256": {
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-inference-r0/request.json": "2a29394c06c6b532678e5ed3f9192cbb8f1793b71d037a98e1fc5bfa17b6b6c9",
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-inference-r0/status.json": "3a057cd4f1550e14e7e69f6493e1c08e2436359a5680a95a206b1b4b14bf02c2",
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-inference-r0/work.log": "5fd7c7e45db12a05f98c159c30073aa50963addacddc50cc1b63efb9c5dd2b3d",
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-inference-r0/output/inference/inference_rank0.json": "e4f2e437389c3474ddd4eb68f90b8240bc8a395c0aeed2ba1c5e587af6899fc5",
+    "lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-inference-r0/output/inference/inference_rank1.json": "8e2dc05c7d479b7bf06b9ef585e076b299ba9b8cda8d4156333241abedb298a9",
+    "lc_rec/letter/evidence/autograd_20261110/budget_estimate.json": "4dd8c0a074d67b24ea9f20f42cca7acab95d8db0d0d204f8a624acf37082f458"
+  },
+  "final_executed_source_review": {
+    "path": "lc_rec/letter/scripts/inference_probe.py",
+    "sha256": "e2f178c5af1d8d1509c76384c265248e537406850472f1420254120c418d2ddb",
+    "complete_actual_source_reread": true,
+    "matches_fixed_RUN_COMMIT_git_blob": true,
+    "prelaunch_candidate_hash": "7e678bcc8fc6be1d753efa0bb1f2c5b3f48088e5997b06fd8ae1edc79d67c665",
+    "clarification": "Prelaunchreceipt was written against a candidate before final>=40GiBguard/measurementassertions. Final executed fullsource was directly re-read and runtime+request/blob verified; earlier receipt remains historical rather than rewritten."
+  }
+}

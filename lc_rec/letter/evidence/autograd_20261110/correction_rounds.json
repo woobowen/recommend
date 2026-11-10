@@ -5,7 +5,7 @@
   "prior_correction_rounds_used": 3,
   "prior_correction_record_sha256": "778d99d6a8463606719e3d3e48b585f4a7fe3d1ef184d4808f00bb6f79a6a32d",
   "current_initial_round": 0,
-  "current_correction_rounds_used": 0,
+  "current_correction_rounds_used": 1,
   "current_correction_rounds_limit": 3,
   "current_gpu_update_cap_across_attempts": 9,
   "round0": {
@@ -13,12 +13,33 @@
     "cpu_job": "letter-20261110-autograd-cpu-r0",
     "cpu_status": "SUCCEEDED / PASS_CPU_SYNTHETIC / cleanup_verified",
     "cpu_run_commit": "059f9feb55fde067187afbf3b80f285a00a63ec3",
-    "prelaunch_instrumentation": "Nine-update task-wide cap, per-module checkpoint call counters, trainable/optimizer/gradient/SID/frozen checks, synchronized timing, strict adapter save/reload and original beam20."
+    "prelaunch_instrumentation": "Nine-update task-wide cap, per-module checkpoint call counters, trainable/optimizer/gradient/SID/frozen checks, synchronized timing, strict adapter save/reload and original beam20.",
+    "gpu_job": "letter-20261110-autograd-gpu-r0",
+    "inference_job": "letter-20261110-autograd-inference-r0",
+    "RUN_COMMIT": "8e6399c2a1269dfde58d705eef25a499400dc59b",
+    "actual_complete_updates": 9,
+    "gpu_training": "PASS",
+    "adapter_reload_and_beam20": "PASS"
   },
   "current_failures": [],
   "gpu_budget_inherited_device_seconds": 467.3264223076403,
   "gpu_budget_total_device_seconds": 7200,
   "packages_installed_this_task": [],
   "environment_configuration_changes_this_task": [],
-  "formal_training_authorized": false
+  "formal_training_authorized": false,
+  "terminal_outcome": {
+    "core_gpu_technical": "PASS",
+    "full_seed_96h": "INCONCLUSIVE_FORMAL_CHECKPOINT_AND_SUSTAINED_RUNTIME",
+    "active_jobs": [],
+    "current_correction_rounds_used": 1,
+    "no_additional_GPU_work_authorized_or_started": true
+  },
+  "round1": {
+    "component": "Delivery draft sampler description",
+    "root_cause": "Draft described DistributedSampler arithmetic as actual runtime sampling; captured Trainer loader is Accelerate DataLoaderShard/BatchSamplerShard with inner RandomSampler.",
+    "minimal_change": "Correct only unified review-entry prose. Runtime source, raw records, estimator and all numeric costs unchanged.",
+    "verification": "Re-read actual rank formal_train_dataloader_inspection; actual length8240/rank and scheduler8240/four epochs remain supported. Non-author entry review is separately retained.",
+    "new_GPU_execution": false,
+    "additional_optimizer_updates": 0
+  }
 }

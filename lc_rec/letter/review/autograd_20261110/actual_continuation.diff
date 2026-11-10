@@ -1,0 +1,1621 @@
+diff --git a/lc_rec/letter/config/guard_autograd.json b/lc_rec/letter/config/guard_autograd.json
+new file mode 100644
+index 0000000..4f20279
+--- /dev/null
++++ b/lc_rec/letter/config/guard_autograd.json
+@@ -0,0 +1,36 @@
++{
++  "candidate": "letter_author_sid_int8_lora_zero2",
++  "single_gpu_seconds": 3480,
++  "all_gpu_seconds": 7200,
++  "prior_stage_a_seconds": 0,
++  "cpu_reserve_bytes": 42949672960,
++  "task_vm_swap_limit_bytes": 67108864,
++  "host_swap_io_limit_bytes": 268435456,
++  "budget_ledger": "/home/bwwu/lc-rec/letter-20261110/gpu-budget.json",
++  "new_disk_roots": [
++    "/home/bwwu/lc-rec/letter-20261110",
++    "/data/bwwu/envs/letter-20261110",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r0",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r1",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r2",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r3",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r1",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r2",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r3",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r0",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r1",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r2",
++    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r3"
++  ],
++  "separate_release_deploy_reserve_bytes": 0,
++  "new_disk_peak_bytes_limit": 32212254720,
++  "charging": "2 GPU-device seconds per second of entire guarded two-device process lifetime, including load/save",
++  "precision_adaptation_approval": "User approved necessary-path BF16 autocast for this bounded technical probe only; no formal baseline approval",
++  "require_existing_ledger": true,
++  "historical_gpu_device_seconds_floor": 467.3264223076403,
++  "required_prior_job_ids": [
++    "letter-20261110-gpu-r0",
++    "letter-20261110-gpu-r1"
++  ]
++}
+diff --git a/lc_rec/letter/scripts/compat.py b/lc_rec/letter/scripts/compat.py
+index 19e54f8..2d576b6 100644
+--- a/lc_rec/letter/scripts/compat.py
++++ b/lc_rec/letter/scripts/compat.py
+@@ -13,6 +13,126 @@ import importlib.metadata
+ import types
+ 
+ 
++PEFT05_FORWARD_SHA256 = "df705367a1512d2f8bc3ff067a2617218a0a69ca5f151f2d2d1e233462d06088"
++PEFT05_LORA_FILE_SHA256 = "cbcab4d64b5254d0e1a0018f5e870f7bd93f0178ed1b14d2b750e033f871aa01"
++BNB0455_FORWARD_SHA256 = "d3f4146d34e7100027694d30fa36bac6c8691c244f865a15ff55e3c462b12665"
++_PEFT05_ORIGINAL_FORWARD = None
++_PEFT05_TARGET_RECORDS = {}
++
++
++def peft05_out_of_place_forward(self, x):
++    """Derived PEFT 0.5 int8 forward; preserve both differentiable branches."""
++    import torch
++    import bitsandbytes as bnb
++
++    evidence = _PEFT05_TARGET_RECORDS.get(id(self))
++    if evidence is None:
++        raise RuntimeError("Unregistered PEFT 0.5 int8 module reached the guarded forward")
++    evidence["calls"] += 1
++    evidence["grad_enabled_calls" if torch.is_grad_enabled() else "no_grad_calls"] += 1
++    # The pinned MRO's immediate original parent is bnb.nn.Linear8bitLt.
++    # An explicit call preserves its implementation without a __class__ closure.
++    result = bnb.nn.Linear8bitLt.forward(self, x)
++
++    if self.disable_adapters or self.active_adapter not in self.lora_A.keys():
++        evidence["base_only_calls"] += 1
++        return result
++    elif self.r[self.active_adapter] > 0:
++        if not torch.is_autocast_enabled():
++            expected_dtype = result.dtype
++
++            if x.dtype != torch.float32:
++                x = x.float()
++            output = (
++                self.lora_B[self.active_adapter](
++                    self.lora_A[self.active_adapter](self.lora_dropout[self.active_adapter](x))
++                ).to(expected_dtype)
++                * self.scaling[self.active_adapter]
++            )
++        else:
++            output = (
++                self.lora_B[self.active_adapter](
++                    self.lora_A[self.active_adapter](self.lora_dropout[self.active_adapter](x))
++                )
++                * self.scaling[self.active_adapter]
++            )
++        result = result + output
++        evidence["lora_add_calls"] += 1
++    else:
++        evidence["rank_zero_calls"] += 1
++    return result
++
++
++def install_peft05_out_of_place(model):
++    """Guard the frozen wheel and replace only its int8 class forward in memory.
++
++    Installed packages and author files remain unchanged. Parameter identities,
++    shapes, dtypes, requires_grad and state_dict keys are checked before/after.
++    The registry makes actual calls inspectable, including checkpoint replays.
++    """
++    global _PEFT05_ORIGINAL_FORWARD
++    import bitsandbytes as bnb
++    from peft.tuners.lora import Linear8bitLt
++
++    if importlib.metadata.version("peft") != "0.5.0":
++        raise RuntimeError("Out-of-place compatibility is limited to PEFT == 0.5.0")
++    if (importlib.metadata.version("bitsandbytes") != "0.45.5"
++            or hashlib.sha256(inspect.getsource(bnb.nn.Linear8bitLt.forward).encode()).hexdigest() != BNB0455_FORWARD_SHA256):
++        raise RuntimeError("bitsandbytes parent differs from the inspected 0.45.5 forward")
++    original = _PEFT05_ORIGINAL_FORWARD or Linear8bitLt.forward
++    source = inspect.getsource(original)
++    source_file = inspect.getsourcefile(original)
++    from pathlib import Path
++    file_sha = hashlib.sha256(Path(source_file).read_bytes()).hexdigest()
++    mro = [c.__module__ + "." + c.__qualname__ for c in Linear8bitLt.__mro__]
++    expected_mro = ["peft.tuners.lora.Linear8bitLt", "bitsandbytes.nn.modules.Linear8bitLt",
++                    "torch.nn.modules.linear.Linear", "torch.nn.modules.module.Module",
++                    "peft.tuners.lora.LoraLayer", "peft.tuners.tuners_utils.BaseTunerLayer",
++                    "abc.ABC", "builtins.object"]
++    if (hashlib.sha256(source.encode()).hexdigest() != PEFT05_FORWARD_SHA256
++            or file_sha != PEFT05_LORA_FILE_SHA256
++            or str(inspect.signature(original)) != "(self, x: torch.Tensor)"
++            or mro != expected_mro or Linear8bitLt.__bases__[0] is not bnb.nn.Linear8bitLt
++            or source.count("result += output") != 1):
++        raise RuntimeError("Installed PEFT source/signature/class/MRO differs from the frozen 0.5 wheel")
++    if _PEFT05_ORIGINAL_FORWARD is not None and Linear8bitLt.forward is not peft05_out_of_place_forward:
++        raise RuntimeError("A different runtime forward override is already present")
++    targets = [(name, module) for name, module in model.named_modules() if isinstance(module, Linear8bitLt)]
++    if not targets or any(type(module) is not Linear8bitLt for _, module in targets):
++        raise RuntimeError("Expected exact PEFT 0.5 int8 target classes")
++
++    def parameter_identity():
++        return {name: (id(p), tuple(p.shape), str(p.dtype), p.requires_grad)
++                for name, p in model.named_parameters()}
++
++    before = parameter_identity()
++    state_keys = set(model.state_dict())
++    records = {}
++    for name, module in targets:
++        records[name] = {"calls": 0, "grad_enabled_calls": 0, "no_grad_calls": 0,
++                         "base_only_calls": 0, "lora_add_calls": 0, "rank_zero_calls": 0}
++        _PEFT05_TARGET_RECORDS[id(module)] = records[name]
++    _PEFT05_ORIGINAL_FORWARD = original
++    Linear8bitLt.forward = peft05_out_of_place_forward
++    if before != parameter_identity() or state_keys != set(model.state_dict()):
++        raise AssertionError("Forward installation changed parameter identity or state keys")
++    return {"adaptation": "Probe-only PEFT 0.5 int8 differentiable out-of-place LoRA residual",
++            "original_source_file": source_file, "original_file_sha256": file_sha,
++            "original_source_sha256": PEFT05_FORWARD_SHA256,
++            "original_signature": str(inspect.signature(original)),
++            "derived_source_file": inspect.getsourcefile(peft05_out_of_place_forward),
++            "derived_source_sha256": hashlib.sha256(inspect.getsource(peft05_out_of_place_forward).encode()).hexdigest(),
++            "derived_signature": str(inspect.signature(peft05_out_of_place_forward)),
++            "class": mro[0], "mro": mro,
++            "parent_forward": "bitsandbytes.nn.Linear8bitLt.forward",
++            "parent_forward_source_sha256": hashlib.sha256(inspect.getsource(bnb.nn.Linear8bitLt.forward).encode()).hexdigest(),
++            "semantic_diff": ["super().forward(x) -> explicit pinned bnb.nn.Linear8bitLt.forward(self, x)",
++                              "result += output -> result = result + output"],
++            "target_count": len(targets), "module_calls": records,
++            "parameter_and_state_identity_unchanged": True,
++            "parameter_tensors_before_after": len(before), "state_dict_keys_before_after": len(state_keys)}
++
++
+ def restore_legacy_bnb_state_field(model):
+     """Supply an obsolete False flag only if this PEFT version reads it.
+ 
+@@ -74,7 +194,10 @@ def peft05_lora_a_targets(model):
+ 
+     if importlib.metadata.version("peft") != "0.5.0":
+         raise RuntimeError("This approved precision adaptation is pinned to PEFT 0.5.0")
+-    source = inspect.getsource(Linear8bitLt.forward)
++    original = _PEFT05_ORIGINAL_FORWARD or Linear8bitLt.forward
++    source = inspect.getsource(original)
++    if hashlib.sha256(source.encode()).hexdigest() != PEFT05_FORWARD_SHA256:
++        raise RuntimeError("PEFT 0.5 precision path source differs from frozen forward")
+     if "x = x.float()" not in source or "not torch.is_autocast_enabled()" not in source:
+         raise RuntimeError("PEFT 0.5 int8 forward does not match the inspected FP32 branch")
+     targets = []
+@@ -87,7 +210,8 @@ def peft05_lora_a_targets(model):
+     if not targets:
+         raise RuntimeError("No inspected PEFT 0.5 int8 LoRA A modules found")
+     identity = {"class": Linear8bitLt.__module__ + "." + Linear8bitLt.__qualname__,
+-                "forward_signature": str(inspect.signature(Linear8bitLt.forward)),
++                "original_forward_signature": str(inspect.signature(original)),
++                "runtime_forward_signature": str(inspect.signature(Linear8bitLt.forward)),
+                 "forward_source_sha256": hashlib.sha256(source.encode()).hexdigest(),
+                 "target_count": len(targets)}
+     return targets, identity
+diff --git a/lc_rec/letter/scripts/estimate_budget.py b/lc_rec/letter/scripts/estimate_budget.py
+index e7f1920..83b7c30 100644
+--- a/lc_rec/letter/scripts/estimate_budget.py
++++ b/lc_rec/letter/scripts/estimate_budget.py
+@@ -1,56 +1,234 @@
+-"""Budget counts from completed CPU evidence; failed GPU runs cannot supply rates."""
++"""Estimate one LETTER Instruments seed from actual bounded two-rank timings.
++
++No failed/partial execution is promoted to a measured rate. Point estimates
++and conservative scenarios are extrapolations, not complete-seed validation.
++"""
+ import argparse
+ import hashlib
+ import json
+ import math
++import statistics
+ from pathlib import Path
+ 
+-p = argparse.ArgumentParser()
+-p.add_argument('--audit', required=True)
+-p.add_argument('--train-dir', required=True)
+-p.add_argument('--output', required=True)
+-a = p.parse_args()
+-audit_path = Path(a.audit)
+-j = json.loads(audit_path.read_text())
+-assert j['status'] == 'PASS'
+-c = j['budget_counts']
+-n = c['train_rows_per_epoch']
+-v = c['valid_two_prompt_rows_per_epoch']
+-t = c['test_prompt0_rows']
+-epochs, batch = c['epochs'], c['global_batch']
+-assert n == j['original_dataset_execution']['train_rows']
+-assert v == j['original_dataset_execution']['valid_rows_after_two_prompts']
+-assert t == j['original_dataset_execution']['test_rows']
+-assert t * j['seqrec_prompt_count'] == c['test_all_17_prompt_rows']
+-assert epochs == 4 and batch == 64
+-train = [json.loads(q.read_text()) for q in sorted(Path(a.train_dir).glob('rank[01].json'))]
+-assert len(train) == 2
+-assert all(x['status'] == 'FAIL' and not x['updates'] for x in train), 'This negative-result estimator requires the actual failed zero-update evidence'
+-updates = epochs * math.ceil(n / batch)
+-r = {
+-    'status': 'MISSING_GPU_MEASUREMENTS',
+-    'audit_sha256': hashlib.sha256(audit_path.read_bytes()).hexdigest(),
+-    'count_source': 'Completed CPU audit budget_counts, cross-checked with actual original dataset execution',
+-    'observed_counts': {
+-        'train_per_epoch': n, 'epochs': epochs, 'train_presentations': n * epochs,
+-        'valid_texts_per_epoch': v, 'total_validation_texts': v * epochs,
+-        'test_users_per_prompt': t, 'test_prompt0_presentations': t,
+-        'test_17_prompt_presentations': c['test_all_17_prompt_rows'],
+-        'effective_batch': batch, 'updates_per_epoch': math.ceil(n / batch),
+-        'optimizer_updates_four_epochs': updates,
+-        'scheduler_warmup_steps': math.ceil(updates * .01),
+-    },
+-    'rounding_limit': c['update_rounding_note'],
+-    'actual_complete_optimizer_updates_by_rank': [len(x['updates']) for x in train],
+-    'publication_prompt_protocol': 'Unknown historically; public run_test_ddp.sh specifies prompt0. 17 prompts is a separate cost scenario.',
+-    'reason': 'Approved local precision adaptation completed one real forward/loss per rank, but first backward failed. No stable update throughput, validation timing, checkpoint I/O, adapter reload or beam20 measurements exist.',
+-    'time_limit_assessment': 'UNKNOWN; cannot certify <=96 hours or hardware execution; failure is not proof of OOM or >96h',
+-    'required_train_samples_per_second_if_other_hours': {
+-        str(h): n * epochs / ((96 - h) * 3600) for h in [0, 6, 12, 24]
+-    },
+-    'hours_formula': 'train_presentations/r_train/3600 + total_validation_texts/r_valid/3600 + test_users_per_prompt*P/r_gen/3600 + initialization + checkpoint_selection_save + adapter_reload + margin',
+-    'rates_definition': 'All r are dual-GPU aggregate actual samples or user-prompts per second; P=1 or17 are separate scenarios.',
+-    'identity_limit': 'Author supplement is not bound to historical checkpoint/argv; technical feasibility is not metric reproduction.',
+-}
+-Path(a.output).write_text(json.dumps(r, indent=2) + '\n')
+-print(json.dumps({'status': r['status'], 'output': a.output}))
++
++def sha(path):
++    return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++def positive(value, label):
++    value = float(value)
++    if not math.isfinite(value) or value <= 0:
++        raise AssertionError('Expected finite positive ' + label)
++    return value
++
++
++def read_ranks(directory, prefix):
++    if not directory:
++        return [], []
++    paths = [Path(directory) / (prefix + str(rank) + '.json') for rank in range(2)]
++    records = [json.loads(path.read_text()) for path in paths if path.is_file()]
++    return records, [{'path': str(path), 'sha256': sha(path)} for path in paths if path.is_file()]
++
++
++def paired_rows(records, field, selector):
++    if len(records) != 2:
++        return []
++    selected = [[row for row in record.get(field, []) if selector(row)] for record in records]
++    if len(selected[0]) != len(selected[1]):
++        raise AssertionError('Rank measurement counts disagree for ' + field)
++    rows = []
++    for left, right in zip(*selected):
++        phase = left.get('phase', left.get('selection'))
++        if phase != right.get('phase', right.get('selection')) or left.get('update') != right.get('update'):
++            raise AssertionError('Rank measurement identities disagree')
++        seconds = max(positive(row['max_rank_seconds'], 'synchronized duration') for row in [left, right])
++        item = dict(left)
++        item['seconds'] = seconds
++        item['data_preparation_seconds'] = max(float(row.get('cpu_batch_preparation_and_mask_verification_seconds',
++                                                       row.get('cpu_collator_and_transfer_seconds', 0))) for row in [left, right])
++        item['combined_true_lengths'] = left.get('rank_true_lengths', left.get('rank_lengths', [])) + right.get('rank_true_lengths', right.get('rank_lengths', []))
++        item['wall_seconds_with_data'] = seconds + item['data_preparation_seconds']
++        if field == 'timings' and left.get('row_idx') == right.get('row_idx'):
++            raise AssertionError('Duplicate users across ranks cannot be counted as distinct throughput')
++        rows.append(item)
++    return rows
++
++
++def stage_seconds(record, name):
++    return next((float(stage['elapsed_seconds']) for stage in record.get('stages', []) if stage['stage'] == name), None)
++
++
++def scenario(components, margin_fraction):
++    missing = [key for key, value in components.items() if value is None]
++    known = sum(value for value in components.values() if value is not None)
++    margin = known * margin_fraction
++    hours = {key: None if value is None else value / 3600 for key, value in components.items()}
++    hours['environment_io_margin'] = margin / 3600
++    total = (known + margin) / 3600 if not missing else None
++    return {'component_hours': hours, 'margin_fraction_assumption': margin_fraction,
++            'total_hours': total, 'remaining_to_96_hours': None if total is None else 96 - total,
++            'known_components_plus_margin_hours': (known + margin) / 3600,
++            'missing_components': missing}
++
++
++def estimate(audit, train, inference, center_margin=.10, conservative_margin=.25):
++    if audit['status'] != 'PASS':
++        raise AssertionError('Budget denominators require retained completed CPU audit PASS')
++    counts = audit['budget_counts']
++    n, v, t = counts['train_rows_per_epoch'], counts['valid_two_prompt_rows_per_epoch'], counts['test_prompt0_rows']
++    epochs, batch = counts['epochs'], counts['global_batch']
++    actual = audit['original_dataset_execution']
++    if (n, v, t, epochs, batch) != (actual['train_rows'], actual['valid_rows_after_two_prompts'], actual['test_rows'], 4, 64):
++        raise AssertionError('Frozen counts/dataset/global64 identity mismatch')
++    ceil_updates = epochs * math.ceil(n / batch)
++    per_rank_rows = math.ceil(n / 2)
++    per_rank_batches = math.ceil(per_rank_rows / 8)
++    floor_updates = epochs * (per_rank_batches // 4)
++    train_pass = len(train) == 2 and all(record['status'] == 'PASS' for record in train)
++    inference_pass = len(inference) == 2 and all(record['status'] == 'RELOAD_BEAM20_TECHNICAL_PASS' for record in inference)
++    updates = paired_rows(train, 'updates', lambda row: row['phase'] != 'warmup') if train_pass else []
++    mixed = [row for row in updates if row['phase'] == 'mixed_steady']
++    validation = paired_rows(train, 'validation_timings', lambda row: row['phase'] != 'warmup') if train_pass else []
++    generation = paired_rows(inference, 'timings', lambda row: not row['warmup']) if inference_pass else []
++    for records in [train, inference]:
++        if len(records) == 2 and records[0].get('rank') == records[1].get('rank'):
++            raise AssertionError('Two distinct rank records required')
++    result = {'schema': 'letter_seed96h_bounded_estimate_v2', 'status': 'INCONCLUSIVE',
++        'observed_counts': {'train_per_epoch': n, 'epochs': epochs, 'train_presentations': n * epochs,
++            'validation_texts_per_epoch': v, 'total_validation_texts': v * epochs,
++            'test_users_prompt0': t, 'effective_global_batch': batch,
++            'conservative_optimizer_updates_four_epochs': ceil_updates,
++            'trainer431_floor_scheduler_updates_four_epochs': floor_updates,
++            'dataloader_batches_per_rank_per_epoch': per_rank_batches,
++            'distributed_sampler_rows_per_rank': per_rank_rows,
++            'distributed_sampler_total_rows_including_padding_per_epoch': per_rank_rows * 2},
++        'dataloader_tail_semantics': {'binding': 'Transformers4.31 Trainer default drop_last=False; two-rank sample/batch accounting; micro8 accumulation4; actual sharding is runtime-bound',
++            'scheduler': 'floor(len(dataloader)/4)*4 epochs; verified against training_definition when available',
++            'wall_estimate': 'ceil(131837/64)*4 = 8240 global64-equivalent updates is conservative work accounting',
++            'partial_accumulation_limit': 'Bounded nine full global64 updates do not execute an epoch tail. Scheduler arithmetic gives %d updates; conservative work accounting gives %d. DistributedSampler arithmetic alone would give last rank microbatch7/global accumulation62, while Accelerate even_batches may fill it; actual runtime shard/tail behavior has not been measured.' % (floor_updates, ceil_updates)},
++        'actual_complete_optimizer_updates_by_rank': [len(record.get('updates', [])) for record in train],
++        'train_statuses': [record['status'] for record in train],
++        'inference_statuses': [record['status'] for record in inference],
++        'scope': 'Conditional one-seed cost: four train epochs, two-template validation per epoch, four adapter serializations, one final reload and prompt0 beam20 for 24772 users; formal Trainer/DS state checkpoint/selection/best restore cost remains unmeasured',
++        'rates_definition': 'Dual-GPU aggregate samples/users divided by synchronized MAX-rank wall duration. Rank totals are never added to duplicate the denominator.',
++        'minimum_train_samples_per_second_if_other_hours': {str(h): n * epochs / ((96 - h) * 3600) for h in [0, 6, 12, 24]},
++        'method_and_precision_limits': ['Training uses approved technical-only PEFT0.5 non-inplace residual plus LoRA-A-only BF16 adaptation.',
++            'Author test_ddp.py LoRA inference reloads full BF16 base with vanilla HF attention; training is int8/flash-attention. These are separate measured paths.',
++            'No complete epoch, best-checkpoint selection, sustained multi-hour run, or recommendation metric reproduction was performed.']}
++    if train_pass:
++        for record in train:
++            definition = record['training_definition']
++            if definition['formal_dataloader_batches_per_rank'] != per_rank_batches or definition['formal_scheduler_updates'] != floor_updates:
++                raise AssertionError('Actual training scheduler/dataloader accounting differs')
++    train_center = ceil_updates * statistics.mean(row['wall_seconds_with_data'] for row in mixed) if mixed else None
++    train_slow = ceil_updates * max(row['wall_seconds_with_data'] for row in updates) if updates else None
++    valid_mixed = [row for row in validation if row['phase'] == 'mixed']
++    valid_center = (v * epochs * sum(row['wall_seconds_with_data'] for row in valid_mixed) /
++                    sum(row['global_samples'] for row in valid_mixed)) if valid_mixed else None
++    valid_slow = v * epochs * max(row['wall_seconds_with_data'] / row['global_samples'] for row in validation) if validation else None
++    save = train[0].get('adapter_save', {}) if train_pass else {}
++    save_center = epochs * float(save.get('write_seconds_rank0', save.get('seconds_rank0', 0))) if save else None
++    save_slow = epochs * float(save['seconds_rank0']) if save else None
++    reload_seconds = max(float(record['adapter_reload_seconds']) for record in inference) if inference_pass else None
++    init_train_values = [stage_seconds(record, 'before_updates') for record in train] if train_pass else []
++    init_train = max(init_train_values) if init_train_values and all(value is not None for value in init_train_values) else None
++    init_inference = max(float(record['base_load_seconds']) for record in inference) if inference_pass else None
++    initialization = init_train + init_inference if init_train is not None and init_inference is not None else None
++    # Nearest measured prompt0 length stratum weights the point estimate with
++    # the already-audited full user distribution. This is a timing proxy, not
++    # a regression/claim that only length determines the generation runtime.
++    beam_center, beam_slow, assignments = None, None, {}
++    if generation:
++        histogram = audit['length_distributions']['test']['input_per_prompt'][0]['histogram']
++        if sum(map(int, histogram.values())) != t:
++            raise AssertionError('Prompt0 histogram does not cover all test users')
++        beam_center = 0.
++        for length, count in histogram.items():
++            nearest = min(generation, key=lambda row: (abs(row['input_length'] - int(length)), row['input_length']))
++            per_user = nearest['wall_seconds_with_data'] / nearest['global_users']
++            beam_center += int(count) * per_user
++            assignments.setdefault(nearest['selection'], {'user_count': 0, 'measured_input_length': nearest['input_length'], 'seconds_per_user': per_user})['user_count'] += int(count)
++        beam_slow = t * max(row['wall_seconds_with_data'] / row['global_users'] for row in generation)
++    center = scenario({'train': train_center, 'validation': valid_center, 'adapter_checkpoint_serialization_proxy': save_center,
++                       'adapter_reload': reload_seconds, 'beam20_prompt0_test': beam_center, 'initialization': initialization}, center_margin)
++    conservative = scenario({'train': train_slow, 'validation': valid_slow, 'adapter_checkpoint_serialization_proxy': save_slow,
++                       'adapter_reload': reload_seconds, 'beam20_prompt0_test': beam_slow, 'initialization': initialization}, conservative_margin)
++    unquantified = ['Formal Trainer/DeepSpeed optimizer, scheduler, RNG and other state checkpoint writes.',
++                   'Best-checkpoint selection/restore and final Trainer state/model saves. Full checkpoints were prohibited in this probe.',
++                   'Validation loader/worker and distributed aggregation overhead beyond measured collator/forward; CPU recommendation filtering/metric aggregation were not executed.']
++    for estimate in [center, conservative]:
++        estimate['is_full_seed_cost_validation'] = False
++        estimate['unquantified_formal_checkpoint_overheads'] = unquantified
++        estimate['total_hours_definition'] = 'Conditional measured-component estimate plus stated margin; excludes additional formal checkpoint/selection/state restore costs'
++    result['center_estimate'] = center
++    result['conservative_estimate'] = conservative
++    result['measurements'] = {'steady_mixed_update_count': len(mixed),
++        'steady_mixed_update_seconds_with_data': [row['wall_seconds_with_data'] for row in mixed],
++        'steady_mixed_global_samples_per_second': (sum(row['global_samples'] for row in mixed) / sum(row['seconds'] for row in mixed)) if mixed else None,
++        'steady_mixed_effective_tokens_per_second': (sum(row['effective_input_tokens'] for row in mixed) / sum(row['seconds'] for row in mixed)) if mixed else None,
++        'postwarmup_length_phases': [{'phase': row['phase'], 'seconds': row['seconds'], 'seconds_with_data': row['wall_seconds_with_data'],
++                                    'global_samples': row['global_samples'], 'effective_tokens': row['effective_input_tokens'],
++                                    'padded_tokens': row['padded_tokens']} for row in updates],
++        'validation': [{'phase': row['phase'], 'seconds': row['seconds'], 'seconds_with_data': row['wall_seconds_with_data'],
++                        'global_samples': row['global_samples']} for row in validation],
++        'generation': [{'selection': row['selection'], 'seconds': row['seconds'], 'global_users': row['global_users'],
++                       'input_length': row['input_length']} for row in generation],
++        'beam_center_full_user_histogram_assignments': assignments}
++    observed_lengths = [length for row in mixed for length in row['combined_true_lengths']]
++    audited_lengths = audit['length_distributions']['train']['all_prompt_full_with_eos']
++    result['train_length_representativeness'] = {'full_train_rows_x_uniform17_prompt_distribution': {key: audited_lengths[key] for key in ['count', 'min', 'max', 'mean', 'quantiles']},
++        'steady_mixed_observed_length_count_including_repeats': len(observed_lengths),
++        'steady_mixed_observed_mean': statistics.mean(observed_lengths) if observed_lengths else None,
++        'steady_mixed_observed_min': min(observed_lengths) if observed_lengths else None,
++        'steady_mixed_observed_max': max(observed_lengths) if observed_lengths else None,
++        'limitation': 'The retained probe uses 128 fixed unique mixed train rows. Updates0/2/4 repeat one64-row half,1/3/5 the other. Three steady timings cover128 unique rows, not192 independent new rows. Short/middle/long are homogeneous length-envelope checks, excluded from center.'}
++    if center['total_hours'] is not None:
++        result['status'] = 'CONDITIONAL_ESTIMATE_WITH_UNMEASURED_FORMAL_CHECKPOINT_OVERHEAD'
++        result['time_limit_assessment'] = 'INCONCLUSIVE_FORMAL_CHECKPOINT_AND_SUSTAINED_RUNTIME'
++        result['conditional_measured_scenarios_within_96h'] = {'center': center['total_hours'] <= 96, 'conservative': conservative['total_hours'] <= 96}
++        result['evidence_interpretation'] = ('Conditional center/conservative scenarios use actual steady mixed updates and real validation/adapter serialization/reload/beam20. '
++            'Additional formal Trainer/DS checkpoint, selection and best restore costs are NOT TESTED. Remaining_to_96_hours is the combined capacity for these costs beyond the stated margin. '
++            'Only three steady mixed updates and eight distinct measured generation users are available; no statistically calibrated 96h completion guarantee or sustained throughput validation is claimed.')
++        other_center = sum(value for key, value in center['component_hours'].items() if key not in ['train', 'environment_io_margin'] and value is not None)
++        allowed_train_hours = 96 / (1 + center_margin) - other_center
++        result['minimum_train_samples_per_second_with_measured_other_costs_and_center_margin'] = (
++            n * epochs / (allowed_train_hours * 3600)) if allowed_train_hours > 0 else None
++        if center['total_hours'] > 96:
++            result['time_limit_assessment'] = 'TIME_BUDGET_BLOCKED_AT_OBSERVED_CENTER_RATE'
++        elif conservative['total_hours'] <= 96:
++            result['conditional_measured_components_support_96h_feasibility'] = True
++            result['remaining_risks'] = ['Unmeasured multi-hour thermal, scheduling, memory fragmentation and shared I/O changes.',
++                'Only one adapter serialization/reload observation; best checkpoint selection itself was not exercised.',
++                'Generation uses a small fixed length-stratified user sample; histogram-weighted center is a proxy.',
++                'Guard/finite checks and synchronized component timers add probe overhead; formal dataloader workers/prefetch may differ.']
++        else:
++            result['conditional_measured_components_support_96h_feasibility'] = False
++    else:
++        result['time_limit_assessment'] = 'INCONCLUSIVE_MISSING_MEASUREMENTS'
++        result['evidence_interpretation'] = 'Missing stages remain NOT TESTED. Known component time is a partial cost, never a full-seed estimate.'
++    return result
++
++
++def main():
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--audit', required=True)
++    parser.add_argument('--train-dir', required=True)
++    parser.add_argument('--inference-dir')
++    parser.add_argument('--output', required=True)
++    parser.add_argument('--center-margin', type=float, default=.10)
++    parser.add_argument('--conservative-margin', type=float, default=.25)
++    args = parser.parse_args()
++    if not 0 <= args.center_margin <= args.conservative_margin < 1:
++        raise ValueError('Margin fractions must satisfy 0 <= center <= conservative < 1')
++    audit_path = Path(args.audit)
++    audit = json.loads(audit_path.read_text())
++    train, train_refs = read_ranks(args.train_dir, 'rank')
++    inference, inference_refs = read_ranks(args.inference_dir, 'inference_rank')
++    result = estimate(audit, train, inference, args.center_margin, args.conservative_margin)
++    result['evidence_sources'] = {'audit': {'path': str(audit_path), 'sha256': sha(audit_path)}, 'training': train_refs, 'inference': inference_refs}
++    Path(args.output).write_text(json.dumps(result, indent=2) + '\n')
++    print(json.dumps({'status': result['status'], 'time_limit_assessment': result['time_limit_assessment'], 'output': args.output}))
++
++
++if __name__ == '__main__':
++    main()
+diff --git a/lc_rec/letter/scripts/gpu_probe.py b/lc_rec/letter/scripts/gpu_probe.py
+index 1fb0731..82f84a7 100644
+--- a/lc_rec/letter/scripts/gpu_probe.py
++++ b/lc_rec/letter/scripts/gpu_probe.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""Nine-update LETTER A technical probe; never a full-epoch training entry.
++"""At most nine LETTER A technical updates; never a full-epoch training entry.
+ 
+ Run with torchrun --nproc_per_node=2. Uses the original LETTER model, FastChat
+ patch, SeqRec data and collator. Only the measurement loop and explicit DS auto
+@@ -43,6 +43,12 @@ def write(path, value):
+     temporary.replace(path)
+ 
+ 
++def tensor_json(value):
++    if hasattr(value, "numel"):
++        return value.item() if value.numel() == 1 else value.tolist()
++    return value
++
++
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument("--source-root", required=True)
+@@ -53,6 +59,8 @@ def main():
+     parser.add_argument("--source-commit", required=True)
+     parser.add_argument("--micro-batch", type=int, default=8)
+     parser.add_argument("--accumulation", type=int, default=4)
++    parser.add_argument("--max-updates", type=int, default=9,
++                        help="Task-wide remaining global64 update allowance; never more than nine. Caller must subtract previous jobs' real updates.")
+     parser.add_argument("--max-seconds", type=int, default=3300)
+     parser.add_argument("--minimum-host-free-gib", type=float, default=40)
+     parser.add_argument("--skip-adapter-save", action="store_true")
+@@ -91,11 +99,33 @@ def main():
+                     raise MemoryError(f"MemAvailable {available:.2f}GiB < {args.minimum_host_free_gib}GiB")
+                 break
+ 
++    def host_resources():
++        memory = {}
++        for line in Path("/proc/meminfo").read_text().splitlines():
++            key, value = line.split(":", 1)
++            if key in ("MemAvailable", "SwapTotal", "SwapFree"):
++                memory[key + "_gib"] = int(value.split()[0]) / 1024**2
++        status = {}
++        for line in Path("/proc/self/status").read_text().splitlines():
++            if line.startswith(("VmRSS:", "VmSwap:")):
++                key, value = line.split(":", 1)
++                status[key + "_gib"] = int(value.split()[0]) / 1024**2
++        return {**memory, **status}
++
++    def track_gpu_peak():
++        if torch is not None and torch.cuda.is_initialized():
++            for label, amount in (("allocated", torch.cuda.max_memory_allocated()),
++                                  ("reserved", torch.cuda.max_memory_reserved())):
++                key = "gpu_entire_job_peak_" + label + "_gib"
++                report[key] = max(report.get(key, 0), amount / 1024**3)
++
+     try:
+-        if world != 2 or args.micro_batch <= 0 or args.accumulation <= 0 or args.micro_batch * args.accumulation * world != 64:
+-            raise ValueError("Requires exactly two ranks and micro_batch * accumulation * 2 == 64")
++        if (world, args.micro_batch, args.accumulation) != (2, 8, 4):
++            raise ValueError("This approved probe requires exactly two ranks, micro_batch=8, accumulation=4, global64")
+         if not 0 < args.max_seconds <= 3300:
+             raise ValueError("--max-seconds must be at most 3300 (55 minutes)")
++        if not 1 <= args.max_updates <= 9:
++            raise ValueError("--max-updates must be within the remaining task-wide allowance, between one and nine")
+         guard()
+         import torch
+         import torch.distributed as dist
+@@ -108,7 +138,8 @@ def main():
+         import peft
+         from peft import LoraConfig, TaskType, get_peft_model
+         from peft import get_peft_model_state_dict
+-        from compat import restore_legacy_bnb_state_field, peft05_lora_a_targets, install_peft05_lora_a_bf16_autocast
++        from compat import (restore_legacy_bnb_state_field, peft05_lora_a_targets,
++                            install_peft05_lora_a_bf16_autocast, install_peft05_out_of_place)
+ 
+         if importlib.metadata.version("peft") != "0.5.0":
+             raise RuntimeError("This probe is fixed to the user-approved installed PEFT 0.5.0; no version upgrade")
+@@ -181,6 +212,7 @@ def main():
+         report["data"] = {"train_rows": len(train_data), "valid_two_prompt_rows": len(valid_data),
+                           "base_vocab": original_vocab, "expanded_vocab": len(tokenizer), "sid_tokens": len(sid_ids),
+                           "tokenizer_exact_match_to_cpu_audit": True}
++        report["measurement_sampling_limit"] = "Six mixed updates reuse the fixed CPU-audited 128 real row/prompt pool; steady updates 3/4/5 provide three timings of only two distinct global64 groups. Length-envelope updates repeat one real row. No full-epoch performance measurement."
+ 
+         def text(selected):
+             row = train_data.inter_data[selected["row_idx"]]
+@@ -213,7 +245,10 @@ def main():
+                                       "labels": first_batch["labels"].tolist(), "prefix_mask_exact": True}
+         stage("data_and_mask_ready")
+         guard()
++        load_started = time.monotonic()
+         model = LETTER.from_pretrained(args.model, load_in_8bit=True, device_map={"": local_rank}, local_files_only=True)
++        torch.cuda.synchronize()
++        report["base_model_load_seconds"] = time.monotonic() - load_started
+         model.set_hyper(.8)
+         model.resize_token_embeddings(len(tokenizer))
+         model = prepare_function(model)
+@@ -223,6 +258,9 @@ def main():
+                             modules_to_save=["embed_tokens", "lm_head"], lora_dropout=.05, bias="none",
+                             inference_mode=False, task_type=TaskType.CAUSAL_LM)
+         model = get_peft_model(model, config)
++        report["peft05_out_of_place_compatibility"] = install_peft05_out_of_place(model)
++        if report["peft05_out_of_place_compatibility"]["target_count"] != 224:
++            raise AssertionError("Out-of-place compatibility did not find exactly 32 layers x seven int8 LoRA modules")
+         for name, param in model.named_parameters():
+             if "original_module" in name and any(module_name in name for module_name in config.modules_to_save):
+                 param.requires_grad = False
+@@ -234,12 +272,43 @@ def main():
+                                        lr_scheduler_type="cosine", bf16=True, optim="adamw_torch", max_grad_norm=1.0,
+                                        gradient_checkpointing=True, report_to=[], local_rank=local_rank, ddp_find_unused_parameters=False)
+         trainer = Trainer(model=model, args=train_args, train_dataset=train_data, data_collator=collator)
++        # Inspect the actual Trainer/Accelerate loader without consuming rows or
++        # changing dropout/initialization RNG streams. Tail filling is not
++        # inferred from a DistributedSampler formula alone.
++        loader_rng = (torch.get_rng_state().clone(), torch.cuda.get_rng_state(local_rank).clone(),
++                      random.getstate(), np.random.get_state())
++        try:
++            actual_loader = trainer.get_train_dataloader()
++            actual_loader_batches = len(actual_loader)
++            def loader_identity(obj):
++                info = {"class": type(obj).__module__ + "." + type(obj).__qualname__}
++                for key in ("batch_size", "drop_last", "even_batches", "split_batches", "num_processes", "process_index"):
++                    val = getattr(obj, key, None)
++                    if isinstance(val, (bool, int, float, str, type(None))):
++                        info[key] = val
++                return info
++            loader_info = {"loader": loader_identity(actual_loader), "length_per_rank": actual_loader_batches,
++                           "sampler": loader_identity(actual_loader.sampler),
++                           "batch_sampler": loader_identity(actual_loader.batch_sampler),
++                           "iteration_executed": False, "tail_behavior": "Structural inspection only; no complete epoch traversed"}
++            inner_sampler = getattr(actual_loader.batch_sampler, "batch_sampler", None)
++            if inner_sampler is not None:
++                loader_info["inner_batch_sampler"] = loader_identity(inner_sampler)
++                if hasattr(inner_sampler, "sampler"):
++                    loader_info["inner_sampler"] = loader_identity(inner_sampler.sampler)
++            report["formal_train_dataloader_inspection"] = loader_info
++            del actual_loader
++        finally:
++            torch.set_rng_state(loader_rng[0])
++            torch.cuda.set_rng_state(loader_rng[1], local_rank)
++            random.setstate(loader_rng[2])
++            np.random.set_state(loader_rng[3])
+         trainer.create_optimizer()
+         optimizer = trainer.optimizer
+         # Transformers 4.31 Trainer floors dataloader/accum, then multiplies by
+         # epochs. The remaining partial accumulation is runtime-sensitive and
+         # the conservative wall-time estimate separately uses ceil(rows/64).
+-        dataloader_batches = math.ceil(math.ceil(len(train_data) / world) / args.micro_batch)
++        dataloader_batches = actual_loader_batches
+         updates_per_epoch = max(dataloader_batches // args.accumulation, 1)
+         formal_updates = updates_per_epoch * 4
+         trainer.create_scheduler(num_training_steps=formal_updates, optimizer=optimizer)
+@@ -251,10 +320,24 @@ def main():
+         selected_ids = {id(p) for group in optimizer.param_groups for p in group["params"]}
+         if selected_ids != {id(p) for p in named.values() if p.requires_grad}:
+             raise AssertionError("Trainer optimizer parameter set differs from requires_grad set")
++        if sum(len(group["params"]) for group in optimizer.param_groups) != len(selected_ids):
++            raise AssertionError("Duplicate parameter in optimizer groups")
+         for n, p in named.items():
+             expected = "lora_" in n or "modules_to_save.default" in n
+             if p.requires_grad != expected:
+                 raise AssertionError(f"Unexpected trainability: {n} requires_grad={p.requires_grad}")
++        trainable_names = sorted(n for n, p in named.items() if p.requires_grad)
++        lora_names = [n for n in trainable_names if "lora_" in n]
++        wrapper_names = [n for n in trainable_names if "modules_to_save.default" in n]
++        trainable_numel = sum(named[n].numel() for n in trainable_names)
++        if (len(trainable_names), len(lora_names), len(wrapper_names), trainable_numel) != (450, 448, 2, 289652736):
++            raise AssertionError("Current real trainable inventory differs from fixed LETTER-LC-Rec r8 + active embed/head")
++        report["trainable_identity"] = {"parameter_tensors": len(trainable_names), "lora_tensors": len(lora_names),
++                                        "active_wrapper_tensors": len(wrapper_names), "parameter_elements": trainable_numel,
++                                        "active_wrapper_names": wrapper_names,
++                                        "names_shapes_sha256": hashlib.sha256(json.dumps(
++                                            [(n, list(named[n].shape)) for n in trainable_names],
++                                            separators=(",", ":")).encode()).hexdigest()}
+         report["optimizer"] = {"class": type(optimizer).__module__ + "." + type(optimizer).__name__,
+                                "defaults": {k: v for k, v in optimizer.defaults.items() if isinstance(v, (str, int, float, bool, tuple, type(None)))},
+                                "groups": groups, "exact_trainable_membership": True}
+@@ -263,7 +346,8 @@ def main():
+                                           "formal_dataloader_batches_per_rank": dataloader_batches,
+                                           "formal_updates_per_epoch_floor": updates_per_epoch, "formal_scheduler_updates": formal_updates,
+                                           "warmup_steps": train_args.get_warmup_steps(formal_updates),
+-                                          "probe_updates": 9, "probe_global_samples": 576,
++                                          "probe_updates": args.max_updates, "probe_global_samples": 64 * args.max_updates,
++                                          "task_wide_update_ceiling": 9, "caller_must_account_prior_completed_updates": True,
+                                           "scheduler_starts_at_author_warmup": True,
+                                           "warmup_timing_note": "3 measurement warmup updates excluded; LR remains in formal warmup. First LR is zero, so LoRA A first becomes nonzero after B is updated on second update."}
+         report["parameter_inventory"] = {n: {"shape": list(p.shape), "dtype_before_ds": str(p.dtype), "requires_grad": p.requires_grad,
+@@ -284,6 +368,13 @@ def main():
+         stage("before_deepspeed")
+         engine, _, _, scheduler = deepspeed.initialize(model=model, optimizer=optimizer, lr_scheduler=scheduler, config=ds_config,
+                                                        model_parameters=[p for p in model.parameters() if p.requires_grad], dist_init_required=False)
++        ds_original_groups = getattr(engine.optimizer, "bit16_groups", None)
++        if ds_original_groups is None:
++            raise AssertionError("ZeRO-2 original BF16 optimizer membership is not inspectable")
++        ds_selected_ids = {id(p) for group in ds_original_groups for p in group}
++        if ds_selected_ids != selected_ids or sum(map(len, ds_original_groups)) != len(selected_ids):
++            raise AssertionError("ZeRO-2 original parameter groups differ from exact Trainer trainable membership")
++        report["optimizer"]["zero2_original_groups_exact_trainable_membership"] = True
+         engine.train()
+         for n, p in named.items():
+             report["parameter_inventory"][n]["dtype_after_ds"] = str(p.dtype)
+@@ -302,11 +393,14 @@ def main():
+             return result
+ 
+         report["int8_before_forward"] = int8_evidence()
+-        # Hooks retain scalar tensors only and run during the three discarded
+-        # warmup updates. They are removed for steady throughput measurements.
++        # Hooks retain scalar tensors only. Full-gradient maxima are observed
++        # for every real backward, so a late NaN/Inf is not hidden by warmup.
++        # Their bounded measurement overhead is included in reported timings.
+         gradient_evidence, handles = {}, []
+-        observed_sid = sorted(set(int(v) for v in first_batch["input_ids"].reshape(-1).tolist() if v >= original_vocab))
+-        sid_tensor = torch.tensor(observed_sid, device=local_rank, dtype=torch.long)
++        sid_tensor = torch.tensor(sid_ids, device=local_rank, dtype=torch.long)
++        sid_position = {token: i for i, token in enumerate(sid_ids)}
++        current_sid_tensors, current_sid_positions = {}, {}
++        input_sid_seen, supervised_sid_seen = set(), set()
+ 
+         def hook_for(name):
+             def hook(grad):
+@@ -314,10 +408,25 @@ def main():
+                 maximum = value.abs().max()
+                 current = gradient_evidence.get(name)
+                 entry = {"max_abs": maximum if current is None else torch.maximum(current["max_abs"], maximum),
+-                         "calls": 1 if current is None else current["calls"] + 1}
++                         "calls": 1 if current is None else current["calls"] + 1,
++                         "gradient_shape": list(value.shape), "gradient_dtype": str(value.dtype)}
+                 if "modules_to_save.default" in name:
+-                    sidmax = value.index_select(0, sid_tensor).abs().max()
+-                    entry["observed_sid_rows_max_abs"] = sidmax if current is None else torch.maximum(current["observed_sid_rows_max_abs"], sidmax)
++                    kind = "input" if "embed_tokens" in name else "supervised"
++                    selected_sid = current_sid_tensors[kind]
++                    if selected_sid.numel():
++                        per_row = value.index_select(0, selected_sid).abs().amax(dim=1)
++                        sidmax = per_row.max()
++                        old = None if current is None else current.get("observed_sid_rows_max_abs")
++                        entry["observed_sid_rows_max_abs"] = sidmax if old is None else torch.maximum(old, sidmax)
++                        old_rows = torch.zeros(len(sid_ids), device=value.device, dtype=value.dtype) if current is None else current["sid_row_max_abs"]
++                        new_rows = old_rows.clone()
++                        positions = current_sid_positions[kind]
++                        new_rows.index_copy_(0, positions, torch.maximum(old_rows.index_select(0, positions), per_row))
++                        entry["sid_row_max_abs"] = new_rows
++                    elif current is not None and "observed_sid_rows_max_abs" in current:
++                        entry["observed_sid_rows_max_abs"] = current["observed_sid_rows_max_abs"]
++                        entry["sid_row_max_abs"] = current["sid_row_max_abs"]
++                    entry["sid_gradient_scope"] = kind + " SID rows actually present in each current microbatch"
+                 gradient_evidence[name] = entry
+             return hook
+ 
+@@ -325,21 +434,50 @@ def main():
+             if p.requires_grad:
+                 handles.append(p.register_hook(hook_for(n)))
+         activation = {}
++        input_gradient = {"calls": 0}
+ 
+         def activation_hook(module, inp, out):
+             activation["lm_head_input_dtype"] = str(inp[0].dtype)
+ 
+         activation_handle = model.base_model.model.lm_head.register_forward_hook(activation_hook)
++
++        def embedding_output_hook(module, inp, out):
++            activation["embedding_output_requires_grad"] = out.requires_grad
++            if out.requires_grad and len(report["updates"]) < 3:
++                def observe_input_gradient(grad):
++                    maximum = grad.detach().abs().max()
++                    old = input_gradient.get("max_abs")
++                    input_gradient["max_abs"] = maximum if old is None else torch.maximum(old, maximum)
++                    input_gradient["calls"] += 1
++                out.register_hook(observe_input_gradient)
++
++        input_activation_handle = model.base_model.model.model.embed_tokens.register_forward_hook(embedding_output_hook)
+         snapshot_names = [n for n in named if "modules_to_save.default" in n or "original_module" in n]
+         snapshot_names += [n for n in named if "lora_" in n]
+ 
+         def small_snapshot(name):
+             p = named[name].detach()
+             if "embed_tokens" in name or "lm_head" in name:
+-                return p.index_select(0, sid_tensor)[:, :32].float().cpu().clone()
+-            return p.reshape(-1)[:256].float().cpu().clone()
++                # All columns of every added SID row; ordinary vocabulary rows
++                # are checked for finiteness later, not claimed as delta samples.
++                return p.index_select(0, sid_tensor).cpu().clone()
++            return p.cpu().clone()
++
++        def tensor_digest(parameter):
++            digest = hashlib.sha256()
++            flat = parameter.detach().reshape(-1)
++            # Preserve actual dtype bytes (including BF16) in bounded chunks.
++            for offset in range(0, flat.numel(), 2**20):
++                part = flat[offset:offset + 2**20].contiguous().cpu()
++                digest.update(part.view(torch.uint8).numpy().tobytes())
++            return digest.hexdigest()
+ 
+         before = {n: small_snapshot(n) for n in snapshot_names}
++        frozen_hash_before = {n: tensor_digest(p) for n, p in named.items() if "original_module" in n}
++        report["parameter_snapshot_scope"] = {"lora": "All values of all 448 LoRA tensors",
++                                               "active_wrappers": "All columns of all added SID rows in active embedding/head",
++                                               "frozen_originals": "SHA-256 of every byte of each complete original embedding/head tensor",
++                                               "sid_row_ids": sid_ids}
+         # Record the actual original failure before installing any precision
+         # adaptation. No backward/optimizer update occurs; restore every RNG
+         # stream consumed by this diagnostic forward before technical updates.
+@@ -420,9 +558,31 @@ def main():
+         stage("original_precision_diagnostic_complete")
+         stage("before_updates")
+         report["finite_checks"] = {"loss_scope": "Every real training microbatch loss; checked outside autocast", "loss_microbatches_checked": 0,
+-                                   "gradient_scope": "Full tensor abs max of every trainable gradient during the first three updates; finite/nonzero checked",
+-                                   "parameter_scope": "After nine updates, all elements of every requires_grad parameter scanned outside timed throughput"}
+-        for update in range(9):
++                                   "gradient_scope": "Full tensor abs max of every trainable gradient during all requested updates; warmup and final summaries; no per-element host synchronization",
++                                   "parameter_scope": "After requested updates, all elements of every requires_grad parameter scanned outside timed throughput"}
++
++        def optimizer_progress():
++            inner = getattr(engine.optimizer, "optimizer", None)
++            if inner is None:
++                raise AssertionError("Underlying AdamW optimizer is not inspectable")
++            steps = []
++            for state in inner.state.values():
++                if "step" in state:
++                    value = state["step"]
++                    steps.append(int(value.item()) if hasattr(value, "item") else int(value))
++            return {"state_entries": len(inner.state), "adam_step_values": steps,
++                    "engine_global_steps": engine.global_steps, "engine_micro_steps": engine.micro_steps,
++                    "overflow": bool(getattr(engine.optimizer, "overflow", False))}
++
++        report["timing_method"] = {"clock": "monotonic wall time with CUDA synchronize at each transfer/forward/backward/step boundary",
++                                   "denominator": "MAX of rank wall times; SUM actual rank samples and token counts",
++                                   "overhead_included": "Resource guard, finite loss checks, full-gradient scalar hooks, CUDA phase synchronization, microstep boundary queries",
++                                   "overhead_excluded": "Original CPU collator/mask construction, interrank barrier/reductions, JSON write, final parameter/adapter checks",
++                                   "interpretation": "Observable synchronized technical-probe phases, not unsynchronized production kernel overlap"}
++        report["optimizer_progress_before_updates"] = optimizer_progress()
++        if any(step != 0 for step in report["optimizer_progress_before_updates"]["adam_step_values"]):
++            raise AssertionError("Pinned AdamW optimizer starts at an unexpected nonzero state step")
++        for update in range(args.max_updates):
+             guard()
+             # CPU original collator and mask verification happen outside timed
+             # GPU loop; report this limit when extrapolating end-to-end time.
+@@ -431,23 +591,51 @@ def main():
+             preparation_seconds = time.monotonic() - preparation_started
+             torch.cuda.synchronize()
+             dist.barrier()
++            track_gpu_peak()
+             torch.cuda.reset_peak_memory_stats()
+             timer = time.monotonic()
+             count_tokens, padded_tokens, supervised_tokens = 0, 0, 0
+-            losses, lengths = [], []
++            losses, lengths, microsteps = [], [], []
+             previous_global_step = engine.global_steps
++            progress_before = optimizer_progress()
++            lr_before = [float(group["lr"]) for group in optimizer.param_groups]
+             for micro, (batch, chosen) in enumerate(prepared):
+                 guard()
+                 count_tokens += int(batch["attention_mask"].sum())
+                 padded_tokens += batch["input_ids"].numel()
+                 supervised_tokens += int((batch["labels"] != -100).sum())
+                 lengths += [x["full_length_including_eos"] for x in chosen]
++                input_sid = set(int(v) for v in batch["input_ids"].reshape(-1).tolist() if v >= original_vocab)
++                supervised_sid = set(int(v) for v in batch["labels"].reshape(-1).tolist() if v >= original_vocab)
++                input_sid_seen.update(input_sid)
++                supervised_sid_seen.update(supervised_sid)
++                current_sid_tensors.update(input=torch.tensor(sorted(input_sid), device=local_rank, dtype=torch.long),
++                                           supervised=torch.tensor(sorted(supervised_sid), device=local_rank, dtype=torch.long))
++                current_sid_positions.update(input=torch.tensor([sid_position[v] for v in sorted(input_sid)], device=local_rank, dtype=torch.long),
++                                             supervised=torch.tensor([sid_position[v] for v in sorted(supervised_sid)], device=local_rank, dtype=torch.long))
++                torch.cuda.synchronize()
++                phase_started = time.monotonic()
+                 batch = {k: v.to(local_rank) for k, v in batch.items()}
++                torch.cuda.synchronize()
++                transfer_seconds = time.monotonic() - phase_started
++                boundary = engine.is_gradient_accumulation_boundary()
++                if boundary != (micro == args.accumulation - 1):
++                    raise AssertionError(f"Wrong accumulation boundary at update={update} micro={micro}: {boundary}")
++                micro_row = {"micro": micro, "accumulation_boundary": boundary, "forward": "RUNNING",
++                             "backward": "NOT_STARTED", "step": "NOT_STARTED", "transfer_seconds": transfer_seconds,
++                             "engine_micro_steps_before": engine.micro_steps,
++                             "engine_global_steps_before": engine.global_steps}
++                microsteps.append(micro_row)
++                report["current_update"] = {"update": update, "microsteps": microsteps}
+                 if update == 0 and micro == 0:
+                     report["precision_context"]["observed_global_autocast_during_forward"] = torch.is_autocast_enabled()
+                 if torch.is_autocast_enabled():
+                     raise AssertionError("Global autocast must remain disabled")
++                torch.cuda.synchronize()
++                phase_started = time.monotonic()
+                 result = engine(**batch)
++                torch.cuda.synchronize()
++                micro_row.update(forward="PASS", forward_seconds=time.monotonic() - phase_started)
+                 if torch.is_autocast_enabled():
+                     raise AssertionError("LoRA A adaptation leaked autocast outside its linear call")
+                 if not torch.isfinite(result.loss).all().item():
+@@ -467,9 +655,23 @@ def main():
+                                                   "exact_temp08_agreement": torch.allclose(result.loss, loss08, atol=1e-6, rtol=1e-6)}
+                     if not report["temperature_loss"]["exact_temp08_agreement"] or torch.allclose(loss08, loss1, atol=1e-6, rtol=1e-6):
+                         raise AssertionError("Actual LETTER temperature loss evidence failed")
++                    del logits, labels, loss08, loss1
+                 losses.append(result.loss.detach())
++                phase_started = time.monotonic()
+                 engine.backward(result.loss)
++                torch.cuda.synchronize()
++                micro_row.update(backward="PASS", backward_seconds=time.monotonic() - phase_started)
++                phase_started = time.monotonic()
++                micro_row["step"] = "RUNNING"
+                 engine.step()
++                torch.cuda.synchronize()
++                micro_row.update(step="PASS", optimizer_step_seconds=time.monotonic() - phase_started,
++                                 engine_global_steps_after=engine.global_steps, engine_micro_steps_after=engine.micro_steps)
++                expected_step = previous_global_step + int(boundary)
++                if engine.global_steps != expected_step:
++                    raise AssertionError("Engine global step changed outside its unique accumulation boundary")
++                if engine.micro_steps != micro_row["engine_micro_steps_before"] + 1:
++                    raise AssertionError("Engine microstep did not advance exactly once")
+                 del result, batch
+             torch.cuda.synchronize()
+             seconds = time.monotonic() - timer
+@@ -479,32 +681,95 @@ def main():
+             dist.all_reduce(token_counts)
+             if engine.global_steps != previous_global_step + 1:
+                 raise AssertionError("Exactly one real optimizer update per global64 was not observed")
++            progress_after = optimizer_progress()
++            if progress_after["overflow"] or not progress_after["adam_step_values"]:
++                raise AssertionError("Real AdamW state did not advance, or ZeRO reported gradient overflow")
++            if any(step != update + 1 for step in progress_after["adam_step_values"]):
++                raise AssertionError("AdamW state step differs from actual completed optimizer boundary count")
++            rank_progress = [None] * world
++            dist.all_gather_object(rank_progress, progress_after)
++            if any(p["engine_global_steps"] != previous_global_step + 1 or
++                   p["engine_micro_steps"] != engine.micro_steps or
++                   set(p["adam_step_values"]) != {update + 1} or p["overflow"] for p in rank_progress):
++                raise AssertionError("Optimizer boundary/state progress is not synchronized across both ranks")
++            preparation_max = torch.tensor(preparation_seconds, device=local_rank)
++            dist.all_reduce(preparation_max, op=dist.ReduceOp.MAX)
+             row = {"update": update, "phase": "warmup" if update < 3 else "mixed_steady" if update < 6 else ("short", "middle", "long")[update - 6],
+                    "rank_seconds": seconds, "max_rank_seconds": global_seconds.item(), "global_samples": 64,
+                    "cpu_batch_preparation_and_mask_verification_seconds": preparation_seconds,
++                   "max_rank_cpu_batch_preparation_and_mask_verification_seconds": preparation_max.item(),
+                    "effective_input_tokens": int(token_counts[0]), "padded_tokens": int(token_counts[1]),
++                   "padding_tokens": int(token_counts[1] - token_counts[0]),
+                    "supervised_tokens": int(token_counts[2]), "rank_true_lengths": lengths,
+                    "samples_per_second": 64 / global_seconds.item(), "effective_tokens_per_second": int(token_counts[0]) / global_seconds.item(),
+                    "mean_loss_rank": torch.stack(losses).mean().item(), "lr_after_update": scheduler.get_last_lr(),
+                    "gpu_peak_allocated_gib": torch.cuda.max_memory_allocated() / 1024**3,
+                    "gpu_peak_reserved_gib": torch.cuda.max_memory_reserved() / 1024**3,
+-                   "engine_global_steps": engine.global_steps}
++                   "engine_global_steps": engine.global_steps, "lr_before_update": lr_before,
++                   "nonzero_learning_rate": any(lr > 0 for lr in lr_before),
++                   "optimizer_progress_before": progress_before, "optimizer_progress_after": progress_after,
++                   "all_rank_optimizer_progress": rank_progress, "microsteps": microsteps,
++                   "rank_phase_seconds": {key: sum(m[key] for m in microsteps) for key in
++                                          ("transfer_seconds", "forward_seconds", "backward_seconds", "optimizer_step_seconds")},
++                   "host_resources": host_resources()}
+             report["updates"].append(row)
++            track_gpu_peak()
++            report.pop("current_update", None)
+             if update == 2:
+-                for handle in handles:
+-                    handle.remove()
+-                report["gradient_evidence"] = {n: {k: v.item() if hasattr(v, "item") else v for k, v in entry.items()}
++                report["gradient_evidence"] = {n: {k: tensor_json(v) for k, v in entry.items()}
+                                                 for n, entry in gradient_evidence.items()}
++                report["embedding_output_gradient"] = {k: v.item() if hasattr(v, "item") else v for k, v in input_gradient.items()}
+                 if set(gradient_evidence) != {n for n, p in named.items() if p.requires_grad}:
+                     raise AssertionError("Some trainable parameters never received a gradient")
+-                if any(not math.isfinite(entry["max_abs"].item()) or entry["max_abs"].item() <= 0 for entry in gradient_evidence.values()):
+-                    raise AssertionError("Some trainable parameters have zero/nonfinite gradients after three updates")
++                if any(not math.isfinite(entry["max_abs"].item()) for entry in gradient_evidence.values()):
++                    raise AssertionError("Some trainable parameters have nonfinite gradients")
++                zero_gradients = [n for n, entry in gradient_evidence.items() if entry["max_abs"].item() == 0]
++                report["gradient_zero_analysis"] = {"zero_tensor_names_after_three_updates": zero_gradients,
++                    "expected_initial_behavior": "LoRA B starts at zero; LoRA A can have zero gradient before B changes. First optimizer LR is zero.",
++                    "interpretation": "Every trainable tensor must receive a finite gradient. Zero aggregates are listed and checked by branch; final real LoRA A/B and SID deltas are independently required."}
++                if any(all(gradient_evidence[n]["max_abs"].item() == 0 for n in lora_names if marker in n)
++                       for marker in ("lora_A", "lora_B")):
++                    raise AssertionError("An entire necessary LoRA A/B branch has zero gradients after nonzero-LR updates")
+                 if any(entry.get("observed_sid_rows_max_abs", torch.tensor(1)).item() <= 0 for entry in gradient_evidence.values()):
+                     raise AssertionError("Necessary SID wrapper rows had zero gradient")
+                 if any(p.grad is not None for n, p in named.items() if "original_module" in n):
+                     raise AssertionError("Frozen original module unexpectedly has gradient")
++                if (not input_gradient["calls"] or not math.isfinite(input_gradient["max_abs"].item())
++                        or input_gradient["max_abs"].item() <= 0):
++                    raise AssertionError("Required embedding output/input gradient was lost or nonfinite")
+             stage(f"update_{update}_complete")
++        for handle in handles:
++            handle.remove()
++        patch_calls = report["peft05_out_of_place_compatibility"]["module_calls"]
++        expected_micro_forwards = args.max_updates * args.accumulation
++        if (len(patch_calls) != 224 or any(entry["lora_add_calls"] < expected_micro_forwards or
++                entry["grad_enabled_calls"] < expected_micro_forwards or entry["no_grad_calls"] < expected_micro_forwards or
++                entry["base_only_calls"] or entry["rank_zero_calls"] for entry in patch_calls.values())):
++            raise AssertionError("Guarded out-of-place forward did not reach all 224 LoRA modules and checkpoint replays")
++        report["checkpoint_replay_evidence"] = {"all_224_modules_hit": True,
++            "minimum_grad_enabled_calls_per_module": min(entry["grad_enabled_calls"] for entry in patch_calls.values()),
++            "minimum_no_grad_checkpoint_forward_calls_per_module": min(entry["no_grad_calls"] for entry in patch_calls.values()),
++            "minimum_lora_add_calls_per_module": min(entry["lora_add_calls"] for entry in patch_calls.values()),
++            "real_training_microbatches_per_rank": expected_micro_forwards,
++            "interpretation": "Every int8 LoRA projection ran in no-grad checkpoint forward and grad-enabled backward recomputation; no adapter-disabled/rank-zero shortcut"}
++        report["gradient_evidence"] = {n: {k: tensor_json(v) for k, v in entry.items()}
++                                       for n, entry in gradient_evidence.items()}
++        if set(gradient_evidence) != set(trainable_names):
++            raise AssertionError("Some required trainable parameters never received a gradient")
++        if any(not math.isfinite(entry["max_abs"].item()) for entry in gradient_evidence.values()):
++            raise FloatingPointError("A trainable gradient was nonfinite during the nine-update probe")
++        final_zero_gradients = [n for n, entry in gradient_evidence.items() if entry["max_abs"].item() == 0]
++        report.setdefault("gradient_zero_analysis", {"expected_initial_behavior": "LoRA B starts at zero; first LR is zero. LoRA A can remain zero until the third update's backward."})
++        report["gradient_zero_analysis"].update(zero_tensor_names_after_requested_updates=final_zero_gradients,
++            completed_updates=len(report["updates"]), actual_nonzero_lr_updates=sum(row["nonzero_learning_rate"] for row in report["updates"]))
++        if final_zero_gradients and args.max_updates >= 3:
++            raise AssertionError(f"Unresolved all-zero gradients after {args.max_updates} updates of nonoptional dense LoRA/SID modules; inspect saved per-parameter evidence rather than assume a disconnect")
++        report["embedding_output_gradient"] = {k: tensor_json(v) for k, v in input_gradient.items()}
++        if (not input_gradient["calls"] or not math.isfinite(input_gradient["max_abs"].item())
++                or input_gradient["max_abs"].item() <= 0):
++            raise AssertionError("Required embedding output/input gradient was lost or nonfinite")
+         activation_handle.remove()
++        input_activation_handle.remove()
+         finite_tensors, finite_elements = 0, 0
+         for name, parameter in named.items():
+             if parameter.requires_grad:
+@@ -518,8 +783,25 @@ def main():
+         report["int8_after_updates"] = int8_evidence()
+         if bnb_example.weight.dtype != torch.int8 or activation.get("lm_head_input_dtype") != "torch.bfloat16":
+             raise AssertionError("Required actual int8 base weight / BF16 activation not observed")
+-        changes = {n: float((small_snapshot(n) - original).abs().max()) for n, original in before.items()}
++        changes = {n: float((small_snapshot(n).float() - original.float()).abs().max()) for n, original in before.items()}
+         report["small_parameter_change_max_abs"] = changes
++        if not any(row["nonzero_learning_rate"] for row in report["updates"]):
++            report["status"] = "PARTIAL"
++            report["training_acceptance"] = "Only zero-LR formal warmup boundary observed; real nonzero parameter update is NOT CONFIRMED. Validation/save were not run."
++            stage("bounded_update_allowance_exhausted_before_nonzero_lr")
++            return 2
++        report["parameter_changes"] = {"scope": report["parameter_snapshot_scope"], "max_abs_by_parameter": changes,
++                                        "changed_lora_A_tensors": sum(v > 0 for n, v in changes.items() if "lora_A" in n),
++                                        "changed_lora_B_tensors": sum(v > 0 for n, v in changes.items() if "lora_B" in n),
++                                        "interpretation": "BF16 model values may round away small LoRA A changes during the first nine formal-warmup updates; at least one real LoRA change and both active SID modules must change."}
++        frozen_hash_after = {n: tensor_digest(p) for n, p in named.items() if "original_module" in n}
++        report["frozen_original_checks"] = {n: {"before_sha256": value, "after_sha256": frozen_hash_after[n],
++                                               "all_bytes_identical": value == frozen_hash_after[n],
++                                               "requires_grad": named[n].requires_grad,
++                                               "in_original_optimizer_set": id(named[n]) in selected_ids}
++                                             for n, value in frozen_hash_before.items()}
++        if frozen_hash_before != frozen_hash_after:
++            raise AssertionError("A complete frozen original embedding/head tensor changed")
+         if any(value != 0 for n, value in changes.items() if "original_module" in n):
+             raise AssertionError("Frozen original sampled SID rows changed")
+         if not any(value > 0 for n, value in changes.items() if "lora_" in n):
+@@ -527,6 +809,39 @@ def main():
+         for wrapper in ("embed_tokens", "lm_head"):
+             if not any(v > 0 for n, v in changes.items() if wrapper in n and "modules_to_save.default" in n):
+                 raise AssertionError(f"No sampled {wrapper} SID wrapper row changed")
++        report["active_sid_row_changes"] = {}
++        report["active_sid_row_gradients"] = {}
++        for name in wrapper_names:
++            used = input_sid_seen if "embed_tokens" in name else supervised_sid_seen
++            row_gradient = gradient_evidence[name]["sid_row_max_abs"].detach().cpu()
++            used_gradients = {str(token): row_gradient[sid_position[token]].item() for token in sorted(used)}
++            report["active_sid_row_gradients"][name] = {"used_row_max_abs_gradients": used_gradients,
++                "used_row_kind": "input" if "embed_tokens" in name else "supervised",
++                "zero_gradient_used_rows": [token for token, value in used_gradients.items() if value == 0],
++                "nonzero_gradient_used_rows": sum(value > 0 for value in used_gradients.values()),
++                "unused_rows": "Not required to receive nonzero gradients; input and supervised row sets are distinct"}
++            row_deltas = (small_snapshot(name).float() - before[name].float()).abs().amax(dim=1)
++            used_deltas = {str(token): row_deltas[sid_position[token]].item() for token in sorted(used)}
++            report["active_sid_row_changes"][name] = {"used_row_max_abs_deltas": used_deltas,
++                "used_row_kind": "input" if "embed_tokens" in name else "supervised",
++                "nonzero_delta_used_rows": sum(value > 0 for value in used_deltas.values()),
++                "zero_delta_used_rows": [token for token, value in used_deltas.items() if value == 0],
++                "note": "Zero per-row BF16 deltas are reported; a branch-wide zero delta does not pass."}
++            if not any(value > 0 for value in used_deltas.values()):
++                raise AssertionError(f"No actually used SID row changed in active module: {name}")
++        report["observed_sid_rows"] = {"input_ids": sorted(input_sid_seen), "supervised_labels": sorted(supervised_sid_seen),
++                                       "gradient_observation": "All nine updates; dynamic current-microbatch input/label sets",
++                                       "parameter_delta_observation": "All added SID rows, all columns; input and supervised row IDs also listed"}
++        synchronized_parts = {n: tensor_digest(named[n]) if "lora_" in n else
++                              hashlib.sha256(small_snapshot(n).contiguous().view(torch.uint8).numpy().tobytes()).hexdigest()
++                              for n in trainable_names}
++        rank_parameter_hashes = [None] * world
++        dist.all_gather_object(rank_parameter_hashes, synchronized_parts)
++        if any(value != rank_parameter_hashes[0] for value in rank_parameter_hashes):
++            raise AssertionError("Final LoRA and active SID values differ across ZeRO-2 ranks")
++        report["cross_rank_parameter_synchronization"] = {"all_equal": True,
++                                                         "scope": "Every LoRA value and all added SID rows of active embedding/head",
++                                                         "rank_tensor_sha256": synchronized_parts}
+         # Real two-prompt validation forwards only, without selecting a checkpoint.
+         # The original validation dataset and original Collator/loss are retained.
+         engine.eval()
+@@ -534,61 +849,142 @@ def main():
+         valid_prompt_ids = matrix["valid_prompt_ids_seed42"]
+         valid_lengths = np.take_along_axis(matrix["valid_full_lengths"], valid_prompt_ids, axis=1).reshape(-1)
+         max_valid = int(np.argmax(valid_lengths))
++        short_valid = int(np.argmin(np.abs(valid_lengths - np.quantile(valid_lengths, .1))))
++        middle_valid = int(np.argmin(np.abs(valid_lengths - np.quantile(valid_lengths, .5))))
++        if len(valid_lengths) != len(valid_data):
++            raise AssertionError("Validation length table does not match original two-prompt validation dataset")
+         vrng = np.random.RandomState(42)
+         mixed_valid = vrng.choice(len(valid_data), 64, replace=False).tolist()
+         report["validation_timings"] = []
+-        for vphase in ("warmup", "mixed", "long"):
+-            indices = ([max_valid] * args.micro_batch if vphase == "long" else
++        for vphase in ("warmup", "mixed", "short", "middle", "long"):
++            guard()
++            preparation_started = time.monotonic()
++            representative = {"short": short_valid, "middle": middle_valid, "long": max_valid}
++            indices = ([representative[vphase]] * args.micro_batch if vphase in representative else
+                        mixed_valid[rank * args.micro_batch:(rank + 1) * args.micro_batch])
+-            batch = collator([valid_data[i] for i in indices])
++            pairs = [valid_data[i] for i in indices]
++            batch = collator(pairs)
++            for position, (index, pair) in enumerate(zip(indices, pairs)):
++                input_ids = tokenizer(pair["input_ids"])["input_ids"]
++                full_ids = tokenizer(pair["labels"] + tokenizer.eos_token)["input_ids"]
++                expected = [-100] * len(input_ids) + full_ids[len(input_ids):]
++                expected += [-100] * (batch["labels"].shape[1] - len(expected))
++                if (full_ids[:len(input_ids)] != input_ids or batch["labels"][position].tolist() != expected
++                        or len(full_ids) != int(valid_lengths[index])):
++                    raise AssertionError("Original validation response mask or CPU-audited length differs")
++            preparation_seconds = time.monotonic() - preparation_started
+             tokens = int(batch["attention_mask"].sum())
++            counts = torch.tensor([tokens, batch["input_ids"].numel(), int((batch["labels"] != -100).sum())],
++                                  device=local_rank, dtype=torch.long)
++            track_gpu_peak()
++            torch.cuda.reset_peak_memory_stats()
+             batch = {k: v.to(local_rank) for k, v in batch.items()}
+             dist.barrier(); torch.cuda.synchronize(); vt = time.monotonic()
+             with torch.no_grad():
+                 vout = engine(**batch)
+             torch.cuda.synchronize(); duration = torch.tensor(time.monotonic()-vt, device=local_rank)
+             dist.all_reduce(duration, op=dist.ReduceOp.MAX)
++            dist.all_reduce(counts)
++            if not torch.isfinite(vout.loss).all().item():
++                raise FloatingPointError("Nonfinite real validation loss")
+             report["validation_timings"].append({"phase":vphase,"max_rank_seconds":duration.item(),
+                 "global_samples":args.micro_batch*world,"rank_effective_tokens":tokens,
++                "global_effective_tokens": int(counts[0]), "padded_tokens": int(counts[1]),
++                "padding_tokens": int(counts[1] - counts[0]), "supervised_tokens": int(counts[2]),
++                "samples_per_second": args.micro_batch * world / duration.item(),
++                "effective_tokens_per_second": int(counts[0]) / duration.item(),
++                "cpu_batch_preparation_and_mask_verification_seconds": preparation_seconds,
+                 "rank_rows":indices,"rank_lengths":[int(valid_lengths[i]) for i in indices],
+-                "loss":vout.loss.item(),"checkpoint_selection_executed":False})
++                "loss":vout.loss.item(),"checkpoint_selection_executed":False,
++                "gpu_peak_allocated_gib": torch.cuda.max_memory_allocated() / 1024**3,
++                "gpu_peak_reserved_gib": torch.cuda.max_memory_reserved() / 1024**3})
++            track_gpu_peak()
+             del vout,batch
++            stage(f"validation_{vphase}_complete")
+         engine.train()
+         if not args.skip_adapter_save:
+             guard()
+             dist.barrier()
+             save_started = time.monotonic()
+-            if rank == 0:
++            def perform_save():
+                 save_dir = output / "adapter"
+                 model.save_pretrained(save_dir, safe_serialization=False)
+                 tokenizer.save_pretrained(save_dir)
+                 model.config.save_pretrained(save_dir)
++                write_seconds = time.monotonic() - save_started
+                 loaded = torch.load(save_dir / "adapter_model.bin", map_location="cpu", weights_only=True)
+                 expected = get_peft_model_state_dict(model)
++                direct_trainable = {n.replace(".modules_to_save.default", "").replace(".lora_A.default.", ".lora_A.")
++                                    .replace(".lora_B.default.", ".lora_B."): named[n] for n in trainable_names}
++                if set(expected) != set(direct_trainable):
++                    raise AssertionError("PEFT adapter state does not contain exactly all active trainable tensors")
+                 if set(loaded) != set(expected):
+                     raise AssertionError("Saved adapter key set differs from PEFT expected state")
++                metadata = {}
+                 for key, value in loaded.items():
+-                    if value.shape != expected[key].shape or not torch.equal(value, expected[key].detach().cpu()):
++                    guard()
++                    if (value.shape != expected[key].shape or value.dtype != expected[key].dtype
++                            or not torch.equal(value, expected[key].detach().cpu())
++                            or not torch.equal(value, direct_trainable[key].detach().cpu())):
+                         raise AssertionError(f"Saved adapter differs: {key}")
++                    metadata[key] = {"shape": list(value.shape), "dtype": str(value.dtype), "sha256": tensor_digest(value)}
++                saved_tokenizer = LlamaTokenizer.from_pretrained(save_dir, local_files_only=True)
++                if (saved_tokenizer.get_vocab() != tokenizer.get_vocab() or
++                        saved_tokenizer.pad_token_id != tokenizer.pad_token_id or
++                        saved_tokenizer.convert_tokens_to_ids(train_data.get_new_tokens()) !=
++                        tokenizer.convert_tokens_to_ids(train_data.get_new_tokens())):
++                    raise AssertionError("Saved/reloaded tokenizer vocab, pad or ordered SID token IDs differ")
+                 report["adapter_save"] = {"path": str(save_dir), "seconds_rank0": time.monotonic() - save_started,
++                                          "write_seconds_rank0": write_seconds,
+                                           "keys": sorted(loaded), "strict_tensor_equality_to_expected_peft_state": True,
++                                          "exact_direct_trainable_key_and_value_match": True,
++                                          "tensor_metadata": metadata, "tokenizer_exact_vocab_sid_order_and_pad_reload": True,
++                                          "checkpoint_format": "PyTorch adapter_model.bin; complete active embed/head plus LoRA only; no optimizer/full-model checkpoint",
+                                           "full_model_reload_generation": "separate inference job required",
+                                           "files": {p.name: {"bytes": p.stat().st_size, "sha256": sha(p)} for p in save_dir.iterdir() if p.is_file()}}
++                del loaded, expected, direct_trainable
++            save_result = [None]
++            if rank == 0:
++                try:
++                    perform_save()
++                    save_result[0] = {"status": "PASS", "path": report["adapter_save"]["path"]}
++                except Exception as error:
++                    save_result[0] = {"status": "FAIL", "error": {"type": type(error).__name__,
++                                        "message": str(error), "traceback": traceback.format_exc()}}
++            dist.broadcast_object_list(save_result, src=0)
++            report["adapter_save_rank0_receipt"] = save_result[0]
++            if save_result[0]["status"] != "PASS":
++                raise RuntimeError("Rank0 adapter save/check failed: " + json.dumps(save_result[0]["error"]))
+             dist.barrier()
+         report["status"] = "PASS"
++        phases = {row["phase"] for row in report["updates"]}
++        report["measurement_completeness"] = {"status": "COMPLETE" if args.max_updates == 9 else "PARTIAL",
++            "requested_updates": args.max_updates, "completed_updates": len(report["updates"]),
++            "missing_training_phases": sorted({"warmup", "mixed_steady", "short", "middle", "long"} - phases),
++            "core_training_acceptance": "Real backward, finite gradients, nonzero-LR AdamW update, exact parameter membership and active SID/LoRA deltas passed"}
+         stage("probe_complete")
+     except Exception as error:
+         report["status"] = "PARTIAL" if isinstance(error, (TimeoutError, MemoryError)) else "FAIL"
+         report["error"] = {"type": type(error).__name__, "message": str(error), "traceback": traceback.format_exc()}
++        if "gradient_evidence" in locals():
++            try:
++                report["partial_gradient_evidence"] = {n: {k: tensor_json(v) for k, v in entry.items()}
++                                                        for n, entry in gradient_evidence.items()}
++            except Exception as summary_error:
++                report["partial_gradient_evidence_unavailable"] = str(summary_error)
+         print(report["error"]["traceback"], file=sys.stderr, flush=True)
+     finally:
+         report["elapsed_seconds"] = time.monotonic() - started
+         report["cpu_process_peak_rss_gib"] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024**2
++        report["host_resources_final"] = host_resources()
+         report["finished_utc"] = dt.datetime.now(dt.timezone.utc).isoformat()
+         if torch is not None and torch.cuda.is_initialized():
++            track_gpu_peak()
+             report["gpu_final_peak_allocated_gib"] = torch.cuda.max_memory_allocated() / 1024**3
+             report["gpu_final_peak_reserved_gib"] = torch.cuda.max_memory_reserved() / 1024**3
+         write(report_path, report)
++        if "dist" in locals() and dist.is_initialized():
++            dist.destroy_process_group()
+     return 0 if report["status"] == "PASS" else 2
+ 
+ 
+diff --git a/lc_rec/letter/scripts/inference_probe.py b/lc_rec/letter/scripts/inference_probe.py
+index 3b4c4c4..2a02631 100644
+--- a/lc_rec/letter/scripts/inference_probe.py
++++ b/lc_rec/letter/scripts/inference_probe.py
+@@ -1,67 +1,317 @@
+-"""Bounded adapter reload and beam20 timing, with no recommendation metrics."""
+-import argparse,hashlib,json,os,resource,sys,time,traceback
++"""Strict adapter reload and bounded original LETTER prompt0/beam20 timing.
++
++The author's LoRA test branch reloads a BF16 base, not an int8 base. This
++script preserves that branch and does not report recommendation metrics.
++"""
++import argparse
++import datetime as dt
++import hashlib
++import importlib.metadata
++import inspect
++import json
++import os
++import resource
++import socket
++import sys
++import time
++import traceback
+ from pathlib import Path
++from types import SimpleNamespace
++
++
++def sha(path):
++    return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++def write(path, value):
++    temporary = path.with_suffix('.partial')
++    temporary.write_text(json.dumps(value, indent=2) + '\n')
++    temporary.replace(path)
++
++
++def saved_key(name):
++    if '.modules_to_save.default.' in name:
++        return name.replace('.modules_to_save.default.', '.')
++    if '.lora_A.default.' in name or '.lora_B.default.' in name:
++        return name.replace('.default.', '.')
++    raise AssertionError('Unexpected trained tensor family: ' + name)
++
++
++def select_users(lengths, world, np):
++    """Fixed first matching real users at exact prompt0 length quantiles."""
++    used, selected = set(), {}
++    for kind, quantile in [('q10', .1), ('q50', .5), ('q90', .9), ('max', 1.)]:
++        k = int(round(quantile * (len(lengths) - 1)))
++        target = int(np.partition(lengths, k)[k])
++        candidates = [int(i) for i in np.flatnonzero(lengths == target) if int(i) not in used]
++        if len(candidates) < world:
++            raise AssertionError('Insufficient distinct users for fixed length stratum ' + kind)
++        rows = candidates[:world]
++        used.update(rows)
++        selected[kind] = [{'row_idx': i, 'input_length': int(lengths[i]), 'prompt_id': 0} for i in rows]
++    return selected
+ 
+-def write(p,v):
+- q=p.with_suffix('.partial');q.write_text(json.dumps(v,indent=2)+'\n');q.replace(p)
+ 
+ def main():
+- p=argparse.ArgumentParser();p.add_argument('--source',required=True);p.add_argument('--data-root',required=True);p.add_argument('--model',required=True);p.add_argument('--adapter',required=True);p.add_argument('--audit-output',required=True);p.add_argument('--output',required=True);p.add_argument('--run-commit',required=True);a=p.parse_args()
+- rank=int(os.environ.get('LOCAL_RANK',0));out=Path(a.output);out.mkdir(parents=True,exist_ok=True);start=time.monotonic();r={'rank':rank,'argv':sys.argv,'RUN_COMMIT':a.run_commit,'status':'RUNNING','no_metrics':True,'timings':[]}
+- try:
+-  import numpy as np,torch,torch.distributed as dist
+-  from transformers import LlamaForCausalLM,LlamaTokenizer
+-  from peft import PeftModel,get_peft_model_state_dict
+-  torch.cuda.set_device(rank);torch.manual_seed(42);dist.init_process_group('nccl')
+-  sys.path.insert(0,a.source)
+-  from data import SeqRecDataset
+-  from collator import TestCollator
+-  from types import SimpleNamespace
+-  args=SimpleNamespace(dataset='Instruments',data_path=a.data_root,max_his_len=20,his_sep=', ',index_file='.index.json',add_prefix=False)
+-  tok=LlamaTokenizer.from_pretrained(a.adapter,local_files_only=True);tok.pad_token_id=0;tok.padding_side='left';tok.model_max_length=2048
+-  samples=json.loads((Path(a.audit_output)/'probe_samples.json').read_text())
+-  for kind,identity in samples['a_data_identity'].items():
+-   path=Path(a.data_root)/'Instruments'/('Instruments.'+kind+'.json');assert hashlib.sha256(path.read_bytes()).hexdigest()==identity['sha256']
+-  audited=LlamaTokenizer.from_pretrained(Path(a.audit_output)/'tokenizer_a',local_files_only=True);assert tok.get_vocab()==audited.get_vocab()
+-  r['a_mapping_and_tokenizer_identity_verified']=True
+-  data=SeqRecDataset(args,mode='test');collate=TestCollator(args,tok);allowed=data.get_prefix_allowed_tokens_fn(tok)
+-  t=time.monotonic();base=LlamaForCausalLM.from_pretrained(a.model,torch_dtype=torch.bfloat16,low_cpu_mem_usage=True,device_map={'':rank},local_files_only=True);base.resize_token_embeddings(len(tok));r['base_load_seconds']=time.monotonic()-t
+-  t=time.monotonic();model=PeftModel.from_pretrained(base,a.adapter,torch_dtype=torch.bfloat16,device_map={'':rank},is_trainable=False);model.eval();r['adapter_reload_seconds']=time.monotonic()-t
+-  # Verify every saved adapter tensor against the actual reloaded parameters; no permissive missing-state claim.
+-  path=Path(a.adapter)/'adapter_model.bin'
+-  if path.exists(): saved=torch.load(path,map_location='cpu',weights_only=True)
+-  else:
+-   from safetensors.torch import load_file
+-   saved=load_file(str(Path(a.adapter)/'adapter_model.safetensors'))
+-  loaded=get_peft_model_state_dict(model);assert set(saved)==set(loaded),(len(saved),len(loaded))
+-  mismatch=[]
+-  for k,v in saved.items():
+-   if not torch.equal(v.to(dtype=loaded[k].dtype),loaded[k].detach().cpu()):mismatch.append(k)
+-  assert not mismatch,mismatch[:10]
+-  r['adapter_exact_key_and_value_reload']={'keys':len(saved),'all_equal_in_inference_dtype':True};del saved,loaded
+-  samples=json.loads((Path(a.audit_output)/'probe_samples.json').read_text())
+-  reps=samples['test_prompt0_representatives'];r['selection']=reps
+-  # Source test uses vanilla HF attention and no temperature division at inference.
+-  r['generation_definition']={'model':'LlamaForCausalLM+PeftModel BF16; vanilla HF attention as original test_ddp.py','num_beams':20,'num_return_sequences':20,'max_new_tokens':10,'prefix_constraint':'original positional allowed-token sets, no Trie repair','prompt':0,'batch':1,'filtering_and_metrics':'not executed'}
+-  keys=list(reps) if isinstance(reps,dict) else list(range(len(reps)))
+-  for n,key in enumerate([keys[0]]+keys):
+-   d=reps[key] if isinstance(reps,dict) else reps[key];idx=d['row_idx'];data.set_prompt(int(d.get('prompt_id',0)))
+-   inputs,targets=collate([data[idx]]);inputs={k:v.to(rank) for k,v in inputs.items()}
+-   assert int(inputs['attention_mask'].sum())==d['input_length']
+-   torch.cuda.synchronize();t=time.monotonic()
+-   with torch.no_grad(): result=model.generate(**inputs,max_new_tokens=10,prefix_allowed_tokens_fn=allowed,num_beams=20,num_return_sequences=20,output_scores=True,return_dict_in_generate=True,early_stopping=True)
+-   torch.cuda.synchronize();seconds=time.monotonic()-t
+-   suffix=result.sequences[:,inputs['input_ids'].shape[1]:].cpu().tolist();assert len(suffix)==20
+-   r['timings'].append({'warmup':n==0,'selection':str(key),'row_idx':idx,'prompt_id':d.get('prompt_id',0),'input_tokens':int(inputs['input_ids'].numel()),'seconds':seconds,'generated_sequence_count':len(suffix),'generated_tokens':sum(len(z) for z in suffix),'output_token_ids':suffix,'eos_all':all(tok.eos_token_id in z for z in suffix)})
+-   assert r['timings'][-1]['eos_all'],'beam output did not reach SID EOS within fixed10 token budget'
+-   del result,inputs;write(out/f'inference_rank{rank}.json',r)
+-  r['status']='RELOAD_BEAM20_TECHNICAL_PASS'
+- except BaseException as e:
+-  r['status']='FAIL';r['error']={'type':type(e).__name__,'message':str(e),'traceback':traceback.format_exc()};print(r['error']['traceback'],flush=True)
+- finally:
+-  r['elapsed_seconds']=time.monotonic()-start;r['cpu_process_peak_rss_bytes']=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024
+-  if 'torch' in locals() and torch.cuda.is_initialized():r['cuda_peak_allocated_bytes']=torch.cuda.max_memory_allocated(rank);r['cuda_peak_reserved_bytes']=torch.cuda.max_memory_reserved(rank)
+-  write(out/f'inference_rank{rank}.json',r)
+-  if 'dist' in locals() and dist.is_initialized():dist.destroy_process_group()
+- return 0 if r['status']=='RELOAD_BEAM20_TECHNICAL_PASS' else 2
+-if __name__=='__main__':raise SystemExit(main())
++    parser = argparse.ArgumentParser()
++    for name in ['source', 'data-root', 'model', 'adapter', 'audit-output', 'train-dir', 'output', 'run-commit']:
++        parser.add_argument('--' + name, required=True)
++    parser.add_argument('--minimum-host-free-gib', type=float, default=40.)
++    args = parser.parse_args()
++    rank = int(os.environ.get('RANK', 0))
++    local_rank = int(os.environ.get('LOCAL_RANK', 0))
++    world = int(os.environ.get('WORLD_SIZE', 1))
++    output = Path(args.output)
++    output.mkdir(parents=True, exist_ok=True)
++    started = time.monotonic()
++    report = {'schema': 'letter_strict_reload_beam20_v2', 'rank': rank, 'world_size': world,
++              'argv': sys.argv, 'cwd': str(Path.cwd()), 'host': socket.gethostname(),
++              'interpreter': sys.executable, 'RUN_COMMIT': args.run_commit,
++              'started_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
++              'status': 'RUNNING', 'no_metrics': True, 'timings': []}
++    torch, dist = None, None
++
++    def guard():
++        available = next(int(line.split()[1]) * 1024 for line in Path('/proc/meminfo').read_text().splitlines()
++                         if line.startswith('MemAvailable:'))
++        report['minimum_observed_host_memavailable_bytes'] = min(available, report.get('minimum_observed_host_memavailable_bytes', available))
++        if available < args.minimum_host_free_gib * 1024**3:
++            raise MemoryError('Host memory reserve fell below configured 40 GiB minimum')
++
++    try:
++        if world != 2:
++            raise ValueError('Exactly two ranks required for dual-device inference timing')
++        if args.minimum_host_free_gib < 40:
++            raise ValueError('Host memory reserve cannot be lowered below 40 GiB')
++        guard()
++        import numpy as np
++        import torch
++        import torch.distributed as dist
++        from transformers import LlamaForCausalLM, LlamaTokenizer
++        from peft import PeftModel, get_peft_model_state_dict
++        if importlib.metadata.version('peft') != '0.5.0':
++            raise RuntimeError('This strict reload probe is pinned to PEFT 0.5.0')
++        report['versions'] = {name: importlib.metadata.version(name) for name in
++                              ['torch', 'transformers', 'peft', 'bitsandbytes', 'deepspeed', 'safetensors']}
++        torch.cuda.set_device(local_rank)
++        torch.manual_seed(42)
++        dist.init_process_group('nccl', timeout=dt.timedelta(minutes=5))
++        torch.cuda.reset_peak_memory_stats()
++        sys.path.insert(0, args.source)
++        from data import SeqRecDataset
++        from collator import TestCollator
++        source = Path(args.source)
++        report['author_sources'] = {name: {'path': str(source / name), 'sha256': sha(source / name)}
++                                    for name in ['data.py', 'collator.py', 'test_ddp.py']}
++        audit = Path(args.audit_output)
++        samples = json.loads((audit / 'probe_samples.json').read_text())
++        for kind, identity in samples['a_data_identity'].items():
++            path = Path(args.data_root) / 'Instruments' / ('Instruments.' + kind + '.json')
++            if sha(path) != identity['sha256']:
++                raise AssertionError('Fixed data/SID identity mismatch: ' + str(path))
++        adapter = Path(args.adapter)
++        required_files = ['adapter_config.json', 'tokenizer_config.json', 'tokenizer.model', 'added_tokens.json']
++        if any(not (adapter / name).is_file() for name in required_files):
++            raise AssertionError('Adapter tokenizer/config artifact is missing')
++        bins = [adapter / name for name in ['adapter_model.bin', 'adapter_model.safetensors'] if (adapter / name).is_file()]
++        if len(bins) != 1 or bins[0].name != 'adapter_model.bin':
++            raise AssertionError('Pinned PEFT0.5 job expects one explicit adapter_model.bin; ambiguous or changed format rejected')
++        tensor_path = bins[0].resolve()
++        tok = LlamaTokenizer.from_pretrained(adapter, local_files_only=True)
++        tok.pad_token_id, tok.padding_side, tok.model_max_length = 0, 'left', 2048
++        audited = LlamaTokenizer.from_pretrained(audit / 'tokenizer_a', local_files_only=True)
++        if tok.get_vocab() != audited.get_vocab() or tok.get_added_vocab() != audited.get_added_vocab():
++            raise AssertionError('Saved tokenizer or SID token ID ordering differs from audited tokenizer')
++        added = tok.get_added_vocab()
++        sid_ids = sorted(added.values())
++        report['tokenizer_identity'] = {'vocab_size': len(tok), 'added_count': len(added),
++             'exact_vocab_and_added_token_ids_match_audit': True, 'added_token_ids': added,
++             'special_ids': {'bos': tok.bos_token_id, 'eos': tok.eos_token_id, 'pad': tok.pad_token_id}}
++        train_paths = [Path(args.train_dir) / ('rank%d.json' % i) for i in range(world)]
++        training = [json.loads(path.read_text()) for path in train_paths]
++        if not all(item['status'] == 'PASS' and 3 <= len(item['updates']) <= 9 for item in training):
++            raise AssertionError('Reload/generation requires completed real training PASS with at least three bounded updates')
++        for item in training:
++            if not any(row['nonzero_learning_rate'] for row in item['updates']):
++                raise AssertionError('No actual nonzero-LR optimizer boundary was measured')
++            changes = item['small_parameter_change_max_abs']
++            if not any(value > 0 for name, value in changes.items() if 'lora_' in name):
++                raise AssertionError('Training evidence does not show a real LoRA parameter change')
++            for family in ['embed_tokens', 'lm_head']:
++                if not any(value > 0 for name, value in changes.items() if family in name and 'modules_to_save.default' in name):
++                    raise AssertionError('Training evidence does not show changed active SID ' + family)
++        report['training_evidence'] = [{'path': str(path), 'sha256': sha(path)} for path in train_paths]
++        inventories = [{saved_key(k): v for k, v in item['parameter_inventory'].items() if v['requires_grad']} for item in training]
++        if inventories[0].keys() != inventories[1].keys():
++            raise AssertionError('Rank training inventories disagree')
++        if any(inventories[0][key]['shape'] != inventories[1][key]['shape'] for key in inventories[0]):
++            raise AssertionError('Rank training tensor shapes disagree')
++        expected = inventories[0]
++        if len(expected) != 450 or sum('.lora_' in k for k in expected) != 448:
++            raise AssertionError('Unexpected LoRA/SID trained tensor set')
++        if any('original_module' in k for k in expected):
++            raise AssertionError('Frozen original tensor unexpectedly saved as trained adapter')
++        configuration = json.loads((adapter / 'adapter_config.json').read_text())
++        if configuration['r'] != 8 or configuration['lora_alpha'] != 16 or configuration['lora_dropout'] != .05:
++            raise AssertionError('Saved LoRA hyperparameters differ')
++        if set(configuration['modules_to_save']) != {'embed_tokens', 'lm_head'}:
++            raise AssertionError('Saved active embedding/head configuration missing')
++        if set(configuration['target_modules']) != {'q_proj', 'k_proj', 'v_proj', 'o_proj', 'gate_proj', 'down_proj', 'up_proj'}:
++            raise AssertionError('Saved LoRA target modules differ')
++        report['adapter_files'] = {path.name: {'bytes': path.stat().st_size, 'sha256': sha(path)}
++                                   for path in adapter.iterdir() if path.is_file()}
++        report['loading_definition'] = {'base': 'original test_ddp.py LoRA branch: full BF16 LLaMA, vanilla HF attention',
++            'quantization': 'none during author LoRA inference branch; training was int8',
++            'format': tensor_path.name, 'no_new_shims': True,
++            'reason': '8-bit Autograd and LoRA-A-only BF16 compatibility target training int8 classes; inference BF16 PEFT Linear uses its own native dtype cast'}
++        t = time.monotonic()
++        base = LlamaForCausalLM.from_pretrained(args.model, torch_dtype=torch.bfloat16, low_cpu_mem_usage=True,
++                                              device_map={'': local_rank}, local_files_only=True)
++        base.resize_token_embeddings(len(tok))
++        torch.cuda.synchronize()
++        report['base_load_seconds'] = time.monotonic() - t
++        guard()
++        load_source = inspect.getsource(PeftModel.load_adapter)
++        report['peft_load_adapter_identity'] = {'signature': str(inspect.signature(PeftModel.load_adapter)),
++            'source_file': inspect.getsourcefile(PeftModel.load_adapter),
++            'source_sha256': hashlib.sha256(load_source.encode()).hexdigest()}
++        peft_opens = []
++
++        def audit_open(event, event_args):
++            if event == 'open' and isinstance(event_args[0], (str, bytes, os.PathLike)):
++                if os.fsdecode(event_args[0]) == str(tensor_path):
++                    peft_opens.append({'path': str(tensor_path), 'mode': str(event_args[1])})
++
++        sys.addaudithook(audit_open)
++        t = time.monotonic()
++        model = PeftModel.from_pretrained(base, str(adapter.resolve()), torch_dtype=torch.bfloat16,
++                                         device_map={'': local_rank}, is_trainable=False)
++        model.eval()
++        torch.cuda.synchronize()
++        report['adapter_reload_seconds'] = time.monotonic() - t
++        report['peft_actual_weight_reads'] = list(peft_opens)
++        if not peft_opens:
++            raise AssertionError('PEFT did not actually read expected local .bin payload')
++        report['base_and_adapter_load_peak_allocated_bytes'] = torch.cuda.max_memory_allocated()
++        report['base_and_adapter_load_peak_reserved_bytes'] = torch.cuda.max_memory_reserved()
++        t = time.monotonic()
++        saved = torch.load(tensor_path, map_location='cpu', weights_only=True)
++        loaded = get_peft_model_state_dict(model)
++        if set(saved) != set(loaded) or set(saved) != set(expected):
++            raise AssertionError('Saved/reloaded/trained parameter key sets differ')
++        tensor_checks = {}
++        for key, value in saved.items():
++            actual = loaded[key].detach().cpu()
++            if list(value.shape) != expected[key]['shape'] or value.shape != actual.shape:
++                raise AssertionError('Tensor shape mismatch: ' + key)
++            saved_dtype = expected[key].get('dtype_after_ds')
++            if saved_dtype is not None and str(value.dtype) != saved_dtype:
++                raise AssertionError('Saved tensor dtype differs from trained tensor: ' + key)
++            converted = value.to(actual.dtype)
++            if not torch.equal(converted, actual) or not torch.isfinite(actual).all():
++                raise AssertionError('Reloaded tensor not exactly saved value in actual inference dtype: ' + key)
++            difference = (actual.float() - value.float()).abs()
++            tensor_checks[key] = {'shape': list(value.shape), 'saved_dtype': str(value.dtype),
++                 'reload_dtype': str(actual.dtype), 'exact_after_explicit_dtype_conversion': True,
++                 'max_abs_dtype_conversion_difference': float(difference.max())}
++            if key.endswith('embed_tokens.weight') or key.endswith('lm_head.weight'):
++                if value.shape != (len(tok), 4096) or not torch.equal(converted[sid_ids], actual[sid_ids]):
++                    raise AssertionError('SID embedding/head rows did not strictly restore: ' + key)
++                tensor_checks[key]['all_added_sid_rows_equal_after_dtype_conversion'] = True
++        if sum(value.numel() for value in saved.values()) != 289652736:
++            raise AssertionError('Unexpected adapter trainable element count')
++        report['adapter_exact_key_and_value_reload'] = {'keys': len(saved), 'elements': 289652736,
++            'all_equal_in_actual_inference_dtype': True, 'full_tensor_checks': tensor_checks,
++            'no_missing_keys_tolerated': True, 'verification_seconds': time.monotonic() - t}
++        del saved, loaded, expected, inventories, tensor_checks, value, actual, converted, difference
++        data_args = SimpleNamespace(dataset='Instruments', data_path=args.data_root, max_his_len=20,
++                                    his_sep=', ', index_file='.index.json', add_prefix=False)
++        data = SeqRecDataset(data_args, mode='test')
++        data.set_prompt(0)
++        collate = TestCollator(data_args, tok)
++        allowed = data.get_prefix_allowed_tokens_fn(tok)
++        matrix = np.load(audit / 'length_rows.npz')
++        lengths = matrix['test_input_lengths'][:, 0]
++        selection = select_users(lengths, world, np)
++        users = list(data.remapped_inters)
++        for pairs in selection.values():
++            for item in pairs:
++                item['user_id'] = users[item['row_idx']]
++        report['selection'] = selection
++        report['generation_definition'] = {'num_beams': 20, 'num_return_sequences': 20, 'max_new_tokens': 10,
++            'prefix_constraint': 'original positional allowed-token callback; no Trie', 'prompt': 0,
++            'per_rank_batch': 1, 'distinct_users_per_synchronized_batch': world,
++            'warmup': 'q10 users once; excluded from throughput', 'metrics_or_filtering_executed': False,
++            'oom_beam_reduction': False, 'allowed_callback_source_sha256': hashlib.sha256(inspect.getsource(data.get_prefix_allowed_tokens_fn).encode()).hexdigest()}
++        write(output / ('inference_rank%d.json' % rank), report)
++        for index, kind in enumerate(['q10'] + list(selection)):
++            guard()
++            chosen = selection[kind][rank]
++            prep = time.monotonic()
++            inputs, _ = collate([data[chosen['row_idx']]])
++            if int(inputs['attention_mask'].sum()) != chosen['input_length']:
++                raise AssertionError('Real prompt length differs from frozen CPU audit')
++            inputs = {key: value.to(local_rank) for key, value in inputs.items()}
++            torch.cuda.synchronize()
++            preparation_seconds = time.monotonic() - prep
++            dist.barrier()
++            torch.cuda.reset_peak_memory_stats()
++            t = time.monotonic()
++            with torch.no_grad():
++                result = model.generate(**inputs, max_new_tokens=10, prefix_allowed_tokens_fn=allowed,
++                    num_beams=20, num_return_sequences=20, output_scores=True,
++                    return_dict_in_generate=True, early_stopping=True)
++            torch.cuda.synchronize()
++            seconds = time.monotonic() - t
++            max_seconds = torch.tensor(seconds, device=local_rank)
++            dist.all_reduce(max_seconds, op=dist.ReduceOp.MAX)
++            suffix = result.sequences[:, inputs['input_ids'].shape[1]:].cpu().tolist()
++            if len(suffix) != 20 or not torch.isfinite(result.sequences_scores).all():
++                raise AssertionError('Expected twenty finite scored output beams')
++            prompt_ids = inputs['input_ids'][0].cpu().tolist()
++            eos_positions = []
++            for beam in suffix:
++                if tok.eos_token_id not in beam:
++                    raise AssertionError('Beam did not reach EOS within author max_new_tokens=10')
++                eos = beam.index(tok.eos_token_id)
++                eos_positions.append(eos)
++                for position, token_id in enumerate(beam[:eos + 1]):
++                    permitted = allowed(0, torch.tensor(prompt_ids + beam[:position], dtype=torch.long))
++                    if permitted is None or token_id not in permitted:
++                        raise AssertionError('Generated token violates original positional allowed-token callback')
++                if any(token_id not in {tok.eos_token_id, tok.pad_token_id} for token_id in beam[eos + 1:]):
++                    raise AssertionError('Nonpadding generated tokens found after EOS')
++            row = {'warmup': index == 0, 'selection': kind, **chosen, 'rank_seconds': seconds,
++                'max_rank_seconds': float(max_seconds), 'global_users': world,
++                'dual_gpu_users_per_second': world / float(max_seconds),
++                'cpu_collator_and_transfer_seconds': preparation_seconds,
++                'generated_sequence_count': 20, 'generated_effective_tokens': sum(i + 1 for i in eos_positions),
++                'output_token_ids': suffix, 'eos_positions': eos_positions, 'eos_all': True,
++                'original_positional_callback_verified_all_tokens': True,
++                'gpu_peak_allocated_bytes': torch.cuda.max_memory_allocated(),
++                'gpu_peak_reserved_bytes': torch.cuda.max_memory_reserved()}
++            report['timings'].append(row)
++            del result, inputs
++            write(output / ('inference_rank%d.json' % rank), report)
++        report['status'] = 'RELOAD_BEAM20_TECHNICAL_PASS'
++    except BaseException as error:
++        report['status'] = 'FAIL'
++        report['error'] = {'type': type(error).__name__, 'message': str(error), 'traceback': traceback.format_exc()}
++        print(report['error']['traceback'], flush=True)
++    finally:
++        report['elapsed_seconds'] = time.monotonic() - started
++        report['finished_utc'] = dt.datetime.now(dt.timezone.utc).isoformat()
++        report['cpu_process_peak_rss_bytes'] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024
++        if torch is not None and torch.cuda.is_initialized():
++            report['cuda_peak_allocated_bytes'] = max([torch.cuda.max_memory_allocated(), report.get('base_and_adapter_load_peak_allocated_bytes', 0)] +
++                                                    [row['gpu_peak_allocated_bytes'] for row in report['timings']])
++            report['cuda_peak_reserved_bytes'] = max([torch.cuda.max_memory_reserved(), report.get('base_and_adapter_load_peak_reserved_bytes', 0)] +
++                                                   [row['gpu_peak_reserved_bytes'] for row in report['timings']])
++        write(output / ('inference_rank%d.json' % rank), report)
++        if dist is not None and dist.is_initialized():
++            dist.destroy_process_group()
++    return 0 if report['status'] == 'RELOAD_BEAM20_TECHNICAL_PASS' else 2
++
++
++if __name__ == '__main__':
++    raise SystemExit(main())
+diff --git a/lc_rec/letter/scripts/resource_guard.py b/lc_rec/letter/scripts/resource_guard.py
+index 3763c55..4ba06d2 100644
+--- a/lc_rec/letter/scripts/resource_guard.py
++++ b/lc_rec/letter/scripts/resource_guard.py
+@@ -47,10 +47,14 @@ def main():
+     ledger_path=Path(cfg['budget_ledger']);ledger_path.parent.mkdir(parents=True,exist_ok=True)
+     with ledger_path.with_suffix('.lock').open('a') as lock:
+         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
++        if cfg.get('require_existing_ledger') and not ledger_path.is_file():
++            raise RuntimeError('Historical GPU ledger missing; recover frozen facts before any new GPU run')
+         ledger=json.loads(ledger_path.read_text()) if ledger_path.exists() else {'runs':[],'prior_stage_a_seconds':cfg['prior_stage_a_seconds']}
+         assert all(r['job_id']!=a.job_id for r in ledger['runs']),'query original job; do not relaunch'
+         assert all(r.get('end_utc') for r in ledger['runs']),'previous GPU run unresolved'
+         elapsed=sum(r.get('charged_gpu_device_seconds',2*r['elapsed_seconds']) for r in ledger['runs'])+ledger['prior_stage_a_seconds']
++        assert elapsed >= cfg.get('historical_gpu_device_seconds_floor',0), 'Historical GPU usage must not be reset'
++        assert set(cfg.get('required_prior_job_ids',[])) <= {r['job_id'] for r in ledger['runs']}, 'Missing historical job identities'
+         limit=min(cfg['single_gpu_seconds'],(cfg['all_gpu_seconds']-elapsed)/2)
+         assert limit>0
+         baseline=meminfo();baseline_swap_io=swap_io();page_size=os.sysconf('SC_PAGE_SIZE');assert baseline['MemAvailable']>=cfg['cpu_reserve_bytes']
