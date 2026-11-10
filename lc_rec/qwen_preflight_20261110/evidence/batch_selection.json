@@ -1,0 +1,31 @@
+{
+  "scope": "initial resource choice before first F17 GPU update; not a failed optimizer retry or budget reset",
+  "key": "q17",
+  "route": "F",
+  "selected_micro": 4,
+  "accumulation": 8,
+  "world_size": 2,
+  "global_batch": 64,
+  "author_seed": 42,
+  "basis": "non-author phase-by-phase native AdamW/ZeRO2 memory analysis plus actual q06 F first-state and second nonzero update peaks",
+  "source_actual_job": "qwen-20261110-q06-f-r0",
+  "source_actual_peak_allocated_gib": 8.211846351623535,
+  "source_actual_parameter_count": 596716544,
+  "F17_expanded_parameter_count": 1721908224,
+  "F17_optimizer_12N_floor_gib": 19.243824005126953,
+  "F06_extra_over_12N_gib": 1.5430192947387695,
+  "F17_transferred_envelope_plus_context_width_gib": 21.636843299865724,
+  "actual_Torch_capacity_gib": 23.5184326171875,
+  "remaining_conditional_headroom_gib": 1.8815893173217768,
+  "reason_prefer_authorized_micro4": "micro8 original static21.943GiB plus context leaves insufficient1.5\u20132GiB working margin; micro4 halves full-vocabulary CE/logits and checkpointed batch activations, retaining exact global64 and native optimizer math.",
+  "preserved": [
+    "all1721908224 instantiated parameters trainable",
+    "official tied embedding/head",
+    "BF16 model and gradients, GPU FP32 masters and moments",
+    "native AdamW/cosine/warmup0.01/temperature0.8",
+    "original data and prompts/labels/history",
+    "ZeRO2 no offload, two updates maximum"
+  ],
+  "numerical_limit": "Every sample has exactly5 supervised tokens; equal-size micro means preserve equal sample weights, but BF16 accumulation order and per-micro padding differ. No bitwise-equivalence claim.",
+  "actual_F17_feasibility": "PENDING actual initial GPU probe"
+}
