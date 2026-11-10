@@ -119,6 +119,9 @@ print(json.dumps(r))"""
         deploy = json.loads((SUPPORT/'receipts'/('deployment-'+commit+'.json')).read_text())
         prefixes = ('lc_rec/six_task_lora/scripts/', 'lc_rec/six_task_lora/config/', 'lc_rec/vendor/original/')
         inputs = [{'path':release+'/'+row['path'], 'sha256':row['sha256']} for row in deploy['files'] if row['path'].startswith(prefixes)]
+        if args.kind=='gpu':
+            evidence_code="from pathlib import Path;import json,hashlib\nroot=Path("+repr(workload)+");summary=json.loads((root/'workload_summary.json').read_text());rows=[]\nfor name in ['samples.json','validation_samples.json','output_manifest.json','workload_summary.json']:\n p=root/name;rows.append({'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})\nrows.extend({'path':v['path'],'sha256':v['sha256']} for v in summary['assets'].values());print(json.dumps(rows))"
+            inputs.extend(json.loads(t.python(evidence_code)))
         req.update(job_id=args.job, capture_version=commit, cwd=release, argv=argv, env=env, inputs=inputs, timeout_seconds=2850 if args.kind=='gpu' else 3600)
         path = SUPPORT/'requests'/(args.job+'.json')
         if path.exists():
@@ -138,7 +141,7 @@ print(json.dumps(r))"""
         code=f"""from pathlib import Path\nimport hashlib,json,tarfile\nroot=Path({jobpath!r});archive=Path({destination!r});files=[];excluded=[]\nfor p in sorted(root.rglob('*')):\n if not p.is_file() or p.is_symlink() or p.name.endswith(('.lock','.partial','.tmp')):continue\n rel=str(p.relative_to(root))\n if p.stat().st_size>32*1024**2 or p.suffix in ['.bin','.safetensors','.pt','.pth']:\n  excluded.append({{'path':rel,'bytes':p.stat().st_size,'reason':'large/payload remains on server'}});continue\n files.append({{'path':rel,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}})\nmanifest=root/'light-export-manifest.json'\nfiles=[x for x in files if x['path']!='light-export-manifest.json']\nmanifest.write_text(json.dumps({{'files':files,'excluded':excluded}},indent=2)+'\\n')\narchive.parent.mkdir(exist_ok=True)\nwith tarfile.open(archive,'w:gz') as tf:\n for row in files:tf.add(root/row['path'],arcname=row['path'],recursive=False)\n tf.add(manifest,arcname=manifest.name,recursive=False)\nprint(json.dumps({{'path':str(archive),'bytes':archive.stat().st_size,'sha256':hashlib.sha256(archive.read_bytes()).hexdigest()}}))"""
         meta=json.loads(t.python(code,timeout=60))
         local=SUPPORT/'exports'/(args.job+'.tar.gz')
-        t.get_verified(meta['path'],local,meta,timeout=60)
+        t.get_verified(meta['path'],local,meta,timeout=240)
         dest=REPO/'lc_rec/six_task_lora/evidence/jobs'/args.job
         dest.mkdir(parents=True,exist_ok=True)
         with tarfile.open(local,'r:gz') as tf:

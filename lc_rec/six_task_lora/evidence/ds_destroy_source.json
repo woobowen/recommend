@@ -1,0 +1,12 @@
+[
+  {
+    "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py",
+    "file_sha256": "88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d",
+    "destroy_source": "    def destroy(self):\n        if self.optimizer is not None and hasattr(self.optimizer, 'destroy'):\n            self.optimizer.destroy()\n        if self.is_deepcompile_enabled():\n            get_deepcompile_handle().cleanup()\n        debug_clear_module_and_param_names()\n"
+  },
+  {
+    "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/zero/stage_1_and_2.py",
+    "file_sha256": "7e03bb5b2c923b2291ed28b663b1b605aa1384f68aa23b5744951183cc42fef6",
+    "destroy_source": "    def destroy(self):\n        for i, _ in enumerate(self.optimizer.param_groups):\n            for p in self.bit16_groups[i]:\n                if getattr(p, '_hp_mapping', None):\n                    p._hp_mapping = None\n        for hook in self._grad_acc_hooks:\n            hook.remove()\n        self.print_rank_0(\"Removed grad acc hooks\")\n"
+  }
+]

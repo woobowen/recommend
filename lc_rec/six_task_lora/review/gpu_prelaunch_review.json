@@ -1,12 +1,12 @@
 {
   "reviewer": "/root/independent_review",
   "role": "non_implementation_author",
-  "observed_utc": "2026-11-10T13:53:40.377342+00:00",
+  "observed_utc": "2026-11-10T13:57:42.865291+00:00",
   "status": "STATIC_PASS_FOR_BOUNDED_EXECUTION_RUNTIME_NOT_YET_VERIFIED",
   "files": {
     "lc_rec/six_task_lora/scripts/gpu_probe.py": {
-      "bytes": 59342,
-      "sha256": "b0cdd53b2b3b5cc05d61200d8f286386273040aac00202eb92f29422e21402e0"
+      "bytes": 60237,
+      "sha256": "1ad3cbcf2d606817d0ca69b4166f00cb58e77b9432c2cfe4b79ba2c4fa0065c4"
     },
     "lc_rec/six_task_lora/scripts/inference_probe.py": {
       "bytes": 11742,
@@ -48,5 +48,10 @@
     "No fullTrainer/DSoptimizer/scheduler/RNG checkpointrestore; adapterfreshreload is different",
     "Fullseed data correctness blocked byauxiliarypairing/provenance evenif boundedGPU tests pass",
     "No formaltraining,completeepoch,papermetricreproduction orapprovedresearchbaseline conclusionfromthisreview"
-  ]
+  ],
+  "source_review_addendum": {
+    "reason": "Public DS engine.destroy before fresh-base loading clears global module/parameter debug references and optimizer hooks; engine.py direct read confirms API does not destroy distributed group. Actual stage2 source readback pending; runtime stores file/method hashes.",
+    "implementation": "Explicit engine.destroy, synchronize, then del all model/optimizer references, gc and empty_cache; report memory before/after",
+    "research_effect": "No training target/model/parameter-set or evaluation change"
+  }
 }

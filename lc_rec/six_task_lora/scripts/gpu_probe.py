@@ -859,6 +859,18 @@ def run(args, report, flush, event):
     # Release the old GPU model and every optimizer reference before loading a
     # genuinely fresh base. No Int8/LoRA path is silently substituted.
     report["reload"] = {"status": "RUNNING", "kind": "Fresh fixed base + real PEFT PeftModel.from_pretrained", "memory_before_release": memory()}
+    engine_destroy = inspect.getsource(type(engine).destroy)
+    optimizer_destroy = inspect.getsource(type(engine.optimizer).destroy)
+    report["reload"]["engine_cleanup"] = {
+        "engine_destroy_file": record_file(inspect.getfile(type(engine).destroy)),
+        "engine_destroy_source_sha256": hashlib.sha256(engine_destroy.encode()).hexdigest(),
+        "optimizer_destroy_file": record_file(inspect.getfile(type(engine.optimizer).destroy)),
+        "optimizer_destroy_source_sha256": hashlib.sha256(optimizer_destroy.encode()).hexdigest(),
+        "semantics": "Verified DS0.16.9 public destroy removes ZeRO gradient hooks/HP mapping and global debug references; distributed group is retained"}
+    engine.destroy()
+    torch.cuda.synchronize()
+    report["reload"]["engine_cleanup"]["called"] = True
+    report["reload"]["engine_cleanup"]["memory_after_destroy_before_del"] = memory()
     del named, optimizer, scheduler, engine, model, sid_tensor, parameter
     gc.collect(); torch.cuda.empty_cache(); torch.cuda.synchronize()
     report["reload"]["memory_after_release"] = memory()
