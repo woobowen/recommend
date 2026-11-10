@@ -53,6 +53,15 @@ def main():
      try:
       if q.is_file() and not q.is_symlink():total+=q.stat().st_blocks*512
      except FileNotFoundError:pass
+   # Earlier accepted setup/CPU/q06-L imports used the DS default cache.
+   # With no pre-task baseline, conservatively charge these exact existing
+   # files in full; do not attribute all contents to this task or delete them.
+   for key in ['Fp16Matmul_2d_kernel','Fp16Matmul_4d_kernel']:
+    for suffix in ['.pickle','.pickle.lock','.lock']:
+     q=Path('/home/bwwu/.triton/autotune')/(key+suffix)
+     try:
+      if q.is_file() and not q.is_symlink():total+=q.stat().st_blocks*512
+     except FileNotFoundError:pass
    return total
   def mem():return psutil.virtual_memory().available
   assert mem()>=40*1024**3

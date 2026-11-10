@@ -38,6 +38,12 @@ for folder,pattern in [('transfers','qwen-preflight-*'),('requests','qwen-202611
  for p in sorted((jobs.parent/folder).glob(pattern)):
   if p.is_file() and not p.is_symlink():
    s=p.stat();r['allocated_and_logical_bytes'][str(p)]={'allocated':s.st_blocks*512,'logical':s.st_size};r['task_shared_transfer_and_request_files'].append({'path':str(p),'bytes':s.st_size,'allocated':s.st_blocks*512,'sha256':sha(p)})
+r['legacy_unredirected_DS_cache_candidates']=[]
+for key in ['Fp16Matmul_2d_kernel','Fp16Matmul_4d_kernel']:
+ for suffix in ['.pickle','.pickle.lock','.lock']:
+  p=Path('/home/bwwu/.triton/autotune')/(key+suffix)
+  if p.is_file() and not p.is_symlink():
+   s=p.stat();r['allocated_and_logical_bytes'][str(p)]={'allocated':s.st_blocks*512,'logical':s.st_size};r['legacy_unredirected_DS_cache_candidates'].append({'path':str(p),'bytes':s.st_size,'allocated':s.st_blocks*512,'sha256':sha(p),'attribution':'No pre-task baseline; conservatively charge full current exact known DS cache files, not all contents attributed to this task. Files unmodified by collector.'})
 for job in sorted(jobs.glob('qwen-20261110-*')):
  r['jobs'][job.name]={name:json.loads((job/name).read_text()) for name in ['request.json','status.json','cleanup.json','attempt.json','accepted.json'] if (job/name).exists()}
 for release in sorted((root/'releases').iterdir()):
