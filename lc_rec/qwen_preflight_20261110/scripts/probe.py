@@ -85,6 +85,10 @@ def main():
   engine,_,_,scheduler=deepspeed.initialize(model=model,optimizer=optimizer,lr_scheduler=scheduler,model_parameters=list(trainable.values()),config=ds,dist_init_required=False)
   groups=engine.optimizer.bit16_groups;flatten=[x for group in groups for x in group];assert len(flatten)==len(train_ids) and {id(x) for x in flatten}==train_ids
   r['optimizer']['zero_original_groups_exact']=True
+  masters=engine.optimizer.single_partition_of_fp32_groups
+  assert all(x.device.type=='cuda' and x.dtype==torch.float32 for x in masters)
+  r['optimizer']['fp32_master_partitions']=[{'numel':x.numel(),'device':str(x.device),'dtype':str(x.dtype)} for x in masters]
+  r['optimizer']['actual_gradient_accumulation_dtype']=str(getattr(engine.optimizer,'gradient_accumulation_dtype',None))
   sync();r['init_seconds']=time.monotonic()-t;r['sharing_after_deepspeed']=sharing(model);assert r['sharing_after_deepspeed']['same_parameter_object']
   for n,x in named.items():r['parameter_inventory'][n].update(dtype_after_ds=str(x.dtype),device_after_ds=str(x.device))
   if a.precision=='int8':
@@ -163,6 +167,9 @@ def main():
    rowinfo.update(seconds=seconds,global_effective_tokens=int(total(effective)),global_padded_tokens=int(total(padded)),global_supervised_tokens=int(total(supervised)),global_samples=64,mean_loss_rank=sum(losses)/len(losses),nonzero_lr=any(x>0 for x in rowinfo['lr_before']),lr_after=scheduler.get_last_lr(),peak=peak())
    rowinfo['samples_per_second']=64/seconds;rowinfo['effective_tokens_per_second']=rowinfo['global_effective_tokens']/seconds
    inner=engine.optimizer.optimizer;r['optimizer']['state_layout']=[{'param_dtype':str(param.dtype),'param_device':str(param.device),'numel':param.numel(),'state':{k:{'dtype':str(v.dtype),'device':str(v.device),'shape':list(v.shape)} if isinstance(v,torch.Tensor) else v for k,v in state.items()}} for param,state in inner.state.items()]
+   for param,state in inner.state.items():
+    assert param.device.type=='cuda' and param.dtype==torch.float32
+    for key in ['exp_avg','exp_avg_sq']:assert state[key].device.type=='cuda' and state[key].dtype==torch.float32
    steps=sorted({int(state['step']) for state in inner.state.values()});assert steps==[update+1];rowinfo['adam_step_values']=steps
    r['updates'].append(rowinfo);r.pop('current_update',None);write(path,r);print(json.dumps({'rank':rank,'update':update,'seconds':seconds,'loss':rowinfo['mean_loss_rank'],'lr':rowinfo['lr_before']}),flush=True)
   r['training_peak']=peak();r['gradient_observations']=grad_observation;r['activation_gradients']=activations
@@ -181,6 +188,7 @@ def main():
   # Full LoRA tensors, every SID row, representative full-finetune layer slices.
   hashes={n:digest_tensor(x if 'lora_' in n else x[sid_ids] if x is emb else sampled(x)) for n,x in monitors.items()};r['all_rank_parameter_hashes']=all_equal(hashes)
   r['all_rank_optimizer_steps']=all_equal([int(x) for x in steps]);r['all_rank_update_count']=all_equal(len(r['updates']))
+  r['core_training_status']='PASS'
   for h in handles:h.remove()
   stage('validation');engine.eval()
   with torch.no_grad():
@@ -200,7 +208,7 @@ def main():
     del disk
    dist.barrier()
    # Release the engine/optimizer before loading a complete BF16 inference base.
-   del expected,trainer,scheduler,optimizer,engine,model,named,trainable,monitors,groups,flatten,selected,emb,inner
+   del expected,trainer,scheduler,optimizer,engine,model,named,trainable,monitors,groups,flatten,selected,emb,inner,masters,param,state
    if a.precision=='int8':del quantized
    gc.collect();torch.cuda.empty_cache();dist.barrier()
    stage('reload_bf16_base');t=time.monotonic();model,info=load_model(a.model,MODELS[a.key][2],False,None);model.resize_token_embeddings(len(tok),mean_resizing=False);model.to(device);sync();r['inference_base_reload_seconds']=time.monotonic()-t
@@ -212,10 +220,21 @@ def main():
    r['adapter_reload']={'all_keys_and_values_exact':True,'sharing':sharing(model),'load_info':info};assert sharing(model)['same_parameter_object']
    reloaded_tok=__import__('transformers').AutoTokenizer.from_pretrained(adapter,local_files_only=True);assert reloaded_tok.get_vocab()==tok.get_vocab();r['adapter_reload']['tokenizer_vocab_and_sid_order_exact']=True;del loaded
   else:
-   # This is the already-updated full text model, without serializing a multi-GB
-   # full checkpoint. No full-state restore claim is made.
-   model=engine.module;model.gradient_checkpointing_disable()
-   r['full_model_save_restore']='NOT TESTED (static cost recorded; optimizer checkpoint prohibited)'
+   # Model-only save is within the explicitly allowed optional interface test:
+   # <3.5 GB/model, <6.5 GB all three. No optimizer/scheduler/RNG is written.
+   folder=out/'full_model';expected_full={n:{'shape':list(x.shape),'dtype':str(x.dtype),'sha256':digest_tensor(x)} for n,x in model.state_dict().items()}
+   if rank==0:
+    t=time.monotonic();model.save_pretrained(folder,safe_serialization=True,max_shard_size='4GB');tok.save_pretrained(folder);seconds=time.monotonic()-t
+    files=[{'path':str(x),'bytes':x.stat().st_size,'sha256':sha(x)} for x in sorted(folder.glob('*.safetensors'))]
+    assert sum(x['bytes'] for x in files)<4*1024**3
+    r['full_model_save']={'path':str(folder),'seconds':seconds,'files':files,'parameter_state':expected_full,'model_only':True,'optimizer_scheduler_rng_saved':False}
+   dist.barrier()
+   del trainer,scheduler,optimizer,engine,model,named,trainable,monitors,groups,flatten,selected,emb,inner,masters,param,state;gc.collect();torch.cuda.empty_cache();dist.barrier()
+   t=time.monotonic();model,info=load_model(folder,MODELS[a.key][2],False,device);sync();r['full_model_reload_seconds']=time.monotonic()-t
+   actual=model.state_dict();assert set(actual)==set(expected_full)
+   for name,x in actual.items():
+    assert list(x.shape)==expected_full[name]['shape'] and str(x.dtype)==expected_full[name]['dtype'] and digest_tensor(x)==expected_full[name]['sha256'],name
+   r['full_model_reload']={'all_keys_shapes_dtypes_values_exact':True,'state_tensors':len(actual),'sharing':sharing(model),'loading_info':info};assert sharing(model)['same_parameter_object'];del actual,expected_full
   r['save_reload_phase_peak']=peak()
   model.eval();model.config.use_cache=True;model.generation_config.eos_token_id=tok.eos_token_id;model.generation_config.pad_token_id=tok.pad_token_id
   model.gradient_checkpointing_disable();r['beam20']=[];canonical=train.get_all_items()
@@ -232,7 +251,7 @@ def main():
      assert all(x==tok.pad_token_id for x in ids[5:]);sid=tok.decode(ids[:4],skip_special_tokens=False);sequences.append({'token_ids':ids,'sid':sid,'canonical':sid in canonical})
     assert set(callback.calls)==set(range(5));scores=generated.sequences_scores.tolist();assert all(math.isfinite(x) for x in scores)
     r['beam20'].append({**entry,'input_text_sha256':hashlib.sha256(row['input_ids'].encode()).hexdigest(),'input_tokens':inputs['input_ids'].shape[1],'seconds_two_rank_max':seconds,'users_per_second_dual_gpu':2/seconds,'sequences':sequences,'sequence_scores':scores,'callback_calls':callback.calls,'callback_events':callback.events,'context_response_separator_ids':callback.sep,'canonical_fraction':sum(s['canonical'] for s in sequences)/20,'peak':peak(),'beam':20,'num_return_sequences':20,'max_new_tokens':10,'temperature_training_only':True});write(path,r);del generated,inputs
-  r['final_peak']=peak();r['status']='PASS_TECHNICAL';r['completed_global_updates']=len(r['updates']);r['nonzero_lr_updates']=sum(x['nonzero_lr'] for x in r['updates']);r['elapsed_seconds']=time.monotonic()-start;r['completed_utc']=dt.datetime.now(dt.timezone.utc).isoformat();write(path,r);stage('complete')
+  r['final_phase_peak']=peak();r['job_peak_from_recorded_phases']={key:max(part[key] for part in [r['training_peak'],r['save_reload_phase_peak']]+[x['peak'] for x in r['beam20']]) for key in ['allocated_gib','reserved_gib','ru_maxrss_gib']};r['status']='PASS_TECHNICAL';r['completed_global_updates']=len(r['updates']);r['nonzero_lr_updates']=sum(x['nonzero_lr'] for x in r['updates']);r['elapsed_seconds']=time.monotonic()-start;r['completed_utc']=dt.datetime.now(dt.timezone.utc).isoformat();write(path,r);stage('complete')
  except Exception:
   r['status']='BLOCKED';r['traceback']=traceback.format_exc()
   if torch is not None and torch.cuda.is_initialized():r['failure_peak']={'allocated_gib':torch.cuda.max_memory_allocated()/1024**3,'reserved_gib':torch.cuda.max_memory_reserved()/1024**3}

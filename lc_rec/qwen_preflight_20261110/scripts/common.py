@@ -92,9 +92,10 @@ def model_class_and_config(path,family):
  config=AutoConfig.from_pretrained(path,local_files_only=True,trust_remote_code=False)
  if family=='qwen35':
   from transformers import Qwen3_5ForCausalLM,Qwen3_5TextConfig
-  assert config.model_type=='qwen3_5'
+  assert config.model_type in ['qwen3_5','qwen3_5_text']
   # Official text class and checkpoint conversion; no hand-edited weights.
-  config=Qwen3_5TextConfig(**config.text_config.to_dict());cls=Qwen3_5ForCausalLM
+  if config.model_type=='qwen3_5':config=Qwen3_5TextConfig(**config.text_config.to_dict())
+  cls=Qwen3_5ForCausalLM
  else:
   from transformers import Qwen3ForCausalLM
   assert config.model_type=='qwen3';cls=Qwen3ForCausalLM

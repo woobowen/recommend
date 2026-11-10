@@ -1,0 +1,108 @@
+{
+  "schema": "qwen_non_author_gpu_prelaunch_static_review_v1",
+  "reviewer": "/root/official_architecture",
+  "is_implementation_author": false,
+  "reviewed_utc": "2026-11-10T16:26:26.299783+00:00",
+  "run_source_commit": "7c670e20304d27e724a90bfc255561d0618f6775",
+  "status": "PASS_STATIC_PRELAUNCH_WITH_RUNTIME_GATES",
+  "meaning": "Only author-source inspection and frozen implementation review have passed. No GPU result, model weight load, timing, training update, save/reload, or environment-runtime PASS is claimed here.",
+  "reviewed_files": {
+    "lc_rec/qwen_preflight_20261110/scripts/common.py": {
+      "sha256": "8d4863c14f6a78188f71b110ff9297f45472ab4b763db0ccc0b8551450ab88a6",
+      "bytes": 9291,
+      "matches_frozen_commit_blob": true,
+      "python_ast_parse": "PASS"
+    },
+    "lc_rec/qwen_preflight_20261110/scripts/cpu_audit.py": {
+      "sha256": "9cee4476071f4bbb9bdba95e375788929f90e741a889f8285ef2f4ed51f10d27",
+      "bytes": 8601,
+      "matches_frozen_commit_blob": true,
+      "python_ast_parse": "PASS"
+    },
+    "lc_rec/qwen_preflight_20261110/scripts/probe.py": {
+      "sha256": "0c19f0b58ed6f52d573283a0a7fa19186e472d3ec016d57614e14c332472b45a",
+      "bytes": 27317,
+      "matches_frozen_commit_blob": true,
+      "python_ast_parse": "PASS"
+    },
+    "lc_rec/qwen_preflight_20261110/scripts/resource_guard.py": {
+      "sha256": "668189b524ca0e137d3db3a8abbbf51f29a2ed9ccbc86add78a576a220ca1fbb",
+      "bytes": 6461,
+      "matches_frozen_commit_blob": true,
+      "python_ast_parse": "PASS"
+    }
+  },
+  "resolved_before_launch": [
+    {
+      "finding": "Bare Response: token ids differ from context-prefixed Response delimiter in Qwen byte BPE",
+      "resolution": "Allowed.bind derives contextual separator via actual tokenizer offsets and binds original prompt end; CPU audit checks8 real users at positions0..4; sequential per-user rebinding appears in beam20 loop."
+    },
+    {
+      "finding": "PAD=EOS requires preserving real EOS while ignoring padding",
+      "resolution": "Collator masks by attention_mask and explicitly checks exactly4 SID plus genuine EOS."
+    },
+    {
+      "finding": "Physical model padded vocabulary differs from tokenizer size",
+      "resolution": "CPU audit records original/expanded tokenizer and physical embedding row counts separately; checks all9922 legal item SID encode/decode before and after reload."
+    },
+    {
+      "finding": "BF16 CUDA relocation could invalidate pre-captured parameter identities",
+      "resolution": "Nonquantized model moves to final device before named/trainable inventory and optimizer membership checks."
+    },
+    {
+      "finding": "First-step independent CE and retained inner optimizer could hold training GPU state during reload",
+      "resolution": "Independent CE uses detached tensors in no_grad and deletes them immediately; reload cleanup deletes engine/trainer/optimizer/inner plus model inventories and quantized module list, collects garbage and empties cache. Actual release remains runtime-gated."
+    },
+    {
+      "finding": "Hard cumulative GPU time needed cleanup/poll allowance and launcher-descendant verification",
+      "resolution": "Guard subtracts30 wall seconds from remaining task/model allowances, serializes GPU ledger, tracks PID+creation identity, cleans known descendants after normal or abnormal launcher exit, records cleanup_verified."
+    }
+  ],
+  "official_compatibility_evidence": {
+    "transformers_qwen3": "4.57.6 source includes Qwen3ForCausalLM, actual seven projection families, legacy tied_weights_keys.",
+    "transformers_qwen35": "5.2.0 source includes official text config/class, weight-prefix conversion, hybrid beam cache reorder, PyTorch DeltaNet fallback; vision153 tensors/100592896 parameters and MTP15 tensors/20452864 parameters are excluded by official text scope.",
+    "peft": "0.21.2 ensure_weight_tying keeps modules_to_save active embedding/head tied; outer PeftModel uses nn.Module dtype/device conversion. Exact adapter key/value checks on both ranks and tied object checks gate success.",
+    "deepspeed": "0.16.9 source get_data_types selects BF16 gradients by default for BF16+ZeRO2, supporting static9N estimate; separate FP32 master/moments and GPU residency are inspected after actual updates.",
+    "bitsandbytes": "0.45.5 Int8Params.to retains CB/SCB on existing CUDA placement; post-DeepSpeed actual int8 storage assertions guard unintended conversion.",
+    "original_LETTER": "LoRA evaluation reloads a BF16 unquantized base plus adapter; probe follows that existing evaluation behavior."
+  },
+  "training_scope_checks": [
+    "Original fixed LETTER author data/SID SHA and SeqRec text functions retained",
+    "Full-vocabulary float32 shifted CE divided by0.8, answer-only masks,5 labels per example",
+    "r8 alpha16 dropout0.05 original seven projections for both Qwen3 models; no invented DeltaNet LoRA mapping",
+    "BF16 full-finetune trains every instantiated text parameter, not LETTER paper LoRA recipe",
+    "Native AdamW parameter groups checked exactly once against unique live trainable Parameter identities, then checked again against ZeRO original groups",
+    "Both rank finite gradients, SID activation paths, nonzero scheduler LR, sampled actual changes and parameter hashes gate PASS",
+    "Task/model update allowance charged before each boundary optimizer step and cannot reset with new job IDs",
+    "Bounded beam20/return20/max_new_tokens10/position-only callback; no trie or lower-beam fallback",
+    "No full optimizer checkpoint or formal epoch/seed is run"
+  ],
+  "important_blocked_candidate": "Qwen3.5 LoRA remains BLOCKED_MAPPING_REQUIRES_APPROVAL; eighteen DeltaNet mixers have no approved LETTER-equivalent target mapping.",
+  "not_tested": [
+    "Actual server overlay environment imports and source receipts have not yet been read by this reviewer",
+    "All three official weight payload hashes and completed server placement",
+    "Real tokenizer/data CPU audit output and meta parameter inventory output",
+    "HF/PEFT/DeepSpeed/bitsandbytes combined GPU loading and forwards",
+    "All gradients/optimizer changes/rank synchronization, actual learning rate and optimizer membership",
+    "Actual peak GPU/CPU memory and cleanup, including release before inference reload",
+    "Real adapter file save, strict reload and tied weight identity/numerical equality",
+    "Qwen3.5 official pure-text full-parameter training and hybrid-cache beam20",
+    "Real stable update, validation and beam20 timings; actual loader tail behavior and formal effective step denominator",
+    "Formal checkpoint/RNG restore, complete four epochs, complete recommendation metrics, quality comparison and96h feasibility"
+  ],
+  "reporting_requirements": [
+    "Do not interpret this static review as GPU PASS",
+    "Probe throughput includes per-tensor finite/norm hooks, CPU collation and bookkeeping; separate measured instrumented timing from conditional formal-training extrapolation",
+    "Qwen3.5 text model parameter scope must remain explicit and must not be called complete multimodal/MTP full-finetuning",
+    "LoRA parameter percentages distinguish allocated frozen-original clones from effective model parameter denominator",
+    "Resource cleanup_verified needs real terminal receipt; kill delivery alone may still require bounded wait before process disappearance"
+  ],
+  "primary_sources": [
+    "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/runtime/engine.py",
+    "https://github.com/deepspeedai/DeepSpeed/blob/v0.16.9/deepspeed/runtime/zero/stage_1_and_2.py",
+    "https://github.com/huggingface/transformers/blob/v4.57.6/src/transformers/trainer.py",
+    "https://github.com/huggingface/transformers/blob/7d9754a05193eb79b1d86aa744b622b8068008cd/src/transformers/models/qwen3_5/modeling_qwen3_5.py",
+    "https://github.com/huggingface/peft/blob/eaa35c777c7ba554a2a3639ac9c79bb690f39a57/src/peft/utils/other.py",
+    "https://github.com/bitsandbytes-foundation/bitsandbytes/blob/0.45.5/bitsandbytes/nn/modules.py"
+  ]
+}
