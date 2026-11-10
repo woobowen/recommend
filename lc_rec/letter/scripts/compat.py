@@ -13,6 +13,126 @@ import importlib.metadata
 import types
 
 
+PEFT05_FORWARD_SHA256 = "df705367a1512d2f8bc3ff067a2617218a0a69ca5f151f2d2d1e233462d06088"
+PEFT05_LORA_FILE_SHA256 = "cbcab4d64b5254d0e1a0018f5e870f7bd93f0178ed1b14d2b750e033f871aa01"
+BNB0455_FORWARD_SHA256 = "d3f4146d34e7100027694d30fa36bac6c8691c244f865a15ff55e3c462b12665"
+_PEFT05_ORIGINAL_FORWARD = None
+_PEFT05_TARGET_RECORDS = {}
+
+
+def peft05_out_of_place_forward(self, x):
+    """Derived PEFT 0.5 int8 forward; preserve both differentiable branches."""
+    import torch
+    import bitsandbytes as bnb
+
+    evidence = _PEFT05_TARGET_RECORDS.get(id(self))
+    if evidence is None:
+        raise RuntimeError("Unregistered PEFT 0.5 int8 module reached the guarded forward")
+    evidence["calls"] += 1
+    evidence["grad_enabled_calls" if torch.is_grad_enabled() else "no_grad_calls"] += 1
+    # The pinned MRO's immediate original parent is bnb.nn.Linear8bitLt.
+    # An explicit call preserves its implementation without a __class__ closure.
+    result = bnb.nn.Linear8bitLt.forward(self, x)
+
+    if self.disable_adapters or self.active_adapter not in self.lora_A.keys():
+        evidence["base_only_calls"] += 1
+        return result
+    elif self.r[self.active_adapter] > 0:
+        if not torch.is_autocast_enabled():
+            expected_dtype = result.dtype
+
+            if x.dtype != torch.float32:
+                x = x.float()
+            output = (
+                self.lora_B[self.active_adapter](
+                    self.lora_A[self.active_adapter](self.lora_dropout[self.active_adapter](x))
+                ).to(expected_dtype)
+                * self.scaling[self.active_adapter]
+            )
+        else:
+            output = (
+                self.lora_B[self.active_adapter](
+                    self.lora_A[self.active_adapter](self.lora_dropout[self.active_adapter](x))
+                )
+                * self.scaling[self.active_adapter]
+            )
+        result = result + output
+        evidence["lora_add_calls"] += 1
+    else:
+        evidence["rank_zero_calls"] += 1
+    return result
+
+
+def install_peft05_out_of_place(model):
+    """Guard the frozen wheel and replace only its int8 class forward in memory.
+
+    Installed packages and author files remain unchanged. Parameter identities,
+    shapes, dtypes, requires_grad and state_dict keys are checked before/after.
+    The registry makes actual calls inspectable, including checkpoint replays.
+    """
+    global _PEFT05_ORIGINAL_FORWARD
+    import bitsandbytes as bnb
+    from peft.tuners.lora import Linear8bitLt
+
+    if importlib.metadata.version("peft") != "0.5.0":
+        raise RuntimeError("Out-of-place compatibility is limited to PEFT == 0.5.0")
+    if (importlib.metadata.version("bitsandbytes") != "0.45.5"
+            or hashlib.sha256(inspect.getsource(bnb.nn.Linear8bitLt.forward).encode()).hexdigest() != BNB0455_FORWARD_SHA256):
+        raise RuntimeError("bitsandbytes parent differs from the inspected 0.45.5 forward")
+    original = _PEFT05_ORIGINAL_FORWARD or Linear8bitLt.forward
+    source = inspect.getsource(original)
+    source_file = inspect.getsourcefile(original)
+    from pathlib import Path
+    file_sha = hashlib.sha256(Path(source_file).read_bytes()).hexdigest()
+    mro = [c.__module__ + "." + c.__qualname__ for c in Linear8bitLt.__mro__]
+    expected_mro = ["peft.tuners.lora.Linear8bitLt", "bitsandbytes.nn.modules.Linear8bitLt",
+                    "torch.nn.modules.linear.Linear", "torch.nn.modules.module.Module",
+                    "peft.tuners.lora.LoraLayer", "peft.tuners.tuners_utils.BaseTunerLayer",
+                    "abc.ABC", "builtins.object"]
+    if (hashlib.sha256(source.encode()).hexdigest() != PEFT05_FORWARD_SHA256
+            or file_sha != PEFT05_LORA_FILE_SHA256
+            or str(inspect.signature(original)) != "(self, x: torch.Tensor)"
+            or mro != expected_mro or Linear8bitLt.__bases__[0] is not bnb.nn.Linear8bitLt
+            or source.count("result += output") != 1):
+        raise RuntimeError("Installed PEFT source/signature/class/MRO differs from the frozen 0.5 wheel")
+    if _PEFT05_ORIGINAL_FORWARD is not None and Linear8bitLt.forward is not peft05_out_of_place_forward:
+        raise RuntimeError("A different runtime forward override is already present")
+    targets = [(name, module) for name, module in model.named_modules() if isinstance(module, Linear8bitLt)]
+    if not targets or any(type(module) is not Linear8bitLt for _, module in targets):
+        raise RuntimeError("Expected exact PEFT 0.5 int8 target classes")
+
+    def parameter_identity():
+        return {name: (id(p), tuple(p.shape), str(p.dtype), p.requires_grad)
+                for name, p in model.named_parameters()}
+
+    before = parameter_identity()
+    state_keys = set(model.state_dict())
+    records = {}
+    for name, module in targets:
+        records[name] = {"calls": 0, "grad_enabled_calls": 0, "no_grad_calls": 0,
+                         "base_only_calls": 0, "lora_add_calls": 0, "rank_zero_calls": 0}
+        _PEFT05_TARGET_RECORDS[id(module)] = records[name]
+    _PEFT05_ORIGINAL_FORWARD = original
+    Linear8bitLt.forward = peft05_out_of_place_forward
+    if before != parameter_identity() or state_keys != set(model.state_dict()):
+        raise AssertionError("Forward installation changed parameter identity or state keys")
+    return {"adaptation": "Probe-only PEFT 0.5 int8 differentiable out-of-place LoRA residual",
+            "original_source_file": source_file, "original_file_sha256": file_sha,
+            "original_source_sha256": PEFT05_FORWARD_SHA256,
+            "original_signature": str(inspect.signature(original)),
+            "derived_source_file": inspect.getsourcefile(peft05_out_of_place_forward),
+            "derived_source_sha256": hashlib.sha256(inspect.getsource(peft05_out_of_place_forward).encode()).hexdigest(),
+            "derived_signature": str(inspect.signature(peft05_out_of_place_forward)),
+            "class": mro[0], "mro": mro,
+            "parent_forward": "bitsandbytes.nn.Linear8bitLt.forward",
+            "parent_forward_source_sha256": hashlib.sha256(inspect.getsource(bnb.nn.Linear8bitLt.forward).encode()).hexdigest(),
+            "semantic_diff": ["super().forward(x) -> explicit pinned bnb.nn.Linear8bitLt.forward(self, x)",
+                              "result += output -> result = result + output"],
+            "target_count": len(targets), "module_calls": records,
+            "parameter_and_state_identity_unchanged": True,
+            "parameter_tensors_before_after": len(before), "state_dict_keys_before_after": len(state_keys)}
+
+
 def restore_legacy_bnb_state_field(model):
     """Supply an obsolete False flag only if this PEFT version reads it.
 
@@ -74,7 +194,10 @@ def peft05_lora_a_targets(model):
 
     if importlib.metadata.version("peft") != "0.5.0":
         raise RuntimeError("This approved precision adaptation is pinned to PEFT 0.5.0")
-    source = inspect.getsource(Linear8bitLt.forward)
+    original = _PEFT05_ORIGINAL_FORWARD or Linear8bitLt.forward
+    source = inspect.getsource(original)
+    if hashlib.sha256(source.encode()).hexdigest() != PEFT05_FORWARD_SHA256:
+        raise RuntimeError("PEFT 0.5 precision path source differs from frozen forward")
     if "x = x.float()" not in source or "not torch.is_autocast_enabled()" not in source:
         raise RuntimeError("PEFT 0.5 int8 forward does not match the inspected FP32 branch")
     targets = []

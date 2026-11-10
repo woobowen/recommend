@@ -47,10 +47,14 @@ def main():
     ledger_path=Path(cfg['budget_ledger']);ledger_path.parent.mkdir(parents=True,exist_ok=True)
     with ledger_path.with_suffix('.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        if cfg.get('require_existing_ledger') and not ledger_path.is_file():
+            raise RuntimeError('Historical GPU ledger missing; recover frozen facts before any new GPU run')
         ledger=json.loads(ledger_path.read_text()) if ledger_path.exists() else {'runs':[],'prior_stage_a_seconds':cfg['prior_stage_a_seconds']}
         assert all(r['job_id']!=a.job_id for r in ledger['runs']),'query original job; do not relaunch'
         assert all(r.get('end_utc') for r in ledger['runs']),'previous GPU run unresolved'
         elapsed=sum(r.get('charged_gpu_device_seconds',2*r['elapsed_seconds']) for r in ledger['runs'])+ledger['prior_stage_a_seconds']
+        assert elapsed >= cfg.get('historical_gpu_device_seconds_floor',0), 'Historical GPU usage must not be reset'
+        assert set(cfg.get('required_prior_job_ids',[])) <= {r['job_id'] for r in ledger['runs']}, 'Missing historical job identities'
         limit=min(cfg['single_gpu_seconds'],(cfg['all_gpu_seconds']-elapsed)/2)
         assert limit>0
         baseline=meminfo();baseline_swap_io=swap_io();page_size=os.sysconf('SC_PAGE_SIZE');assert baseline['MemAvailable']>=cfg['cpu_reserve_bytes']

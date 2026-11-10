@@ -1,0 +1,194 @@
+{
+  "schema": "letter_autograd_non_author_prelaunch_review_v1",
+  "reviewer": "/root/independent_review",
+  "reviewed_utc": "2026-11-10T10:57:14.440646+00:00",
+  "status": "REQUIREMENTS_IDENTIFIED_AWAITING_NEW_CODE",
+  "scope": "Direct local reads of identified frozen historical dependency source, both GPU job rank/request/status/work.log/resource summaries, current bounded probe code/config and explicitly loaded authority rules; no GPU/model load, package install or source implementation by reviewer. Full19-source and CPU data audit intentionally not repeated.",
+  "initial_git": {
+    "root": "/home/addaswsw/recommend-worktrees/lc-rec",
+    "branch": "wbw-lc-rec",
+    "HEAD": "61854bb1df0f26a71e68d95ab8eb564f7c762f76",
+    "origin": "https://github.com/woobowen/recommend.git",
+    "preexisting_untracked_ignored": [
+      "lc_rec/offload/qwen_20261109/Qwen3-8B-Base/tokenizer.json",
+      "lc_rec/offload/qwen_20261109/Qwen3-8B/tokenizer.json"
+    ]
+  },
+  "authority_files": {
+    "/home/addaswsw/recommend/AGENTS.md": "7731caa07ce2b08c7aed5f8de494b43db7fdcb35cade589ead73fb50c3197d0a",
+    "/home/addaswsw/recommend/PROJECT_RULES.md": "2050222ef335f299ded090d2f777a674f755bddbf2470bff43bea1ee5ee2fb5b",
+    "/home/addaswsw/recommend/REMOTE_EXECUTION.md": "6fc8806ae1c24fd2a6ddd32b964aa40dd0b5cb59956d2758448a90d1586cdd51"
+  },
+  "historical_facts": [
+    {
+      "job_id": "letter-20261110-gpu-r0",
+      "ranks": [
+        {
+          "rank": 0,
+          "status": "FAIL",
+          "complete_updates": 0,
+          "error": "too many values to unpack (expected 4)",
+          "temperature_loss": null,
+          "trainable_tensor_count": 450
+        },
+        {
+          "rank": 1,
+          "status": "FAIL",
+          "complete_updates": 0,
+          "error": "too many values to unpack (expected 4)",
+          "temperature_loss": null,
+          "trainable_tensor_count": 450
+        }
+      ],
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "worker_may_be_live": false
+    },
+    {
+      "job_id": "letter-20261110-gpu-r1",
+      "ranks": [
+        {
+          "rank": 0,
+          "status": "FAIL",
+          "complete_updates": 0,
+          "error": "Output 0 of MatMul8bitLtBackward is a view and is being modified inplace. This view was created inside a custom Function (or because an input was returned as-is) and the autograd logic to handle view+inplace would override the custom backward associated with the custom Function, leading to incorrect gradients. This behavior is forbidden. You can fix this by cloning the output of the custom Function.",
+          "temperature_loss": {
+            "model": 13.968113899230957,
+            "independent_ce_temp08": 13.968113899230957,
+            "independent_ce_temp1": 11.858251571655273,
+            "exact_temp08_agreement": true
+          },
+          "trainable_tensor_count": 450
+        },
+        {
+          "rank": 1,
+          "status": "FAIL",
+          "complete_updates": 0,
+          "error": "Output 0 of MatMul8bitLtBackward is a view and is being modified inplace. This view was created inside a custom Function (or because an input was returned as-is) and the autograd logic to handle view+inplace would override the custom backward associated with the custom Function, leading to incorrect gradients. This behavior is forbidden. You can fix this by cloning the output of the custom Function.",
+          "temperature_loss": {
+            "model": 13.420120239257812,
+            "independent_ce_temp08": 13.420120239257812,
+            "independent_ce_temp1": 11.429338455200195,
+            "exact_temp08_agreement": true
+          },
+          "trainable_tensor_count": 450
+        }
+      ],
+      "exit_code": 1,
+      "cleanup_verified": true,
+      "worker_may_be_live": false
+    }
+  ],
+  "historical_budget": {
+    "charged_gpu_device_seconds": 467.3264223076403,
+    "charged_gpu_device_minutes": 7.788773705127339,
+    "remaining_gpu_device_seconds": 6732.67357769236,
+    "remaining_gpu_device_minutes": 112.21122629487266,
+    "live_ledger_check": "REQUIRED_BY_MAIN_BEFORE_GPU",
+    "old_correction_rounds": 3,
+    "new_task_separate_explicit_authorization": true
+  },
+  "frozen_forward_identity": {
+    "class": "peft.tuners.lora.Linear8bitLt",
+    "base_expression": "bnb.nn.Linear8bitLt, LoraLayer",
+    "source_sha256_with_original_indentation": "df705367a1512d2f8bc3ff067a2617218a0a69ca5f151f2d2d1e233462d06088",
+    "signature_text": "(self, x: torch.Tensor)",
+    "contains_expected_inplace_residual": true,
+    "runtime_installed_match": "NOT_REVIEWED_YET"
+  },
+  "required_assertions": [
+    {
+      "id": "P01",
+      "priority": "MUST_BEFORE_FULL_MODEL",
+      "assertion": "Guard exact PEFT0.5.0 original forward hash, signature and class/MRO; explicit bitsandbytes parent call must be equivalent to original super() resolution. Reject mismatches before binding.",
+      "reason": "A copied zero-argument super() requires the original __class__ closure; source-compatible names alone do not establish runtime MRO."
+    },
+    {
+      "id": "P02",
+      "priority": "MUST_BEFORE_FULL_MODEL",
+      "assertion": "Derived forward preserves every adapter/disable/r=0/dtype/dropout/scaling branch; only computational change is result = result + output, plus explicit parent-call spelling and observation. No detach, data, no_grad or gradient disabling in the computational path.",
+      "reason": "Autograd view aliasing repair must preserve both branch gradient edges."
+    },
+    {
+      "id": "P03",
+      "priority": "MUST_BEFORE_FULL_MODEL",
+      "assertion": "Run isolated real Torch tests for custom Function view failure, out-of-place values and input/A/B gradients, with reentrant checkpoint recomputation and adapter-disabled/missing/r=0 branches. Mark CPU synthetic tests separately from bitsandbytes CUDA."
+    },
+    {
+      "id": "P04",
+      "priority": "MUST_BEFORE_UPDATES",
+      "assertion": "Compare parameter object IDs, state_dict key/shape sets and trainable flags before/after patch. Full runtime should find 224 target int8 modules, 448 LoRA tensors + 2 active embed/head tensors, 289652736 trainable elements, exact optimizer membership; originals remain frozen."
+    },
+    {
+      "id": "P05",
+      "priority": "MUST_BEFORE_UPDATES",
+      "assertion": "Observe derived forward calls on all target modules under both no-grad checkpoint initial forward and grad-enabled recomputation; retain bnb int8 base weight evidence. A-only BF16 autocast is scoped and restored on every call, and unpad adaptation retains first4 outputs."
+    },
+    {
+      "id": "P06",
+      "priority": "MUST_FOR_TECHNICAL_PASS",
+      "assertion": "Nine updates maximum, 4 microbatches each, global64. Record per-micro Forward/Backward/step completion, accumulation boundary, before/after DeepSpeed global_steps/micro_steps, applied LR and underlying Adam step state. Cross-rank synchronization must be checked, not inferred solely from an increment."
+    },
+    {
+      "id": "P07",
+      "priority": "MUST_FOR_TECHNICAL_PASS",
+      "assertion": "All450 trainables receive finite gradients during bounded warmup; legitimate first-step zeros are distinguished from persistent disconnection. Report actual input SID rows separately from supervised SID rows, their gradient evidence, active embed/head and LoRA changes, and frozen original equality. State the sampling scope of change checks."
+    },
+    {
+      "id": "P08",
+      "priority": "MUST_FOR_COST_REPORT",
+      "assertion": "Measure >=3 stable mixed updates separately from 3 timing warmups and short/middle/long probes; preserve CPU prep/mask time, actual tokens/padding, synchronized global max time, observable Forward/Backward/optimizer components and whole-job GPU peaks. Do not treat reset_peak final value as whole-job peak."
+    },
+    {
+      "id": "P09",
+      "priority": "MUST_FOR_CHAIN_ACCEPTANCE",
+      "assertion": "Validation uses original author dataset/collator/loss with ordinary/mixed/long records, finite loss and global sample/token denominators. Adapter save and reload must validate exact key/shape/value sets including active embed/head and added-token IDs, with explicit dtype conversion and file format path."
+    },
+    {
+      "id": "P10",
+      "priority": "MUST_FOR_CHAIN_ACCEPTANCE",
+      "assertion": "Beam20 retains author vanilla HF BF16 reload, prompt0, original positional allowed-token callback, return20 and max_new_tokens10, no automatic beam reduction. Validate generated suffix token IDs against the original per-position allowed sets plus EOS, and report each rank rate and effective dual-card aggregation."
+    },
+    {
+      "id": "P11",
+      "priority": "MUST_BEFORE_GPU",
+      "assertion": "Read current live ledger and preserve prior467.3264223076403 GPU-device seconds; update guard new_disk_roots for every new job ID. Bound total<=7200device seconds, host MemAvailable>=40GiB, added disk<=30GiB, and reserve enough budget for reload/generation before allocating the train probe limit."
+    },
+    {
+      "id": "P12",
+      "priority": "MUST_FOR_FINAL",
+      "assertion": "96h report uses actual dataloader/scheduler rounding, steady mixed multi-observation and real length distribution, separate validation/checkpoint/reload/beam/initialization/margin components; include center/conservative/headroom or INCONCLUSIVE. No new formal training, epoch, full-metric evaluation, dependency switch or method change."
+    }
+  ],
+  "reviewed_local_file_hashes": {
+    "lc_rec/letter/scripts/compat.py": "921e6a4b1d2968489fde46daec49f75933da0aca9793640c0b45e8a0465bc514",
+    "lc_rec/letter/scripts/gpu_probe.py": "cfc077be52ecbc72e250966eb1506d2ef371e15a6256b474a7569c8bbdbae904",
+    "lc_rec/letter/scripts/inference_probe.py": "062305a729616d5e94e4a1f81cd183c475b5c10dae69577d43f7f1d0052b4d8b",
+    "lc_rec/letter/scripts/estimate_budget.py": "ec3db58cd5b6e9503bafa51924dfa31b7966e22d608f2e95202c054720dd54c6",
+    "lc_rec/letter/scripts/resource_guard.py": "808dba0d4f02742cd4c661559a488ca2ce2646ceeef05581ec401ddd5557492b",
+    "lc_rec/letter/config/probe_instruments.json": "950e04df16be12f248c941b7b505e39a8a876b54d835b3a229ecf12225be228f",
+    "lc_rec/letter/config/budget.json": "f57e46499073a02536e1c1cc70d5babe62a61a3b2812ff81b2e2e021c390ea02",
+    "lc_rec/letter/config/guard.json": "c1647fbce05380777746a1b58fe601a978f4fc729f2d4bf2a9e04112bed1726b",
+    "lc_rec/letter/review/final_compatibility_blocker.json": "61241ef5b25a0ccb24022421cb222915c54b19d098a4f4af4d141784884c485c",
+    "lc_rec/letter/review/peft_version_compatibility.json": "f6c61e3e3828a0e151bf4aad6a60c024570436b66396b093ebec3182f2119cd0",
+    "lc_rec/letter/evidence/correction_rounds.json": "778d99d6a8463606719e3d3e48b585f4a7fe3d1ef184d4808f00bb6f79a6a32d",
+    "lc_rec/letter/evidence/gpu_budget_ledger.json": "747b71aa16bd94bac12232879134fa19bca7007dcc681e21153860392a520a61",
+    "lc_rec/letter/evidence/dependency_sources/peft_lora.py.txt": "cbcab4d64b5254d0e1a0018f5e870f7bd93f0178ed1b14d2b750e033f871aa01",
+    "lc_rec/letter/evidence/dependency_sources/bitsandbytes__functions.py.txt": "95be0ca8bedc839935ef8e5bcc10fc940e7544ea91ac1b44a37094b41e8d9bcc",
+    "lc_rec/letter/evidence/dependency_sources/manifest.json": "975ecbd40c67883b090f8b37fcfc302ad018d0c4334d68a2d6f988e397e2238c",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r0/request.json": "4d1595bff6bfd4db2c0246ddf72de8f122c9f763ecdac56f5f995a42ebe72d17",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r0/status.json": "59d863421bae296fc6bbba438dd7419c1e22036d800fac1fca47eb883a88add9",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r0/work.log": "959dc682a9d6deea3a1e8fba041d08107900f5f8739b138ba3b0dac219021011",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r0/output/probe/rank0.json": "6a445271b93a2a20d553517304d21ffe8138ab63d15df6cb2f5f120f0333aaa4",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r0/output/probe/rank1.json": "d5b8f730dedd60c85665cc8aa340bb08ffef516f720ae8e89554441c7aeba7c6",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r0/output/resources/resource-summary.json": "42f2bec563034bb004005820a57e4f0e921dc3d5b568c4efb59ad4ca3df50682",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r1/request.json": "273931d8a618a382ed8cce128e82ad09fd9dd63f6759ba734da33d54036fe378",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r1/status.json": "cf9f7095c045f74fd440f487c7f7d1d109ff7218ccb7fca2c9b5c41b8b30540e",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r1/work.log": "81c194799761ca1cae2dcbd828886c5272b1f49e19be33d0ba4b6b918fc7e5d5",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r1/output/probe/rank0.json": "53ae9ea28e72f144126e49bbfa19fda4b9b7825f83d7be450a15d8a0e4c932a4",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r1/output/probe/rank1.json": "02eb4da36199763cbf4f451aeba32511178356116112586453d387429aa976c3",
+    "lc_rec/letter/evidence/jobs/letter-20261110-gpu-r1/output/resources/resource-summary.json": "4283d0759ab0b4a1a8617511a04b6d813b5e71c771807d4b2cd6430c5e1e76cd"
+  },
+  "packages_installed_by_reviewer": [],
+  "gpu_jobs_launched_by_reviewer": []
+}

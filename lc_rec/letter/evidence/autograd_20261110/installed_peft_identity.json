@@ -1,0 +1,34 @@
+{
+  "versions": {
+    "torch": "2.6.0",
+    "peft": "0.5.0",
+    "bitsandbytes": "0.45.5",
+    "deepspeed": "0.16.9",
+    "transformers": "4.31.0",
+    "fschat": "0.2.31",
+    "flash-attn": "2.7.4.post1",
+    "accelerate": "0.21.0"
+  },
+  "source": "        def forward(self, x: torch.Tensor):\n            result = super().forward(x)\n\n            if self.disable_adapters or self.active_adapter not in self.lora_A.keys():\n                return result\n            elif self.r[self.active_adapter] > 0:\n                if not torch.is_autocast_enabled():\n                    expected_dtype = result.dtype\n\n                    if x.dtype != torch.float32:\n                        x = x.float()\n                    output = (\n                        self.lora_B[self.active_adapter](\n                            self.lora_A[self.active_adapter](self.lora_dropout[self.active_adapter](x))\n                        ).to(expected_dtype)\n                        * self.scaling[self.active_adapter]\n                    )\n                else:\n                    output = (\n                        self.lora_B[self.active_adapter](\n                            self.lora_A[self.active_adapter](self.lora_dropout[self.active_adapter](x))\n                        )\n                        * self.scaling[self.active_adapter]\n                    )\n                result += output\n            return result\n",
+  "source_sha256": "df705367a1512d2f8bc3ff067a2617218a0a69ca5f151f2d2d1e233462d06088",
+  "file": "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/tuners/lora.py",
+  "file_sha256": "cbcab4d64b5254d0e1a0018f5e870f7bd93f0178ed1b14d2b750e033f871aa01",
+  "signature": "(self, x: torch.Tensor)",
+  "class": "peft.tuners.lora.Linear8bitLt",
+  "bases": [
+    "bitsandbytes.nn.modules.Linear8bitLt",
+    "peft.tuners.lora.LoraLayer"
+  ],
+  "mro": [
+    "peft.tuners.lora.Linear8bitLt",
+    "bitsandbytes.nn.modules.Linear8bitLt",
+    "torch.nn.modules.linear.Linear",
+    "torch.nn.modules.module.Module",
+    "peft.tuners.lora.LoraLayer",
+    "peft.tuners.tuners_utils.BaseTunerLayer",
+    "abc.ABC",
+    "builtins.object"
+  ],
+  "base_source": "    def forward(self, x: torch.Tensor):\n        self.state.is_training = self.training\n        if self.weight.CB is not None:\n            self.init_8bit_state()\n\n        # weights are cast automatically as Int8Params, but the bias has to be cast manually\n        if self.bias is not None and self.bias.dtype != x.dtype:\n            self.bias.data = self.bias.data.to(x.dtype)\n\n        out = bnb.matmul(x, self.weight, bias=self.bias, state=self.state)\n\n        if not self.state.has_fp16_weights and self.state.CB is not None:\n            self.weight.data = self.state.CB\n\n        return out\n",
+  "cuda_initialized": false
+}
