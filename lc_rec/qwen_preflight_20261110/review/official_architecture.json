@@ -514,5 +514,44 @@
       "Static ZeRO2 9N assumes BF16 partition gradients; actual gradient accumulation dtype must be measured",
       "PEFT model container includes frozen original embedding and trainable clone; report unique physical inventory separately from effective model parameters"
     ]
+  },
+  "gpu_static_pre_review": {
+    "status": "CHANGES_REQUIRED_PRE_RUN",
+    "files": {
+      "probe.py": {
+        "sha256": "598e80f74bf7735c2658376d5e987cf9160560409ea2308ad935caa3ca8ed58d",
+        "python_ast_parse": "PASS"
+      },
+      "resource_guard.py": {
+        "sha256": "668189b524ca0e137d3db3a8abbbf51f29a2ed9ccbc86add78a576a220ca1fbb",
+        "python_ast_parse": "PASS"
+      }
+    },
+    "must_fix_before_GPU": [
+      "Release first-microstep independent CE autograd tensors immediately and release retained inner AdamW reference before BF16 inference reload",
+      "Reserve polling and cleanup time from remaining task/model GPU wall budget, not only per-job maximum",
+      "Check and clean tracked descendants even if launcher exits; persist cleanup_verified and charge through actual task-worker termination",
+      "Move nonquantized model to final CUDA device before capturing named/trainable parameter identities, avoiding stale references when Trainer relocates it"
+    ],
+    "additional_CPU_gate": "Decode all9922 legal four-token item SIDs exactly before and after tokenizer save/reload",
+    "official_source_checks": {
+      "DeepSpeed0.16.9": "_configure_distributed_model calls module.bfloat16 and to(device). BF16+ZeRO2 default gradient accumulation dtype BF16; static9N persistent estimate is source-supported. Actual dtypes and residency remain pending.",
+      "PEFT0.21.2": "Outer PeftModel inherits nn.Module transforms; tied modules_to_save uses shared parameter, configured ensure_weight_tying; native bin serialization with exact saved/loaded key/value checks is reasonable.",
+      "bitsandbytes0.45.5": "Int8Params.to existing CUDA preserves quantized CB/SCB. Post-DS actual int8 dtype assertion necessary.",
+      "LETTER_original": "Original LoRA evaluation reloads BF16 base plus adapter, matching probe inference plan."
+    },
+    "technical_limits_pending": [
+      "Real GPU forward/backward/update and all-rank identity",
+      "Real adapter reload and peak GPU memory release",
+      "BF16 pure-text Qwen3.5 hybrid cache beam20",
+      "Actual dataset loader tail behavior and cost extrapolation"
+    ],
+    "timing_caveat": "Gradient hooks synchronize finite/norm checks for every tensor and microstep. Observed throughput includes instrumentation overhead; distinguish from expected formal training throughput and use conditional estimates.",
+    "microbatch_objective": "Each example has exactly5 response labels and each microbatch has equal rows, preserving mean sample CE weighting across authorized micro sizes. Dropout and floating-point order can still differ.",
+    "superseded_by": {
+      "file": "gpu_prelaunch_architecture.json",
+      "run_source_commit": "7c670e20304d27e724a90bfc255561d0618f6775",
+      "status": "PASS_STATIC_PRELAUNCH_WITH_RUNTIME_GATES"
+    }
   }
 }

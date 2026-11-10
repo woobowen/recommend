@@ -38,9 +38,16 @@ def main():
   r['data']={k:v for k,v in audit['data'].items()};r['tokenizer']=tokenmap;r['audit_sha256']=sha(Path(a.audit)/'audit.json');r['selection_sha256']=sha(Path(a.audit)/'selection.json')
   # Static analysis already precedes the first model GPU allocation.
   r['static_resources']=audit['full_parameter_static'];r['checkpoint_static']=audit['checkpoint_static']
+  official=json.loads((Path(__file__).parents[1]/'metadata'/MODELS[a.key][0]/'manifest.json').read_text());formal=json.loads((Path(a.model)/'ASSET_MANIFEST.json').read_text());assert official==formal
+  assert Path(a.model).name==MODELS[a.key][1]
+  for entry in official['files']:assert (Path(a.model)/entry['path']).stat().st_size==entry['size']
+  r['formal_asset']={'model_id':official['model_id'],'revision':official['revision'],'manifest_path':str(Path(a.model)/'ASSET_MANIFEST.json'),'manifest_sha256':sha(Path(a.model)/'ASSET_MANIFEST.json'),'all_file_sizes_match_pinned_manifest':True,'weight_hash_verification':'reuse prior formal publish job complete LFS SHA verification; no repeated payload hashing each GPU job'}
   stage('load_model');t=time.monotonic();model,loading=load_model(a.model,MODELS[a.key][2],a.precision=='int8',device if a.precision=='int8' else None)
   r['load_info']=loading;r['original_parameter_count']=sum(x.numel() for x in model.parameters());r['sharing_before_resize']=sharing(model)
+  r['model_identity']={'class':type(model).__module__+'.'+type(model).__name__,'source_file':inspect.getfile(type(model)),'source_sha256':sha(inspect.getfile(type(model))),'config_model_type':model.config.model_type}
+  assert r['original_parameter_count']==audit['model']['original_unique_parameters']
   model.resize_token_embeddings(len(tok),mean_resizing=False);r['sharing_after_resize']=sharing(model);assert r['sharing_after_resize']['same_parameter_object']
+  r['expanded_base_parameter_count']=sum(x.numel() for x in model.parameters());assert r['expanded_base_parameter_count']==audit['model']['expanded_unique_parameters']
   if a.route=='L':
    if a.precision=='int8':model=prepare_model_for_kbit_training(model,use_gradient_checkpointing=True,gradient_checkpointing_kwargs={'use_reentrant':False})
    actual_targets=[name for name,module in model.named_modules() if name.rsplit('.',1)[-1] in TARGETS]
