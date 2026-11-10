@@ -202,6 +202,9 @@ def main():
    for label,indices in selection['valid'].items():
     startval=time.monotonic();rows=[valid.valid_text_data[i] for i in indices[rank*8:(rank+1)*8]];batch=collator(rows);tokens=int(batch['attention_mask'].sum());supervised=int((batch['labels']!=-100).sum());padding=int(batch['input_ids'].numel())-tokens;batch={k:v.to(device) for k,v in batch.items()};sync();fstart=time.monotonic();output=engine(input_ids=batch['input_ids'],attention_mask=batch['attention_mask'],use_cache=False);value=loss(output.logits,batch['labels']);sync();forward=max_time(time.monotonic()-fstart);seconds=max_time(time.monotonic()-startval);assert bool(torch.isfinite(value));r['validation'].append({'label':label,'global_rows':16,'seconds_including_collator':seconds,'forward_seconds':forward,'global_tokens':int(total(tokens)),'global_supervised_tokens':int(total(supervised)),'global_padding':int(total(padding)),'loss_rank':float(value),'indices':indices});del output,value,batch
   stage('save_and_reload')
+  # Preserve the interval after training: parameter guards and validation may
+  # peak above training before the next allocator-counter reset.
+  r['validation_and_post_train_check_peak']=peak()
   torch.cuda.reset_peak_memory_stats(device)
   r['full_training_state_restore']='NOT TESTED';r['full_optimizer_checkpoint_written']=False
   if a.route=='L':
@@ -258,7 +261,7 @@ def main():
      assert all(x==tok.pad_token_id for x in ids[5:]);sid=tok.decode(ids[:4],skip_special_tokens=False);sequences.append({'token_ids':ids,'sid':sid,'canonical':sid in canonical})
     assert set(callback.calls)==set(range(5));scores=generated.sequences_scores.tolist();assert all(math.isfinite(x) for x in scores)
     r['beam20'].append({**entry,'input_text_sha256':hashlib.sha256(row['input_ids'].encode()).hexdigest(),'input_tokens':inputs['input_ids'].shape[1],'seconds_two_rank_max':seconds,'users_per_second_dual_gpu':2/seconds,'sequences':sequences,'sequence_scores':scores,'callback_calls':callback.calls,'callback_events':callback.events,'context_response_separator_ids':callback.sep,'canonical_fraction':sum(s['canonical'] for s in sequences)/20,'peak':peak(),'beam':20,'num_return_sequences':20,'max_new_tokens':10,'temperature_training_only':True});write(path,r);del generated,inputs
-  r['final_phase_peak']=peak();r['job_peak_from_recorded_phases']={key:max(part[key] for part in [r['training_peak'],r['save_reload_phase_peak']]+[x['peak'] for x in r['beam20']]) for key in ['allocated_gib','reserved_gib','ru_maxrss_gib']};r['status']='PASS_TECHNICAL';r['completed_global_updates']=len(r['updates']);r['nonzero_lr_updates']=sum(x['nonzero_lr'] for x in r['updates']);r['elapsed_seconds']=time.monotonic()-start;r['completed_utc']=dt.datetime.now(dt.timezone.utc).isoformat();write(path,r);stage('complete')
+  r['final_phase_peak']=peak();r['job_peak_from_recorded_phases']={key:max(part[key] for part in [r['training_peak'],r['validation_and_post_train_check_peak'],r['save_reload_phase_peak']]+[x['peak'] for x in r['beam20']]) for key in ['allocated_gib','reserved_gib','ru_maxrss_gib']};r['status']='PASS_TECHNICAL';r['completed_global_updates']=len(r['updates']);r['nonzero_lr_updates']=sum(x['nonzero_lr'] for x in r['updates']);r['elapsed_seconds']=time.monotonic()-start;r['completed_utc']=dt.datetime.now(dt.timezone.utc).isoformat();write(path,r);stage('complete')
  except Exception:
   r['status']='BLOCKED';r['traceback']=traceback.format_exc()
   if torch is not None and torch.cuda.is_initialized():r['failure_peak']={'allocated_gib':torch.cuda.max_memory_allocated()/1024**3,'reserved_gib':torch.cuda.max_memory_reserved()/1024**3}

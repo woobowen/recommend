@@ -12,7 +12,7 @@
     {
       "round": 2,
       "cause": "Non-author packaging audit found task-specific shared transfers and request files omitted from new server file accounting in guard and final collector. Previous GPU q06-L computation is unaffected; preserve its raw accounting and disclose missing small files.",
-      "fix": "Count exact qwen-preflight-* shared transfer prefix and qwen-20261110-* requests in allocated/logical totals, without scanning unrelated files or deleting artifacts. No probe/common, optimizer, data, loss, quantization or model method change. All subsequent GPU job compiler/runtime/cache paths explicitly point inside the counted task data root; guard creates only those task directories before launching child.",
+      "fix": "Count exact qwen-preflight-* shared transfer prefix and qwen-20261110-* requests in allocated/logical totals, without scanning unrelated files or deleting artifacts. No probe/common, optimizer, data, loss, quantization or model method change. All subsequent GPU job compiler/runtime/cache paths explicitly point inside the counted task data root; guard creates only those task directories before launching child. Before any remaining GPU launch, add an allocator-peak read immediately before validation/post-train counters are reset; computations and data unchanged. q06-L retains exact training peaks and recorded phase peaks, but its unsaved validation interval is disclosed as a coverage limitation (no rerun).",
       "verification": "PENDING corrected collector real readback and next authorized GPU guard execution; syntax checks passed.",
       "previous_successful_training_rerun": false
     }
