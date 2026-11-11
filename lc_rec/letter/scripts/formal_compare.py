@@ -302,12 +302,50 @@ def compare_events(continuous_path, resumed_path, final_step):
         raise AssertionError("Restored optimizer-step and learning-rate sequence does not exactly match continuous execution")
     if not any(any(math.isfinite(lr) and lr > 0 for lr in row["lr"]) for row in right_updates):
         raise AssertionError("No resumed optimizer update has a nonzero finite learning rate")
+
+    def floating_event_sequence(kind, field, expected_sequence):
+        def select(events):
+            return [{"step": row["step"], field: row[field]} for row in events
+                    if row.get("event") == kind and row["step"] >= RESUME_INTERVAL_START
+                    and (kind != "optimizer_step" or row["step"] > RESUME_INTERVAL_START)]
+
+        reference, restored_values = select(continuous), select(resumed)
+        if ([row["step"] for row in reference] != expected_sequence or
+                [row["step"] for row in restored_values] != expected_sequence):
+            raise AssertionError(f"{kind}.{field} sequence is missing, reordered, or has unexpected events")
+        rows = []
+        for index, (reference_row, restored_row) in enumerate(zip(reference, restored_values)):
+            ref, actual = reference_row[field], restored_row[field]
+            if any(isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value)
+                   for value in (ref, actual)):
+                raise AssertionError(f"{kind}.{field} must be finite at interval position {index}")
+            difference = abs(actual - ref)
+            limit = ATOL + RTOL * abs(ref)
+            rows.append({"step": reference_row["step"], "interval_position": index,
+                         "continuous": ref, "resumed": actual, "abs_diff": difference,
+                         "fixed_tolerance_limit": limit, "within_fixed_tolerance": difference <= limit})
+        maximum = max(row["abs_diff"] for row in rows)
+        violations = sum(not row["within_fixed_tolerance"] for row in rows)
+        if violations:
+            raise AssertionError(f"{kind}.{field} exceeds fixed atol={ATOL}/rtol={RTOL}: "
+                                 f"violations={violations}, max_abs_diff={maximum}")
+        return {"count": len(rows), "all_finite": True, "all_within_fixed_tolerance": True,
+                "exact_equal": all(row["abs_diff"] == 0 for row in rows),
+                "max_abs_diff": maximum,
+                "max_relative_diff_with_atol_denominator_floor": max(
+                    row["abs_diff"] / max(abs(row["continuous"]), ATOL) for row in rows),
+                "comparisons": rows}
+
+    losses = floating_event_sequence("micro_loss", "loss", [row["step"] for row in left])
+    losses["meaning"] = "Trainer.training_step return value: microbatch loss already divided by gradient_accumulation_steps=4"
+    gradient_norms = floating_event_sequence("optimizer_step", "grad_norm", list(range(3, final_step + 1)))
     sequence_hash = hashlib.sha256(json.dumps(left, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     return {"status": "PASS", "restore_global_step": 2, "final_global_step": final_step,
             "complete_interval_microbatches": len(left), "batch_and_label_hash_sequence_exact": True,
             "loader_yielded_and_shapes_exact": True, "batch_sequence_sha256": sequence_hash,
             "optimizer_step_and_lr_sequence_exact": True, "resumed_optimizer_updates": len(right_updates),
             "nonzero_learning_rate_update_verified": True,
+            "micro_loss_comparison": losses, "optimizer_grad_norm_comparison": gradient_norms,
             "continuous_events": {"path": str(continuous_path), "sha256": sha(continuous_path)},
             "resumed_events": {"path": str(resumed_path), "sha256": sha(resumed_path)}}
 

@@ -33,7 +33,8 @@ def main():
     p.add_argument('mode',choices=['deploy','submit','query','logs','collect','compare','selftest'])
     p.add_argument('--commit');p.add_argument('--job')
     p.add_argument('--kind',choices=['acceptance-continuous','acceptance-resume','formal'])
-    p.add_argument('--resume');p.add_argument('--continuous');p.add_argument('--resumed')
+    p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true')
+    p.add_argument('--continuous');p.add_argument('--resumed')
     a=p.parse_args();SUPPORT.mkdir(exist_ok=True,parents=True)
     t=transport.Transport('new-server')
     assert subprocess.check_output(['git','branch','--show-current'],cwd=REPO,text=True).strip()=='wbw-lc-rec'
@@ -105,6 +106,7 @@ print(json.dumps(r))
         argv=[PYTHON,release+'/lc_rec/letter/scripts/formal_pipeline.py','--release',release,'--run-commit',commit,
               '--job-id',a.job,'--kind',a.kind,'--precision-approval',approval]
         if a.resume:argv+=['--resume',a.resume]
+        if a.resume_evaluation:argv+=['--resume-evaluation']
         env=dict(old['env']);env['PYTHONUNBUFFERED']='1'
         if a.mode=='selftest':
             argv=[PYTHON,release+'/lc_rec/letter/scripts/runner_timeout_fixture.py']
@@ -132,7 +134,11 @@ print(json.dumps(r))
 import json,hashlib
 job=Path({job!r});root=Path('/data/bwwu/lc-rec/a0-normal-20261111')/{a.job!r}
 result={{}}
-for base,prefix in [(job,'job'),(root,'run')]:
+roots=[(job,'job'),(root,'run')]
+request=json.loads((job/'request.json').read_text())
+if '--kind' in request['argv'] and request['argv'][request['argv'].index('--kind')+1]=='formal':
+ roots.append((Path('/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training'),'formal_training'))
+for base,prefix in roots:
  for p in base.rglob('*'):
   if p.is_file() and not p.is_symlink() and p.suffix in ['.json','.jsonl','.log'] and p.stat().st_size<=8*1024**2 and not p.name.startswith('predictions'):
    result[prefix+'/'+str(p.relative_to(base))]={{'text':p.read_bytes().decode('utf-8'),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}

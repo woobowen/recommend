@@ -1,12 +1,12 @@
 {
-  "task_round": 1,
+  "task_round": 2,
   "max_rounds": 3,
   "initial_gpu_job": "letter-a0-20261111-acceptance-cont-r0",
   "initial_updates": 0,
   "root_cause": "Native HF4.31/Accelerate integration owns LambdaLR outside DS engine; engine.lr_scheduler is None. Callback inspection failed before first update; native DS checkpoint alone would omit that external scheduler.",
   "fix": "Persist/strictly restore external HF scheduler in checkpoint; leave original Trainer stepping path unchanged. Use Trainer scheduler for observations/state comparisons.",
   "other_cpu_fixture_fix": "Reuse prior CPU env without DS_ACCELERATOR=cuda; initialize Accelerator(cpu=True) before prepare_data_loader. No model/data/method change.",
-  "validation": "pending round1 CPU/GPU paths",
+  "validation": "round2 pending 16-microbatch/4-update DS boundary, full checkpoint and cross-process comparison",
   "extra_installations": [],
   "additional_preexecution_findings": [
     "Stable formal training directory retains absolute best checkpoint identity across attempts; per-attempt logs/predictions stay isolated",
@@ -15,5 +15,15 @@
     "A0-only dual-marker/UID/start-time/boot-proven worker sessions admitted to pidfd cleanup; needs no-GPU TERM-resistant fixture",
     "Controller queries/deployments bind runner bytes from git show requested commit, not mutable working tree",
     "Collect raw UTF-8 logs preserves CR bytes for content hashes"
-  ]
+  ],
+  "cpu_replay_status": "PASS_SYNTHETIC_ACTUAL_DATALOADERSHARD_MID_AND_NEXT_EPOCH",
+  "runner_timeout_status": "PASS_EXPECTED_TIMEOUT_TWO_TERM_RESISTANT_IDENTITIES_KILLED_WITH_PIDFD",
+  "round1_result": {
+    "job": "letter-a0-20261111-acceptance-cont-r1",
+    "updates": 0,
+    "root_cause": "Accelerate0.21 no_sync calls DS0.16.9 no_sync on ZeRO2; prohibited before first forward",
+    "fix": "instance-only, pinned-source guarded stage2 nullcontext consistent with current official Accelerate; DS loss/GAS/reduction/backward/step untouched",
+    "independent_review": "/root/a0_method_review actual installed and official source verification",
+    "upstream_blob": "e666b8d7a07c789245bed88c9e68f220a81eb3e7"
+  }
 }

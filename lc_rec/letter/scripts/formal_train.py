@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import hashlib
+import inspect
 import importlib.metadata
 import json
 import math
@@ -263,6 +264,8 @@ def main():
             if checkpoint: event('native_late_rng_restore_suppressed',checkpoint=str(checkpoint))
         def training_step(self, current, inputs):
             step=self.state.global_step
+            before=current.global_steps
+            boundary=current.is_gradient_accumulation_boundary()
             if a.probe_stop or step<3 or step%250==0:
                 event('batch',step=step,loader_yielded=self.replay_loader.yielded,
                       input_sha256=hashlib.sha256(inputs['input_ids'].cpu().numpy().tobytes()).hexdigest(),
@@ -270,7 +273,11 @@ def main():
                       shape=list(inputs['input_ids'].shape))
             loss=super().training_step(current,inputs)
             if not torch.isfinite(loss).all(): raise FloatingPointError('nonfinite training loss')
-            if a.probe_stop: event('micro_loss',step=step,loss=float(loss))
+            if a.probe_stop:
+                assert current.global_steps==before+int(boundary)
+                event('micro_loss',step=step,loss=float(loss),ds_global_step_before=before,
+                      ds_global_step_after=current.global_steps,ds_accumulation_boundary=boundary,
+                      scheduler_last_epoch=self.lr_scheduler.state_dict()['last_epoch'])
             return loss
         def _save_checkpoint(self,current,trial,metrics=None):
             super()._save_checkpoint(current,trial,metrics)
@@ -318,6 +325,7 @@ def main():
                   deepspeed_owns_scheduler=engine.lr_scheduler is not None)
         def on_step_end(self,args,state,control,**kw):
             engine=trainer.model_wrapped
+            assert engine.global_steps==state.global_step
             norm=engine.get_global_grad_norm()
             if norm is not None and not math.isfinite(float(norm)):raise FloatingPointError('nonfinite gradient norm')
             if a.probe_stop or state.global_step%10==0:
@@ -327,7 +335,7 @@ def main():
             if a.probe_stop and state.global_step>=a.probe_stop: control.should_training_stop=True
             return control
         def on_epoch_end(self,args,state,control,**kw):
-            if a.probe_stop: control.should_evaluate=False
+            if a.probe_stop: control.should_evaluate=False;control.should_save=False
             event('epoch_end',step=state.global_step,epoch=state.epoch)
             return control
         def on_log(self,args,state,control,logs=None,**kw):
@@ -335,6 +343,31 @@ def main():
 
     trainer=AuditTrainer(model=model,args=ta,train_dataset=train,eval_dataset=valid,
                          tokenizer=tok,data_collator=collator,callbacks=[Callback()])
+    # Accelerate 0.21 predates DS 0.16's explicit prohibition of no_sync for
+    # partitioned gradients. Match official Accelerate's stage>=2 nullcontext
+    # behavior on this one engine; DS retains its native loss scaling/steps.
+    from contextlib import contextmanager
+    from deepspeed import DeepSpeedEngine
+    from accelerate.utils import DistributedType
+    original_no_sync=trainer.accelerator.no_sync
+    assert report['versions']['accelerate']=='0.21.0' and report['versions']['deepspeed']=='0.16.9'
+    assert sha(inspect.getsourcefile(original_no_sync))=='933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a'
+    report['zero2_no_sync_compat']={'scope':'current Trainer accelerator instance and exact stage2 engine only',
+               'upstream_reference_blob':'e666b8d7a07c789245bed88c9e68f220a81eb3e7',
+               'calls':0,'original_source_sha256':hashlib.sha256(inspect.getsource(original_no_sync).encode()).hexdigest()}
+    @contextmanager
+    def zero2_native_accumulation(current):
+        if current is trainer.model_wrapped and type(current) is DeepSpeedEngine:
+            assert trainer.accelerator.distributed_type==DistributedType.DEEPSPEED
+            assert current.zero_optimization_stage()==2 and current.gradient_accumulation_steps()==4
+            assert current.train_micro_batch_size_per_gpu()==8 and current.train_batch_size()==64 and dist.get_world_size()==2
+            assert not current.inside_no_sync_ctxt and current.enable_backward_allreduce
+            assert current._is_gradient_accumulation_boundary is None
+            report['zero2_no_sync_compat']['calls']+=1
+            yield
+        else:
+            with original_no_sync(current):yield
+    trainer.accelerator.no_sync=zero2_native_accumulation
     # Preserve intermediate acceptance checkpoints; formal uses author limit=1.
     if a.probe_stop: trainer.args.save_total_limit=3
     try:

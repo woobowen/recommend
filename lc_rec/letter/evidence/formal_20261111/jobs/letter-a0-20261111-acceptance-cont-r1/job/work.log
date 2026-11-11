@@ -1,0 +1,106 @@
+2026-11-11 17:45:08.286690: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use avai2026-11-11 17:45:08.286690: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operlable CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+ations, rebuild TensorFlow with the appropriate compiler flags.
+[2026-11-11 17:45:11,971] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+[2026-11-11 17:45:11,981] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+You are using the legacy behaviour of the <class 'transformers.models.llama.tokenization_llama.LlamaTokenizer'>. This means that tokens that come after special tokens will not be properly handled. We recommend you to read the related pull request available at https://github.com/huggingface/transformers/pull/24565
+You are using the legacy behaviour of the <class 'transformers.models.llama.tokenization_llama.LlamaTokenizer'>. This means that tokens that come after special tokens will not be properly handled. We recommend you to read the related pull request available at https://github.com/huggingface/transformers/pull/24565
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.83s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:04<00:04,  4.03s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.40s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.62s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.47s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.70s/it]
+/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/other.py:122: FutureWarning: prepare_model_for_int8_training is deprecated and will be removed in a future version. Use prepare_model_for_kbit_training instead.
+  warnings.warn(
+/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/other.py:122: FutureWarning: prepare_model_for_int8_training is deprecated and will be removed in a future version. Use prepare_model_for_kbit_training instead.
+  warnings.warn(
+{"rank": 0, "utc": "2026-11-11T17:46:20.814419+00:00", "elapsed_seconds": 74.54344252031296, "event": "loader", "attempt_job_id": "letter-a0-20261111-acceptance-cont-r1", "length": 8240, "batch_sampler": "BatchSamplerShard", "sampler_generator": "Generator"}
+{"rank": 1, "utc": "2026-11-11T17:46:20.825149+00:00", "elapsed_seconds": 74.55418050289154, "event": "loader", "attempt_job_id": "letter-a0-20261111-acceptance-cont-r1", "length": 8240, "batch_sampler": "BatchSamplerShard", "sampler_generator": "Generator"}
+{"rank": 1, "utc": "2026-11-11T17:46:23.439159+00:00", "elapsed_seconds": 77.16819184180349, "event": "train_begin", "attempt_job_id": "letter-a0-20261111-acceptance-cont-r1", "global_step": 0, "max_steps": 8240, "optimizer": "DeepSpeedZeroOptimizer", "scheduler": {"base_lrs": [0.0002, 0.0002], "last_epoch": 0, "verbose": false, "_step_count": 1, "_get_lr_called_within_step": false, "_last_lr": [0.0, 0.0], "lr_lambdas": [{}, {}]}, "deepspeed_owns_scheduler": false}
+{"rank": 0, "utc": "2026-11-11T17:46:24.346819+00:00", "elapsed_seconds": 78.07583861518651, "event": "train_begin", "attempt_job_id": "letter-a0-20261111-acceptance-cont-r1", "global_step": 0, "max_steps": 8240, "optimizer": "DeepSpeedZeroOptimizer", "scheduler": {"base_lrs": [0.0002, 0.0002], "last_epoch": 0, "verbose": false, "_step_count": 1, "_get_lr_called_within_step": false, "_last_lr": [0.0, 0.0], "lr_lambdas": [{}, {}]}, "deepspeed_owns_scheduler": false}
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2ad3f2bc9290ed1606b7480bf730ece7656e73e6/lc_rec/letter/scripts/formal_train.py", line 380, in <module>
+[rank0]:     if __name__=='__main__':main()
+[rank0]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2ad3f2bc9290ed1606b7480bf730ece7656e73e6/lc_rec/letter/scripts/formal_train.py", line 341, in main
+[rank0]:     result=trainer.train(resume_from_checkpoint=a.resume)
+[rank0]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py", line 1539, in train
+[rank0]:     return inner_training_loop(
+[rank0]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py", line 1808, in _inner_training_loop
+[rank0]:     with self.accelerator.accumulate(model):
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/contextlib.py", line 135, in __enter__
+[rank0]:     return next(self.gen)
+[rank0]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/accelerator.py", line 923, in accumulate
+[rank0]:     with context(model):
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/contextlib.py", line 135, in __enter__
+[rank0]:     return next(self.gen)
+[rank0]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/accelerator.py", line 862, in no_sync
+[rank0]:     with context():
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/contextlib.py", line 135, in __enter__
+[rank0]:     return next(self.gen)
+[rank0]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py", line 2192, in no_sync
+[rank0]:     assert not self.zero_optimization_partition_gradients(), \
+[rank0]: AssertionError: no_sync context manager is incompatible with gradient partitioning logic of ZeRO stage 2
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2ad3f2bc9290ed1606b7480bf730ece7656e73e6/lc_rec/letter/scripts/formal_train.py", line 380, in <module>
+[rank1]:     if __name__=='__main__':main()
+[rank1]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2ad3f2bc9290ed1606b7480bf730ece7656e73e6/lc_rec/letter/scripts/formal_train.py", line 341, in main
+[rank1]:     result=trainer.train(resume_from_checkpoint=a.resume)
+[rank1]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py", line 1539, in train
+[rank1]:     return inner_training_loop(
+[rank1]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py", line 1808, in _inner_training_loop
+[rank1]:     with self.accelerator.accumulate(model):
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/contextlib.py", line 135, in __enter__
+[rank1]:     return next(self.gen)
+[rank1]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/accelerator.py", line 923, in accumulate
+[rank1]:     with context(model):
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/contextlib.py", line 135, in __enter__
+[rank1]:     return next(self.gen)
+[rank1]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/accelerator.py", line 862, in no_sync
+[rank1]:     with context():
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/contextlib.py", line 135, in __enter__
+[rank1]:     return next(self.gen)
+[rank1]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py", line 2192, in no_sync
+[rank1]:     assert not self.zero_optimization_partition_gradients(), \
+[rank1]: AssertionError: no_sync context manager is incompatible with gradient partitioning logic of ZeRO stage 2
+[rank0]:[W1111 17:46:25.197991041 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+W1111 17:46:27.060000 3201502 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3201513 closing signal SIGTERM
+E1111 17:46:27.175000 3201502 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 3201512) of binary: /data/bwwu/envs/letter-20261110/bin/python
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 922, in <module>
+    main()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2ad3f2bc9290ed1606b7480bf730ece7656e73e6/lc_rec/letter/scripts/formal_train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-11-11_17:46:27
+  host      : zwlab-01
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 3201512)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2ad3f2bc9290ed1606b7480bf730ece7656e73e6/lc_rec/letter/scripts/formal_pipeline.py", line 122, in <module>
+    if __name__=='__main__':main()
+  File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2ad3f2bc9290ed1606b7480bf730ece7656e73e6/lc_rec/letter/scripts/formal_pipeline.py", line 99, in main
+    run('train',args)
+  File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2ad3f2bc9290ed1606b7480bf730ece7656e73e6/lc_rec/letter/scripts/formal_pipeline.py", line 91, in run
+    if child.returncode:raise RuntimeError(stage+' failed: '+str(child.returncode))
+RuntimeError: train failed: 1
