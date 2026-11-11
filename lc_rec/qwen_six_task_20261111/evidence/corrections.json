@@ -1,7 +1,7 @@
 {
   "task_scope": "LC-Rec Qwen six-task four-route preflight 2026-11-11",
   "limit": "round0 initial execution; at most three task-wide concentrated correction rounds",
-  "current_correction_round": 2,
+  "current_correction_round": 3,
   "rounds": [
     {
       "round": 1,
@@ -45,6 +45,24 @@
       "local_verification": "Independent source comparison and estimator self-test passed; actual cached CPU replay and final arithmetic review are recorded separately",
       "gpu_device_seconds_for_this_correction": 0,
       "important_research_changes": "None; the known Qwen BPE supervision-boundary deviation is preserved and explicitly limits all four routes to PARTIAL"
+    },
+    {
+      "round": 3,
+      "original_failures": [
+        {
+          "kind": "Final read-only publication receipt transport failure",
+          "source_commit": "57d7a593be7b3aba13f478d8a0fa3bf2b6389087",
+          "original_error_receipt": "final_receipt_round2_transport_failure.json",
+          "error": "Windows OpenSSH returned Invalid argument before remote Python execution",
+          "root_cause": "Embedding five complete release file manifests in the remote python -c command exceeded the Windows command-line argument capacity",
+          "minimal_change": "Send only fixed release paths and commits; read the existing server RUN_VERSION manifests, hash actual source/config bytes there, then compare every returned row with the local fixed deployment manifests",
+          "unchanged_validation": "All original per-file hash, Git-object, process, resource and budget assertions remain; no SSH configuration, transport identity or GPU source changed",
+          "method_or_numerical_change": false
+        }
+      ],
+      "gpu_device_seconds_for_this_correction": 0,
+      "important_research_changes": "None",
+      "verification": "Actual corrected read-only server receipt and independent external publication review are included in the final ZIP"
     }
   ]
 }

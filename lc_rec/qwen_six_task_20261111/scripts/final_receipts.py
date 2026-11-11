@@ -64,11 +64,12 @@ def main():
         manifest = json.loads((SUPPORT / ("deployment-" + commit + ".json")).read_text())
         releases.append({"commit": commit, "release": manifest["release"], "files": [row for row in manifest["files"] if "/scripts/" in row["path"] or "/config/" in row["path"] or "/vendor/original/" in row["path"]]})
     code = f"""import hashlib,json,os,shutil,subprocess,time;from pathlib import Path
-releases={releases!r};results=[]
+releases={[{key: release[key] for key in ['commit', 'release']} for release in releases]!r};results=[]
 for release in releases:
  root=Path(release['release']);version=json.loads((root/'RUN_VERSION.json').read_text());assert version['RUN_COMMIT']==release['commit'] and version['not_a_git_checkout'] is True and not (root/'.git').exists()
  rows=[]
- for expected in release['files']:
+ for expected in version['files']:
+  if not ('/scripts/' in expected['path'] or '/config/' in expected['path'] or '/vendor/original/' in expected['path']):continue
   path=root/expected['path'];assert path.is_file() and not path.is_symlink();content=path.read_bytes();actual={{'path':expected['path'],'bytes':len(content),'sha256':hashlib.sha256(content).hexdigest()}};assert actual==expected;rows.append(actual)
  results.append({{'run_commit':release['commit'],'release':str(root),'files':rows,'all_bytes_match':True,'not_a_git_checkout':True}})
 jobroot=Path({client.profile['job_root']!r});roots=[Path({REMOTE!r}),Path({DATA!r})]+list(jobroot.glob('lc-qwen6-20261111-*'))
@@ -96,6 +97,12 @@ for location in ['/home/bwwu','/data/bwwu']:
  disk=shutil.disk_usage(location);assert disk.free>=max(30*1024**3,disk.total//10)
 print(json.dumps(result))"""
     readback = json.loads(client.python(code, timeout=90))
+    expected_releases = {release["commit"]: release for release in releases}
+    assert len(readback["releases"]) == len(expected_releases)
+    for observed in readback["releases"]:
+        expected = expected_releases[observed["run_commit"]]
+        assert observed["release"] == expected["release"]
+        assert observed["files"] == expected["files"]
     assert readback["runner_sha256"] == client.profile["runner_sha256"]
     assert not readback["gpu_processes"].strip(), "GPU occupancy changed before final receipt"
     budgets = readback["budgets"]
@@ -111,6 +118,9 @@ print(json.dumps(result))"""
     for route, limit in {"q06-L": 4, "q06-F": 3, "q17-L": 4, "q17-F": 3}.items():
         assert sum(row["route_key"] == route for row in reservations) <= limit
     readback["verified_budget"] = {"total_gpu_device_seconds": seconds, "per_model_device_seconds": per_model, "charged_optimizer_boundaries": len(reservations)}
+    readback["receipt_controller"] = {"script": str(Path(__file__).resolve()), "sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                                      "argv": sys.argv, "python": sys.version, "delivery_commit": delivery,
+                                      "transport": "Existing Windows OpenSSH identity; compact release paths with remote RUN_VERSION file reads and complete local manifest comparison"}
     transport.atomic(args.output / "server_readback.json", readback)
     transport.atomic(args.output / "terminal_jobs.json", statuses)
     transport.atomic(args.output / "run_delivery_mapping.json", {"delivery_commit": delivery, "jobs": mappings, "all_server_input_hashes_and_git_objects_match": True})

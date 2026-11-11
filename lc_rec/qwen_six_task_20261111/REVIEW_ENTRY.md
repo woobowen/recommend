@@ -183,7 +183,7 @@ Validation按原SeqRec每用户2个采样模板，49544记录/次、4次，不�
 
 round0有两个**CPU**失败：protocol探针给Trainer错误Tensor容器；CPU adapter错误断言原SID无碰撞。round1分别改dict容器和按原资产验证真实碰撞，不改SID/方法，后继CPU作业通过。另有一次本地错误完整SHA在提交前被拒，未创建服务器job；随后显式使用`git rev-parse --verify REV^{commit}`硬化。一次未终态collect被控制器拒绝，未重启GPU或更改原job。
 
-round2仅修正上述callback初始化成本归因并补CPU缓存实测，不修改GPU实现或增加更新。**整个任务已用2轮集中修正，round3未使用**；不是每路线各3轮。全部原始失败/错误估算/后继回执保留：`evidence/corrections.json`、`evidence/local_client_hardening.json`、`evidence/jobs/`。GPU四作业全部第一次执行成功。
+round2仅修正上述callback初始化成本归因并补CPU缓存实测，不修改GPU实现或增加更新。发布后的只读server回执首次因Windows SSH命令行装入五份manifest过长而在远端Python执行前报`Invalid argument`；round3改为只传release路径/commit、远端读取现有RUN_VERSION并重哈希，客户端仍逐文件对照固定manifest，未放宽任何校验。**整个任务已用3轮集中修正，已达上限**；不是每路线各3轮。全部原始失败/错误估算/后继回执保留：`evidence/corrections.json`、`evidence/final_receipt_round2_transport_failure.json`、`evidence/local_client_hardening.json`、`evidence/jobs/`。GPU四作业全部第一次执行成功；回执修正不新增GPU、optimizer update或方法变化。
 
 真实非作者`/root/source_reviewer`未实现common/CPU适配/GPU probe/成本计算器，直接读取官方原件、固定源码/config、两rank原始JSON、微步/梯度/参数hash/生成序列与manifest，并以独立标准库NPY解析重数221225条mask边界，独立复算时间与分母。其protocol CPU探针由其作者身份单列，不冒称该小探针独立审核自身；新Qwen适配与实际GPU/cost均由非作者审。
 
