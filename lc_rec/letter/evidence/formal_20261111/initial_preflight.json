@@ -1,0 +1,2793 @@
+{
+  "utc": "2026-11-11T17:21:57Z",
+  "host": "zwlab-01",
+  "user": "bwwu",
+  "uid": 1005,
+  "gpu": "index, uuid, name, memory.total [MiB], memory.used [MiB], utilization.gpu [%]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB, 0 %\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB, 0 %\n",
+  "gpu_processes": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\n",
+  "memory": "MemTotal:       259268452 kB\nMemFree:        80514736 kB\nMemAvailable:   250885772 kB\nBuffers:         1555132 kB\nCached:         166766708 kB\nSwapCached:        12796 kB\nActive:         16202036 kB\nInactive:       152216456 kB\nActive(anon):     101720 kB\nInactive(anon):     4888 kB\nActive(file):   16100316 kB\nInactive(file): 152211568 kB\nUnevictable:       11900 kB\nMlocked:            8828 kB\nSwapTotal:      67108860 kB\nSwapFree:       66960232 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              2920 kB\nWriteback:             0 kB\nAnonPages:        109488 kB\nMapped:           108860 kB\nShmem:              3436 kB\nKReclaimable:    3784852 kB\nSlab:            4947332 kB\nSReclaimable:    3648456 kB\nSUnreclaim:      1298876 kB\nKernelStack:       17568 kB\nPageTables:        15192 kB\nSecPageTables:         0 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    196743084 kB\nCommitted_AS:     907648 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      376732 kB\nVmallocChunk:          0 kB\nPercpu:           201600 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:  111824896 kB\nFilePmdMapped:         0 kB\nCmaTotal:              0 kB\nCmaFree:         5109008 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:    54521088 kB\nDirectMap2M:    181041152 kB\nDirectMap1G:    34603008 kB\n",
+  "disk": "Filesystem                   1B-blocks          Used     Available Use% Mounted on\n/dev/nvme0n1p3            913593581568  274787196928  592322854912  32% /\n/dev/mapper/vg0-lv--data 7937302376448 4560800276480 3296469704704  59% /data\n",
+  "letter_jobs": [
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r0",
+      "request.json": {
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/test_autograd_compat.py",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r0/output/cpu",
+          "--run-commit",
+          "059f9feb55fde067187afbf3b80f285a00a63ec3"
+        ],
+        "capture_version": "059f9feb55fde067187afbf3b80f285a00a63ec3",
+        "cwd": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3",
+        "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+        "env": {
+          "CUDA_HOME": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4",
+          "CUDA_VISIBLE_DEVICES": "",
+          "HF_HUB_OFFLINE": "1",
+          "LD_LIBRARY_PATH": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib",
+          "OMP_NUM_THREADS": "4",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TOKENIZERS_PARALLELISM": "false",
+          "TORCHINDUCTOR_COMPILE_THREADS": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "host": "zwlab-01",
+        "inputs": [
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/config/author_instruments.json",
+            "sha256": "842ae9563ddd811bcfbb5266029b6a7667b277ce15b0801bcfb0e7c59652f4fa"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/config/budget.json",
+            "sha256": "f57e46499073a02536e1c1cc70d5babe62a61a3b2812ff81b2e2e021c390ea02"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/config/guard.json",
+            "sha256": "c1647fbce05380777746a1b58fe601a978f4fc729f2d4bf2a9e04112bed1726b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/config/guard_autograd.json",
+            "sha256": "5281472a4810bc4e0783d5e76e0936c7822a2bd5f7f9094b854ea049c58f737f"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/config/probe_instruments.json",
+            "sha256": "950e04df16be12f248c941b7b505e39a8a876b54d835b3a229ecf12225be228f"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/audit_data.py",
+            "sha256": "f7dc03f8efdc3b6943854077ce33dee3b9099d77476ab7bc9ec00284f2f88ccf"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/build_review_zip.py",
+            "sha256": "557194fbf4fef5fc6baadbfec4bbff845700f650787caa587e8e9779f0911019"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/check_environment.py",
+            "sha256": "f8cdacd07bed7b95097163427fe6b4e91577ac12347e298045b2943289935e5c"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/compat.py",
+            "sha256": "3ca5347e9fa1d6c53e26948735946be1b101cc9d9b98fa8e33db616fcef50190"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/continuation_control.py",
+            "sha256": "8480b0339719d262575c4ad0b479c7a1263a2d509e0fd1652d15155e342f8fbe"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/estimate_budget.py",
+            "sha256": "ec3db58cd5b6e9503bafa51924dfa31b7966e22d608f2e95202c054720dd54c6"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/final_resources.py",
+            "sha256": "d762cbf3fad66675586fc43d970611064192b22f442e202c40ffec575b3dc498"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/gpu_probe.py",
+            "sha256": "e525b38aaa9fc18ef2c0e49534d4f6a07df16f074357d907bf2ad9e6a3dc37f5"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/inference_probe.py",
+            "sha256": "062305a729616d5e94e4a1f81cd183c475b5c10dae69577d43f7f1d0052b4d8b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/inspect_remote.py",
+            "sha256": "520dd2e518247e12402676ae99b15928f5f43ba65354e08d9c7d695d4241b08a"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/materialize_upstream.py",
+            "sha256": "de4b6de8adb07541c04d8fcebef63dda3a01a3b1e86f217b685f0d32244117b2"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/prepare_dependencies.py",
+            "sha256": "ee6298af106b4e9f5c21e107dd3e50500b8cce89084f717ec359e8829368a733"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/prepare_peft_compatibility.py",
+            "sha256": "13bbb52d40308ea976e785538bcb81d49caf92b47a1268014bb84dd3b3d6467b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/resource_guard.py",
+            "sha256": "4aa17156837927f6def5b4e74554e9d8a4f92bf43137119913a2791161d714c3"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/setup_environment.py",
+            "sha256": "397a7f0316545aeaca23410b16bef424459045c3564cb342d369ff7f135b942e"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/test_autograd_compat.py",
+            "sha256": "caebc3e6e675c05b6868ce36249b7856809e82920120b2be0c0497d31aa11c26"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/verify_delivery.py",
+            "sha256": "4bebb8a6e9cecd72852c72da2103fe2211835590f4617cd1c26b864095a3e5c9"
+          }
+        ],
+        "job_id": "letter-20261110-autograd-cpu-r0",
+        "namespace": "sid-extensions-p0/new-server",
+        "schema": 1,
+        "timeout_seconds": 300,
+        "uid": 1005,
+        "user": "bwwu"
+      },
+      "status.json": {
+        "artifacts": [
+          {
+            "bytes": 5467,
+            "path": "output/cpu/autograd_cpu.json",
+            "sha256": "88b50aefe674c81ba7d6e295eda0bfd12a44f64c951529171b13ea34026262e3"
+          }
+        ],
+        "cleanup": {
+          "ended_at": "2026-11-10T11:02:37.586111+00:00",
+          "events": [],
+          "initial_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T11:02:37.504661+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "last_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T11:02:37.545080+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "reason": "NORMAL_EXIT_CHECK",
+          "started_at": "2026-11-10T11:02:37.504614+00:00",
+          "verified": true
+        },
+        "ended_at": "2026-11-10T11:02:37.588350+00:00",
+        "exit_code": 0,
+        "job_id": "letter-20261110-autograd-cpu-r0",
+        "received_at": "2026-11-10T11:02:28.065077+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r0/output",
+        "started_at": "2026-11-10T11:02:28.149828+00:00",
+        "status": "SUCCEEDED",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r0"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3170806,
+          "start_ticks": "491388496",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/home/bwwu/lc-rec/letter-20261110/releases/059f9feb55fde067187afbf3b80f285a00a63ec3/lc_rec/letter/scripts/test_autograd_compat.py",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r0/output/cpu",
+            "--run-commit",
+            "059f9feb55fde067187afbf3b80f285a00a63ec3"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3170807,
+          "start_ticks": "491388504",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-cpu-r0",
+          "job_id": "letter-20261110-autograd-cpu-r0",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3170807,
+              "pid": 3170807,
+              "session_id": 3170807,
+              "start_ticks": "491388504",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 3170807,
+            "pid": 3170807,
+            "session_id": 3170807,
+            "start_ticks": "491388504",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 3170807,
+          "session_id": 3170807,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "worker_may_be_live": false
+      }
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0",
+      "request.json": {
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/resource_guard.py",
+          "--config",
+          "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/guard_autograd.json",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output/resources",
+          "--job-id",
+          "letter-20261110-autograd-gpu-r0",
+          "--",
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/gpu_probe.py",
+          "--source-root",
+          "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--audit-dir",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output/probe",
+          "--source-commit",
+          "8e6399c2a1269dfde58d705eef25a499400dc59b",
+          "--max-updates",
+          "9"
+        ],
+        "capture_version": "8e6399c2a1269dfde58d705eef25a499400dc59b",
+        "cwd": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b",
+        "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+        "env": {
+          "CUDA_HOME": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4",
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "DS_ACCELERATOR": "cuda",
+          "HF_HUB_OFFLINE": "1",
+          "LD_LIBRARY_PATH": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib",
+          "OMP_NUM_THREADS": "4",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TOKENIZERS_PARALLELISM": "false",
+          "TORCHINDUCTOR_COMPILE_THREADS": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "host": "zwlab-01",
+        "inputs": [
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/author_instruments.json",
+            "sha256": "842ae9563ddd811bcfbb5266029b6a7667b277ce15b0801bcfb0e7c59652f4fa"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/budget.json",
+            "sha256": "f57e46499073a02536e1c1cc70d5babe62a61a3b2812ff81b2e2e021c390ea02"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/guard.json",
+            "sha256": "c1647fbce05380777746a1b58fe601a978f4fc729f2d4bf2a9e04112bed1726b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/guard_autograd.json",
+            "sha256": "5281472a4810bc4e0783d5e76e0936c7822a2bd5f7f9094b854ea049c58f737f"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/probe_instruments.json",
+            "sha256": "950e04df16be12f248c941b7b505e39a8a876b54d835b3a229ecf12225be228f"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/audit_data.py",
+            "sha256": "f7dc03f8efdc3b6943854077ce33dee3b9099d77476ab7bc9ec00284f2f88ccf"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/build_review_zip.py",
+            "sha256": "557194fbf4fef5fc6baadbfec4bbff845700f650787caa587e8e9779f0911019"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/check_environment.py",
+            "sha256": "f8cdacd07bed7b95097163427fe6b4e91577ac12347e298045b2943289935e5c"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/compat.py",
+            "sha256": "c8135e5eeda3c1f528065cbe717a31582cbb4b5043ea13bfa76f01b370604a20"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/continuation_control.py",
+            "sha256": "f628ab2845f478a7b4c074f685cc6c6329ff5c01e83dfcf70a3353e81b88ce43"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/estimate_budget.py",
+            "sha256": "f334ff9660c0bea0358ca3cbc69cedf76506398a783f1372d853f3b114ed06e3"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/final_resources.py",
+            "sha256": "d762cbf3fad66675586fc43d970611064192b22f442e202c40ffec575b3dc498"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/gpu_probe.py",
+            "sha256": "3065cea45e56a1bee86c0fd7a834c8dfcd1a9684ef29c32084651d27d0325055"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/inference_probe.py",
+            "sha256": "e2f178c5af1d8d1509c76384c265248e537406850472f1420254120c418d2ddb"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/inspect_remote.py",
+            "sha256": "520dd2e518247e12402676ae99b15928f5f43ba65354e08d9c7d695d4241b08a"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/materialize_upstream.py",
+            "sha256": "de4b6de8adb07541c04d8fcebef63dda3a01a3b1e86f217b685f0d32244117b2"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/prepare_dependencies.py",
+            "sha256": "ee6298af106b4e9f5c21e107dd3e50500b8cce89084f717ec359e8829368a733"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/prepare_peft_compatibility.py",
+            "sha256": "13bbb52d40308ea976e785538bcb81d49caf92b47a1268014bb84dd3b3d6467b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/resource_guard.py",
+            "sha256": "4aa17156837927f6def5b4e74554e9d8a4f92bf43137119913a2791161d714c3"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/setup_environment.py",
+            "sha256": "397a7f0316545aeaca23410b16bef424459045c3564cb342d369ff7f135b942e"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/test_autograd_compat.py",
+            "sha256": "caebc3e6e675c05b6868ce36249b7856809e82920120b2be0c0497d31aa11c26"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/test_budget_estimate.py",
+            "sha256": "23879066c1d286549a839465778a16cf102648c308505d573508f74a61178d97"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/verify_delivery.py",
+            "sha256": "4bebb8a6e9cecd72852c72da2103fe2211835590f4617cd1c26b864095a3e5c9"
+          }
+        ],
+        "job_id": "letter-20261110-autograd-gpu-r0",
+        "namespace": "sid-extensions-p0/new-server",
+        "schema": 1,
+        "timeout_seconds": 3540,
+        "uid": 1005,
+        "user": "bwwu"
+      },
+      "status.json": {
+        "artifacts": [
+          {
+            "bytes": 435,
+            "path": "output/probe/adapter/README.md",
+            "sha256": "ff2b3c12004e1d44cba66e403d0fade308326feac9b182b845e00e1beb667aa4"
+          },
+          {
+            "bytes": 608,
+            "path": "output/probe/adapter/adapter_config.json",
+            "sha256": "0d1b52c3eef752b50900cacdbafd0d0c26de692e38b2c090cb6013929131deb6"
+          },
+          {
+            "bytes": 579376762,
+            "path": "output/probe/adapter/adapter_model.bin",
+            "sha256": "1069b6df364d21ac2ecdab25b97f30b1ee03d5182203d5fe909bdfe2d5c0624a"
+          },
+          {
+            "bytes": 17973,
+            "path": "output/probe/adapter/added_tokens.json",
+            "sha256": "818b5a7d05a234bfed0811bf1ff5b6671d3da5b4869d7c66e5b347d0d90ac97c"
+          },
+          {
+            "bytes": 1058,
+            "path": "output/probe/adapter/config.json",
+            "sha256": "6667a02e194c221c3f5bfce2a701230b6050dd37398ff00336936db2769a3ea5"
+          },
+          {
+            "bytes": 435,
+            "path": "output/probe/adapter/special_tokens_map.json",
+            "sha256": "2ea88203b955648951a454e73a73967ff77ba4e79ae8ceb4400d4ab2cb040777"
+          },
+          {
+            "bytes": 499723,
+            "path": "output/probe/adapter/tokenizer.model",
+            "sha256": "9e556afd44213b6bd1be2b850ebbbd98f5481437a8021afaf58ee7fb1818d347"
+          },
+          {
+            "bytes": 2329,
+            "path": "output/probe/adapter/tokenizer_config.json",
+            "sha256": "d2470069e40f1430899bebaddf5474ffa357b759fcfffc007c8db70438e6c03b"
+          },
+          {
+            "bytes": 1323860,
+            "path": "output/probe/rank0.json",
+            "sha256": "a7998375d0e073649571052ce74d92f39ee75f056470fa6204a5bc514aa061af"
+          },
+          {
+            "bytes": 1172607,
+            "path": "output/probe/rank1.json",
+            "sha256": "7c2966f77bb5c05130a4076e9714f133053462cdbb162c8a16854b046c892f12"
+          },
+          {
+            "bytes": 9454,
+            "path": "output/resources/resource-samples.jsonl",
+            "sha256": "de42bf012a9f5793017a36fbda8de756c2f0b71a1f6a8dd6647148dc52c0d851"
+          },
+          {
+            "bytes": 1635,
+            "path": "output/resources/resource-summary.json",
+            "sha256": "7318ac5c31ed40e5bf0660ffb0cfaab42b9329a6a129679bb5aa0a6990af3670"
+          }
+        ],
+        "cleanup": {
+          "ended_at": "2026-11-10T11:14:53.226076+00:00",
+          "events": [],
+          "initial_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T11:14:53.143843+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "last_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T11:14:53.185545+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "reason": "NORMAL_EXIT_CHECK",
+          "started_at": "2026-11-10T11:14:53.143788+00:00",
+          "verified": true
+        },
+        "ended_at": "2026-11-10T11:14:53.228443+00:00",
+        "exit_code": 0,
+        "job_id": "letter-20261110-autograd-gpu-r0",
+        "received_at": "2026-11-10T11:12:35.516130+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output",
+        "started_at": "2026-11-10T11:12:35.604431+00:00",
+        "status": "SUCCEEDED",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3171188,
+          "start_ticks": "491449241",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/resource_guard.py",
+            "--config",
+            "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/guard_autograd.json",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output/resources",
+            "--job-id",
+            "letter-20261110-autograd-gpu-r0",
+            "--",
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "-m",
+            "torch.distributed.run",
+            "--standalone",
+            "--nnodes=1",
+            "--nproc_per_node=2",
+            "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/gpu_probe.py",
+            "--source-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+            "--data-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER/data",
+            "--model",
+            "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+            "--audit-dir",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output/probe",
+            "--source-commit",
+            "8e6399c2a1269dfde58d705eef25a499400dc59b",
+            "--max-updates",
+            "9"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3171189,
+          "start_ticks": "491449250",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0",
+          "job_id": "letter-20261110-autograd-gpu-r0",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3171189,
+              "pid": 3171189,
+              "session_id": 3171189,
+              "start_ticks": "491449250",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3171189,
+              "pid": 3171191,
+              "session_id": 3171189,
+              "start_ticks": "491449257",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 3171189,
+            "pid": 3171189,
+            "session_id": 3171189,
+            "start_ticks": "491449250",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 3171189,
+          "session_id": 3171189,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "worker_may_be_live": false
+      }
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r0",
+      "request.json": {
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/resource_guard.py",
+          "--config",
+          "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/guard_autograd.json",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r0/output/resources",
+          "--job-id",
+          "letter-20261110-autograd-inference-r0",
+          "--",
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/inference_probe.py",
+          "--source",
+          "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--adapter",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output/probe/adapter",
+          "--train-dir",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output/probe",
+          "--audit-output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r0/output/inference",
+          "--run-commit",
+          "8e6399c2a1269dfde58d705eef25a499400dc59b"
+        ],
+        "capture_version": "8e6399c2a1269dfde58d705eef25a499400dc59b",
+        "cwd": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b",
+        "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+        "env": {
+          "CUDA_HOME": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4",
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "DS_ACCELERATOR": "cuda",
+          "HF_HUB_OFFLINE": "1",
+          "LD_LIBRARY_PATH": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib",
+          "OMP_NUM_THREADS": "4",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TOKENIZERS_PARALLELISM": "false",
+          "TORCHINDUCTOR_COMPILE_THREADS": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "host": "zwlab-01",
+        "inputs": [
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/author_instruments.json",
+            "sha256": "842ae9563ddd811bcfbb5266029b6a7667b277ce15b0801bcfb0e7c59652f4fa"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/budget.json",
+            "sha256": "f57e46499073a02536e1c1cc70d5babe62a61a3b2812ff81b2e2e021c390ea02"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/guard.json",
+            "sha256": "c1647fbce05380777746a1b58fe601a978f4fc729f2d4bf2a9e04112bed1726b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/guard_autograd.json",
+            "sha256": "5281472a4810bc4e0783d5e76e0936c7822a2bd5f7f9094b854ea049c58f737f"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/probe_instruments.json",
+            "sha256": "950e04df16be12f248c941b7b505e39a8a876b54d835b3a229ecf12225be228f"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/audit_data.py",
+            "sha256": "f7dc03f8efdc3b6943854077ce33dee3b9099d77476ab7bc9ec00284f2f88ccf"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/build_review_zip.py",
+            "sha256": "557194fbf4fef5fc6baadbfec4bbff845700f650787caa587e8e9779f0911019"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/check_environment.py",
+            "sha256": "f8cdacd07bed7b95097163427fe6b4e91577ac12347e298045b2943289935e5c"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/compat.py",
+            "sha256": "c8135e5eeda3c1f528065cbe717a31582cbb4b5043ea13bfa76f01b370604a20"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/continuation_control.py",
+            "sha256": "f628ab2845f478a7b4c074f685cc6c6329ff5c01e83dfcf70a3353e81b88ce43"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/estimate_budget.py",
+            "sha256": "f334ff9660c0bea0358ca3cbc69cedf76506398a783f1372d853f3b114ed06e3"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/final_resources.py",
+            "sha256": "d762cbf3fad66675586fc43d970611064192b22f442e202c40ffec575b3dc498"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/gpu_probe.py",
+            "sha256": "3065cea45e56a1bee86c0fd7a834c8dfcd1a9684ef29c32084651d27d0325055"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/inference_probe.py",
+            "sha256": "e2f178c5af1d8d1509c76384c265248e537406850472f1420254120c418d2ddb"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/inspect_remote.py",
+            "sha256": "520dd2e518247e12402676ae99b15928f5f43ba65354e08d9c7d695d4241b08a"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/materialize_upstream.py",
+            "sha256": "de4b6de8adb07541c04d8fcebef63dda3a01a3b1e86f217b685f0d32244117b2"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/prepare_dependencies.py",
+            "sha256": "ee6298af106b4e9f5c21e107dd3e50500b8cce89084f717ec359e8829368a733"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/prepare_peft_compatibility.py",
+            "sha256": "13bbb52d40308ea976e785538bcb81d49caf92b47a1268014bb84dd3b3d6467b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/resource_guard.py",
+            "sha256": "4aa17156837927f6def5b4e74554e9d8a4f92bf43137119913a2791161d714c3"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/setup_environment.py",
+            "sha256": "397a7f0316545aeaca23410b16bef424459045c3564cb342d369ff7f135b942e"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/test_autograd_compat.py",
+            "sha256": "caebc3e6e675c05b6868ce36249b7856809e82920120b2be0c0497d31aa11c26"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/test_budget_estimate.py",
+            "sha256": "23879066c1d286549a839465778a16cf102648c308505d573508f74a61178d97"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/verify_delivery.py",
+            "sha256": "4bebb8a6e9cecd72852c72da2103fe2211835590f4617cd1c26b864095a3e5c9"
+          }
+        ],
+        "job_id": "letter-20261110-autograd-inference-r0",
+        "namespace": "sid-extensions-p0/new-server",
+        "schema": 1,
+        "timeout_seconds": 3540,
+        "uid": 1005,
+        "user": "bwwu"
+      },
+      "status.json": {
+        "artifacts": [
+          {
+            "bytes": 191868,
+            "path": "output/inference/inference_rank0.json",
+            "sha256": "e4f2e437389c3474ddd4eb68f90b8240bc8a395c0aeed2ba1c5e587af6899fc5"
+          },
+          {
+            "bytes": 191867,
+            "path": "output/inference/inference_rank1.json",
+            "sha256": "8e2dc05c7d479b7bf06b9ef585e076b299ba9b8cda8d4156333241abedb298a9"
+          },
+          {
+            "bytes": 9461,
+            "path": "output/resources/resource-samples.jsonl",
+            "sha256": "38460b4cf3de50a143fad4edab26144835572dbbe4486c68878fa88a59dd9fee"
+          },
+          {
+            "bytes": 1865,
+            "path": "output/resources/resource-summary.json",
+            "sha256": "f93d774c8bb75281929e6739eeb6120a2c7a453b91a37edbc4665d3f60158ef4"
+          }
+        ],
+        "cleanup": {
+          "ended_at": "2026-11-10T11:18:45.635478+00:00",
+          "events": [],
+          "initial_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T11:18:45.553790+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "last_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T11:18:45.595397+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "reason": "NORMAL_EXIT_CHECK",
+          "started_at": "2026-11-10T11:18:45.553734+00:00",
+          "verified": true
+        },
+        "ended_at": "2026-11-10T11:18:45.638349+00:00",
+        "exit_code": 0,
+        "job_id": "letter-20261110-autograd-inference-r0",
+        "received_at": "2026-11-10T11:16:27.933728+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r0/output",
+        "started_at": "2026-11-10T11:16:28.018950+00:00",
+        "status": "SUCCEEDED",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r0"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3171621,
+          "start_ticks": "491472483",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/resource_guard.py",
+            "--config",
+            "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/config/guard_autograd.json",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r0/output/resources",
+            "--job-id",
+            "letter-20261110-autograd-inference-r0",
+            "--",
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "-m",
+            "torch.distributed.run",
+            "--standalone",
+            "--nnodes=1",
+            "--nproc_per_node=2",
+            "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/scripts/inference_probe.py",
+            "--source",
+            "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+            "--data-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/8e6399c2a1269dfde58d705eef25a499400dc59b/lc_rec/letter/vendor/LETTER/data",
+            "--model",
+            "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+            "--adapter",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output/probe/adapter",
+            "--train-dir",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-gpu-r0/output/probe",
+            "--audit-output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r0/output/inference",
+            "--run-commit",
+            "8e6399c2a1269dfde58d705eef25a499400dc59b"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3171622,
+          "start_ticks": "491472491",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-autograd-inference-r0",
+          "job_id": "letter-20261110-autograd-inference-r0",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3171622,
+              "pid": 3171622,
+              "session_id": 3171622,
+              "start_ticks": "491472491",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3171622,
+              "pid": 3171623,
+              "session_id": 3171622,
+              "start_ticks": "491472498",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 3171622,
+            "pid": 3171622,
+            "session_id": 3171622,
+            "start_ticks": "491472491",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 3171622,
+          "session_id": 3171622,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "worker_may_be_live": false
+      }
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r0",
+      "request.json": {
+        "argv": [
+          "/data/bwwu/envs/lc-rec-offload-20261108/bin/python",
+          "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/audit_data.py",
+          "--source",
+          "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--a-data",
+          "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/data",
+          "--b-data",
+          "/data/bwwu/lc-rec/assets/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r0/output"
+        ],
+        "capture_version": "7a7365c6033864c232a4c2b042bcc9c494c938b3",
+        "cwd": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3",
+        "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "",
+          "HF_HUB_OFFLINE": "1",
+          "OMP_NUM_THREADS": "4",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TOKENIZERS_PARALLELISM": "false",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "host": "zwlab-01",
+        "inputs": [
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/audit_data.py",
+            "sha256": "f7dc03f8efdc3b6943854077ce33dee3b9099d77476ab7bc9ec00284f2f88ccf"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/lora_finetune.py",
+            "sha256": "84475c87a6d8184f94b8f6fdd35ce7bf6d68e62fe1033b611d005f8e2fcc1ab3"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/run_train.sh",
+            "sha256": "5372018ebd5db46d93d970bc6b369c8b6ae4d0d8e52ba330964b36fcc68f2c5e"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/evaluate.py",
+            "sha256": "6bcbf22965b59edebe2b37ff57c374cb6d3127d9c6254e0eba2b873459c6b357"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/run_test_ddp.sh",
+            "sha256": "570fb27fc07f264f06e71bc5e81c27cccbb5d508cd0bd51daee6cc907cd590bd"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/test_ddp.py",
+            "sha256": "a639395ba42d2e914fc5b8d9bbc73785160badfb80299053b1e359c36bbf6f0c"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/modeling_letter.py",
+            "sha256": "c4798e82bfd0c5a16acebb551e08d0e421765d028981288ee6680cdc7f49c9fc"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/collator.py",
+            "sha256": "e1ec6dec9aadf3c123ea45656fe2c58dc102ac075ca78bf9dff7df47cb5c29b8"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/prompt.py",
+            "sha256": "2415f1a2bece1fd27f961efd5beb3a52e0e997ba39c1f3825fec1292bf84f7d7"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/data.py",
+            "sha256": "cfd7733325670792c0da32393752c49116cd2b0ce097ffd629cda1c224bddecc"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/utils.py",
+            "sha256": "8c1139a496cd74479e862472a57dd5c5eccb3870e17fb64b2f4d02063fd252e5"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z3_fp16_save16bit.json",
+            "sha256": "0268fa4efdcd1a02a002cfe638a7c430c3c6842cfcd0633333af653ca5161608"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z2_fp16.json",
+            "sha256": "27376bb03a1f6ecfc35d76f744bbcf49c760e1e09ca66671836abd094ca8cd8c"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z3_bf16.json",
+            "sha256": "5a505bc1d90b524f216cb8ca15e79e096502c1179a15b42a2ee32766bbf226f6"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z3_bf16_save16bit.json",
+            "sha256": "e607afae1ffe8b9799996ecfa2a63ceebeb8fc4dc9f0c044d62ac5c94f41f589"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z2_bf16.json",
+            "sha256": "031f5d7fdcda395fa7fd2ba0c78f0cbeae92580764502bfd85b733c70374ada1"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z3_fp16.json",
+            "sha256": "1a4534f0406f1aea0737fa638cff572df13286bb67e02f1f5838bd1ee4f23702"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.inter.json",
+            "sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.index.json",
+            "sha256": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.item.json",
+            "sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2"
+          }
+        ],
+        "job_id": "letter-20261110-data-r0",
+        "namespace": "sid-extensions-p0/new-server",
+        "schema": 1,
+        "timeout_seconds": 1260,
+        "uid": 1005,
+        "user": "bwwu"
+      },
+      "status.json": {
+        "artifacts": [],
+        "cleanup": {
+          "ended_at": "2026-11-10T05:43:49.606936+00:00",
+          "events": [],
+          "initial_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T05:43:49.524439+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "last_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T05:43:49.566181+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "reason": "NORMAL_EXIT_CHECK",
+          "started_at": "2026-11-10T05:43:49.524385+00:00",
+          "verified": true
+        },
+        "ended_at": "2026-11-10T05:43:49.609188+00:00",
+        "exit_code": 1,
+        "job_id": "letter-20261110-data-r0",
+        "received_at": "2026-11-10T05:43:48.916871+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r0/output",
+        "started_at": "2026-11-10T05:43:49.037271+00:00",
+        "status": "FAILED",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r0"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3166004,
+          "start_ticks": "489476581",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/lc-rec-offload-20261108/bin/python",
+            "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/audit_data.py",
+            "--source",
+            "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+            "--a-data",
+            "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/data",
+            "--b-data",
+            "/data/bwwu/lc-rec/assets/data",
+            "--model",
+            "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r0/output"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3166005,
+          "start_ticks": "489476593",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r0",
+          "job_id": "letter-20261110-data-r0",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3166005,
+              "pid": 3166005,
+              "session_id": 3166005,
+              "start_ticks": "489476593",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 3166005,
+            "pid": 3166005,
+            "session_id": 3166005,
+            "start_ticks": "489476593",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 3166005,
+          "session_id": 3166005,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "worker_may_be_live": false
+      }
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1",
+      "request.json": {
+        "argv": [
+          "/data/bwwu/envs/lc-rec-offload-20261108/bin/python",
+          "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/audit_data.py",
+          "--source",
+          "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--a-data",
+          "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/data",
+          "--b-data",
+          "/data/bwwu/lc-rec/assets/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit"
+        ],
+        "capture_version": "7a7365c6033864c232a4c2b042bcc9c494c938b3",
+        "cwd": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3",
+        "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "",
+          "HF_HUB_OFFLINE": "1",
+          "OMP_NUM_THREADS": "4",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TOKENIZERS_PARALLELISM": "false",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "host": "zwlab-01",
+        "inputs": [
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/audit_data.py",
+            "sha256": "f7dc03f8efdc3b6943854077ce33dee3b9099d77476ab7bc9ec00284f2f88ccf"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/lora_finetune.py",
+            "sha256": "84475c87a6d8184f94b8f6fdd35ce7bf6d68e62fe1033b611d005f8e2fcc1ab3"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/run_train.sh",
+            "sha256": "5372018ebd5db46d93d970bc6b369c8b6ae4d0d8e52ba330964b36fcc68f2c5e"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/evaluate.py",
+            "sha256": "6bcbf22965b59edebe2b37ff57c374cb6d3127d9c6254e0eba2b873459c6b357"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/run_test_ddp.sh",
+            "sha256": "570fb27fc07f264f06e71bc5e81c27cccbb5d508cd0bd51daee6cc907cd590bd"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/test_ddp.py",
+            "sha256": "a639395ba42d2e914fc5b8d9bbc73785160badfb80299053b1e359c36bbf6f0c"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/modeling_letter.py",
+            "sha256": "c4798e82bfd0c5a16acebb551e08d0e421765d028981288ee6680cdc7f49c9fc"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/collator.py",
+            "sha256": "e1ec6dec9aadf3c123ea45656fe2c58dc102ac075ca78bf9dff7df47cb5c29b8"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/prompt.py",
+            "sha256": "2415f1a2bece1fd27f961efd5beb3a52e0e997ba39c1f3825fec1292bf84f7d7"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/data.py",
+            "sha256": "cfd7733325670792c0da32393752c49116cd2b0ce097ffd629cda1c224bddecc"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/utils.py",
+            "sha256": "8c1139a496cd74479e862472a57dd5c5eccb3870e17fb64b2f4d02063fd252e5"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z3_fp16_save16bit.json",
+            "sha256": "0268fa4efdcd1a02a002cfe638a7c430c3c6842cfcd0633333af653ca5161608"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z2_fp16.json",
+            "sha256": "27376bb03a1f6ecfc35d76f744bbcf49c760e1e09ca66671836abd094ca8cd8c"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z3_bf16.json",
+            "sha256": "5a505bc1d90b524f216cb8ca15e79e096502c1179a15b42a2ee32766bbf226f6"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z3_bf16_save16bit.json",
+            "sha256": "e607afae1ffe8b9799996ecfa2a63ceebeb8fc4dc9f0c044d62ac5c94f41f589"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z2_bf16.json",
+            "sha256": "031f5d7fdcda395fa7fd2ba0c78f0cbeae92580764502bfd85b733c70374ada1"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/config/ds_z3_fp16.json",
+            "sha256": "1a4534f0406f1aea0737fa638cff572df13286bb67e02f1f5838bd1ee4f23702"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.inter.json",
+            "sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.index.json",
+            "sha256": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.item.json",
+            "sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2"
+          }
+        ],
+        "job_id": "letter-20261110-data-r1",
+        "namespace": "sid-extensions-p0/new-server",
+        "schema": 1,
+        "timeout_seconds": 1260,
+        "uid": 1005,
+        "user": "bwwu"
+      },
+      "status.json": {
+        "artifacts": [
+          {
+            "bytes": 156256,
+            "path": "output/audit/audit.json",
+            "sha256": "59b02c50a25681d894130c1f243f32d5479c60ac8ffaa3e1bdb4c882f481ac92"
+          },
+          {
+            "bytes": 484443,
+            "path": "output/audit/length_rows.npz",
+            "sha256": "add692cf5643ee10da2cc2b669228e76b20a33e843dc20cfb461e5cf8730b579"
+          },
+          {
+            "bytes": 59436,
+            "path": "output/audit/probe_samples.json",
+            "sha256": "3c19945c6a39c829e22f5f5169fe46899f9ee74d59be689c60c56773029d904d"
+          },
+          {
+            "bytes": 17973,
+            "path": "output/audit/tokenizer_a/added_tokens.json",
+            "sha256": "818b5a7d05a234bfed0811bf1ff5b6671d3da5b4869d7c66e5b347d0d90ac97c"
+          },
+          {
+            "bytes": 435,
+            "path": "output/audit/tokenizer_a/special_tokens_map.json",
+            "sha256": "2ea88203b955648951a454e73a73967ff77ba4e79ae8ceb4400d4ab2cb040777"
+          },
+          {
+            "bytes": 499723,
+            "path": "output/audit/tokenizer_a/tokenizer.model",
+            "sha256": "9e556afd44213b6bd1be2b850ebbbd98f5481437a8021afaf58ee7fb1818d347"
+          },
+          {
+            "bytes": 2329,
+            "path": "output/audit/tokenizer_a/tokenizer_config.json",
+            "sha256": "d2470069e40f1430899bebaddf5474ffa357b759fcfffc007c8db70438e6c03b"
+          },
+          {
+            "bytes": 20374,
+            "path": "output/audit/tokenizer_a_ids.json",
+            "sha256": "d5602a937e9cef514deb55f6dd0b0931d465fd0df9457e33e15afa020ec329de"
+          },
+          {
+            "bytes": 20625,
+            "path": "output/audit/tokenizer_b_ids.json",
+            "sha256": "87bb04f9d1b67f67f7ffe1c4f140540703542d3861d1128da33a7e9900cb9e68"
+          },
+          {
+            "bytes": 1034,
+            "path": "output/audit/tokenizer_implementation__tokenize.py.txt",
+            "sha256": "97324d3eb4069742d10c2212346677a0ea64c3579be10181a0d3592758d63e0c"
+          },
+          {
+            "bytes": 337,
+            "path": "output/audit/tokenizer_implementation_tokenize.py.txt",
+            "sha256": "83acba85b6b7bcc4c4f2c529702e9980a9225aaa031e56dffcc1cca1714123d4"
+          }
+        ],
+        "cleanup": {
+          "ended_at": "2026-11-10T05:52:53.064824+00:00",
+          "events": [
+            {
+              "at": "2026-11-10T05:52:52.952675+00:00",
+              "member": {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 3167023,
+                "pid": 3167193,
+                "proof": "TASK_MARKERS",
+                "session_id": 3167023,
+                "start_ticks": "489496267",
+                "uid": 1005
+              },
+              "outcome": "SENT",
+              "signal": 15
+            }
+          ],
+          "initial_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T05:52:52.871746+00:00",
+            "owned_live": [
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 3167023,
+                "pid": 3167193,
+                "proof": "TASK_MARKERS",
+                "session_id": 3167023,
+                "start_ticks": "489496267",
+                "uid": 1005
+              }
+            ],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": false,
+            "zombies": []
+          },
+          "last_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T05:52:53.004985+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "reason": "LEADER_EXITED_WITH_MEMBERS",
+          "started_at": "2026-11-10T05:52:52.871696+00:00",
+          "verified": true
+        },
+        "ended_at": "2026-11-10T05:52:53.067222+00:00",
+        "exit_code": 0,
+        "job_id": "letter-20261110-data-r1",
+        "received_at": "2026-11-10T05:46:39.851472+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output",
+        "started_at": "2026-11-10T05:46:39.972087+00:00",
+        "status": "WORKERS_TERMINATED",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3167022,
+          "start_ticks": "489493674",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/lc-rec-offload-20261108/bin/python",
+            "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/audit_data.py",
+            "--source",
+            "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+            "--a-data",
+            "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/vendor/LETTER/data",
+            "--b-data",
+            "/data/bwwu/lc-rec/assets/data",
+            "--model",
+            "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3167023,
+          "start_ticks": "489493687",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1",
+          "job_id": "letter-20261110-data-r1",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167023,
+              "session_id": 3167023,
+              "start_ticks": "489493687",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167193,
+              "session_id": 3167023,
+              "start_ticks": "489496267",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167268,
+              "session_id": 3167023,
+              "start_ticks": "489497001",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167270,
+              "session_id": 3167023,
+              "start_ticks": "489497003",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167272,
+              "session_id": 3167023,
+              "start_ticks": "489497004",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167274,
+              "session_id": 3167023,
+              "start_ticks": "489497004",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167276,
+              "session_id": 3167023,
+              "start_ticks": "489497005",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167278,
+              "session_id": 3167023,
+              "start_ticks": "489497006",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167280,
+              "session_id": 3167023,
+              "start_ticks": "489497006",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167282,
+              "session_id": 3167023,
+              "start_ticks": "489497007",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167284,
+              "session_id": 3167023,
+              "start_ticks": "489497008",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167286,
+              "session_id": 3167023,
+              "start_ticks": "489497008",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167288,
+              "session_id": 3167023,
+              "start_ticks": "489497009",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167290,
+              "session_id": 3167023,
+              "start_ticks": "489497010",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167292,
+              "session_id": 3167023,
+              "start_ticks": "489497010",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167294,
+              "session_id": 3167023,
+              "start_ticks": "489497011",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167296,
+              "session_id": 3167023,
+              "start_ticks": "489497012",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167298,
+              "session_id": 3167023,
+              "start_ticks": "489497012",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167300,
+              "session_id": 3167023,
+              "start_ticks": "489497013",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167302,
+              "session_id": 3167023,
+              "start_ticks": "489497013",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167304,
+              "session_id": 3167023,
+              "start_ticks": "489497014",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167306,
+              "session_id": 3167023,
+              "start_ticks": "489497015",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167308,
+              "session_id": 3167023,
+              "start_ticks": "489497015",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167310,
+              "session_id": 3167023,
+              "start_ticks": "489497016",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167312,
+              "session_id": 3167023,
+              "start_ticks": "489497017",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167314,
+              "session_id": 3167023,
+              "start_ticks": "489497018",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167316,
+              "session_id": 3167023,
+              "start_ticks": "489497019",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167318,
+              "session_id": 3167023,
+              "start_ticks": "489497019",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167320,
+              "session_id": 3167023,
+              "start_ticks": "489497020",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167322,
+              "session_id": 3167023,
+              "start_ticks": "489497021",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167324,
+              "session_id": 3167023,
+              "start_ticks": "489497021",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167326,
+              "session_id": 3167023,
+              "start_ticks": "489497022",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167328,
+              "session_id": 3167023,
+              "start_ticks": "489497023",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167023,
+              "pid": 3167330,
+              "session_id": 3167023,
+              "start_ticks": "489497023",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 3167023,
+            "pid": 3167023,
+            "session_id": 3167023,
+            "start_ticks": "489493687",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 3167023,
+          "session_id": 3167023,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "worker_may_be_live": false
+      }
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-environment-r0",
+      "request.json": {
+        "argv": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/setup_environment.py"
+        ],
+        "capture_version": "7a7365c6033864c232a4c2b042bcc9c494c938b3",
+        "cwd": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3",
+        "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "",
+          "DS_ACCELERATOR": "cuda",
+          "HF_HUB_OFFLINE": "1",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "host": "zwlab-01",
+        "inputs": [
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/setup_environment.py",
+            "sha256": "397a7f0316545aeaca23410b16bef424459045c3564cb342d369ff7f135b942e"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/dependency_downloads.json",
+            "sha256": "b9405f8e075e69cc25a18bb2a36ca1fcff3a0476d7cbbd21bf4a4d0d30811d92"
+          }
+        ],
+        "job_id": "letter-20261110-environment-r0",
+        "namespace": "sid-extensions-p0/new-server",
+        "schema": 1,
+        "timeout_seconds": 240,
+        "uid": 1005,
+        "user": "bwwu"
+      },
+      "status.json": {
+        "artifacts": [],
+        "cleanup": {
+          "ended_at": "2026-11-10T05:48:12.366215+00:00",
+          "events": [],
+          "initial_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T05:48:12.279995+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "last_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T05:48:12.323196+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "reason": "NORMAL_EXIT_CHECK",
+          "started_at": "2026-11-10T05:48:12.279946+00:00",
+          "verified": true
+        },
+        "ended_at": "2026-11-10T05:48:12.368534+00:00",
+        "exit_code": 1,
+        "job_id": "letter-20261110-environment-r0",
+        "received_at": "2026-11-10T05:47:56.386746+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-environment-r0/output",
+        "started_at": "2026-11-10T05:47:56.472033+00:00",
+        "status": "FAILED",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-environment-r0"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3167868,
+          "start_ticks": "489501328",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+            "/home/bwwu/lc-rec/letter-20261110/releases/7a7365c6033864c232a4c2b042bcc9c494c938b3/lc_rec/letter/scripts/setup_environment.py"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3167869,
+          "start_ticks": "489501337",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-environment-r0",
+          "job_id": "letter-20261110-environment-r0",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167869,
+              "pid": 3167869,
+              "session_id": 3167869,
+              "start_ticks": "489501337",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167869,
+              "pid": 3167871,
+              "session_id": 3167869,
+              "start_ticks": "489501343",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167869,
+              "pid": 3167872,
+              "session_id": 3167869,
+              "start_ticks": "489501352",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167869,
+              "pid": 3167873,
+              "session_id": 3167869,
+              "start_ticks": "489501364",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167869,
+              "pid": 3167890,
+              "session_id": 3167869,
+              "start_ticks": "489501822",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3167869,
+              "pid": 3167907,
+              "session_id": 3167869,
+              "start_ticks": "489502510",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 3167869,
+            "pid": 3167869,
+            "session_id": 3167869,
+            "start_ticks": "489501337",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 3167869,
+          "session_id": 3167869,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "worker_may_be_live": false
+      }
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-environment-r1",
+      "request.json": {
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/lc-rec/letter-20261110/environment/check_environment.py"
+        ],
+        "capture_version": "7a7365c6033864c232a4c2b042bcc9c494c938b3+check_environment_sha256",
+        "cwd": "/home/bwwu/lc-rec/letter-20261110",
+        "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "",
+          "HF_HUB_OFFLINE": "1",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "host": "zwlab-01",
+        "inputs": [
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/environment/check_environment.py",
+            "sha256": "f8cdacd07bed7b95097163427fe6b4e91577ac12347e298045b2943289935e5c"
+          }
+        ],
+        "job_id": "letter-20261110-environment-r1",
+        "namespace": "sid-extensions-p0/new-server",
+        "schema": 1,
+        "timeout_seconds": 120,
+        "uid": 1005,
+        "user": "bwwu"
+      },
+      "status.json": {
+        "artifacts": [],
+        "cleanup": {
+          "ended_at": "2026-11-10T05:50:30.438868+00:00",
+          "events": [
+            {
+              "at": "2026-11-10T05:50:30.326756+00:00",
+              "member": {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 3168243,
+                "pid": 3168317,
+                "proof": "TASK_MARKERS",
+                "session_id": 3168243,
+                "start_ticks": "489516099",
+                "uid": 1005
+              },
+              "outcome": "SENT",
+              "signal": 15
+            }
+          ],
+          "initial_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T05:50:30.236605+00:00",
+            "owned_live": [
+              {
+                "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+                "pgid": 3168243,
+                "pid": 3168317,
+                "proof": "TASK_MARKERS",
+                "session_id": 3168243,
+                "start_ticks": "489516099",
+                "uid": 1005
+              }
+            ],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": false,
+            "zombies": []
+          },
+          "last_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T05:50:30.379151+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "reason": "LEADER_EXITED_WITH_MEMBERS",
+          "started_at": "2026-11-10T05:50:30.236545+00:00",
+          "verified": true
+        },
+        "ended_at": "2026-11-10T05:50:30.441082+00:00",
+        "exit_code": 0,
+        "job_id": "letter-20261110-environment-r1",
+        "received_at": "2026-11-10T05:50:20.555875+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-environment-r1/output",
+        "started_at": "2026-11-10T05:50:20.640640+00:00",
+        "status": "WORKERS_TERMINATED",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-environment-r1"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3168242,
+          "start_ticks": "489515745",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/home/bwwu/lc-rec/letter-20261110/environment/check_environment.py"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3168243,
+          "start_ticks": "489515753",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-environment-r1",
+          "job_id": "letter-20261110-environment-r1",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168243,
+              "session_id": 3168243,
+              "start_ticks": "489515753",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168317,
+              "session_id": 3168243,
+              "start_ticks": "489516099",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168388,
+              "session_id": 3168243,
+              "start_ticks": "489516537",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168390,
+              "session_id": 3168243,
+              "start_ticks": "489516538",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168392,
+              "session_id": 3168243,
+              "start_ticks": "489516539",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168394,
+              "session_id": 3168243,
+              "start_ticks": "489516539",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168396,
+              "session_id": 3168243,
+              "start_ticks": "489516540",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168398,
+              "session_id": 3168243,
+              "start_ticks": "489516541",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168400,
+              "session_id": 3168243,
+              "start_ticks": "489516541",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168402,
+              "session_id": 3168243,
+              "start_ticks": "489516542",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168404,
+              "session_id": 3168243,
+              "start_ticks": "489516543",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168406,
+              "session_id": 3168243,
+              "start_ticks": "489516543",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168408,
+              "session_id": 3168243,
+              "start_ticks": "489516544",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168409,
+              "session_id": 3168243,
+              "start_ticks": "489516545",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168412,
+              "session_id": 3168243,
+              "start_ticks": "489516545",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168414,
+              "session_id": 3168243,
+              "start_ticks": "489516546",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168416,
+              "session_id": 3168243,
+              "start_ticks": "489516547",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168418,
+              "session_id": 3168243,
+              "start_ticks": "489516547",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168420,
+              "session_id": 3168243,
+              "start_ticks": "489516548",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168422,
+              "session_id": 3168243,
+              "start_ticks": "489516549",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168424,
+              "session_id": 3168243,
+              "start_ticks": "489516549",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168426,
+              "session_id": 3168243,
+              "start_ticks": "489516550",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168428,
+              "session_id": 3168243,
+              "start_ticks": "489516551",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168430,
+              "session_id": 3168243,
+              "start_ticks": "489516551",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168432,
+              "session_id": 3168243,
+              "start_ticks": "489516552",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168434,
+              "session_id": 3168243,
+              "start_ticks": "489516554",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168436,
+              "session_id": 3168243,
+              "start_ticks": "489516555",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168438,
+              "session_id": 3168243,
+              "start_ticks": "489516555",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168440,
+              "session_id": 3168243,
+              "start_ticks": "489516556",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168442,
+              "session_id": 3168243,
+              "start_ticks": "489516557",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168444,
+              "session_id": 3168243,
+              "start_ticks": "489516557",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168446,
+              "session_id": 3168243,
+              "start_ticks": "489516558",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168448,
+              "session_id": 3168243,
+              "start_ticks": "489516559",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3168243,
+              "pid": 3168450,
+              "session_id": 3168243,
+              "start_ticks": "489516559",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 3168243,
+            "pid": 3168243,
+            "session_id": 3168243,
+            "start_ticks": "489515753",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 3168243,
+          "session_id": 3168243,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "worker_may_be_live": false
+      }
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r0",
+      "request.json": {
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/scripts/resource_guard.py",
+          "--config",
+          "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/config/guard.json",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r0/output/resources",
+          "--job-id",
+          "letter-20261110-gpu-r0",
+          "--",
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/scripts/gpu_probe.py",
+          "--source-root",
+          "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/vendor/LETTER/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--audit-dir",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r0/output/probe",
+          "--source-commit",
+          "66c903a70ea709f7fc07c7ef211c7a35cbc3394a"
+        ],
+        "capture_version": "66c903a70ea709f7fc07c7ef211c7a35cbc3394a",
+        "cwd": "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a",
+        "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+        "env": {
+          "CUDA_HOME": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4",
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "DS_ACCELERATOR": "cuda",
+          "HF_HUB_OFFLINE": "1",
+          "LD_LIBRARY_PATH": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib",
+          "OMP_NUM_THREADS": "4",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TOKENIZERS_PARALLELISM": "false",
+          "TORCHINDUCTOR_COMPILE_THREADS": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "host": "zwlab-01",
+        "inputs": [
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/scripts/gpu_probe.py",
+            "sha256": "bba17eb1ad98b8ba810bfcf896939acc0e1adf0d8c6eea080596b30cc827f8b6"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/scripts/compat.py",
+            "sha256": "5428ca0c28412b2e66a5d51f026aeb8a1e9f5961a30ddc6dadd26e75fbb95559"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/scripts/inference_probe.py",
+            "sha256": "062305a729616d5e94e4a1f81cd183c475b5c10dae69577d43f7f1d0052b4d8b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/scripts/resource_guard.py",
+            "sha256": "808dba0d4f02742cd4c661559a488ca2ce2646ceeef05581ec401ddd5557492b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/config/guard.json",
+            "sha256": "c1647fbce05380777746a1b58fe601a978f4fc729f2d4bf2a9e04112bed1726b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/config/probe_instruments.json",
+            "sha256": "950e04df16be12f248c941b7b505e39a8a876b54d835b3a229ecf12225be228f"
+          }
+        ],
+        "job_id": "letter-20261110-gpu-r0",
+        "namespace": "sid-extensions-p0/new-server",
+        "schema": 1,
+        "timeout_seconds": 3540,
+        "uid": 1005,
+        "user": "bwwu"
+      },
+      "status.json": {
+        "artifacts": [
+          {
+            "bytes": 498696,
+            "path": "output/probe/rank0.json",
+            "sha256": "6a445271b93a2a20d553517304d21ffe8138ab63d15df6cb2f5f120f0333aaa4"
+          },
+          {
+            "bytes": 498724,
+            "path": "output/probe/rank1.json",
+            "sha256": "d5b8f730dedd60c85665cc8aa340bb08ffef516f720ae8e89554441c7aeba7c6"
+          },
+          {
+            "bytes": 10002,
+            "path": "output/resources/resource-samples.jsonl",
+            "sha256": "b7c3d4cb6dc1911aa8539c328faae7641ee59d6c5b3aa8ecde102ae5fa399319"
+          },
+          {
+            "bytes": 1576,
+            "path": "output/resources/resource-summary.json",
+            "sha256": "42f2bec563034bb004005820a57e4f0e921dc3d5b568c4efb59ad4ca3df50682"
+          }
+        ],
+        "cleanup": {
+          "ended_at": "2026-11-10T06:17:22.524688+00:00",
+          "events": [],
+          "initial_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T06:17:22.443019+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "last_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T06:17:22.484082+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "reason": "NORMAL_EXIT_CHECK",
+          "started_at": "2026-11-10T06:17:22.442964+00:00",
+          "verified": true
+        },
+        "ended_at": "2026-11-10T06:17:22.527568+00:00",
+        "exit_code": 1,
+        "job_id": "letter-20261110-gpu-r0",
+        "received_at": "2026-11-10T06:14:54.920433+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r0/output",
+        "started_at": "2026-11-10T06:14:55.003845+00:00",
+        "status": "FAILED",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r0"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3169113,
+          "start_ticks": "489663181",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/scripts/resource_guard.py",
+            "--config",
+            "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/config/guard.json",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r0/output/resources",
+            "--job-id",
+            "letter-20261110-gpu-r0",
+            "--",
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "-m",
+            "torch.distributed.run",
+            "--standalone",
+            "--nnodes=1",
+            "--nproc_per_node=2",
+            "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/scripts/gpu_probe.py",
+            "--source-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+            "--data-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/66c903a70ea709f7fc07c7ef211c7a35cbc3394a/lc_rec/letter/vendor/LETTER/data",
+            "--model",
+            "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+            "--audit-dir",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r0/output/probe",
+            "--source-commit",
+            "66c903a70ea709f7fc07c7ef211c7a35cbc3394a"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3169115,
+          "start_ticks": "489663190",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r0",
+          "job_id": "letter-20261110-gpu-r0",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3169115,
+              "pid": 3169115,
+              "session_id": 3169115,
+              "start_ticks": "489663190",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3169115,
+              "pid": 3169116,
+              "session_id": 3169115,
+              "start_ticks": "489663197",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 3169115,
+            "pid": 3169115,
+            "session_id": 3169115,
+            "start_ticks": "489663190",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 3169115,
+          "session_id": 3169115,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "worker_may_be_live": false
+      }
+    },
+    {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r1",
+      "request.json": {
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/scripts/resource_guard.py",
+          "--config",
+          "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/config/guard.json",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r1/output/resources",
+          "--job-id",
+          "letter-20261110-gpu-r1",
+          "--",
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/scripts/gpu_probe.py",
+          "--source-root",
+          "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/vendor/LETTER/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--audit-dir",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r1/output/probe",
+          "--source-commit",
+          "6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f"
+        ],
+        "capture_version": "6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f",
+        "cwd": "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f",
+        "deployment_sha256": "e610be95a47894472c3f6b8396af8eb48fb1a998696a3a4914af2d886cc00877",
+        "env": {
+          "CUDA_HOME": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4",
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "DS_ACCELERATOR": "cuda",
+          "HF_HUB_OFFLINE": "1",
+          "LD_LIBRARY_PATH": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib",
+          "OMP_NUM_THREADS": "4",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TOKENIZERS_PARALLELISM": "false",
+          "TORCHINDUCTOR_COMPILE_THREADS": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "host": "zwlab-01",
+        "inputs": [
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/scripts/gpu_probe.py",
+            "sha256": "e525b38aaa9fc18ef2c0e49534d4f6a07df16f074357d907bf2ad9e6a3dc37f5"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/scripts/compat.py",
+            "sha256": "921e6a4b1d2968489fde46daec49f75933da0aca9793640c0b45e8a0465bc514"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/scripts/inference_probe.py",
+            "sha256": "062305a729616d5e94e4a1f81cd183c475b5c10dae69577d43f7f1d0052b4d8b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/scripts/resource_guard.py",
+            "sha256": "808dba0d4f02742cd4c661559a488ca2ce2646ceeef05581ec401ddd5557492b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/config/guard.json",
+            "sha256": "c1647fbce05380777746a1b58fe601a978f4fc729f2d4bf2a9e04112bed1726b"
+          },
+          {
+            "path": "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/config/probe_instruments.json",
+            "sha256": "950e04df16be12f248c941b7b505e39a8a876b54d835b3a229ecf12225be228f"
+          }
+        ],
+        "job_id": "letter-20261110-gpu-r1",
+        "namespace": "sid-extensions-p0/new-server",
+        "schema": 1,
+        "timeout_seconds": 3540,
+        "uid": 1005,
+        "user": "bwwu"
+      },
+      "status.json": {
+        "artifacts": [
+          {
+            "bytes": 682625,
+            "path": "output/probe/rank0.json",
+            "sha256": "53ae9ea28e72f144126e49bbfa19fda4b9b7825f83d7be450a15d8a0e4c932a4"
+          },
+          {
+            "bytes": 682650,
+            "path": "output/probe/rank1.json",
+            "sha256": "02eb4da36199763cbf4f451aeba32511178356116112586453d387429aa976c3"
+          },
+          {
+            "bytes": 5984,
+            "path": "output/resources/resource-samples.jsonl",
+            "sha256": "53a188ee7442d525600b07a7f8e774f27356cb010b734aab14a9376df264d1c4"
+          },
+          {
+            "bytes": 1587,
+            "path": "output/resources/resource-summary.json",
+            "sha256": "4283d0759ab0b4a1a8617511a04b6d813b5e71c771807d4b2cd6430c5e1e76cd"
+          }
+        ],
+        "cleanup": {
+          "ended_at": "2026-11-10T06:26:54.490348+00:00",
+          "events": [],
+          "initial_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T06:26:54.408161+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "last_observation": {
+            "boot_changed": false,
+            "observed_at": "2026-11-10T06:26:54.449617+00:00",
+            "owned_live": [],
+            "scan_complete": true,
+            "scan_errors": [],
+            "source": "captured_at_launch",
+            "unconfirmed_live": [],
+            "unsupported_live": [],
+            "verified_empty": true,
+            "zombies": []
+          },
+          "reason": "NORMAL_EXIT_CHECK",
+          "started_at": "2026-11-10T06:26:54.408102+00:00",
+          "verified": true
+        },
+        "ended_at": "2026-11-10T06:26:54.492933+00:00",
+        "exit_code": 1,
+        "job_id": "letter-20261110-gpu-r1",
+        "received_at": "2026-11-10T06:25:27.794875+00:00",
+        "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r1/output",
+        "started_at": "2026-11-10T06:25:27.881612+00:00",
+        "status": "FAILED",
+        "supervisor": {
+          "argv": [
+            "/usr/bin/python3",
+            "-I",
+            "-S",
+            "-B",
+            "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+            "supervise",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r1"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3169647,
+          "start_ticks": "489726469",
+          "uid": 1005
+        },
+        "worker": {
+          "argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/scripts/resource_guard.py",
+            "--config",
+            "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/config/guard.json",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r1/output/resources",
+            "--job-id",
+            "letter-20261110-gpu-r1",
+            "--",
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "-m",
+            "torch.distributed.run",
+            "--standalone",
+            "--nnodes=1",
+            "--nproc_per_node=2",
+            "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/scripts/gpu_probe.py",
+            "--source-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+            "--data-root",
+            "/home/bwwu/lc-rec/letter-20261110/releases/6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f/lc_rec/letter/vendor/LETTER/data",
+            "--model",
+            "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+            "--audit-dir",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-data-r1/output/audit",
+            "--output",
+            "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r1/output/probe",
+            "--source-commit",
+            "6f59f44f02e50b49c4b6f2fec83fc8110dcbeb2f"
+          ],
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pid": 3169648,
+          "start_ticks": "489726477",
+          "uid": 1005
+        },
+        "worker_group": {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-20261110-gpu-r1",
+          "job_id": "letter-20261110-gpu-r1",
+          "known_members": [
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3169648,
+              "pid": 3169648,
+              "session_id": 3169648,
+              "start_ticks": "489726477",
+              "uid": 1005
+            },
+            {
+              "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+              "pgid": 3169648,
+              "pid": 3169649,
+              "session_id": 3169648,
+              "start_ticks": "489726484",
+              "uid": 1005
+            }
+          ],
+          "leader": {
+            "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+            "pgid": 3169648,
+            "pid": 3169648,
+            "session_id": 3169648,
+            "start_ticks": "489726477",
+            "uid": 1005
+          },
+          "ownership_schema": 1,
+          "pgid": 3169648,
+          "session_id": 3169648,
+          "source": "captured_at_launch",
+          "uid": 1005
+        },
+        "worker_may_be_live": false
+      }
+    }
+  ],
+  "paths": {
+    "/data/bwwu/envs/letter-20261110": {
+      "exists": true,
+      "writable": true,
+      "children": [
+        "bin",
+        "lib",
+        "include",
+        "lib64",
+        "pyvenv.cfg"
+      ]
+    },
+    "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549": {
+      "exists": true,
+      "writable": true,
+      "children": [
+        "model-00002-of-00002.safetensors",
+        "tokenizer_config.json",
+        "model-00001-of-00002.safetensors",
+        "LICENSE",
+        "model-00002-of-00002.safetensors.offload-20261108.lock",
+        "config.json",
+        "README.md",
+        "model-00001-of-00002.safetensors.offload-20261108.receipt.json",
+        "download-validation-stable-20261109.json",
+        "special_tokens_map.json",
+        "generation_config.json",
+        "model-00002-of-00002.safetensors.offload-20261108.receipt.json",
+        "tokenizer.model",
+        "model-00001-of-00002.safetensors.offload-20261108.lock",
+        "model.safetensors.index.json"
+      ]
+    },
+    "/home/bwwu/lc-rec/letter-20261110": {
+      "exists": true,
+      "writable": true,
+      "children": [
+        "gpu-budget.json",
+        "environment",
+        "deploy",
+        "wheels",
+        "gpu-budget.lock",
+        "light_exports",
+        "cleanup-sync-20261110.json",
+        "wheel-chunks",
+        "dependency_downloads.json",
+        "requests",
+        "cleanup-autograd-sync-20261110.json",
+        "releases"
+      ]
+    }
+  },
+  "runner_sha256": "398768a732bbfebde4308486a0cedd924595157fda6cbff6a88f0bfaa512beff"
+}
