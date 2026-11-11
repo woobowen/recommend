@@ -1,0 +1,366 @@
+{
+  "reviewer": "/root/source_reviewer, non-author of model/data/GPU/controller implementation or GPU execution",
+  "review_type": "Direct raw-evidence, byte-identity and original-code assertions; no GPU rerun or local loading of heavy state files",
+  "route": "Q06-F",
+  "job_id": "lc-qwen6-20261111-q06-f-r0",
+  "run_commit": "1f3a0bafeebb3a2fa8604a052727ddb3d1eadcff",
+  "route_status": "PARTIAL",
+  "bounded_compute_status": "PASS",
+  "semantic_status": "PARTIAL_BOUNDARY",
+  "source_binding": {
+    "git_run_members_recomputed": 66,
+    "collected_manifest_members_recomputed": 22,
+    "canonical_request_sha256": "a4cd1797ba5b99bee0f284e30269ae34b7f6f26cb6c906d88ecfefbe2ce94ad7",
+    "probe_sha256": "8e72c75a961d3ef308c3b88359221cda94632777ead8c891caf89b5979463f3a",
+    "common_sha256": "be599f633fbf0d6b3748cd643b8fcd605593ec09da1ae04d69e50b79a28fc788",
+    "cpu_samples_sha256": "1d196e51ab1eaf1d0cb238a884295b75d44781dfabb46ddd724bc3900fce2553",
+    "server_release": "/home/bwwu/lc-rec/qwen-six-task-20261111/releases/1f3a0bafeebb3a2fa8604a052727ddb3d1eadcff"
+  },
+  "independent_assertion_coverage": [
+    "Recomputed all66 request source member SHA from exact git RUN, request canonical digest versus acceptance/query and all22 included local artifact sizes/SHA.",
+    "Checked all192 local microbatches from fixed CPU sample plans: rank slicing, eligibility, shapes, every input/padding/label count, LR/Adam/global steps, nonzero LR flags, finite loss and complete update timing MAX denominators.",
+    "Checked every310 trainable tensor membership, every310 finite nonzero gradient record, full final310 hash agreement and each corresponding saved model manifest hash. Checked one unique active shared matrix,310 optimizer members and no freezing/offload.",
+    "Independently reconstructed every1020 returned sequence from token IDs and checked position legality/EOS/text/canonical membership, shared51 case identities and17template denominators.",
+    "Read actual complete state restore stage events plus fixed source798-859 strict model/state/scheduler/step/RNG checks and seven-file identical two-rank receipts.",
+    "Independently recomputed resource sample peaks, no observed foreign GPU processes, no observed task swap, host safety, exit and tracked own-process cleanup."
+  ],
+  "training": {
+    "micro_per_rank": 2,
+    "accumulation": 32,
+    "global_batch": 128,
+    "completed_updates": 3,
+    "nonzero_lr_updates": 2,
+    "compute_presentations": 384,
+    "distinct_raw_records_union": 262,
+    "all_six_tasks": true,
+    "updates": [
+      {
+        "index": 0,
+        "plan": "mixed_global128_0",
+        "seconds_max_rank": 21.663378331810236,
+        "samples_per_second": 5.908589050122731,
+        "counts": {
+          "samples": 128,
+          "input_tokens": 12546,
+          "padded_tokens": 15766,
+          "label_tokens": 2204,
+          "shift_label_tokens": 2204
+        },
+        "padding_ratio": 0.20423696562222504,
+        "lr": [
+          0,
+          0
+        ],
+        "optimizer_state_resident_before": false
+      },
+      {
+        "index": 1,
+        "plan": "mixed_global128_1",
+        "seconds_max_rank": 21.197898035869002,
+        "samples_per_second": 6.038334545406859,
+        "counts": {
+          "samples": 128,
+          "input_tokens": 14040,
+          "padded_tokens": 18210,
+          "label_tokens": 2695,
+          "shift_label_tokens": 2695
+        },
+        "padding_ratio": 0.228995057660626,
+        "lr": [
+          7.142857142857143e-7,
+          7.142857142857143e-7
+        ],
+        "optimizer_state_resident_before": true
+      },
+      {
+        "index": 2,
+        "plan": "mixed_global128_tail",
+        "seconds_max_rank": 21.53623037133366,
+        "samples_per_second": 5.943472826626968,
+        "counts": {
+          "samples": 128,
+          "input_tokens": 17732,
+          "padded_tokens": 23824,
+          "label_tokens": 4926,
+          "shift_label_tokens": 4926
+        },
+        "padding_ratio": 0.2557085292142377,
+        "lr": [
+          0.0000014285714285714286,
+          0.0000014285714285714286
+        ],
+        "optimizer_state_resident_before": true
+      }
+    ],
+    "postwarm_normal_mixed_update_indices": [
+      1
+    ],
+    "postwarm_normal_mixed_samples_per_second": 6.038334545406859,
+    "tail_excluded_from_normal_throughput": true,
+    "local_microbatch_records_independently_checked": 192,
+    "scope": "Full communicating ZeRO-2 GPU AdamW; isolated NCCL not separately profiled"
+  },
+  "parameters": {
+    "native_class": "transformers.models.qwen3.modeling_qwen3.Qwen3ForCausalLM",
+    "complete_model_trainable_unique": 596728832,
+    "complete_model_trainable_tensors": 310,
+    "frozen_tensors": 0,
+    "all_310_finite_nonzero_gradients": true,
+    "all_310_complete_final_hashes_equal_between_ranks": true,
+    "representative_update_snapshots": 170,
+    "representative_snapshots_with_actual_change": 109,
+    "unchanged_BF16_snapshots_not_false_failure": "Nonzero gradient and tiny warmup update may round away in BF16; no claim that every BF16 parameter changed",
+    "SID_input_and_output_activation_gradients_nonzero": true,
+    "optimizer_exact_unique_members": 310,
+    "active_shared_embedding_head_occurrences": 1,
+    "input_head_tied_after_resize_wrap_zero_and_reload": true,
+    "independent_CE_abs_diff_ranks": [
+      9.5367431640625e-7,
+      4.76837158203125e-7
+    ]
+  },
+  "long_tail": {
+    "status": "PASS_COMPLETE_COMMUNICATING_ZERO_UPDATE",
+    "global_update_zero_based_index": 2,
+    "Adam_states_already_resident": true,
+    "actual_dataset_maximum_coverage": {
+      "seqrec": {
+        "sample_id": "seqrec:116350",
+        "full_tokens": 184,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "item2index": {
+        "sample_id": "item2index:3879",
+        "full_tokens": 1511,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "index2item": {
+        "sample_id": "index2item:3879",
+        "full_tokens": 1513,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "fusionseqrec": {
+        "sample_id": "fusionseqrec:4529",
+        "full_tokens": 908,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "itemsearch": {
+        "sample_id": "itemsearch:3451",
+        "full_tokens": 550,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "preferenceobtain": {
+        "sample_id": "preferenceobtain:4060",
+        "full_tokens": 543,
+        "actual_maximum_in_complete_zero_update": true
+      }
+    },
+    "additional_no_communication_diagnostics_each_rank": 24,
+    "distinct_records_per_diagnostic": 1,
+    "compute_presentations_per_diagnostic": 2,
+    "diagnostic_optimizer_updates": 0,
+    "diagnostic_parameters_unchanged": true,
+    "other_micro_layouts": "NOT_TESTED"
+  },
+  "training_state": {
+    "status": "PASS_SAME_ENGINE_DISK_SAVE_RESTORE",
+    "unique_files": 7,
+    "actual_unique_bytes": 8354402359,
+    "files": [
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q06-f-r0/output/probe/training_state/bounded/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt",
+        "bytes": 3580387312,
+        "sha256": "23615482b719e4036d329bbe2da44889efcbbc58a6349b40fad0a9f9502a999a"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q06-f-r0/output/probe/training_state/bounded/bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt",
+        "bytes": 3580392496,
+        "sha256": "9590689fa2190775fd143051e5f83abc7b9ff77be83f7ee5453981a448f3fc6e"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q06-f-r0/output/probe/training_state/bounded/mp_rank_00_model_states.pt",
+        "bytes": 1193560784,
+        "sha256": "7bec2c4e919806df8e3963f2dbcb2e2958353cfa3283de8c707e9984f0381cf8"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q06-f-r0/output/probe/training_state/latest",
+        "bytes": 7,
+        "sha256": "73060ad79f2c28d9235e910e8040ca93e7e6a611a3df4f0aa3d0cf3616b37ba5"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q06-f-r0/output/probe/training_state/rank0_rng.pt",
+        "bytes": 14244,
+        "sha256": "628ec6f24ea18154b56ca2f2789e143a27dc5467c34b3e544df7e7a7aaf59a4f"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q06-f-r0/output/probe/training_state/rank1_rng.pt",
+        "bytes": 14244,
+        "sha256": "9db7e1f2e691a25ade1c2a99c3daed273c994215c32cfa9adf2f9a7d7becd150"
+      },
+      {
+        "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q06-f-r0/output/probe/training_state/zero_to_fp32.py",
+        "bytes": 33272,
+        "sha256": "46497565ccf2b4a8b1f6f18c8341042f3749605a94335c81f69df1bd268af64f"
+      }
+    ],
+    "save_seconds_max_rank": 18.46324342675507,
+    "restore_seconds_max_rank": 19.58818262256682,
+    "independent_code_check": "probe.py798-859 hashes every optimizer tensor before save and after strict load, mutates first exp_avg scalar by+1 before reload, checks all310 model hashes, Adam/global steps, scheduler dictionary, Torch CPU/CUDA and Python/NumPy RNG; both actual ranks reached training_state_disk_restore_complete after assertions",
+    "explicit_rng_wrapper_required": true,
+    "restore_scope": "Disk read into the existing initialized ZeRO-2 engine; NOT a fresh-process or actual Trainer resume",
+    "reviewer_limit": "Heavy optimizer/model checkpoint payloads remain on server. Non-author independently verified code/control-flow, raw stage events, matching two-rank seven-file size/SHA receipts and successful assertions, not an independent local tensor deserialization."
+  },
+  "save_reload": {
+    "status": "PASS_FULL_NATIVE_MODEL_STRICT_RELOAD",
+    "tensor_manifest_keys": 311,
+    "each_complete_trainable_final_hash_matches_saved_tensor_manifest": true,
+    "tied_alias_hashes_equal": true,
+    "tokenizer_930_SID_order_exact": true,
+    "model_save_seconds_max_rank": 1.6604461958631873,
+    "model_fresh_reload_seconds_max_rank": 6.57273581251502
+  },
+  "generation": {
+    "status": "PASS_BOUNDED_ORIGINAL_POSITIONWISE_INTERFACE",
+    "unique_cases": 51,
+    "templates": 17,
+    "cases_per_template": 3,
+    "beam": 20,
+    "return_sequences": 20,
+    "returned_sequences": 1020,
+    "canonical_sequences": 0,
+    "canonical_denominator": 1020,
+    "all_five_token_sequences_independently_reconstructed": true,
+    "all_EOS_at_suffix_position": 4,
+    "allowed_counts": [
+      162,
+      256,
+      256,
+      256,
+      1
+    ],
+    "canonical_sids": 9897,
+    "formal_metrics": false,
+    "pure_generate_projected_17_template_center_hours": 14.457250942814992,
+    "pure_generate_template_max_case_hours_before_safety_factor": 14.986498870854783,
+    "CPU_test_processing": "Separate cached-callback CPU replay required; uncached harness residual is not a formal center"
+  },
+  "resources": {
+    "guard_wall_seconds": 249.18421711586416,
+    "charged_device_seconds": 498.3684342317283,
+    "training_update_peak_allocated_gib": 11.234960079193115,
+    "training_update_peak_reserved_gib": 12.7890625,
+    "whole_task_RSS_sample_peak_bytes": 9621909504,
+    "host_mem_available_min_bytes": 247955750912,
+    "new_disk_allocated_peak_bytes": 9982234624,
+    "all_observed_foreign_GPU_process_sets_empty": true,
+    "foreign_GPU_sample_count": 17,
+    "all_observed_task_swap_bytes_zero": true,
+    "guard_exit": 0,
+    "guard_cleanup_verified": true,
+    "runner_status": "SUCCEEDED",
+    "runner_exit": 0,
+    "owned_processes_remaining": [],
+    "cleanup_kill_signals_sent": false
+  },
+  "event_stage_counts_per_rank": [
+    {
+      "started": 1,
+      "environment_and_budget_checked": 1,
+      "load_model": 1,
+      "initial_model_long_tail_forward_complete": 6,
+      "deepspeed_initialize": 1,
+      "bounded_training_begin": 1,
+      "training_microstep": 96,
+      "global_optimizer_update_complete": 3,
+      "training_correctness_complete": 1,
+      "training_state_disk_restore_complete": 1,
+      "resident_state_no_communication_diagnostics_begin": 1,
+      "task_no_communication_diagnostic_complete": 24,
+      "bounded_validation_complete": 1,
+      "model_or_adapter_saved": 1,
+      "fresh_saved_model_reload_complete": 1,
+      "generation_case_complete": 34,
+      "generation_template_complete": 17,
+      "all_bounded_gpu_stages_complete": 1
+    },
+    {
+      "started": 1,
+      "environment_and_budget_checked": 1,
+      "load_model": 1,
+      "initial_model_long_tail_forward_complete": 6,
+      "deepspeed_initialize": 1,
+      "bounded_training_begin": 1,
+      "training_microstep": 96,
+      "global_optimizer_update_complete": 3,
+      "training_correctness_complete": 1,
+      "training_state_disk_restore_complete": 1,
+      "resident_state_no_communication_diagnostics_begin": 1,
+      "task_no_communication_diagnostic_complete": 24,
+      "bounded_validation_complete": 1,
+      "model_or_adapter_saved": 1,
+      "fresh_saved_model_reload_complete": 1,
+      "generation_case_complete": 17,
+      "generation_template_complete": 17,
+      "all_bounded_gpu_stages_complete": 1
+    }
+  ],
+  "limits": [
+    "Original Qwen prompt-length mask boundary gap29574 remains; semantic statusPARTIAL_BOUNDARY; known auxiliary pairing/provenance blocks formal reliable metrics.",
+    "Only selected micro2 is measured, not an optimized or fastest layout. One steady mixed update calibrates this full-parameter route.",
+    "Allocator peaks are training-update observations, not every initialization transient; whole-job NVML/RSS are sampled.",
+    "Heavy saved model/state was not locally reloaded by reviewer; raw strict execution proof is assessed. Same-engine state resume does not prove fresh-process RNG/data-loader/Trainer restoration.",
+    "No complete epoch, full metric evaluation, baseline adoption or complete96h conclusion from this review."
+  ],
+  "evidence_root": "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-q06-f-r0",
+  "raw_evidence": {
+    "request.json": {
+      "bytes": 17320,
+      "sha256": "3cdeab0ac61294edf254d1f43c89c9967358c43075fa536e0673e03d3a00807d"
+    },
+    "accepted.json": {
+      "bytes": 310,
+      "sha256": "34aa0700511f7374032a2ab5261245c8295347a79691f302b4e5d8aae88e9ede"
+    },
+    "status.json": {
+      "bytes": 6683,
+      "sha256": "46ae519d56a8fcd2926e59bea712e41972e996782c02645fa52d70568b4cde37"
+    },
+    "cleanup.json": {
+      "bytes": 664,
+      "sha256": "50993b9d536f3c25af20901bb3d1e7d114ac8d92463f4330bb9a3654b09ff849"
+    },
+    "controller-query.json": {
+      "bytes": 8939,
+      "sha256": "a1825e8411a58176dcaa9a0e61f39eb536f47d595d552cd8057d70487ec21214"
+    },
+    "work.log": {
+      "bytes": 53280,
+      "sha256": "ff9f1101a07be3cfb302e4ce544e8d2a755972722b61bc82f2a269795bb9f4e2"
+    },
+    "output/probe/rank0.json": {
+      "bytes": 1132839,
+      "sha256": "9ba2f32fb2eeba74945d498caedc2afd0d5614b24db5715a57c4b7f54f4a4619"
+    },
+    "output/probe/rank1.json": {
+      "bytes": 1132578,
+      "sha256": "fd088ca6dd44d499cbc0054cbfe23d896e96640bc30dfe1f1109ff104716e50d"
+    },
+    "output/probe/events_rank0.jsonl": {
+      "bytes": 287826,
+      "sha256": "1fe0395ee0318672bce41781d3fd371bc6a2269ce34e34e04ee10066f457e6bc"
+    },
+    "output/probe/events_rank1.jsonl": {
+      "bytes": 201638,
+      "sha256": "e92170facfe4c5c34ebcf2af71de4dfa74a667fd2fc20944b0d5654c8bc73e5b"
+    },
+    "output/resources/resource-summary.json": {
+      "bytes": 1576,
+      "sha256": "3f31d3dc1783e8a929b2bdb8405b9045b956933bfd8c8b9a9f412d494fdf00d5"
+    },
+    "output/resources/resource-samples.jsonl": {
+      "bytes": 11945,
+      "sha256": "67cd0024f6cc0ed1223785a2a138c743d18479a8a49db8376dc13dba8ee5d8ce"
+    }
+  },
+  "result": "Q06-F complete BF16 trainable model dual-GPU update, full communicating1513-token tail, strict native save/reload and same-engine full-state disk restoration verified; overallPARTIAL for retained Qwen boundary semantics."
+}

@@ -1,6 +1,6 @@
 {
   "reviewer": "/root/source_reviewer",
-  "status": "PASS_STATIC_WITH_EXPLICIT_RUNTIME_GATES",
+  "status": "PARTIAL_BOUNDARY_COMPUTE_PREFLIGHT_ALLOWED",
   "scope": "Direct non-author review of common.py, cpu_audit.py, probe.py, control.py, resource_guard.py and four route configurations before the first GPU run. No GPU execution or model/optimizer implementation by this reviewer.",
   "independence": {
     "not_authored_by_reviewer": ["scripts/common.py", "scripts/cpu_audit.py", "scripts/probe.py", "scripts/control.py", "scripts/resource_guard.py"],
@@ -130,6 +130,29 @@
     "No paper-quality identity, full seed completion,96-hour conclusion or final GitHub/ZIP acceptance is established by this file."
   ],
   "blocking_code_findings_open_for_current_configurations": [],
+  "subsequent_real_cpu_semantic_finding": {
+    "review": "review/mask_boundary_review.json",
+    "semantic_status_all_four_routes": "PARTIAL_BOUNDARY",
+    "original_prompt_length_mask_algorithm_retained": true,
+    "complete_answer_text_supervision_verified": false,
+    "compute_preflight_may_continue": true,
+    "overall_task_result_ceiling": "PARTIAL until the material supervision boundary question is resolved under new approval",
+    "scope": "Both completed CPU realizations reveal29574 tokenizer prefix-boundary disagreements and474 nonempty answers reduced to EOS-only supervision. This is a semantic acceptance limitation, not authorization to rewrite supervision or cancel independent bounded computation."
+  },
+  "independent_cpu_length_recount": {
+    "source": "Both CPU-r1 workload.npz files, identical SHA803bfe8cc13359fdfff9fff1382b3d587206a2ba150148ba8cb820edd9bbcea4",
+    "method": "Read raw arrays with NumPy, without importing the author audit or estimator. For each task independently recompute count/min/mean/max/sum/p10/p50/p90/p99 for input_raw_tokens,answer_standalone_tokens,full_raw_tokens_with_eos,full_tokens,shift_effective_label_tokens. Every value matches the saved CPU summary at1e-12 tolerance.",
+    "result": "PASS_RECOUNT_OF_REAL_TOKENIZER_OBSERVATIONS",
+    "per_task": [
+      {"task": "seqrec", "rows": 131837, "full_mean": 86.05969492631051, "full_p99": 180.0, "full_max": 184, "mean_shifted_labels": 5.0},
+      {"task": "item2index", "rows": 9922, "full_mean": 132.72868373311832, "full_p99": 480.0, "full_max": 1511, "mean_shifted_labels": 5.0},
+      {"task": "index2item", "rows": 9922, "full_mean": 123.46119733924613, "full_p99": 473.78999999999905, "full_max": 1513, "mean_shifted_labels": 84.46109655311429},
+      {"task": "fusionseqrec", "rows": 20000, "full_mean": 160.94115, "full_p99": 516.0, "full_max": 908, "mean_shifted_labels": 50.1963},
+      {"task": "itemsearch", "rows": 24772, "full_mean": 126.0729048926207, "full_p99": 308.0, "full_max": 550, "mean_shifted_labels": 5.0},
+      {"task": "preferenceobtain", "rows": 24772, "full_mean": 142.4177700629743, "full_p99": 293.0, "full_max": 543, "mean_shifted_labels": 68.61961085096077}
+    ],
+    "limit": "Independent arithmetic over the complete saved Qwen tokenizer observations; not a second full tokenizer execution and not the historical LLaMA lengths."
+  },
   "reviewer_gpu_jobs": 0,
   "reviewer_dependency_installs": [],
   "reviewer_git_mutations": []

@@ -1,0 +1,54 @@
+{
+  "reviewer": "/root/source_reviewer, non-author of estimate_budget.py and postprocess_probe.py",
+  "status": "PASS_STATIC_ONLY_PENDING_REAL_CPU_REPLAY_AND_FINAL_COST",
+  "task_correction_round": 2,
+  "files": {
+    "scripts/postprocess_probe.py": "7b96ec50dec7142ba812bd230a256d39d9d9f50bf572ffc73922e47db27b6db3",
+    "scripts/estimate_budget.py": "34c72fcc87c0c31c3cd3d619217303c6fad6c54ae833635dbc564167504d106f"
+  },
+  "root_cause_independent_original_source_check": {
+    "official_test_ddp.py:78": "The callback is constructed before DataLoader iteration and before the prompt loop at93; it is not reconstructed per user.",
+    "official_data.py:67": "BaseDataset.get_prefix_allowed_tokens_fn populates allowed_tokens only when None and reuses the position sets.",
+    "original_commit": "e6f1b3b3f8b4fee55a49a7b3dfeba29dbfcf0669",
+    "GPU_harness_difference": "Fixed probe.py constructs Allowed inside each bounded generation case and tokenizes the full9922-item catalog each time. This remains real diagnostic wall cost, but is not a required per-user cost of the official cached evaluation loop.",
+    "required_resolution": "Do not extrapolate this harness residual as formal CPU center. Preserve old result and mark the residual diagnostic-only. Obtain independent CPU-only replay using a single callback initialization."
+  },
+  "CPU_replay_static_checks": [
+    "Reads both fixed GPU rank reports and requires identical51 gathered successful generation cases and complete17-template coverage.",
+    "Verifies saved sample SHA,930-SID tokenizer IDs, vocabulary and EOS; constructs original SeqRecDataset in test mode and original TestCollator with unchanged Instruments histories and SID mapping.",
+    "Constructs exact existing Qwen Allowed once per route, binds the actual encoded prompt per case, and never invokes beam callbacks or model.generate.",
+    "Reconstructs the20 saved actual token sequences and FP32 scores on CPU; whole-sequence batch_decode and unchanged original get_topk_results must reproduce GPU reference parsed strings and topk bits.",
+    "Checks exact original prompt/target/user/token IDs and attention mask; not a synthetic text-length or different-user benchmark.",
+    "Uses51 warmup replays then3 measured repetitions for every case. Mean and maximum are scenarios, not a statistical confidence interval.",
+    "total_per_user_seconds includes Dataset, Collator/encoding, cached callback bind, CPU reconstruction, decode and original evaluator once. Encode is inside Collator; extra parser diagnostics are outside total and are not added again.",
+    "CUDA_VISIBLE_DEVICES is empty before Torch import; no model loading and an explicit torch.cuda.is_initialized assertion. This adds zero GPU optimizer updates and is not a GPU throughput measurement.",
+    "Final7b96 source change independently read: missing route/rank evidence gets route-local BLOCKED while independent valid routes continue, and duplicate route identities are rejected before outputs are written."
+  ],
+  "estimator_static_checks": [
+    "Old generation-template residual remains in diagnostic_harness_upper_bound with formal_cost_component=false; generation_budget no longer returns it as a required formal component.",
+    "Absent successful cached CPU benchmark preserves null processing cost, preventing a fabricated complete seed total or likely-under96h conclusion.",
+    "Cached center adds one callback initialization plus24772/2 times the sum of17 mean per-user CPU times; conservative adds17 initializations and template maximum repetition times then multiplies1.25.",
+    "Already measured generate callback runtime is not replayed or charged twice. CPU phase diagnostic values are not summed into total a second time.",
+    "Training remains MAX(rank wall), not summed rank wall; source postwarm ordinary mixed updates exclude artificial long-tail capacity updates. Full221225-row NPZ lengths and actual sampler presentation counts are used in deterministic four-epoch padding scenarios.",
+    "Conservative training envelope retains normalized and unnormalized NNLS/residual and constant/linear/quadratic sensitivity, not an unverified stable rank-normalizer guarantee.",
+    "Current prompt-length-mask scope and29574 boundary mismatches,979 EOS-only records including474 nonempty answers are explicit; compute budget does not approve new supervision semantics or a formal baseline.",
+    "Full-state donor requires successful actual Q06-F disk save/restore; linear byte scaling for other routes remains a proxy, not their actual resume validation. Native model saves and training-state saves remain separately identified.",
+    "Known unmeasured distributed aggregation/durable output, epoch random realization, fresh-process restoration and CPU concurrency costs remain listed, not falsely measured. Planning reserves do not prove runtime guarantees."
+  ],
+  "independent_local_validation": {
+    "postprocess_py_compile": "PASS",
+    "postprocess_help": "PASS",
+    "estimate_py_compile": "PASS",
+    "estimate_self_test": "PASS, actual reviewer invocation",
+    "GPU_execution": "NONE",
+    "new_packages_or_environment_changes": "NONE"
+  },
+  "runtime_limitations": [
+    "No successful actual CPU replay receipt was available when this static review was written; final output arithmetic must be reviewed after the job.",
+    "Replay scores are CPU scalars. Native GPU D2H and score-comparison synchronization, pinned H2D, DataLoader worker contention and distributed per-batch object gathering are not directly measured by this replay and cannot be described as complete formal evaluator overhead.",
+    "Callback/tokenizer/dataset initialization outside per-user total is either separately measured or covered by explicit initialization reserves. It must not silently disappear from final accounting.",
+    "Only same-engine Q06-F training-state disk restoration is actually verified. New-process Trainer resume and best-checkpoint restoration remain separate untested paths."
+  ],
+  "effect_on_fixed_GPU_source": "NONE; probe.py SHA8e72c75a961d3ef308c3b88359221cda94632777ead8c891caf89b5979463f3a and GPU RUN1f3a0bafeebb3a2fa8604a052727ddb3d1eadcff unchanged",
+  "overall_semantics": "PARTIAL_BOUNDARY; existing auxiliary data blocker remains"
+}

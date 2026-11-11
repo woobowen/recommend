@@ -1,0 +1,36 @@
+{
+  "argv": [
+    "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+    "{TASK}/scripts/postprocess_probe.py",
+    "--probe",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q06-l-r0/output/probe",
+    "--probe",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q06-f-r0/output/probe",
+    "--probe",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q17-l-r0/output/probe",
+    "--probe",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q17-f-r0/output/probe",
+    "--original",
+    "{RELEASE}/lc_rec/vendor/original",
+    "--data",
+    "/data/bwwu/lc-rec/assets/data/Instruments",
+    "--output",
+    "{JOB}/output/postprocess",
+    "--run-commit",
+    "{COMMIT}",
+    "--cpu-threads",
+    "4"
+  ],
+  "env": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OMP_NUM_THREADS": "4",
+    "TOKENIZERS_PARALLELISM": "false",
+    "USE_TF": "0",
+    "USE_FLAX": "0",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "RUN_COMMIT": "{COMMIT}",
+    "CUDA_VISIBLE_DEVICES": ""
+  },
+  "timeout_seconds": 1200
+}

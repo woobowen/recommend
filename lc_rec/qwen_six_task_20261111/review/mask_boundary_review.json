@@ -1,0 +1,104 @@
+{
+  "reviewer": "/root/source_reviewer",
+  "status": "PARTIAL_BOUNDARY",
+  "independence": "Reviewer did not implement common.Collator, cpu_audit.py, probe.py, tokenizer replay or the workload arrays. Directly read their implementation, both completed CPU audit files, original LC-Rec Collator and actual boundary offsets. Independently recounted both raw workload.npz NPY payloads with Python standard-library zipfile/ast/struct, without importing the author's audit/estimator code or NumPy. No GPU run by reviewer.",
+  "applicable_routes": ["Q06-L", "Q06-F", "Q17-L", "Q17-F"],
+  "source_and_run": {
+    "official_lc_rec_commit": "e6f1b3b3f8b4fee55a49a7b3dfeba29dbfcf0669",
+    "common_py_sha256": "be599f633fbf0d6b3748cd643b8fcd605593ec09da1ae04d69e50b79a28fc788",
+    "cpu_audit_py_sha256": "5845fe49458a40adf9940112705a49ad94b5ee87b4e787f13334b120e4dcd9ac",
+    "cpu_run_commit_both_models": "97ae3fad2cda9e9df5576db36ef6dee323500585",
+    "q06_audit": {
+      "path": "evidence/jobs/lc-qwen6-20261111-cpu-q06-r1/output/audit/audit.json",
+      "bytes": 133619,
+      "sha256": "18f3d0b5f724110e733f4a40d9b33b2cd4d3dec9e12cf602b52c273993eaabd6"
+    },
+    "q17_audit": {
+      "path": "evidence/jobs/lc-qwen6-20261111-cpu-q17-r1/output/audit/audit.json",
+      "bytes": 133708,
+      "sha256": "3b58dd486a5a3944c7ff9c5b64087898450117cbd878c165d57056bd8576d38a"
+    },
+    "both_workload_npz_sha256": "803bfe8cc13359fdfff9fff1382b3d587206a2ba150148ba8cb820edd9bbcea4"
+  },
+  "observed_both_models": {
+    "unchanged_realization_records": 221225,
+    "boundary_mismatch_records": 29574,
+    "raw_empty_answer_records": 505,
+    "eos_only_supervision_records": 979,
+    "nonempty_answers_with_eos_only_supervision": 474,
+    "zero_effective_supervision_records": 0,
+    "full_sequence_truncated_records": 0,
+    "per_task": [
+      {"task": "seqrec", "records": 131837, "boundary_mismatches": 0, "raw_empty": 0, "eos_only": 0, "nonempty_eos_only": 0},
+      {"task": "item2index", "records": 9922, "boundary_mismatches": 0, "raw_empty": 0, "eos_only": 0, "nonempty_eos_only": 0},
+      {"task": "index2item", "records": 9922, "boundary_mismatches": 2993, "raw_empty": 133, "eos_only": 316, "nonempty_eos_only": 183},
+      {"task": "fusionseqrec", "records": 20000, "boundary_mismatches": 4537, "raw_empty": 372, "eos_only": 663, "nonempty_eos_only": 291},
+      {"task": "itemsearch", "records": 24772, "boundary_mismatches": 0, "raw_empty": 0, "eos_only": 0, "nonempty_eos_only": 0},
+      {"task": "preferenceobtain", "records": 24772, "boundary_mismatches": 22044, "raw_empty": 0, "eos_only": 0, "nonempty_eos_only": 0}
+    ]
+  },
+  "independent_raw_array_recount": {
+    "records_checked_per_model": 221225,
+    "method": "Read and validate NPY magic/header/version/shape/descriptor within each NPZ. Byte flags and task_id determine counts directly. Verify N=221225, one-byte boolean/int8 descriptors, non-Fortran shape, all payload lengths, and cross-tab boundary mismatch/EOS-only/raw-empty by task. All independent totals match the CPU audit summaries exactly.",
+    "two_models_identical_npz_bytes": true,
+    "payload_sha256": {
+      "task_id": "02fb2c14ac01b080ab849c577e934d61143faad1c5ff626c58d7583dbc015b50",
+      "prompt_full_token_prefix_match": "66d4189379b8854433ba740cbded8f661c9b20a8dc0024d6a91d95945707f518",
+      "answer_text_empty": "43c5bd0b456f3efc85bf90e34ce5543bc9756708ddc5f2f9736471aba1340fdf",
+      "eos_only_supervision": "d647c597abaf66fa01f191f41023940bcfe07ab76018f7f9fc4ce4c24a0cfce1",
+      "zero_supervision": "c42a89641d0ef2f58b758efa620c13c756774410c62cccfc43edb5ba0d3e0704",
+      "full_truncated": "c42a89641d0ef2f58b758efa620c13c756774410c62cccfc43edb5ba0d3e0704"
+    },
+    "limit": "Independent arithmetic over saved real-tokenizer observations, not a second complete tokenizer execution. Per-record tokenization was performed by the CPU audit; the reviewer directly checks saved offsets and original/adapted mask code."
+  },
+  "direct_boundary_examples": [
+    {
+      "sample_id": "index2item:12",
+      "prompt_character_length": 231,
+      "independently_encoded_prompt_tokens": 40,
+      "full_boundary_token_id": 55992,
+      "full_boundary_character_offsets_half_open": [230, 232],
+      "answer_prefix": "Crescent 4/4 Full Size Well Balanced Round Brazil Wood Mongolian",
+      "interpretation": "The full-text token straddles the prompt's final colon at230 and first answer character C at231. The original independently encoded prompt-length mask ignores this token, so the first answer character has no supervised prediction."
+    },
+    {
+      "sample_id": "index2item:9",
+      "prompt_character_length": 187,
+      "independently_encoded_prompt_tokens": 34,
+      "full_boundary_token_id": 74045,
+      "full_boundary_character_offsets_half_open": [186, 190],
+      "answer_prefix": "The Kona K2 Series Thin Body Electric Acoustic Guitars strike th",
+      "interpretation": "The full-text token straddles the final colon and the entire initial The fragment. The ignored content can span several answer characters or a first word, not merely one character."
+    },
+    {
+      "sample_id": "index2item:27",
+      "prompt_character_length": 214,
+      "full_boundary_token_id": 16976,
+      "full_boundary_character_offsets_half_open": [213, 215],
+      "answer_prefix": ".",
+      "interpretation": "A nonempty one-character answer merges with the prompt boundary and is ignored, leaving genuine EOS as the sole supervised token."
+    }
+  ],
+  "cause_and_method_boundary": {
+    "original_algorithm": "Official LC-Rec independently tokenizes the input prompt and full prompt+answer+EOS, masking labels by the independently tokenized prompt positions. It does not prove that the prompt token IDs are a prefix of the full encoding.",
+    "current_qwen_adapter": "Preserves that algorithm and the exact original natural-language bytes. attention_mask replaces PAD-token equality solely to preserve genuine EOS when Qwen PAD equals EOS.",
+    "new_qwen_effect": "Byte-BPE merges across the colon/answer boundary frequently in the three text-output tasks. Keeping the old positional mask therefore does not preserve complete answer-text supervision for every record.",
+    "what_is_verified": "Literal original mask algorithm plus deliberate genuine-EOS adaptation; all six tasks and original records remain present; no temperature or chat prompt is introduced.",
+    "what_is_not_verified": "Correct complete answer-only supervision/information boundary for all six tasks under Qwen. Formal corrected-mask method and its numerical trajectory are not approved or tested.",
+    "separate_existing_blocker": "Auxiliary12233 train/7473 test mismatches and incomplete preference-label generation provenance remain independent formal-data blockers."
+  },
+  "non_author_decision": {
+    "semantic_status_all_four_routes": "PARTIAL_BOUNDARY",
+    "overall_task_result_cannot_be_full_pass": true,
+    "continue_authorized_bounded_computation": true,
+    "why_continue": "The user's failure-isolation rule requires completing independent authorized technical checks. Under the unchanged original mask algorithm, finite F/B/AdamW, gradients, full ZeRO long-tail capacity, saving/reloading, SeqRec17-template beam20 and conditional computational cost remain useful and separately testable. No formal seed or recommendation quality evaluation is authorized.",
+    "what_is_blocked": "A claim of complete six-task supervision correctness, adoption as a trusted formal baseline, and a claim that current costs validate an unapproved future boundary-corrected method.",
+    "do_not_change_without_new_approval": ["Offset-based supervision rewrite", "Separate prompt/answer tokenization that changes the actual token sequence", "New boundary separators or changed natural-language prompt", "Removing boundary-mismatched records", "Regenerating auxiliary labels or changing data splits"],
+    "main_control_confirmation": "Main control explicitly agreed to continue bounded computation with semantic_status=PARTIAL_BOUNDARY for every route, overall at mostPARTIAL, and unchanged supervision.",
+    "required_reporting": "Distinguish compute technical status, semantic status, long-tail status, save/reload status, complete-state restore status and96-hour conditional cost. Preserve original failed and unfavorable observations."
+  },
+  "reviewer_code_changes": ["review/mask_boundary_review.json", "review/prelaunch_review.json metadata only"],
+  "training_or_supervision_implementation_modified_by_reviewer": false,
+  "gpu_executed_by_reviewer": false,
+  "dependency_installs_by_reviewer": []
+}

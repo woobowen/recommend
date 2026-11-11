@@ -212,7 +212,8 @@ def train_budget(ranks, arrays, protocol_layout):
     fit = nonnegative_fit(design, timings)
     normalizer = sum(update["whole_update_compute_seconds"] for update in steady) / sum(timings)
     assert 0 < normalizer <= 1 + 1e-6
-    compute = float(target @ numpy.asarray(fit["coefficients_seconds"])) * normalizer
+    unnormalized_compute = float(target @ numpy.asarray(fit["coefficients_seconds"]))
+    compute = unnormalized_compute * normalizer
     sensitivity = []
     for update in steady:
         observed_features = numpy.asarray(update["design"]).sum(axis=0)
@@ -223,7 +224,8 @@ def train_budget(ranks, arrays, protocol_layout):
             "quadratic_only_seconds": update["whole_update_compute_seconds"] * target[2] / observed_features[2],
         })
     fit_plus_residual = compute + 2 * fit["rmse_seconds"] * target[0] * normalizer
-    candidates = [compute, fit_plus_residual]
+    unnormalized_plus_residual = unnormalized_compute + 2 * fit["rmse_seconds"] * target[0]
+    candidates = [compute, fit_plus_residual, unnormalized_compute, unnormalized_plus_residual]
     candidates.extend(value for row in sensitivity for name, value in row.items() if name.endswith("_seconds"))
     other_center = steps * statistics.mean(update["whole_update_other_seconds"] for update in steady)
     other_slow = steps * max(update["whole_update_other_seconds"] for update in steady)
@@ -232,7 +234,10 @@ def train_budget(ranks, arrays, protocol_layout):
         "formal_steps": steps, "micro": micro, "accumulation": ranks[0]["training_definition"]["accumulation"],
         "full_workload": workload, "nonnegative_forward_backward_fit": fit,
         "paired_micro_max_to_whole_rank_normalizer": normalizer,
+        "normalizer_center_assumption": "The observed ratio between MAX(rank sum F+B) and sum(microstep MAX F+B) is assumed stable only for the center scenario. Rank-alternation skew can change with full-data layouts; the conservative envelope retains the unnormalized predictions",
         "fit_compute_seconds": compute, "fit_plus_two_rmse_per_micro_seconds": fit_plus_residual,
+        "unnormalized_fit_compute_seconds": unnormalized_compute,
+        "unnormalized_fit_plus_two_rmse_per_micro_seconds": unnormalized_plus_residual,
         "covariate_sensitivities": sensitivity,
         "center_measured_other_seconds": other_center,
         "conservative_measured_other_seconds_before_factor": other_slow,
@@ -241,7 +246,8 @@ def train_budget(ranks, arrays, protocol_layout):
         "timing_denominator": "Two synchronized ranks, MAX rank wall; never sum rank wall seconds",
         "other_cost": "Whole update wall minus its slow-rank F+B includes collator, transfer, optimizer, synchronization, guard and probe instrumentation exactly once",
         "communication": "ZeRO communication inside measured backward/step is included; separate NCCL kernel time is not profiled",
-        "conservative_method": "Maximum NNLS/residual/constant/linear/quadratic full-distribution sensitivity plus worst steady non-F+B overhead, multiplied by1.25",
+        "conservative_method": "Maximum normalized and unnormalized NNLS/residual/constant/linear/quadratic full-distribution sensitivity plus worst steady non-F+B overhead, multiplied by1.25",
+        "model_speed_claim_limit": "Gradient hooks, guard, data replay, logging and other probe instrumentation remain included. These are measured harness costs; this is not a model-intrinsic speed or recommendation-quality comparison",
     })
     return report["center_seconds"], report["conservative_seconds"], report
 
@@ -331,16 +337,80 @@ def generation_budget(ranks):
     center = multiplier * sum(row["mean_seconds"] for row in prompt_rows)
     slow = multiplier * sum(row["max_seconds"] for row in prompt_rows) * SCENARIO_FACTOR
     complete_residuals = all(row["non_generation_wall_proxy_per_critical_rank_user_seconds"] is not None for row in prompt_rows)
-    processing_center = multiplier * sum(row["non_generation_wall_proxy_per_critical_rank_user_seconds"] for row in prompt_rows) if complete_residuals else None
-    processing_slow = multiplier * 17 * max(row["non_generation_wall_proxy_per_critical_rank_user_seconds"] for row in prompt_rows) * SCENARIO_FACTOR if complete_residuals else None
-    return center, slow, processing_center, processing_slow, {
+    residual_center = multiplier * sum(row["non_generation_wall_proxy_per_critical_rank_user_seconds"] for row in prompt_rows) if complete_residuals else None
+    residual_slow = multiplier * 17 * max(row["non_generation_wall_proxy_per_critical_rank_user_seconds"] for row in prompt_rows) * SCENARIO_FACTOR if complete_residuals else None
+    return center, slow, None, None, {
         "per_prompt": prompt_rows, "test_users": TEST_USERS, "templates": 17, "beam": 20,
         "return_sequences": 20, "max_new_tokens": 10, "dual_rank_divisor": WORLD,
         "formula": "Sum over17 prompts of24772/2 * mean_or_max(actual per-user beam20 generation seconds)",
         "conservative_factor": SCENARIO_FACTOR,
-        "processing_proxy": "Template MAX-rank wall minus actual assigned critical-rank generation sum, divided by its two real cases; includes callback construction, collator, decoding, original evaluator sort and barriers. Original callback reuse can make formal processing cheaper; no speedup assumed",
+        "diagnostic_harness_upper_bound": {
+            "full_test_center_residual_seconds": residual_center,
+            "full_test_conservative_residual_seconds": residual_slow,
+            "formal_cost_component": False,
+            "cause": "GPU probe constructs Allowed anew for each case and re-encodes the complete9922-item four-position catalog. Official LC-Rec constructs the callback once and caches BaseDataset.allowed_tokens. This repeated harness initialization must not be extrapolated as required per-user formal CPU processing",
+        },
+        "processing_cost_policy": "Use only the independent CPU replay benchmark with a cached callback and exact original preprocessing/postprocessing. Without it the required test CPU processing component remains unknown",
         "remaining_unknown": "Full-test result aggregation/durable output flush and trained-output variation are unmeasured and covered only by explicit planning reserves",
         "formal_recall_ndcg_computed": False,
+    }
+
+
+def cached_processing_budget(benchmark):
+    if benchmark is None:
+        return None, None, {"missing": "No successful cached-callback original CPU replay benchmark; old GPU harness residual is diagnostic only"}
+    assert benchmark["status"] == "PASS"
+    assert benchmark["callback"]["cached_across_cases"] is True
+    initialization = benchmark["callback"]["initialization_seconds"]
+    assert math.isfinite(initialization) and initialization >= 0
+    cases = benchmark["cases"]
+    assert len(cases) == 51 and len({(case["prompt_id"], case["row_idx"], case["history_bucket"]) for case in cases}) == 51
+    rows = []
+    for prompt_id in range(17):
+        selected = [case for case in cases if case["prompt_id"] == prompt_id]
+        assert len(selected) == 3
+        assert all(case["status"] == "PASS" and case["exact_reference_outputs"] is True for case in selected)
+        means = [case["total_per_user_seconds"] for case in selected]
+        maxima = [case["conservative_per_user_seconds"] for case in selected]
+        assert all(math.isfinite(mean) and 0 <= mean <= maximum for mean, maximum in zip(means, maxima))
+        rows.append({
+            "prompt_id": prompt_id, "mean_seconds": statistics.mean(means), "conservative_seconds": max(maxima),
+            "per_case_mean_seconds": means, "per_case_max_seconds": maxima,
+        })
+    center = initialization + TEST_USERS / WORLD * sum(row["mean_seconds"] for row in rows)
+    slow = 17 * initialization + TEST_USERS / WORLD * sum(row["conservative_seconds"] for row in rows)
+    slow *= SCENARIO_FACTOR
+    return center, slow, {
+        "status": "PASS_CACHED_ORIGINAL_CPU_REPLAY", "route_key": benchmark["route_key"],
+        "benchmark_run_commit": benchmark["run_commit"],
+        "callback_initialization_seconds": initialization,
+        "callback_initialization_count_center_per_rank": 1,
+        "callback_initialization_count_conservative_per_rank": 17,
+        "per_prompt": rows, "distinct_actual_replayed_cases": 51,
+        "formula_center": "One cached callback initialization plus24772/2 times sum of17 template mean CPU per-user times",
+        "formula_conservative": "(17 callback initializations plus24772/2 times sum of17 template maximum per-user repetition times)*1.25",
+        "timing_policy": "Use measured total_per_user_seconds only; phase encode/collator times may overlap and are not summed again",
+        "callback_generation_runtime": "Already included in GPU generate timing; CPU replay does not add or simulate it",
+        "parallelism_assumption": "Two independent formal CPU data/output workers can supply the two GPUs; CPU processing is added without assuming overlap with GPU work",
+        "remaining_unknown": "Complete-test output aggregation, durable flush and process contention remain bounded only by planning reserves",
+    }
+
+
+def semantic_boundary(audit, arrays):
+    counts = audit["joint"]["counts"]
+    boundary_count = audit["concat_rows"] - counts["prompt_full_token_prefix_match"]
+    nonempty_eos = int((arrays["eos_only_supervision"] & ~arrays["answer_text_empty"]).sum()) if arrays is not None else None
+    return {
+        "semantic_status": "PARTIAL_BOUNDARY" if boundary_count else "NO_OBSERVED_BOUNDARY_MISMATCH",
+        "records": audit["concat_rows"], "boundary_mismatch_records": boundary_count,
+        "raw_empty_answer_records": counts["answer_text_empty"],
+        "eos_only_supervision_records": counts["eos_only_supervision"],
+        "nonempty_answer_eos_only_records": nonempty_eos,
+        "zero_effective_supervision_records": counts["zero_supervision"],
+        "cost_scope": "Computational budget of the currently retained original independently-tokenized prompt-length mask with Qwen genuine-EOS adaptation",
+        "not_claimed": "Complete original answer-text supervision, a validated corrected-boundary method, trusted formal baseline or paper-matched recommendation quality",
+        "future_corrected_mask_method": "NOT APPROVED OR TESTED; this budget does not validate its loss, numerical trajectory or runtime",
+        "compute_budget_status_is_separate": True,
     }
 
 
@@ -429,9 +499,10 @@ def event_initialization(paths, ranks, inputs):
         "measured_bootstrap_seconds": bootstrap if all(value is not None for value in starts) else None,
         "measured_model_and_zero_seconds": measured - bootstrap,
         "cold_update_allowance_seconds": cold,
+        "cold_update_is_extra_planning_reserve_not_additional_measured_initialization": True,
         "unmeasured_full_cpu_dataset_setup_allowance_seconds_center": 300,
         "unmeasured_full_cpu_dataset_setup_allowance_seconds_conservative": 600,
-        "boundary": "Five/ten minute planning allowances, not measurements. Full formal CPU preparation and new-process recovery are not executed. Counting one cold update again is deliberate initialization reserve",
+        "boundary": "Only named bootstrap/model/ZeRO fields are measured initialization. A duplicated cold update and five/ten minute CPU setup are explicit planning reserves, not measurements of a complete formal initializer. Full formal CPU preparation and new-process recovery are not executed",
     }
 
 
@@ -440,7 +511,7 @@ def classify(row):
         return "BLOCKED", "No verified complete nonzero-LR dual-rank update"
     conservative = row["conservative"]
     if conservative["known_subtotal_hours"] > 96 and row["center"]["component_seconds"]["training"] is not None and row["center"]["component_seconds"]["test_generation"] is not None:
-        return "UNLIKELY_WITHIN_96H", "Conservative quantified components exceed96h before any missing cost"
+        return "UNLIKELY_WITHIN_96H", "The conservative scenario for the selected micro, retained original mask and measured instrumented implementation exceeds96h before missing costs. Model-intrinsic speed and a lean unmeasured formal loop are not established by this result"
     required = row.get("core_training_status") == "PASS" and row.get("long_tail_status") == "PASS" and row.get("save_reload_status") == "PASS" and row.get("generation_status") == "PASS"
     if required and conservative["conditional_total_hours"] is not None and conservative["conditional_total_hours"] <= 72:
         return "LIKELY_WITHIN_96H", "All essential bounded chains and full-state I/O measurement/proxy present; conservative conditional total leaves at least24h margin"
@@ -480,12 +551,21 @@ def discover(evidence, inputs):
         if report.get("status") == "PASS_CPU_PROTOCOL_ONLY":
             protocols.append((report.get("observed_utc", ""), str(path), report))
     protocol = max(protocols, default=(None, None, None))[2]
-    return cpu, cpu_attempts, attempts, selected, protocol
+    benchmarks = {}
+    for route_key in ROUTES:
+        for path in sorted(evidence.rglob(route_key + ".json")):
+            benchmark = inputs.read(path)
+            if benchmark.get("route_key") != route_key or benchmark.get("status") != "PASS" or "callback" not in benchmark or "cases" not in benchmark:
+                continue
+            candidate = (benchmark.get("finished_utc", benchmark.get("observed_utc", "")), str(path))
+            if route_key not in benchmarks or candidate > benchmarks[route_key][0]:
+                benchmarks[route_key] = (candidate, path, benchmark)
+    return cpu, cpu_attempts, attempts, selected, protocol, benchmarks
 
 
 def estimate(evidence, run_commit):
     inputs = Inputs()
-    cpu, cpu_attempts, attempts, selected, protocol = discover(evidence, inputs)
+    cpu, cpu_attempts, attempts, selected, protocol, benchmarks = discover(evidence, inputs)
     donor = None
     if "q06-F" in selected and "q06" in cpu:
         ranks = selected["q06-F"]["ranks"]
@@ -495,9 +575,17 @@ def estimate(evidence, run_commit):
             donor = {"route_key": "q06-F", "run_commit": ranks[0]["run_commit"], "measurement": measured, "static_bytes": 14 * parameters}
     result = {
         "calculation_run_commit": run_commit, "calculation_script": {"path": str(Path(__file__).resolve()), "sha256": sha(__file__)},
+        "calculation_environment": {
+            "executable": sys.executable, "python": sys.version, "numpy": numpy.__version__,
+            "cwd": str(Path.cwd()), "argv": sys.argv,
+        },
         "created_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "scope": "One Instruments seed, original six tasks and930 LC-Rec SID,4epochs/global128, sampled SeqRec validation,24772 users times17 prompts beam20; no formal run launched",
         "cpu_attempts": cpu_attempts, "routes": {}, "full_state_donor": donor,
+        "semantic_status_all_routes": "PARTIAL_BOUNDARY",
+        "supervision_scope": "Current retained original prompt-length mask only:29574 boundary mismatches and979 EOS-only records, including474 originally nonempty answers. No corrected-supervision method or complete six-task semantic PASS is established",
+        "compute_budget_judgment_is_not_semantic_or_baseline_approval": True,
+        "compute_budget_scope": "Current selected per-route micro/accumulation and preserved original prompt-length mask, including measured gradient-hook, guard, replay and logging instrumentation. Lean formal-kernel throughput and future boundary-corrected supervision are unmeasured",
         "method_boundary": [
             "Center/conservative are explicit engineering scenarios, not statistical confidence intervals or runtime guarantees",
             "Current full-realization arrays include every original auxiliary mismatch, empty answer and EOS-only record; technical update eligibility does not redefine a formal training corpus",
@@ -505,6 +593,7 @@ def estimate(evidence, run_commit):
             "MAX of synchronized ranks is wall time; shared generation cases are deduplicated, and formal distinct users divide by two GPUs exactly once",
             "Full-state proxies require a successful measured Q06-F save/restore; missing required costs remain null",
             "Cold update, CPU setup, callback/output handling and explicit operating reserves are included; no unmeasured required cost is silently set to zero",
+            "Per-case full-catalog Allowed initialization in the GPU harness is diagnostic overhead. Formal CPU test cost uses only separately measured cached-callback replay; missing replay evidence keeps that component null",
         ],
         "unquantified_costs": [
             "Actual future full-epoch prompt/query/preference random realizations and long-run padding variation beyond the fixed audited realization",
@@ -519,7 +608,7 @@ def estimate(evidence, run_commit):
         label = route_key.upper()
         all_attempts = attempts[route_key]
         attempt_rows = [{"job_id": value["job_id"], "paths": [str(path) for path in value["paths"]], "statuses": [rank.get("status") if rank else "MISSING_RANK" for rank in value["ranks"]], "run_commits": [rank.get("run_commit") if rank else None for rank in value["ranks"]]} for value in all_attempts]
-        row = {"route": label, "attempts": attempt_rows}
+        row = {"route": label, "attempts": attempt_rows, "semantic_status": "PARTIAL_BOUNDARY"}
         result["routes"][label] = row
         if route_key not in selected or route_key.split("-")[0] not in cpu:
             row.update(status="BLOCKED", reason="Missing completed dual-rank GPU evidence or successful actual-model CPU tokenization", center=scenario({"full_seed": None}), conservative=scenario({"full_seed": None}))
@@ -547,6 +636,12 @@ def estimate(evidence, run_commit):
                 row["training"] = {"measured_updates": paired_updates(ranks), "missing": "Full workload.npz not collected; full-distribution calibrated training cost remains unknown"}
             components["validation"], slow_components["validation"], row["validation"] = validation_budget(ranks, calls)
             components["test_generation"], slow_components["test_generation"], components["test_processing_proxy"], slow_components["test_processing_proxy"], row["test"] = generation_budget(ranks)
+            benchmark = benchmarks.get(route_key)
+            if benchmark:
+                assert benchmark[2]["probe_run_commit"] == ranks[0]["run_commit"], "CPU replay benchmark belongs to a different GPU source run"
+            components["test_processing_proxy"], slow_components["test_processing_proxy"], row["test_cpu_processing"] = cached_processing_budget(benchmark[2] if benchmark else None)
+            if benchmark:
+                row["test_cpu_processing"]["benchmark_path"] = str(benchmark[1])
             components["checkpoint"], slow_components["checkpoint"], components["best_restore"], slow_components["best_restore"], row["checkpoint"] = checkpoint_budget(ranks, audit, layout, donor)
             components["initialization"], slow_components["initialization"], row["initialization"] = event_initialization(chosen["paths"], ranks, inputs)
             subtotal = sum(value for value in components.values() if value is not None)
@@ -555,6 +650,7 @@ def estimate(evidence, run_commit):
             slow_components["operating_reserve"] = .10 * slow_subtotal + 1800
             row.update({
                 "selected_job_id": chosen["job_id"], "run_commit": ranks[0]["run_commit"],
+                "compute_budget_scope": "This exact selected micro/accumulation and retained-mask instrumented implementation; no model-intrinsic speed or formal baseline adoption conclusion",
                 "selection_rule": "Latest timestamped attempt with both rank reports; no fastest-attempt selection; prior failures retained",
                 "training_definition": definition, "formal_loader": ranks[0].get("formal_loader"),
                 "rank_statuses": [rank.get("status") for rank in ranks],
@@ -566,12 +662,14 @@ def estimate(evidence, run_commit):
                 "has_nonzero_update": any(update["nonzero_lr"] for update in paired_updates(ranks)),
                 "measured_gpu_and_host_peaks": [rank.get("training_peak", {}) for rank in ranks],
                 "token_lengths": {"per_task": audit["per_task"], "joint": audit["joint"]},
+                "supervision_semantics": semantic_boundary(audit, arrays),
                 "micro_loss_weighting": micro_loss_weights(samples),
                 "center": scenario(components), "conservative": scenario(slow_components),
                 "reserves": {"center": "5% of quantified subtotal plus10min", "conservative": "1.25 factor within measured component scenarios, plus10% subtotal and30min operating reserve", "unmeasured_cpu_setup": "Additional5min center/10min conservative initialization allowances"},
                 "confidence": "MODERATE_CONDITIONAL" if all(value is not None for value in components.values()) else "LOW_INCOMPLETE",
             })
             row["status"], row["reason"] = classify(row)
+            row["compute_budget_status"] = row["status"]
             if arrays is not None:
                 arrays.close()
         except Exception:
@@ -610,7 +708,23 @@ def self_test():
     generation_center, generation_slow, processing_center, processing_slow, generation = generation_budget(generation_ranks)
     assert generation_center == TEST_USERS / 2 * 17 * 2
     assert generation_slow == TEST_USERS / 2 * 17 * 3 * SCENARIO_FACTOR
-    assert processing_center == TEST_USERS / 2 * 17 * .5
+    assert processing_center is None and processing_slow is None
+    assert generation["diagnostic_harness_upper_bound"]["full_test_center_residual_seconds"] == TEST_USERS / 2 * 17 * .5
+    assert cached_processing_budget(None)[:2] == (None, None)
+    processing_cases = [
+        {"prompt_id": prompt_id, "row_idx": row_index, "history_bucket": str(row_index),
+         "status": "PASS", "exact_reference_outputs": True,
+         "total_per_user_seconds": .02, "conservative_per_user_seconds": .03}
+        for prompt_id in range(17) for row_index in range(3)
+    ]
+    benchmark = {
+        "route_key": "q06-L", "status": "PASS", "run_commit": "0" * 40,
+        "callback": {"initialization_seconds": 1., "cached_across_cases": True},
+        "cases": processing_cases,
+    }
+    processing_center, processing_slow, processing = cached_processing_budget(benchmark)
+    assert math.isclose(processing_center, 1. + TEST_USERS / 2 * 17 * .02)
+    assert math.isclose(processing_slow, (17. + TEST_USERS / 2 * 17 * .03) * SCENARIO_FACTOR)
     presentations = math.ceil(TRAIN_ROWS / 4) * 4
     workload = full_workload({"full_tokens": numpy.full(TRAIN_ROWS, 10)}, 2, presentations, None)
     assert workload["effective_presentations"] == presentations * 4
@@ -625,7 +739,7 @@ def self_test():
     weights = micro_loss_weights(fake_samples)["plans"]["mixed_global128_0"]
     assert abs(weights["micro_mean_layouts"]["1"]["seqrec"] - .5) < 1e-9
     assert abs(weights["micro_mean_layouts"]["2"]["seqrec"] - 1 / 11) < 1e-9
-    print(json.dumps({"status": "PASS_SELF_TEST", "nonnegative_fit": True, "missing_cost_retained": True, "duplicate_file_bytes_not_double_counted": True, "two_rank_wall_max_not_sum": True, "ceil_schedule_four_epochs": 6916, "all17_template_dual_rank_generation_denominator": True, "full_random_layout_preserves_sampler_presentations": True, "micro_mean_differs_from_global_token_mean": True}))
+    print(json.dumps({"status": "PASS_SELF_TEST", "nonnegative_fit": True, "missing_cost_retained": True, "duplicate_file_bytes_not_double_counted": True, "two_rank_wall_max_not_sum": True, "ceil_schedule_four_epochs": 6916, "all17_template_dual_rank_generation_denominator": True, "full_random_layout_preserves_sampler_presentations": True, "micro_mean_differs_from_global_token_mean": True, "uncached_harness_residual_not_formal_cost": True, "cached_callback_once_or17_not_per_user": True, "missing_cached_benchmark_retains_unknown": True}))
 
 
 def main():

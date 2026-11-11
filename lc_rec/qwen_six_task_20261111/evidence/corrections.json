@@ -1,7 +1,7 @@
 {
   "task_scope": "LC-Rec Qwen six-task four-route preflight 2026-11-11",
   "limit": "round0 initial execution; at most three task-wide concentrated correction rounds",
-  "current_correction_round": 1,
+  "current_correction_round": 2,
   "rounds": [
     {
       "round": 1,
@@ -27,6 +27,24 @@
       "local_verification": "Syntax and targeted container/collision/sampler arithmetic checks passed; server verification recorded by linked successor jobs",
       "gpu_device_seconds_used_by_original_failures": 0,
       "important_research_changes": "None"
+    },
+    {
+      "round": 2,
+      "original_failures": [
+        {
+          "kind": "cost attribution defect, not a GPU execution failure",
+          "run_commit": "1f3a0bafeebb3a2fa8604a052727ddb3d1eadcff",
+          "error": "Preliminary estimator extrapolated per-case callback catalog reconstruction as formal per-user CPU processing cost",
+          "root_cause": "The bounded GPU diagnostic rebuilds the 9922-item SID callback for each generation case; original test_ddp.py builds and caches this callback before the 17-template loop",
+          "original_analysis": "cost_before_round2_diagnostic_harness.json",
+          "minimal_change": "Keep GPU source and observations unchanged; add CPU-only cached replay of the exact recorded cases and separate one-time initialization, measured per-user processing and diagnostic harness upper bound",
+          "method_or_numerical_change": false,
+          "scope": "Cost attribution and CPU-only measurement; no new optimizer update or changed generation protocol"
+        }
+      ],
+      "local_verification": "Independent source comparison and estimator self-test passed; actual cached CPU replay and final arithmetic review are recorded separately",
+      "gpu_device_seconds_for_this_correction": 0,
+      "important_research_changes": "None; the known Qwen BPE supervision-boundary deviation is preserved and explicitly limits all four routes to PARTIAL"
     }
   ]
 }
