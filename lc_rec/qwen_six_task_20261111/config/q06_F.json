@@ -1,0 +1,75 @@
+{
+  "key": "q06",
+  "route": "F",
+  "model_path": "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-0.6B-Base/da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+  "model_id": "Qwen/Qwen3-0.6B-Base",
+  "revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+  "weight_sha256": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba",
+  "audit_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-cpu-q06-r0/output/audit",
+  "micro": 2,
+  "updates": 3,
+  "seed": 42,
+  "global_batch": 128,
+  "epochs": 4,
+  "learning_rate": 0.00005,
+  "weight_decay": 0.01,
+  "warmup_ratio": 0.01,
+  "precision": "bf16",
+  "update_ledger": "/home/bwwu/lc-rec/qwen-six-task-20261111/update-budget.json",
+  "lora": {
+    "r": 8,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "down_proj",
+      "up_proj"
+    ],
+    "modules_to_save": [
+      "embed_tokens",
+      "lm_head"
+    ],
+    "ensure_weight_tying": true
+  },
+  "zero": {
+    "stage": 2,
+    "offload_optimizer": {
+      "device": "none"
+    },
+    "overlap_comm": false,
+    "contiguous_gradients": true,
+    "reduce_bucket_size": 5000000,
+    "allgather_bucket_size": 5000000
+  },
+  "full_training_state_check": false,
+  "generation": {
+    "num_beams": 20,
+    "num_return_sequences": 20,
+    "max_new_tokens": 10,
+    "prompt_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "filter_items": false,
+    "callback": "original position-wise allowed tokens plus EOS"
+  }
+}

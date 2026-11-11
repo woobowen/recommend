@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+    "{TASK}/scripts/cpu_audit.py",
+    "--model",
+    "q17",
+    "--model-path",
+    "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+    "--data",
+    "/data/bwwu/lc-rec/assets/data/Instruments",
+    "--original",
+    "{RELEASE}/lc_rec/vendor/original",
+    "--out",
+    "{JOB}/output/audit",
+    "--config",
+    "{TASK}/config/experiment.json"
+  ],
+  "env": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OMP_NUM_THREADS": "4",
+    "TOKENIZERS_PARALLELISM": "false",
+    "USE_TF": "0",
+    "USE_FLAX": "0",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "RUN_COMMIT": "{COMMIT}",
+    "CUDA_VISIBLE_DEVICES": ""
+  },
+  "timeout_seconds": 2700
+}

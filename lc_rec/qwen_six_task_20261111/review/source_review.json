@@ -1,0 +1,86 @@
+{
+  "reviewer": "/root/source_reviewer",
+  "review_scope": "Independent direct source review before new CPU/GPU runs; reviewer did not author common.py, cpu_audit.py or probe.py and did not run GPU jobs.",
+  "status": "PASS_SOURCE_RELATION_WITH_REQUIRED_RUNTIME_REGRESSIONS",
+  "source_commit": "1cd37ec681bdb3534108aaaee554dbaa9158a12f",
+  "official_lc_rec_commit": "e6f1b3b3f8b4fee55a49a7b3dfeba29dbfcf0669",
+  "rules_read_explicitly_from": "/home/addaswsw/recommend/{AGENTS.md,PROJECT_RULES.md,REMOTE_EXECUTION.md}",
+  "current_tree": {
+    "git_root": "/home/addaswsw/recommend-worktrees/lc-rec",
+    "branch": "wbw-lc-rec",
+    "preexisting_untracked_files_untouched": [
+      "lc_rec/offload/qwen_20261109/Qwen3-8B-Base/tokenizer.json",
+      "lc_rec/offload/qwen_20261109/Qwen3-8B/tokenizer.json"
+    ]
+  },
+  "independent_checks": [
+    {
+      "check": "Recomputed six original source SHA-256 values against previous six_task_lora workload_summary.source_files",
+      "files": ["data.py", "utils.py", "collator.py", "prompt.py", "lora_finetune.py", "run.sh"],
+      "result": "6 of 6 exact matches",
+      "evidence": "lc_rec/six_task_lora/evidence/jobs/lc-six-20261110-cpu-r0/output/workload/workload_summary.json"
+    },
+    {
+      "check": "Read original lora_finetune.py and finetune.py",
+      "result": "Both use load_datasets and Collator for all six tasks. Official run.sh uses full-parameter finetune.py. LoRA code existence does not bind full LoRA configuration to paper metrics."
+    },
+    {
+      "check": "Read utils.load_datasets and all original Dataset classes",
+      "result": "Concat order seqrec,item2index,index2item,fusionseqrec,itemsearch,preferenceobtain. Train prompts are random per access; ItemSearch additionally draws preference/query and PreferenceObtain draws preference. Validation is SeqRec with two distinct random templates/user."
+    },
+    {
+      "check": "Read original Collator and compare old Qwen common.Collator/loss",
+      "result": "Original full text appends EOS; separate input token lengths mask prompt; padding and prompt labels ignored; native causal shifted CE, no temperature. Old Qwen helper is LETTER-specific and cannot be used unchanged for six tasks."
+    },
+    {
+      "check": "Read BaseDataset.get_new_tokens and original callback",
+      "result": "LC SID token order is sorted unique strings over unchanged four-position index. Callback constrains each SID position independently then EOS. Original tokenizer(token)[1] and separator[1:] assume LLaMA BOS and require explicit Qwen adaptation."
+    },
+    {
+      "check": "Read original test.py/test_ddp.py and evaluate.py",
+      "result": "17 templates when all selected; beam20/return20/max_new10/early_stopping. Per-template user metrics then mean/min/max. No SID deduplication. Optional filter only lowers illegal SID scores to -1000; default false. Original OOM beam reduction must remain disabled for this task."
+    }
+  ],
+  "fixed_data_identity": {
+    "inter_sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743",
+    "item_sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2",
+    "index_sha256": "b94d16398a178220a117abda5effd5508069beaccc2b8110eab25ae50f2af600",
+    "user_sha256": "8fe65b5de6222e665d12052c8771f8a314813323b8470f54f2ca2920bf7af5b6",
+    "sid_tokens": 930,
+    "rows": [131837, 9922, 9922, 20000, 24772, 24772],
+    "total_train_records": 221225,
+    "validation_records": 49544,
+    "test_users": 24772
+  },
+  "must_not_reuse_unchanged_from_old_qwen_helper": [
+    "LETTER index SHA, 918 SID assertions and fixed position candidate sizes",
+    "SeqRec-only Dataset, five supervised-token Collator assertion",
+    "logits divided by temperature 0.8",
+    "LoRA alpha16, learning-rate 2e-4, global64",
+    "Prompt0-only eight-user generation and previous seed workload"
+  ],
+  "reusable_engineering": [
+    "Native Qwen3 model/config loader and strict loading_info assertions",
+    "Tied embedding/head checks before/after resize, PEFT and DeepSpeed",
+    "ensure_weight_tying=True with full active embedding/head and frozen original copies",
+    "Exact optimizer unique membership and GPU FP32 Adam/master-state checks",
+    "Strict key/shape/dtype/value model or adapter reload and tokenizer-vocab equality"
+  ],
+  "mandatory_runtime_regressions": [
+    "All 930 LC SID strings, token IDs, four-token item mapping and saved/reloaded order",
+    "Full fixed-realization Qwen length/mask statistics, including empty answers and response-boundary discrepancies",
+    "No LETTER temperature; independent CE; original equal micro-mean aggregation across variable answer lengths",
+    "LoRA alpha32; full BF16 base first; all seven projection families and active tied matrix optimizer membership",
+    "True post-ZeRO baseline parameter changes, later LoRA_A gradients/updates after zero-initialized B",
+    "Complete current-optimizer-resident ZeRO long-tail update versus no-communication capacity diagnostic",
+    "Actual six-task joint global128 throughput with MAX rank duration and SUM rank presentations",
+    "All 17 templates with Qwen context-bound response delimiter, original position constraints and evaluator",
+    "Current Transformers 4.57.6 epoch-tail schedule and validation callback; old 4.31 values cannot be inherited"
+  ],
+  "current_transformers_risk": "Installed 4.57.6 Trainer may pass accumulation-window num_items_in_batch into Qwen3 **kwargs and change token normalization. Bounded explicit original micro-mean CE must not be represented as proof that unmodified future Trainer preserves LC-Rec loss semantics.",
+  "auxiliary_data_boundary": "Previous unchanged assets contain 12233 train and 7473 test pairing mismatches. Auxiliary update samples require unchanged exact current-train target/history pairing and valid text; this is only diagnostic selection. Preference-generation provenance remains incomplete; formal trustworthy six-task reproduction is blocked.",
+  "independence_limit": "This reviewer authors only protocol_probe.py and this source review. Another reviewer must assess protocol_probe.py and its runtime evidence. This report is not a GPU, full-checkpoint, seed-cost or final-delivery PASS.",
+  "gpu_executed_by_reviewer": false,
+  "dependencies_installed_by_reviewer": [],
+  "git_mutations_by_reviewer": []
+}
