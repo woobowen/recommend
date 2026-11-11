@@ -1,0 +1,296 @@
+{
+  "reviewer": "/root/source_reviewer, non-author of common.py/cpu_audit.py/probe.py/control.py/resource_guard.py and Q17-L execution",
+  "review_type": "Independent read-only source and actual raw-evidence review; no GPU rerun",
+  "route": "Q17-L",
+  "job_id": "lc-qwen6-20261111-q17-l-r0",
+  "run_commit": "1f3a0bafeebb3a2fa8604a052727ddb3d1eadcff",
+  "route_status": "PARTIAL",
+  "bounded_compute_status": "PASS",
+  "semantic_status": "PARTIAL_BOUNDARY",
+  "source_binding": {
+    "request_members_recomputed_against_git_run_commit": 66,
+    "collected_manifest_members_recomputed": 20,
+    "probe_sha256": "8e72c75a961d3ef308c3b88359221cda94632777ead8c891caf89b5979463f3a",
+    "common_sha256": "be599f633fbf0d6b3748cd643b8fcd605593ec09da1ae04d69e50b79a28fc788",
+    "sample_sha256": "4eadaa1d8813b41aded6c3c489c66cb6d69c8fe7e8d4e3f3d85aa06943174da5",
+    "server_release": "/home/bwwu/lc-rec/qwen-six-task-20261111/releases/1f3a0bafeebb3a2fa8604a052727ddb3d1eadcff"
+  },
+  "independently_checked": [
+    "Actual request source bytes against all 66 git RUN members, canonical request digest, runner acceptance and cleanup, all 20 collected manifest members size/SHA.",
+    "All 256 local microbatch records across two ranks and four global updates: sample-ID slicing of saved CPU plans, original eligible record metrics, per-rank shapes/input/padding/labels, accumulation boundaries, LR, Adam/global steps, finite loss and global count sums.",
+    "All 196 A and 196 B gradient records and complete LoRA tensor update snapshots, 310 frozen baseline/final hashes, 393 complete final trainable tensor hashes across ranks, shared optimizer uniqueness and native tied storage.",
+    "All six actual tokenizer-max records in the fourth complete communicating ZeRO global128 update, resident Adam state, 24 diagnostics per rank explicitly no-communication/no-update, diagnostic parameter invariance.",
+    "Strict save/reload 394-key shape/dtype/value-byte manifests, tokenizer/SID order and tied state; adapter reload is not optimizer resume.",
+    "51 distinct gathered generation cases (not 102), all 1020 beams independently reconstructed from token IDs and checked against original SID strings, per-position allowed sets, EOS, finite scores, callback events and unchanged canonical item set.",
+    "Raw events/rank timing denominators, guard samples/summary, current child cleanup and exit status; no formal epoch or recommendation metrics."
+  ],
+  "model_and_tokens": {
+    "model_id": "Qwen/Qwen3-1.7B-Base",
+    "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+    "tokenizer_original": 151669,
+    "tokenizer_expanded": 152599,
+    "added_sid_tokens": 930,
+    "physical_embedding_rows_original": 151936,
+    "physical_embedding_rows_expanded": 152599,
+    "tied_shape": [
+      152599,
+      2048
+    ],
+    "both_rank_identity_equal": true
+  },
+  "parameter_scope": {
+    "expanded_base_unique": 1721932800,
+    "allocated_unique_including_frozen_peft_copies": 2043171840,
+    "trainable_unique": 321239040,
+    "trainable_tensors": 393,
+    "frozen_tensors": 310,
+    "trainable_fraction_of_expanded_base": 0.18655724543954327,
+    "lora_A_tensors": 196,
+    "lora_B_tensors": 196,
+    "all_A_first_nonzero_gradient_zero_based_update": 2,
+    "all_B_first_nonzero_gradient_zero_based_update": 0,
+    "all_392_complete_LoRA_tensors_changed": true,
+    "all_310_frozen_hashes_unchanged": true,
+    "all_393_complete_final_trainable_hashes_equal_between_ranks": true,
+    "shared_active_parameter_optimizer_occurrences": 1,
+    "finite_input_sid_activation_and_output_sid_logit_gradients": true,
+    "independent_CE_abs_difference_ranks": [
+      0,
+      4.76837158203125e-7
+    ]
+  },
+  "training": {
+    "micro_per_rank": 2,
+    "accumulation": 32,
+    "global_batch": 128,
+    "completed_global_updates": 4,
+    "nonzero_lr_updates": 3,
+    "compute_presentations": 512,
+    "distinct_raw_records_union": 262,
+    "all_six_tasks_present": true,
+    "updates": [
+      {
+        "index": 0,
+        "plan": "mixed_global128_0",
+        "seconds_max_rank": 24.83086516428739,
+        "samples_per_second": 5.154874755797637,
+        "input_tokens": 12546,
+        "padded_tokens": 15766,
+        "shift_labels": 2204,
+        "padding_ratio": 0.20423696562222504,
+        "lr": [
+          0
+        ],
+        "nonzero_lr": false
+      },
+      {
+        "index": 1,
+        "plan": "mixed_global128_1",
+        "seconds_max_rank": 24.165101786144078,
+        "samples_per_second": 5.296894717546498,
+        "input_tokens": 14040,
+        "padded_tokens": 18210,
+        "shift_labels": 2695,
+        "padding_ratio": 0.228995057660626,
+        "lr": [
+          7.142857142857143e-7
+        ],
+        "nonzero_lr": true
+      },
+      {
+        "index": 2,
+        "plan": "mixed_global128_0",
+        "seconds_max_rank": 22.55157987587154,
+        "samples_per_second": 5.6758772868481016,
+        "input_tokens": 12546,
+        "padded_tokens": 15766,
+        "shift_labels": 2204,
+        "padding_ratio": 0.20423696562222504,
+        "lr": [
+          0.0000014285714285714286
+        ],
+        "nonzero_lr": true
+      },
+      {
+        "index": 3,
+        "plan": "mixed_global128_tail",
+        "seconds_max_rank": 23.072561278939247,
+        "samples_per_second": 5.547715247237812,
+        "input_tokens": 17732,
+        "padded_tokens": 23824,
+        "shift_labels": 4926,
+        "padding_ratio": 0.2557085292142377,
+        "lr": [
+          0.000002142857142857143
+        ],
+        "nonzero_lr": true
+      }
+    ],
+    "steady_normal_mixed_update_indices": [
+      1,
+      2
+    ],
+    "steady_normal_mixed_samples_per_second": 5.47984126638319,
+    "tail_excluded_from_normal_mixed_throughput": true,
+    "communication": "Real ZeRO-2 backward/accumulation/step hooks; NCCL not isolated from backward/step timing"
+  },
+  "long_tail": {
+    "status": "PASS_COMPLETE_COMMUNICATING_ZERO_UPDATE",
+    "global_update_zero_based_index": 3,
+    "optimizer_states_resident": true,
+    "coverage": {
+      "seqrec": {
+        "sample_id": "seqrec:116350",
+        "full_tokens": 184,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "item2index": {
+        "sample_id": "item2index:3879",
+        "full_tokens": 1511,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "index2item": {
+        "sample_id": "index2item:3879",
+        "full_tokens": 1513,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "fusionseqrec": {
+        "sample_id": "fusionseqrec:4529",
+        "full_tokens": 908,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "itemsearch": {
+        "sample_id": "itemsearch:3451",
+        "full_tokens": 550,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "preferenceobtain": {
+        "sample_id": "preferenceobtain:4060",
+        "full_tokens": 543,
+        "actual_maximum_in_complete_zero_update": true
+      }
+    },
+    "resident_Adam_no_communication_diagnostics_per_rank": 24,
+    "diagnostic_distinct_records_each": 1,
+    "diagnostic_compute_presentations_each": 2,
+    "diagnostic_optimizer_updates": 0,
+    "only_micro2_measured_other_layouts": "NOT_TESTED"
+  },
+  "save_reload": {
+    "status": "PASS",
+    "strict_tensor_manifest_keys": 394,
+    "all_key_shape_dtype_bytes_equal": true,
+    "tied_aliases_equal": true,
+    "tokenizer_and_sid_order_exact": true,
+    "save_seconds_max_rank": 0.8155254619196057,
+    "fresh_reload_seconds_max_rank": 34.01000495161861,
+    "full_training_state_restore": "NOT_TESTED",
+    "adapter_blob_bytes": 642613998,
+    "adapter_blob_sha256": "8a833944fe59394e0032d5c0d96535b6894b9804f62c8482d8572eb4db433ff1",
+    "all_final_trainable_hashes_match_saved_manifest_after_exact_PEFT_key_mapping": true
+  },
+  "generation": {
+    "status": "PASS_BOUNDED_ORIGINAL_POSITIONWISE_INTERFACE",
+    "templates": 17,
+    "unique_cases": 51,
+    "actual_generation_case_counts_by_rank": [
+      34,
+      17
+    ],
+    "beam": 20,
+    "return_sequences": 20,
+    "returned_sequences": 1020,
+    "allowed_token_counts_by_position": [
+      162,
+      256,
+      256,
+      256,
+      1
+    ],
+    "all_beams_EOS_position": 4,
+    "canonical_sequences": 0,
+    "canonical_denominator": 1020,
+    "canonical_distinct_catalog_sids": 9897,
+    "catalog_items": 9922,
+    "formal_metrics_computed": false,
+    "pure_generate_projected_17_template_center_hours": 21.53139730816517,
+    "pure_generate_max_case_per_template_hours_before_safety_factor": 23.199058863309006,
+    "CPU_processing_cost": "NOT derived from per-case Allowed reconstruction; see round2 CPU replay benchmark",
+    "quality_inference": "No recommendation quality conclusion from untrained bounded outputs"
+  },
+  "resources": {
+    "guard_wall_seconds": 289.8947339449078,
+    "charged_gpu_device_seconds": 579.7894678898156,
+    "update_allocator_peak_allocated_gib": 12.604565620422363,
+    "update_allocator_peak_reserved_gib": 13.220703125,
+    "guard_RSS_sample_peak_bytes": 15677005824,
+    "host_mem_available_min_bytes": 241722359808,
+    "new_disk_allocated_sample_peak_bytes": 10645356544,
+    "guard_exit": 0,
+    "guard_cleanup_verified": true,
+    "guard_live_owned_pids_after_cleanup": [],
+    "runner_state": "SUCCEEDED",
+    "runner_exit": 0,
+    "runner_group_empty_after_cleanup": true,
+    "cleanup_kill_signals_sent": false
+  },
+  "limitations": [
+    "Original prompt-length mask has 29574 Qwen BPE boundary mismatches; see mask_boundary_review.json. No new supervision policy approved; overall semantic acceptance remains PARTIAL_BOUNDARY.",
+    "Known auxiliary pairing/provenance blockers remain; this is not trustworthy formal six-task metric reproduction.",
+    "Training allocator maxima do not preserve every earlier ZeRO initialization transient; whole-job NVML is sampled. Timings are observed bounded updates, not formal epoch throughput.",
+    "Heavy adapter not locally transferred/reloaded by reviewer; strict actual server tensor proof and save manifest reviewed. Fresh-process full optimizer/RNG recovery untested on this route.",
+    "Complete seed estimate requires cached original-protocol CPU replay, validation/checkpoint extrapolation and other route donor evidence. Pure generation hours are not complete seed hours."
+  ],
+  "evidence_root": "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-q17-l-r0",
+  "raw_evidence": {
+    "request.json": {
+      "bytes": 17320,
+      "sha256": "b3d73e038600ab6270dd2ebcd1d8d7e65b90305df513ecbb9ad67c311d865067"
+    },
+    "accepted.json": {
+      "bytes": 310,
+      "sha256": "aa36f8dec04bfec47508929af1340a6be1b4b0b56f8a05f330923d73fd978180"
+    },
+    "status.json": {
+      "bytes": 5537,
+      "sha256": "c0109cd8dd3fa69728a6576e490b62fe63afc6f4182255dcda0ec0eaeb65b787"
+    },
+    "cleanup.json": {
+      "bytes": 664,
+      "sha256": "17f66d56c9bdd25a181fa64dae261d0fae22dd99febeb6edf8576bcfe29bea6f"
+    },
+    "controller-query.json": {
+      "bytes": 7555,
+      "sha256": "4f73d0c80de1cb79fd37bfde3c795530ea011258068cf3b682d2fb79b883bc44"
+    },
+    "work.log": {
+      "bytes": 50954,
+      "sha256": "38a0fd86e4fa0392841d45899205b5a6cddcb823507fd9beb5268747783d9777"
+    },
+    "output/probe/rank0.json": {
+      "bytes": 1580629,
+      "sha256": "21a18554fdd7e8422a90135aa03aa792523bdbbc1f6d843f0ce115198f19c277"
+    },
+    "output/probe/rank1.json": {
+      "bytes": 1580642,
+      "sha256": "7b0bf2a4500543ff6b78741e52267fc85a59266d6021d969db5b23aca4a152b5"
+    },
+    "output/probe/events_rank0.jsonl": {
+      "bytes": 324095,
+      "sha256": "750a974aee0a839665f0e1417fb2b29328d4ae4e463f1684c026d5a9fec754dc"
+    },
+    "output/probe/events_rank1.jsonl": {
+      "bytes": 237484,
+      "sha256": "91875ae9bbb1cb39ca9ce5c71a23123d227414012b164f449d5b18113ab5ebab"
+    },
+    "output/resources/resource-summary.json": {
+      "bytes": 1577,
+      "sha256": "be6a8d239843227dbfd7a7fc7fce67465ad961d594439faeb482f55ca9067d48"
+    },
+    "output/resources/resource-samples.jsonl": {
+      "bytes": 13943,
+      "sha256": "28555e97af55fea25c8710a8a57f7667d1fade529f7fd9fe89433bd9b3f9dd54"
+    }
+  },
+  "result": "Q17-L bounded dual-4090 BF16 LoRA compute/update/complete-longtail/save-reload/17-template beam20 interface verified; original Qwen supervision boundary and known auxiliary data prevent overall PASS."
+}

@@ -1,0 +1,378 @@
+{
+  "reviewer": "/root/source_reviewer, non-author of estimator, CPU replay or GPU probe",
+  "status": "PASS_INDEPENDENT_FINAL_ARITHMETIC_WITH_EXPLICIT_PARTIAL_SEMANTICS",
+  "correction_round": 2,
+  "calculation_source_commit": "820e2f30a51c507f65d5f3068eab018868410c8d",
+  "GPU_run_commit": "1f3a0bafeebb3a2fa8604a052727ddb3d1eadcff",
+  "review_method": "Standalone reviewer NumPy/stdlib calculation; did not import or call estimate_budget.py or postprocess_probe.py for result reproduction. Independently regenerated full four-epoch padding scenarios and solved all nonnegative feature subsets with a pseudoinverse.",
+  "input_file_size_SHA_checks": 29,
+  "CPU_request_fixed_source_members_checked": 69,
+  "CPU_collected_manifest_members_checked": 12,
+  "CPU_job_status": "SUCCEEDED",
+  "CPU_no_CUDA_or_model_loaded_all_routes": true,
+  "CPU_callback_initializations_actual_per_route": 1,
+  "CPU_actual_cases_all_routes": 204,
+  "CPU_measured_case_replays_all_routes": 612,
+  "CPU_warmup_case_replays_all_routes": 204,
+  "extra_GPU_updates_from_round2": 0,
+  "formal_loss_and_recommendation_metrics_computed": false,
+  "original_callback_placement_verified": "test_ddp.py78 before loop93; data.py70 caches legal sets",
+  "independent_checks": [
+    "Every one of29 cost input paths rehashed; CPU exact fixed source bytes and final job cleanup checked.",
+    "Every benchmark repetition matched parsed output SHA and independently reconstructed original score-sorted topk bits for all20 actual beams; mean/max and phase overlap arithmetic checked. Actual full prompt decode/tokenizer equality is enforced by the reviewed immutable server CPU source and raw successful receipts, not independently rerun locally.",
+    "All221225 fixed-realization lengths, four seed42..45 layouts, original repeated sampler indices, per-rank padding and MAX synchronized-rank feature totals regenerated from NPZ.",
+    "Actual microstep F+B timings and rankMAX update denominators regenerated; full nonnegative model and all conservative sensitivity terms recalculated.",
+    "Real six-case validation,51case17-template GPU times, cached CPU times, same-engine donor scaling,4full-state+5native saves,best restore, initialization and reserves independently recomputed.",
+    "All eight components, hours/days,96h margins and72h conservative approval threshold exactly match published budget within1e-7seconds or1e-10 relative. No unknown unmeasured costs silently promoted to verified paths."
+  ],
+  "routes": {
+    "Q06-L": {
+      "status": "UNLIKELY_WITHIN_96H",
+      "center_hours": 70.10459155223434,
+      "conservative_hours": 112.56776026071567,
+      "margin_conservative_hours": -16.567760260715673,
+      "center_component_hours": {
+        "training": 43.05332189020395,
+        "validation": 1.8538439587793416,
+        "checkpoint": 0.011269615982328354,
+        "best_restore": 0.004580619923977389,
+        "test_generation": 21.4744932880908,
+        "test_processing_proxy": 0.11393284979790887,
+        "initialization": 0.09610528728614251,
+        "operating_reserve": 3.497044042169889
+      },
+      "conservative_component_hours": {
+        "training": 68.5569201866425,
+        "validation": 2.829205836609213,
+        "checkpoint": 0.014087019977910443,
+        "best_restore": 0.005725774904971735,
+        "test_generation": 30.094663427060006,
+        "test_processing_proxy": 0.19654820089377203,
+        "initialization": 0.18263160910767814,
+        "operating_reserve": 10.687978205519606
+      },
+      "micro": 2,
+      "accumulation": 32,
+      "scheduled_updates": 6916,
+      "warmup_steps": 70,
+      "validation_calls": 4,
+      "effective_presentations": 884912,
+      "steady_normal_updates_used": [
+        1,
+        2
+      ],
+      "fit_coefficient_seconds": [
+        0.6545191249315393,
+        0,
+        0
+      ],
+      "fit_RMSE_seconds": 0.09512969344450865,
+      "whole_rank_normalizer": 0.9996457294016424,
+      "four_epoch_padding_scenarios": [
+        {
+          "epoch": 0,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.21607186754177599
+        },
+        {
+          "epoch": 1,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.2158019214350405
+        },
+        {
+          "epoch": 2,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.21547099688361804
+        },
+        {
+          "epoch": 3,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.21607808979102472
+        }
+      ],
+      "cached_CPU_callback_initialization_seconds": 1.0249972017481923,
+      "cached_CPU_mean_per_user_seconds": 0.00194305364724273,
+      "CPU_measured_replays": 153,
+      "CPU_warmup_replays": 51,
+      "exact_GPU_reference_topk_and_parsed_SHA_checked": true,
+      "state_save_restore_measured_on_this_route": false,
+      "state_static_bytes": 3451764736
+    },
+    "Q06-F": {
+      "status": "INCONCLUSIVE",
+      "center_hours": 59.440506904352496,
+      "conservative_hours": 85.74645445636561,
+      "margin_conservative_hours": 10.253545543634388,
+      "center_component_hours": {
+        "training": 40.68562931496808,
+        "validation": 1.0637663434818387,
+        "checkpoint": 0.024488869968077375,
+        "best_restore": 0.005441161839601894,
+        "test_generation": 14.457250942814992,
+        "test_processing_proxy": 0.11970886366634434,
+        "initialization": 0.09499092010470728,
+        "operating_reserve": 2.989230487508849
+      },
+      "conservative_component_hours": {
+        "training": 56.67334335318336,
+        "validation": 1.6338571507638942,
+        "checkpoint": 0.03061108746009672,
+        "best_restore": 0.006801452299502368,
+        "test_generation": 18.73312358856848,
+        "test_processing_proxy": 0.23780149610797202,
+        "initialization": 0.1812386501308841,
+        "operating_reserve": 8.24967767785142
+      },
+      "micro": 2,
+      "accumulation": 32,
+      "scheduled_updates": 6916,
+      "warmup_steps": 70,
+      "validation_calls": 4,
+      "effective_presentations": 884912,
+      "steady_normal_updates_used": [
+        1
+      ],
+      "fit_coefficient_seconds": [
+        0.608235462519172,
+        0.01159414903855352,
+        0
+      ],
+      "fit_RMSE_seconds": 0.0376423315581495,
+      "whole_rank_normalizer": 0.9992920748475589,
+      "four_epoch_padding_scenarios": [
+        {
+          "epoch": 0,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.21607186754177599
+        },
+        {
+          "epoch": 1,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.2158019214350405
+        },
+        {
+          "epoch": 2,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.21547099688361804
+        },
+        {
+          "epoch": 3,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.21607808979102472
+        }
+      ],
+      "cached_CPU_callback_initialization_seconds": 1.044744218699634,
+      "cached_CPU_mean_per_user_seconds": 0.0020417129633083842,
+      "CPU_measured_replays": 153,
+      "CPU_warmup_replays": 51,
+      "exact_GPU_reference_topk_and_parsed_SHA_checked": true,
+      "state_save_restore_measured_on_this_route": true,
+      "state_static_bytes": 8354203648
+    },
+    "Q17-L": {
+      "status": "UNLIKELY_WITHIN_96H",
+      "center_hours": 72.60544554651216,
+      "conservative_hours": 114.69172853935001,
+      "margin_conservative_hours": -18.69172853935001,
+      "center_component_hours": {
+        "training": 44.897712560954176,
+        "validation": 2.308555400343267,
+        "checkpoint": 0.027421510670046778,
+        "best_restore": 0.009447223597671837,
+        "test_generation": 21.53139730816517,
+        "test_processing_proxy": 0.11464734439988172,
+        "initialization": 0.1001318707702578,
+        "operating_reserve": 3.6161323276116906
+      },
+      "conservative_component_hours": {
+        "training": 71.46296468538964,
+        "validation": 2.914483847624312,
+        "checkpoint": 0.03427688833755847,
+        "best_restore": 0.011809029497089795,
+        "test_generation": 28.998823579136257,
+        "test_processing_proxy": 0.2006394400523277,
+        "initialization": 0.18766483846282225,
+        "operating_reserve": 10.881066230850001
+      },
+      "micro": 2,
+      "accumulation": 32,
+      "scheduled_updates": 6916,
+      "warmup_steps": 70,
+      "validation_calls": 4,
+      "effective_presentations": 884912,
+      "steady_normal_updates_used": [
+        1,
+        2
+      ],
+      "fit_coefficient_seconds": [
+        0.6474682890255673,
+        0.08836891956884299,
+        0
+      ],
+      "fit_RMSE_seconds": 0.0713534734376357,
+      "whole_rank_normalizer": 0.9994116337884625,
+      "four_epoch_padding_scenarios": [
+        {
+          "epoch": 0,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.21607186754177599
+        },
+        {
+          "epoch": 1,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.2158019214350405
+        },
+        {
+          "epoch": 2,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.21547099688361804
+        },
+        {
+          "epoch": 3,
+          "presentations": 221228,
+          "rank_microsteps": 55307,
+          "padding_ratio": 0.21607808979102472
+        }
+      ],
+      "cached_CPU_callback_initialization_seconds": 1.0412774877622724,
+      "cached_CPU_mean_per_user_seconds": 0.0019551921161074263,
+      "CPU_measured_replays": 153,
+      "CPU_warmup_replays": 51,
+      "exact_GPU_reference_topk_and_parsed_SHA_checked": true,
+      "state_save_restore_measured_on_this_route": false,
+      "state_static_bytes": 7941212160
+    },
+    "Q17-F": {
+      "status": "UNLIKELY_WITHIN_96H",
+      "center_hours": 178.26633264575526,
+      "conservative_hours": 256.2581571680105,
+      "margin_conservative_hours": -160.25815716801048,
+      "center_component_hours": {
+        "training": 151.88123397311054,
+        "validation": 1.5488293118312682,
+        "checkpoint": 0.07328850753738338,
+        "best_restore": 0.015701126775317,
+        "test_generation": 15.869654349674367,
+        "test_processing_proxy": 0.11445905018284527,
+        "initialization": 0.11556318478219005,
+        "operating_reserve": 8.647603141861362
+      },
+      "conservative_component_hours": {
+        "training": 205.6125863385978,
+        "validation": 2.2112985338601803,
+        "checkpoint": 0.09161063442172923,
+        "best_restore": 0.019626408469146255,
+        "test_generation": 24.164878799927344,
+        "test_processing_proxy": 0.2004609110283329,
+        "initialization": 0.20695398097773754,
+        "operating_reserve": 23.750741560728226
+      },
+      "micro": 1,
+      "accumulation": 64,
+      "scheduled_updates": 6916,
+      "warmup_steps": 70,
+      "validation_calls": 4,
+      "effective_presentations": 884904,
+      "steady_normal_updates_used": [
+        1
+      ],
+      "fit_coefficient_seconds": [
+        1.175776601156351,
+        0.017804744828103042,
+        0
+      ],
+      "fit_RMSE_seconds": 0.051142954767442565,
+      "whole_rank_normalizer": 0.9997406480452949,
+      "four_epoch_padding_scenarios": [
+        {
+          "epoch": 0,
+          "presentations": 221226,
+          "rank_microsteps": 110613,
+          "padding_ratio": 0
+        },
+        {
+          "epoch": 1,
+          "presentations": 221226,
+          "rank_microsteps": 110613,
+          "padding_ratio": 0
+        },
+        {
+          "epoch": 2,
+          "presentations": 221226,
+          "rank_microsteps": 110613,
+          "padding_ratio": 0
+        },
+        {
+          "epoch": 3,
+          "presentations": 221226,
+          "rank_microsteps": 110613,
+          "padding_ratio": 0
+        }
+      ],
+      "cached_CPU_callback_initialization_seconds": 1.033956048078835,
+      "cached_CPU_mean_per_user_seconds": 0.0019520076016098066,
+      "CPU_measured_replays": 153,
+      "CPU_warmup_replays": 51,
+      "exact_GPU_reference_topk_and_parsed_SHA_checked": true,
+      "state_save_restore_measured_on_this_route": false,
+      "state_static_bytes": 24107059200
+    }
+  },
+  "not_claimed": [
+    "A complete statistical runtime confidence interval or guaranteed96h seed completion.",
+    "Model-intrinsic speed or the speed of an unmeasured lean native Trainer after removing audit hooks. UNLIKELY applies only to the selected micro and measured instrumented retained-mask scenario.",
+    "Complete original answer-text supervision: all routes remainPARTIAL_BOUNDARY with29574 mismatch,979EOS-only/474nonempty-to-EOS-only records.",
+    "Formal reliable six-task metric reproduction or baseline selection:12233training/7473testing auxiliary mismatch and unresolved provenance remain.",
+    "Fresh-process checkpoint recovery,actual Trainer best-model restore,long-run allocator fragmentation,full-test aggregation/durable flush or future random prompt realizations."
+  ],
+  "decision": "No route has bounded evidence supporting reliable96h completion under the declared conservative72h approval threshold. Q06-F leaves10.2535h in its conservative scenario and is INCONCLUSIVE, not a reliablePASS. Other three exceed96h in their declared conservative instrumented scenarios.",
+  "raw_evidence": {
+    "lc_rec/qwen_six_task_20261111/evidence/budget.json": {
+      "bytes": 579098,
+      "sha256": "f0ab1d31d9a226f91c9c42471035a90951314c458e06b8ac15d1827126c65d9b"
+    },
+    "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-postprocess-r2/request.json": {
+      "bytes": 17170,
+      "sha256": "d30272d8aa0f4d0d35427b92e21d2b4ef52515f014af8099da98d011de3424a4"
+    },
+    "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-postprocess-r2/status.json": {
+      "bytes": 3726,
+      "sha256": "ee22b2198e7e7c46a80ac0cc71b7f2fd6b511652e3ba97e488ff7d4caa3b5023"
+    },
+    "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-postprocess-r2/controller-query.json": {
+      "bytes": 5234,
+      "sha256": "0e1f6d584838e003e8a78c10c4fd02ee9c8e4940f7ed61775252a6ea3324cc2d"
+    },
+    "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-postprocess-r2/output/postprocess/summary.json": {
+      "bytes": 4829,
+      "sha256": "8aa171f3798c750e0c7737e16439ad0e8fbe24a4d56a04621886eb62816fe321"
+    },
+    "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-postprocess-r2/output/postprocess/q06-L.json": {
+      "bytes": 250573,
+      "sha256": "6e5cfa3ea149251e805c5e09d132588dfda0c6fbb833874498b85280dd1fff5b"
+    },
+    "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-postprocess-r2/output/postprocess/q06-F.json": {
+      "bytes": 250538,
+      "sha256": "fc3be7a87c2b1924d40dcc4e2592018385367f218091b6646eda6182b1326fe5"
+    },
+    "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-postprocess-r2/output/postprocess/q17-L.json": {
+      "bytes": 250530,
+      "sha256": "0a4b17bbc646d9bd05a2b5c4f77aa4d23b23edd712cff3c0ce21ccb88859a09f"
+    },
+    "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-postprocess-r2/output/postprocess/q17-F.json": {
+      "bytes": 250629,
+      "sha256": "2325388b1a537b4e015f617db007ef49fe370defce21d87253cfc30656668bec"
+    }
+  }
+}

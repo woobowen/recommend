@@ -1,6 +1,8 @@
 {
   "reviewer": "/root/source_reviewer, non-author of estimate_budget.py and postprocess_probe.py",
-  "status": "PASS_STATIC_ONLY_PENDING_REAL_CPU_REPLAY_AND_FINAL_COST",
+  "status": "PASS_STATIC_AND_ACTUAL_CACHED_REPLAY_ARITHMETIC",
+  "original_static_stage_status": "PASS_STATIC_ONLY_PENDING_REAL_CPU_REPLAY_AND_FINAL_COST",
+  "final_runtime_and_arithmetic_review": "final_cost_review.json",
   "task_correction_round": 2,
   "files": {
     "scripts/postprocess_probe.py": "7b96ec50dec7142ba812bd230a256d39d9d9f50bf572ffc73922e47db27b6db3",
@@ -44,7 +46,7 @@
     "new_packages_or_environment_changes": "NONE"
   },
   "runtime_limitations": [
-    "No successful actual CPU replay receipt was available when this static review was written; final output arithmetic must be reviewed after the job.",
+    "Initial static review preceded CPU replay. Final CPU job lc-qwen6-20261111-postprocess-r2 succeeded, and independent final_cost_review.json recomputes its exact references, full-distribution training model and all seed components.",
     "Replay scores are CPU scalars. Native GPU D2H and score-comparison synchronization, pinned H2D, DataLoader worker contention and distributed per-batch object gathering are not directly measured by this replay and cannot be described as complete formal evaluator overhead.",
     "Callback/tokenizer/dataset initialization outside per-user total is either separately measured or covered by explicit initialization reserves. It must not silently disappear from final accounting.",
     "Only same-engine Q06-F training-state disk restoration is actually verified. New-process Trainer resume and best-checkpoint restoration remain separate untested paths."

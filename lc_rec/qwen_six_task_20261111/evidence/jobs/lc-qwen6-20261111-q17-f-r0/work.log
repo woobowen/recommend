@@ -1,0 +1,745 @@
+{"rank": 0, "stage": "started"}
+{"rank": 1, "stage": "started"}
+[2026-11-11 12:03:49,757] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+[2026-11-11 12:03:49,768] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+{"rank": 0, "stage": "environment_and_budget_checked"}
+{"rank": 1, "stage": "environment_and_budget_checked"}
+{"rank": 0, "stage": "load_model"}
+`torch_dtype` is deprecated! Use `dtype` instead!
+{"rank": 1, "stage": "load_model"}
+`torch_dtype` is deprecated! Use `dtype` instead!
+{"rank": 1, "stage": "initial_model_long_tail_forward_complete", "task": "seqrec", "status": "PASS"}
+{"rank": 0, "stage": "initial_model_long_tail_forward_complete", "task": "seqrec", "status": "PASS"}
+{"rank": 1, "stage": "initial_model_long_tail_forward_complete", "task": "item2index", "status": "PASS"}
+{"rank": 0, "stage": "initial_model_long_tail_forward_complete", "task": "item2index", "status": "PASS"}
+{"rank": 1, "stage": "initial_model_long_tail_forward_complete", "task": "index2item", "status": "PASS"}
+{"rank": 0, "stage": "initial_model_long_tail_forward_complete", "task": "index2item", "status": "PASS"}
+{"rank": 1, "stage": "initial_model_long_tail_forward_complete", "task": "fusionseqrec", "status": "PASS"}
+{"rank": 0, "stage": "initial_model_long_tail_forward_complete", "task": "fusionseqrec", "status": "PASS"}
+{"rank": 1, "stage": "initial_model_long_tail_forward_complete", "task": "itemsearch", "status": "PASS"}
+{"rank": 0, "stage": "initial_model_long_tail_forward_complete", "task": "itemsearch", "status": "PASS"}
+{"rank": 1, "stage": "initial_model_long_tail_forward_complete", "task": "preferenceobtain", "status": "PASS"}
+{"rank": 0, "stage": "initial_model_long_tail_forward_complete", "task": "preferenceobtain", "status": "PASS"}
+{"rank": 1, "stage": "deepspeed_initialize"}
+{"rank": 0, "stage": "deepspeed_initialize"}
+[2026-11-11 12:04:19,302] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.9, git-hash=unknown, git-branch=unknown
+[2026-11-11 12:04:19,302] [INFO] [logging.py:107:log_dist] [Rank -1] DeepSpeed info: version=0.16.9, git-hash=unknown, git-branch=unknown
+[2026-11-11 12:04:19,303] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-11-11 12:04:19,303] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-11-11 12:04:19,303] [INFO] [config.py:735:__init__] Config mesh_device None world_size = 2
+[2026-11-11 12:04:19,303] [INFO] [config.py:735:__init__] Config mesh_device None world_size = 2
+[2026-11-11 12:04:19,440] [INFO] [logging.py:107:log_dist] [Rank 0] DeepSpeed Flops Profiler Enabled: False
+[2026-11-11 12:04:19,440] [INFO] [logging.py:107:log_dist] [Rank 0] Using client Optimizer as basic optimizer
+[2026-11-11 12:04:19,440] [INFO] [logging.py:107:log_dist] [Rank 0] Removing param_group that has no 'params' in the basic Optimizer
+[2026-11-11 12:04:19,453] [INFO] [logging.py:107:log_dist] [Rank 0] DeepSpeed Basic Optimizer = AdamW
+[2026-11-11 12:04:19,453] [INFO] [utils.py:59:is_zero_supported_optimizer] Checking ZeRO support for optimizer=AdamW type=<class 'torch.optim.adamw.AdamW'>
+[2026-11-11 12:04:19,454] [INFO] [logging.py:107:log_dist] [Rank 0] Creating torch.bfloat16 ZeRO stage 2 optimizer
+[2026-11-11 12:04:19,454] [INFO] [stage_1_and_2.py:150:__init__] Reduce bucket size 5000000
+[2026-11-11 12:04:19,454] [INFO] [stage_1_and_2.py:151:__init__] Allgather bucket size 5000000
+[2026-11-11 12:04:19,454] [INFO] [stage_1_and_2.py:152:__init__] CPU Offload: False
+[2026-11-11 12:04:19,454] [INFO] [stage_1_and_2.py:153:__init__] Round robin gradient partitioning: False
+[2026-11-11 12:04:25,934] [INFO] [utils.py:781:see_memory_usage] Before initializing optimizer states
+[2026-11-11 12:04:25,935] [INFO] [utils.py:782:see_memory_usage] MA 6.42 GB         Max_MA 6.42 GB         CA 6.45 GB         Max_CA 6 GB 
+[2026-11-11 12:04:25,935] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 12.0 GB, percent = 4.9%
+[2026-11-11 12:04:26,092] [INFO] [utils.py:781:see_memory_usage] After initializing optimizer states
+[2026-11-11 12:04:26,093] [INFO] [utils.py:782:see_memory_usage] MA 6.42 GB         Max_MA 9.63 GB         CA 9.67 GB         Max_CA 10 GB 
+[2026-11-11 12:04:26,093] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 11.99 GB, percent = 4.9%
+[2026-11-11 12:04:26,093] [INFO] [stage_1_and_2.py:557:__init__] optimizer state initialized
+[2026-11-11 12:04:26,237] [INFO] [utils.py:781:see_memory_usage] After initializing ZeRO optimizer
+[2026-11-11 12:04:26,238] [INFO] [utils.py:782:see_memory_usage] MA 6.42 GB         Max_MA 6.42 GB         CA 9.67 GB         Max_CA 10 GB 
+[2026-11-11 12:04:26,238] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 11.99 GB, percent = 4.9%
+[2026-11-11 12:04:26,241] [INFO] [logging.py:107:log_dist] [Rank 0] DeepSpeed Final Optimizer = DeepSpeedZeroOptimizer
+[2026-11-11 12:04:26,242] [INFO] [logging.py:107:log_dist] [Rank 0] DeepSpeed using client LR scheduler
+[2026-11-11 12:04:26,242] [INFO] [logging.py:107:log_dist] [Rank 0] DeepSpeed LR Scheduler = <torch.optim.lr_scheduler.LambdaLR object at 0x71fcb2c8f1c0>
+[2026-11-11 12:04:26,242] [INFO] [logging.py:107:log_dist] [Rank 0] step=0, skipped=0, lr=[0.0, 0.0], mom=[(0.9, 0.999), (0.9, 0.999)]
+[2026-11-11 12:04:26,243] [INFO] [config.py:1003:print] DeepSpeedEngine configuration:
+[2026-11-11 12:04:26,243] [INFO] [config.py:1007:print]   activation_checkpointing_config  {
+    "partition_activations": false, 
+    "contiguous_memory_optimization": false, 
+    "cpu_checkpointing": false, 
+    "number_checkpoints": null, 
+    "synchronize_checkpoint_boundary": false, 
+    "profile": false
+}
+[2026-11-11 12:04:26,243] [INFO] [config.py:1007:print]   aio_config ................... {'block_size': 1048576, 'queue_depth': 8, 'intra_op_parallelism': 1, 'single_submit': False, 'overlap_events': True, 'use_gds': False}
+[2026-11-11 12:04:26,243] [INFO] [config.py:1007:print]   amp_enabled .................. False
+[2026-11-11 12:04:26,243] [INFO] [config.py:1007:print]   amp_params ................... False
+[2026-11-11 12:04:26,243] [INFO] [config.py:1007:print]   autotuning_config ............ {
+    "enabled": false, 
+    "start_step": null, 
+    "end_step": null, 
+    "metric_path": null, 
+    "arg_mappings": null, 
+    "metric": "throughput", 
+    "model_info": null, 
+    "results_dir": "autotuning_results", 
+    "exps_dir": "autotuning_exps", 
+    "overwrite": true, 
+    "fast": true, 
+    "start_profile_step": 3, 
+    "end_profile_step": 5, 
+    "tuner_type": "gridsearch", 
+    "tuner_early_stopping": 5, 
+    "tuner_num_trials": 50, 
+    "model_info_path": null, 
+    "mp_size": 1, 
+    "max_train_batch_size": null, 
+    "min_train_batch_size": 1, 
+    "max_train_micro_batch_size_per_gpu": 1.024000e+03, 
+    "min_train_micro_batch_size_per_gpu": 1, 
+    "num_tuning_micro_batch_sizes": 3
+}
+[2026-11-11 12:04:26,243] [INFO] [config.py:1007:print]   bfloat16_enabled ............. True
+[2026-11-11 12:04:26,243] [INFO] [config.py:1007:print]   bfloat16_immediate_grad_update  True
+[2026-11-11 12:04:26,243] [INFO] [config.py:1007:print]   checkpoint_parallel_write_pipeline  False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   checkpoint_tag_validation_enabled  True
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   checkpoint_tag_validation_fail  False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   comms_config ................. <deepspeed.comm.config.DeepSpeedCommsConfig object at 0x71fcb2b61f30>
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   communication_data_type ...... None
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   compile_config ............... deepcompile=False free_activation=False offload_activation=False offload_opt_states=False double_buffer=True symmetric_memory=False debug_log=False offload_parameters=False sync_before_reduce=False sync_after_reduce=False sync_before_allgather=False sync_after_allgather=False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   compression_config ........... {'weight_quantization': {'shared_parameters': {'enabled': False, 'quantizer_kernel': False, 'schedule_offset': 0, 'quantize_groups': 1, 'quantize_verbose': False, 'quantization_type': 'symmetric', 'quantize_weight_in_forward': False, 'rounding': 'nearest', 'fp16_mixed_quantize': False, 'quantize_change_ratio': 0.001}, 'different_groups': {}}, 'activation_quantization': {'shared_parameters': {'enabled': False, 'quantization_type': 'symmetric', 'range_calibration': 'dynamic', 'schedule_offset': 1000}, 'different_groups': {}}, 'sparse_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'row_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'head_pruning': {'shared_parameters': {'enabled': False, 'method': 'topk', 'schedule_offset': 1000}, 'different_groups': {}}, 'channel_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'layer_reduction': {'enabled': False}}
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   curriculum_enabled_legacy .... False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   curriculum_params_legacy ..... False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   data_efficiency_config ....... {'enabled': False, 'seed': 1234, 'data_sampling': {'enabled': False, 'num_epochs': 1000, 'num_workers': 0, 'pin_memory': False, 'curriculum_learning': {'enabled': False}, 'dynamic_batching': {'enabled': False, 'lr_scaling_method': 'linear', 'min_batch_size': 1, 'max_batch_size': None, 'sequence_picking_order': 'dataloader', 'verbose': False}}, 'data_routing': {'enabled': False, 'random_ltd': {'enabled': False, 'layer_token_lr_schedule': {'enabled': False}}}}
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   data_efficiency_enabled ...... False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   dataloader_drop_last ......... False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   disable_allgather ............ False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   dump_state ................... False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   dynamic_loss_scale_args ...... None
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   eigenvalue_enabled ........... False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   eigenvalue_gas_boundary_resolution  1
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   eigenvalue_layer_name ........ bert.encoder.layer
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   eigenvalue_layer_num ......... 0
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   eigenvalue_max_iter .......... 100
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   eigenvalue_stability ......... 1e-06
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   eigenvalue_tol ............... 0.01
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   eigenvalue_verbose ........... False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   elasticity_enabled ........... False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   flops_profiler_config ........ {
+    "enabled": false, 
+    "recompute_fwd_factor": 0.0, 
+    "profile_step": 1, 
+    "module_depth": -1, 
+    "top_modules": 1, 
+    "detailed": true, 
+    "output_file": null
+}
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   fp16_auto_cast ............... None
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   fp16_enabled ................. False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   fp16_master_weights_and_gradients  False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   global_rank .................. 0
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   grad_accum_dtype ............. None
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   gradient_accumulation_steps .. 64
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   gradient_clipping ............ 1.0
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   gradient_predivide_factor .... 1.0
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   graph_harvesting ............. False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   hybrid_engine ................ enabled=False max_out_tokens=512 inference_tp_size=1 release_inference_cache=False pin_parameters=True tp_gather_partition_size=8
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   initial_dynamic_scale ........ 1
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   load_universal_checkpoint .... False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   loss_scale ................... 1.0
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   memory_breakdown ............. False
+[2026-11-11 12:04:26,244] [INFO] [config.py:1007:print]   mics_hierarchial_params_gather  False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   mics_shard_size .............. -1
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   monitor_config ............... tensorboard=TensorBoardConfig(enabled=False, output_path='', job_name='DeepSpeedJobName') comet=CometConfig(enabled=False, samples_log_interval=100, project=None, workspace=None, api_key=None, experiment_name=None, experiment_key=None, online=None, mode=None) wandb=WandbConfig(enabled=False, group=None, team=None, project='deepspeed') csv_monitor=CSVConfig(enabled=False, output_path='', job_name='DeepSpeedJobName')
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   nebula_config ................ {
+    "enabled": false, 
+    "persistent_storage_path": null, 
+    "persistent_time_interval": 100, 
+    "num_of_version_in_retention": 2, 
+    "enable_nebula_load": true, 
+    "load_path": null
+}
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   optimizer_legacy_fusion ...... False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   optimizer_name ............... None
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   optimizer_params ............. None
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   pipeline ..................... {'stages': 'auto', 'partition': 'best', 'seed_layers': False, 'activation_checkpoint_interval': 0, 'pipe_partitioned': True, 'grad_partitioned': True}
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   pld_enabled .................. False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   pld_params ................... False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   prescale_gradients ........... False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   scheduler_name ............... None
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   scheduler_params ............. None
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   seq_parallel_communication_data_type  torch.float32
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   sparse_attention ............. None
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   sparse_gradients_enabled ..... False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   steps_per_print .............. 100000
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   tensor_parallel_config ....... dtype=torch.float16 autotp_size=0 tp_overlap_comm=False tensor_parallel=TPConfig(tp_size=1, tp_grain_size=1, mpu=None, tp_group=None) injection_policy_tuple=None keep_module_on_host=False replace_with_kernel_inject=False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   timers_config ................ enabled=True synchronized=True
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   train_batch_size ............. 128
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   train_micro_batch_size_per_gpu  1
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   use_data_before_expert_parallel_  False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   use_node_local_storage ....... False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   wall_clock_breakdown ......... False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   weight_quantization_config ... None
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   world_size ................... 2
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   zero_allow_untested_optimizer  True
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   zero_config .................. stage=2 contiguous_gradients=True reduce_scatter=True reduce_bucket_size=5000000 use_multi_rank_bucket_allreduce=True allgather_partitions=True allgather_bucket_size=5000000 overlap_comm=False load_from_fp32_weights=True elastic_checkpoint=False offload_param=None offload_optimizer=DeepSpeedZeroOffloadOptimizerConfig(device='none', nvme_path=None, buffer_count=4, pin_memory=False, pipeline_read=False, pipeline_write=False, fast_init=False, ratio=1.0) sub_group_size=1000000000 cpu_offload_param=None cpu_offload_use_pin_memory=None cpu_offload=None prefetch_bucket_size=50000000 param_persistence_threshold=100000 model_persistence_threshold=9223372036854775807 max_live_parameters=1000000000 max_reuse_distance=1000000000 gather_16bit_weights_on_model_save=False module_granularity_threshold=0 use_all_reduce_for_fetch_params=False stage3_gather_fp16_weights_on_model_save=False ignore_unused_parameters=True legacy_stage1=False round_robin_gradients=False zero_hpz_partition_size=1 zero_quantized_weights=False zero_quantized_nontrainable_weights=False zero_quantized_gradients=False zeropp_loco_param=None mics_shard_size=-1 mics_hierarchical_params_gather=False memory_efficient_linear=True pipeline_loading_checkpoint=False override_module_apply=True log_trace_cache_warnings=False
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   zero_enabled ................. True
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   zero_force_ds_cpu_optimizer .. True
+[2026-11-11 12:04:26,245] [INFO] [config.py:1007:print]   zero_optimization_stage ...... 2
+[2026-11-11 12:04:26,245] [INFO] [config.py:993:print_user_config]   json = {
+    "bf16": {
+        "enabled": true
+    }, 
+    "zero_optimization": {
+        "stage": 2, 
+        "overlap_comm": false, 
+        "contiguous_gradients": true, 
+        "reduce_scatter": true, 
+        "allgather_partitions": true, 
+        "reduce_bucket_size": 5.000000e+06, 
+        "allgather_bucket_size": 5.000000e+06, 
+        "offload_optimizer": {
+            "device": "none"
+        }
+    }, 
+    "gradient_accumulation_steps": 64, 
+    "gradient_clipping": 1.0, 
+    "train_batch_size": 128, 
+    "train_micro_batch_size_per_gpu": 1, 
+    "steps_per_print": 1.000000e+05, 
+    "wall_clock_breakdown": false, 
+    "zero_allow_untested_optimizer": true, 
+    "flops_profiler": {
+        "enabled": false
+    }
+}
+{"rank": 0, "stage": "bounded_training_begin"}
+{"rank": 1, "stage": "bounded_training_begin"}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 0}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 0}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 1}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 1}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 2}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 2}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 3}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 3}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 4}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 4}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 5}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 5}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 6}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 6}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 7}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 7}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 8}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 8}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 9}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 9}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 10}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 10}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 11}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 11}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 12}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 12}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 13}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 13}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 14}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 14}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 15}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 15}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 16}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 16}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 17}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 17}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 18}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 18}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 19}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 19}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 20}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 20}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 21}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 21}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 22}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 22}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 23}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 23}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 24}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 24}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 25}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 25}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 26}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 26}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 27}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 27}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 28}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 28}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 29}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 29}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 30}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 30}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 31}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 31}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 32}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 32}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 33}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 33}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 34}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 34}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 35}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 35}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 36}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 36}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 37}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 37}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 38}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 38}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 39}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 39}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 40}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 40}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 41}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 41}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 42}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 42}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 43}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 43}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 44}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 44}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 45}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 45}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 46}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 46}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 47}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 47}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 48}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 48}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 49}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 49}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 50}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 50}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 51}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 51}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 52}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 52}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 53}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 53}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 54}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 54}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 55}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 55}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 56}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 56}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 57}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 57}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 58}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 58}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 59}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 59}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 60}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 60}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 61}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 61}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 62}
+{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 62}
+{"rank": 1, "stage": "training_microstep", "update": 0, "micro": 63}{"rank": 0, "stage": "training_microstep", "update": 0, "micro": 63}
+
+{"rank": 0, "stage": "global_optimizer_update_complete", "update": 0, "seconds": 79.73492780979723}
+{"rank": 1, "stage": "global_optimizer_update_complete", "update": 0, "seconds": 79.73492780979723}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 0}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 0}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 1}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 1}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 2}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 2}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 3}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 3}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 4}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 4}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 5}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 5}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 6}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 6}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 7}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 7}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 8}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 8}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 9}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 9}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 10}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 10}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 11}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 11}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 12}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 12}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 13}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 13}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 14}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 14}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 15}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 15}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 16}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 16}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 17}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 17}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 18}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 18}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 19}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 19}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 20}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 20}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 21}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 21}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 22}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 22}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 23}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 23}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 24}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 24}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 25}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 25}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 26}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 26}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 27}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 27}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 28}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 28}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 29}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 29}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 30}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 30}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 31}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 31}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 32}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 32}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 33}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 33}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 34}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 34}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 35}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 35}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 36}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 36}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 37}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 37}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 38}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 38}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 39}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 39}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 40}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 40}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 41}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 41}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 42}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 42}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 43}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 43}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 44}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 44}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 45}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 45}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 46}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 46}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 47}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 47}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 48}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 48}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 49}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 49}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 50}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 50}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 51}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 51}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 52}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 52}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 53}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 53}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 54}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 54}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 55}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 55}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 56}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 56}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 57}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 57}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 58}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 58}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 59}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 59}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 60}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 60}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 61}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 61}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 62}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 62}
+{"rank": 0, "stage": "training_microstep", "update": 1, "micro": 63}
+{"rank": 1, "stage": "training_microstep", "update": 1, "micro": 63}
+{"rank": 0, "stage": "global_optimizer_update_complete", "update": 1, "seconds": 79.09440339636058}
+{"rank": 1, "stage": "global_optimizer_update_complete", "update": 1, "seconds": 79.09440339636058}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 0}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 0}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 1}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 1}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 2}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 2}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 3}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 3}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 4}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 4}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 5}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 5}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 6}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 6}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 7}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 7}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 8}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 8}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 9}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 9}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 10}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 10}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 11}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 11}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 12}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 12}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 13}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 13}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 14}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 14}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 15}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 15}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 16}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 16}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 17}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 17}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 18}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 18}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 19}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 19}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 20}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 20}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 21}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 21}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 22}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 22}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 23}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 23}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 24}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 24}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 25}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 25}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 26}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 26}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 27}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 27}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 28}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 28}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 29}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 29}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 30}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 30}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 31}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 31}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 32}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 32}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 33}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 33}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 34}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 34}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 35}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 35}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 36}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 36}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 37}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 37}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 38}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 38}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 39}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 39}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 40}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 40}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 41}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 41}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 42}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 42}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 43}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 43}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 44}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 44}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 45}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 45}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 46}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 46}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 47}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 47}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 48}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 48}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 49}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 49}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 50}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 50}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 51}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 51}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 52}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 52}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 53}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 53}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 54}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 54}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 55}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 55}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 56}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 56}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 57}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 57}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 58}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 58}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 59}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 59}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 60}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 60}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 61}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 61}
+{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 62}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 62}
+{"rank": 0, "stage": "training_microstep", "update": 2, "micro": 63}{"rank": 1, "stage": "training_microstep", "update": 2, "micro": 63}
+
+{"rank": 0, "stage": "global_optimizer_update_complete", "update": 2, "seconds": 78.89072086662054}
+{"rank": 1, "stage": "global_optimizer_update_complete", "update": 2, "seconds": 78.89072086662054}
+{"rank": 0, "stage": "training_correctness_complete"}
+{"rank": 1, "stage": "training_correctness_complete"}
+[2026-11-11 12:08:38,251] [INFO] [stage_1_and_2.py:986:print_rank_0] Removed grad acc hooks
+{"rank": 0, "stage": "resident_state_no_communication_diagnostics_begin"}
+{"rank": 1, "stage": "resident_state_no_communication_diagnostics_begin"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "seqrec", "quantile": "short", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "seqrec", "quantile": "short", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "seqrec", "quantile": "p50", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "seqrec", "quantile": "p50", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "seqrec", "quantile": "p90", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "seqrec", "quantile": "p90", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "seqrec", "quantile": "max", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "seqrec", "quantile": "max", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "item2index", "quantile": "short", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "item2index", "quantile": "short", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "item2index", "quantile": "p50", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "item2index", "quantile": "p50", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "item2index", "quantile": "p90", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "item2index", "quantile": "p90", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "item2index", "quantile": "max", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "item2index", "quantile": "max", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "index2item", "quantile": "short", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "index2item", "quantile": "short", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "index2item", "quantile": "p50", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "index2item", "quantile": "p50", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "index2item", "quantile": "p90", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "index2item", "quantile": "p90", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "index2item", "quantile": "max", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "index2item", "quantile": "max", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "fusionseqrec", "quantile": "short", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "fusionseqrec", "quantile": "short", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "fusionseqrec", "quantile": "p50", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "fusionseqrec", "quantile": "p50", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "fusionseqrec", "quantile": "p90", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "fusionseqrec", "quantile": "p90", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "fusionseqrec", "quantile": "max", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "fusionseqrec", "quantile": "max", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "itemsearch", "quantile": "short", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "itemsearch", "quantile": "short", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "itemsearch", "quantile": "p50", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "itemsearch", "quantile": "p50", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "itemsearch", "quantile": "p90", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "itemsearch", "quantile": "p90", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "itemsearch", "quantile": "max", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "itemsearch", "quantile": "max", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "preferenceobtain", "quantile": "short", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "preferenceobtain", "quantile": "short", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "preferenceobtain", "quantile": "p50", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "preferenceobtain", "quantile": "p50", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "preferenceobtain", "quantile": "p90", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "preferenceobtain", "quantile": "p90", "status": "PASS"}
+{"rank": 0, "stage": "task_no_communication_diagnostic_complete", "task": "preferenceobtain", "quantile": "max", "status": "PASS"}
+{"rank": 1, "stage": "task_no_communication_diagnostic_complete", "task": "preferenceobtain", "quantile": "max", "status": "PASS"}
+{"rank": 0, "stage": "bounded_validation_complete"}
+{"rank": 1, "stage": "bounded_validation_complete"}
+{"rank": 0, "stage": "model_or_adapter_saved"}
+{"rank": 1, "stage": "model_or_adapter_saved"}
+The tokenizer you are loading from '/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q17-f-r0/output/probe/full_model' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+The tokenizer you are loading from '/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q17-f-r0/output/probe/full_model' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+{"rank": 1, "stage": "fresh_saved_model_reload_complete"}
+{"rank": 0, "stage": "fresh_saved_model_reload_complete"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 0, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 0, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 0, "status": "PASS"}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 0}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 0}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 1, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 1, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 1, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 1}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 1}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 2, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 2, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 2, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 2}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 2}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 3, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 3, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 3, "status": "PASS"}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 3}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 3}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 4, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 4, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 4, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 4}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 4}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 5, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 5, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 5, "status": "PASS"}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 5}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 5}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 6, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 6, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 6, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 6}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 6}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 7, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 7, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 7, "status": "PASS"}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 7}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 7}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 8, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 8, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 8, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 8}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 8}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 9, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 9, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 9, "status": "PASS"}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 9}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 9}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 10, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 10, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 10, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 10}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 10}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 11, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 11, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 11, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 11}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 11}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 12, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 12, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 12, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 12}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 12}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 13, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 13, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 13, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 13}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 13}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 14, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 14, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 14, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 14}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 14}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 15, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 15, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 15, "status": "PASS"}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 15}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 15}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 16, "status": "PASS"}
+{"rank": 1, "stage": "generation_case_complete", "prompt_id": 16, "status": "PASS"}
+{"rank": 0, "stage": "generation_case_complete", "prompt_id": 16, "status": "PASS"}
+{"rank": 1, "stage": "generation_template_complete", "prompt_id": 16}
+{"rank": 0, "stage": "generation_template_complete", "prompt_id": 16}
+{"rank": 1, "stage": "all_bounded_gpu_stages_complete", "status": "PASS"}
+{"rank": 0, "stage": "all_bounded_gpu_stages_complete", "status": "PASS"}

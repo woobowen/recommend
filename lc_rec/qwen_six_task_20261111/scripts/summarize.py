@@ -53,6 +53,22 @@ def main():
                       "samples_per_second": 128 / max(update["seconds"] for update in group), "global_counts": group[0].get("global_counts")}
                      for index, group in sorted(ordinary_by_index.items()) if len(group) == 2]
             state = [rank.get("training_state_restore", {"status": "NOT_TESTED"}) for rank in ranks]
+            diagnostics = []
+            if both_rank:
+                for diagnostic_index, record in enumerate(ranks[0].get("task_diagnostics", [])):
+                    pair = [rank["task_diagnostics"][diagnostic_index] for rank in ranks]
+                    assert all((item["task"], item["quantile"], item["sample_id"]) == (record["task"], record["quantile"], record["sample_id"]) for item in pair)
+                    measured_seconds = max(sum(item[name] for name in ("cpu_collator_seconds", "transfer_seconds", "forward_seconds", "backward_seconds")) for item in pair)
+                    diagnostics.append({"task": record["task"], "quantile": record["quantile"], "sample_id": record["sample_id"],
+                                        "distinct_records": 1, "compute_presentations": 2, "communication": "NONE", "optimizer_updates": 0,
+                                        "counts_per_rank": record["counts_per_rank"], "measured_seconds_max_rank": measured_seconds,
+                                        "forward_backward_seconds_max_rank": max(item["forward_seconds"] + item["backward_seconds"] for item in pair),
+                                        "compute_presentations_per_second": 2 / measured_seconds,
+                                        "effective_input_tokens_per_second": 2 * record["counts_per_rank"]["input_tokens"] / measured_seconds,
+                                        "phase_seconds_max_rank": {name: max(item[name] for item in pair) for name in ("cpu_collator_seconds", "transfer_seconds", "forward_seconds", "backward_seconds")},
+                                        "phase_maxima_are_not_additive_wall": True})
+            resources_path = directory / "output/resources/resource-summary.json"
+            resources = read(resources_path) if resources_path.exists() else {}
             attempt = {"job_id": directory.name, "run_commits": sorted({rank.get("run_commit", "UNKNOWN") for rank in ranks}),
                        "compute_status": compute, "two_rank_reports": both_rank,
                        "load_observed": [bool(rank.get("model_identity")) for rank in ranks],
@@ -65,6 +81,13 @@ def main():
                        "training_update_peak_allocated_gib": max((rank.get("training_peak", {}).get("peak_allocated_gib", 0) for rank in ranks), default=0),
                        "training_update_peak_reserved_gib": max((rank.get("training_peak", {}).get("peak_reserved_gib", 0) for rank in ranks), default=0),
                        "ordinary_mixed_timing": timed, "training_state_restore": state,
+                       "ordinary_joint_samples_per_second": sum(item["samples"] for item in timed) / sum(item["wall_seconds_max_rank"] for item in timed) if timed else None,
+                       "task_diagnostics_no_communication": diagnostics,
+                       "resource_guard": resources,
+                       "generation_summary": [{"case_count": len(rank.get("generation", {}).get("cases", [])),
+                                               "returned_sequences": sum(case["returned_sequences"] for case in rank.get("generation", {}).get("cases", [])),
+                                               "canonical_sequences": sum(case["canonical_count"] for case in rank.get("generation", {}).get("cases", [])),
+                                               "all_position_legal": all(case.get("all_position_legal", False) for case in rank.get("generation", {}).get("cases", []))} for rank in ranks],
                        "parameter_scope": [rank.get("parameter_scope") for rank in ranks],
                        "rank_reports": [source(directory / "output/probe" / ("rank" + str(rank) + ".json")) for rank in (0, 1) if (directory / "output/probe" / ("rank" + str(rank) + ".json")).exists()]}
             candidate["attempts"].append(attempt)

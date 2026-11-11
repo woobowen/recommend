@@ -1,0 +1,335 @@
+{
+  "reviewer": "/root/source_reviewer, non-author of model/data/GPU/controller implementation or GPU execution",
+  "review_type": "Direct raw-evidence, byte-identity and original-code assertions; no GPU rerun or local loading of heavy state files",
+  "route": "Q17-F",
+  "job_id": "lc-qwen6-20261111-q17-f-r0",
+  "run_commit": "1f3a0bafeebb3a2fa8604a052727ddb3d1eadcff",
+  "route_status": "PARTIAL",
+  "bounded_compute_status": "PASS",
+  "semantic_status": "PARTIAL_BOUNDARY",
+  "source_binding": {
+    "git_run_members_recomputed": 66,
+    "collected_manifest_members_recomputed": 20,
+    "canonical_request_sha256": "a60e1e08adb9a2376cf425105bce542a557b941002a22492351796e0a8a0af87",
+    "probe_sha256": "8e72c75a961d3ef308c3b88359221cda94632777ead8c891caf89b5979463f3a",
+    "common_sha256": "be599f633fbf0d6b3748cd643b8fcd605593ec09da1ae04d69e50b79a28fc788",
+    "cpu_samples_sha256": "4eadaa1d8813b41aded6c3c489c66cb6d69c8fe7e8d4e3f3d85aa06943174da5",
+    "server_release": "/home/bwwu/lc-rec/qwen-six-task-20261111/releases/1f3a0bafeebb3a2fa8604a052727ddb3d1eadcff"
+  },
+  "independent_assertion_coverage": [
+    "Recomputed all66 request source member SHA from exact git RUN, request canonical digest versus acceptance/query and all20 included local artifact sizes/SHA.",
+    "Checked all384 local microbatches from fixed CPU sample plans: rank slicing, eligibility, shapes, every input/padding/label count, LR/Adam/global steps, nonzero LR flags, finite loss and complete update timing MAX denominators.",
+    "Checked every310 trainable tensor membership, every310 finite nonzero gradient record, full final310 hash agreement and each corresponding saved model manifest hash. Checked one unique active shared matrix,310 optimizer members and no freezing/offload.",
+    "Independently reconstructed every1020 returned sequence from token IDs and checked position legality/EOS/text/canonical membership, shared51 case identities and17template denominators.",
+    "Full training-state restoration is NOT_TESTED on this route; successful strict native full-model reload is not a training-state resume.",
+    "Independently recomputed resource sample peaks, no observed foreign GPU processes, no observed task swap, host safety, exit and tracked own-process cleanup."
+  ],
+  "training": {
+    "micro_per_rank": 1,
+    "accumulation": 64,
+    "global_batch": 128,
+    "completed_updates": 3,
+    "nonzero_lr_updates": 2,
+    "compute_presentations": 384,
+    "distinct_raw_records_union": 262,
+    "all_six_tasks": true,
+    "updates": [
+      {
+        "index": 0,
+        "plan": "mixed_global128_0",
+        "seconds_max_rank": 79.73492780979723,
+        "samples_per_second": 1.6053190680166682,
+        "counts": {
+          "samples": 128,
+          "input_tokens": 12546,
+          "padded_tokens": 12546,
+          "label_tokens": 2204,
+          "shift_label_tokens": 2204
+        },
+        "padding_ratio": 0,
+        "lr": [
+          0,
+          0
+        ],
+        "optimizer_state_resident_before": false
+      },
+      {
+        "index": 1,
+        "plan": "mixed_global128_1",
+        "seconds_max_rank": 79.09440339636058,
+        "samples_per_second": 1.6183193058371277,
+        "counts": {
+          "samples": 128,
+          "input_tokens": 14040,
+          "padded_tokens": 14040,
+          "label_tokens": 2695,
+          "shift_label_tokens": 2695
+        },
+        "padding_ratio": 0,
+        "lr": [
+          7.142857142857143e-7,
+          7.142857142857143e-7
+        ],
+        "optimizer_state_resident_before": true
+      },
+      {
+        "index": 2,
+        "plan": "mixed_global128_tail",
+        "seconds_max_rank": 78.89072086662054,
+        "samples_per_second": 1.6224975332195004,
+        "counts": {
+          "samples": 128,
+          "input_tokens": 17732,
+          "padded_tokens": 17732,
+          "label_tokens": 4926,
+          "shift_label_tokens": 4926
+        },
+        "padding_ratio": 0,
+        "lr": [
+          0.0000014285714285714286,
+          0.0000014285714285714286
+        ],
+        "optimizer_state_resident_before": true
+      }
+    ],
+    "postwarm_normal_mixed_update_indices": [
+      1
+    ],
+    "postwarm_normal_mixed_samples_per_second": 1.6183193058371277,
+    "tail_excluded_from_normal_throughput": true,
+    "local_microbatch_records_independently_checked": 384,
+    "scope": "Full communicating ZeRO-2 GPU AdamW; isolated NCCL not separately profiled"
+  },
+  "parameters": {
+    "native_class": "transformers.models.qwen3.modeling_qwen3.Qwen3ForCausalLM",
+    "complete_model_trainable_unique": 1721932800,
+    "complete_model_trainable_tensors": 310,
+    "frozen_tensors": 0,
+    "all_310_finite_nonzero_gradients": true,
+    "all_310_complete_final_hashes_equal_between_ranks": true,
+    "representative_update_snapshots": 170,
+    "representative_snapshots_with_actual_change": 119,
+    "unchanged_BF16_snapshots_not_false_failure": "Nonzero gradient and tiny warmup update may round away in BF16; no claim that every BF16 parameter changed",
+    "SID_input_and_output_activation_gradients_nonzero": true,
+    "optimizer_exact_unique_members": 310,
+    "active_shared_embedding_head_occurrences": 1,
+    "input_head_tied_after_resize_wrap_zero_and_reload": true,
+    "independent_CE_abs_diff_ranks": [
+      0.0000019073486328125,
+      0.0000019073486328125
+    ],
+    "model_id": "Qwen/Qwen3-1.7B-Base",
+    "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1"
+  },
+  "long_tail": {
+    "status": "PASS_COMPLETE_COMMUNICATING_ZERO_UPDATE",
+    "global_update_zero_based_index": 2,
+    "Adam_states_already_resident": true,
+    "actual_dataset_maximum_coverage": {
+      "seqrec": {
+        "sample_id": "seqrec:116350",
+        "full_tokens": 184,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "item2index": {
+        "sample_id": "item2index:3879",
+        "full_tokens": 1511,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "index2item": {
+        "sample_id": "index2item:3879",
+        "full_tokens": 1513,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "fusionseqrec": {
+        "sample_id": "fusionseqrec:4529",
+        "full_tokens": 908,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "itemsearch": {
+        "sample_id": "itemsearch:3451",
+        "full_tokens": 550,
+        "actual_maximum_in_complete_zero_update": true
+      },
+      "preferenceobtain": {
+        "sample_id": "preferenceobtain:4060",
+        "full_tokens": 543,
+        "actual_maximum_in_complete_zero_update": true
+      }
+    },
+    "additional_no_communication_diagnostics_each_rank": 24,
+    "distinct_records_per_diagnostic": 1,
+    "compute_presentations_per_diagnostic": 2,
+    "diagnostic_optimizer_updates": 0,
+    "diagnostic_parameters_unchanged": true,
+    "other_micro_layouts": "NOT_TESTED; only selected micro1/accum64 tested"
+  },
+  "training_state": {
+    "status": "NOT_TESTED",
+    "native_model_reload_is_not_training_state_restore": true,
+    "static_BF16_plus_FP32_master_and_two_moments_bytes": 24107059200,
+    "static_overhead_exclusions": [
+      "serialization metadata",
+      "scheduler/RNG",
+      "per-rank layout variations"
+    ],
+    "cost_donor_scope": "Q06-F same-engine disk save/restore may supply a separately labelled byte-scaled cost proxy; does not validate this route resume"
+  },
+  "save_reload": {
+    "status": "PASS_FULL_NATIVE_MODEL_STRICT_RELOAD",
+    "tensor_manifest_keys": 311,
+    "each_complete_trainable_final_hash_matches_saved_tensor_manifest": true,
+    "tied_alias_hashes_equal": true,
+    "tokenizer_930_SID_order_exact": true,
+    "model_save_seconds_max_rank": 6.199435853399336,
+    "model_fresh_reload_seconds_max_rank": 20.819988786242902,
+    "full_model_blob": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-q17-f-r0/output/probe/full_model/model.safetensors",
+      "bytes": 3443901264,
+      "sha256": "b4a3e816da340a9b9bc371a9b659d217a823516cb0bfb29039e61e3ac7971fd2"
+    }
+  },
+  "generation": {
+    "status": "PASS_BOUNDED_ORIGINAL_POSITIONWISE_INTERFACE",
+    "unique_cases": 51,
+    "templates": 17,
+    "cases_per_template": 3,
+    "beam": 20,
+    "return_sequences": 20,
+    "returned_sequences": 1020,
+    "canonical_sequences": 0,
+    "canonical_denominator": 1020,
+    "all_five_token_sequences_independently_reconstructed": true,
+    "all_EOS_at_suffix_position": 4,
+    "allowed_counts": [
+      162,
+      256,
+      256,
+      256,
+      1
+    ],
+    "canonical_sids": 9897,
+    "formal_metrics": false,
+    "pure_generate_projected_17_template_center_hours": 15.869654349674367,
+    "pure_generate_template_max_case_hours_before_safety_factor": 19.331903039941874,
+    "CPU_test_processing": "Separate cached-callback CPU replay required; uncached harness residual is not a formal center"
+  },
+  "resources": {
+    "guard_wall_seconds": 427.2838239008561,
+    "charged_device_seconds": 854.5676478017122,
+    "training_update_peak_allocated_gib": 20.92809534072876,
+    "training_update_peak_reserved_gib": 22.62890625,
+    "whole_task_RSS_sample_peak_bytes": 13843525632,
+    "host_mem_available_min_bytes": 243239653376,
+    "new_disk_allocated_peak_bytes": 14139523072,
+    "all_observed_foreign_GPU_process_sets_empty": true,
+    "all_observed_task_swap_bytes_zero": true,
+    "guard_exit": 0,
+    "guard_cleanup_verified": true,
+    "runner_status": "SUCCEEDED",
+    "runner_exit": 0,
+    "owned_processes_remaining": [],
+    "cleanup_kill_signals_sent": false
+  },
+  "event_stage_counts_per_rank": [
+    {
+      "started": 1,
+      "environment_and_budget_checked": 1,
+      "load_model": 1,
+      "initial_model_long_tail_forward_complete": 6,
+      "deepspeed_initialize": 1,
+      "bounded_training_begin": 1,
+      "training_microstep": 192,
+      "global_optimizer_update_complete": 3,
+      "training_correctness_complete": 1,
+      "resident_state_no_communication_diagnostics_begin": 1,
+      "task_no_communication_diagnostic_complete": 24,
+      "bounded_validation_complete": 1,
+      "model_or_adapter_saved": 1,
+      "fresh_saved_model_reload_complete": 1,
+      "generation_case_complete": 34,
+      "generation_template_complete": 17,
+      "all_bounded_gpu_stages_complete": 1
+    },
+    {
+      "started": 1,
+      "environment_and_budget_checked": 1,
+      "load_model": 1,
+      "initial_model_long_tail_forward_complete": 6,
+      "deepspeed_initialize": 1,
+      "bounded_training_begin": 1,
+      "training_microstep": 192,
+      "global_optimizer_update_complete": 3,
+      "training_correctness_complete": 1,
+      "resident_state_no_communication_diagnostics_begin": 1,
+      "task_no_communication_diagnostic_complete": 24,
+      "bounded_validation_complete": 1,
+      "model_or_adapter_saved": 1,
+      "fresh_saved_model_reload_complete": 1,
+      "generation_case_complete": 17,
+      "generation_template_complete": 17,
+      "all_bounded_gpu_stages_complete": 1
+    }
+  ],
+  "limits": [
+    "Original Qwen prompt-length mask boundary gap29574 remains; semantic statusPARTIAL_BOUNDARY; known auxiliary pairing/provenance blocks formal reliable metrics.",
+    "Only selected micro1/accum64 is measured, not an optimized or fastest layout. One steady mixed update calibrates this full-parameter route; micro1 changes original micro-mean token weighting relative to micro2.",
+    "Allocator peaks are training-update observations, not every initialization transient; whole-job NVML/RSS are sampled.",
+    "Heavy saved model is not locally reloaded by reviewer; raw strict execution proof assessed. Full-state and fresh-process restoration are NOT_TESTED on Q17-F.",
+    "No complete epoch, full metric evaluation, baseline adoption or complete96h conclusion from this review.",
+    "Observed training allocator reserve22.62890625GiB on23.5184326171875GiB physical memory leaves limited allocator/device slack. No long-run fragmentation or future random prompt-realization guarantee.",
+    "The79.0944s normal update includes all full-parameter gradient vector-norm/finite synchronization and audit guards. No-communication diagnostics remove both these hooks and ZeRO and cannot substitute for lean formal Trainer throughput; the compute budget conclusion is conditional on the measured instrumented implementation."
+  ],
+  "evidence_root": "lc_rec/qwen_six_task_20261111/evidence/jobs/lc-qwen6-20261111-q17-f-r0",
+  "raw_evidence": {
+    "request.json": {
+      "bytes": 17320,
+      "sha256": "ec9576435dc58e872b0b6ebf02d49ec67a3ea875e807ef8b49717ad8c1516857"
+    },
+    "accepted.json": {
+      "bytes": 310,
+      "sha256": "478e221a327189532570c8ff1db23955eea52951673c217ab0b90a0973299951"
+    },
+    "status.json": {
+      "bytes": 5575,
+      "sha256": "681f3bfc7897abbea0fa20ec10e9c591d67adcb8f25e8a47f5431d109b0c3e5d"
+    },
+    "cleanup.json": {
+      "bytes": 664,
+      "sha256": "5f831fe7d96dd8225d28f85ff9df916a34be46d4f400c8d0529bab861e1afa5d"
+    },
+    "controller-query.json": {
+      "bytes": 7593,
+      "sha256": "a7b79225a2fc803aed3dcdd970a03c5ff836fdd7f4c42a12a4a45da75b420b74"
+    },
+    "work.log": {
+      "bytes": 60452,
+      "sha256": "5e9f97f1cb7b4cc45f12f3099d2e3c73b7afd118d0e21f050db5454ac6148b62"
+    },
+    "output/probe/rank0.json": {
+      "bytes": 1267209,
+      "sha256": "93bc8e92b8617b730b32500c46830ea321b5c3b55895ae4886a4832a4de33720"
+    },
+    "output/probe/rank1.json": {
+      "bytes": 1267258,
+      "sha256": "bc2ed4cf6986cdeb669043a85210bf925bd7f85feb1c0d33eb6afb0dd789fbc2"
+    },
+    "output/probe/events_rank0.jsonl": {
+      "bytes": 389887,
+      "sha256": "6882670461f5f573e71f1463e4c2cb56ebb81f85949bbeb228f5330918ef08c0"
+    },
+    "output/probe/events_rank1.jsonl": {
+      "bytes": 303193,
+      "sha256": "91308445d9be5fa2d7456f8eb837e7b325ab85e8e1d46d881ad60343231d4a5a"
+    },
+    "output/resources/resource-summary.json": {
+      "bytes": 1577,
+      "sha256": "8e2b821aee7912d93bf4bf25d98f3efbcc74d02d9ad9783044f173ff8989995d"
+    },
+    "output/resources/resource-samples.jsonl": {
+      "bytes": 20430,
+      "sha256": "db039ff4bbd42724f27a998e50e6073533a3582f16925e1646c352f392c86d25"
+    }
+  },
+  "result": "Q17-F complete BF16 trainable model dual-GPU update, full communicating1513-token tail and strict native save/reload verified at micro1; full-state restore untested, constrained allocator slack and current boundary semantics keep overallPARTIAL."
+}
