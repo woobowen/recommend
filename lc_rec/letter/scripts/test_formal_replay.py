@@ -20,6 +20,9 @@ def main():
     from accelerate.data_loader import prepare_data_loader
     from accelerate import Accelerator
     Accelerator(cpu=True)
+    from formal_train import nosync_source_identity
+    no_sync_identity=nosync_source_identity(Accelerator.no_sync)
+    assert no_sync_identity['file_sha256']=='933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a'
     assert not torch.cuda.is_initialized()
     source=Path(__file__).with_name('formal_train.py').read_text()
     tree=ast.parse(source)
@@ -67,7 +70,8 @@ def main():
     assert not torch.cuda.is_initialized()
     Path(a.output).write_text(json.dumps({'status':'PASS','synthetic_cpu_only':True,
         'actual_class_ast_sha256':hashlib.sha256(ast.dump(cls).encode()).hexdigest(),
-        'torch_version':torch.__version__,'cases':results,'replay_events':events},indent=2)+'\n')
+        'torch_version':torch.__version__,'no_sync_source_identity':no_sync_identity,
+        'cases':results,'replay_events':events},indent=2)+'\n')
     print(json.dumps({'status':'PASS','cases':results}))
 
 

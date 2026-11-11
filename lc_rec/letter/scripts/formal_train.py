@@ -36,6 +36,16 @@ def sha(path):
     return h.hexdigest()
 
 
+def nosync_source_identity(callable_):
+    # contextmanager's outer wrapper is defined in contextlib.py. Inspect the
+    # original decorated Accelerator method, retaining the full-file guard.
+    original=inspect.unwrap(callable_)
+    path=inspect.getsourcefile(original)
+    return {'source_file':path,'file_sha256':sha(path),
+            'method_sha256':hashlib.sha256(inspect.getsource(original).encode()).hexdigest(),
+            'signature':str(inspect.signature(original))}
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     for name in ['source-root', 'data-root', 'model', 'output', 'config', 'run-commit']:
@@ -105,6 +115,7 @@ def main():
         if previous.exists():assert previous.read_bytes()==rp.read_bytes()
         else:previous.write_bytes(rp.read_bytes())
     events = (out / ('events.rank%d.jsonl' % rank)).open('a', buffering=1)
+    write(rp,report)
 
     def event(kind, **kw):
         record = {'utc': dt.datetime.now(dt.timezone.utc).isoformat(),
@@ -266,7 +277,7 @@ def main():
             step=self.state.global_step
             before=current.global_steps
             boundary=current.is_gradient_accumulation_boundary()
-            if a.probe_stop or step<3 or step%250==0:
+            if a.probe_stop or step<3 or step%250==0 or (step+1)%2060==0:
                 event('batch',step=step,loader_yielded=self.replay_loader.yielded,
                       input_sha256=hashlib.sha256(inputs['input_ids'].cpu().numpy().tobytes()).hexdigest(),
                       label_sha256=hashlib.sha256(inputs['labels'].cpu().numpy().tobytes()).hexdigest(),
@@ -280,6 +291,8 @@ def main():
                       scheduler_last_epoch=self.lr_scheduler.state_dict()['last_epoch'])
             return loss
         def _save_checkpoint(self,current,trial,metrics=None):
+            if metrics is not None and 'eval_loss' in metrics:
+                assert math.isfinite(float(metrics['eval_loss'])), 'nonfinite validation loss'
             super()._save_checkpoint(current,trial,metrics)
             cp=out/('checkpoint-%d'%self.state.global_step)
             # Native _save_checkpoint ran collectively, including DS optimizer,
@@ -348,13 +361,16 @@ def main():
     # behavior on this one engine; DS retains its native loss scaling/steps.
     from contextlib import contextmanager
     from deepspeed import DeepSpeedEngine
+    from accelerate import Accelerator
     from accelerate.utils import DistributedType
     original_no_sync=trainer.accelerator.no_sync
     assert report['versions']['accelerate']=='0.21.0' and report['versions']['deepspeed']=='0.16.9'
-    assert sha(inspect.getsourcefile(original_no_sync))=='933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a'
+    assert original_no_sync.__func__ is Accelerator.no_sync
+    nosync_identity=nosync_source_identity(original_no_sync)
+    assert nosync_identity['file_sha256']=='933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a'
     report['zero2_no_sync_compat']={'scope':'current Trainer accelerator instance and exact stage2 engine only',
                'upstream_reference_blob':'e666b8d7a07c789245bed88c9e68f220a81eb3e7',
-               'calls':0,'original_source_sha256':hashlib.sha256(inspect.getsource(original_no_sync).encode()).hexdigest()}
+               'calls':0,'source_identity':nosync_identity}
     @contextmanager
     def zero2_native_accumulation(current):
         if current is trainer.model_wrapped and type(current) is DeepSpeedEngine:
@@ -384,6 +400,7 @@ def main():
         else:
             assert trainer.state.global_step==8240 and trainer.state.epoch==4.0
             assert trainer.state.best_model_checkpoint and trainer.state.best_metric is not None
+            assert math.isfinite(float(trainer.state.best_metric))
             # Native Trainer already restored strict best DS state on all ranks.
             best=out/'best_adapter'
             trainer.save_model(str(best));trainer.save_state()
@@ -410,4 +427,12 @@ def main():
     dist.destroy_process_group()
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    try:main()
+    except BaseException as error:
+        import traceback
+        if '--output' in sys.argv:
+            output=Path(sys.argv[sys.argv.index('--output')+1])
+            write(output/('failure.rank%s.json'%os.environ.get('RANK','unknown')),
+                  {'status':'FAILED','error':repr(error),'traceback':traceback.format_exc(),'argv':sys.argv})
+        raise

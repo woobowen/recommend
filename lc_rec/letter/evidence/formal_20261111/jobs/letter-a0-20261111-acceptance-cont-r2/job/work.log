@@ -1,0 +1,70 @@
+2026-11-11 17:52:43.871455: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use avai2026-11-11 17:52:43.871454: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operlable CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+ations, rebuild TensorFlow with the appropriate compiler flags.
+[2026-11-11 17:52:47,474] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+[2026-11-11 17:52:47,531] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+You are using the legacy behaviour of the <class 'transformers.models.llama.tokenization_llama.LlamaTokenizer'>. This means that tokens that come after special tokens will not be properly handled. We recommend you to read the related pull request available at https://github.com/huggingface/transformers/pull/24565
+You are using the legacy behaviour of the <class 'transformers.models.llama.tokenization_llama.LlamaTokenizer'>. This means that tokens that come after special tokens will not be properly handled. We recommend you to read the related pull request available at https://github.com/huggingface/transformers/pull/24565
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.77s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.56s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.39s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.60s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.28s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.47s/it]
+/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/other.py:122: FutureWarning: prepare_model_for_int8_training is deprecated and will be removed in a future version. Use prepare_model_for_kbit_training instead.
+  warnings.warn(
+/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/other.py:122: FutureWarning: prepare_model_for_int8_training is deprecated and will be removed in a future version. Use prepare_model_for_kbit_training instead.
+  warnings.warn(
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_train.py", line 413, in <module>
+[rank0]:     if __name__=='__main__':main()
+[rank0]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_train.py", line 354, in main
+[rank0]:     assert sha(inspect.getsourcefile(original_no_sync))=='933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a'
+[rank0]: AssertionError
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_train.py", line 413, in <module>
+[rank1]:     if __name__=='__main__':main()
+[rank1]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_train.py", line 354, in main
+[rank1]:     assert sha(inspect.getsourcefile(original_no_sync))=='933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a'
+[rank1]: AssertionError
+[rank0]:[W1111 17:53:57.905158330 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+W1111 17:53:57.765000 3202113 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3202122 closing signal SIGTERM
+E1111 17:53:57.980000 3202113 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 1 (pid: 3202123) of binary: /data/bwwu/envs/letter-20261110/bin/python
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 922, in <module>
+    main()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-11-11_17:53:57
+  host      : zwlab-01
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 3202123)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_pipeline.py", line 139, in <module>
+    if __name__=='__main__':main()
+  File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_pipeline.py", line 116, in main
+    run('train',args)
+  File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_pipeline.py", line 95, in run
+    if child.returncode:raise RuntimeError(stage+' failed: '+str(child.returncode))
+RuntimeError: train failed: 1

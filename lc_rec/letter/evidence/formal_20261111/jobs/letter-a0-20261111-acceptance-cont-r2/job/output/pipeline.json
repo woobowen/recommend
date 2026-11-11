@@ -1,0 +1,52 @@
+{
+  "status": "FAILED",
+  "job_id": "letter-a0-20261111-acceptance-cont-r2",
+  "kind": "acceptance-continuous",
+  "run_commit": "5b166e3bbfe3cacdbef0e245968025107cf169c1",
+  "output": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-cont-r2",
+  "started_utc": "2026-11-11T17:52:39.898610+00:00",
+  "pid": 3202105,
+  "stages": [
+    {
+      "stage": "train",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nnodes=1",
+        "--nproc_per_node=2",
+        "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_train.py",
+        "--source-root",
+        "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+        "--data-root",
+        "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/vendor/LETTER/data",
+        "--model",
+        "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+        "--output",
+        "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-cont-r2/training",
+        "--config",
+        "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/config/formal_instruments_seed42.json",
+        "--run-commit",
+        "5b166e3bbfe3cacdbef0e245968025107cf169c1",
+        "--precision-approval",
+        "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+        "--probe-stop",
+        "4",
+        "--probe-save",
+        "2"
+      ],
+      "started_utc": "2026-11-11T17:52:40.068447+00:00",
+      "exit_code": 1,
+      "ended_utc": "2026-11-11T17:53:58.423388+00:00"
+    }
+  ],
+  "gpu_start": "index, uuid, name, memory.total [MiB], memory.used [MiB]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n",
+  "phase": "train",
+  "error": "RuntimeError('train failed: 1')",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_pipeline.py\", line 116, in main\n    run('train',args)\n  File \"/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/5b166e3bbfe3cacdbef0e245968025107cf169c1/lc_rec/letter/scripts/formal_pipeline.py\", line 95, in run\n    if child.returncode:raise RuntimeError(stage+' failed: '+str(child.returncode))\nRuntimeError: train failed: 1\n",
+  "exit_code": 1,
+  "ended_utc": "2026-11-11T17:53:58.426881+00:00",
+  "wall_seconds": 78.52743570692837,
+  "charged_gpu_device_seconds": 157.05487141385674
+}

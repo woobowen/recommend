@@ -1,12 +1,12 @@
 {
-  "task_round": 2,
+  "task_round": 3,
   "max_rounds": 3,
   "initial_gpu_job": "letter-a0-20261111-acceptance-cont-r0",
   "initial_updates": 0,
   "root_cause": "Native HF4.31/Accelerate integration owns LambdaLR outside DS engine; engine.lr_scheduler is None. Callback inspection failed before first update; native DS checkpoint alone would omit that external scheduler.",
   "fix": "Persist/strictly restore external HF scheduler in checkpoint; leave original Trainer stepping path unchanged. Use Trainer scheduler for observations/state comparisons.",
   "other_cpu_fixture_fix": "Reuse prior CPU env without DS_ACCELERATOR=cuda; initialize Accelerator(cpu=True) before prepare_data_loader. No model/data/method change.",
-  "validation": "round2 pending 16-microbatch/4-update DS boundary, full checkpoint and cross-process comparison",
+  "validation": "round3 final allowed correction: CPU source guard then GPU continuous/resume pending; no fourth correction authorized",
   "extra_installations": [],
   "additional_preexecution_findings": [
     "Stable formal training directory retains absolute best checkpoint identity across attempts; per-attempt logs/predictions stay isolated",
@@ -25,5 +25,16 @@
     "fix": "instance-only, pinned-source guarded stage2 nullcontext consistent with current official Accelerate; DS loss/GAS/reduction/backward/step untouched",
     "independent_review": "/root/a0_method_review actual installed and official source verification",
     "upstream_blob": "e666b8d7a07c789245bed88c9e68f220a81eb3e7"
+  },
+  "round2_result": {
+    "job": "letter-a0-20261111-acceptance-cont-r2",
+    "updates": 0,
+    "root_cause": "Source guard inspected contextmanager wrapper defined in contextlib.py instead of unwrapped Accelerator.no_sync; assertion before train_begin",
+    "fix": "inspect.unwrap before getsourcefile, preserve exact full Accelerator file SHA guard and bound-method/class identity. Validate helper using installed CPU imports before any next GPU run.",
+    "additional_failure_guards": [
+      "startup failure JSON outside Trainer.train try",
+      "finite validation loss and finite best_metric",
+      "log actual final microbatches of each epoch"
+    ]
   }
 }
