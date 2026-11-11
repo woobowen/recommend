@@ -1,0 +1,121 @@
+{
+  "status": "BLOCKED",
+  "scope": "A0 LETTER-LC-Rec Instruments seed42 Normal only",
+  "RUN_COMMIT": "87ba6556ce7237f8ef32c690165449d0d6a28294",
+  "RUN_COMMIT_scope": "bounded acceptance only; no formal training run",
+  "formal_job_id": null,
+  "formal_training_completed": false,
+  "full_test_completed": false,
+  "best_checkpoint": null,
+  "actual_test_users": 0,
+  "metrics": {
+    "Recall_HR@5": null,
+    "Recall_HR@10": null,
+    "NDCG@5": null,
+    "NDCG@10": null
+  },
+  "paper_reference": {
+    "Recall_HR@10": 0.1115,
+    "NDCG@10": 0.0854,
+    "absolute_difference": null,
+    "relative_difference": null,
+    "reason": "no formal result to compare"
+  },
+  "hard_gate": "cross-process full training-state recovery comparison failed",
+  "tolerance": {
+    "atol": 1e-06,
+    "rtol": 0.001,
+    "reference": "continuous",
+    "criterion": "Every floating tensor element satisfies abs(resumed-continuous) <= atol + rtol*abs(continuous)",
+    "exact_required": [
+      "scheduler",
+      "global_step",
+      "optimizer step/counters",
+      "all RNG including loader generator",
+      "all discrete state"
+    ],
+    "relative_diagnostic_denominator": "max(abs(continuous), atol)",
+    "fixed_before_observation": true,
+    "bf16_note": "rtol=1e-3 is stricter than a typical single BF16 ULP; nondeterministic BF16 differences may fail. No result-dependent widening is permitted."
+  },
+  "comparison_sha256": "1819c4b076e4e88414534fa32f450370ceb6f04aa3f17c876613ee4df785b4bf",
+  "rounds_used": 3,
+  "rounds_max": 3,
+  "acceptance_jobs": [
+    {
+      "job_id": "letter-a0-20261111-acceptance-cont-r0",
+      "started_utc": "2026-11-11T17:35:13.934157+00:00",
+      "ended_utc": "2026-11-11T17:36:37.730681+00:00",
+      "wall_seconds": 83.981657,
+      "gpu_device_seconds": 167.963314,
+      "status": "FAILED",
+      "runner_cleanup_verified": true
+    },
+    {
+      "job_id": "letter-a0-20261111-acceptance-cont-r1",
+      "started_utc": "2026-11-11T17:45:04.489387+00:00",
+      "ended_utc": "2026-11-11T17:46:27.808772+00:00",
+      "wall_seconds": 83.509734,
+      "gpu_device_seconds": 167.019468,
+      "status": "FAILED",
+      "runner_cleanup_verified": true
+    },
+    {
+      "job_id": "letter-a0-20261111-acceptance-cont-r2",
+      "started_utc": "2026-11-11T17:52:40.002793+00:00",
+      "ended_utc": "2026-11-11T17:53:58.594429+00:00",
+      "wall_seconds": 78.787413,
+      "gpu_device_seconds": 157.574826,
+      "status": "FAILED",
+      "runner_cleanup_verified": true
+    },
+    {
+      "job_id": "letter-a0-20261111-acceptance-cont-r3",
+      "started_utc": "2026-11-11T17:59:38.136057+00:00",
+      "ended_utc": "2026-11-11T18:02:44.670968+00:00",
+      "wall_seconds": 186.728672,
+      "gpu_device_seconds": 373.457344,
+      "status": "SUCCEEDED",
+      "runner_cleanup_verified": true
+    },
+    {
+      "job_id": "letter-a0-20261111-acceptance-resume-r3",
+      "started_utc": "2026-11-11T18:04:07.882930+00:00",
+      "ended_utc": "2026-11-11T18:07:00.629656+00:00",
+      "wall_seconds": 173.156615,
+      "gpu_device_seconds": 346.31323,
+      "status": "SUCCEEDED",
+      "runner_cleanup_verified": true
+    }
+  ],
+  "preacceptance_charged_gpu_device_seconds": 1212.328182,
+  "preacceptance_charged_gpu_device_minutes": 20.2054697,
+  "preacceptance_budget_gpu_device_minutes": 60,
+  "formal_wall_seconds_used": 0,
+  "formal_wall_seconds_budget": 345600,
+  "all_jobs_terminal": true,
+  "current_gpu_compute_processes": [],
+  "checkpoint_bytes_each": 18673205984,
+  "peak_reserved_bytes_per_gpu": 15040774144,
+  "nonfinite_state_tensors": false,
+  "independent_reviews": [
+    "../../review/formal_20261111/method_final_review.md",
+    "../../review/formal_20261111/execution_final_review.md"
+  ],
+  "new_installations": {
+    "system": [],
+    "language": [],
+    "toolchain": [],
+    "shared_configuration_changes": []
+  },
+  "not_run": [
+    "A1",
+    "Qwen",
+    "A2",
+    "Shuffle",
+    "extra seeds",
+    "other datasets",
+    "upstream SID training/regeneration"
+  ],
+  "next_action": "stop; user review and new authorization required before any further correction or GPU attempt"
+}
