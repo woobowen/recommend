@@ -1,0 +1,76 @@
+{
+  "official_lc_rec": {
+    "repository": "RUCAIBox/LC-Rec",
+    "commit": "e6f1b3b3f8b4fee55a49a7b3dfeba29dbfcf0669",
+    "local_source": "lc_rec/vendor/original",
+    "prior_byte_exact_receipt": "lc_rec/evidence/source_identity_verification.json",
+    "required_source_files": [
+      "lora_finetune.py",
+      "finetune.py",
+      "utils.py",
+      "data.py",
+      "collator.py",
+      "prompt.py",
+      "run.sh",
+      "test.py",
+      "test_ddp.py",
+      "evaluate.py"
+    ]
+  },
+  "reused_reviews": [
+    {
+      "commit": "cceb550a44835b359c21596507f31dc7765da2d4",
+      "path": "lc_rec/six_task_lora/REVIEW_ENTRY.md",
+      "scope": "Original LC-Rec six tasks, LC930 author SID and Instruments, fixed realization and auxiliary pairing evidence; not Qwen runtime proof"
+    },
+    {
+      "commit": "1cd37ec681bdb3534108aaaee554dbaa9158a12f",
+      "path": "lc_rec/qwen_preflight_20261110/REVIEW_ENTRY.md",
+      "scope": "Qwen3 assets/native architecture/tied PEFT/save and ZeRO engineering only; previous LETTER918, temperature.8, Int8 LoRA and global64 are not imported"
+    }
+  ],
+  "approved_candidate": {
+    "lr": 0.00005,
+    "lr_basis": "Author Instruments full-parameter run.sh plus explicit user authorization for these bounded candidates",
+    "official_parser_default_lr": 0.00002,
+    "lora_rank": 8,
+    "alpha": 32,
+    "dropout": 0.05,
+    "targets": "seven original native projection names",
+    "global_batch": 128,
+    "max_length": 2048,
+    "history_length": 20,
+    "epochs_for_budget_only": 4,
+    "temperature": 1,
+    "seed": 42,
+    "bf16_base": true,
+    "quantization": "NONE",
+    "offload": "NONE"
+  },
+  "engine_adaptations": [
+    "Native Qwen3ForCausalLM Base with fixed official revisions; no chat/system/thinking template",
+    "LC930 sorted added tokens; 151669 tokenizer entries to152599, original physical151936 rows to152599;267 padded old rows reused,663 physical new rows",
+    "Keep native tied embedding/head, PEFT ensure_weight_tying and full active shared matrix; optimizer deduplicates shared Parameter",
+    "Restore genuine EOS via attention-mask padding when Qwen PAD==EOS; preserve independent-prompt-length mask and report substantial BPE boundary failure instead of silently changing supervision",
+    "Explicit original per-micro FP32 causal CE mean at temperature1; prevent new Trainer accumulated-window token normalization",
+    "BF16 base initialization and SDPA/checkpointing/ZeRO2 GPU AdamW instead of original LLaMA/older Trainer engine; numerical trajectory is not asserted identical",
+    "Finite fixed paired training-period diagnostic samples, original task proportions and prompt realization; full original length distribution retains mismatched auxiliary records for load analysis",
+    "LoRA4 updates=mixed0,mixed1,mixed0,tail; full3=mixed0,mixed1,tail; first LR0 recorded, all failures charged and total<=14"
+  ],
+  "semantic_status": "PARTIAL_BOUNDARY: 29574/221225 Qwen full/prompt token-prefix mismatches,979 EOS-only vs505 raw empty;474 nonempty answers collapse to EOS-only. No offset rewrite, separate-token retokenization, filtering, or formal baseline adoption authorized.",
+  "original_method_identity": "Qwen full changes downstream LLM from original full-parameter LLaMA LC-Rec; Qwen LoRA additionally changes training parameter range. Official LoRA source exists but no strictly bound complete LoRA paper metrics are claimed.",
+  "resource_caps": {
+    "GPU_device_minutes": 240,
+    "per_model_device_minutes": 120,
+    "per_job_wall_minutes": 45,
+    "host_memory_reserve_GiB": 40,
+    "new_server_files_GiB": 20,
+    "filesystem_reserve": "max(30GiB,10%)"
+  },
+  "installs": {
+    "system": [],
+    "language": [],
+    "toolchains": [],
+    "shared_config_changes": []
+  }
+}

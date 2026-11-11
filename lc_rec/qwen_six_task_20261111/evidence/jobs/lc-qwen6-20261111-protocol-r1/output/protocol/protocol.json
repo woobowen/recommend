@@ -1,0 +1,1945 @@
+{
+  "status": "PASS_CPU_PROTOCOL_ONLY",
+  "kind": "CPU_ONLY_INSTALLED_TRAINER_AND_ACCELERATE_PROTOCOL",
+  "run_commit": "97ae3fad2cda9e9df5576db36ef6dee323500585",
+  "argv": [
+    "/home/bwwu/lc-rec/qwen-six-task-20261111/releases/97ae3fad2cda9e9df5576db36ef6dee323500585/lc_rec/qwen_six_task_20261111/scripts/protocol_probe.py",
+    "--output",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-protocol-r1/output/protocol",
+    "--run-commit",
+    "97ae3fad2cda9e9df5576db36ef6dee323500585"
+  ],
+  "interpreter": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+  "cwd": "/home/bwwu/lc-rec/qwen-six-task-20261111/releases/97ae3fad2cda9e9df5576db36ef6dee323500585",
+  "observed_utc": "2026-11-11T11:22:41.632541+00:00",
+  "training_records": 221225,
+  "versions": {
+    "torch": "2.6.0",
+    "transformers": "4.57.6",
+    "accelerate": "1.12.0"
+  },
+  "cuda_initialized_before": false,
+  "sources": {
+    "initial_values": {
+      "symbol": "Trainer.set_initial_training_values",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 5661,
+      "source_sha256": "0cf039322eacabfc328c855765ae75cf2ab1ca5534eb03ce984a0b19a487d759",
+      "source_file": "initial_values.py.txt",
+      "control_lines": [
+        {
+          "line": 5667,
+          "text": "        - `num_update_steps_per_epoch`"
+        },
+        {
+          "line": 5675,
+          "text": "        max_steps = args.max_steps"
+        },
+        {
+          "line": 5682,
+          "text": "            num_update_steps_per_epoch = max("
+        },
+        {
+          "line": 5683,
+          "text": "                len_dataloader // args.gradient_accumulation_steps"
+        },
+        {
+          "line": 5684,
+          "text": "                + int(len_dataloader % args.gradient_accumulation_steps > 0),"
+        },
+        {
+          "line": 5689,
+          "text": "                max_steps = math.ceil(args.num_train_epochs * num_update_steps_per_epoch)"
+        },
+        {
+          "line": 5695,
+          "text": "                num_train_epochs = max_steps // num_update_steps_per_epoch + int("
+        },
+        {
+          "line": 5696,
+          "text": "                    max_steps % num_update_steps_per_epoch > 0"
+        },
+        {
+          "line": 5702,
+          "text": "                num_train_epochs = math.ceil(args.num_train_epochs)"
+        },
+        {
+          "line": 5707,
+          "text": "            num_update_steps_per_epoch = max_steps"
+        },
+        {
+          "line": 5717,
+          "text": "            num_update_steps_per_epoch,"
+        }
+      ]
+    },
+    "inner_training_loop": {
+      "symbol": "Trainer._inner_training_loop",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 2353,
+      "source_sha256": "fb3e7f42af2bcd95e25f60236086e0a79096c2dc98f57a11042c642f1fb39384",
+      "source_file": "inner_training_loop.py.txt",
+      "control_lines": [
+        {
+          "line": 2530,
+          "text": "        self.state.epoch = 0"
+        },
+        {
+          "line": 2587,
+          "text": "            steps_in_epoch = ("
+        },
+        {
+          "line": 2608,
+          "text": "            remainder = steps_in_epoch % args.gradient_accumulation_steps"
+        },
+        {
+          "line": 2609,
+          "text": "            if remainder == 0:"
+        },
+        {
+          "line": 2610,
+          "text": "                remainder = args.gradient_accumulation_steps"
+        },
+        {
+          "line": 2612,
+          "text": "            total_updates = steps_in_epoch // args.gradient_accumulation_steps + int("
+        },
+        {
+          "line": 2613,
+          "text": "                remainder < args.gradient_accumulation_steps"
+        },
+        {
+          "line": 2615,
+          "text": "            for _ in range(total_updates):"
+        },
+        {
+          "line": 2617,
+          "text": "                num_batches = args.gradient_accumulation_steps if update_step != (total_updates - 1) else remainder"
+        },
+        {
+          "line": 2618,
+          "text": "                batch_samples, num_items_in_batch = self.get_batch_samples(epoch_iterator, num_batches, args.device)"
+        },
+        {
+          "line": 2621,
+          "text": "                self.current_gradient_accumulation_steps = len(batch_samples)"
+        },
+        {
+          "line": 2624,
+          "text": "                    do_sync_step = (step + 1) % args.gradient_accumulation_steps == 0 or (step + 1) == steps_in_epoch"
+        },
+        {
+          "line": 2626,
+          "text": "                    self.accelerator.gradient_state._set_sync_gradients(do_sync_step)"
+        },
+        {
+          "line": 2692,
+          "text": "                    if do_sync_step:"
+        },
+        {
+          "line": 2754,
+          "text": "                        self.state.epoch = epoch + (step + 1) / steps_in_epoch"
+        },
+        {
+          "line": 2789,
+          "text": "            self.control = self.callback_handler.on_epoch_end(args, self.state, self.control)"
+        },
+        {
+          "line": 2812,
+          "text": "            self._load_best_model()"
+        }
+      ]
+    },
+    "epoch_callback": {
+      "symbol": "DefaultFlowCallback.on_epoch_end",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer_callback.py",
+      "first_line": 611,
+      "source_sha256": "061fc0f8bce47b344961037319a804578a505eaf45d9bc2da8c943e18799ee29",
+      "source_file": "epoch_callback.py.txt",
+      "control_lines": [
+        {
+          "line": 617,
+          "text": "        if args.eval_strategy == IntervalStrategy.EPOCH and args.eval_delay <= state.epoch:"
+        },
+        {
+          "line": 618,
+          "text": "            control.should_evaluate = True"
+        },
+        {
+          "line": 621,
+          "text": "        if args.save_strategy == SaveStrategy.EPOCH:"
+        },
+        {
+          "line": 622,
+          "text": "            control.should_save = True"
+        }
+      ]
+    },
+    "step_callback": {
+      "symbol": "DefaultFlowCallback.on_step_end",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer_callback.py",
+      "first_line": 579,
+      "source_sha256": "355f8da8a3a9d38fd0e208b793c373e505f02d402b49de08d9e6067c866027df",
+      "source_file": "step_callback.py.txt",
+      "control_lines": [
+        {
+          "line": 581,
+          "text": "        if state.global_step == 1 and args.logging_first_step:"
+        },
+        {
+          "line": 583,
+          "text": "        if args.logging_strategy == IntervalStrategy.STEPS and state.global_step % state.logging_steps == 0:"
+        },
+        {
+          "line": 589,
+          "text": "            and state.global_step % state.eval_steps == 0"
+        },
+        {
+          "line": 590,
+          "text": "            and args.eval_delay <= state.global_step"
+        },
+        {
+          "line": 598,
+          "text": "            and state.global_step % state.save_steps == 0"
+        },
+        {
+          "line": 600,
+          "text": "            control.should_save = True"
+        },
+        {
+          "line": 603,
+          "text": "        if state.global_step >= state.max_steps:"
+        },
+        {
+          "line": 604,
+          "text": "            control.should_training_stop = True"
+        },
+        {
+          "line": 607,
+          "text": "                control.should_save = True"
+        }
+      ]
+    },
+    "save_checkpoint": {
+      "symbol": "Trainer._save_checkpoint",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 3312,
+      "source_sha256": "211d0152a338f8432d223b1fa980e94ae7ebaaa00a92e66193186960f332378c",
+      "source_file": "save_checkpoint.py.txt",
+      "control_lines": [
+        {
+          "line": 3325,
+          "text": "        self.save_model(output_dir, _internal_call=True)"
+        },
+        {
+          "line": 3343,
+          "text": "        if not self.args.save_only_model:"
+        },
+        {
+          "line": 3345,
+          "text": "            self._save_optimizer_and_scheduler(output_dir)"
+        },
+        {
+          "line": 3346,
+          "text": "            self._save_scaler(output_dir)"
+        },
+        {
+          "line": 3348,
+          "text": "            self._save_rng_state(output_dir)"
+        },
+        {
+          "line": 3362,
+          "text": "            self.state.save_to_json(os.path.join(output_dir, TRAINER_STATE_NAME))"
+        },
+        {
+          "line": 3370,
+          "text": "            self._rotate_checkpoints(use_mtime=True, output_dir=run_dir)"
+        }
+      ]
+    },
+    "best_restore": {
+      "symbol": "Trainer._load_best_model",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 3032,
+      "source_sha256": "a832f4b1ffe03c9a0c46b66c23914cbfbc9eae29136b9471b68c849b285f835f",
+      "source_file": "best_restore.py.txt",
+      "control_lines": [
+        {
+          "line": 3033,
+          "text": "        logger.info(f\"Loading best model from {self.state.best_model_checkpoint} (score: {self.state.best_metric}).\")"
+        },
+        {
+          "line": 3034,
+          "text": "        best_model_path = os.path.join(self.state.best_model_checkpoint, WEIGHTS_NAME)"
+        },
+        {
+          "line": 3035,
+          "text": "        best_safe_model_path = os.path.join(self.state.best_model_checkpoint, SAFE_WEIGHTS_NAME)"
+        },
+        {
+          "line": 3036,
+          "text": "        best_adapter_model_path = os.path.join(self.state.best_model_checkpoint, ADAPTER_WEIGHTS_NAME)"
+        },
+        {
+          "line": 3037,
+          "text": "        best_safe_adapter_model_path = os.path.join(self.state.best_model_checkpoint, ADAPTER_SAFE_WEIGHTS_NAME)"
+        },
+        {
+          "line": 3040,
+          "text": "        if self.is_deepspeed_enabled:"
+        },
+        {
+          "line": 3041,
+          "text": "            deepspeed_load_checkpoint("
+        },
+        {
+          "line": 3043,
+          "text": "                self.state.best_model_checkpoint,"
+        },
+        {
+          "line": 3044,
+          "text": "                load_module_strict=not _is_peft_model(self.model),"
+        },
+        {
+          "line": 3051,
+          "text": "                self.state.best_model_checkpoint,"
+        },
+        {
+          "line": 3062,
+          "text": "                if os.path.isfile(os.path.join(self.state.best_model_checkpoint, \"user_content.pt\")):"
+        },
+        {
+          "line": 3065,
+          "text": "                    smp.resume_from_checkpoint("
+        },
+        {
+          "line": 3066,
+          "text": "                        path=self.state.best_model_checkpoint,"
+        },
+        {
+          "line": 3081,
+          "text": "                    load_result = model.load_state_dict(state_dict, strict=True)"
+        },
+        {
+          "line": 3087,
+          "text": "                        model, \"load_adapter\""
+        },
+        {
+          "line": 3099,
+          "text": "                                model.load_adapter(self.state.best_model_checkpoint, active_adapter)"
+        },
+        {
+          "line": 3107,
+          "text": "                                        \"to set this to False and to load the model manually from the checkpoint \""
+        },
+        {
+          "line": 3120,
+          "text": "                                \"The intermediate checkpoints of PEFT may not be saved correctly, \""
+        },
+        {
+          "line": 3139,
+          "text": "                    load_result = model.load_state_dict(state_dict, False)"
+        },
+        {
+          "line": 3142,
+          "text": "        elif os.path.exists(os.path.join(self.state.best_model_checkpoint, SAFE_WEIGHTS_INDEX_NAME)) or os.path.exists("
+        },
+        {
+          "line": 3143,
+          "text": "            os.path.join(self.state.best_model_checkpoint, WEIGHTS_INDEX_NAME)"
+        },
+        {
+          "line": 3145,
+          "text": "            load_result = load_sharded_checkpoint("
+        },
+        {
+          "line": 3146,
+          "text": "                model, self.state.best_model_checkpoint, strict=is_sagemaker_mp_enabled()"
+        }
+      ]
+    },
+    "prepare_data_loader": {
+      "symbol": "prepare_data_loader",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/accelerate/data_loader.py",
+      "first_line": 996,
+      "source_sha256": "33329061deb02f2cbbfe546e5314eb024542b05124c33297d940bf63b0905b21",
+      "source_file": "prepare_data_loader.py.txt",
+      "control_lines": [
+        {
+          "line": 1005,
+          "text": "    even_batches: bool = True,"
+        },
+        {
+          "line": 1007,
+          "text": "    use_seedable_sampler: bool = False,"
+        },
+        {
+          "line": 1008,
+          "text": "    data_seed: Optional[int] = None,"
+        },
+        {
+          "line": 1056,
+          "text": "        even_batches (`bool`, *optional*, defaults to `True`):"
+        },
+        {
+          "line": 1064,
+          "text": "        use_seedable_sampler (`bool`, *optional*, defaults to `False`):"
+        },
+        {
+          "line": 1069,
+          "text": "        data_seed (`int`, *optional*, defaults to `None`):"
+        },
+        {
+          "line": 1070,
+          "text": "            The seed to use for the underlying generator when using `use_seedable_sampler`. If `None`, the generator"
+        },
+        {
+          "line": 1088,
+          "text": "    `BatchSampler`s with varying batch sizes are not enabled by default. To enable this behaviour, set `even_batches`"
+        },
+        {
+          "line": 1176,
+          "text": "    if isinstance(sampler, RandomSampler) and use_seedable_sampler:"
+        },
+        {
+          "line": 1190,
+          "text": "            data_seed=data_seed,"
+        },
+        {
+          "line": 1225,
+          "text": "            if not use_seedable_sampler and hasattr(sampler, \"generator\"):"
+        },
+        {
+          "line": 1234,
+          "text": "            new_batch_sampler = BatchSamplerShard("
+        },
+        {
+          "line": 1239,
+          "text": "                even_batches=even_batches,"
+        },
+        {
+          "line": 1305,
+          "text": "    if isinstance(sampler, SeedableRandomSampler) and use_seedable_sampler:"
+        }
+      ]
+    },
+    "get_batch_samples": {
+      "symbol": "Trainer.get_batch_samples",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 5644,
+      "source_sha256": "4211a94c6eac798f48d77d61ba4051fc0e3bdd5ffa5f4f28bfed7fc798ddfcde",
+      "source_file": "get_batch_samples.py.txt",
+      "control_lines": [
+        {
+          "line": 5645,
+          "text": "        self, epoch_iterator: Iterator, num_batches: int, device: torch.device"
+        },
+        {
+          "line": 5652,
+          "text": "        for _ in range(num_batches):"
+        },
+        {
+          "line": 5654,
+          "text": "                batch_samples.append(next(epoch_iterator))"
+        },
+        {
+          "line": 5658,
+          "text": "        num_items_in_batch = self._get_num_items_in_batch(batch_samples, device)"
+        }
+      ]
+    },
+    "count_items": {
+      "symbol": "Trainer._get_num_items_in_batch",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 5593,
+      "source_sha256": "dfc6f0a69851dcf0aedb2217ca012f3cd998264ff28755e6c102e3267a5513fa",
+      "source_file": "count_items.py.txt",
+      "control_lines": [
+        {
+          "line": 5593,
+          "text": "    def _get_num_items_in_batch(self, batch_samples: list, device: torch.device) -> Optional[Union[torch.Tensor, int]]:"
+        },
+        {
+          "line": 5602,
+          "text": "        num_items_in_batch = None"
+        },
+        {
+          "line": 5603,
+          "text": "        count_num_items_in_batch = ("
+        },
+        {
+          "line": 5607,
+          "text": "                # num_items_in_batch is passed to model forward"
+        },
+        {
+          "line": 5609,
+          "text": "                self.model_accepts_loss_kwargs"
+        },
+        {
+          "line": 5610,
+          "text": "                # num_items_in_batch is passed to compute_loss_func"
+        },
+        {
+          "line": 5612,
+          "text": "                or self.compute_loss_func is not None"
+        },
+        {
+          "line": 5613,
+          "text": "                # num_items_in_batch is also verified if (self.model_accepts_loss_kwargs or self.compute_loss_func)"
+        },
+        {
+          "line": 5617,
+          "text": "        if count_num_items_in_batch:"
+        },
+        {
+          "line": 5620,
+          "text": "                num_items_in_batch = sum((batch[\"labels\"].ne(-100)).sum() for batch in batch_samples)"
+        },
+        {
+          "line": 5624,
+          "text": "        if num_items_in_batch is not None:"
+        },
+        {
+          "line": 5625,
+          "text": "            if self.args.average_tokens_across_devices and self.args.world_size >= 1:"
+        },
+        {
+          "line": 5626,
+          "text": "                num_items_in_batch = self.accelerator.gather(num_items_in_batch.to(device)).sum()"
+        },
+        {
+          "line": 5629,
+          "text": "                # Otherwise, we would have to scatter labels and calculate num_items_in_batch for each gpu."
+        },
+        {
+          "line": 5630,
+          "text": "                num_items_in_batch = num_items_in_batch // self.args.n_gpu"
+        },
+        {
+          "line": 5632,
+          "text": "            if torch.is_tensor(num_items_in_batch):"
+        },
+        {
+          "line": 5633,
+          "text": "                num_items_in_batch = num_items_in_batch.to(device)"
+        },
+        {
+          "line": 5635,
+          "text": "                if self.args.n_gpu > 1 and num_items_in_batch.dim() == 0:"
+        },
+        {
+          "line": 5637,
+          "text": "                    num_items_in_batch = num_items_in_batch.unsqueeze(0).expand(self.args.n_gpu, -1)"
+        },
+        {
+          "line": 5640,
+          "text": "                    num_items_in_batch = num_items_in_batch // pc.non_data_parallel_size"
+        },
+        {
+          "line": 5642,
+          "text": "        return num_items_in_batch"
+        }
+      ]
+    },
+    "compute_loss": {
+      "symbol": "Trainer.compute_loss",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 4075,
+      "source_sha256": "a632e3220093cdfe4aaebc20aed84a54896a5e19ec5fc75090d421267044f34c",
+      "source_file": "compute_loss.py.txt",
+      "control_lines": [
+        {
+          "line": 4080,
+          "text": "        num_items_in_batch: Optional[torch.Tensor] = None,"
+        },
+        {
+          "line": 4092,
+          "text": "            num_items_in_batch (Optional[torch.Tensor], *optional*):"
+        },
+        {
+          "line": 4093,
+          "text": "                The number of items in the batch. If num_items_in_batch is not passed,"
+        },
+        {
+          "line": 4098,
+          "text": "        Subclass and override for custom behavior. If you are not using `num_items_in_batch` when computing your loss,"
+        },
+        {
+          "line": 4099,
+          "text": "        make sure to overwrite `self.model_accepts_loss_kwargs` to `False`. Otherwise, the loss calculating might be slightly inaccurate when performing gradient accumulation."
+        },
+        {
+          "line": 4105,
+          "text": "        if self.model_accepts_loss_kwargs:"
+        },
+        {
+          "line": 4107,
+          "text": "            if num_items_in_batch is not None:"
+        },
+        {
+          "line": 4108,
+          "text": "                kwargs[\"num_items_in_batch\"] = num_items_in_batch"
+        },
+        {
+          "line": 4110,
+          "text": "        outputs = model(**inputs)"
+        },
+        {
+          "line": 4126,
+          "text": "                num_items_in_batch=num_items_in_batch,"
+        },
+        {
+          "line": 4150,
+          "text": "            self.args.average_tokens_across_devices"
+        },
+        {
+          "line": 4151,
+          "text": "            and (self.model_accepts_loss_kwargs or self.compute_loss_func)"
+        },
+        {
+          "line": 4152,
+          "text": "            and num_items_in_batch is not None"
+        }
+      ]
+    },
+    "training_step": {
+      "symbol": "Trainer.training_step",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 3981,
+      "source_sha256": "6eb7e9a2bcfed6d8d66cfcd0d292405135043be8026b036863fe105d1eaaa7ab",
+      "source_file": "training_step.py.txt",
+      "control_lines": [
+        {
+          "line": 4016,
+          "text": "                loss_mb = smp_forward_backward(model, inputs, self.args.gradient_accumulation_steps)"
+        },
+        {
+          "line": 4057,
+          "text": "                    scaled_loss.backward()"
+        },
+        {
+          "line": 4061,
+          "text": "                    not self.model_accepts_loss_kwargs or num_items_in_batch is None"
+        },
+        {
+          "line": 4064,
+          "text": "                    loss = loss / self.current_gradient_accumulation_steps"
+        },
+        {
+          "line": 4069,
+          "text": "                    kwargs[\"scale_wrt_gas\"] = False"
+        },
+        {
+          "line": 4071,
+          "text": "                self.accelerator.backward(loss, **kwargs)"
+        }
+      ]
+    },
+    "qwen_forward": {
+      "symbol": "Qwen3ForCausalLM.forward",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/utils/generic.py",
+      "first_line": 443,
+      "source_sha256": "474923638af92bcc038c1986be008c47a33cecb1ab5fb458facf44ae53a385e6",
+      "source_file": "qwen_forward.py.txt",
+      "control_lines": [
+        {
+          "line": 452,
+          "text": "        labels: Optional[torch.LongTensor] = None,"
+        },
+        {
+          "line": 456,
+          "text": "        **kwargs: Unpack[TransformersKwargs],"
+        },
+        {
+          "line": 459,
+          "text": "        labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):"
+        },
+        {
+          "line": 462,
+          "text": "            (masked), the loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`."
+        },
+        {
+          "line": 488,
+          "text": "            **kwargs,"
+        },
+        {
+          "line": 497,
+          "text": "        if labels is not None:"
+        },
+        {
+          "line": 498,
+          "text": "            loss = self.loss_function(logits=logits, labels=labels, vocab_size=self.config.vocab_size, **kwargs)"
+        }
+      ]
+    }
+  },
+  "layouts": [
+    {
+      "micro": 8,
+      "accumulation": 8,
+      "world_size": 2,
+      "full_global_batch": 128,
+      "ranks": [
+        {
+          "rank": 0,
+          "raw_loader": {
+            "class": "torch.utils.data.dataloader.DataLoader",
+            "batch_size": 8,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_loader": {
+            "class": "accelerate.data_loader.DataLoaderShard",
+            "batch_size": null,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_batch_sampler": {
+            "class": "accelerate.data_loader.BatchSamplerShard",
+            "batch_size": 8,
+            "drop_last": false,
+            "even_batches": true,
+            "split_batches": false,
+            "num_processes": 2,
+            "process_index": 0
+          },
+          "sampler": {
+            "class": "torch.utils.data.sampler.SequentialSampler",
+            "batch_size": null,
+            "drop_last": null,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "actual_iterated_batches": 13827,
+          "presentations": 110616,
+          "unique_records": 110616,
+          "first_eight_indices": [
+            110567,
+            118132,
+            173967,
+            74875,
+            118399,
+            140200,
+            211408,
+            198965
+          ],
+          "last_eight_indices": [
+            188197,
+            32977,
+            166706,
+            42751,
+            108358,
+            181464,
+            77731,
+            208931
+          ],
+          "ordered_indices_sha256": "0363c370bb8a7646207f590d12cca044ff94ea8899b5ec327049258d8d0423dc",
+          "index_hash_encoding": "native-endian unsigned32 array; host byteorder=little",
+          "last_microbatch_sizes": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "actual_get_batch_samples_calls": 1729,
+          "last_update_microbatches": 3,
+          "last_update_local_presentations": 24
+        },
+        {
+          "rank": 1,
+          "raw_loader": {
+            "class": "torch.utils.data.dataloader.DataLoader",
+            "batch_size": 8,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_loader": {
+            "class": "accelerate.data_loader.DataLoaderShard",
+            "batch_size": null,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_batch_sampler": {
+            "class": "accelerate.data_loader.BatchSamplerShard",
+            "batch_size": 8,
+            "drop_last": false,
+            "even_batches": true,
+            "split_batches": false,
+            "num_processes": 2,
+            "process_index": 1
+          },
+          "sampler": {
+            "class": "torch.utils.data.sampler.SequentialSampler",
+            "batch_size": null,
+            "drop_last": null,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "actual_iterated_batches": 13827,
+          "presentations": 110616,
+          "unique_records": 110616,
+          "first_eight_indices": [
+            28665,
+            212642,
+            152368,
+            12651,
+            160171,
+            132775,
+            92858,
+            47997
+          ],
+          "last_eight_indices": [
+            187738,
+            110567,
+            118132,
+            173967,
+            74875,
+            118399,
+            140200,
+            211408
+          ],
+          "ordered_indices_sha256": "62a264ef4e69342fa887c5df975e700b1a45132bc170e7db6aa2ed334c33adc4",
+          "index_hash_encoding": "native-endian unsigned32 array; host byteorder=little",
+          "last_microbatch_sizes": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "actual_get_batch_samples_calls": 1729,
+          "last_update_microbatches": 3,
+          "last_update_local_presentations": 24
+        }
+      ],
+      "trainer_set_initial_training_values": {
+        "num_train_epochs": 4,
+        "num_update_steps_per_epoch": 1729,
+        "num_examples": 221225,
+        "num_train_samples_nominal": 884900,
+        "epoch_based": true,
+        "len_dataloader": 13827,
+        "max_steps": 6916
+      },
+      "warmup_steps_actual_method": 70,
+      "epoch_loop_control": [
+        {
+          "epoch_index": 0,
+          "state_epoch": 1.0,
+          "global_step": 1729,
+          "updates": 1729,
+          "microbatches_per_rank": 13827,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 3,
+          "last_executed_update_global_presentations": 48,
+          "tail_microbatches_per_rank": 3,
+          "tail_global_presentations": 48,
+          "global_presentations": 221232,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 1,
+          "state_epoch": 2.0,
+          "global_step": 3458,
+          "updates": 1729,
+          "microbatches_per_rank": 13827,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 3,
+          "last_executed_update_global_presentations": 48,
+          "tail_microbatches_per_rank": 3,
+          "tail_global_presentations": 48,
+          "global_presentations": 221232,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 2,
+          "state_epoch": 3.0,
+          "global_step": 5187,
+          "updates": 1729,
+          "microbatches_per_rank": 13827,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 3,
+          "last_executed_update_global_presentations": 48,
+          "tail_microbatches_per_rank": 3,
+          "tail_global_presentations": 48,
+          "global_presentations": 221232,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 3,
+          "state_epoch": 4.0,
+          "global_step": 6916,
+          "updates": 1729,
+          "microbatches_per_rank": 13827,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 3,
+          "last_executed_update_global_presentations": 48,
+          "tail_microbatches_per_rank": 3,
+          "tail_global_presentations": 48,
+          "global_presentations": 221232,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": true
+        }
+      ],
+      "base_records_four_epochs": 884900,
+      "actual_sampler_presentations_per_epoch": 221232,
+      "sampler_repeated_presentations_per_epoch": 7,
+      "actual_sampler_presentations_four_epochs": 884928,
+      "full_sampler_presentations_if_four_complete_epochs": 884928,
+      "scheduled_global128_equivalent_presentations": 885248,
+      "difference_due_to_partial_epoch_tail": 320,
+      "effective_validation_calls": 4,
+      "validation_records_per_call": 49544,
+      "validation_total_records": 198176,
+      "scheduled_full_checkpoint_calls": 4,
+      "final_explicit_model_save_calls": 1,
+      "best_model_restore_calls": 1,
+      "training_arguments": {
+        "eval_strategy": "epoch",
+        "save_strategy": "epoch",
+        "eval_delay": 1,
+        "load_best_model_at_end": true,
+        "save_total_limit": 5,
+        "save_only_model": false,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "average_tokens_across_devices": true
+      }
+    },
+    {
+      "micro": 4,
+      "accumulation": 16,
+      "world_size": 2,
+      "full_global_batch": 128,
+      "ranks": [
+        {
+          "rank": 0,
+          "raw_loader": {
+            "class": "torch.utils.data.dataloader.DataLoader",
+            "batch_size": 4,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_loader": {
+            "class": "accelerate.data_loader.DataLoaderShard",
+            "batch_size": null,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_batch_sampler": {
+            "class": "accelerate.data_loader.BatchSamplerShard",
+            "batch_size": 4,
+            "drop_last": false,
+            "even_batches": true,
+            "split_batches": false,
+            "num_processes": 2,
+            "process_index": 0
+          },
+          "sampler": {
+            "class": "torch.utils.data.sampler.SequentialSampler",
+            "batch_size": null,
+            "drop_last": null,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "actual_iterated_batches": 27654,
+          "presentations": 110616,
+          "unique_records": 110613,
+          "first_eight_indices": [
+            110567,
+            118132,
+            173967,
+            74875,
+            28665,
+            212642,
+            152368,
+            12651
+          ],
+          "last_eight_indices": [
+            188197,
+            32977,
+            166706,
+            42751,
+            187738,
+            110567,
+            118132,
+            173967
+          ],
+          "ordered_indices_sha256": "051624fb76e139b935af31f80517a2a4d1d28fe4bff943ab8b4d1e25249d80bb",
+          "index_hash_encoding": "native-endian unsigned32 array; host byteorder=little",
+          "last_microbatch_sizes": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "actual_get_batch_samples_calls": 1729,
+          "last_update_microbatches": 6,
+          "last_update_local_presentations": 24
+        },
+        {
+          "rank": 1,
+          "raw_loader": {
+            "class": "torch.utils.data.dataloader.DataLoader",
+            "batch_size": 4,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_loader": {
+            "class": "accelerate.data_loader.DataLoaderShard",
+            "batch_size": null,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_batch_sampler": {
+            "class": "accelerate.data_loader.BatchSamplerShard",
+            "batch_size": 4,
+            "drop_last": false,
+            "even_batches": true,
+            "split_batches": false,
+            "num_processes": 2,
+            "process_index": 1
+          },
+          "sampler": {
+            "class": "torch.utils.data.sampler.SequentialSampler",
+            "batch_size": null,
+            "drop_last": null,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "actual_iterated_batches": 27654,
+          "presentations": 110616,
+          "unique_records": 110613,
+          "first_eight_indices": [
+            118399,
+            140200,
+            211408,
+            198965,
+            160171,
+            132775,
+            92858,
+            47997
+          ],
+          "last_eight_indices": [
+            108358,
+            181464,
+            77731,
+            208931,
+            74875,
+            118399,
+            140200,
+            211408
+          ],
+          "ordered_indices_sha256": "bf4f6944015f196924aa8d7a36f627828aaf9487e2b0b14de776712097b2e514",
+          "index_hash_encoding": "native-endian unsigned32 array; host byteorder=little",
+          "last_microbatch_sizes": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "actual_get_batch_samples_calls": 1729,
+          "last_update_microbatches": 6,
+          "last_update_local_presentations": 24
+        }
+      ],
+      "trainer_set_initial_training_values": {
+        "num_train_epochs": 4,
+        "num_update_steps_per_epoch": 1729,
+        "num_examples": 221225,
+        "num_train_samples_nominal": 884900,
+        "epoch_based": true,
+        "len_dataloader": 27654,
+        "max_steps": 6916
+      },
+      "warmup_steps_actual_method": 70,
+      "epoch_loop_control": [
+        {
+          "epoch_index": 0,
+          "state_epoch": 1.0,
+          "global_step": 1729,
+          "updates": 1729,
+          "microbatches_per_rank": 27654,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 6,
+          "last_executed_update_global_presentations": 48,
+          "tail_microbatches_per_rank": 6,
+          "tail_global_presentations": 48,
+          "global_presentations": 221232,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 1,
+          "state_epoch": 2.0,
+          "global_step": 3458,
+          "updates": 1729,
+          "microbatches_per_rank": 27654,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 6,
+          "last_executed_update_global_presentations": 48,
+          "tail_microbatches_per_rank": 6,
+          "tail_global_presentations": 48,
+          "global_presentations": 221232,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 2,
+          "state_epoch": 3.0,
+          "global_step": 5187,
+          "updates": 1729,
+          "microbatches_per_rank": 27654,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 6,
+          "last_executed_update_global_presentations": 48,
+          "tail_microbatches_per_rank": 6,
+          "tail_global_presentations": 48,
+          "global_presentations": 221232,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 3,
+          "state_epoch": 4.0,
+          "global_step": 6916,
+          "updates": 1729,
+          "microbatches_per_rank": 27654,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 6,
+          "last_executed_update_global_presentations": 48,
+          "tail_microbatches_per_rank": 6,
+          "tail_global_presentations": 48,
+          "global_presentations": 221232,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": true
+        }
+      ],
+      "base_records_four_epochs": 884900,
+      "actual_sampler_presentations_per_epoch": 221232,
+      "sampler_repeated_presentations_per_epoch": 7,
+      "actual_sampler_presentations_four_epochs": 884928,
+      "full_sampler_presentations_if_four_complete_epochs": 884928,
+      "scheduled_global128_equivalent_presentations": 885248,
+      "difference_due_to_partial_epoch_tail": 320,
+      "effective_validation_calls": 4,
+      "validation_records_per_call": 49544,
+      "validation_total_records": 198176,
+      "scheduled_full_checkpoint_calls": 4,
+      "final_explicit_model_save_calls": 1,
+      "best_model_restore_calls": 1,
+      "training_arguments": {
+        "eval_strategy": "epoch",
+        "save_strategy": "epoch",
+        "eval_delay": 1,
+        "load_best_model_at_end": true,
+        "save_total_limit": 5,
+        "save_only_model": false,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "average_tokens_across_devices": true
+      }
+    },
+    {
+      "micro": 2,
+      "accumulation": 32,
+      "world_size": 2,
+      "full_global_batch": 128,
+      "ranks": [
+        {
+          "rank": 0,
+          "raw_loader": {
+            "class": "torch.utils.data.dataloader.DataLoader",
+            "batch_size": 2,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_loader": {
+            "class": "accelerate.data_loader.DataLoaderShard",
+            "batch_size": null,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_batch_sampler": {
+            "class": "accelerate.data_loader.BatchSamplerShard",
+            "batch_size": 2,
+            "drop_last": false,
+            "even_batches": true,
+            "split_batches": false,
+            "num_processes": 2,
+            "process_index": 0
+          },
+          "sampler": {
+            "class": "torch.utils.data.sampler.SequentialSampler",
+            "batch_size": null,
+            "drop_last": null,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "actual_iterated_batches": 55307,
+          "presentations": 110614,
+          "unique_records": 110613,
+          "first_eight_indices": [
+            110567,
+            118132,
+            118399,
+            140200,
+            28665,
+            212642,
+            160171,
+            132775
+          ],
+          "last_eight_indices": [
+            187065,
+            5322,
+            188197,
+            32977,
+            108358,
+            181464,
+            187738,
+            110567
+          ],
+          "ordered_indices_sha256": "02f36d33b280f3b427a74e5e0b27cd3242d0237232c184aa5931a5c19764db26",
+          "index_hash_encoding": "native-endian unsigned32 array; host byteorder=little",
+          "last_microbatch_sizes": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "actual_get_batch_samples_calls": 1729,
+          "last_update_microbatches": 11,
+          "last_update_local_presentations": 22
+        },
+        {
+          "rank": 1,
+          "raw_loader": {
+            "class": "torch.utils.data.dataloader.DataLoader",
+            "batch_size": 2,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_loader": {
+            "class": "accelerate.data_loader.DataLoaderShard",
+            "batch_size": null,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_batch_sampler": {
+            "class": "accelerate.data_loader.BatchSamplerShard",
+            "batch_size": 2,
+            "drop_last": false,
+            "even_batches": true,
+            "split_batches": false,
+            "num_processes": 2,
+            "process_index": 1
+          },
+          "sampler": {
+            "class": "torch.utils.data.sampler.SequentialSampler",
+            "batch_size": null,
+            "drop_last": null,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "actual_iterated_batches": 55307,
+          "presentations": 110614,
+          "unique_records": 110613,
+          "first_eight_indices": [
+            173967,
+            74875,
+            211408,
+            198965,
+            152368,
+            12651,
+            92858,
+            47997
+          ],
+          "last_eight_indices": [
+            85481,
+            155694,
+            166706,
+            42751,
+            77731,
+            208931,
+            118132,
+            173967
+          ],
+          "ordered_indices_sha256": "d26903e5d11be4f7bc7df0dfea16586644214b3cdaeb9022c32a2d7b8a75d604",
+          "index_hash_encoding": "native-endian unsigned32 array; host byteorder=little",
+          "last_microbatch_sizes": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "actual_get_batch_samples_calls": 1729,
+          "last_update_microbatches": 11,
+          "last_update_local_presentations": 22
+        }
+      ],
+      "trainer_set_initial_training_values": {
+        "num_train_epochs": 4,
+        "num_update_steps_per_epoch": 1729,
+        "num_examples": 221225,
+        "num_train_samples_nominal": 884900,
+        "epoch_based": true,
+        "len_dataloader": 55307,
+        "max_steps": 6916
+      },
+      "warmup_steps_actual_method": 70,
+      "epoch_loop_control": [
+        {
+          "epoch_index": 0,
+          "state_epoch": 1.0,
+          "global_step": 1729,
+          "updates": 1729,
+          "microbatches_per_rank": 55307,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 11,
+          "last_executed_update_global_presentations": 44,
+          "tail_microbatches_per_rank": 11,
+          "tail_global_presentations": 44,
+          "global_presentations": 221228,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 1,
+          "state_epoch": 2.0,
+          "global_step": 3458,
+          "updates": 1729,
+          "microbatches_per_rank": 55307,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 11,
+          "last_executed_update_global_presentations": 44,
+          "tail_microbatches_per_rank": 11,
+          "tail_global_presentations": 44,
+          "global_presentations": 221228,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 2,
+          "state_epoch": 3.0,
+          "global_step": 5187,
+          "updates": 1729,
+          "microbatches_per_rank": 55307,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 11,
+          "last_executed_update_global_presentations": 44,
+          "tail_microbatches_per_rank": 11,
+          "tail_global_presentations": 44,
+          "global_presentations": 221228,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 3,
+          "state_epoch": 4.0,
+          "global_step": 6916,
+          "updates": 1729,
+          "microbatches_per_rank": 55307,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 11,
+          "last_executed_update_global_presentations": 44,
+          "tail_microbatches_per_rank": 11,
+          "tail_global_presentations": 44,
+          "global_presentations": 221228,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": true
+        }
+      ],
+      "base_records_four_epochs": 884900,
+      "actual_sampler_presentations_per_epoch": 221228,
+      "sampler_repeated_presentations_per_epoch": 3,
+      "actual_sampler_presentations_four_epochs": 884912,
+      "full_sampler_presentations_if_four_complete_epochs": 884912,
+      "scheduled_global128_equivalent_presentations": 885248,
+      "difference_due_to_partial_epoch_tail": 336,
+      "effective_validation_calls": 4,
+      "validation_records_per_call": 49544,
+      "validation_total_records": 198176,
+      "scheduled_full_checkpoint_calls": 4,
+      "final_explicit_model_save_calls": 1,
+      "best_model_restore_calls": 1,
+      "training_arguments": {
+        "eval_strategy": "epoch",
+        "save_strategy": "epoch",
+        "eval_delay": 1,
+        "load_best_model_at_end": true,
+        "save_total_limit": 5,
+        "save_only_model": false,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "average_tokens_across_devices": true
+      }
+    },
+    {
+      "micro": 1,
+      "accumulation": 64,
+      "world_size": 2,
+      "full_global_batch": 128,
+      "ranks": [
+        {
+          "rank": 0,
+          "raw_loader": {
+            "class": "torch.utils.data.dataloader.DataLoader",
+            "batch_size": 1,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_loader": {
+            "class": "accelerate.data_loader.DataLoaderShard",
+            "batch_size": null,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_batch_sampler": {
+            "class": "accelerate.data_loader.BatchSamplerShard",
+            "batch_size": 1,
+            "drop_last": false,
+            "even_batches": true,
+            "split_batches": false,
+            "num_processes": 2,
+            "process_index": 0
+          },
+          "sampler": {
+            "class": "torch.utils.data.sampler.SequentialSampler",
+            "batch_size": null,
+            "drop_last": null,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "actual_iterated_batches": 110613,
+          "presentations": 110613,
+          "unique_records": 110613,
+          "first_eight_indices": [
+            110567,
+            173967,
+            118399,
+            211408,
+            28665,
+            152368,
+            160171,
+            92858
+          ],
+          "last_eight_indices": [
+            162447,
+            187065,
+            85481,
+            188197,
+            166706,
+            108358,
+            77731,
+            187738
+          ],
+          "ordered_indices_sha256": "4680fdc13e80e767e26a32e079bc1bfd33475c9001530317c48fc844094593d9",
+          "index_hash_encoding": "native-endian unsigned32 array; host byteorder=little",
+          "last_microbatch_sizes": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "actual_get_batch_samples_calls": 1729,
+          "last_update_microbatches": 21,
+          "last_update_local_presentations": 21
+        },
+        {
+          "rank": 1,
+          "raw_loader": {
+            "class": "torch.utils.data.dataloader.DataLoader",
+            "batch_size": 1,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_loader": {
+            "class": "accelerate.data_loader.DataLoaderShard",
+            "batch_size": null,
+            "drop_last": false,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "prepared_batch_sampler": {
+            "class": "accelerate.data_loader.BatchSamplerShard",
+            "batch_size": 1,
+            "drop_last": false,
+            "even_batches": true,
+            "split_batches": false,
+            "num_processes": 2,
+            "process_index": 1
+          },
+          "sampler": {
+            "class": "torch.utils.data.sampler.SequentialSampler",
+            "batch_size": null,
+            "drop_last": null,
+            "even_batches": null,
+            "split_batches": null,
+            "num_processes": null,
+            "process_index": null
+          },
+          "actual_iterated_batches": 110613,
+          "presentations": 110613,
+          "unique_records": 110613,
+          "first_eight_indices": [
+            118132,
+            74875,
+            140200,
+            198965,
+            212642,
+            12651,
+            132775,
+            47997
+          ],
+          "last_eight_indices": [
+            201975,
+            5322,
+            155694,
+            32977,
+            42751,
+            181464,
+            208931,
+            110567
+          ],
+          "ordered_indices_sha256": "6b7bbb0296b3f2f6fc2f67dae5c7a07e09938a835940249c905aee78f374dd00",
+          "index_hash_encoding": "native-endian unsigned32 array; host byteorder=little",
+          "last_microbatch_sizes": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "actual_get_batch_samples_calls": 1729,
+          "last_update_microbatches": 21,
+          "last_update_local_presentations": 21
+        }
+      ],
+      "trainer_set_initial_training_values": {
+        "num_train_epochs": 4,
+        "num_update_steps_per_epoch": 1729,
+        "num_examples": 221225,
+        "num_train_samples_nominal": 884900,
+        "epoch_based": true,
+        "len_dataloader": 110613,
+        "max_steps": 6916
+      },
+      "warmup_steps_actual_method": 70,
+      "epoch_loop_control": [
+        {
+          "epoch_index": 0,
+          "state_epoch": 1.0,
+          "global_step": 1729,
+          "updates": 1729,
+          "microbatches_per_rank": 110613,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 21,
+          "last_executed_update_global_presentations": 42,
+          "tail_microbatches_per_rank": 21,
+          "tail_global_presentations": 42,
+          "global_presentations": 221226,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 1,
+          "state_epoch": 2.0,
+          "global_step": 3458,
+          "updates": 1729,
+          "microbatches_per_rank": 110613,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 21,
+          "last_executed_update_global_presentations": 42,
+          "tail_microbatches_per_rank": 21,
+          "tail_global_presentations": 42,
+          "global_presentations": 221226,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 2,
+          "state_epoch": 3.0,
+          "global_step": 5187,
+          "updates": 1729,
+          "microbatches_per_rank": 110613,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 21,
+          "last_executed_update_global_presentations": 42,
+          "tail_microbatches_per_rank": 21,
+          "tail_global_presentations": 42,
+          "global_presentations": 221226,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": false
+        },
+        {
+          "epoch_index": 3,
+          "state_epoch": 4.0,
+          "global_step": 6916,
+          "updates": 1729,
+          "microbatches_per_rank": 110613,
+          "complete_epoch_tail_reached": true,
+          "last_executed_update_microbatches_per_rank": 21,
+          "last_executed_update_global_presentations": 42,
+          "tail_microbatches_per_rank": 21,
+          "tail_global_presentations": 42,
+          "global_presentations": 221226,
+          "unstepped_microbatches_after_epoch": 0,
+          "should_evaluate": true,
+          "should_save": true,
+          "should_training_stop": true
+        }
+      ],
+      "base_records_four_epochs": 884900,
+      "actual_sampler_presentations_per_epoch": 221226,
+      "sampler_repeated_presentations_per_epoch": 1,
+      "actual_sampler_presentations_four_epochs": 884904,
+      "full_sampler_presentations_if_four_complete_epochs": 884904,
+      "scheduled_global128_equivalent_presentations": 885248,
+      "difference_due_to_partial_epoch_tail": 344,
+      "effective_validation_calls": 4,
+      "validation_records_per_call": 49544,
+      "validation_total_records": 198176,
+      "scheduled_full_checkpoint_calls": 4,
+      "final_explicit_model_save_calls": 1,
+      "best_model_restore_calls": 1,
+      "training_arguments": {
+        "eval_strategy": "epoch",
+        "save_strategy": "epoch",
+        "eval_delay": 1,
+        "load_best_model_at_end": true,
+        "save_total_limit": 5,
+        "save_only_model": false,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "average_tokens_across_devices": true
+      }
+    }
+  ],
+  "loss_normalization_boundary": {
+    "original_lc_rec": "Each rank microbatch causal shifted CE is a mean over its valid labels; accumulation/rank averaging does not equal a full-window token mean when answer lengths differ.",
+    "current_trainer_default_risk": "Qwen3.forward accepts **kwargs; Trainer can pass num_items_in_batch across the accumulation window. Native 4.57.6 Trainer loss scaling must not be called equivalent to original 4.31 LC-Rec without an explicit adapter.",
+    "this_cpu_probe": "The uninitialized Trainer object has model_accepts_loss_kwargs=False and compute_loss_func=None only for index iteration; no loss, model, optimizer, backward or training executed.",
+    "required_bounded_gpu_scope": "Explicit per-micro CE with no temperature and no num_items_in_batch; original rank/micro averaging must be evidenced independently.",
+    "epoch_tail_limit": "Native Trainer sets current_gradient_accumulation_steps to actual final chunk size. The bounded DeepSpeed loop uses full global128; exact short-tail numerical behavior with DeepSpeed is NOT TESTED by this CPU protocol audit."
+  },
+  "checkpoint_scope": {
+    "checkpoint_policy": "Four epoch checkpoints plus final save_model; save_total_limit=5; lowest eval_loss; load_best_model_at_end.",
+    "full_state_by_source": "save_only_model=False invokes model, optimizer/scheduler, scaler as applicable, RNG and Trainer JSON state saving. DeepSpeed-specific state layout is not written here.",
+    "not_measured": [
+      "Model loading",
+      "Training or loss",
+      "Full optimizer checkpoint I/O",
+      "Optimizer/scheduler/RNG recovery",
+      "DeepSpeed epoch-tail gradients",
+      "Real model selection and best restoration"
+    ]
+  },
+  "limitations": [
+    "CPU sharding traverses only dummy integer record IDs in one epoch per rank; all four epoch batch-size and callback traces follow inspected installed control flow, not a model run.",
+    "prepare_data_loader is explicitly parameterized for two ranks on one CPU process; no distributed CPU process group or GPU is created.",
+    "Sampler identities and tail sizes are real Accelerate 1.12 outputs, but Dataset prompt/query/preference RNG behavior and communication are outside this probe.",
+    "The dummy Trainer object bypasses __init__ to avoid model/optimizer initialization; actual set_initial_training_values, sampler, get_batch_samples and DefaultFlowCallback methods are invoked."
+  ],
+  "cuda_initialized_after": false,
+  "elapsed_seconds": 21.74810145329684
+}

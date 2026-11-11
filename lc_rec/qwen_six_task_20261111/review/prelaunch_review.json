@@ -1,0 +1,136 @@
+{
+  "reviewer": "/root/source_reviewer",
+  "status": "PASS_STATIC_WITH_EXPLICIT_RUNTIME_GATES",
+  "scope": "Direct non-author review of common.py, cpu_audit.py, probe.py, control.py, resource_guard.py and four route configurations before the first GPU run. No GPU execution or model/optimizer implementation by this reviewer.",
+  "independence": {
+    "not_authored_by_reviewer": ["scripts/common.py", "scripts/cpu_audit.py", "scripts/probe.py", "scripts/control.py", "scripts/resource_guard.py"],
+    "authored_by_reviewer": ["scripts/protocol_probe.py", "review/source_review.json", "review/prelaunch_review.json"],
+    "protocol_limitation": "The protocol-r1 result is an observed artifact from this reviewer's script, not an independently authored validation of that script. Main control or another reviewer must review the protocol implementation independently."
+  },
+  "reviewed_source_sha256": {
+    "scripts/common.py": "be599f633fbf0d6b3748cd643b8fcd605593ec09da1ae04d69e50b79a28fc788",
+    "scripts/cpu_audit.py": "5845fe49458a40adf9940112705a49ad94b5ee87b4e787f13334b120e4dcd9ac",
+    "scripts/probe.py": "8e72c75a961d3ef308c3b88359221cda94632777ead8c891caf89b5979463f3a",
+    "scripts/control.py": "fae8774ca61aded5f47a45151d0119135d148a4b116b45eb8975913b69abc2ac",
+    "scripts/resource_guard.py": "e523e06b020ed43e10e6f949e4cb8b7de7831f36dad6808fefe7d80683b2a0ad"
+  },
+  "static_checks": [
+    {
+      "area": "Original six-task realization and provenance",
+      "result": "Original Dataset classes are imported from fixed vendor/original. All 221225 old recorded randint/choice events replay into original text hashes. Both Qwen models use the same original realization; principal two mixed128 plans remain identical. No LETTER data loader, SID map, prompt, temperature or single-task objective is imported."
+    },
+    {
+      "area": "LC SID identity and original collisions",
+      "result": "Sorted original token strings must count930; IDs are contiguous additions. Both saved/reloaded tokenizers must encode every 9922 original four-position SID exactly. catalog_identity preserves inverse one-to-many SID mapping and asserts9897 canonical SIDs,23 collision groups,25 additional items, rather than requiring an injective item map."
+    },
+    {
+      "area": "Mask and EOS adaptation",
+      "result": "Natural-language input/full text is unchanged. Independently encoded original prompt length still defines the mask; no offset-based supervision rewrite occurs. CPU audit compares the adapted and literal official collators on every record; only restored genuine EOS labels are allowed to differ when Qwen PAD equals EOS. Empty/EOS-only answers, truncation and prefix-boundary disagreements are reported rather than silently removed."
+    },
+    {
+      "area": "Loss and accumulation",
+      "result": "Explicit FP32 causal-shift CE uses temperature1 and microbatch valid-label mean. The engine forward receives no labels or num_items_in_batch. DeepSpeed accumulation/rank averaging therefore retains original micro-mean semantics. The code records unequal token weights versus global token mean and independently checks logsumexp CE."
+    },
+    {
+      "area": "Native Qwen and parameter scope",
+      "result": "Native Qwen3ForCausalLM, official Base assets, unchanged architecture, BF16, mean_resizing=False, original tied embedding/head. LoRA r8/alpha32/dropout0.05 targets seven projection families in every layer and saves the complete active shared matrix. Frozen original PEFT modules are protected. Full route marks every instantiated parameter trainable."
+    },
+    {
+      "area": "Optimizer, gradients, updates and ranks",
+      "result": "AdamW unique membership must equal trainable Parameter identity exactly, including shared matrix once. ZeRO original groups are checked; FP32 masters/moments must be GPU resident. Baselines occur after ZeRO conversion, full LoRA tensors and930 SID rows are snapshotted, frozen tensor hashes are compared, all trainable gradients are observed, input/output SID paths checked and complete final trainable tensor hashes compared across ranks. Insufficient later LoRA_A update evidence produces PARTIAL."
+    },
+    {
+      "area": "Joint throughput and long-tail training",
+      "result": "Each authorized update uses all six tasks with128 presentations and actual MAX-rank wall time/SUM-rank counts. Fourth LoRA update and third full-parameter update insert eligible actual-Qwen task maxima into the original proportional plan, retaining ZeRO communication hooks and initialized GPU optimizer states. Actual-all-data versus eligible maxima coverage is separately reported. Later24 task diagnostics explicitly remove communication hooks and count one distinct record/two compute presentations; they cannot establish a complete ZeRO update."
+    },
+    {
+      "area": "Save/reload and failure continuation",
+      "result": "Native full model or adapter plus tokenizer is saved, then a fresh model/PEFT public load must match complete key/shape/dtype/value-byte manifests and tied sharing. Reload exceptions are gathered before shared timing/branch decisions; all ranks either select fresh load or use the retained exact trained CPU model for generation while keeping reload PARTIAL. Adapter/model reload remains distinct from optimizer/scheduler/RNG recovery."
+    },
+    {
+      "area": "Generation protocol",
+      "result": "Three fixed real users at unchanged raw-history p10/p50/max each use all17 original SeqRec templates. Qwen offsets only locate the actual Response delimiter; allowed tokens remain independent per SID position plus EOS. beam20,return20,max_new10 and original get_topk_results score sorting are preserved, with no added deduplication/trie or OOM beam reduction. Untrained canonical fraction is diagnostic, not recommendation quality."
+    },
+    {
+      "area": "Resources and independent runner",
+      "result": "Task/model budgets14400/7200 device-seconds, child guard2660 seconds with reserve and outer runner2700 seconds, host40GiB, new files20GiB, free disk max30GiB/10 percent, isolated task caches and offline weights. Persistent flock and unique job IDs prevent overlapping/duplicate task attempts. Only tracked PID/create-time/UID identities are terminated; verified runner handles owned process-group cleanup and lost control. events_rank*.jsonl matches guard progress glob."
+    }
+  ],
+  "findings_resolved_before_gpu": [
+    {
+      "finding": "Asymmetric strict-reload failure could mismatch successful-rank all_reduce and fallback-rank barrier",
+      "resolution": "Final reviewed probe gathers local reload errors, then applies uniform MAX timing and an all-rank success/fallback decision."
+    },
+    {
+      "finding": "Optional optimizer-state hashing must support zero-dimensional Adam step tensors",
+      "resolution": "Final reviewed tensor_digest reshapes the CPU contiguous tensor to one dimension before dtype-viewing bytes. Actual CPU dtype regression remains a prelaunch gate."
+    },
+    {
+      "finding": "Unchanged old six-task protocol values cannot be assumed under current Trainer",
+      "resolution": "Observed protocol-r1 uses actual4.57.6/Accelerate1.12 sampler/initial-values/callback methods and produces the current schedule below; old4.31 values are retained only as historical evidence."
+    }
+  ],
+  "observed_protocol_r1": {
+    "path": "evidence/jobs/lc-qwen6-20261111-protocol-r1/output/protocol/protocol.json",
+    "run_commit": "97ae3fad2cda9e9df5576db36ef6dee323500585",
+    "status": "PASS_CPU_PROTOCOL_ONLY",
+    "cuda_initialized": false,
+    "updates_per_epoch": 1729,
+    "scheduled_updates": 6916,
+    "warmup_steps": 70,
+    "validation_calls": 4,
+    "validation_records_per_call": 49544,
+    "epoch_checkpoint_calls": 4,
+    "final_explicit_model_save_calls": 1,
+    "layouts": [
+      {"micro": 8, "accumulation": 8, "loader_batches_per_rank": 13827, "four_epoch_presentations": 884928, "tail_global_presentations": 48},
+      {"micro": 4, "accumulation": 16, "loader_batches_per_rank": 27654, "four_epoch_presentations": 884928, "tail_global_presentations": 48},
+      {"micro": 2, "accumulation": 32, "loader_batches_per_rank": 55307, "four_epoch_presentations": 884912, "tail_global_presentations": 44},
+      {"micro": 1, "accumulation": 64, "loader_batches_per_rank": 110613, "four_epoch_presentations": 884904, "tail_global_presentations": 42}
+    ],
+    "scope": "Real dummy-index one-epoch CPU sharding per rank plus actual installed method/callback control simulation. No complete real-model epoch or DeepSpeed tail update was run."
+  },
+  "current_route_plan": {
+    "q06-L": {"micro": 2, "accumulation": 32, "requested_updates": 4, "full_training_state_check": false},
+    "q06-F": {"micro": 2, "accumulation": 32, "requested_updates": 3, "full_training_state_check": true, "max_training_state_bytes": 11811160064},
+    "q17-L": {"micro": 2, "accumulation": 32, "requested_updates": 4, "full_training_state_check": false},
+    "q17-F": {"micro": 1, "accumulation": 64, "requested_updates": 3, "full_training_state_check": false},
+    "selection_claim": "Conservative first bounded layouts, not fastest-layout measurements. Unexecuted micro8/4/2/1 alternatives remain NOT_TESTED."
+  },
+  "authorized_prelaunch_schedule_refinement": {
+    "gpu_jobs_previously_started": 0,
+    "lora_update_plans": ["mixed_global128_0", "mixed_global128_1", "mixed_global128_0", "mixed_global128_tail"],
+    "full_parameter_update_plans": ["mixed_global128_0", "mixed_global128_1", "mixed_global128_tail"],
+    "maximum_updates_by_route": {"q06-L": 4, "q06-F": 3, "q17-L": 4, "q17-F": 3},
+    "maximum_task_updates": 14,
+    "lora_compute_presentations_per_route": 512,
+    "full_parameter_compute_presentations_per_route": 384,
+    "all_route_compute_presentations": 1792,
+    "ordinary_lora_timing_updates_zero_based": [1, 2],
+    "lora_tail_timing_update_zero_based": 3,
+    "original_mixed0_distinct_raw_records": 128,
+    "original_mixed1_distinct_raw_records": 128,
+    "original_two_plan_union_distinct_raw_records": 256,
+    "distinct_record_limit": "Repeated mixed0 is a technical presentation/timing repetition, not128 new raw records. Exact all-update raw-record union must be calculated from actual samples/concat_index;512 LoRA presentations must never be described as512 distinct records.",
+    "independent_diff_check": "Reversing exactly the plan_names and plan_name indexing line changes reconstructs the previously reviewed d8f2f1a201c3cbea26bfdd9f1cff6cfe8ac1379511af360a05cf61d8c3dedbc1 source SHA. New source8e72c75a961d3ef308c3b88359221cda94632777ead8c891caf89b5979463f3a compiles; both real LoRA config files now request4 updates.",
+    "scope": "Within the original user limits; no new GPU run or update is authorized beyond4/3/4/3, including failures and warmup."
+  },
+  "required_before_gpu": [
+    "Both CPU replay/tokenizer/length audits finish with verifiable correct source and data identity, and complete current-Qwen long-tail statistics.",
+    "CPU-only tensor_digest regression covers zero-dimensional float32/int64 and BF16/FP32 vectors using the existing server Qwen environment, with CUDA hidden and no dependency installation.",
+    "Commit and fixed export must contain exact reviewed implementation bytes; compare deployment manifest with hashes in this review, and preserve the existing failed CPU/protocol round0 logs."
+  ],
+  "reporting_conditions": [
+    "This is static prelaunch acceptance only; all four runtime states, gradients, memory, throughput, saving, generation and costs remain pending until actual logs are reviewed.",
+    "Q06-F optional state check is same-engine disk save/load, including explicit per-rank RNG restoration. A new-process complete training resume remains untested even if this optional check passes.",
+    "Training allocated peaks mean observed update peaks. A transient DeepSpeed initialization allocator peak before the first update reset is not separately retained; whole-job NVML samples and phase observations must not be called an exact complete-job allocator maximum.",
+    "Communication is included in synchronized backward/engine-step timings; isolated NCCL-only latency is not measured.",
+    "Full-array Qwen prompt-boundary mismatches retain original mask policy and require reporting; do not claim byte-perfect answer boundaries for all records.",
+    "Auxiliary12233 train/7473 test mismatches and preference-label provenance still block trustworthy formal six-task reproduction. Diagnostic sample eligibility is not a clean-corpus proposal.",
+    "No paper-quality identity, full seed completion,96-hour conclusion or final GitHub/ZIP acceptance is established by this file."
+  ],
+  "blocking_code_findings_open_for_current_configurations": [],
+  "reviewer_gpu_jobs": 0,
+  "reviewer_dependency_installs": [],
+  "reviewer_git_mutations": []
+}

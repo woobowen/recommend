@@ -51,7 +51,7 @@ print(json.dumps(result))"""
         assert result["runner_sha256"] == client.profile["runner_sha256"]
         transport.atomic(TASK / "evidence/preflight.json", result)
     elif args.mode == "deploy":
-        commit = subprocess.check_output(["git", "rev-parse", args.commit or "HEAD"], cwd=REPO, text=True).strip()
+        commit = subprocess.check_output(["git", "rev-parse", "--verify", (args.commit or "HEAD") + "^{commit}"], cwd=REPO, text=True).strip()
         archive = SUPPORT / (commit + ".tar.gz")
         subprocess.run(["git", "archive", "--format=tar.gz", "--output=" + str(archive), commit,
                         "lc_rec/qwen_six_task_20261111", "lc_rec/vendor/original",
@@ -92,7 +92,7 @@ print(json.dumps(result))"""
         gridctl.valid(args.job)
         if args.mode == "submit":
             assert args.spec and args.commit
-            commit = subprocess.check_output(["git", "rev-parse", args.commit], cwd=REPO, text=True).strip()
+            commit = subprocess.check_output(["git", "rev-parse", "--verify", args.commit + "^{commit}"], cwd=REPO, text=True).strip()
             release = REMOTE + "/releases/" + commit
             task = release + "/lc_rec/qwen_six_task_20261111"
             jobdir = client.profile["job_root"] + "/" + args.job
@@ -136,7 +136,7 @@ root=Path({jobdir!r});archive=Path({destination!r});rows=[];excluded=[]
 for path in sorted(root.rglob('*')):
  if not path.is_file() or path.is_symlink() or path.name.endswith(('.lock','.partial','.tmp')):continue
  relative=str(path.relative_to(root))
- if path.stat().st_size>12*1024**2 or path.suffix in ['.bin','.safetensors','.pt','.pth','.gz','.npz'] or path.name in ['tokenizer.json','vocab.json','merges.txt']:
+ if path.stat().st_size>12*1024**2 or path.suffix in ['.bin','.safetensors','.pt','.pth','.gz'] or path.name in ['tokenizer.json','vocab.json','merges.txt']:
   excluded.append({{'path':relative,'bytes':path.stat().st_size}});continue
  if relative!='light-export-manifest.json':rows.append({{'path':relative,'bytes':path.stat().st_size,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}})
 manifest=root/'light-export-manifest.json';manifest.write_text(json.dumps({{'files':rows,'excluded':excluded}},indent=2)+'\\n');archive.parent.mkdir(parents=True,exist_ok=True)

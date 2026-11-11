@@ -1,0 +1,59 @@
+{
+  "status": "PASS_CPU_IDENTITY_FOR_BOUNDED_COMPUTE_WITH_SEMANTIC_LIMITATION",
+  "both_models_same_original_records_prompts_and_all_measured_arrays": true,
+  "model_payload_downloads": 0,
+  "routes": {
+    "q06-L": {
+      "micro": 2,
+      "accumulation": 32,
+      "global_batch": 128,
+      "observed_qwen_longest_tokens": 1513.0,
+      "estimated_persistent_gib_per_rank": 2.463559150695801,
+      "one_float32_logits_tensor_at_longest_gib": 1.7202070876955986,
+      "layout_basis": "Conservative initial capacity choice from actual1513-token tail and unique-parameter ZeRO2 state accounting; Q17 full uses micro1 to leave room for CE temporaries, gradients, communication and allocator reserve",
+      "estimate_is_not_gpu_pass": true,
+      "other_micro_layouts": "NOT TESTED; this task does not claim a fastest layout"
+    },
+    "q06-F": {
+      "micro": 2,
+      "accumulation": 32,
+      "global_batch": 128,
+      "observed_qwen_longest_tokens": 1513.0,
+      "estimated_persistent_gib_per_rank": 5.001723289489746,
+      "one_float32_logits_tensor_at_longest_gib": 1.7202070876955986,
+      "layout_basis": "Conservative initial capacity choice from actual1513-token tail and unique-parameter ZeRO2 state accounting; Q17 full uses micro1 to leave room for CE temporaries, gradients, communication and allocator reserve",
+      "estimate_is_not_gpu_pass": true,
+      "other_micro_layouts": "NOT TESTED; this task does not claim a fastest layout"
+    },
+    "q17-L": {
+      "micro": 2,
+      "accumulation": 32,
+      "global_batch": 128,
+      "observed_qwen_longest_tokens": 1513.0,
+      "estimated_persistent_gib_per_rank": 5.899944305419922,
+      "one_float32_logits_tensor_at_longest_gib": 1.7202070876955986,
+      "layout_basis": "Conservative initial capacity choice from actual1513-token tail and unique-parameter ZeRO2 state accounting; Q17 full uses micro1 to leave room for CE temporaries, gradients, communication and allocator reserve",
+      "estimate_is_not_gpu_pass": true,
+      "other_micro_layouts": "NOT TESTED; this task does not claim a fastest layout"
+    },
+    "q17-F": {
+      "micro": 1,
+      "accumulation": 64,
+      "global_batch": 128,
+      "observed_qwen_longest_tokens": 1513.0,
+      "estimated_persistent_gib_per_rank": 14.433073997497559,
+      "one_float32_logits_tensor_at_longest_gib": 0.8601035438477993,
+      "layout_basis": "Conservative initial capacity choice from actual1513-token tail and unique-parameter ZeRO2 state accounting; Q17 full uses micro1 to leave room for CE temporaries, gradients, communication and allocator reserve",
+      "estimate_is_not_gpu_pass": true,
+      "other_micro_layouts": "NOT TESTED; this task does not claim a fastest layout"
+    }
+  },
+  "mask_boundary": {
+    "mismatch_records": 29574,
+    "rule": "Retain original independently tokenized prompt-length masking; only restore genuine EOS using attention_mask when Qwen PAD==EOS",
+    "observed_limitation": "Qwen may merge the final prompt colon with the first answer characters; retaining the original mask can omit those answer characters and turn additional short answers into EOS-only supervision",
+    "not_claimed": "Complete natural-language answer supervision or exact LLaMA numerical supervision",
+    "offset_mask_or_separate_segment_retokenization": "NOT APPLIED; changing the actual supervised token range is an important method decision outside this unchanged-mask technical probe",
+    "computation_scope": "Record original mask behavior truthfully, measure all six tasks and fixed assets, and keep semantic-fidelity status separate from compute PASS"
+  }
+}
