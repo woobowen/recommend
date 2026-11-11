@@ -75,6 +75,7 @@ def audit(output, run_commit, report):
         ("initial_values", Trainer.set_initial_training_values, ("num_update_steps_per_epoch", "gradient_accumulation_steps", "max_steps =", "math.ceil")),
         ("inner_training_loop", Trainer._inner_training_loop, ("steps_in_epoch", "remainder", "total_updates", "num_batches", "current_gradient_accumulation_steps", "do_sync_step", "state.epoch", "on_epoch_end", "_load_best_model")),
         ("epoch_callback", DefaultFlowCallback.on_epoch_end, ("eval_strategy", "eval_delay", "should_evaluate", "save_strategy", "should_save")),
+        ("step_callback", DefaultFlowCallback.on_step_end, ("global_step", "max_steps", "should_training_stop", "should_save")),
         ("save_checkpoint", Trainer._save_checkpoint, ("save_model", "save_only_model", "_save_optimizer_and_scheduler", "_save_scaler", "_save_rng_state", "save_to_json", "_rotate_checkpoints")),
         ("best_restore", Trainer._load_best_model, ("deepspeed", "checkpoint", "load_adapter", "load_state_dict", "strict=")),
         ("prepare_data_loader", prepare_data_loader, ("even_batches", "use_seedable_sampler", "data_seed", "BatchSamplerShard")),
@@ -133,7 +134,13 @@ def audit(output, run_commit, report):
         for rank in range(WORLD_SIZE):
             torch.manual_seed(42)
             sampler = trainer._get_train_sampler()
-            raw_loader = DataLoader(trainer.train_dataset, batch_size=micro, sampler=sampler, drop_last=False)
+            raw_loader = DataLoader(
+                trainer.train_dataset,
+                batch_size=micro,
+                sampler=sampler,
+                drop_last=False,
+                collate_fn=lambda entries: {"record_indices": torch.tensor(entries, dtype=torch.long)},
+            )
             prepared = prepare_data_loader(
                 raw_loader,
                 device=torch.device("cpu"),
@@ -169,7 +176,7 @@ def audit(output, run_commit, report):
                 assert len(batches) == requested and num_items is None
                 samples_this_update = 0
                 for batch in batches:
-                    entries = batch.tolist()
+                    entries = batch["record_indices"].tolist()
                     batches_seen += 1
                     samples_this_update += len(entries)
                     row_ids.extend(entries)
@@ -184,7 +191,7 @@ def audit(output, run_commit, report):
                     observed_tail_samples = samples_this_update
             assert next(iterator, None) is None
             assert batches_seen == len(prepared)
-            assert observed_updates == initial_values[1]
+            assert observed_updates == total_updates
             ranks.append({
                 "rank": rank,
                 "raw_loader": identity(raw_loader),
@@ -207,25 +214,41 @@ def audit(output, run_commit, report):
         assert num_epochs == EPOCHS and epoch_based
         assert num_examples == TRAIN_RECORDS
         assert sum(count == 0 for count in presentation_counts) == 0
-        state = TrainerState(max_steps=max_steps)
+        state = TrainerState(max_steps=max_steps, logging_steps=args.logging_steps)
         flow = DefaultFlowCallback()
         epoch_trace = []
         for epoch in range(num_epochs):
-            state.global_step += updates_per_epoch
-            state.epoch = epoch + loader_length / loader_length
-            control = flow.on_epoch_end(args, state, TrainerControl())
+            before_step = state.global_step
+            consumed_microbatches = 0
+            executed_last_window = 0
+            for update_index in range(ranks[0]["actual_get_batch_samples_calls"]):
+                executed_last_window = accumulation if update_index != total_updates - 1 else remainder
+                consumed_microbatches += executed_last_window
+                state.global_step += 1
+                state.epoch = epoch + consumed_microbatches / loader_length
+                control = flow.on_step_end(args, state, TrainerControl())
+                if control.should_epoch_stop or control.should_training_stop:
+                    break
+            control = flow.on_epoch_end(args, state, control)
             epoch_trace.append({
                 "epoch_index": epoch,
                 "state_epoch": state.epoch,
                 "global_step": state.global_step,
-                "updates": updates_per_epoch,
-                "microbatches_per_rank": loader_length,
-                "tail_microbatches_per_rank": ranks[0]["last_update_microbatches"],
-                "tail_global_presentations": sum(rank["last_update_local_presentations"] for rank in ranks),
+                "updates": state.global_step - before_step,
+                "microbatches_per_rank": consumed_microbatches,
+                "complete_epoch_tail_reached": consumed_microbatches == loader_length,
+                "last_executed_update_microbatches_per_rank": executed_last_window,
+                "last_executed_update_global_presentations": executed_last_window * micro * WORLD_SIZE,
+                "tail_microbatches_per_rank": ranks[0]["last_update_microbatches"] if consumed_microbatches == loader_length else 0,
+                "tail_global_presentations": sum(rank["last_update_local_presentations"] for rank in ranks) if consumed_microbatches == loader_length else 0,
+                "global_presentations": consumed_microbatches * micro * WORLD_SIZE,
                 "unstepped_microbatches_after_epoch": 0,
                 "should_evaluate": control.should_evaluate,
                 "should_save": control.should_save,
+                "should_training_stop": control.should_training_stop,
             })
+            if control.should_training_stop:
+                break
         assert state.global_step == max_steps
         presentations = sum(rank["presentations"] for rank in ranks)
         report["layouts"].append({
@@ -248,9 +271,10 @@ def audit(output, run_commit, report):
             "base_records_four_epochs": TRAIN_RECORDS * EPOCHS,
             "actual_sampler_presentations_per_epoch": presentations,
             "sampler_repeated_presentations_per_epoch": presentations - TRAIN_RECORDS,
-            "actual_sampler_presentations_four_epochs": presentations * EPOCHS,
+            "actual_sampler_presentations_four_epochs": sum(event["global_presentations"] for event in epoch_trace),
+            "full_sampler_presentations_if_four_complete_epochs": presentations * EPOCHS,
             "scheduled_global128_equivalent_presentations": max_steps * GLOBAL_BATCH,
-            "difference_due_to_partial_epoch_tail": max_steps * GLOBAL_BATCH - presentations * EPOCHS,
+            "difference_due_to_partial_epoch_tail": max_steps * GLOBAL_BATCH - sum(event["global_presentations"] for event in epoch_trace),
             "effective_validation_calls": sum(event["should_evaluate"] for event in epoch_trace),
             "validation_records_per_call": VALID_RECORDS,
             "validation_total_records": VALID_RECORDS * sum(event["should_evaluate"] for event in epoch_trace),

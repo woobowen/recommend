@@ -1,0 +1,32 @@
+{
+  "task_scope": "LC-Rec Qwen six-task four-route preflight 2026-11-11",
+  "limit": "round0 initial execution; at most three task-wide concentrated correction rounds",
+  "current_correction_round": 1,
+  "rounds": [
+    {
+      "round": 1,
+      "original_failures": [
+        {
+          "job_id": "lc-qwen6-20261111-protocol-r0",
+          "run_commit": "7625259087b81da4e7de83987c2808fe41bd6891",
+          "error": "Trainer.get_batch_samples tested labels membership on a tensor batch, raising Tensor.__contains__ RuntimeError",
+          "root_cause": "The CPU-only protocol wrapper supplied an incompatible batch container",
+          "minimal_change": "Use a dictionary containing record_indices for the real Trainer batch API; separately record schedule and observed tail/step callbacks",
+          "method_or_numerical_change": false
+        },
+        {
+          "job_id": "lc-qwen6-20261111-cpu-q06-r0",
+          "run_commit": "d8f37ef202516cae0ae0a5d74d40898394a78c2c",
+          "error": "Incorrect assertion that all 9922 original item SIDs were unique",
+          "root_cause": "The adapter confused a per-item mapping with an injective mapping; the unchanged author asset has 9897 canonical SIDs, 23 collision groups and25 duplicate increments",
+          "minimal_change": "Assert the previously audited exact collision counts, emit all collision members, retain per-item four-token encode/decode and save/reload checks",
+          "method_or_numerical_change": false,
+          "unchanged_asset_sha256": "b94d16398a178220a117abda5effd5508069beaccc2b8110eab25ae50f2af600"
+        }
+      ],
+      "local_verification": "Syntax and targeted container/collision/sampler arithmetic checks passed; server verification recorded by linked successor jobs",
+      "gpu_device_seconds_used_by_original_failures": 0,
+      "important_research_changes": "None"
+    }
+  ]
+}

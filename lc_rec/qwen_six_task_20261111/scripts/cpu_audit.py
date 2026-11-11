@@ -76,6 +76,23 @@ def padding(lengths, micro, numpy):
     }
 
 
+def catalog_identity(indices):
+    inverse = collections.defaultdict(list)
+    for item_id, parts in indices.items():
+        assert len(parts) == 4 and all(isinstance(token, str) for token in parts)
+        inverse["".join(parts)].append(item_id)
+    collisions = [{"canonical_sid": sid, "item_ids": item_ids}
+                  for sid, item_ids in inverse.items() if len(item_ids) > 1]
+    return {
+        "items": len(indices), "canonical_sid_count": len(inverse),
+        "collision_groups": len(collisions),
+        "extra_items_due_to_duplicates": sum(len(group["item_ids"]) - 1 for group in collisions),
+        "collision_members": collisions,
+        "mapping_policy": "Preserve every original item-to-four-token SID mapping; inverse SID maps to all matching item IDs, retaining author-asset collisions",
+        "historical_source": "lc_rec/evidence/cpu_audit/output/real_data_audit.json:sid_catalog",
+    }
+
+
 def replay(dataset, metadata, observer):
     observer.bind(metadata["random_choices"])
     row = dataset[metadata["dataset_local_index"]]
@@ -318,7 +335,11 @@ def run(arguments, report):
         if (arguments.model_path / name).exists()
     }
     indices = datasets["seqrec"].indices
-    assert len(indices) == 9922 and len({"".join(parts) for parts in indices.values()}) == 9922
+    catalog = catalog_identity(indices)
+    assert (catalog["items"], catalog["canonical_sid_count"], catalog["collision_groups"],
+            catalog["extra_items_due_to_duplicates"]) == (9922, 9897, 23, 25), catalog
+    report["sid_catalog"] = catalog
+    write(arguments.out / "sid_catalog.json", catalog)
     tokenizer.save_pretrained(arguments.out / "tokenizer")
     restored = transformers.AutoTokenizer.from_pretrained(arguments.out / "tokenizer", local_files_only=True)
     assert restored.get_vocab() == tokenizer.get_vocab()
@@ -462,7 +483,7 @@ def run(arguments, report):
     samples = {
         "schema_version": 2, "seed": 42, "args_namespace": vars(dataset_args),
         "records": records, "plans": plans, "validation": valid_records, "generation": generation,
-        "sid_tokens": tokens, "indices": indices,
+        "sid_tokens": tokens, "indices": indices, "sid_catalog": catalog,
         "mixed_global128_task_counts": old_samples["mixed_global128_task_counts"],
         "selection_algorithm": {
             "mixed_0_and_1": "Exactly reuse previous audited seed42 task-proportional raw records and prompt/query/preference realization; tokenizer-independent",

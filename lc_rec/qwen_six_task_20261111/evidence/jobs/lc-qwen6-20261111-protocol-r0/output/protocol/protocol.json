@@ -1,0 +1,634 @@
+{
+  "status": "BLOCKED_CPU_PROTOCOL",
+  "kind": "CPU_ONLY_INSTALLED_TRAINER_AND_ACCELERATE_PROTOCOL",
+  "run_commit": "7625259087b81da4e7de83987c2808fe41bd6891",
+  "argv": [
+    "/home/bwwu/lc-rec/qwen-six-task-20261111/releases/7625259087b81da4e7de83987c2808fe41bd6891/lc_rec/qwen_six_task_20261111/scripts/protocol_probe.py",
+    "--output",
+    "/home/bwwu/grid-audits/sid-extensions-p0/jobs/lc-qwen6-20261111-protocol-r0/output/protocol",
+    "--run-commit",
+    "7625259087b81da4e7de83987c2808fe41bd6891"
+  ],
+  "interpreter": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+  "cwd": "/home/bwwu/lc-rec/qwen-six-task-20261111/releases/7625259087b81da4e7de83987c2808fe41bd6891",
+  "observed_utc": "2026-11-11T11:16:30.606230+00:00",
+  "training_records": 221225,
+  "versions": {
+    "torch": "2.6.0",
+    "transformers": "4.57.6",
+    "accelerate": "1.12.0"
+  },
+  "cuda_initialized_before": false,
+  "sources": {
+    "initial_values": {
+      "symbol": "Trainer.set_initial_training_values",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 5661,
+      "source_sha256": "0cf039322eacabfc328c855765ae75cf2ab1ca5534eb03ce984a0b19a487d759",
+      "source_file": "initial_values.py.txt",
+      "control_lines": [
+        {
+          "line": 5667,
+          "text": "        - `num_update_steps_per_epoch`"
+        },
+        {
+          "line": 5675,
+          "text": "        max_steps = args.max_steps"
+        },
+        {
+          "line": 5682,
+          "text": "            num_update_steps_per_epoch = max("
+        },
+        {
+          "line": 5683,
+          "text": "                len_dataloader // args.gradient_accumulation_steps"
+        },
+        {
+          "line": 5684,
+          "text": "                + int(len_dataloader % args.gradient_accumulation_steps > 0),"
+        },
+        {
+          "line": 5689,
+          "text": "                max_steps = math.ceil(args.num_train_epochs * num_update_steps_per_epoch)"
+        },
+        {
+          "line": 5695,
+          "text": "                num_train_epochs = max_steps // num_update_steps_per_epoch + int("
+        },
+        {
+          "line": 5696,
+          "text": "                    max_steps % num_update_steps_per_epoch > 0"
+        },
+        {
+          "line": 5702,
+          "text": "                num_train_epochs = math.ceil(args.num_train_epochs)"
+        },
+        {
+          "line": 5707,
+          "text": "            num_update_steps_per_epoch = max_steps"
+        },
+        {
+          "line": 5717,
+          "text": "            num_update_steps_per_epoch,"
+        }
+      ]
+    },
+    "inner_training_loop": {
+      "symbol": "Trainer._inner_training_loop",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 2353,
+      "source_sha256": "fb3e7f42af2bcd95e25f60236086e0a79096c2dc98f57a11042c642f1fb39384",
+      "source_file": "inner_training_loop.py.txt",
+      "control_lines": [
+        {
+          "line": 2530,
+          "text": "        self.state.epoch = 0"
+        },
+        {
+          "line": 2587,
+          "text": "            steps_in_epoch = ("
+        },
+        {
+          "line": 2608,
+          "text": "            remainder = steps_in_epoch % args.gradient_accumulation_steps"
+        },
+        {
+          "line": 2609,
+          "text": "            if remainder == 0:"
+        },
+        {
+          "line": 2610,
+          "text": "                remainder = args.gradient_accumulation_steps"
+        },
+        {
+          "line": 2612,
+          "text": "            total_updates = steps_in_epoch // args.gradient_accumulation_steps + int("
+        },
+        {
+          "line": 2613,
+          "text": "                remainder < args.gradient_accumulation_steps"
+        },
+        {
+          "line": 2615,
+          "text": "            for _ in range(total_updates):"
+        },
+        {
+          "line": 2617,
+          "text": "                num_batches = args.gradient_accumulation_steps if update_step != (total_updates - 1) else remainder"
+        },
+        {
+          "line": 2618,
+          "text": "                batch_samples, num_items_in_batch = self.get_batch_samples(epoch_iterator, num_batches, args.device)"
+        },
+        {
+          "line": 2621,
+          "text": "                self.current_gradient_accumulation_steps = len(batch_samples)"
+        },
+        {
+          "line": 2624,
+          "text": "                    do_sync_step = (step + 1) % args.gradient_accumulation_steps == 0 or (step + 1) == steps_in_epoch"
+        },
+        {
+          "line": 2626,
+          "text": "                    self.accelerator.gradient_state._set_sync_gradients(do_sync_step)"
+        },
+        {
+          "line": 2692,
+          "text": "                    if do_sync_step:"
+        },
+        {
+          "line": 2754,
+          "text": "                        self.state.epoch = epoch + (step + 1) / steps_in_epoch"
+        },
+        {
+          "line": 2789,
+          "text": "            self.control = self.callback_handler.on_epoch_end(args, self.state, self.control)"
+        },
+        {
+          "line": 2812,
+          "text": "            self._load_best_model()"
+        }
+      ]
+    },
+    "epoch_callback": {
+      "symbol": "DefaultFlowCallback.on_epoch_end",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer_callback.py",
+      "first_line": 611,
+      "source_sha256": "061fc0f8bce47b344961037319a804578a505eaf45d9bc2da8c943e18799ee29",
+      "source_file": "epoch_callback.py.txt",
+      "control_lines": [
+        {
+          "line": 617,
+          "text": "        if args.eval_strategy == IntervalStrategy.EPOCH and args.eval_delay <= state.epoch:"
+        },
+        {
+          "line": 618,
+          "text": "            control.should_evaluate = True"
+        },
+        {
+          "line": 621,
+          "text": "        if args.save_strategy == SaveStrategy.EPOCH:"
+        },
+        {
+          "line": 622,
+          "text": "            control.should_save = True"
+        }
+      ]
+    },
+    "save_checkpoint": {
+      "symbol": "Trainer._save_checkpoint",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 3312,
+      "source_sha256": "211d0152a338f8432d223b1fa980e94ae7ebaaa00a92e66193186960f332378c",
+      "source_file": "save_checkpoint.py.txt",
+      "control_lines": [
+        {
+          "line": 3325,
+          "text": "        self.save_model(output_dir, _internal_call=True)"
+        },
+        {
+          "line": 3343,
+          "text": "        if not self.args.save_only_model:"
+        },
+        {
+          "line": 3345,
+          "text": "            self._save_optimizer_and_scheduler(output_dir)"
+        },
+        {
+          "line": 3346,
+          "text": "            self._save_scaler(output_dir)"
+        },
+        {
+          "line": 3348,
+          "text": "            self._save_rng_state(output_dir)"
+        },
+        {
+          "line": 3362,
+          "text": "            self.state.save_to_json(os.path.join(output_dir, TRAINER_STATE_NAME))"
+        },
+        {
+          "line": 3370,
+          "text": "            self._rotate_checkpoints(use_mtime=True, output_dir=run_dir)"
+        }
+      ]
+    },
+    "best_restore": {
+      "symbol": "Trainer._load_best_model",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 3032,
+      "source_sha256": "a832f4b1ffe03c9a0c46b66c23914cbfbc9eae29136b9471b68c849b285f835f",
+      "source_file": "best_restore.py.txt",
+      "control_lines": [
+        {
+          "line": 3033,
+          "text": "        logger.info(f\"Loading best model from {self.state.best_model_checkpoint} (score: {self.state.best_metric}).\")"
+        },
+        {
+          "line": 3034,
+          "text": "        best_model_path = os.path.join(self.state.best_model_checkpoint, WEIGHTS_NAME)"
+        },
+        {
+          "line": 3035,
+          "text": "        best_safe_model_path = os.path.join(self.state.best_model_checkpoint, SAFE_WEIGHTS_NAME)"
+        },
+        {
+          "line": 3036,
+          "text": "        best_adapter_model_path = os.path.join(self.state.best_model_checkpoint, ADAPTER_WEIGHTS_NAME)"
+        },
+        {
+          "line": 3037,
+          "text": "        best_safe_adapter_model_path = os.path.join(self.state.best_model_checkpoint, ADAPTER_SAFE_WEIGHTS_NAME)"
+        },
+        {
+          "line": 3040,
+          "text": "        if self.is_deepspeed_enabled:"
+        },
+        {
+          "line": 3041,
+          "text": "            deepspeed_load_checkpoint("
+        },
+        {
+          "line": 3043,
+          "text": "                self.state.best_model_checkpoint,"
+        },
+        {
+          "line": 3044,
+          "text": "                load_module_strict=not _is_peft_model(self.model),"
+        },
+        {
+          "line": 3051,
+          "text": "                self.state.best_model_checkpoint,"
+        },
+        {
+          "line": 3062,
+          "text": "                if os.path.isfile(os.path.join(self.state.best_model_checkpoint, \"user_content.pt\")):"
+        },
+        {
+          "line": 3065,
+          "text": "                    smp.resume_from_checkpoint("
+        },
+        {
+          "line": 3066,
+          "text": "                        path=self.state.best_model_checkpoint,"
+        },
+        {
+          "line": 3081,
+          "text": "                    load_result = model.load_state_dict(state_dict, strict=True)"
+        },
+        {
+          "line": 3087,
+          "text": "                        model, \"load_adapter\""
+        },
+        {
+          "line": 3099,
+          "text": "                                model.load_adapter(self.state.best_model_checkpoint, active_adapter)"
+        },
+        {
+          "line": 3107,
+          "text": "                                        \"to set this to False and to load the model manually from the checkpoint \""
+        },
+        {
+          "line": 3120,
+          "text": "                                \"The intermediate checkpoints of PEFT may not be saved correctly, \""
+        },
+        {
+          "line": 3139,
+          "text": "                    load_result = model.load_state_dict(state_dict, False)"
+        },
+        {
+          "line": 3142,
+          "text": "        elif os.path.exists(os.path.join(self.state.best_model_checkpoint, SAFE_WEIGHTS_INDEX_NAME)) or os.path.exists("
+        },
+        {
+          "line": 3143,
+          "text": "            os.path.join(self.state.best_model_checkpoint, WEIGHTS_INDEX_NAME)"
+        },
+        {
+          "line": 3145,
+          "text": "            load_result = load_sharded_checkpoint("
+        },
+        {
+          "line": 3146,
+          "text": "                model, self.state.best_model_checkpoint, strict=is_sagemaker_mp_enabled()"
+        }
+      ]
+    },
+    "prepare_data_loader": {
+      "symbol": "prepare_data_loader",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/accelerate/data_loader.py",
+      "first_line": 996,
+      "source_sha256": "33329061deb02f2cbbfe546e5314eb024542b05124c33297d940bf63b0905b21",
+      "source_file": "prepare_data_loader.py.txt",
+      "control_lines": [
+        {
+          "line": 1005,
+          "text": "    even_batches: bool = True,"
+        },
+        {
+          "line": 1007,
+          "text": "    use_seedable_sampler: bool = False,"
+        },
+        {
+          "line": 1008,
+          "text": "    data_seed: Optional[int] = None,"
+        },
+        {
+          "line": 1056,
+          "text": "        even_batches (`bool`, *optional*, defaults to `True`):"
+        },
+        {
+          "line": 1064,
+          "text": "        use_seedable_sampler (`bool`, *optional*, defaults to `False`):"
+        },
+        {
+          "line": 1069,
+          "text": "        data_seed (`int`, *optional*, defaults to `None`):"
+        },
+        {
+          "line": 1070,
+          "text": "            The seed to use for the underlying generator when using `use_seedable_sampler`. If `None`, the generator"
+        },
+        {
+          "line": 1088,
+          "text": "    `BatchSampler`s with varying batch sizes are not enabled by default. To enable this behaviour, set `even_batches`"
+        },
+        {
+          "line": 1176,
+          "text": "    if isinstance(sampler, RandomSampler) and use_seedable_sampler:"
+        },
+        {
+          "line": 1190,
+          "text": "            data_seed=data_seed,"
+        },
+        {
+          "line": 1225,
+          "text": "            if not use_seedable_sampler and hasattr(sampler, \"generator\"):"
+        },
+        {
+          "line": 1234,
+          "text": "            new_batch_sampler = BatchSamplerShard("
+        },
+        {
+          "line": 1239,
+          "text": "                even_batches=even_batches,"
+        },
+        {
+          "line": 1305,
+          "text": "    if isinstance(sampler, SeedableRandomSampler) and use_seedable_sampler:"
+        }
+      ]
+    },
+    "get_batch_samples": {
+      "symbol": "Trainer.get_batch_samples",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 5644,
+      "source_sha256": "4211a94c6eac798f48d77d61ba4051fc0e3bdd5ffa5f4f28bfed7fc798ddfcde",
+      "source_file": "get_batch_samples.py.txt",
+      "control_lines": [
+        {
+          "line": 5645,
+          "text": "        self, epoch_iterator: Iterator, num_batches: int, device: torch.device"
+        },
+        {
+          "line": 5652,
+          "text": "        for _ in range(num_batches):"
+        },
+        {
+          "line": 5654,
+          "text": "                batch_samples.append(next(epoch_iterator))"
+        },
+        {
+          "line": 5658,
+          "text": "        num_items_in_batch = self._get_num_items_in_batch(batch_samples, device)"
+        }
+      ]
+    },
+    "count_items": {
+      "symbol": "Trainer._get_num_items_in_batch",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 5593,
+      "source_sha256": "dfc6f0a69851dcf0aedb2217ca012f3cd998264ff28755e6c102e3267a5513fa",
+      "source_file": "count_items.py.txt",
+      "control_lines": [
+        {
+          "line": 5593,
+          "text": "    def _get_num_items_in_batch(self, batch_samples: list, device: torch.device) -> Optional[Union[torch.Tensor, int]]:"
+        },
+        {
+          "line": 5602,
+          "text": "        num_items_in_batch = None"
+        },
+        {
+          "line": 5603,
+          "text": "        count_num_items_in_batch = ("
+        },
+        {
+          "line": 5607,
+          "text": "                # num_items_in_batch is passed to model forward"
+        },
+        {
+          "line": 5609,
+          "text": "                self.model_accepts_loss_kwargs"
+        },
+        {
+          "line": 5610,
+          "text": "                # num_items_in_batch is passed to compute_loss_func"
+        },
+        {
+          "line": 5612,
+          "text": "                or self.compute_loss_func is not None"
+        },
+        {
+          "line": 5613,
+          "text": "                # num_items_in_batch is also verified if (self.model_accepts_loss_kwargs or self.compute_loss_func)"
+        },
+        {
+          "line": 5617,
+          "text": "        if count_num_items_in_batch:"
+        },
+        {
+          "line": 5620,
+          "text": "                num_items_in_batch = sum((batch[\"labels\"].ne(-100)).sum() for batch in batch_samples)"
+        },
+        {
+          "line": 5624,
+          "text": "        if num_items_in_batch is not None:"
+        },
+        {
+          "line": 5625,
+          "text": "            if self.args.average_tokens_across_devices and self.args.world_size >= 1:"
+        },
+        {
+          "line": 5626,
+          "text": "                num_items_in_batch = self.accelerator.gather(num_items_in_batch.to(device)).sum()"
+        },
+        {
+          "line": 5629,
+          "text": "                # Otherwise, we would have to scatter labels and calculate num_items_in_batch for each gpu."
+        },
+        {
+          "line": 5630,
+          "text": "                num_items_in_batch = num_items_in_batch // self.args.n_gpu"
+        },
+        {
+          "line": 5632,
+          "text": "            if torch.is_tensor(num_items_in_batch):"
+        },
+        {
+          "line": 5633,
+          "text": "                num_items_in_batch = num_items_in_batch.to(device)"
+        },
+        {
+          "line": 5635,
+          "text": "                if self.args.n_gpu > 1 and num_items_in_batch.dim() == 0:"
+        },
+        {
+          "line": 5637,
+          "text": "                    num_items_in_batch = num_items_in_batch.unsqueeze(0).expand(self.args.n_gpu, -1)"
+        },
+        {
+          "line": 5640,
+          "text": "                    num_items_in_batch = num_items_in_batch // pc.non_data_parallel_size"
+        },
+        {
+          "line": 5642,
+          "text": "        return num_items_in_batch"
+        }
+      ]
+    },
+    "compute_loss": {
+      "symbol": "Trainer.compute_loss",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 4075,
+      "source_sha256": "a632e3220093cdfe4aaebc20aed84a54896a5e19ec5fc75090d421267044f34c",
+      "source_file": "compute_loss.py.txt",
+      "control_lines": [
+        {
+          "line": 4080,
+          "text": "        num_items_in_batch: Optional[torch.Tensor] = None,"
+        },
+        {
+          "line": 4092,
+          "text": "            num_items_in_batch (Optional[torch.Tensor], *optional*):"
+        },
+        {
+          "line": 4093,
+          "text": "                The number of items in the batch. If num_items_in_batch is not passed,"
+        },
+        {
+          "line": 4098,
+          "text": "        Subclass and override for custom behavior. If you are not using `num_items_in_batch` when computing your loss,"
+        },
+        {
+          "line": 4099,
+          "text": "        make sure to overwrite `self.model_accepts_loss_kwargs` to `False`. Otherwise, the loss calculating might be slightly inaccurate when performing gradient accumulation."
+        },
+        {
+          "line": 4105,
+          "text": "        if self.model_accepts_loss_kwargs:"
+        },
+        {
+          "line": 4107,
+          "text": "            if num_items_in_batch is not None:"
+        },
+        {
+          "line": 4108,
+          "text": "                kwargs[\"num_items_in_batch\"] = num_items_in_batch"
+        },
+        {
+          "line": 4110,
+          "text": "        outputs = model(**inputs)"
+        },
+        {
+          "line": 4126,
+          "text": "                num_items_in_batch=num_items_in_batch,"
+        },
+        {
+          "line": 4150,
+          "text": "            self.args.average_tokens_across_devices"
+        },
+        {
+          "line": 4151,
+          "text": "            and (self.model_accepts_loss_kwargs or self.compute_loss_func)"
+        },
+        {
+          "line": 4152,
+          "text": "            and num_items_in_batch is not None"
+        }
+      ]
+    },
+    "training_step": {
+      "symbol": "Trainer.training_step",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py",
+      "first_line": 3981,
+      "source_sha256": "6eb7e9a2bcfed6d8d66cfcd0d292405135043be8026b036863fe105d1eaaa7ab",
+      "source_file": "training_step.py.txt",
+      "control_lines": [
+        {
+          "line": 4016,
+          "text": "                loss_mb = smp_forward_backward(model, inputs, self.args.gradient_accumulation_steps)"
+        },
+        {
+          "line": 4057,
+          "text": "                    scaled_loss.backward()"
+        },
+        {
+          "line": 4061,
+          "text": "                    not self.model_accepts_loss_kwargs or num_items_in_batch is None"
+        },
+        {
+          "line": 4064,
+          "text": "                    loss = loss / self.current_gradient_accumulation_steps"
+        },
+        {
+          "line": 4069,
+          "text": "                    kwargs[\"scale_wrt_gas\"] = False"
+        },
+        {
+          "line": 4071,
+          "text": "                self.accelerator.backward(loss, **kwargs)"
+        }
+      ]
+    },
+    "qwen_forward": {
+      "symbol": "Qwen3ForCausalLM.forward",
+      "installed_file": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/utils/generic.py",
+      "first_line": 443,
+      "source_sha256": "474923638af92bcc038c1986be008c47a33cecb1ab5fb458facf44ae53a385e6",
+      "source_file": "qwen_forward.py.txt",
+      "control_lines": [
+        {
+          "line": 452,
+          "text": "        labels: Optional[torch.LongTensor] = None,"
+        },
+        {
+          "line": 456,
+          "text": "        **kwargs: Unpack[TransformersKwargs],"
+        },
+        {
+          "line": 459,
+          "text": "        labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):"
+        },
+        {
+          "line": 462,
+          "text": "            (masked), the loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`."
+        },
+        {
+          "line": 488,
+          "text": "            **kwargs,"
+        },
+        {
+          "line": 497,
+          "text": "        if labels is not None:"
+        },
+        {
+          "line": 498,
+          "text": "            loss = self.loss_function(logits=logits, labels=labels, vocab_size=self.config.vocab_size, **kwargs)"
+        }
+      ]
+    }
+  },
+  "layouts": [],
+  "traceback": "Traceback (most recent call last):\n  File \"/home/bwwu/lc-rec/qwen-six-task-20261111/releases/7625259087b81da4e7de83987c2808fe41bd6891/lc_rec/qwen_six_task_20261111/scripts/protocol_probe.py\", line 317, in main\n    audit(args.output, args.run_commit, report)\n  File \"/home/bwwu/lc-rec/qwen-six-task-20261111/releases/7625259087b81da4e7de83987c2808fe41bd6891/lc_rec/qwen_six_task_20261111/scripts/protocol_probe.py\", line 168, in audit\n    batches, num_items = trainer.get_batch_samples(iterator, requested, torch.device(\"cpu\"))\n  File \"/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py\", line 5658, in get_batch_samples\n    num_items_in_batch = self._get_num_items_in_batch(batch_samples, device)\n  File \"/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py\", line 5605, in _get_num_items_in_batch\n    and \"labels\" in batch_samples[0]\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/_tensor.py\", line 1225, in __contains__\n    raise RuntimeError(\nRuntimeError: Tensor.__contains__ only supports Tensor or scalar, but you passed in a <class 'str'>.\n",
+  "elapsed_seconds": 4.722418718971312
+}
