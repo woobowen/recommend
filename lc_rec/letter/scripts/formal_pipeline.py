@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Server-owned A0 train -> best adapter -> all-user test with one budget.
 
-Runs within the accepted at-most-once runner. Every child remains in the runner's
-verified process group. A persistent seed ledger prevents duplicate/rebudgeted
+Runs within the accepted at-most-once runner. Torchrun owns its worker sessions
+and forwards termination; the runner checks every surviving marked session.
+A persistent seed ledger prevents duplicate/rebudgeted
 attempts. Checkpoint payloads stay on /data, not in runner's small export tree.
 """
 import argparse
@@ -14,23 +15,33 @@ from pathlib import Path
 import subprocess
 import sys
 import time
-from formal_train import write
+from formal_train import write,sha
+from formal_ledger import reconcile
 
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for n in ['release','run-commit','job-id','kind','precision-approval']:
         p.add_argument('--'+n,required=True)
-    p.add_argument('--resume');a=p.parse_args()
+    p.add_argument('--resume');p.add_argument('--prelaunch-review');a=p.parse_args()
     assert a.kind in ['acceptance-continuous','acceptance-resume','formal']
     root=Path('/data/bwwu/lc-rec/a0-normal-20261111');root.mkdir(parents=True,exist_ok=True)
     job=Path(os.environ['GRID_JOB_DIR']);assert job.name==a.job_id
     scripts=Path(a.release)/'lc_rec/letter/scripts'
     config=Path(a.release)/'lc_rec/letter/config/formal_instruments_seed42.json'
+    if a.kind=='formal':
+        assert a.prelaunch_review
+        gate=json.loads(Path(a.prelaunch_review).read_text())
+        assert gate['status']=='PASS' and gate['RUN_COMMIT']==a.run_commit
+        assert gate['config_sha256']==sha(config)
+        assert gate['formal_train_sha256']==sha(scripts/'formal_train.py')
     source=Path(a.release)/'lc_rec/letter/vendor/LETTER/LETTER-LC-Rec'
     data=source.parent/'data'
     model='/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549'
     output=root/a.job_id;output.mkdir(exist_ok=True)
+    training=(root/'formal_seed42/training') if a.kind=='formal' else output/'training'
+    training.parent.mkdir(exist_ok=True,parents=True)
+    if a.resume and a.kind=='formal':assert Path(a.resume).resolve().parent==training.resolve()
     ledger_path=root/('formal_seed42_ledger.json' if a.kind=='formal' else 'acceptance_ledger.json')
     status_path=job/'output/pipeline.json'
     started=time.monotonic();utc=lambda:dt.datetime.now(dt.timezone.utc).isoformat()
@@ -38,7 +49,7 @@ def main():
             'output':str(output),'started_utc':utc(),'pid':os.getpid(),'stages':[]}
     with (root/'a0_gpu.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-        ledger=json.loads(ledger_path.read_text()) if ledger_path.exists() else {'attempts':[]}
+        ledger=reconcile(ledger_path)
         assert all(x.get('ended_utc') for x in ledger['attempts']), 'query prior unresolved job; no blind restart'
         assert all(x['job_id']!=a.job_id for x in ledger['attempts'])
         if a.kind=='formal' and ledger['attempts']: assert a.resume,'second fresh formal seed forbidden'
@@ -81,18 +92,18 @@ def main():
 
         try:
             args=[scripts/'formal_train.py','--source-root',source,'--data-root',data,'--model',model,
-                  '--output',output/'training','--config',config,'--run-commit',a.run_commit,
+                  '--output',training,'--config',config,'--run-commit',a.run_commit,
                   '--precision-approval',a.precision_approval]
             if a.resume:args+=['--resume',a.resume]
             if a.kind!='formal':args+=['--probe-stop','4','--probe-save','2']
             run('train',args)
             if a.kind=='formal':
-                selected=json.loads((output/'training/best_selection.json').read_text())
+                selected=json.loads((training/'best_selection.json').read_text())
                 run('test',[scripts/'formal_evaluate.py','--source-root',source,'--data-root',data,'--model',model,
-                            '--adapter',output/'training/best_adapter','--output',output/'test','--run-commit',a.run_commit])
+                            '--adapter',training/'best_adapter','--output',output/'test','--run-commit',a.run_commit])
                 metrics=json.loads((output/'test/metrics.json').read_text())
                 status.update(best_selection=selected,metrics=metrics)
-                for r in [0,1]:assert json.loads((output/'training'/('rank%d.json'%r)).read_text())['status']=='TRAINING_COMPLETE'
+                for r in [0,1]:assert json.loads((training/('rank%d.json'%r)).read_text())['status']=='TRAINING_COMPLETE'
             status.update(status='SUCCESS' if a.kind=='formal' else 'ACCEPTANCE_PATH_COMPLETE',exit_code=0)
         except BaseException as e:
             import traceback

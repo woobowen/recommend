@@ -1,0 +1,19 @@
+{
+  "task_round": 1,
+  "max_rounds": 3,
+  "initial_gpu_job": "letter-a0-20261111-acceptance-cont-r0",
+  "initial_updates": 0,
+  "root_cause": "Native HF4.31/Accelerate integration owns LambdaLR outside DS engine; engine.lr_scheduler is None. Callback inspection failed before first update; native DS checkpoint alone would omit that external scheduler.",
+  "fix": "Persist/strictly restore external HF scheduler in checkpoint; leave original Trainer stepping path unchanged. Use Trainer scheduler for observations/state comparisons.",
+  "other_cpu_fixture_fix": "Reuse prior CPU env without DS_ACCELERATOR=cuda; initialize Accelerator(cpu=True) before prepare_data_loader. No model/data/method change.",
+  "validation": "pending round1 CPU/GPU paths",
+  "extra_installations": [],
+  "additional_preexecution_findings": [
+    "Stable formal training directory retains absolute best checkpoint identity across attempts; per-attempt logs/predictions stay isolated",
+    "Reconcile killed/provisionally closed ledger rows from terminal runner cleanup receipts before any next attempt; charges include supervisor cleanup",
+    "Prelaunch gate binds commit/config/training-source and is uploaded as hashed runner input",
+    "A0-only dual-marker/UID/start-time/boot-proven worker sessions admitted to pidfd cleanup; needs no-GPU TERM-resistant fixture",
+    "Controller queries/deployments bind runner bytes from git show requested commit, not mutable working tree",
+    "Collect raw UTF-8 logs preserves CR bytes for content hashes"
+  ]
+}

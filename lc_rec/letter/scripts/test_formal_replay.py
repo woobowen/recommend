@@ -18,6 +18,8 @@ def main():
     import numpy as np
     from torch.utils.data import DataLoader, Dataset, RandomSampler
     from accelerate.data_loader import prepare_data_loader
+    from accelerate import Accelerator
+    Accelerator(cpu=True)
     assert not torch.cuda.is_initialized()
     source=Path(__file__).with_name('formal_train.py').read_text()
     tree=ast.parse(source)

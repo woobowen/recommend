@@ -47,6 +47,11 @@ def main():
     rank = int(os.environ['RANK']); local = int(os.environ['LOCAL_RANK'])
     assert int(os.environ['WORLD_SIZE']) == 2
     cfg = json.loads(Path(a.config).read_text())
+    author=json.loads(Path(a.config).with_name('author_instruments.json').read_text())
+    for k,v in author.items():
+        if k not in ['base_model','output_dir','resume_from_checkpoint','deepspeed','data_path','gradient_accumulation_steps']:
+            assert cfg[k]==v, 'unapproved author setting drift: '+k
+    assert (cfg['gradient_accumulation_steps'],cfg['global_batch'],cfg['world_size'])==(4,64,2)
     approval = json.loads(Path(a.precision_approval).read_text())
     assert approval['formal_a_only_bf16_authorized'] is True
     out = Path(a.output); out.mkdir(parents=True, exist_ok=True)
@@ -85,12 +90,25 @@ def main():
           'config_sha256':sha(Path(a.model)/'config.json'),
           'source':'previous official LFS verification; current file sizes/receipt rechecked in preflight'}
     assert Path(a.model).name==report['base_model_identity']['revision']
+    assert report['base_model_identity']['config_sha256']=='e4c3dea29aefc16c0e63825f9ae097dbf5cb5d7c320843a84257e11be3b452c8'
+    report['base_model_identity']['weight_files']={}
+    for name,size in [('model-00001-of-00002.safetensors',9976579217),('model-00002-of-00002.safetensors',3500297444)]:
+        f=Path(a.model)/name
+        assert f.stat().st_size==size
+        report['base_model_identity']['weight_files'][name]={'bytes':size,'mtime_ns':f.stat().st_mtime_ns}
     rp = out / ('rank%d.json' % rank)
+    if rp.exists() and not a.probe_stop:
+        assert a.resume, 'existing formal training output requires explicit full resume'
+        previous=out/'attempt_reports'/('%s-rank%d.json'%(sha(rp)[:16],rank))
+        previous.parent.mkdir(exist_ok=True)
+        if previous.exists():assert previous.read_bytes()==rp.read_bytes()
+        else:previous.write_bytes(rp.read_bytes())
     events = (out / ('events.rank%d.jsonl' % rank)).open('a', buffering=1)
 
     def event(kind, **kw):
         record = {'utc': dt.datetime.now(dt.timezone.utc).isoformat(),
-                  'elapsed_seconds': time.monotonic()-started, 'event': kind, **kw}
+                  'elapsed_seconds': time.monotonic()-started, 'event': kind,
+                  'attempt_job_id':os.environ.get('GRID_JOB_ID'), **kw}
         events.write(json.dumps(record, ensure_ascii=False) + '\n')
         if kind != 'batch': print(json.dumps({'rank': rank, **record}), flush=True)
 
@@ -211,8 +229,14 @@ def main():
         loaded,client=engine.load_checkpoint(path,load_module_strict=True,
                  load_optimizer_states=True,load_lr_scheduler_states=True)
         assert loaded and engine.global_steps==saved['global_step']
+        # HF4.31/Accelerate0.21 keeps LambdaLR outside the DS engine. Persist it
+        # separately rather than attaching it to engine.step (which double-steps
+        # the scheduler). This also covers native best-checkpoint restoration.
+        scheduler_path=Path(path)/'external_scheduler.pth'
+        assert scheduler_path.is_file()
+        trainer.lr_scheduler.load_state_dict(torch.load(scheduler_path,weights_only=False,map_location='cpu'))
         event('strict_ds_restored',path=str(path),global_step=engine.global_steps,
-              scheduler=engine.lr_scheduler.state_dict(),client_keys=sorted(client))
+              scheduler=trainer.lr_scheduler.state_dict(),client_keys=sorted(client))
     trainer_module.deepspeed_load_checkpoint=strict_ds_load
 
     saved_loader=None
@@ -254,6 +278,7 @@ def main():
             # Native _save_checkpoint ran collectively, including DS optimizer,
             # scheduler, module states and rank-specific RNG. Add loader state.
             torch.save(self.replay_loader.checkpoint(self.state.global_step),cp/('loader_state_%d.pth'%rank))
+            if rank==0:torch.save(self.lr_scheduler.state_dict(),cp/'external_scheduler.pth')
             dist.barrier()
             if rank==0:
                 rows=[]
@@ -289,7 +314,8 @@ def main():
             report['initial_global_step']=state.global_step
             write(rp,report)
             event('train_begin',global_step=state.global_step,max_steps=state.max_steps,
-                  optimizer=type(engine.optimizer).__name__,scheduler=engine.lr_scheduler.state_dict())
+                  optimizer=type(engine.optimizer).__name__,scheduler=trainer.lr_scheduler.state_dict(),
+                  deepspeed_owns_scheduler=engine.lr_scheduler is not None)
         def on_step_end(self,args,state,control,**kw):
             engine=trainer.model_wrapped
             norm=engine.get_global_grad_norm()
@@ -318,7 +344,7 @@ def main():
             engine=trainer.model_wrapped
             state={'trainable':{n:v.detach().cpu().clone() for n,v in model.named_parameters() if v.requires_grad},
                    'optimizer':engine.optimizer.state_dict(),
-                   'scheduler':engine.lr_scheduler.state_dict(),
+                   'scheduler':trainer.lr_scheduler.state_dict(),
                    'global_step':trainer.state.global_step,'rng':rng_capture(trainer.replay_loader.loader)}
             torch.save(state,out/('acceptance_state_%d.pt'%rank))
             event('acceptance_state_saved',step=trainer.state.global_step)

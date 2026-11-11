@@ -202,6 +202,11 @@ class Compare:
             for index, (left, right) in enumerate(zip(reference, resumed)):
                 self.compare(left, right, key_path(path, index), exact)
             return
+        # DeepSpeed optimizer state may include a concrete LossScaler object.
+        # Its class must be identical and every stored field is compared exactly.
+        if type(reference).__module__.startswith("deepspeed.") and hasattr(reference, "__dict__"):
+            self.compare(vars(reference), vars(resumed), path + ".__dict__", exact=True)
+            return
         if isinstance(reference, np.generic):
             equal = reference.dtype == resumed.dtype and bool(np.isfinite(reference)) and bool(np.isfinite(resumed)) and bool(reference == resumed)
         elif isinstance(reference, (int, float, bool, str, bytes, type(None))):

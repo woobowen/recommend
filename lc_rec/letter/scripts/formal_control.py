@@ -30,7 +30,7 @@ transport.Transport.python=python_c
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode',choices=['deploy','submit','query','logs','collect','compare'])
+    p.add_argument('mode',choices=['deploy','submit','query','logs','collect','compare','selftest'])
     p.add_argument('--commit');p.add_argument('--job')
     p.add_argument('--kind',choices=['acceptance-continuous','acceptance-resume','formal'])
     p.add_argument('--resume');p.add_argument('--continuous');p.add_argument('--resumed')
@@ -41,7 +41,8 @@ def main():
     def save(name,obj):transport.atomic(SUPPORT/'receipts'/name,obj)
     commit=subprocess.check_output(['git','rev-parse',a.commit or 'HEAD'],cwd=REPO,text=True).strip()
     release=REMOTE+'/releases/'+commit
-    runner_sha=sha(REPO/'lc_rec/letter/scripts/formal_runner.py')
+    runner_bytes=subprocess.check_output(['git','show',commit+':lc_rec/letter/scripts/formal_runner.py'],cwd=REPO)
+    runner_sha=hashlib.sha256(runner_bytes).hexdigest()
     runner=t.profile['remote_support']+'/scripts/runner-a0-96h-'+runner_sha[:16]+'.py'
     t.profile=dict(t.profile,runner=runner,runner_sha256=runner_sha)
     if a.mode=='deploy':
@@ -55,7 +56,9 @@ def main():
         local_sidecar=SUPPORT/'deployment.json';local_sidecar.write_text(sidecar)
         assert sha(local_sidecar)==t.profile['deployment_sha256']
         t.put(local_sidecar,runner+'.deployment.json')
-        t.put(REPO/'lc_rec/letter/scripts/formal_runner.py',runner)
+        local_runner=SUPPORT/'runners'/(runner_sha+'.py')
+        local_runner.parent.mkdir(exist_ok=True);local_runner.write_bytes(runner_bytes)
+        t.put(local_runner,runner)
         code=f"""from pathlib import Path,PurePosixPath
 import hashlib,json,tarfile
 archive=Path({upload!r});root=Path({release!r});rows=[]
@@ -79,16 +82,22 @@ print(json.dumps(r))
         print(json.dumps({'release':release,'files_verified':len(r['files']),'runner_sha256':runner_sha}));return
     if a.mode=='compare':
         assert a.continuous and a.resumed
-        command=[PYTHON,release+'/lc_rec/letter/scripts/formal_compare.py','--continuous',a.continuous,
+        old=json.loads((REPO/'lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-cpu-r0/request.json').read_text())
+        command=['env','-u','DS_ACCELERATOR',*[k+'='+v for k,v in old['env'].items()],PYTHON,release+'/lc_rec/letter/scripts/formal_compare.py','--continuous',a.continuous,
                  '--resumed',a.resumed,'--output','/data/bwwu/lc-rec/a0-normal-20261111/acceptance_comparison.json']
         r=t.ssh(shlex.join(command),timeout=180)
         print(r);return
     assert a.job and a.job.startswith('letter-a0-20261111-');gridctl.valid(a.job)
-    if a.mode=='submit':
-        assert a.kind
+    if a.mode in ['submit','selftest']:
+        assert a.kind or a.mode=='selftest'
+        gate=None
         if a.kind=='formal':
             gate=SUPPORT/'receipts/prelaunch_review.json'
-            assert gate.is_file() and json.loads(gate.read_text())['status']=='PASS'
+            assert gate.is_file()
+            review=json.loads(gate.read_text())
+            assert review['status']=='PASS' and review['RUN_COMMIT']==commit
+            assert review['config_sha256']==sha(REPO/'lc_rec/letter/config/formal_instruments_seed42.json')
+            assert review['formal_train_sha256']==sha(REPO/'lc_rec/letter/scripts/formal_train.py')
         deployment=json.loads((SUPPORT/'receipts'/('deployment-'+commit+'.json')).read_text())
         old=json.loads((REPO/'lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/request.json').read_text())
         req={k:old[k] for k in ['schema','host','user','uid','namespace','deployment_sha256']}
@@ -97,10 +106,18 @@ print(json.dumps(r))
               '--job-id',a.job,'--kind',a.kind,'--precision-approval',approval]
         if a.resume:argv+=['--resume',a.resume]
         env=dict(old['env']);env['PYTHONUNBUFFERED']='1'
+        if a.mode=='selftest':
+            argv=[PYTHON,release+'/lc_rec/letter/scripts/runner_timeout_fixture.py']
+            env['CUDA_VISIBLE_DEVICES']='';env.pop('DS_ACCELERATOR',None)
         req.update(job_id=a.job,capture_version=commit,cwd=release,argv=argv,env=env,
-          timeout_seconds=345600 if a.kind=='formal' else 1800,
+          timeout_seconds=5 if a.mode=='selftest' else 345600 if a.kind=='formal' else 1800,
           inputs=[{'path':release+'/'+x['path'],'sha256':x['sha256']} for x in deployment['files'] if
                   x['path'].startswith(('lc_rec/letter/scripts/','lc_rec/letter/config/')) or x['path'].endswith('/precision_approval.json')])
+        if gate:
+            remote_gate=t.profile['remote_support']+'/requests/'+a.job+'.prelaunch.json'
+            t.put(gate,remote_gate)
+            req['argv']+=['--prelaunch-review',remote_gate]
+            req['inputs'].append({'path':remote_gate,'sha256':sha(gate)})
         path=SUPPORT/'requests'/(a.job+'.json')
         if path.exists():assert json.loads(path.read_text())==req
         else:transport.atomic(path,req)
@@ -118,13 +135,13 @@ result={{}}
 for base,prefix in [(job,'job'),(root,'run')]:
  for p in base.rglob('*'):
   if p.is_file() and not p.is_symlink() and p.suffix in ['.json','.jsonl','.log'] and p.stat().st_size<=8*1024**2 and not p.name.startswith('predictions'):
-   result[prefix+'/'+str(p.relative_to(base))]={{'text':p.read_text(),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
+   result[prefix+'/'+str(p.relative_to(base))]={{'text':p.read_bytes().decode('utf-8'),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
 print(json.dumps(result))
 """
             data=json.loads(t.python(code,timeout=60))
             dest=REPO/'lc_rec/letter/evidence/formal_20261111/jobs'/a.job
             for n,v in data.items():
-                path=dest/n;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(v['text'])
+                path=dest/n;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(v['text'].encode('utf-8'))
                 assert sha(path)==v['sha256']
             save('collected-'+a.job+'.json',{'job_id':a.job,'files':{k:v['sha256'] for k,v in data.items()}})
     save(a.mode+'-'+a.job+'.json',r)

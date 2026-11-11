@@ -1,0 +1,92 @@
+2026-11-11 17:35:17.946829: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-11 17:35:17.951431: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+[2026-11-11 17:35:21,659] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+[2026-11-11 17:35:21,676] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+You are using the legacy behaviour of the <class 'transformers.models.llama.tokenization_llama.LlamaTokenizer'>. This means that tokens that come after special tokens will not be properly handled. We recommend you to read the related pull request available at https://github.com/huggingface/transformers/pull/24565
+You are using the legacy behaviour of the <class 'transformers.models.llama.tokenization_llama.LlamaTokenizer'>. This means that tokens that come after special tokens will not be properly handled. We recommend you to read the related pull request available at https://github.com/huggingface/transformers/pull/24565
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:05<00:05,  5.43s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:05<00:05,  5.52s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.12s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.46s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.14s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.49s/it]
+/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/other.py:122: FutureWarning: prepare_model_for_int8_training is deprecated and will be removed in a future version. Use prepare_model_for_kbit_training instead.
+  warnings.warn(
+/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/other.py:122: FutureWarning: prepare_model_for_int8_training is deprecated and will be removed in a future version. Use prepare_model_for_kbit_training instead.
+  warnings.warn(
+{"rank": 1, "utc": "2026-11-11T17:36:32.176247+00:00", "elapsed_seconds": 76.21489418949932, "event": "loader", "length": 8240, "batch_sampler": "BatchSamplerShard", "sampler_generator": "Generator"}
+{"rank": 0, "utc": "2026-11-11T17:36:32.177816+00:00", "elapsed_seconds": 76.21644509676844, "event": "loader", "length": 8240, "batch_sampler": "BatchSamplerShard", "sampler_generator": "Generator"}
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2843f7de98bd94f4878a437f9847db1eb4c64711/lc_rec/letter/scripts/formal_train.py", line 354, in <module>
+[rank1]:     if __name__=='__main__':main()
+[rank1]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2843f7de98bd94f4878a437f9847db1eb4c64711/lc_rec/letter/scripts/formal_train.py", line 315, in main
+[rank1]:     result=trainer.train(resume_from_checkpoint=a.resume)
+[rank1]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py", line 1539, in train
+[rank1]:     return inner_training_loop(
+[rank1]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py", line 1752, in _inner_training_loop
+[rank1]:     self.control = self.callback_handler.on_train_begin(args, self.state, self.control)
+[rank1]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer_callback.py", line 353, in on_train_begin
+[rank1]:     return self.call_event("on_train_begin", args, state, control)
+[rank1]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer_callback.py", line 397, in call_event
+[rank1]:     result = getattr(callback, event)(
+[rank1]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2843f7de98bd94f4878a437f9847db1eb4c64711/lc_rec/letter/scripts/formal_train.py", line 292, in on_train_begin
+[rank1]:     optimizer=type(engine.optimizer).__name__,scheduler=engine.lr_scheduler.state_dict())
+[rank1]: AttributeError: 'NoneType' object has no attribute 'state_dict'
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2843f7de98bd94f4878a437f9847db1eb4c64711/lc_rec/letter/scripts/formal_train.py", line 354, in <module>
+[rank0]:     if __name__=='__main__':main()
+[rank0]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2843f7de98bd94f4878a437f9847db1eb4c64711/lc_rec/letter/scripts/formal_train.py", line 315, in main
+[rank0]:     result=trainer.train(resume_from_checkpoint=a.resume)
+[rank0]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py", line 1539, in train
+[rank0]:     return inner_training_loop(
+[rank0]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py", line 1752, in _inner_training_loop
+[rank0]:     self.control = self.callback_handler.on_train_begin(args, self.state, self.control)
+[rank0]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer_callback.py", line 353, in on_train_begin
+[rank0]:     return self.call_event("on_train_begin", args, state, control)
+[rank0]:   File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer_callback.py", line 397, in call_event
+[rank0]:     result = getattr(callback, event)(
+[rank0]:   File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2843f7de98bd94f4878a437f9847db1eb4c64711/lc_rec/letter/scripts/formal_train.py", line 292, in on_train_begin
+[rank0]:     optimizer=type(engine.optimizer).__name__,scheduler=engine.lr_scheduler.state_dict())
+[rank0]: AttributeError: 'NoneType' object has no attribute 'state_dict'
+[rank0]:[W1111 17:36:36.536509605 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+W1111 17:36:36.760000 3200484 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3200493 closing signal SIGTERM
+E1111 17:36:37.075000 3200484 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 1 (pid: 3200494) of binary: /data/bwwu/envs/letter-20261110/bin/python
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 922, in <module>
+    main()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2843f7de98bd94f4878a437f9847db1eb4c64711/lc_rec/letter/scripts/formal_train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-11-11_17:36:36
+  host      : zwlab-01
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 3200494)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2843f7de98bd94f4878a437f9847db1eb4c64711/lc_rec/letter/scripts/formal_pipeline.py", line 111, in <module>
+    if __name__=='__main__':main()
+  File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2843f7de98bd94f4878a437f9847db1eb4c64711/lc_rec/letter/scripts/formal_pipeline.py", line 88, in main
+    run('train',args)
+  File "/home/bwwu/lc-rec/letter-a0-normal-20261111/releases/2843f7de98bd94f4878a437f9847db1eb4c64711/lc_rec/letter/scripts/formal_pipeline.py", line 80, in run
+    if child.returncode:raise RuntimeError(stage+' failed: '+str(child.returncode))
+RuntimeError: train failed: 1
