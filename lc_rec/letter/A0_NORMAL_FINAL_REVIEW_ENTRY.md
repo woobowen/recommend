@@ -68,3 +68,9 @@ python3 lc_rec/letter/scripts/formal_control.py collect --commit 4c6a83d9ba42dc2
 ```
 
 正常在线约每15分钟轻量查询；Codex离线后不声称AI继续监控，服务器runner与资源守护继续记账并自动训练→best→全量测试。重连先查原ID，运行中只恢复监控，不重新提交；完成后收集结果与独立审核。当前没有正式checkpoint/best或正式指标，不能将RUNNING写成完成。
+
+## 运行中首轮实际验收（非最终结果）
+
+2026-11-12 21:03:58 UTC，两rank真实完成epoch1 / step2060。全49,544条Validation于21:17:54 UTC完成，eval_loss `1.840831995010376`，eval_runtime `836.2467s`。21:18:29 UTC，checkpoint-2060完整保存，两rank保存耗时约34.945s，当前best=checkpoint-2060。
+
+[首轮checkpoint只读核验与两rank原始里程碑](evidence/formal_det_20261112/epoch1_checkpoint_audit.json)：19成员，必需成员齐备，大小及小文件SHA匹配；没有重新加载模型或GPU重跑。21:33 UTC核对GPU进程仅为本任务rank PID3227289/3227290，两卡56–57°C。21:32 UTC训练已自动进入epoch1.102 / step2270，最近loss1.7429，资源正常。完整四轮、最终best及测试仍待完成。
