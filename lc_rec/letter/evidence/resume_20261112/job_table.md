@@ -1,6 +1,6 @@
 # 本轮作业原始终态清单
 
-观测 UTC: 2026-11-12T07:07:02.329805+00:00。所有 job 均为服务端 accepted runner 独立执行；数值比较 exit2 的 FAILED 表示恢复门槛真实失败。
+观测 UTC: 2026-11-12T07:14:35.794167+00:00。所有 job 均为服务端 accepted runner 独立执行；数值比较 exit2 的 FAILED 表示恢复门槛真实失败。
 
 | 完整 job_id | 状态/exit | GPU device-min（保守） | 来源 |
 |---|---|---:|---|
