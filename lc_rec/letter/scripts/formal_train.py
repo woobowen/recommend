@@ -89,7 +89,7 @@ def main():
     assert int(os.environ['WORLD_SIZE']) == 2
     cfg = json.loads(Path(a.config).read_text())
     assert not a.diagnosis, 'Formal FA adaptation is independent of diagnostic observers'
-    assert not a.preflight_interfaces or a.probe_stop == 12
+    assert (a.preflight_interfaces and a.probe_stop==12) or (not a.preflight_interfaces and a.probe_stop==0)
     author=json.loads(Path(a.config).with_name('author_instruments.json').read_text())
     for k,v in author.items():
         if k not in ['base_model','output_dir','resume_from_checkpoint','deepspeed','data_path','gradient_accumulation_steps']:
@@ -490,7 +490,9 @@ def main():
                 for n,v in active.items():assert torch.equal(v.detach().cpu(),weights[n])
                 write(out/'best_selection.json',{'checkpoint':trainer.state.best_model_checkpoint,
                       'metric':'eval_loss','greater_is_better':False,'value':trainer.state.best_metric,
-                      'adapter_sha256':sha(best/'adapter_model.bin'),'run_commit':a.run_commit})
+                      'adapter_sha256':sha(best/'adapter_model.bin'),'run_commit':a.run_commit,
+                      'completed_training_step':trainer.state.global_step,
+                      'loaded_best_checkpoint_step':trainer.model_wrapped.global_steps})
             dist.barrier()
         report.update(status='PROBE_COMPLETE' if a.probe_stop else 'TRAINING_COMPLETE',
                       global_step=trainer.state.global_step,epoch=trainer.state.epoch,

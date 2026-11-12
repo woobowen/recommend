@@ -69,17 +69,23 @@ def main():
         ledger['attempts'].append(entry);write(ledger_path,ledger)
         write(status_path,status)
         children=[]
+        activity={'worklog_bytes':-1,'last_progress':time.monotonic()}
 
         def resource():
+            log_bytes=(job/'work.log').stat().st_size
+            if log_bytes!=activity['worklog_bytes']:
+                activity.update(worklog_bytes=log_bytes,last_progress=time.monotonic())
             mem={r.split(':')[0]:int(r.split()[1])*1024 for r in Path('/proc/meminfo').read_text().splitlines() if len(r.split())>=2}
             disk=os.statvfs(root)
             v={'utc':utc(),'elapsed_seconds':time.monotonic()-started,'mem_available':mem['MemAvailable'],
                'swap_used':mem['SwapTotal']-mem['SwapFree'],'disk_available':disk.f_bavail*disk.f_frsize,
-               'gpu':subprocess.check_output(['nvidia-smi','--query-gpu=index,memory.used,memory.free,utilization.gpu','--format=csv,noheader,nounits'],text=True)}
+               'gpu':subprocess.check_output(['nvidia-smi','--query-gpu=index,memory.used,memory.free,utilization.gpu','--format=csv,noheader,nounits'],text=True),
+               'seconds_without_worklog_progress':time.monotonic()-activity['last_progress']}
             with (job/'output/resources.jsonl').open('a') as f:f.write(json.dumps(v)+'\n')
             assert v['mem_available']>=40*1024**3,'HOST_MEMORY_RESERVE_40GIB'
             assert v['disk_available']>=max(100*1024**3,disk.f_blocks*disk.f_frsize//10),'DATA_DISK_RESERVE'
             assert time.monotonic()-started<limit,'CUMULATIVE_BUDGET_EXHAUSTED'
+            assert v['seconds_without_worklog_progress']<7200,'NO_TASK_LOG_PROGRESS_FOR_TWO_HOURS'
 
         def run(stage,args):
             resource()

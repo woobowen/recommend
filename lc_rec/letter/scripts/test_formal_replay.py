@@ -49,6 +49,7 @@ def main():
         return Replay(shard,saved)
     def digest(batch):return [x.tolist() for x in batch]
     results=[]
+    multiple_boundaries=[]
     for rank in [0,1]:
         full=loader(rank);seq=[];saved=None
         iterator=iter(full)
@@ -67,11 +68,31 @@ def main():
         assert restored_epoch2==epoch2
         results.append({'rank':rank,'batches_per_epoch':len(seq),'mid_epoch_remaining':len(remaining),
                         'mid_epoch_all_rows_prompts_numpy_exact':True,'next_epoch_all_rows_prompts_numpy_exact':True})
+        for completed_epochs in [1,2,3]:
+            continuous=loader(rank)
+            for _ in range(completed_epochs):
+                for batch in continuous:pass
+            saved_boundary=continuous.checkpoint(completed_epochs*len(continuous))
+            expected=[digest(b) for b in continuous]
+            expected_rng=capture(continuous.loader)
+            resumed_boundary=loader(rank,saved_boundary)
+            for _ in range(completed_epochs):
+                for batch in resumed_boundary:break
+            observed=[digest(b) for b in resumed_boundary]
+            observed_rng=capture(resumed_boundary.loader)
+            assert observed==expected
+            assert expected_rng['python']==observed_rng['python']
+            assert np.array_equal(expected_rng['numpy'][1],observed_rng['numpy'][1])
+            assert expected_rng['numpy'][0]==observed_rng['numpy'][0] and expected_rng['numpy'][2:]==observed_rng['numpy'][2:]
+            assert torch.equal(expected_rng['cpu'],observed_rng['cpu'])
+            assert torch.equal(expected_rng['loader_generator'],observed_rng['loader_generator'])
+            multiple_boundaries.append({'rank':rank,'completed_epochs':completed_epochs,
+                'next_epoch_all_rows_templates_exact':True,'python_numpy_torch_loader_rng_exact':True})
     assert not torch.cuda.is_initialized()
     Path(a.output).write_text(json.dumps({'status':'PASS','synthetic_cpu_only':True,
         'actual_class_ast_sha256':hashlib.sha256(ast.dump(cls).encode()).hexdigest(),
         'torch_version':torch.__version__,'no_sync_source_identity':no_sync_identity,
-        'cases':results,'replay_events':events},indent=2)+'\n')
+        'cases':results,'multiple_epoch_boundaries':multiple_boundaries,'replay_events':events},indent=2)+'\n')
     print(json.dumps({'status':'PASS','cases':results}))
 
 
