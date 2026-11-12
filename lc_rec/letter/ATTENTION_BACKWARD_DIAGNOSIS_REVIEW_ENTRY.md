@@ -1,61 +1,174 @@
-# A0 layer28 Attention backward 专项：用户暂停快照
+# A0 第28层 Attention backward：最终审核入口
 
-**本次是暂停保存，不是最终交付或正式训练放行。** 用户要求关闭 Codex，暂停新增工作；已经接受的服务器作业继续独立运行，未执行取消/重启。
+本轮专项已完成真实双卡诊断、官方 FA deterministic 验证和受控恢复复核。**真实 case 的默认 FA backward 非确定性已确认；完整历史故障的唯一传播链尚未确认。诊断模式通过恢复验收，原配方仍失败。**
 
-当前已验证：
-
-- 原 FA-default 两次同 checkpoint 恢复：原门槛 **FAIL**，两 rank 各453项浮点状态失败。
-- layer28 的必要 FA 输入 q/k/v/dO/out/LSE/cu/RNG exact，rank0 native dQ有1元素差异，最大4.547473508864641e-13、原容差超限0；dK/dV exact；RoPE后q_proj梯度在本次配对exact，不能把这一处tiny差异独自等同全部轨迹FAIL。
-- 绑定case的默认/确定性：每模式3个新进程×每进程3次，rank0默认dQ共6种hash、确定性仅1种，rank1两组均稳定；forward/dK/dV均稳定。非作者独立脚本直接从原Tensor复算了该结论。
-- FA-det完整同CP两次恢复：**原始比较器PASS，两rank全部458项Tensor exact，参数/master/moments/scheduler/RNG及两个非零LR更新通过**；176个边界（两rank各88）exact。真实扩展入口确认True。
-- 普通工程修正仅诊断Bool统计量与观察/回执完善；正式训练入口、比较器、compat、runner、正式配置均与历史DELIVERY字节一致；没有恢复算法修改。
-
-## 继续时的唯一入口
-
-首先重新读取本文件、`evidence/attention_20261112/pause_snapshot.json` 和规范，核对Git工作区；按原ID查询 **`letter-attention-20261112-det-cont-r1`**，不要重新提交同一任务。保存时它正在服务器独立执行，是本轮第6个GPU作业；0dd RUN，FA-det、关闭本轮Boundary、保留旧Probe，continuous stop4/save2。模型、输入及运行全部在服务器，不依赖本地Codex/SSH生命周期。
-
-```bash
-python3 lc_rec/letter/scripts/attention_control.py query --commit 0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5 --job letter-attention-20261112-det-cont-r1
-python3 lc_rec/letter/scripts/attention_control.py collect --commit 0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5 --job letter-attention-20261112-det-cont-r1
+```text
+A0 ATTENTION DIAGNOSIS: ROOT_CAUSE_NARROWED
+COMPONENT FA BACKWARD NONDETERMINISM: CONFIRMED
+ORIGINAL RESUME GATE: FAIL
+DIAGNOSTIC VARIANT: PASS — FORMAL ADOPTION NOT AUTHORIZED
+FORMAL DECISION: NEEDS_USER_DECISION
+A0 FORMAL NORMAL: NOT_STARTED
+GPT_UPLOAD_REQUIRED: NO
 ```
 
-若终态和完整CP2通过检查，再按原授权提交**尚未提交的最后第7个GPU作业** `letter-attention-20261112-det-resume-r1`，同0dd RUN，参数 `--kind resume --diagnostic-attention-deterministic --boundary-disabled --resume /data/bwwu/lc-rec/attention-20261112/letter-attention-20261112-det-cont-r1/training/checkpoint-2`。必须先刷新GPU/空间/剩余总预算和旧进程，成功后CPU运行原formal_compare核continuous/resume；不可盲目重跑。它是本轮最后有信息价值的对照，不启动正式四轮A0。
+## 1. 核心原始证据
 
-还需完成：continuous/resume验收；原checkpoint最后全量哈希保护回执与总GPU/磁盘封账；非作者JSON状态/预算脚本（已保存未运行）；非作者最终结论；最终审核入口重写、源码映射、GitHub最终固定发布回读和完整审核ZIP。`attention_receipt.py`和`attention_delivery.py`已保存；最终ZIP尚未生成。没有声称全部任务完成。
+- [最终机器汇总](evidence/attention_20261112/final_summary.json)，由[汇总程序](scripts/attention_summary.py)读取实际回执生成。
+- [默认完整恢复比较](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-default-pair/run/numeric_comparison.json)：FAIL，两rank各453项浮点状态超原门槛。
+- [FA-det同原checkpoint两次恢复](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-det-pair/run/numeric_comparison.json)：PASS，两rank各458项Tensor全部exact。
+- [FA-det continuous/resume](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-cont-resume/run/numeric_comparison.json)：PASS，两rank各458项Tensor全部exact，关闭本轮Boundary、保留旧Probe。
+- [默认边界逐元素比较](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-default-pair/run/boundary_comparison.json)、[det边界比较](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-det-pair/run/boundary_comparison.json)、[真实case隔离重复](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-isolate/run/isolate_comparison.json)。
+- 非作者脚本从原Tensor独立复算：[默认边界](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-independent-default/run/independent_result.json)、[det边界](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-independent-det/run/independent_result.json)、[隔离case](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-independent-isolate/run/independent_isolate_result.json)。
+- [非作者最终审核](review/attention_20261112/final_review.md)、[桥接方式](review/attention_20261112/bridge_method.md)、[独立状态及预算核算](review/attention_20261112/independent_state_budget_result.json)。没有冒称非作者直接读盘完整源码、独立GPU重跑或全量重算大型acceptance_state。
+- [原checkpoint、固定源码及资源最终核验](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-final-receipt/run/final_resources.json)、[17作业最终清收](evidence/attention_20261112/final_closure.json)。
 
-固定身份：
+所有 `jobs/<job_id>/job/` 留request/status/日志/cleanup；`run/` 留有效配置、原始事件及报告。执行成功不等于数值gate通过：默认比较CPU job exit0，但报告FAIL。
 
-- 初始默认GPU RUN `9bb7207e4a84ec3eca02d505da53ad2a771c2ee5`。
-- 后续isolate、det恢复与当前continuous GPU RUN **`0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5`**。
-- 非作者boundary CPU脚本提交 `cbe248b4c654a7a2f2805ad6edabcdd00adc6540`，脚本SHA `baf6d0fe48db5a3d5edf7c9eab6871ba35bd9f5dd1ebae316224e4702641202b`。
-- 非作者isolate CPU与最终回执工具提交 `b7dca996e6e0c9e26d95429b1f9d67efe5daef4c`。新state/budget非作者脚本待部署/运行。
-- 输出 `/data/bwwu/lc-rec/attention-20261112/`；固定export `/home/bwwu/lc-rec/letter-attention-20261112/releases/<SHA>/`；本地support `/home/addaswsw/recommend-support/letter-attention-20261112/`；job根 `/home/bwwu/grid-audits/sid-extensions-p0/jobs/`。
-- 预算仍最多120 device-min、8 GPU jobs、80GiB；round0后仅使用round1工程修正，不重置预算。最新已封账部分和仍运行条目以pause_snapshot/原ledger为准，不能把运行中0秒当已免费完成。
-- 新增依赖/系统配置：无。原checkpoint、历史失败、原source export全部保留；两份无关Qwen tokenizer未跟踪文件保留。
-- **A0 FORMAL NORMAL: NOT_STARTED。** FA-det属于DIAGNOSTIC_ONLY，正式采用及正式A0仍须用户批准。
+## 2. 配方、资产与固定身份
 
-以下保留本轮启动说明与实验依据；接续后据最终证据重写最终入口。
+沿用历史DELIVERY `6dad49e92ab3099d8e6f441a84f843d3e7666409`、GPU RUN `be15ad0a7c8b3cb8f1adac2c4668e7e6973b7164`；更早验收DELIVERY `2c13d30c61337be961dca3d3d4cc05a63a463117`、RUN `87ba6556ce7237f8ef32c690165449d0d6a28294`全部保留。
 
----
+原checkpoint只读引用：
 
-# A0 layer28 Attention backward 专项（2026-11-12）
+```text
+/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-cont-r3/training/checkpoint-2
+```
 
-本轮新授权：layer28 真实边界定位、FA2 专用 deterministic 诊断、必要普通工程修复与受控恢复复核；正式 A0 NOT_STARTED。沿用历史 DELIVERY `6dad49e92ab3099d8e6f441a84f843d3e7666409` 和 GPU RUN `be15ad0a7c8b3cb8f1adac2c4668e7e6973b7164`，原 checkpoint 与旧失败全保留。
+末次对20个文件逐项流式重哈希，与历史完整清单一致。没有修改、删除或替换原件。新增continuous的CP2位于独立目录：
 
-实验卡：同一原 checkpoint-2、Instruments seed42、LETTER SID/LLaMA7B、Int8/BF16、LoRA r8 七投影与 active embedding/head，micro8×GAS4×world2，ZeRO2、GC 与四轮8240-step scheduler 固定；恢复仅执行 step2→4，两次非零 LR 更新。默认方案与 FA deterministic 仅诊断比较，不正式采纳。阈值保持 abs(diff)<=1e-6+1e-3*abs(reference)，离散/RNG/scheduler exact。
+```text
+/data/bwwu/lc-rec/attention-20261112/letter-attention-20261112-det-cont-r1/training/checkpoint-2
+```
 
-预算：新任务独立最多120 GPU-device-min、8 GPU jobs、每job≤1800s、持久增量≤80GiB。复用已审核 formal_runner + Windows SSH/SCP；新根 `/data/bwwu/lc-rec/attention-20261112` 和 `/home/bwwu/lc-rec/letter-attention-20261112/releases/<RUN_COMMIT>`。预计先默认两次恢复，再绑定case的默认/确定性同进程3次×新进程3次；有信息价值才做完整FA-det配对，保留余量用于最小有证据补测。任务round0之后最多3组集中修正。
+该新CP2为20文件、18,673,208,961bytes，见[输入清单](evidence/attention_20261112/resume_input_checkpoint.json)，不是历史原CP2。
 
-真实调用链：FastChat pinned forward 将q/k/v投影 `[8,s,4096]` view为 `[8,s,32,128]`；原apply_rotary_pos_emb gather cos/sin，对q/k执行q*cos+rotate_half(q)*sin。padding路径分别unpad q以及stack(k,v,dim2)，调用flash_attn_varlen_kvpacked_func，输出reshape→pad→o_proj。FA ctx的q/k/v/out/lse/cu/rng与真实dO在backward记录；原native dispatch output buffers dq/dk/dv原样记录，再经过unpad scatter、stack拆分、RoPE两分支累加及view回到q_proj。raw FA dQ不等于q_proj最终梯度。unpad indices唯一性实际断言。
+固定LETTER-LC-Rec / Amazon Instruments / 作者LETTER SID，LLaMA7B Int8+BF16、LoRA r8七投影及active embedding/head（450可训练Tensor、289,652,736元素）、ZeRO-2、GC、seed42、micro8×accum4×world2=global64、四轮8240-step scheduler。训练诊断最多4updates，恢复从CP2到step4，包含2次非零LR更新。没有正式四轮训练。
 
-HF4.31 LlamaModel源码调用torch.utils.checkpoint.checkpoint且不传use_reentrant，当前torch2.6默认reentrant：primary no_grad、backward重算grad enabled；绑定rank/layer/step2/yield9/phase/call，阶段计数不被重算推进。非持久rotary cache逐phase采样。CPU观测会同步CUDA，可能改变调度，局部阴性不推广为无hook的全局结论。
+原比较标准始终为 `abs(candidate-reference)<=1e-6+1e-3*abs(reference)`；scheduler/step/必要RNG/离散状态exact。未放宽阈值、删除失败检查或使用strict=False。
 
-改动：仅opt-in resume_probe安装新Boundary；formal_train、formal_compare、compat、正式配置均保持上轮字节。新attention_control/pipeline复用既有transport、runner、锁、request/status/cleanup机制，使用独立预算根；det开关复用原install_diagnostic_attention。共享依赖包不改。所有关键张量保存原dtype连续CPU副本并记录原shape/stride/layout/offset与字节SHA、norm/max_abs；重放按原stride新建，offset/alignment/allocator上下文无法跨进程相同，明确限制。
+## 3. 第28层真实链与最早局部差异
 
-结果、修正及非作者桥接审核将在本入口补充。当前仅启动前范围声明，未宣称定位或验收通过。
+实际[FastChat冻结源码](evidence/attention_20261112/dependency_sources/fastchat_train_llama2_flash_attn_monkey_patch.py.txt)，观测[attention_boundary.py](scripts/attention_boundary.py)：
 
-## 新证据驱动的最后对照（启动前记录）
+```text
+q_proj [B,S,4096] → view BSHD [B,S,32,128] → Q RoPE → unpad Q
+k_proj → view BSHD → K RoPE ┐
+v_proj → view BSHD ────────┴→ stack(K,V,dim=2) → unpad KV
+ → flash_attn_varlen_kvpacked_func → reshape / pad → o_proj
 
-Default pair两rank原始输入/必要FA输入exact，rank0 native dQ出现1元素4.547473508864641e-13差异且未超容差，经过RoPE后q_proj梯度exact；完整两次恢复原门槛FAIL，每rank453项浮点state失败。真实layer28隔离rank0默认9次出现6种dQ字节，det9次仅1种，forward/dK/dV均1种，rank1均稳定。这证明局部FA backward非确定性，不能将这一处微小误差直接称全部轨迹FAIL的唯一原因。
+反向：o_proj.input.grad → pad backward → FA dO
+ → 原始FA dQ/dK/dV → unpad scatter → RoPE backward → view
+ → q_proj.output.grad
+```
 
-FA-det完整两次恢复的176个边界均exact，S5第二次更新后的参数与optimizer descriptor exact；原始张量完整比较器并行复核。下一步有信息价值：在同一FA-det条件下用既有probe（关闭本轮新增Boundary），continuous stop4/save2，与该完整CP2的新进程resume2→4配对，保持model/data/seed/BF16/Int8/GC/GAS/ZeRO2/四轮scheduler不变。其目的检验新hook同步之外的真实恢复轨迹，不能叫完全无hook。只使用最后两个GPU作业，预计累计<80 device-min，总jobs7/8，保留80GiB上限；不正式采纳det模式。
+不是BHSD链。padding mask使本case进入varlen KV-packed。rank0有效token719、max_seq168；rank1有效token669、max_seq113。head_dim128、BF16，q stride `[4096,128,1]`、k/v `[8192,128,1]`；dropout0、causal=True、scale0.08838834764831845、window[-1,-1]、softcap0、alibi=None。cu_seqlens、mask/索引、shape/dtype/stride/layout/offset、SHA/norm/max_abs均在原始事件和描述中；索引唯一、scatter/packing/view对应经独立CPU复算。
+
+绑定rank/layer28/step2/micro9/phase/call1，phase各一次断言。HF4.31与torch2.6现有reentrant GC：primary no_grad，反向recompute grad-enabled。非持久RoPE cache留长度、device/dtype及内容指纹，实际cos/sin/position也有张量记录。
+
+默认配对：q/k/v、out、LSE、cu、RNG、选项及dO exact，rank0原始dQ的2,945,024元素中只有1个差异：
+
+```text
+flat_index 2820290
+reference 1.000444171950221e-10
+candidate 9.958966984413564e-11
+abs_diff 4.547473508864641e-13
+fixed_limit 1.0000001000444172e-6
+outside_tolerance 0
+```
+
+dK/dV exact。该差异沿unpad及rope.q.post.grad保留，经过RoPE backward舍入消失：rope.q.pre.grad及q_proj.output.grad exact。rank1的88项边界全部exact。符合C2，确认FA组件非确定性；**没有重现历史row351的q_proj完整分歧链**。raw dQ与q_proj最终梯度不能混称，也不能把这1个未超容差且随后消失的差异直接解释为完整453项状态失败的唯一原因。
+
+本case未发现RoPE/unpad新增最终q_proj差异，不能排除其他调用。CPU观测同步、存盘会改变调度，阴性结果不推广到完全无hook情况。
+
+## 4. FA专用deterministic的实际生效与隔离重放
+
+实际 `flash-attn==2.7.4.post1`；[Python interface身份](evidence/attention_20261112/dependency_identity.json) SHA `d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75`；[CUDA extension身份](evidence/attention_20261112/flash_extension_identity.json) SHA `49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2`。
+
+复用install_diagnostic_attention，仅显式诊断开关向FastChat实际引用函数传True。未开启torch全局deterministic，CUBLAS_WORKSPACE_CONFIG为空。native wrapper位置20（第21参）、CUDA extension varlen_bwd位置21（第22参），两rank真实fa_native_dispatch/fa_extension_dispatch事件均确认True；不是只看配置。末维stride均1，无末维复制/head padding。
+
+Profiler中默认flash_bwd_dot_do_o_kernel<true>，det为<false>并有填充路径。主kernel名称可相同；固定官方[launch源码](evidence/attention_20261112/official_flash_bwd_launch_template.h.txt)及[backward源码](evidence/attention_20261112/official_flash_bwd_kernel.h.txt)将det开关绑定grid、dQ累加缓冲及归约路径。没有反汇编，不声称定位唯一机器指令。
+
+[隔离重放程序](scripts/attention_case_replay.py)复用真实q/k/v/out/LSE/dO/RNG/cu与调用选项，原stride重建。每rank3个新Python进程，每进程每模式3次：
+
+| 观测 | rank0 Default | rank0 Det | rank1 两模式 |
+|---|---:|---:|---:|
+| 每模式重复 | 9 | 9 | 各9 |
+| forward/dK/dV hash数 | 各1 | 各1 | 各1 |
+| dQ hash数 | 6 | 1 | 各1 |
+| dQ最大差 | 3.725290298461914e-9 | 0 | 0 |
+| 原容差超限数 | 0 | 0 | 0 |
+
+这确认真实case默认backward非确定，det在此次重复消除字节差异。新地址、offset、allocator上下文不保证与训练相同；不能扩大成所有未来调用证明。
+
+6个非profiler样本backward中位数：rank0默认0.352816ms、det0.400480ms；rank1默认0.322160ms、det0.503968ms。两模式allocated峰值相同（rank0 114,546,176、rank1 104,752,640bytes），reserved均132,120,576。完整同CP配对rank0 allocated默认12,740,192,768、det12,740,242,432（+49,664bytes），rank1相同。模式顺序固定，有首次profiling；这些有界测量不能外推正式四轮吞吐/显存。
+
+## 5. 完整恢复验收与因果边界
+
+| 配对 | checkpoint | 本轮Boundary | 完整状态结果（每rank） |
+|---|---|---|---|
+| Default1/Default2 | 同历史CP2 | 开 | FAIL，453项超容差 |
+| Det1/Det2 | 同历史CP2 | 开 | PASS，458项Tensor exact |
+| Det-cont/Det-resume | 新continuous CP2 | 关，旧Probe保留 | PASS，458项Tensor exact |
+
+两det配对各有1114个exact scalar leaves、NumPy RNG624个uint32 exact，覆盖模型/LoRA、FP32 master、Adam moments、scheduler和必要RNG。每rank master、exp_avg、exp_avg_sq各144,826,368 FP32元素。恢复后2非零LRupdates、8microbatch的输入/标签/loader顺序/loss/grad norm exact。
+
+最后配对grad norm `63.30452346801758 / 61.98331069946289`；真实Adam入口LR `4.819277108433735e-6 / 7.228915662650602e-6`。日志post-update LR是后继值，两者不混淆；loss是Trainer返回、已除GAS4的值。完整比较报告SHA `4d51ab869eba1d64a9300a6e2e71e789cd97960c1cd0b15fcd9041e52e61464d`。
+
+独立审核核三配对起始六类状态字段、224个量化模块canonical CB/SCB exact。continuous/resume原始bnb记录有冷/热缓存存放位置差异，不称全部非持久运行时元数据逐字一致；该差异未阻碍这组完整轨迹exact。
+
+Default与Det完整配对分别使用9bb与0dd RUN，含公开的[观测工程修正diff](evidence/attention_20261112/observer_revision_diff.patch)，**不能声称两组完整源码仅差det布尔值**。同case native重放提供更严格单变量证据；同RUN关闭Boundary的continuous/resume降低观测同步混杂，仍保留旧Probe。整体根因NARROWED。
+
+## 6. 最小改动、修正轮次与服务器源码
+
+[最小运行diff](evidence/attention_20261112/minimal_runtime_diff.patch)含诊断入口、Boundary、重放/分析/回执工具；resume_probe.install只有4行条件安装，未默认改变正式训练。[修正记录](evidence/attention_20261112/corrections.json)：round1修复Bool统计量兼容缺陷（真实CPU复现），只将统计量转float，保存dtype/字节不变；真实GPU mask为Int64，默认配对不受影响。另完善extension实参记录、可选关闭Boundary及回执。见[Bool回归](evidence/attention_20261112/statistic_cpu_validation.json)和[cpu-statistic日志](evidence/attention_20261112/jobs/letter-attention-20261112-cpu-statistic/job/work.log)。
+
+[正式文件共同身份](evidence/attention_20261112/formal_identity.json)：formal_train、formal_compare、compat、formal_runner、formal_pipeline、formal_instruments_seed42与历史DELIVERY字节一致。没有确认普通checkpoint保存/加载缺陷，**未修改恢复算法**，没有用诊断PASS冒称原配方修复。
+
+- 默认GPU RUN：`9bb7207e4a84ec3eca02d505da53ad2a771c2ee5`。
+- 后续GPU RUN：**`0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5`**。
+- 独立边界CPU：`cbe248b4c654a7a2f2805ad6edabcdd00adc6540`。
+- 隔离审核/回执工具：`b7dca996e6e0c9e26d95429b1f9d67efe5daef4c`。
+- 最终CPU回执：`ca302c109e9921f07d025ebed00517ffa59544bc`。
+
+两GPU RUN的[关键源码快照与清单](evidence/attention_20261112/source_snapshots/manifest.json)便于ZIP独立审核。服务器是无.git的固定export，按[部署映射](evidence/attention_20261112/deployments/)逐文件SHA核验，不称checkout：
+
+```text
+/home/bwwu/lc-rec/letter-attention-20261112/releases/<完整RUN_COMMIT>/
+/data/bwwu/lc-rec/attention-20261112/<job_id>/
+/home/bwwu/grid-audits/sid-extensions-p0/jobs/<job_id>/
+```
+
+交付后文档/汇总变化没有用于GPU，实际GPU计算仍绑定上述RUN。
+
+## 7. 所有GPU作业、预算和最后终态
+
+均经既有独立runner与Windows SSH/SCP。解释器/cwd/argv/输入/GPU UUID/预算/日志/cleanup在job回执。用户关闭Codex时continuous按原ID独立继续；重开后查询收集，再只提交原定第7项，未盲重跑。7项均SUCCEEDED、exit0、cleanup verified。
+
+| 完整job_id | 外层runner墙钟秒 | 保守device-min |
+|---|---:|---:|
+| letter-attention-20261112-default1-r0 | 284.332136 | 10.134370 |
+| letter-attention-20261112-default2-r0 | 278.971948 | 9.955231 |
+| letter-attention-20261112-isolate-r1 | 20.730044 | 1.344585 |
+| letter-attention-20261112-det1-r1 | 259.842895 | 9.317820 |
+| letter-attention-20261112-det2-r1 | 267.922449 | 9.589144 |
+| letter-attention-20261112-det-cont-r1 | 384.862764 | 13.487237 |
+| letter-attention-20261112-det-resume-r1 | 260.686511 | 9.346269 |
+
+实际监督双卡折算58.57829157device-min；保守pipeline含每GPU20秒预留，与外层逐项取较大值，封账**63.17465463/120 device-min**。7/8 GPU jobs，最长384.862764秒<1800。round0后仅round1集中工程修正，没有重置历史次数。
+
+最后服务器观测**2026-11-12T09:47:09.142001+00:00**（纽约04:47:09）：17项远端任务（7GPU、10CPU）全部SUCCEEDED/exit0/清收通过；两GPU各1MiB、0%，无compute进程。data51,809,720,856 + exports539,930,679 + 传输tar/job目录68,983,672 = **52,418,635,207bytes =48.81865830GiB/80GiB**。
+
+原checkpoint、旧失败、旧exports与无关工作区文件保留；没有新增系统包、语言包、工具链或系统配置变化。
+
+## 8. 发布、官方参考与停止点
+
+只发布wbw-lc-rec。固定GitHub材料包含源码/有效配置、关键原始事件与张量描述/差异数值、完整比较、负面结果、独立审核及作业/部署回执；大型Tensor/模型/checkpoint留服务器，以路径/SHA引用。网页GPT二次审核所需轻量证据均在固定提交，GPT_UPLOAD_REQUIRED: NO。
+
+内容发布回读见 `evidence/attention_20261112/publication_content_readback.json`。最终DELIVERY的SHA和回读放ZIP的FIXED_IDENTITY.json / PUBLICATION_READBACK.json及包外回执，避免Git提交自指。ZIP从最终固定Git版本构造，有逐文件SHA清单；实际CRC/完整解压/成员大小与哈希/重复与危险路径/敏感信息/整体SHA/Windows副本校验结果及真实路径见最终回复和包外validation.json。
+
+官方参考：[FA issue414](https://github.com/Dao-AILab/flash-attention/issues/414)、[固定v2.7.4.post1接口](https://github.com/Dao-AILab/flash-attention/blob/v2.7.4.post1/flash_attn/flash_attn_interface.py)、[固定launch实现](https://github.com/Dao-AILab/flash-attention/blob/v2.7.4.post1/csrc/flash_attn/src/flash_bwd_launch_template.h)、[PyTorch2.6 reproducibility](https://docs.pytorch.org/docs/2.6/notes/randomness.html)、[Transformers案例31787](https://github.com/huggingface/transformers/issues/31787)、[DeepSpeed checkpoint](https://deepspeed.readthedocs.io/en/latest/model-checkpointing.html)。Issue是候选假设，结论来自本轮实测。
+
+首选待批准：正式配方显式采用FA专用deterministic backward，保留原Int8/BF16、LoRA、GC、batch和ZeRO-2。它改变数值backward路径，**未获正式采用授权**，完整四轮时间/显存成本未测。若要求唯一根因闭环，应另行授权对其他调用/微批次采样首次分歧传播链，不能扩大tiny dQ证据。
+
+本轮诊断交付后停止。没有运行正式四轮A0、A1、Shuffle、额外seed或其他数据集；等待网页GPT二次审核及用户批准正式FA-det采用和正式A0。

@@ -68,6 +68,24 @@ def main():
     if receipts:
         resource=read(receipts[-1]);report['gpu_device_minutes']=resource['charged_gpu_device_minutes']
         report['storage']=resource['storage'];report['final_observed_utc']=resource['utc']
+    closure=root/'final_closure.json'
+    if closure.exists():
+        final=read(closure)
+        report['final_observed_utc']=final['utc']
+        report['all_17_remote_jobs_terminal_and_clean']=len(final['job_directories'])==17 and all(
+            x['status']=='SUCCEEDED' and x['exit_code']==0 and x['cleanup_verified'] for x in final['job_directories'])
+        report['task_owned_server_logical_bytes']=sum(x['logical_bytes'] for x in report['storage'].values())+sum(
+            x['logical_bytes'] for x in final['job_directories'])+sum(x['bytes'] for x in final['transfers'])
+    required={'letter-attention-20261112-cpu-default-pair':'FAIL',
+              'letter-attention-20261112-cpu-det-pair':'PASS',
+              'letter-attention-20261112-cpu-cont-resume':'PASS'}
+    if all(report['comparisons'].get(k,{}).get('status')==v for k,v in required.items()):
+        report.update(A0_ATTENTION_DIAGNOSIS='ROOT_CAUSE_NARROWED',
+            COMPONENT_FA_BACKWARD_NONDETERMINISM='CONFIRMED',ORIGINAL_RESUME_GATE='FAIL',
+            DIAGNOSTIC_VARIANT='PASS — FORMAL ADOPTION NOT AUTHORIZED',
+            FORMAL_DECISION='NEEDS_USER_DECISION',
+            limitation='The tiny observed layer28 dQ difference is real but disappears after RoPE in this pair; the unique historical q_proj divergence chain was not recovered.')
+    report['generator_sha256']=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     root.joinpath('final_summary.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps({'gpu_jobs':len(report['gpu_jobs']),'comparisons':{k:v['status'] for k,v in report['comparisons'].items()},'summary':str(root/'final_summary.json')}))
 

@@ -1,0 +1,55 @@
+diff --git a/lc_rec/letter/scripts/attention_boundary.py b/lc_rec/letter/scripts/attention_boundary.py
+index dac8a12..f517305 100644
+--- a/lc_rec/letter/scripts/attention_boundary.py
++++ b/lc_rec/letter/scripts/attention_boundary.py
+@@ -31,7 +31,7 @@ class Boundary:
+                  device=str(value.device),storage_offset=value.storage_offset(),
+                  contiguous=value.is_contiguous(),requires_grad=value.requires_grad,
+                  sha256=hashlib.sha256(raw).hexdigest(),elements=value.numel(),
+-                 norm=float(cpu.float().norm()),max_abs=float(cpu.abs().max()) if cpu.numel() else 0,
++                 norm=float(cpu.float().norm()),max_abs=float(cpu.float().abs().max()) if cpu.numel() else 0,
+                  file=path.name)
+         torch.save(cpu,path)
+         path.with_suffix('.json').write_text(json.dumps(row,indent=2)+'\n')
+@@ -161,6 +161,16 @@ class Boundary:
+                 for label,t in zip(['dQ','dK','dV'],args[6:9]):self.save('dispatch.'+label,t,self.native)
+             return result
+         fa._wrapped_flash_attn_varlen_backward=native
++        extension_original=fa.flash_attn_gpu.varlen_bwd
++        @functools.wraps(extension_original)
++        def extension(*args,**kwargs):
++            if self.native:
++                assert len(args)==24
++                self.probe.event('fa_extension_dispatch',**self.native,
++                    deterministic=args[21],extension_file=fa.flash_attn_gpu.__file__,
++                    positional_arguments=len(args),last_dimension_strides=[t.stride(-1) for t in args[:5]])
++            return extension_original(*args,**kwargs)
++        fa.flash_attn_gpu.varlen_bwd=extension
+ 
+     @staticmethod
+     def _fingerprint(t):
+diff --git a/lc_rec/letter/scripts/attention_pipeline.py b/lc_rec/letter/scripts/attention_pipeline.py
+index 3d8aad1..32b04fd 100644
+--- a/lc_rec/letter/scripts/attention_pipeline.py
++++ b/lc_rec/letter/scripts/attention_pipeline.py
+@@ -19,7 +19,9 @@ def main():
+     p.add_argument('--run-commit',required=True);p.add_argument('--kind',choices=['inspect','continuous','resume','attention-isolate'],required=True)
+     p.add_argument('--resume');p.add_argument('--diagnostic-attention-deterministic',action='store_true')
+     p.add_argument('--capture-attention-case',action='store_true');p.add_argument('--attention-case-root')
+-    p.add_argument('--full-first-backward-trace',action='store_true');p.add_argument('--diagnostic-torch-deterministic',action='store_true');a=p.parse_args()
++    p.add_argument('--full-first-backward-trace',action='store_true');p.add_argument('--diagnostic-torch-deterministic',action='store_true')
++    p.add_argument('--boundary-disabled',action='store_true',help='Matched legacy observers; no new boundary synchronization')
++    a=p.parse_args()
+     job=Path(os.environ['GRID_JOB_DIR']);assert job.name.startswith('letter-attention-20261112-')
+     release=Path(__file__).resolve().parents[3];scripts=release/'lc_rec/letter/scripts'
+     assert json.loads((release/'RUN_VERSION.json').read_text())['RUN_COMMIT']==a.run_commit, 'RUN_COMMIT label differs from immutable deployment'
+@@ -50,6 +52,9 @@ def main():
+                 assert sum(f.stat().st_size for f in ROOT.rglob('*') if f.is_file() and not f.is_symlink())<cfg['persistent_bytes_limit']-reserve
+                 source=release/'lc_rec/letter/vendor/LETTER/LETTER-LC-Rec'
+                 diagnostic_config=('resume_torch_deterministic_diagnostic.json' if a.diagnostic_torch_deterministic else 'resume_full_trace_diagnostic.json' if a.full_first_backward_trace else 'attention_boundary_det.json' if a.diagnostic_attention_deterministic else 'resume_capture_diagnostic.json' if a.capture_attention_case else 'attention_boundary_default.json')
++                if a.boundary_disabled:
++                    assert a.diagnostic_attention_deterministic and not a.diagnostic_torch_deterministic
++                    diagnostic_config='resume_deterministic_diagnostic.json'
+                 argv=[sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2',str(scripts/'formal_train.py'),
+                     '--source-root',str(source),'--data-root',str(source.parent/'data'),
+                     '--model','/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549',
