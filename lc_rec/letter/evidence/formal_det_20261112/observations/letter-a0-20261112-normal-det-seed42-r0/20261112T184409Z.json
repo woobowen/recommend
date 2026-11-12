@@ -1,0 +1,428 @@
+{
+  "utc": "2026-11-12T18:44:09.667227+00:00",
+  "job_id": "letter-a0-20261112-normal-det-seed42-r0",
+  "kind": "formal",
+  "training": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training",
+  "rank": {
+    "0": {
+      "report": {
+        "status": "TRAINING",
+        "run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+        "config_sha256": "133e0e88f4158ab2806ebaa973eb87a0d98c68c98690bcc5cab62e8d126ae9b7",
+        "initial_global_step": 0,
+        "formal_attention": {
+          "enabled": true,
+          "recipe": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+          "interface_sha256": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+          "fastchat_sha256": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e",
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2",
+          "version": "2.7.4.post1",
+          "torch_global_deterministic": false,
+          "cublas_workspace_config": null,
+          "tensor_observers": false,
+          "calls": {
+            "flash_attn_func": 0,
+            "flash_attn_varlen_kvpacked_func": 256,
+            "native_dense": 0,
+            "native_varlen": 128,
+            "extension_dense": 0,
+            "extension_varlen": 128
+          },
+          "signatures": {
+            "flash_attn_func": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+            "flash_attn_varlen_kvpacked_func": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)"
+          }
+        }
+      },
+      "recent_events": [
+        {
+          "utc": "2026-11-12T18:41:31.471925+00:00",
+          "elapsed_seconds": 10.913783689960837,
+          "event": "formal_fa_installed",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "enabled": true,
+          "recipe": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+          "interface_sha256": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+          "fastchat_sha256": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e",
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2",
+          "version": "2.7.4.post1",
+          "torch_global_deterministic": false,
+          "cublas_workspace_config": null,
+          "tensor_observers": false,
+          "calls": {
+            "flash_attn_func": 0,
+            "flash_attn_varlen_kvpacked_func": 0,
+            "native_dense": 0,
+            "native_varlen": 0,
+            "extension_dense": 0,
+            "extension_varlen": 0
+          },
+          "signatures": {
+            "flash_attn_func": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+            "flash_attn_varlen_kvpacked_func": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)"
+          }
+        },
+        {
+          "utc": "2026-11-12T18:42:37.696694+00:00",
+          "elapsed_seconds": 77.1385536249727,
+          "event": "loader",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "length": 8240,
+          "batch_sampler": "BatchSamplerShard",
+          "sampler_generator": "Generator"
+        },
+        {
+          "utc": "2026-11-12T18:42:41.479045+00:00",
+          "elapsed_seconds": 80.9209000505507,
+          "event": "train_begin",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "global_step": 0,
+          "max_steps": 8240,
+          "optimizer": "DeepSpeedZeroOptimizer",
+          "scheduler": {
+            "base_lrs": [
+              0.0002,
+              0.0002
+            ],
+            "last_epoch": 0,
+            "verbose": false,
+            "_step_count": 1,
+            "_get_lr_called_within_step": false,
+            "_last_lr": [
+              0.0,
+              0.0
+            ],
+            "lr_lambdas": [
+              {},
+              {}
+            ]
+          },
+          "deepspeed_owns_scheduler": false
+        },
+        {
+          "utc": "2026-11-12T18:42:42.158386+00:00",
+          "elapsed_seconds": 81.60024618450552,
+          "event": "formal_fa_forward",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "function": "flash_attn_varlen_kvpacked_func",
+          "deterministic": true
+        },
+        {
+          "utc": "2026-11-12T18:42:42.577383+00:00",
+          "elapsed_seconds": 82.01924038678408,
+          "event": "formal_fa_backward_dispatch",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "boundary": "extension_varlen",
+          "deterministic": true,
+          "positional_arguments": 24,
+          "deterministic_position": 21,
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2"
+        },
+        {
+          "utc": "2026-11-12T18:42:42.577628+00:00",
+          "elapsed_seconds": 82.01947908196598,
+          "event": "formal_fa_backward_dispatch",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "boundary": "native_varlen",
+          "deterministic": true,
+          "positional_arguments": 21,
+          "deterministic_position": 20,
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2"
+        },
+        {
+          "utc": "2026-11-12T18:43:28.545274+00:00",
+          "elapsed_seconds": 127.98713079188019,
+          "event": "optimizer_step",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 10,
+          "epoch": 0.0048543689320388345,
+          "lr": [
+            2.4096385542168677e-05
+          ],
+          "grad_norm": 64.38441467285156
+        },
+        {
+          "utc": "2026-11-12T18:43:28.546759+00:00",
+          "elapsed_seconds": 127.98860874585807,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 10,
+          "epoch": 0.0048543689320388345,
+          "values": {
+            "loss": 13.1409,
+            "learning_rate": 2.4096385542168677e-05,
+            "epoch": 0.0
+          }
+        }
+      ]
+    },
+    "1": {
+      "report": {
+        "status": "TRAINING",
+        "run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+        "config_sha256": "133e0e88f4158ab2806ebaa973eb87a0d98c68c98690bcc5cab62e8d126ae9b7",
+        "initial_global_step": 0,
+        "formal_attention": {
+          "enabled": true,
+          "recipe": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+          "interface_sha256": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+          "fastchat_sha256": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e",
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2",
+          "version": "2.7.4.post1",
+          "torch_global_deterministic": false,
+          "cublas_workspace_config": null,
+          "tensor_observers": false,
+          "calls": {
+            "flash_attn_func": 0,
+            "flash_attn_varlen_kvpacked_func": 256,
+            "native_dense": 0,
+            "native_varlen": 128,
+            "extension_dense": 0,
+            "extension_varlen": 128
+          },
+          "signatures": {
+            "flash_attn_func": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+            "flash_attn_varlen_kvpacked_func": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)"
+          }
+        }
+      },
+      "recent_events": [
+        {
+          "utc": "2026-11-12T18:41:31.599195+00:00",
+          "elapsed_seconds": 11.040868535637856,
+          "event": "formal_fa_installed",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "enabled": true,
+          "recipe": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+          "interface_sha256": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+          "fastchat_sha256": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e",
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2",
+          "version": "2.7.4.post1",
+          "torch_global_deterministic": false,
+          "cublas_workspace_config": null,
+          "tensor_observers": false,
+          "calls": {
+            "flash_attn_func": 0,
+            "flash_attn_varlen_kvpacked_func": 0,
+            "native_dense": 0,
+            "native_varlen": 0,
+            "extension_dense": 0,
+            "extension_varlen": 0
+          },
+          "signatures": {
+            "flash_attn_func": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+            "flash_attn_varlen_kvpacked_func": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)"
+          }
+        },
+        {
+          "utc": "2026-11-12T18:42:37.973121+00:00",
+          "elapsed_seconds": 77.41479281615466,
+          "event": "loader",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "length": 8240,
+          "batch_sampler": "BatchSamplerShard",
+          "sampler_generator": "Generator"
+        },
+        {
+          "utc": "2026-11-12T18:42:40.621797+00:00",
+          "elapsed_seconds": 80.06346672959626,
+          "event": "train_begin",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "global_step": 0,
+          "max_steps": 8240,
+          "optimizer": "DeepSpeedZeroOptimizer",
+          "scheduler": {
+            "base_lrs": [
+              0.0002,
+              0.0002
+            ],
+            "last_epoch": 0,
+            "verbose": false,
+            "_step_count": 1,
+            "_get_lr_called_within_step": false,
+            "_last_lr": [
+              0.0,
+              0.0
+            ],
+            "lr_lambdas": [
+              {},
+              {}
+            ]
+          },
+          "deepspeed_owns_scheduler": false
+        },
+        {
+          "utc": "2026-11-12T18:42:42.165570+00:00",
+          "elapsed_seconds": 81.60723596438766,
+          "event": "formal_fa_forward",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "function": "flash_attn_varlen_kvpacked_func",
+          "deterministic": true
+        },
+        {
+          "utc": "2026-11-12T18:42:42.639299+00:00",
+          "elapsed_seconds": 82.08096960838884,
+          "event": "formal_fa_backward_dispatch",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "boundary": "extension_varlen",
+          "deterministic": true,
+          "positional_arguments": 24,
+          "deterministic_position": 21,
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2"
+        },
+        {
+          "utc": "2026-11-12T18:42:42.639655+00:00",
+          "elapsed_seconds": 82.08131741452962,
+          "event": "formal_fa_backward_dispatch",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "boundary": "native_varlen",
+          "deterministic": true,
+          "positional_arguments": 21,
+          "deterministic_position": 20,
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2"
+        },
+        {
+          "utc": "2026-11-12T18:43:28.545698+00:00",
+          "elapsed_seconds": 127.98736311960965,
+          "event": "optimizer_step",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 10,
+          "epoch": 0.0048543689320388345,
+          "lr": [
+            2.4096385542168677e-05
+          ],
+          "grad_norm": 64.38441467285156
+        },
+        {
+          "utc": "2026-11-12T18:43:28.546914+00:00",
+          "elapsed_seconds": 127.9885760396719,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 10,
+          "epoch": 0.0048543689320388345,
+          "values": {
+            "loss": 13.1409,
+            "learning_rate": 2.4096385542168677e-05,
+            "epoch": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "pipeline": {
+    "status": "RUNNING",
+    "job_id": "letter-a0-20261112-normal-det-seed42-r0",
+    "kind": "formal",
+    "run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+    "output": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0",
+    "started_utc": "2026-11-12T18:41:18.450032+00:00",
+    "pid": 3227273,
+    "stages": [
+      {
+        "stage": "train",
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/scripts/formal_train.py",
+          "--source-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--output",
+          "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training",
+          "--config",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/config/formal_instruments_seed42.json",
+          "--run-commit",
+          "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+          "--precision-approval",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/evidence/formal_20261111/precision_approval.json"
+        ],
+        "started_utc": "2026-11-12T18:41:18.614744+00:00"
+      }
+    ],
+    "gpu_start": "index, uuid, name, memory.total [MiB], memory.used [MiB]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n",
+    "phase": "train"
+  },
+  "ledger": {
+    "attempts": [
+      {
+        "job_id": "letter-a0-20261112-normal-det-seed42-r0",
+        "kind": "formal",
+        "run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+        "started_utc": "2026-11-12T18:41:18.555238+00:00",
+        "resume": null,
+        "wall_limit_seconds": 345580
+      }
+    ]
+  },
+  "test_rank": {},
+  "gpu": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 16000, 8084, 40\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 16000, 8084, 43\n",
+  "mem_available": 251776995328,
+  "swap_used": 152190976,
+  "disk_available": 3019932360704,
+  "runner": {
+    "status": "RUNNING",
+    "started_at": "2026-11-12T18:41:18.357863+00:00",
+    "ended_at": null,
+    "exit_code": null,
+    "request_sha256": "a6b6c6f6518d389a7c777c5f44552bdcd1e180b6a40ebb100f547f4f3499ffd3",
+    "worker_alive": true,
+    "supervisor_alive": true,
+    "cleanup_verified": false,
+    "workgroup_observation": {
+      "observed_at": "2026-11-12T18:44:09.167945+00:00",
+      "source": "captured_at_launch",
+      "boot_changed": false,
+      "owned_live": [
+        {
+          "pid": 3227273,
+          "start_ticks": "511421525",
+          "uid": 1005,
+          "pgid": 3227273,
+          "session_id": 3227273,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "TASK_MARKERS"
+        },
+        {
+          "pid": 3227280,
+          "start_ticks": "511421551",
+          "uid": 1005,
+          "pgid": 3227273,
+          "session_id": 3227273,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "TASK_MARKERS"
+        },
+        {
+          "pid": 3227289,
+          "start_ticks": "511421736",
+          "uid": 1005,
+          "pgid": 3227289,
+          "session_id": 3227289,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "A0_MARKED_WORKER_SESSION"
+        },
+        {
+          "pid": 3227290,
+          "start_ticks": "511421736",
+          "uid": 1005,
+          "pgid": 3227290,
+          "session_id": 3227290,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "A0_MARKED_WORKER_SESSION"
+        }
+      ],
+      "unconfirmed_live": [],
+      "unsupported_live": [],
+      "zombies": [],
+      "scan_errors": [],
+      "scan_complete": true,
+      "verified_empty": false
+    }
+  }
+}

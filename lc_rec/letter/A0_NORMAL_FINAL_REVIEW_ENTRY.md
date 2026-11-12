@@ -1,6 +1,6 @@
 # A0 Instruments Normal：正式执行与审核入口
 
-当前状态：PRELAUNCH PASS，尚未启动正式四轮训练。本文随真实证据更新，不将技术预跑记为正式结果。
+当前状态：RUNNING（2026-11-12 18:41 UTC启动），正式四轮与全量测试尚未完成。本文随真实证据更新，不将技术预跑记为正式结果。
 
 ## 本轮实验卡与批准差异
 
@@ -35,7 +35,7 @@
 
 论文最终参照HR@10=0.1115、NDCG@10=0.0854，只有完整测试后才比较。不以指标相近证明正确，不追数值改协议。单seed、双卡累积与作者未知历史执行的差异，以及使用公开SID仅复现下游的范围最终均披露。
 
-GPT_UPLOAD_REQUIRED: YES（当前尚无本轮固定最终交付；不是已完成声明）。
+GPT_UPLOAD_REQUIRED: NO（本次启动与预审证据已在本入口固定提交；最终运行结果仍待交付）。
 
 ## 最后预验收实际结论（2026-11-12）
 
@@ -47,3 +47,24 @@ GPT_UPLOAD_REQUIRED: YES（当前尚无本轮固定最终交付；不是已完�
 - [模型现存身份复核](evidence/formal_det_20261112/model_identity.json)、[作者后补38字段一致性](evidence/formal_det_20261112/author_supplement_check.json)、[实际Windows transport身份](evidence/formal_det_20261112/transport_identity.json)均已保留。大权重复用历史官方LFS身份，本轮核尺寸及小文件哈希，没有再次下载或无必要全量重哈希。
 
 尚待正式运行验证：8240更新/4 Epoch、各实际Validation时点与loss、真正best选择及较早best恢复、完整24,772用户Beam20、最终原evaluator/独立复算与论文差异。本轮没有新增依赖安装或系统配置修改。
+
+## 唯一正式作业与断线接续
+
+RUN_COMMIT：`4c6a83d9ba42dc2fe737792759e410ef1874da76`。
+
+job_id：`letter-a0-20261112-normal-det-seed42-r0`；accepted runner真实启动时间 `2026-11-12T18:41:18.357863+00:00`。独立supervisor与两rank工作进程已在提交SSH退出后经新连接验证存活；正式FA native/extension实参True；初始step10 loss13.1409、LR2.4096385542168677e-5、双rank grad norm64.38441467285156。
+
+[不可变request及真实状态](evidence/formal_det_20261112/jobs/letter-a0-20261112-normal-det-seed42-r0/job/request.json)、[正式启动身份](evidence/formal_det_20261112/formal_launch.json)、[已发布RUN回读](evidence/formal_det_20261112/run_github_readback.json)、[本次逐文件固定export映射](evidence/formal_det_20261112/deployments/4c6a83d9ba42dc2fe737792759e410ef1874da76.json)。服务器目录没有.git，不称Git checkout。
+
+服务器训练目录：`/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training`；测试目录：`/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0/test`；runner日志：`/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-20261112-normal-det-seed42-r0/work.log`。
+
+在实际Git根 `/home/addaswsw/recommend-worktrees/lc-rec` 查询；以下参数已由实际--help与调用验证：
+
+```bash
+python3 lc_rec/letter/scripts/formal_control.py query --commit 4c6a83d9ba42dc2fe737792759e410ef1874da76 --job letter-a0-20261112-normal-det-seed42-r0
+python3 lc_rec/letter/scripts/formal_control.py logs --commit 4c6a83d9ba42dc2fe737792759e410ef1874da76 --job letter-a0-20261112-normal-det-seed42-r0
+python3 lc_rec/letter/scripts/formal_observe.py --commit 4c6a83d9ba42dc2fe737792759e410ef1874da76 --job letter-a0-20261112-normal-det-seed42-r0
+python3 lc_rec/letter/scripts/formal_control.py collect --commit 4c6a83d9ba42dc2fe737792759e410ef1874da76 --job letter-a0-20261112-normal-det-seed42-r0
+```
+
+正常在线约每15分钟轻量查询；Codex离线后不声称AI继续监控，服务器runner与资源守护继续记账并自动训练→best→全量测试。重连先查原ID，运行中只恢复监控，不重新提交；完成后收集结果与独立审核。当前没有正式checkpoint/best或正式指标，不能将RUNNING写成完成。
