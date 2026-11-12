@@ -20,6 +20,7 @@ def main():
     p.add_argument('--resume');a=p.parse_args()
     job=Path(os.environ['GRID_JOB_DIR']);assert job.name.startswith('letter-resume-20261112-')
     release=Path(__file__).resolve().parents[3];scripts=release/'lc_rec/letter/scripts'
+    assert json.loads((release/'RUN_VERSION.json').read_text())['RUN_COMMIT']==a.run_commit, 'RUN_COMMIT label differs from immutable deployment'
     ROOT.mkdir(parents=True,exist_ok=True);out=ROOT/job.name;out.mkdir(exist_ok=False)
     cfg=json.loads((release/'lc_rec/letter/config/resume_diagnosis.json').read_text())
     utc=lambda:dt.datetime.now(dt.timezone.utc).isoformat()

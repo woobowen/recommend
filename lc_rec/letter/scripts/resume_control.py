@@ -67,11 +67,15 @@ print(json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()
     assert a.job and a.job.startswith('letter-resume-20261112-');fc.gridctl.valid(a.job)
     if a.mode=='submit':
         assert a.script and a.timeout<=1800
+        pending=json.loads(t.python("from pathlib import Path\nimport json\np=Path('/data/bwwu/lc-rec/resume-20261112/ledger.json')\nprint(json.dumps(json.loads(p.read_text()) if p.exists() else {'attempts':[]}))"))
+        assert all(x.get('ended_utc') for x in pending['attempts']), 'query existing job before another submission'
         old=json.loads((REPO/'lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/request.json').read_text())
         req={k:old[k] for k in ['schema','host','user','uid','namespace','deployment_sha256']}
         env=dict(old['env']);env['PYTHONUNBUFFERED']='1'
         if a.cpu_only:env['CUDA_VISIBLE_DEVICES']='';env.pop('DS_ACCELERATOR',None)
-        req.update(job_id=a.job,capture_version=commit,cwd=release,argv=[fc.PYTHON,release+'/lc_rec/letter/scripts/'+a.script,*json.loads(a.args)],env=env,timeout_seconds=a.timeout,
+        args=[commit if x=='@RUN_COMMIT@' else x for x in json.loads(a.args)]
+        if '--run-commit' in args:assert args[args.index('--run-commit')+1]==commit
+        req.update(job_id=a.job,capture_version=commit,cwd=release,argv=[fc.PYTHON,release+'/lc_rec/letter/scripts/'+a.script,*args],env=env,timeout_seconds=a.timeout,
           inputs=[{'path':release+'/'+r['path'],'sha256':r['sha256']} for r in deployment['files'] if r['path'].startswith(('lc_rec/letter/scripts/','lc_rec/letter/config/'))])
         path=fc.SUPPORT/'requests'/(a.job+'.json')
         if path.exists():assert json.loads(path.read_text())==req
