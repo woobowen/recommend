@@ -1,0 +1,918 @@
+{
+  "rank": 0,
+  "layer": 28,
+  "process_repeat": 2,
+  "case_root": "/data/bwwu/lc-rec/attention-20261112/letter-attention-20261112-default1-r0/training/boundary.rank0",
+  "flash_attn": "2.7.4.post1",
+  "options": {
+    "utc": "2026-11-12T08:44:05.690717+00:00",
+    "elapsed_seconds": 229.3911894513294,
+    "event": "fa_backward_ctx",
+    "attempt_job_id": "letter-attention-20261112-default1-r0",
+    "rank": 0,
+    "layer": 28,
+    "module": "base_model.model.model.layers.28.self_attn",
+    "step": 2,
+    "micro": 9,
+    "phase": "recompute",
+    "call": 1,
+    "deterministic": false,
+    "max_q": 168,
+    "max_k": 168,
+    "dropout_p": 0.0,
+    "softmax_scale": 0.08838834764831845,
+    "causal": true,
+    "window_size": [
+      -1,
+      -1
+    ],
+    "softcap": 0.0,
+    "alibi_slopes": null
+  },
+  "device": "NVIDIA GeForce RTX 4090",
+  "rows": [
+    {
+      "mode": false,
+      "repeat": 0,
+      "hashes": {
+        "out": "e7a570e66f63ceb6caea1f1ea72d743766a6164d91ec956a4fa6c3d28e65aba0",
+        "dQ": "3264572cd3fc685fffe9cd0fe431506da109d8a8482ea1e2bb75c1d160d0cb51",
+        "dK": "b700c00159de9c3d3e2ec8d7bb9dab4dd6c92c0dd20beaa89786c98aacc41dd6",
+        "dV": "5d62ef236b30628d390abdafd58976e3ad291d2a99681921b97519caba5419c9"
+      },
+      "within_mode": [
+        {
+          "path": "out",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dQ",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dK",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dV",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        }
+      ],
+      "backward_ms": 6.837120056152344,
+      "wall_seconds": 1.3230330776423216,
+      "allocated_before": 60599808,
+      "peak_allocated": 114546176,
+      "peak_reserved": 132120576,
+      "native_dispatch_deterministic": false,
+      "cuda_kernels": [
+        "void flash::flash_bwd_convert_dq_kernel<Flash_bwd_kernel_traits<128, 64, 64, 8, 4, 2, 2, true, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 64, 64, 8, cutlass::bfloat16_t> > >(flash::Flash_bwd_params, int)",
+        "void flash::flash_bwd_dot_do_o_kernel<true, Flash_bwd_kernel_traits<128, 64, 64, 8, 4, 2, 2, true, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 64, 64, 8, cutlass::bfloat16_t> > >(flash::Flash_bwd_params)",
+        "void flash::flash_bwd_dq_dk_dv_loop_seqk_parallel_kernel<Flash_bwd_kernel_traits<128, 64, 64, 8, 4, 2, 2, true, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 64, 64, 8, cutlass::bfloat16_t> >, false, true, false, false, false, true, false>(flash::Flash_bwd_params)"
+      ]
+    },
+    {
+      "mode": false,
+      "repeat": 1,
+      "hashes": {
+        "out": "e7a570e66f63ceb6caea1f1ea72d743766a6164d91ec956a4fa6c3d28e65aba0",
+        "dQ": "23af275c9c963d9500867e33fa325acddbf6b4c0f8c8da090c3692943ca5c2d0",
+        "dK": "b700c00159de9c3d3e2ec8d7bb9dab4dd6c92c0dd20beaa89786c98aacc41dd6",
+        "dV": "5d62ef236b30628d390abdafd58976e3ad291d2a99681921b97519caba5419c9"
+      },
+      "within_mode": [
+        {
+          "path": "out",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dQ",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": false,
+          "differing_elements": 1,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 3.725290298461914e-09,
+          "max_relative_with_atol_denominator_floor": 0.003725290298461914,
+          "rms": 2.170779453090513e-12
+        },
+        {
+          "path": "dK",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dV",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        }
+      ],
+      "backward_ms": 0.39190399646759033,
+      "wall_seconds": 0.279130975715816,
+      "allocated_before": 60599808,
+      "peak_allocated": 114546176,
+      "peak_reserved": 132120576,
+      "native_dispatch_deterministic": false
+    },
+    {
+      "mode": false,
+      "repeat": 2,
+      "hashes": {
+        "out": "e7a570e66f63ceb6caea1f1ea72d743766a6164d91ec956a4fa6c3d28e65aba0",
+        "dQ": "95ac60d596c91ea0a3c5983cc79d68433bd58722fb17acb1d8216b7417b91331",
+        "dK": "b700c00159de9c3d3e2ec8d7bb9dab4dd6c92c0dd20beaa89786c98aacc41dd6",
+        "dV": "5d62ef236b30628d390abdafd58976e3ad291d2a99681921b97519caba5419c9"
+      },
+      "within_mode": [
+        {
+          "path": "out",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dQ",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": false,
+          "differing_elements": 2,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 4.656612873077393e-10,
+          "max_relative_with_atol_denominator_floor": 0.00046566128730773926,
+          "rms": 2.7134756102482143e-13
+        },
+        {
+          "path": "dK",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dV",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        }
+      ],
+      "backward_ms": 0.31679999828338623,
+      "wall_seconds": 0.29585517663508654,
+      "allocated_before": 60599808,
+      "peak_allocated": 114546176,
+      "peak_reserved": 132120576,
+      "native_dispatch_deterministic": false
+    },
+    {
+      "mode": true,
+      "repeat": 0,
+      "hashes": {
+        "out": "e7a570e66f63ceb6caea1f1ea72d743766a6164d91ec956a4fa6c3d28e65aba0",
+        "dQ": "4364b4fd14503784fa5eeec852fdcff6ffceb44dfbd577b20ac197ffdbf57575",
+        "dK": "b700c00159de9c3d3e2ec8d7bb9dab4dd6c92c0dd20beaa89786c98aacc41dd6",
+        "dV": "5d62ef236b30628d390abdafd58976e3ad291d2a99681921b97519caba5419c9"
+      },
+      "within_mode": [
+        {
+          "path": "out",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dQ",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dK",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dV",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        }
+      ],
+      "backward_ms": 2.839168071746826,
+      "wall_seconds": 0.292368458583951,
+      "allocated_before": 60599808,
+      "peak_allocated": 114546176,
+      "peak_reserved": 132120576,
+      "native_dispatch_deterministic": true,
+      "cuda_kernels": [
+        "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)",
+        "void flash::flash_bwd_convert_dq_kernel<Flash_bwd_kernel_traits<128, 64, 64, 8, 4, 2, 2, true, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 64, 64, 8, cutlass::bfloat16_t> > >(flash::Flash_bwd_params, int)",
+        "void flash::flash_bwd_dot_do_o_kernel<false, Flash_bwd_kernel_traits<128, 64, 64, 8, 4, 2, 2, true, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 64, 64, 8, cutlass::bfloat16_t> > >(flash::Flash_bwd_params)",
+        "void flash::flash_bwd_dq_dk_dv_loop_seqk_parallel_kernel<Flash_bwd_kernel_traits<128, 64, 64, 8, 4, 2, 2, true, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 64, 64, 8, cutlass::bfloat16_t> >, false, true, false, false, false, true, false>(flash::Flash_bwd_params)"
+      ]
+    },
+    {
+      "mode": true,
+      "repeat": 1,
+      "hashes": {
+        "out": "e7a570e66f63ceb6caea1f1ea72d743766a6164d91ec956a4fa6c3d28e65aba0",
+        "dQ": "4364b4fd14503784fa5eeec852fdcff6ffceb44dfbd577b20ac197ffdbf57575",
+        "dK": "b700c00159de9c3d3e2ec8d7bb9dab4dd6c92c0dd20beaa89786c98aacc41dd6",
+        "dV": "5d62ef236b30628d390abdafd58976e3ad291d2a99681921b97519caba5419c9"
+      },
+      "within_mode": [
+        {
+          "path": "out",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dQ",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dK",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dV",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        }
+      ],
+      "backward_ms": 0.415039986371994,
+      "wall_seconds": 0.29452329128980637,
+      "allocated_before": 60599808,
+      "peak_allocated": 114546176,
+      "peak_reserved": 132120576,
+      "native_dispatch_deterministic": true
+    },
+    {
+      "mode": true,
+      "repeat": 2,
+      "hashes": {
+        "out": "e7a570e66f63ceb6caea1f1ea72d743766a6164d91ec956a4fa6c3d28e65aba0",
+        "dQ": "4364b4fd14503784fa5eeec852fdcff6ffceb44dfbd577b20ac197ffdbf57575",
+        "dK": "b700c00159de9c3d3e2ec8d7bb9dab4dd6c92c0dd20beaa89786c98aacc41dd6",
+        "dV": "5d62ef236b30628d390abdafd58976e3ad291d2a99681921b97519caba5419c9"
+      },
+      "within_mode": [
+        {
+          "path": "out",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dQ",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dK",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        },
+        {
+          "path": "dV",
+          "reference_shape": [
+            719,
+            32,
+            128
+          ],
+          "resumed_shape": [
+            719,
+            32,
+            128
+          ],
+          "reference_dtype": "torch.bfloat16",
+          "resumed_dtype": "torch.bfloat16",
+          "elements_reference": 2945024,
+          "elements_resumed": 2945024,
+          "requires_exact": false,
+          "reference_finite": true,
+          "resumed_finite": true,
+          "exact_equal": true,
+          "differing_elements": 0,
+          "outside_fixed_tolerance_elements": 0,
+          "max_abs": 0.0,
+          "max_relative_with_atol_denominator_floor": 0.0,
+          "rms": 0.0
+        }
+      ],
+      "backward_ms": 0.3582080006599426,
+      "wall_seconds": 0.29075555969029665,
+      "allocated_before": 60599808,
+      "peak_allocated": 114546176,
+      "peak_reserved": 132120576,
+      "native_dispatch_deterministic": true
+    }
+  ],
+  "reconstruction": "all input shapes/dtypes/strides exact; new storage_offset0; values byte-bound to saved tensors",
+  "input_strides": {
+    "q": [
+      4096,
+      128,
+      1
+    ],
+    "kv": [
+      8192,
+      4096,
+      128,
+      1
+    ],
+    "dO": [
+      4096,
+      128,
+      1
+    ],
+    "native.q": [
+      4096,
+      128,
+      1
+    ],
+    "native.k": [
+      8192,
+      128,
+      1
+    ],
+    "native.v": [
+      8192,
+      128,
+      1
+    ]
+  },
+  "between_modes": [
+    {
+      "path": "out",
+      "reference_shape": [
+        719,
+        32,
+        128
+      ],
+      "resumed_shape": [
+        719,
+        32,
+        128
+      ],
+      "reference_dtype": "torch.bfloat16",
+      "resumed_dtype": "torch.bfloat16",
+      "elements_reference": 2945024,
+      "elements_resumed": 2945024,
+      "requires_exact": false,
+      "reference_finite": true,
+      "resumed_finite": true,
+      "exact_equal": true,
+      "differing_elements": 0,
+      "outside_fixed_tolerance_elements": 0,
+      "max_abs": 0.0,
+      "max_relative_with_atol_denominator_floor": 0.0,
+      "rms": 0.0
+    },
+    {
+      "path": "dQ",
+      "reference_shape": [
+        719,
+        32,
+        128
+      ],
+      "resumed_shape": [
+        719,
+        32,
+        128
+      ],
+      "reference_dtype": "torch.bfloat16",
+      "resumed_dtype": "torch.bfloat16",
+      "elements_reference": 2945024,
+      "elements_resumed": 2945024,
+      "requires_exact": false,
+      "reference_finite": true,
+      "resumed_finite": true,
+      "exact_equal": false,
+      "differing_elements": 1,
+      "outside_fixed_tolerance_elements": 0,
+      "max_abs": 1.862645149230957e-09,
+      "max_relative_with_atol_denominator_floor": 0.001862645149230957,
+      "rms": 1.0853897265452565e-12
+    },
+    {
+      "path": "dK",
+      "reference_shape": [
+        719,
+        32,
+        128
+      ],
+      "resumed_shape": [
+        719,
+        32,
+        128
+      ],
+      "reference_dtype": "torch.bfloat16",
+      "resumed_dtype": "torch.bfloat16",
+      "elements_reference": 2945024,
+      "elements_resumed": 2945024,
+      "requires_exact": false,
+      "reference_finite": true,
+      "resumed_finite": true,
+      "exact_equal": true,
+      "differing_elements": 0,
+      "outside_fixed_tolerance_elements": 0,
+      "max_abs": 0.0,
+      "max_relative_with_atol_denominator_floor": 0.0,
+      "rms": 0.0
+    },
+    {
+      "path": "dV",
+      "reference_shape": [
+        719,
+        32,
+        128
+      ],
+      "resumed_shape": [
+        719,
+        32,
+        128
+      ],
+      "reference_dtype": "torch.bfloat16",
+      "resumed_dtype": "torch.bfloat16",
+      "elements_reference": 2945024,
+      "elements_resumed": 2945024,
+      "requires_exact": false,
+      "reference_finite": true,
+      "resumed_finite": true,
+      "exact_equal": true,
+      "differing_elements": 0,
+      "outside_fixed_tolerance_elements": 0,
+      "max_abs": 0.0,
+      "max_relative_with_atol_denominator_floor": 0.0,
+      "rms": 0.0
+    }
+  ]
+}

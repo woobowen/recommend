@@ -1,0 +1,41 @@
+{
+  "job_id": "letter-attention-20261112-det-cont-r1",
+  "run_commit": "0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5",
+  "kind": "continuous",
+  "started_utc": "2026-11-12T09:03:38.525724+00:00",
+  "status": "RUNNING",
+  "gpu_device_seconds": 0,
+  "argv": [
+    "/data/bwwu/envs/letter-20261110/bin/python",
+    "-m",
+    "torch.distributed.run",
+    "--standalone",
+    "--nnodes=1",
+    "--nproc_per_node=2",
+    "/home/bwwu/lc-rec/letter-attention-20261112/releases/0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5/lc_rec/letter/scripts/formal_train.py",
+    "--source-root",
+    "/home/bwwu/lc-rec/letter-attention-20261112/releases/0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+    "--data-root",
+    "/home/bwwu/lc-rec/letter-attention-20261112/releases/0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5/lc_rec/letter/vendor/LETTER/data",
+    "--model",
+    "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+    "--output",
+    "/data/bwwu/lc-rec/attention-20261112/letter-attention-20261112-det-cont-r1/training",
+    "--config",
+    "/home/bwwu/lc-rec/letter-attention-20261112/releases/0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5/lc_rec/letter/config/formal_instruments_seed42.json",
+    "--run-commit",
+    "0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5",
+    "--precision-approval",
+    "/home/bwwu/lc-rec/letter-attention-20261112/releases/0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+    "--probe-stop",
+    "4",
+    "--probe-save",
+    "2",
+    "--diagnosis",
+    "/home/bwwu/lc-rec/letter-attention-20261112/releases/0dd56bc4c44d8a0cda60d7dabb7e949b611fffd5/lc_rec/letter/config/resume_deterministic_diagnostic.json"
+  ],
+  "wall_limit_seconds": 1780,
+  "diagnostic_environment": {
+    "CUBLAS_WORKSPACE_CONFIG": null
+  }
+}
