@@ -1,4 +1,4 @@
-"""Opt-in observation only. No RNG use, parameter mutation, or kernel changes."""
+"""Opt-in observations and explicitly scoped DIAGNOSTIC_ONLY kernel controls."""
 import hashlib
 import json
 from pathlib import Path
@@ -7,13 +7,19 @@ import enum
 def install_diagnostic_attention(config):
     """Explicit DIAGNOSTIC_ONLY intervention, never enabled by formal config."""
     cfg=json.loads(Path(config).read_text())
+    import torch
+    import os
+    if cfg.get('torch_deterministic',False):
+        assert os.environ.get('CUBLAS_WORKSPACE_CONFIG')==':4096:8'
+        torch.use_deterministic_algorithms(True)
     import inspect
     import functools
     import flash_attn.flash_attn_interface as interface
     import fastchat.train.llama2_flash_attn_monkey_patch as fastchat
     assert hashlib.sha256(Path(inspect.getsourcefile(interface)).read_bytes()).hexdigest()=='d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75'
     enabled=cfg.get('flash_backward_deterministic',False)
-    report={'enabled':enabled,'scope':'DIAGNOSTIC_ONLY; deterministic FlashAttention backward if enabled; not an approved formal recipe','calls':{}}
+    report={'enabled':enabled,'scope':'DIAGNOSTIC_ONLY; kernel options only when explicitly enabled; not an approved formal recipe','calls':{},
+            'torch_deterministic':torch.are_deterministic_algorithms_enabled(),'cublas_workspace_config':os.environ.get('CUBLAS_WORKSPACE_CONFIG')}
     for name in ['flash_attn_func','flash_attn_varlen_kvpacked_func']:
         original=getattr(fastchat,name);assert original is getattr(interface,name)
         assert inspect.signature(original).parameters['deterministic'].default is False
@@ -91,7 +97,26 @@ class Probe:
         self.event('diagnosis_state',label=label,step=engine.global_steps)
     def install(self,model,engine,scheduler,rng_capture):
         import torch
+        import bitsandbytes as bnb
         self.model=model;self.engine=engine;self.scheduler=scheduler;self.rng_capture=rng_capture
+        if self.config.get('full_first_backward_trace'):
+            for name,module in model.named_modules():
+                if isinstance(module,bnb.nn.Linear8bitLt) or name.endswith('lm_head.modules_to_save.default'):
+                    def trace(mod,args,output,name=name):
+                        if self.step==2 and self.micro==9:
+                            self.event('trace_forward',step=self.step,micro=self.micro,module=name,grad_enabled=torch.is_grad_enabled(),output=tensor(output),input=tensor(args[0]))
+                            if output.requires_grad:
+                                def grad_hook(g):
+                                    self.event('trace_gradient_output',step=self.step,micro=self.micro,module=name,gradient=tensor(g),norm=float(g.float().norm()))
+                                    return g
+                                output.register_hook(grad_hook)
+                    self.handles.append(module.register_forward_hook(trace))
+            for name,v in model.named_parameters():
+                if v.requires_grad:
+                    def trace_g(g,name=name):
+                        if self.step==2 and self.micro==9:self.event('trace_parameter_gradient',step=self.step,micro=self.micro,parameter=name,gradient=tensor(g),norm=float(g.float().norm()))
+                        return g
+                    self.handles.append(v.register_hook(trace_g))
         targets=['layers.0.self_attn.q_proj','layers.31.self_attn.q_proj','lm_head.modules_to_save.default']
         for n,m in model.named_modules():
             if any(n.endswith(x) for x in targets):

@@ -21,4 +21,14 @@ Frozen FlashAttention2.7.4.post1 source (`d8eaf989a5401fedd23d11a336a7f38e67596d
 
 Revised ceiling: at most 7 actual two-GPU jobs, expected <85 device-min; hard limit remains120. At most two new checkpoint-2 payloads; expected added persistent data <70GiB, hard80GiB. Each optimizer job stays≤4 updates; isolate has0 updates. Both mechanisms share the same task ledger and old A0 GPU lock. Reserve per next job: continuous24GiB/resume6GiB/isolate1GiB.
 
+## Revision after the negative attention isolation (before trace jobs)
+
+`attention-r2`: two ranks, real q/kv/dout, False and True each repeated5 times. All forward/dq/dkv hashes are exact both within groups and across modes. Rank0 max sequence168, rank1 max113. This does NOT establish a FlashAttention cause, and that result is retained. Full Flash-only continuous/resume pair is deprioritized instead of assumed useful.
+
+Next use two same-CP2 resumes with first-microbatch-only full projection forward/output-gradient and all trainable parameter-gradient fingerprints. This locates the first observed differing branch with lower ambiguity than only layers0/31. Probes do not change computation but synchronize CUDA; any disappearance under probes is a limitation, not PASS.
+
+One final diagnostic control, if trace supports native backward nondeterminism, is PyTorch2.6 `use_deterministic_algorithms(True)` with its required `CUBLAS_WORKSPACE_CONFIG=:4096:8`, keeping the FlashAttention explicit flagFalse. [Version-matched official semantics](https://pytorch.org/docs/2.6/generated/torch.use_deterministic_algorithms.html) distinguish deterministic substitutes and runtime errors, including CUDA indexing/gather/scatter and cuBLAS operations. This may change kernels and is DIAGNOSTIC_ONLY; formal use would need user approval. No precision, optimizer, dropout or attention implementation replacement. A strict runtime error is retained as evidence rather than suppressed.
+
+Revised ceiling≤9 actual GPU jobs plus the prior lock-rejected request; still≤120 device-min and≤80GiB. Trace two jobs replace the Flash-only pair, and a conditional native-deterministic continuous/resume pair may use up to two more jobs. This is the final round3 instrumentation/correction group; no fourth correction group is authorized. All preceding round0–2 failures and negative results remain unchanged.
+
 Source acquisition preflight encountered a missing assumed DS path (actual inherited package via letter-readonly-framework.pth) and a local sha helper reference error; both corrected before any submitted compute. Raw transport errors retained in existing transport evidence. No packages installed, no shared environment modified.
