@@ -4,6 +4,45 @@ import json
 from pathlib import Path
 import enum
 
+def install_diagnostic_attention(config):
+    """Explicit DIAGNOSTIC_ONLY intervention, never enabled by formal config."""
+    cfg=json.loads(Path(config).read_text())
+    import inspect
+    import functools
+    import flash_attn.flash_attn_interface as interface
+    import fastchat.train.llama2_flash_attn_monkey_patch as fastchat
+    assert hashlib.sha256(Path(inspect.getsourcefile(interface)).read_bytes()).hexdigest()=='d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75'
+    enabled=cfg.get('flash_backward_deterministic',False)
+    report={'enabled':enabled,'scope':'DIAGNOSTIC_ONLY; deterministic FlashAttention backward if enabled; not an approved formal recipe','calls':{}}
+    for name in ['flash_attn_func','flash_attn_varlen_kvpacked_func']:
+        original=getattr(fastchat,name);assert original is getattr(interface,name)
+        assert inspect.signature(original).parameters['deterministic'].default is False
+        report['calls'][name]=0
+        def wrap(fn,label):
+            @functools.wraps(fn)
+            def forward(*args,**kwargs):
+                assert 'deterministic' not in kwargs
+                if enabled:kwargs['deterministic']=True
+                report['calls'][label]+=1
+                output=fn(*args,**kwargs)
+                # Capture one REAL recompute call and its actual upstream grad.
+                # The default path retains deterministic=False; no extra RNG.
+                import torch
+                if cfg.get('capture_attention_case') and torch.is_grad_enabled() and output.requires_grad and not report.get('case_captured'):
+                    report['case_captured']=True
+                    saved_args=[x.detach().cpu().clone() if isinstance(x,torch.Tensor) else x for x in args]
+                    saved_kwargs={k:(v.detach().cpu().clone() if isinstance(v,torch.Tensor) else v) for k,v in kwargs.items()}
+                    def capture_grad(g):
+                        path=Path(__import__('sys').argv[__import__('sys').argv.index('--output')+1])/('attention_case.rank%s.pt'%__import__('os').environ['RANK'])
+                        assert not path.exists()
+                        torch.save({'function':label,'args':saved_args,'kwargs':saved_kwargs,'dout':g.detach().cpu().clone(),'source':'first grad-enabled actual attention call; recompute during first resumed backward'},path)
+                        return g
+                    output.register_hook(capture_grad)
+                return output
+            return forward
+        setattr(fastchat,name,wrap(original,name))
+    return report
+
 def tensor(t):
     import torch
     x=t.detach().to('cpu').contiguous()

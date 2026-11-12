@@ -16,8 +16,9 @@ OLD=Path('/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-con
 
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument('--run-commit',required=True);p.add_argument('--kind',choices=['inspect','continuous','resume'],required=True)
-    p.add_argument('--resume');a=p.parse_args()
+    p.add_argument('--run-commit',required=True);p.add_argument('--kind',choices=['inspect','continuous','resume','attention-isolate'],required=True)
+    p.add_argument('--resume');p.add_argument('--diagnostic-attention-deterministic',action='store_true')
+    p.add_argument('--capture-attention-case',action='store_true');p.add_argument('--attention-case-root');a=p.parse_args()
     job=Path(os.environ['GRID_JOB_DIR']);assert job.name.startswith('letter-resume-20261112-')
     release=Path(__file__).resolve().parents[3];scripts=release/'lc_rec/letter/scripts'
     assert json.loads((release/'RUN_VERSION.json').read_text())['RUN_COMMIT']==a.run_commit, 'RUN_COMMIT label differs from immutable deployment'
@@ -44,15 +45,19 @@ def main():
             else:
                 compute=subprocess.check_output(['nvidia-smi','--query-compute-apps=gpu_uuid,pid,process_name,used_memory','--format=csv'],text=True)
                 assert len(compute.strip().splitlines())==1,'GPU occupied'
-                assert sum(f.stat().st_size for f in ROOT.rglob('*') if f.is_file() and not f.is_symlink())<cfg['persistent_bytes_limit']-24*1024**3
+                reserve=(24 if a.kind=='continuous' else 6 if a.kind=='resume' else 1)*1024**3
+                assert sum(f.stat().st_size for f in ROOT.rglob('*') if f.is_file() and not f.is_symlink())<cfg['persistent_bytes_limit']-reserve
                 source=release/'lc_rec/letter/vendor/LETTER/LETTER-LC-Rec'
                 argv=[sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2',str(scripts/'formal_train.py'),
                     '--source-root',str(source),'--data-root',str(source.parent/'data'),
                     '--model','/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549',
                     '--output',str(out/'training'),'--config',str(release/'lc_rec/letter/config/formal_instruments_seed42.json'),
                     '--run-commit',a.run_commit,'--precision-approval',str(release/'lc_rec/letter/evidence/formal_20261111/precision_approval.json'),
-                    '--probe-stop','4','--probe-save','2','--diagnosis',str(release/'lc_rec/letter/config/resume_diagnosis.json')]
+                    '--probe-stop','4','--probe-save','2','--diagnosis',str(release/'lc_rec/letter/config'/('resume_deterministic_diagnostic.json' if a.diagnostic_attention_deterministic else 'resume_capture_diagnostic.json' if a.capture_attention_case else 'resume_diagnosis.json'))]
                 if a.kind=='resume':argv+=['--resume',a.resume or str(OLD)]
+                if a.kind=='attention-isolate':
+                    assert a.attention_case_root
+                    argv=[sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2',str(scripts/'resume_attention_isolate.py'),'--case-root',a.attention_case_root,'--output',str(out/'isolate')]
             status.update(argv=argv,wall_limit_seconds=limit,status='RUNNING');write(out/'pipeline.json',status)
             child=subprocess.Popen(argv,stdin=subprocess.DEVNULL)
             while child.poll() is None:

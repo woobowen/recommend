@@ -130,6 +130,8 @@ def main():
         assert a.probe_stop==4, 'diagnosis may only run bounded four-step acceptance'
         from resume_probe import Probe
         probe=Probe(a.diagnosis,out,rank,event)
+        from resume_probe import install_diagnostic_attention
+        report['diagnostic_attention']=install_diagnostic_attention(a.diagnosis)
 
     da = SimpleNamespace(**cfg)
     da.data_path = str(Path(a.data_root).resolve())

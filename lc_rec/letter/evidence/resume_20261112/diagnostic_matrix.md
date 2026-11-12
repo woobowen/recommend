@@ -13,4 +13,12 @@ Scope: A0 Instruments seed42, historical RUN `87ba6556ce7237f8ef32c690165449d0d6
 
 Initial plan uses at most 3 GPU jobs (4 updates continuous; 2 nonzero-LR updates per resume), each wall≤1800s and total≤7200 device-seconds including loading/save/failure/cleanup. Existing scheduler/config unchanged. Added persistent storage hard≤80GiB; originals never modified. Any later probe requires a hypothesis/result justification here before launch. No new plan/design/state-board files.
 
+## Evidence-driven extension before additional GPU jobs
+
+First real resume `letter-resume-20261112-load-r1` completed step2→4. S1→S2 module (1221 entries) and complete optimizer fingerprints are EXACT on both ranks, including every FP32 master/moment element. First four resumed micro-loss values reproduce historical values exactly, but final grad norm is 63.53452682495117, distinct from both historical continuous and historical resume. This justifies controlled independent repetitions; it does not establish a missing-state root cause.
+
+Frozen FlashAttention2.7.4.post1 source (`d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75`) exposes `deterministic=False`; FastChat calls omit that option. Backward passes it to the native varlen kernel. Next: (1) repeat the same historical checkpoint resume with a single real q/kv/upstream-gradient capture; (2) matched default continuous/resume with S0/S1/S2; (3) repeat the captured attention backward five times with False and five with True, no model initialization, to isolate kernel variation; (4) only if supported, matched DIAGNOSTIC_ONLY deterministic continuous/resume, preserving every other setting. The deterministic option is NOT enabled in formal A0, and cannot grant formal resume PASS without user decision. No global deterministic flag, precision, dropout, optimizer, or loss change.
+
+Revised ceiling: at most 7 actual two-GPU jobs, expected <85 device-min; hard limit remains120. At most two new checkpoint-2 payloads; expected added persistent data <70GiB, hard80GiB. Each optimizer job stays≤4 updates; isolate has0 updates. Both mechanisms share the same task ledger and old A0 GPU lock. Reserve per next job: continuous24GiB/resume6GiB/isolate1GiB.
+
 Source acquisition preflight encountered a missing assumed DS path (actual inherited package via letter-readonly-framework.pth) and a local sha helper reference error; both corrected before any submitted compute. Raw transport errors retained in existing transport evidence. No packages installed, no shared environment modified.
