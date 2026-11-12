@@ -43,7 +43,14 @@ def main():
               'compute':['nvidia-smi','--query-compute-apps=gpu_uuid,pid,process_name,used_memory','--format=csv'],
               'disk':['df','-B1','/data/bwwu','/home/bwwu'],'ram':['free','-b'],
               'process':['ps','-u','bwwu','-o','pid,ppid,lstart,args']}
-    result={'utc':dt.datetime.now(dt.timezone.utc).isoformat(),'host':socket.gethostname(),'uid':os.getuid(),
+    sources=[]
+    for export in sorted(Path('/home/bwwu/lc-rec/letter-attention-20261112/releases').glob('*')):
+        if not (export/'RUN_VERSION.json').exists():continue
+        mapping=json.loads((export/'RUN_VERSION.json').read_text())
+        for row in mapping['files']:
+            assert sha(export/row['path'])==row['sha256'], 'fixed export changed'
+        sources.append({'RUN_COMMIT':mapping['RUN_COMMIT'],'path':str(export),'verified_files':len(mapping['files']),'mapping_sha256':sha(export/'RUN_VERSION.json')})
+    result={'sources':sources,'utc':dt.datetime.now(dt.timezone.utc).isoformat(),'host':socket.gethostname(),'uid':os.getuid(),
             'original_checkpoint':checkpoint,'jobs':jobs,'charged_gpu_device_seconds':charged,
             'charged_gpu_device_minutes':charged/60,'storage':storage,
             'ledger':json.loads((root/'ledger.json').read_text()),
