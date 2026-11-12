@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "synthetic_cpu_only": true,
+  "actual_class_ast_sha256": "854c277ea7b5b994c322fb339bd1b8644f2075803d31d1e54be0f7eb5f28bda5",
+  "torch_version": "2.6.0+cu124",
+  "no_sync_source_identity": {
+    "source_file": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/accelerator.py",
+    "file_sha256": "933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a",
+    "method_sha256": "d198d4cc4e9fc2e6b9ca178a55f44c560c0bc91bb19dddc1188ccbb64e35c8c6",
+    "signature": "(self, model)"
+  },
+  "cases": [
+    {
+      "rank": 0,
+      "batches_per_epoch": 9,
+      "mid_epoch_remaining": 5,
+      "mid_epoch_all_rows_prompts_numpy_exact": true,
+      "next_epoch_all_rows_prompts_numpy_exact": true
+    },
+    {
+      "rank": 1,
+      "batches_per_epoch": 9,
+      "mid_epoch_remaining": 5,
+      "mid_epoch_all_rows_prompts_numpy_exact": true,
+      "next_epoch_all_rows_prompts_numpy_exact": true
+    }
+  ],
+  "replay_events": [
+    {
+      "event": "loader_replayed",
+      "epoch": 0,
+      "replayed_batches": 4,
+      "checkpoint_step": 1
+    },
+    {
+      "event": "loader_replayed",
+      "epoch": 1,
+      "replayed_batches": 0,
+      "checkpoint_step": 3
+    },
+    {
+      "event": "loader_replayed",
+      "epoch": 0,
+      "replayed_batches": 4,
+      "checkpoint_step": 1
+    },
+    {
+      "event": "loader_replayed",
+      "epoch": 1,
+      "replayed_batches": 0,
+      "checkpoint_step": 3
+    }
+  ]
+}

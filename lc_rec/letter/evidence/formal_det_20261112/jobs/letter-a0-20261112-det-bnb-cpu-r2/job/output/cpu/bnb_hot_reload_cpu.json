@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "synthetic_cpu_only": true,
+  "original_error_reproduced": "Loading a quantized checkpoint into non-quantized Linear8bitLt is not supported. Please call module.cuda() before module.load_state_dict()",
+  "strict_complete_weight_SCB_exact": true,
+  "hot_cache_aliases_and_parameter_identity_preserved": true,
+  "events": [
+    {
+      "event": "bnb_hot_scb_alias_begin",
+      "modules": 1,
+      "hot_modules": 1,
+      "modules_source_sha256": "e97af1a69794f192bf58e0154efb660f3d2ed0a00dade672c7d8f9a3d14b9e53",
+      "scope": "native strict checkpoint load only; no requantization"
+    },
+    {
+      "event": "bnb_hot_scb_alias_loaded",
+      "modules": 1,
+      "hot_modules": 1,
+      "parameter_identity_and_cache_aliases_preserved": true
+    }
+  ],
+  "modules_source_sha256": "e97af1a69794f192bf58e0154efb660f3d2ed0a00dade672c7d8f9a3d14b9e53"
+}

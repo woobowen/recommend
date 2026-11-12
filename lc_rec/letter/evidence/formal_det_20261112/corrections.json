@@ -19,9 +19,10 @@
       "trigger": "preflight-r0 FAILED only at hot in-process full DeepSpeed reload after successful 12 updates, complete CP2/CP12 and real validation",
       "root_cause": "Native bitsandbytes 0.45.5 forward moves weight.SCB to state.SCB; native save accepts either but native load requires weight.SCB. Historical cold cross-process resume did not cover hot best-checkpoint restoration",
       "correction": "Version/source-pinned context temporarily aliases existing state.SCB onto weight only around original strict full model/optimizer/scheduler load, then restores original hot metadata; asserts all 224 frozen Int8 modules, layouts and parameter identities; no requantization or strict=False",
-      "validation": "Initial native-loader CPU failure/success regression PASS; expanded independent-instance hot/cold/layout CPU and dual-GPU actual hot DS reload/Beam20 interfaces PENDING",
+      "validation": "PASS: independent-instance native-loader hot/cold/layout CPU regression; real dual-GPU preflight-r2 strict 224-module hot DS reload and fresh BF16 16-user Beam20 interface; selected checkpoint/export 450 tensors exact",
       "preserved_failure": "letter-a0-20261112-det-preflight-r0, outer 243.305448s, 8.1101816 GPU-device-min, FAILED/exit1/cleanup verified",
-      "method_or_config_change": false
+      "method_or_config_change": false,
+      "successful_job": "letter-a0-20261112-det-preflight-r2"
     }
   ],
   "installations": []

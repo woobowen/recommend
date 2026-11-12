@@ -1,6 +1,6 @@
 # A0 Instruments Normal：正式执行与审核入口
 
-当前状态：PREPARING，尚未启动正式四轮训练。本文随真实证据更新，不将技术预跑记为正式结果。
+当前状态：PRELAUNCH PASS，尚未启动正式四轮训练。本文随真实证据更新，不将技术预跑记为正式结果。
 
 ## 本轮实验卡与批准差异
 
@@ -36,3 +36,14 @@
 论文最终参照HR@10=0.1115、NDCG@10=0.0854，只有完整测试后才比较。不以指标相近证明正确，不追数值改协议。单seed、双卡累积与作者未知历史执行的差异，以及使用公开SID仅复现下游的范围最终均披露。
 
 GPT_UPLOAD_REQUIRED: YES（当前尚无本轮固定最终交付；不是已完成声明）。
+
+## 最后预验收实际结论（2026-11-12）
+
+- GPU源码 `a1b1618e04c8be9bb62918c90b59418c8de34f52`；CPU收口源码 `d9d0a5337e23ce0ceb8666ebdbd7ea209403f9fc`；[核心10文件字节身份](evidence/formal_det_20261112/prelaunch_source_identity.json)相同。最终RUN以本入口所在固定提交为准，提交前再核同一核心身份。
+- `letter-a0-20261112-det-preflight-r2`：SUCCEEDED / exit0 / cleanup verified；两rank 12updates、真实native/extension deterministic计数一致、CP2与CP12完整保存、32条真实Validation、224模块严格full DS hot恢复、450 tensor选定checkpoint/adapter精确相同、fresh BF16严格450 key加载及16用户Beam20接口通过。
+- [原始CPU收口回执](evidence/formal_det_20261112/jobs/letter-a0-20261112-det-receipt-cpu-r2/job/output/preflight_receipt.json)：累计22.0989842/60 GPU-device-minutes；稳态update中位4.769s，训练峰值allocated11.87GiB/reserved15.01GiB，推理峰值allocated16.74GiB/reserved18.46GiB；历史同协议最大长度包络reserved21.91GiB。保守条件预算22.6996小时，非保证，96h为累计硬上限。
+- [训练/FA/checkpoint非作者预审PASS](review/formal_det_20261112/prelaunch_training.md)；[pipeline/runner/evaluation非作者预审PASS](review/formal_det_20261112/prelaunch_pipeline.md)。两名真实子代理通过主控桥接源码与原始证据审核，未独立SSH/GPU执行；最终全量结果尚未审核。
+- 已用任务级修正2/3轮：[原因、最小修正和回执](evidence/formal_det_20261112/corrections.json)。r0预验收真实失败保留：bnb原生hot加载SCB元数据缺口；获批工程范围内版本/source-pinned临时alias修复，不改权重/量化/优化器。另有runner新日期前缀身份识别最小修正及真实超时清收fixture。
+- [模型现存身份复核](evidence/formal_det_20261112/model_identity.json)、[作者后补38字段一致性](evidence/formal_det_20261112/author_supplement_check.json)、[实际Windows transport身份](evidence/formal_det_20261112/transport_identity.json)均已保留。大权重复用历史官方LFS身份，本轮核尺寸及小文件哈希，没有再次下载或无必要全量重哈希。
+
+尚待正式运行验证：8240更新/4 Epoch、各实际Validation时点与loss、真正best选择及较早best恢复、完整24,772用户Beam20、最终原evaluator/独立复算与论文差异。本轮没有新增依赖安装或系统配置修改。

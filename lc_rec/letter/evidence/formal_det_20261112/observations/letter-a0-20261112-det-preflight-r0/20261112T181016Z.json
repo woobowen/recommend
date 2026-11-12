@@ -1,0 +1,364 @@
+{
+  "utc": "2026-11-12T18:10:17.653276+00:00",
+  "job_id": "letter-a0-20261112-det-preflight-r0",
+  "kind": "preflight",
+  "training": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r0/training",
+  "rank": {
+    "0": {
+      "report": {
+        "status": "FAILED",
+        "run_commit": "5878df35e3a422a5b6619b1e5ad8c4b6853ea192",
+        "config_sha256": "133e0e88f4158ab2806ebaa973eb87a0d98c68c98690bcc5cab62e8d126ae9b7",
+        "initial_global_step": 0,
+        "elapsed_seconds": 234.13928394857794,
+        "formal_attention": {
+          "enabled": true,
+          "recipe": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+          "interface_sha256": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+          "fastchat_sha256": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e",
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2",
+          "version": "2.7.4.post1",
+          "torch_global_deterministic": false,
+          "cublas_workspace_config": null,
+          "tensor_observers": false,
+          "calls": {
+            "flash_attn_func": 0,
+            "flash_attn_varlen_kvpacked_func": 3136,
+            "native_dense": 0,
+            "native_varlen": 1536,
+            "extension_dense": 0,
+            "extension_varlen": 1536
+          },
+          "signatures": {
+            "flash_attn_func": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+            "flash_attn_varlen_kvpacked_func": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)"
+          }
+        },
+        "error": "RuntimeError('Loading a quantized checkpoint into non-quantized Linear8bitLt is not supported. Please call module.cuda() before module.load_state_dict()')"
+      },
+      "recent_events": [
+        {
+          "utc": "2026-11-12T18:07:48.378026+00:00",
+          "elapsed_seconds": 166.25312370155007,
+          "event": "optimizer_step",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 11,
+          "epoch": 0.005339805825242718,
+          "lr": [
+            2.6506024096385545e-05
+          ],
+          "grad_norm": 63.0712890625
+        },
+        {
+          "utc": "2026-11-12T18:07:52.586419+00:00",
+          "elapsed_seconds": 170.46151775494218,
+          "event": "optimizer_step",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 12,
+          "epoch": 0.005825242718446602,
+          "lr": [
+            2.891566265060241e-05
+          ],
+          "grad_norm": 72.26605224609375
+        },
+        {
+          "utc": "2026-11-12T18:08:28.870234+00:00",
+          "elapsed_seconds": 206.74533447343856,
+          "event": "checkpoint_complete",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "path": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r0/training/checkpoint-12",
+          "step": 12,
+          "best": null,
+          "best_metric": null,
+          "elapsed_seconds_checkpoint": 36.283697159960866
+        },
+        {
+          "utc": "2026-11-12T18:08:28.873712+00:00",
+          "elapsed_seconds": 206.7488081585616,
+          "event": "epoch_end",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 12,
+          "epoch": 0.005825242718446602
+        },
+        {
+          "utc": "2026-11-12T18:08:28.874855+00:00",
+          "elapsed_seconds": 206.7499500606209,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 12,
+          "epoch": 0.005825242718446602,
+          "values": {
+            "train_runtime": 126.2258,
+            "train_samples_per_second": 4177.813,
+            "train_steps_per_second": 65.28,
+            "total_flos": 4353141554282496.0,
+            "train_loss": 13.030396779378256,
+            "epoch": 0.01
+          }
+        },
+        {
+          "utc": "2026-11-12T18:08:33.182863+00:00",
+          "elapsed_seconds": 211.05796971544623,
+          "event": "acceptance_state_saved",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 12
+        },
+        {
+          "utc": "2026-11-12T18:08:33.810288+00:00",
+          "elapsed_seconds": 211.68538598529994,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 12,
+          "epoch": 0.005825242718446602,
+          "values": {
+            "eval_loss": 11.849772453308105,
+            "eval_runtime": 0.6267,
+            "eval_samples_per_second": 51.06,
+            "eval_steps_per_second": 3.191,
+            "epoch": 0.01
+          }
+        },
+        {
+          "utc": "2026-11-12T18:08:33.810436+00:00",
+          "elapsed_seconds": 211.68552773725241,
+          "event": "preflight_validation",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "records": 32,
+          "metrics": {
+            "eval_loss": 11.849772453308105,
+            "eval_runtime": 0.6267,
+            "eval_samples_per_second": 51.06,
+            "eval_steps_per_second": 3.191,
+            "epoch": 0.01
+          }
+        }
+      ]
+    },
+    "1": {
+      "report": {
+        "status": "FAILED",
+        "run_commit": "5878df35e3a422a5b6619b1e5ad8c4b6853ea192",
+        "config_sha256": "133e0e88f4158ab2806ebaa973eb87a0d98c68c98690bcc5cab62e8d126ae9b7",
+        "initial_global_step": 0,
+        "elapsed_seconds": 233.42862760461867,
+        "formal_attention": {
+          "enabled": true,
+          "recipe": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+          "interface_sha256": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+          "fastchat_sha256": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e",
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2",
+          "version": "2.7.4.post1",
+          "torch_global_deterministic": false,
+          "cublas_workspace_config": null,
+          "tensor_observers": false,
+          "calls": {
+            "flash_attn_func": 0,
+            "flash_attn_varlen_kvpacked_func": 3136,
+            "native_dense": 0,
+            "native_varlen": 1536,
+            "extension_dense": 0,
+            "extension_varlen": 1536
+          },
+          "signatures": {
+            "flash_attn_func": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+            "flash_attn_varlen_kvpacked_func": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)"
+          }
+        },
+        "error": "RuntimeError('Loading a quantized checkpoint into non-quantized Linear8bitLt is not supported. Please call module.cuda() before module.load_state_dict()')"
+      },
+      "recent_events": [
+        {
+          "utc": "2026-11-12T18:07:48.378160+00:00",
+          "elapsed_seconds": 166.25093571003526,
+          "event": "optimizer_step",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 11,
+          "epoch": 0.005339805825242718,
+          "lr": [
+            2.6506024096385545e-05
+          ],
+          "grad_norm": 63.0712890625
+        },
+        {
+          "utc": "2026-11-12T18:07:52.586738+00:00",
+          "elapsed_seconds": 170.45951286889613,
+          "event": "optimizer_step",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 12,
+          "epoch": 0.005825242718446602,
+          "lr": [
+            2.891566265060241e-05
+          ],
+          "grad_norm": 72.26605224609375
+        },
+        {
+          "utc": "2026-11-12T18:08:28.870249+00:00",
+          "elapsed_seconds": 206.74303600937128,
+          "event": "checkpoint_complete",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "path": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r0/training/checkpoint-12",
+          "step": 12,
+          "best": null,
+          "best_metric": null,
+          "elapsed_seconds_checkpoint": 36.283385248854756
+        },
+        {
+          "utc": "2026-11-12T18:08:28.874165+00:00",
+          "elapsed_seconds": 206.74694195669144,
+          "event": "epoch_end",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 12,
+          "epoch": 0.005825242718446602
+        },
+        {
+          "utc": "2026-11-12T18:08:28.875378+00:00",
+          "elapsed_seconds": 206.74815218523145,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 12,
+          "epoch": 0.005825242718446602,
+          "values": {
+            "train_runtime": 127.0978,
+            "train_samples_per_second": 4149.15,
+            "train_steps_per_second": 64.832,
+            "total_flos": 4353141554282496.0,
+            "train_loss": 12.9588410059611,
+            "epoch": 0.01
+          }
+        },
+        {
+          "utc": "2026-11-12T18:08:31.297240+00:00",
+          "elapsed_seconds": 209.17002569045871,
+          "event": "acceptance_state_saved",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 12
+        },
+        {
+          "utc": "2026-11-12T18:08:33.810386+00:00",
+          "elapsed_seconds": 211.68316048383713,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "step": 12,
+          "epoch": 0.005825242718446602,
+          "values": {
+            "eval_loss": 11.849772453308105,
+            "eval_runtime": 2.512,
+            "eval_samples_per_second": 12.739,
+            "eval_steps_per_second": 0.796,
+            "epoch": 0.01
+          }
+        },
+        {
+          "utc": "2026-11-12T18:08:33.810521+00:00",
+          "elapsed_seconds": 211.68329130206257,
+          "event": "preflight_validation",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r0",
+          "records": 32,
+          "metrics": {
+            "eval_loss": 11.849772453308105,
+            "eval_runtime": 2.512,
+            "eval_samples_per_second": 12.739,
+            "eval_steps_per_second": 0.796,
+            "epoch": 0.01
+          }
+        }
+      ]
+    }
+  },
+  "pipeline": {
+    "status": "FAILED",
+    "job_id": "letter-a0-20261112-det-preflight-r0",
+    "kind": "preflight",
+    "run_commit": "5878df35e3a422a5b6619b1e5ad8c4b6853ea192",
+    "output": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r0",
+    "started_utc": "2026-11-12T18:04:59.963954+00:00",
+    "pid": 3223715,
+    "stages": [
+      {
+        "stage": "train",
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/scripts/formal_train.py",
+          "--source-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/vendor/LETTER/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--output",
+          "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r0/training",
+          "--config",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/config/formal_instruments_seed42.json",
+          "--run-commit",
+          "5878df35e3a422a5b6619b1e5ad8c4b6853ea192",
+          "--precision-approval",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+          "--probe-stop",
+          "12",
+          "--probe-save",
+          "2",
+          "--preflight-interfaces"
+        ],
+        "started_utc": "2026-11-12T18:05:00.132614+00:00",
+        "exit_code": 1,
+        "ended_utc": "2026-11-12T18:09:02.599399+00:00"
+      }
+    ],
+    "gpu_start": "index, uuid, name, memory.total [MiB], memory.used [MiB]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n",
+    "phase": "train",
+    "error": "RuntimeError('train failed: 1')",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/scripts/formal_pipeline.py\", line 125, in main\n    run('train',args)\n  File \"/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/scripts/formal_pipeline.py\", line 103, in run\n    if child.returncode:raise RuntimeError(stage+' failed: '+str(child.returncode))\nRuntimeError: train failed: 1\n",
+    "exit_code": 1,
+    "ended_utc": "2026-11-12T18:09:02.984460+00:00",
+    "wall_seconds": 242.6440090201795,
+    "charged_gpu_device_seconds": 485.288018040359
+  },
+  "ledger": {
+    "attempts": [
+      {
+        "job_id": "letter-a0-20261112-det-preflight-r0",
+        "kind": "preflight",
+        "run_commit": "5878df35e3a422a5b6619b1e5ad8c4b6853ea192",
+        "started_utc": "2026-11-12T18:05:00.070272+00:00",
+        "resume": null,
+        "wall_limit_seconds": 1780.0,
+        "ended_utc": "2026-11-12T18:09:02.607965+00:00",
+        "wall_seconds": 242.6440090201795,
+        "gpu_device_seconds": 485.288018040359,
+        "status": "FAILED"
+      }
+    ]
+  },
+  "test_rank": {},
+  "gpu": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 1, 24082, 0\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 1, 24082, 0\n",
+  "mem_available": 255392772096,
+  "swap_used": 152190976,
+  "disk_available": 3062497898496,
+  "runner": {
+    "status": "FAILED",
+    "started_at": "2026-11-12T18:04:59.871807+00:00",
+    "ended_at": "2026-11-12T18:09:03.177255+00:00",
+    "exit_code": 1,
+    "request_sha256": "94899640ce4443c977616e266025f77e4ca97dfa1570e5946e7220e35d8164e5",
+    "worker_alive": false,
+    "supervisor_alive": false,
+    "cleanup_verified": true,
+    "workgroup_observation": {
+      "observed_at": "2026-11-12T18:10:16.761713+00:00",
+      "source": "captured_at_launch",
+      "boot_changed": false,
+      "owned_live": [],
+      "unconfirmed_live": [],
+      "unsupported_live": [],
+      "zombies": [],
+      "scan_errors": [],
+      "scan_complete": true,
+      "verified_empty": true
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "status": "FAILED",
+  "error": "RuntimeError('Loading a quantized checkpoint into non-quantized Linear8bitLt is not supported. Please call module.cuda() before module.load_state_dict()')",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/scripts/formal_train.py\", line 512, in <module>\n    try:main()\n  File \"/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/scripts/formal_train.py\", line 475, in main\n    strict_ds_load(trainer.model_wrapped,str(cp))\n  File \"/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/scripts/formal_train.py\", line 287, in strict_ds_load\n    loaded,client=engine.load_checkpoint(path,load_module_strict=True,\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py\", line 2980, in load_checkpoint\n    load_path, client_states = self._load_checkpoint(load_dir,\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py\", line 3063, in _load_checkpoint\n    self.load_module_state_dict(checkpoint=checkpoint,\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py\", line 2840, in load_module_state_dict\n    self.module.load_state_dict(\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py\", line 2561, in load_state_dict\n    load(self, state_dict)\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py\", line 2549, in load\n    load(child, child_state_dict, child_prefix)  # noqa: F821\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py\", line 2549, in load\n    load(child, child_state_dict, child_prefix)  # noqa: F821\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py\", line 2549, in load\n    load(child, child_state_dict, child_prefix)  # noqa: F821\n  [Previous line repeated 4 more times]\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py\", line 2532, in load\n    module._load_from_state_dict(\n  File \"/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/bitsandbytes/nn/modules.py\", line 962, in _load_from_state_dict\n    raise RuntimeError(\nRuntimeError: Loading a quantized checkpoint into non-quantized Linear8bitLt is not supported. Please call module.cuda() before module.load_state_dict()\n",
+  "argv": [
+    "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/scripts/formal_train.py",
+    "--source-root",
+    "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+    "--data-root",
+    "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/vendor/LETTER/data",
+    "--model",
+    "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+    "--output",
+    "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r0/training",
+    "--config",
+    "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/config/formal_instruments_seed42.json",
+    "--run-commit",
+    "5878df35e3a422a5b6619b1e5ad8c4b6853ea192",
+    "--precision-approval",
+    "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/5878df35e3a422a5b6619b1e5ad8c4b6853ea192/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+    "--probe-stop",
+    "12",
+    "--probe-save",
+    "2",
+    "--preflight-interfaces"
+  ]
+}

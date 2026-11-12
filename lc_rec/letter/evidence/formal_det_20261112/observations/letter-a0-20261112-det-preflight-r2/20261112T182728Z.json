@@ -1,0 +1,475 @@
+{
+  "utc": "2026-11-12T18:27:32.140060+00:00",
+  "job_id": "letter-a0-20261112-det-preflight-r2",
+  "kind": "preflight",
+  "training": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training",
+  "rank": {
+    "0": {
+      "report": {
+        "status": "PROBE_COMPLETE",
+        "run_commit": "a1b1618e04c8be9bb62918c90b59418c8de34f52",
+        "config_sha256": "133e0e88f4158ab2806ebaa973eb87a0d98c68c98690bcc5cab62e8d126ae9b7",
+        "global_step": 12,
+        "epoch": 0.005825242718446602,
+        "best_checkpoint": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training/checkpoint-12",
+        "best_metric": 11.849772453308105,
+        "initial_global_step": 0,
+        "elapsed_seconds": 252.69721340946853,
+        "peak_allocated_bytes": 12740771840,
+        "peak_reserved_bytes": 16120807424,
+        "formal_attention": {
+          "enabled": true,
+          "recipe": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+          "interface_sha256": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+          "fastchat_sha256": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e",
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2",
+          "version": "2.7.4.post1",
+          "torch_global_deterministic": false,
+          "cublas_workspace_config": null,
+          "tensor_observers": false,
+          "calls": {
+            "flash_attn_func": 0,
+            "flash_attn_varlen_kvpacked_func": 3136,
+            "native_dense": 0,
+            "native_varlen": 1536,
+            "extension_dense": 0,
+            "extension_varlen": 1536
+          },
+          "signatures": {
+            "flash_attn_func": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+            "flash_attn_varlen_kvpacked_func": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)"
+          }
+        }
+      },
+      "recent_events": [
+        {
+          "utc": "2026-11-12T18:23:50.774895+00:00",
+          "elapsed_seconds": 211.6816451223567,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "step": 12,
+          "epoch": 0.005825242718446602,
+          "values": {
+            "train_runtime": 129.0621,
+            "train_samples_per_second": 4086.002,
+            "train_steps_per_second": 63.845,
+            "total_flos": 4353141554282496.0,
+            "train_loss": 13.030396779378256,
+            "epoch": 0.01
+          }
+        },
+        {
+          "utc": "2026-11-12T18:23:55.016545+00:00",
+          "elapsed_seconds": 215.92330707982183,
+          "event": "acceptance_state_saved",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "step": 12
+        },
+        {
+          "utc": "2026-11-12T18:23:55.644698+00:00",
+          "elapsed_seconds": 216.55145019013435,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "step": 12,
+          "epoch": 0.005825242718446602,
+          "values": {
+            "eval_loss": 11.849772453308105,
+            "eval_runtime": 0.6274,
+            "eval_samples_per_second": 51.003,
+            "eval_steps_per_second": 3.188,
+            "epoch": 0.01
+          }
+        },
+        {
+          "utc": "2026-11-12T18:23:55.644841+00:00",
+          "elapsed_seconds": 216.55158743448555,
+          "event": "preflight_validation",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "records": 32,
+          "metrics": {
+            "eval_loss": 11.849772453308105,
+            "eval_runtime": 0.6274,
+            "eval_samples_per_second": 51.003,
+            "eval_steps_per_second": 3.188,
+            "epoch": 0.01
+          }
+        },
+        {
+          "utc": "2026-11-12T18:23:55.657876+00:00",
+          "elapsed_seconds": 216.56462834216654,
+          "event": "bnb_hot_scb_alias_begin",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "modules": 224,
+          "hot_modules": 224,
+          "modules_source_sha256": "e97af1a69794f192bf58e0154efb660f3d2ed0a00dade672c7d8f9a3d14b9e53",
+          "scope": "native strict checkpoint load only; no requantization"
+        },
+        {
+          "utc": "2026-11-12T18:24:24.957117+00:00",
+          "elapsed_seconds": 245.8638768736273,
+          "event": "bnb_hot_scb_alias_loaded",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "modules": 224,
+          "hot_modules": 224,
+          "parameter_identity_and_cache_aliases_preserved": true
+        },
+        {
+          "utc": "2026-11-12T18:24:24.957922+00:00",
+          "elapsed_seconds": 245.86467195115983,
+          "event": "strict_ds_restored",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "path": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training/checkpoint-12",
+          "global_step": 12,
+          "scheduler": {
+            "base_lrs": [
+              0.0002,
+              0.0002
+            ],
+            "last_epoch": 12,
+            "verbose": false,
+            "_step_count": 13,
+            "_get_lr_called_within_step": false,
+            "_last_lr": [
+              2.891566265060241e-05
+            ],
+            "lr_lambdas": [
+              {},
+              {}
+            ]
+          },
+          "client_keys": [
+            "buffer_names",
+            "ds_config",
+            "ds_version",
+            "frozen_param_fragments",
+            "frozen_param_shapes",
+            "global_samples",
+            "param_shapes",
+            "shared_params"
+          ]
+        },
+        {
+          "utc": "2026-11-12T18:24:31.790323+00:00",
+          "elapsed_seconds": 252.69708498753607,
+          "event": "preflight_best_restore",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "checkpoint": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training/checkpoint-12",
+          "adapter": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training/preflight_adapter",
+          "selection_scope": "interface only; not formal best selection"
+        }
+      ]
+    },
+    "1": {
+      "report": {
+        "status": "PROBE_COMPLETE",
+        "run_commit": "a1b1618e04c8be9bb62918c90b59418c8de34f52",
+        "config_sha256": "133e0e88f4158ab2806ebaa973eb87a0d98c68c98690bcc5cab62e8d126ae9b7",
+        "global_step": 12,
+        "epoch": 0.005825242718446602,
+        "best_checkpoint": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training/checkpoint-12",
+        "best_metric": 11.849772453308105,
+        "initial_global_step": 0,
+        "elapsed_seconds": 249.94010653998703,
+        "peak_allocated_bytes": 12739515392,
+        "peak_reserved_bytes": 16120807424,
+        "formal_attention": {
+          "enabled": true,
+          "recipe": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+          "interface_sha256": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+          "fastchat_sha256": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e",
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2",
+          "version": "2.7.4.post1",
+          "torch_global_deterministic": false,
+          "cublas_workspace_config": null,
+          "tensor_observers": false,
+          "calls": {
+            "flash_attn_func": 0,
+            "flash_attn_varlen_kvpacked_func": 3136,
+            "native_dense": 0,
+            "native_varlen": 1536,
+            "extension_dense": 0,
+            "extension_varlen": 1536
+          },
+          "signatures": {
+            "flash_attn_func": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+            "flash_attn_varlen_kvpacked_func": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)"
+          }
+        }
+      },
+      "recent_events": [
+        {
+          "utc": "2026-11-12T18:23:50.775475+00:00",
+          "elapsed_seconds": 211.67746614851058,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "step": 12,
+          "epoch": 0.005825242718446602,
+          "values": {
+            "train_runtime": 129.9671,
+            "train_samples_per_second": 4057.551,
+            "train_steps_per_second": 63.401,
+            "total_flos": 4353141554282496.0,
+            "train_loss": 12.9588410059611,
+            "epoch": 0.01
+          }
+        },
+        {
+          "utc": "2026-11-12T18:23:53.220709+00:00",
+          "elapsed_seconds": 214.12271271366626,
+          "event": "acceptance_state_saved",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "step": 12
+        },
+        {
+          "utc": "2026-11-12T18:23:55.644780+00:00",
+          "elapsed_seconds": 216.54677190911025,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "step": 12,
+          "epoch": 0.005825242718446602,
+          "values": {
+            "eval_loss": 11.849772453308105,
+            "eval_runtime": 2.4229,
+            "eval_samples_per_second": 13.207,
+            "eval_steps_per_second": 0.825,
+            "epoch": 0.01
+          }
+        },
+        {
+          "utc": "2026-11-12T18:23:55.644917+00:00",
+          "elapsed_seconds": 216.54690483585,
+          "event": "preflight_validation",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "records": 32,
+          "metrics": {
+            "eval_loss": 11.849772453308105,
+            "eval_runtime": 2.4229,
+            "eval_samples_per_second": 13.207,
+            "eval_steps_per_second": 0.825,
+            "epoch": 0.01
+          }
+        },
+        {
+          "utc": "2026-11-12T18:23:55.658646+00:00",
+          "elapsed_seconds": 216.56063917279243,
+          "event": "bnb_hot_scb_alias_begin",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "modules": 224,
+          "hot_modules": 224,
+          "modules_source_sha256": "e97af1a69794f192bf58e0154efb660f3d2ed0a00dade672c7d8f9a3d14b9e53",
+          "scope": "native strict checkpoint load only; no requantization"
+        },
+        {
+          "utc": "2026-11-12T18:24:23.103356+00:00",
+          "elapsed_seconds": 244.0053570875898,
+          "event": "bnb_hot_scb_alias_loaded",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "modules": 224,
+          "hot_modules": 224,
+          "parameter_identity_and_cache_aliases_preserved": true
+        },
+        {
+          "utc": "2026-11-12T18:24:23.104191+00:00",
+          "elapsed_seconds": 244.00618255045265,
+          "event": "strict_ds_restored",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "path": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training/checkpoint-12",
+          "global_step": 12,
+          "scheduler": {
+            "base_lrs": [
+              0.0002,
+              0.0002
+            ],
+            "last_epoch": 12,
+            "verbose": false,
+            "_step_count": 13,
+            "_get_lr_called_within_step": false,
+            "_last_lr": [
+              2.891566265060241e-05
+            ],
+            "lr_lambdas": [
+              {},
+              {}
+            ]
+          },
+          "client_keys": [
+            "buffer_names",
+            "ds_config",
+            "ds_version",
+            "frozen_param_fragments",
+            "frozen_param_shapes",
+            "global_samples",
+            "param_shapes",
+            "shared_params"
+          ]
+        },
+        {
+          "utc": "2026-11-12T18:24:29.037959+00:00",
+          "elapsed_seconds": 249.939962875098,
+          "event": "preflight_best_restore",
+          "attempt_job_id": "letter-a0-20261112-det-preflight-r2",
+          "checkpoint": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training/checkpoint-12",
+          "adapter": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training/preflight_adapter",
+          "selection_scope": "interface only; not formal best selection"
+        }
+      ]
+    }
+  },
+  "pipeline": {
+    "status": "PREFLIGHT_COMPLETE",
+    "job_id": "letter-a0-20261112-det-preflight-r2",
+    "kind": "preflight",
+    "run_commit": "a1b1618e04c8be9bb62918c90b59418c8de34f52",
+    "output": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2",
+    "started_utc": "2026-11-12T18:20:16.916658+00:00",
+    "pid": 3225865,
+    "stages": [
+      {
+        "stage": "train",
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/a1b1618e04c8be9bb62918c90b59418c8de34f52/lc_rec/letter/scripts/formal_train.py",
+          "--source-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/a1b1618e04c8be9bb62918c90b59418c8de34f52/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/a1b1618e04c8be9bb62918c90b59418c8de34f52/lc_rec/letter/vendor/LETTER/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--output",
+          "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training",
+          "--config",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/a1b1618e04c8be9bb62918c90b59418c8de34f52/lc_rec/letter/config/formal_instruments_seed42.json",
+          "--run-commit",
+          "a1b1618e04c8be9bb62918c90b59418c8de34f52",
+          "--precision-approval",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/a1b1618e04c8be9bb62918c90b59418c8de34f52/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+          "--probe-stop",
+          "12",
+          "--probe-save",
+          "2",
+          "--preflight-interfaces"
+        ],
+        "started_utc": "2026-11-12T18:20:17.082835+00:00",
+        "exit_code": 0,
+        "ended_utc": "2026-11-12T18:24:36.596723+00:00"
+      },
+      {
+        "stage": "test_interfaces",
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/a1b1618e04c8be9bb62918c90b59418c8de34f52/lc_rec/letter/scripts/formal_evaluate.py",
+          "--source-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/a1b1618e04c8be9bb62918c90b59418c8de34f52/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/a1b1618e04c8be9bb62918c90b59418c8de34f52/lc_rec/letter/vendor/LETTER/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--adapter",
+          "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/training/preflight_adapter",
+          "--output",
+          "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-det-preflight-r2/test_preflight",
+          "--run-commit",
+          "a1b1618e04c8be9bb62918c90b59418c8de34f52",
+          "--preflight-users-per-rank",
+          "8"
+        ],
+        "started_utc": "2026-11-12T18:24:36.648445+00:00",
+        "exit_code": 0,
+        "ended_utc": "2026-11-12T18:27:16.297287+00:00"
+      }
+    ],
+    "gpu_start": "index, uuid, name, memory.total [MiB], memory.used [MiB]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n",
+    "phase": "test_interfaces",
+    "exit_code": 0,
+    "ended_utc": "2026-11-12T18:27:16.307949+00:00",
+    "wall_seconds": 419.39050615858287,
+    "charged_gpu_device_seconds": 838.7810123171657
+  },
+  "ledger": {
+    "attempts": [
+      {
+        "job_id": "letter-a0-20261112-det-preflight-r0",
+        "kind": "preflight",
+        "run_commit": "5878df35e3a422a5b6619b1e5ad8c4b6853ea192",
+        "started_utc": "2026-11-12T18:05:00.070272+00:00",
+        "resume": null,
+        "wall_limit_seconds": 1780.0,
+        "ended_utc": "2026-11-12T18:09:03.177255+00:00",
+        "wall_seconds": 243.305448,
+        "gpu_device_seconds": 486.610896,
+        "status": "FAILED",
+        "pipeline_wall_seconds": 242.6440090201795,
+        "runner_cleanup_verified": true,
+        "runner_receipt": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-20261112-det-preflight-r0/status.json"
+      },
+      {
+        "job_id": "letter-a0-20261112-det-preflight-r2",
+        "kind": "preflight",
+        "run_commit": "a1b1618e04c8be9bb62918c90b59418c8de34f52",
+        "started_utc": "2026-11-12T18:20:17.022895+00:00",
+        "resume": null,
+        "wall_limit_seconds": 1536.694552,
+        "ended_utc": "2026-11-12T18:27:16.307168+00:00",
+        "wall_seconds": 419.39050615858287,
+        "gpu_device_seconds": 838.7810123171657,
+        "status": "PREFLIGHT_COMPLETE"
+      }
+    ]
+  },
+  "test_rank": {
+    "0": {
+      "status": "PREFLIGHT_INTERFACE_PASS",
+      "completed_users": 8,
+      "assigned_users": 12386,
+      "elapsed_generation_seconds": 5.816832114942372,
+      "elapsed_seconds": 142.2000522930175,
+      "gpu_peak_allocated_bytes": 17978269184,
+      "gpu_peak_reserved_bytes": 19818086400
+    },
+    "1": {
+      "status": "PREFLIGHT_INTERFACE_PASS",
+      "completed_users": 8,
+      "assigned_users": 12386,
+      "elapsed_generation_seconds": 6.4753542291000485,
+      "elapsed_seconds": 142.2003640802577,
+      "gpu_peak_allocated_bytes": 17218945536,
+      "gpu_peak_reserved_bytes": 18943574016
+    }
+  },
+  "gpu": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 1, 24082, 0\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 1, 24082, 0\n",
+  "mem_available": 255870558208,
+  "swap_used": 152190976,
+  "disk_available": 3019934081024,
+  "runner": {
+    "status": "SUCCEEDED",
+    "started_at": "2026-11-12T18:20:16.824156+00:00",
+    "ended_at": "2026-11-12T18:27:16.488234+00:00",
+    "exit_code": 0,
+    "request_sha256": "48b8a00db5f8d01c4e0fa8d44e9ae1bff46afd69c0a60be844aa8bde2afa4b76",
+    "worker_alive": false,
+    "supervisor_alive": false,
+    "cleanup_verified": true,
+    "workgroup_observation": {
+      "observed_at": "2026-11-12T18:27:31.627619+00:00",
+      "source": "captured_at_launch",
+      "boot_changed": false,
+      "owned_live": [],
+      "unconfirmed_live": [],
+      "unsupported_live": [],
+      "zombies": [],
+      "scan_errors": [],
+      "scan_complete": true,
+      "verified_empty": true
+    }
+  }
+}
