@@ -99,6 +99,10 @@ class Probe:
         import torch
         import bitsandbytes as bnb
         self.model=model;self.engine=engine;self.scheduler=scheduler;self.rng_capture=rng_capture
+        if self.config.get('attention_boundary'):
+            from attention_boundary import Boundary
+            self.attention_boundary=Boundary(self)
+            self.attention_boundary.install(model)
         if self.config.get('full_first_backward_trace'):
             for name,module in model.named_modules():
                 if isinstance(module,bnb.nn.Linear8bitLt) or name.endswith('lm_head.modules_to_save.default'):
