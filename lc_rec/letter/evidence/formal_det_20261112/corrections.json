@@ -1,7 +1,7 @@
 {
   "task": "A0 formal deterministic Normal Instruments seed42 20261112",
   "initial_round": 0,
-  "task_correction_rounds_used": 1,
+  "task_correction_rounds_used": 2,
   "maximum_correction_rounds": 3,
   "rounds": [
     {
@@ -11,7 +11,16 @@
       "correction": "Admit exactly the old and current A0 prefixes in observe_group and signal_member; retain same UID, dual marker, boot/PID/start/PGID/session and pidfd checks",
       "active_export_policy": "Do not modify the active frozen preflight export or runner; original job ID and receipts remain intact",
       "additional_prelaunch_hardening": "Controller derives outer runner timeout from reconciled cumulative ledger, retaining 10s cleanup reserve; pipeline retains 20s reserve and clips wait to remaining time",
-      "validation": "PENDING bounded no-GPU TERM-resistant separate-session timeout fixture under the new prefix",
+      "validation": "PASS: letter-a0-20261112-det-runner-timeout-r1 expected TIMED_OUT/-9; TERM then pidfd KILL for both identities; cleanup verified, no live members",
+      "method_or_config_change": false
+    },
+    {
+      "round": 2,
+      "trigger": "preflight-r0 FAILED only at hot in-process full DeepSpeed reload after successful 12 updates, complete CP2/CP12 and real validation",
+      "root_cause": "Native bitsandbytes 0.45.5 forward moves weight.SCB to state.SCB; native save accepts either but native load requires weight.SCB. Historical cold cross-process resume did not cover hot best-checkpoint restoration",
+      "correction": "Version/source-pinned context temporarily aliases existing state.SCB onto weight only around original strict full model/optimizer/scheduler load, then restores original hot metadata; asserts all 224 frozen Int8 modules, layouts and parameter identities; no requantization or strict=False",
+      "validation": "Initial native-loader CPU failure/success regression PASS; expanded independent-instance hot/cold/layout CPU and dual-GPU actual hot DS reload/Beam20 interfaces PENDING",
+      "preserved_failure": "letter-a0-20261112-det-preflight-r0, outer 243.305448s, 8.1101816 GPU-device-min, FAILED/exit1/cleanup verified",
       "method_or_config_change": false
     }
   ],
