@@ -31,7 +31,7 @@ class Boundary:
                  device=str(value.device),storage_offset=value.storage_offset(),
                  contiguous=value.is_contiguous(),requires_grad=value.requires_grad,
                  sha256=hashlib.sha256(raw).hexdigest(),elements=value.numel(),
-                 norm=float(cpu.float().norm()),max_abs=float(cpu.abs().max()) if cpu.numel() else 0,
+                 norm=float(cpu.float().norm()),max_abs=float(cpu.float().abs().max()) if cpu.numel() else 0,
                  file=path.name)
         torch.save(cpu,path)
         path.with_suffix('.json').write_text(json.dumps(row,indent=2)+'\n')
@@ -161,6 +161,16 @@ class Boundary:
                 for label,t in zip(['dQ','dK','dV'],args[6:9]):self.save('dispatch.'+label,t,self.native)
             return result
         fa._wrapped_flash_attn_varlen_backward=native
+        extension_original=fa.flash_attn_gpu.varlen_bwd
+        @functools.wraps(extension_original)
+        def extension(*args,**kwargs):
+            if self.native:
+                assert len(args)==24
+                self.probe.event('fa_extension_dispatch',**self.native,
+                    deterministic=args[21],extension_file=fa.flash_attn_gpu.__file__,
+                    positional_arguments=len(args),last_dimension_strides=[t.stride(-1) for t in args[:5]])
+            return extension_original(*args,**kwargs)
+        fa.flash_attn_gpu.varlen_bwd=extension
 
     @staticmethod
     def _fingerprint(t):

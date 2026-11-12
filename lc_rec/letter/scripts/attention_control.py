@@ -68,7 +68,8 @@ print(json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()
     if a.mode=='submit':
         assert a.script and a.timeout<=1800
         pending=json.loads(t.python("from pathlib import Path\nimport json\np=Path('/data/bwwu/lc-rec/attention-20261112/ledger.json')\nprint(json.dumps(json.loads(p.read_text()) if p.exists() else {'attempts':[]}))"))
-        assert all(x.get('ended_utc') for x in pending['attempts']), 'query existing job before another submission'
+        if not a.cpu_only:
+            assert all(x.get('ended_utc') for x in pending['attempts']), 'query existing job before another submission'
         old=json.loads((REPO/'lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/request.json').read_text())
         req={k:old[k] for k in ['schema','host','user','uid','namespace','deployment_sha256']}
         env=dict(old['env']);env['PYTHONUNBUFFERED']='1'

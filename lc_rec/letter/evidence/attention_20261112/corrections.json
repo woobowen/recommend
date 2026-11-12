@@ -1,0 +1,20 @@
+{
+  "round0": {
+    "run_commit": "9bb7207e4a84ec3eca02d505da53ad2a771c2ee5",
+    "work": "Bound layer28 and same-checkpoint default pair",
+    "gpu_failures": []
+  },
+  "round1": {
+    "reason": "Independent bridge review identified Bool statistic defect, reproduced by real CPU interpreter; actual GPU masks were int64 so default pair unaffected",
+    "changes": [
+      "Only statistic max_abs casts CPU values to float; saved dtype/bytes unchanged",
+      "Record final extension varlen_bwd argument21 and last-dimension strides, while retaining original result",
+      "Allow independent CPU-only jobs while GPU job runs; GPU guard unchanged",
+      "Add optional legacy-observer FA-det control for observation timing check",
+      "CPU boundary and full-state comparison / final resource receipt scripts"
+    ],
+    "formal_recipe_changed": false
+  },
+  "limit": "At most three correction groups after round0",
+  "installations": []
+}

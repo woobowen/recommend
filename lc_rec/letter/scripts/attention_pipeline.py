@@ -19,7 +19,9 @@ def main():
     p.add_argument('--run-commit',required=True);p.add_argument('--kind',choices=['inspect','continuous','resume','attention-isolate'],required=True)
     p.add_argument('--resume');p.add_argument('--diagnostic-attention-deterministic',action='store_true')
     p.add_argument('--capture-attention-case',action='store_true');p.add_argument('--attention-case-root')
-    p.add_argument('--full-first-backward-trace',action='store_true');p.add_argument('--diagnostic-torch-deterministic',action='store_true');a=p.parse_args()
+    p.add_argument('--full-first-backward-trace',action='store_true');p.add_argument('--diagnostic-torch-deterministic',action='store_true')
+    p.add_argument('--boundary-disabled',action='store_true',help='Matched legacy observers; no new boundary synchronization')
+    a=p.parse_args()
     job=Path(os.environ['GRID_JOB_DIR']);assert job.name.startswith('letter-attention-20261112-')
     release=Path(__file__).resolve().parents[3];scripts=release/'lc_rec/letter/scripts'
     assert json.loads((release/'RUN_VERSION.json').read_text())['RUN_COMMIT']==a.run_commit, 'RUN_COMMIT label differs from immutable deployment'
@@ -50,6 +52,9 @@ def main():
                 assert sum(f.stat().st_size for f in ROOT.rglob('*') if f.is_file() and not f.is_symlink())<cfg['persistent_bytes_limit']-reserve
                 source=release/'lc_rec/letter/vendor/LETTER/LETTER-LC-Rec'
                 diagnostic_config=('resume_torch_deterministic_diagnostic.json' if a.diagnostic_torch_deterministic else 'resume_full_trace_diagnostic.json' if a.full_first_backward_trace else 'attention_boundary_det.json' if a.diagnostic_attention_deterministic else 'resume_capture_diagnostic.json' if a.capture_attention_case else 'attention_boundary_default.json')
+                if a.boundary_disabled:
+                    assert a.diagnostic_attention_deterministic and not a.diagnostic_torch_deterministic
+                    diagnostic_config='resume_deterministic_diagnostic.json'
                 argv=[sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2',str(scripts/'formal_train.py'),
                     '--source-root',str(source),'--data-root',str(source.parent/'data'),
                     '--model','/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549',
