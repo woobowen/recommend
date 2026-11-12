@@ -1,0 +1,1697 @@
+{
+  "optimizer_state_dict": {
+    "loss_scaler": {
+      "class": "deepspeed.runtime.fp16.loss_scaler.LossScaler",
+      "fields": {
+        "cur_scale": 1.0,
+        "dynamic": false
+      }
+    },
+    "dynamic_loss_scale": false,
+    "overflow": false,
+    "clip_grad": 1.0,
+    "base_optimizer_state": {
+      "state": {
+        "0": {
+          "step": {
+            "shape": [],
+            "dtype": "torch.float32",
+            "sha256": "d88c86f15bbea365d658ad95a81d45367c465f7af6f7264fb077f01747ddc77d",
+            "elements": 1
+          },
+          "exp_avg": {
+            "shape": [
+              144826368
+            ],
+            "dtype": "torch.float32",
+            "sha256": "432c8d3e795d0d46eab472923cf5df48bfd71e44ee7bab3976e3872ef83d6072",
+            "elements": 144826368
+          },
+          "exp_avg_sq": {
+            "shape": [
+              144826368
+            ],
+            "dtype": "torch.float32",
+            "sha256": "ff86fd01b9c8a1b87f4021df2a0bc5a57cce35435bccfc26688f99aaf850dc0a",
+            "elements": 144826368
+          }
+        }
+      },
+      "param_groups": [
+        {
+          "weight_decay": 0.01,
+          "lr": 4.819277108433735e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "amsgrad": false,
+          "foreach": null,
+          "maximize": false,
+          "capturable": false,
+          "differentiable": false,
+          "fused": null,
+          "initial_lr": 0.0002,
+          "params": [
+            0
+          ]
+        }
+      ]
+    },
+    "single_partition_of_fp32_groups": [
+      {
+        "shape": [
+          144826368
+        ],
+        "dtype": "torch.float32",
+        "sha256": "294f7be57171bdb76d2988c3e485690e0301a7d2b471935aa44af0347ce6fd47",
+        "elements": 144826368
+      }
+    ],
+    "zero_stage": {
+      "enum": "deepspeed.runtime.zero.config.ZeroStageEnum",
+      "name": "gradients",
+      "value": 2
+    },
+    "group_paddings": [
+      0
+    ],
+    "partition_count": [
+      2
+    ],
+    "ds_version": "0.16.9",
+    "param_slice_mappings": [
+      {
+        "base_model.model.model.embed_tokens.modules_to_save.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 134832128,
+            "start": 0
+          }
+        },
+        "base_model.model.model.layers.0.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 134832128
+          }
+        },
+        "base_model.model.model.layers.0.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 134864896
+          }
+        },
+        "base_model.model.model.layers.0.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 134897664
+          }
+        },
+        "base_model.model.model.layers.0.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 134930432
+          }
+        },
+        "base_model.model.model.layers.0.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 134963200
+          }
+        },
+        "base_model.model.model.layers.0.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 134995968
+          }
+        },
+        "base_model.model.model.layers.0.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135028736
+          }
+        },
+        "base_model.model.model.layers.0.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135061504
+          }
+        },
+        "base_model.model.model.layers.0.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135094272
+          }
+        },
+        "base_model.model.model.layers.0.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 135127040
+          }
+        },
+        "base_model.model.model.layers.0.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135215104
+          }
+        },
+        "base_model.model.model.layers.0.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 135247872
+          }
+        },
+        "base_model.model.model.layers.0.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 135335936
+          }
+        },
+        "base_model.model.model.layers.0.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135424000
+          }
+        },
+        "base_model.model.model.layers.1.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135456768
+          }
+        },
+        "base_model.model.model.layers.1.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135489536
+          }
+        },
+        "base_model.model.model.layers.1.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135522304
+          }
+        },
+        "base_model.model.model.layers.1.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135555072
+          }
+        },
+        "base_model.model.model.layers.1.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135587840
+          }
+        },
+        "base_model.model.model.layers.1.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135620608
+          }
+        },
+        "base_model.model.model.layers.1.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135653376
+          }
+        },
+        "base_model.model.model.layers.1.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135686144
+          }
+        },
+        "base_model.model.model.layers.1.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135718912
+          }
+        },
+        "base_model.model.model.layers.1.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 135751680
+          }
+        },
+        "base_model.model.model.layers.1.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 135839744
+          }
+        },
+        "base_model.model.model.layers.1.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 135872512
+          }
+        },
+        "base_model.model.model.layers.1.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 135960576
+          }
+        },
+        "base_model.model.model.layers.1.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136048640
+          }
+        },
+        "base_model.model.model.layers.2.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136081408
+          }
+        },
+        "base_model.model.model.layers.2.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136114176
+          }
+        },
+        "base_model.model.model.layers.2.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136146944
+          }
+        },
+        "base_model.model.model.layers.2.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136179712
+          }
+        },
+        "base_model.model.model.layers.2.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136212480
+          }
+        },
+        "base_model.model.model.layers.2.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136245248
+          }
+        },
+        "base_model.model.model.layers.2.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136278016
+          }
+        },
+        "base_model.model.model.layers.2.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136310784
+          }
+        },
+        "base_model.model.model.layers.2.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136343552
+          }
+        },
+        "base_model.model.model.layers.2.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 136376320
+          }
+        },
+        "base_model.model.model.layers.2.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136464384
+          }
+        },
+        "base_model.model.model.layers.2.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 136497152
+          }
+        },
+        "base_model.model.model.layers.2.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 136585216
+          }
+        },
+        "base_model.model.model.layers.2.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136673280
+          }
+        },
+        "base_model.model.model.layers.3.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136706048
+          }
+        },
+        "base_model.model.model.layers.3.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136738816
+          }
+        },
+        "base_model.model.model.layers.3.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136771584
+          }
+        },
+        "base_model.model.model.layers.3.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136804352
+          }
+        },
+        "base_model.model.model.layers.3.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136837120
+          }
+        },
+        "base_model.model.model.layers.3.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136869888
+          }
+        },
+        "base_model.model.model.layers.3.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136902656
+          }
+        },
+        "base_model.model.model.layers.3.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136935424
+          }
+        },
+        "base_model.model.model.layers.3.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 136968192
+          }
+        },
+        "base_model.model.model.layers.3.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 137000960
+          }
+        },
+        "base_model.model.model.layers.3.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137089024
+          }
+        },
+        "base_model.model.model.layers.3.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 137121792
+          }
+        },
+        "base_model.model.model.layers.3.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 137209856
+          }
+        },
+        "base_model.model.model.layers.3.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137297920
+          }
+        },
+        "base_model.model.model.layers.4.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137330688
+          }
+        },
+        "base_model.model.model.layers.4.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137363456
+          }
+        },
+        "base_model.model.model.layers.4.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137396224
+          }
+        },
+        "base_model.model.model.layers.4.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137428992
+          }
+        },
+        "base_model.model.model.layers.4.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137461760
+          }
+        },
+        "base_model.model.model.layers.4.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137494528
+          }
+        },
+        "base_model.model.model.layers.4.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137527296
+          }
+        },
+        "base_model.model.model.layers.4.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137560064
+          }
+        },
+        "base_model.model.model.layers.4.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137592832
+          }
+        },
+        "base_model.model.model.layers.4.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 137625600
+          }
+        },
+        "base_model.model.model.layers.4.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137713664
+          }
+        },
+        "base_model.model.model.layers.4.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 137746432
+          }
+        },
+        "base_model.model.model.layers.4.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 137834496
+          }
+        },
+        "base_model.model.model.layers.4.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137922560
+          }
+        },
+        "base_model.model.model.layers.5.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137955328
+          }
+        },
+        "base_model.model.model.layers.5.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 137988096
+          }
+        },
+        "base_model.model.model.layers.5.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138020864
+          }
+        },
+        "base_model.model.model.layers.5.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138053632
+          }
+        },
+        "base_model.model.model.layers.5.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138086400
+          }
+        },
+        "base_model.model.model.layers.5.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138119168
+          }
+        },
+        "base_model.model.model.layers.5.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138151936
+          }
+        },
+        "base_model.model.model.layers.5.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138184704
+          }
+        },
+        "base_model.model.model.layers.5.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138217472
+          }
+        },
+        "base_model.model.model.layers.5.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 138250240
+          }
+        },
+        "base_model.model.model.layers.5.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138338304
+          }
+        },
+        "base_model.model.model.layers.5.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 138371072
+          }
+        },
+        "base_model.model.model.layers.5.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 138459136
+          }
+        },
+        "base_model.model.model.layers.5.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138547200
+          }
+        },
+        "base_model.model.model.layers.6.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138579968
+          }
+        },
+        "base_model.model.model.layers.6.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138612736
+          }
+        },
+        "base_model.model.model.layers.6.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138645504
+          }
+        },
+        "base_model.model.model.layers.6.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138678272
+          }
+        },
+        "base_model.model.model.layers.6.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138711040
+          }
+        },
+        "base_model.model.model.layers.6.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138743808
+          }
+        },
+        "base_model.model.model.layers.6.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138776576
+          }
+        },
+        "base_model.model.model.layers.6.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138809344
+          }
+        },
+        "base_model.model.model.layers.6.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138842112
+          }
+        },
+        "base_model.model.model.layers.6.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 138874880
+          }
+        },
+        "base_model.model.model.layers.6.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 138962944
+          }
+        },
+        "base_model.model.model.layers.6.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 138995712
+          }
+        },
+        "base_model.model.model.layers.6.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 139083776
+          }
+        },
+        "base_model.model.model.layers.6.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139171840
+          }
+        },
+        "base_model.model.model.layers.7.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139204608
+          }
+        },
+        "base_model.model.model.layers.7.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139237376
+          }
+        },
+        "base_model.model.model.layers.7.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139270144
+          }
+        },
+        "base_model.model.model.layers.7.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139302912
+          }
+        },
+        "base_model.model.model.layers.7.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139335680
+          }
+        },
+        "base_model.model.model.layers.7.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139368448
+          }
+        },
+        "base_model.model.model.layers.7.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139401216
+          }
+        },
+        "base_model.model.model.layers.7.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139433984
+          }
+        },
+        "base_model.model.model.layers.7.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139466752
+          }
+        },
+        "base_model.model.model.layers.7.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 139499520
+          }
+        },
+        "base_model.model.model.layers.7.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139587584
+          }
+        },
+        "base_model.model.model.layers.7.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 139620352
+          }
+        },
+        "base_model.model.model.layers.7.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 139708416
+          }
+        },
+        "base_model.model.model.layers.7.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139796480
+          }
+        },
+        "base_model.model.model.layers.8.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139829248
+          }
+        },
+        "base_model.model.model.layers.8.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139862016
+          }
+        },
+        "base_model.model.model.layers.8.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139894784
+          }
+        },
+        "base_model.model.model.layers.8.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139927552
+          }
+        },
+        "base_model.model.model.layers.8.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139960320
+          }
+        },
+        "base_model.model.model.layers.8.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 139993088
+          }
+        },
+        "base_model.model.model.layers.8.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140025856
+          }
+        },
+        "base_model.model.model.layers.8.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140058624
+          }
+        },
+        "base_model.model.model.layers.8.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140091392
+          }
+        },
+        "base_model.model.model.layers.8.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 140124160
+          }
+        },
+        "base_model.model.model.layers.8.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140212224
+          }
+        },
+        "base_model.model.model.layers.8.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 140244992
+          }
+        },
+        "base_model.model.model.layers.8.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 140333056
+          }
+        },
+        "base_model.model.model.layers.8.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140421120
+          }
+        },
+        "base_model.model.model.layers.9.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140453888
+          }
+        },
+        "base_model.model.model.layers.9.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140486656
+          }
+        },
+        "base_model.model.model.layers.9.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140519424
+          }
+        },
+        "base_model.model.model.layers.9.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140552192
+          }
+        },
+        "base_model.model.model.layers.9.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140584960
+          }
+        },
+        "base_model.model.model.layers.9.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140617728
+          }
+        },
+        "base_model.model.model.layers.9.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140650496
+          }
+        },
+        "base_model.model.model.layers.9.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140683264
+          }
+        },
+        "base_model.model.model.layers.9.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140716032
+          }
+        },
+        "base_model.model.model.layers.9.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 140748800
+          }
+        },
+        "base_model.model.model.layers.9.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 140836864
+          }
+        },
+        "base_model.model.model.layers.9.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 140869632
+          }
+        },
+        "base_model.model.model.layers.9.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 140957696
+          }
+        },
+        "base_model.model.model.layers.9.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141045760
+          }
+        },
+        "base_model.model.model.layers.10.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141078528
+          }
+        },
+        "base_model.model.model.layers.10.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141111296
+          }
+        },
+        "base_model.model.model.layers.10.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141144064
+          }
+        },
+        "base_model.model.model.layers.10.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141176832
+          }
+        },
+        "base_model.model.model.layers.10.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141209600
+          }
+        },
+        "base_model.model.model.layers.10.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141242368
+          }
+        },
+        "base_model.model.model.layers.10.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141275136
+          }
+        },
+        "base_model.model.model.layers.10.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141307904
+          }
+        },
+        "base_model.model.model.layers.10.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141340672
+          }
+        },
+        "base_model.model.model.layers.10.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 141373440
+          }
+        },
+        "base_model.model.model.layers.10.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141461504
+          }
+        },
+        "base_model.model.model.layers.10.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 141494272
+          }
+        },
+        "base_model.model.model.layers.10.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 141582336
+          }
+        },
+        "base_model.model.model.layers.10.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141670400
+          }
+        },
+        "base_model.model.model.layers.11.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141703168
+          }
+        },
+        "base_model.model.model.layers.11.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141735936
+          }
+        },
+        "base_model.model.model.layers.11.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141768704
+          }
+        },
+        "base_model.model.model.layers.11.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141801472
+          }
+        },
+        "base_model.model.model.layers.11.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141834240
+          }
+        },
+        "base_model.model.model.layers.11.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141867008
+          }
+        },
+        "base_model.model.model.layers.11.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141899776
+          }
+        },
+        "base_model.model.model.layers.11.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141932544
+          }
+        },
+        "base_model.model.model.layers.11.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 141965312
+          }
+        },
+        "base_model.model.model.layers.11.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 141998080
+          }
+        },
+        "base_model.model.model.layers.11.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142086144
+          }
+        },
+        "base_model.model.model.layers.11.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 142118912
+          }
+        },
+        "base_model.model.model.layers.11.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 142206976
+          }
+        },
+        "base_model.model.model.layers.11.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142295040
+          }
+        },
+        "base_model.model.model.layers.12.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142327808
+          }
+        },
+        "base_model.model.model.layers.12.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142360576
+          }
+        },
+        "base_model.model.model.layers.12.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142393344
+          }
+        },
+        "base_model.model.model.layers.12.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142426112
+          }
+        },
+        "base_model.model.model.layers.12.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142458880
+          }
+        },
+        "base_model.model.model.layers.12.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142491648
+          }
+        },
+        "base_model.model.model.layers.12.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142524416
+          }
+        },
+        "base_model.model.model.layers.12.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142557184
+          }
+        },
+        "base_model.model.model.layers.12.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142589952
+          }
+        },
+        "base_model.model.model.layers.12.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 142622720
+          }
+        },
+        "base_model.model.model.layers.12.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142710784
+          }
+        },
+        "base_model.model.model.layers.12.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 142743552
+          }
+        },
+        "base_model.model.model.layers.12.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 142831616
+          }
+        },
+        "base_model.model.model.layers.12.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142919680
+          }
+        },
+        "base_model.model.model.layers.13.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142952448
+          }
+        },
+        "base_model.model.model.layers.13.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 142985216
+          }
+        },
+        "base_model.model.model.layers.13.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143017984
+          }
+        },
+        "base_model.model.model.layers.13.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143050752
+          }
+        },
+        "base_model.model.model.layers.13.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143083520
+          }
+        },
+        "base_model.model.model.layers.13.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143116288
+          }
+        },
+        "base_model.model.model.layers.13.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143149056
+          }
+        },
+        "base_model.model.model.layers.13.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143181824
+          }
+        },
+        "base_model.model.model.layers.13.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143214592
+          }
+        },
+        "base_model.model.model.layers.13.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 143247360
+          }
+        },
+        "base_model.model.model.layers.13.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143335424
+          }
+        },
+        "base_model.model.model.layers.13.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 143368192
+          }
+        },
+        "base_model.model.model.layers.13.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 143456256
+          }
+        },
+        "base_model.model.model.layers.13.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143544320
+          }
+        },
+        "base_model.model.model.layers.14.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143577088
+          }
+        },
+        "base_model.model.model.layers.14.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143609856
+          }
+        },
+        "base_model.model.model.layers.14.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143642624
+          }
+        },
+        "base_model.model.model.layers.14.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143675392
+          }
+        },
+        "base_model.model.model.layers.14.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143708160
+          }
+        },
+        "base_model.model.model.layers.14.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143740928
+          }
+        },
+        "base_model.model.model.layers.14.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143773696
+          }
+        },
+        "base_model.model.model.layers.14.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143806464
+          }
+        },
+        "base_model.model.model.layers.14.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143839232
+          }
+        },
+        "base_model.model.model.layers.14.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 143872000
+          }
+        },
+        "base_model.model.model.layers.14.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 143960064
+          }
+        },
+        "base_model.model.model.layers.14.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 143992832
+          }
+        },
+        "base_model.model.model.layers.14.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 144080896
+          }
+        },
+        "base_model.model.model.layers.14.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144168960
+          }
+        },
+        "base_model.model.model.layers.15.self_attn.q_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144201728
+          }
+        },
+        "base_model.model.model.layers.15.self_attn.q_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144234496
+          }
+        },
+        "base_model.model.model.layers.15.self_attn.k_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144267264
+          }
+        },
+        "base_model.model.model.layers.15.self_attn.k_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144300032
+          }
+        },
+        "base_model.model.model.layers.15.self_attn.v_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144332800
+          }
+        },
+        "base_model.model.model.layers.15.self_attn.v_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144365568
+          }
+        },
+        "base_model.model.model.layers.15.self_attn.o_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144398336
+          }
+        },
+        "base_model.model.model.layers.15.self_attn.o_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144431104
+          }
+        },
+        "base_model.model.model.layers.15.mlp.gate_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144463872
+          }
+        },
+        "base_model.model.model.layers.15.mlp.gate_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 144496640
+          }
+        },
+        "base_model.model.model.layers.15.mlp.up_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144584704
+          }
+        },
+        "base_model.model.model.layers.15.mlp.up_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 144617472
+          }
+        },
+        "base_model.model.model.layers.15.mlp.down_proj.lora_A.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 88064,
+            "start": 144705536
+          }
+        },
+        "base_model.model.model.layers.15.mlp.down_proj.lora_B.default.weight": {
+          "class": "deepspeed.utils.tensor_fragment.fragment_address",
+          "fields": {
+            "numel": 32768,
+            "start": 144793600
+          }
+        }
+      }
+    ]
+  },
+  "ds_config": {
+    "bf16": {
+      "enabled": true
+    },
+    "zero_optimization": {
+      "stage": 2,
+      "allgather_partitions": true,
+      "allgather_bucket_size": 500000000.0,
+      "overlap_comm": true,
+      "reduce_scatter": true,
+      "reduce_bucket_size": 500000000.0,
+      "contiguous_gradients": true
+    },
+    "gradient_accumulation_steps": 4,
+    "gradient_clipping": 1.0,
+    "steps_per_print": Infinity,
+    "train_batch_size": 64,
+    "train_micro_batch_size_per_gpu": 8,
+    "wall_clock_breakdown": false,
+    "flops_profiler": {
+      "enabled": false,
+      "profile_step": 10,
+      "module_depth": -1,
+      "top_modules": 3,
+      "detailed": true,
+      "output_file": "flops_profiler.out"
+    },
+    "zero_allow_untested_optimizer": true,
+    "fp16": {
+      "enabled": false
+    }
+  },
+  "ds_version": "0.16.9"
+}

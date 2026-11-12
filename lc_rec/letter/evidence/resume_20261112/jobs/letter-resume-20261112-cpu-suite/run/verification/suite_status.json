@@ -1,0 +1,86 @@
+{
+  "started_utc": "2026-11-12T06:13:20.845777+00:00",
+  "cpu_only": true,
+  "checks": [
+    {
+      "name": "inspect-default-cont-r2",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "/home/bwwu/lc-rec/letter-resume-20261112/releases/d84088222df1f00dffef02f3c97c43efb200ccdc/lc_rec/letter/scripts/resume_inspect.py",
+        "--checkpoint",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-default-cont-r2/training/checkpoint-2",
+        "--output",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-cpu-suite/verification/inspect-default-cont-r2"
+      ],
+      "started_utc": "2026-11-12T06:13:20.845827+00:00",
+      "ended_utc": "2026-11-12T06:16:22.984957+00:00",
+      "exit_code": 0
+    },
+    {
+      "name": "state-default-cont-r2",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "/home/bwwu/lc-rec/letter-resume-20261112/releases/d84088222df1f00dffef02f3c97c43efb200ccdc/lc_rec/letter/scripts/resume_checkpoint_state.py",
+        "--continuous",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-default-cont-r2/training",
+        "--resumed",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-default-resume-r2/training",
+        "--inspection",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-cpu-suite/verification/inspect-default-cont-r2",
+        "--output",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-cpu-suite/verification/state-default-cont-r2.json"
+      ],
+      "started_utc": "2026-11-12T06:16:22.985607+00:00",
+      "ended_utc": "2026-11-12T06:16:25.301891+00:00",
+      "exit_code": 0
+    },
+    {
+      "name": "inspect-torchdet-cont-r3",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "/home/bwwu/lc-rec/letter-resume-20261112/releases/d84088222df1f00dffef02f3c97c43efb200ccdc/lc_rec/letter/scripts/resume_inspect.py",
+        "--checkpoint",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-torchdet-cont-r3/training/checkpoint-2",
+        "--output",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-cpu-suite/verification/inspect-torchdet-cont-r3"
+      ],
+      "started_utc": "2026-11-12T06:16:25.303281+00:00",
+      "ended_utc": "2026-11-12T06:19:18.162134+00:00",
+      "exit_code": 0
+    },
+    {
+      "name": "state-torchdet-cont-r3",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "/home/bwwu/lc-rec/letter-resume-20261112/releases/d84088222df1f00dffef02f3c97c43efb200ccdc/lc_rec/letter/scripts/resume_checkpoint_state.py",
+        "--continuous",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-torchdet-cont-r3/training",
+        "--resumed",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-torchdet-resume-r3/training",
+        "--inspection",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-cpu-suite/verification/inspect-torchdet-cont-r3",
+        "--output",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-cpu-suite/verification/state-torchdet-cont-r3.json"
+      ],
+      "started_utc": "2026-11-12T06:19:18.162927+00:00",
+      "ended_utc": "2026-11-12T06:19:20.387399+00:00",
+      "exit_code": 0
+    },
+    {
+      "name": "compare-historical",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "/home/bwwu/lc-rec/letter-resume-20261112/releases/d84088222df1f00dffef02f3c97c43efb200ccdc/lc_rec/letter/scripts/resume_cpu_verify.py",
+        "--left",
+        "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-cont-r3/training",
+        "--right",
+        "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-resume-r3/training",
+        "--output",
+        "/data/bwwu/lc-rec/resume-20261112/letter-resume-20261112-cpu-suite/verification/compare-historical"
+      ],
+      "started_utc": "2026-11-12T06:19:20.388954+00:00",
+      "ended_utc": "2026-11-12T06:19:22.366186+00:00",
+      "exit_code": 1
+    }
+  ]
+}
