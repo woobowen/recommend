@@ -54,6 +54,7 @@ def main():
     p.add_argument('--probe-stop', type=int, default=0)
     p.add_argument('--probe-save', type=int, default=2)
     p.add_argument('--precision-approval', required=True)
+    p.add_argument('--diagnosis', help='Opt-in observational probe; never used by formal pipeline')
     a = p.parse_args()
     rank = int(os.environ['RANK']); local = int(os.environ['LOCAL_RANK'])
     assert int(os.environ['WORLD_SIZE']) == 2
@@ -123,6 +124,12 @@ def main():
                   'attempt_job_id':os.environ.get('GRID_JOB_ID'), **kw}
         events.write(json.dumps(record, ensure_ascii=False) + '\n')
         if kind != 'batch': print(json.dumps({'rank': rank, **record}), flush=True)
+
+    probe=None
+    if a.diagnosis:
+        assert a.probe_stop==4, 'diagnosis may only run bounded four-step acceptance'
+        from resume_probe import Probe
+        probe=Probe(a.diagnosis,out,rank,event)
 
     da = SimpleNamespace(**cfg)
     da.data_path = str(Path(a.data_root).resolve())
@@ -255,7 +262,8 @@ def main():
     if a.resume:
         cp=Path(a.resume)
         meta=json.loads((cp/'complete.json').read_text())
-        assert meta['run_commit']==a.run_commit and meta['config_sha256']==sha(a.config)
+        allowed=[a.run_commit]+(probe.config['accepted_resume_commits'] if probe else [])
+        assert meta['run_commit'] in allowed and meta['config_sha256']==sha(a.config)
         for row in meta['files']:
             f=cp/row['path'];assert f.is_file() and f.stat().st_size==row['bytes']
             if row['sha256'] is not None: assert sha(f)==row['sha256']
@@ -277,6 +285,7 @@ def main():
             step=self.state.global_step
             before=current.global_steps
             boundary=current.is_gradient_accumulation_boundary()
+            if probe:probe.batch(step,self.replay_loader.yielded)
             if a.probe_stop or step<3 or step%250==0 or (step+1)%2060==0:
                 event('batch',step=step,loader_yielded=self.replay_loader.yielded,
                       input_sha256=hashlib.sha256(inputs['input_ids'].cpu().numpy().tobytes()).hexdigest(),
@@ -293,6 +302,7 @@ def main():
         def _save_checkpoint(self,current,trial,metrics=None):
             if metrics is not None and 'eval_loss' in metrics:
                 assert math.isfinite(float(metrics['eval_loss'])), 'nonfinite validation loss'
+            if probe:probe.state('S0-before-save-step%d'%self.state.global_step,model,self.model_wrapped,self.lr_scheduler,rng_capture(self.replay_loader.loader))
             super()._save_checkpoint(current,trial,metrics)
             cp=out/('checkpoint-%d'%self.state.global_step)
             # Native _save_checkpoint ran collectively, including DS optimizer,
@@ -336,6 +346,9 @@ def main():
             event('train_begin',global_step=state.global_step,max_steps=state.max_steps,
                   optimizer=type(engine.optimizer).__name__,scheduler=trainer.lr_scheduler.state_dict(),
                   deepspeed_owns_scheduler=engine.lr_scheduler is not None)
+            if probe:
+                probe.state('S2-train-begin',model,engine,trainer.lr_scheduler,rng_capture(trainer.replay_loader.loader))
+                probe.install(model,engine,trainer.lr_scheduler,lambda:rng_capture(trainer.replay_loader.loader))
         def on_step_end(self,args,state,control,**kw):
             engine=trainer.model_wrapped
             assert engine.global_steps==state.global_step
@@ -345,6 +358,7 @@ def main():
                 event('optimizer_step',step=state.global_step,epoch=state.epoch,
                       lr=engine.get_lr(),grad_norm=None if norm is None else float(norm))
             if a.probe_stop and state.global_step in [a.probe_save,a.probe_stop]: control.should_save=True
+            if probe:control.should_save=state.global_step in probe.config['checkpoint_steps'] and not a.resume
             if a.probe_stop and state.global_step>=a.probe_stop: control.should_training_stop=True
             return control
         def on_epoch_end(self,args,state,control,**kw):

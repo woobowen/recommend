@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 import datetime as dt
+import enum
 import hashlib
 import json
 import math
@@ -201,6 +202,15 @@ class Compare:
                 self.fail(path, "Sequence lengths differ", reference_length=len(reference), resumed_length=len(resumed))
             for index, (left, right) in enumerate(zip(reference, resumed)):
                 self.compare(left, right, key_path(path, index), exact)
+            return
+        if isinstance(reference, type) and issubclass(reference, enum.Enum):
+            left=(reference.__module__,reference.__qualname__,{k:v.value for k,v in reference.__members__.items()})
+            right=(resumed.__module__,resumed.__qualname__,{k:v.value for k,v in resumed.__members__.items()})
+            self.compare(left,right,path+'.enum_class',exact=True)
+            return
+        if isinstance(reference, enum.Enum):
+            self.compare((type(reference).__module__,type(reference).__qualname__,reference.name,reference.value),
+                         (type(resumed).__module__,type(resumed).__qualname__,resumed.name,resumed.value),path+'.enum',exact=True)
             return
         # DeepSpeed optimizer state may include a concrete LossScaler object.
         # Its class must be identical and every stored field is compared exactly.
