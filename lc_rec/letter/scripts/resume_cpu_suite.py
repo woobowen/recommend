@@ -22,6 +22,8 @@ def main():
  def training(name):return root/(prefix+name)/'training'
  for name in ['default-cont-r2']+(['torchdet-cont-r3'] if a.include_torchdet else []):
   run('inspect-'+name,'resume_inspect.py',['--checkpoint',training(name)/'checkpoint-2','--output',out/('inspect-'+name)])
+  resumed='default-resume-r2' if name=='default-cont-r2' else 'torchdet-resume-r3'
+  run('state-'+name,'resume_checkpoint_state.py',['--continuous',training(name),'--resumed',training(resumed),'--inspection',out/('inspect-'+name),'--output',out/('state-'+name+'.json')])
  pairs=[('historical',history/'letter-a0-20261111-acceptance-cont-r3/training',history/'letter-a0-20261111-acceptance-resume-r3/training'),
         ('default',training('default-cont-r2'),training('default-resume-r2')),
         ('independent-resumes',training('load-r1'),training('repeat-r2')),
