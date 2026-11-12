@@ -74,3 +74,9 @@ python3 lc_rec/letter/scripts/formal_control.py collect --commit 4c6a83d9ba42dc2
 2026-11-12 21:03:58 UTC，两rank真实完成epoch1 / step2060。全49,544条Validation于21:17:54 UTC完成，eval_loss `1.840831995010376`，eval_runtime `836.2467s`。21:18:29 UTC，checkpoint-2060完整保存，两rank保存耗时约34.945s，当前best=checkpoint-2060。
 
 [首轮checkpoint只读核验与两rank原始里程碑](evidence/formal_det_20261112/epoch1_checkpoint_audit.json)：19成员，必需成员齐备，大小及小文件SHA匹配；没有重新加载模型或GPU重跑。21:33 UTC核对GPU进程仅为本任务rank PID3227289/3227290，两卡56–57°C。21:32 UTC训练已自动进入epoch1.102 / step2270，最近loss1.7429，资源正常。完整四轮、最终best及测试仍待完成。
+
+## 运行中第二轮实际验收（非最终结果）
+
+2026-11-12 23:34:25 UTC，两rank真实完成epoch2 / step4120。第二次全量Validation于23:48:11 UTC完成，eval_loss `1.6257708072662354`，eval_runtime约 `826.172s`。23:48:42 UTC，checkpoint-4120完整保存，耗时约30.804s；19成员，总18,673,256,113 bytes，经必需成员、大小与小文件SHA只读核验。
+
+[第二轮checkpoint及原始两rank里程碑](evidence/formal_det_20261112/epoch2_checkpoint_audit.json)。阶段性best更新为checkpoint-4120；剩余两轮及最终best恢复、完整测试仍待执行。没有Early Stopping，没有运行测试选模，没有中断/恢复。Codex已在线监控超过5小时，服务端任务独立继续；用户关闭本地后重连查询原job，不提交新seed。
