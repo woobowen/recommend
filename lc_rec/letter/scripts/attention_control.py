@@ -77,7 +77,7 @@ print(json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()
         args=[commit if x=='@RUN_COMMIT@' else x for x in json.loads(a.args)]
         if '--run-commit' in args:assert args[args.index('--run-commit')+1]==commit
         req.update(job_id=a.job,capture_version=commit,cwd=release,argv=[fc.PYTHON,release+'/lc_rec/letter/scripts/'+a.script,*args],env=env,timeout_seconds=a.timeout,
-          inputs=[{'path':release+'/'+r['path'],'sha256':r['sha256']} for r in deployment['files'] if r['path'].startswith(('lc_rec/letter/scripts/','lc_rec/letter/config/'))])
+          inputs=[{'path':release+'/'+r['path'],'sha256':r['sha256']} for r in deployment['files'] if r['path'].startswith(('lc_rec/letter/scripts/','lc_rec/letter/config/','lc_rec/letter/review/attention_20261112/'))])
         path=fc.SUPPORT/'requests'/(a.job+'.json')
         if path.exists():assert json.loads(path.read_text())==req
         else:fc.transport.atomic(path,req)
