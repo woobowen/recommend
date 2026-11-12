@@ -30,7 +30,7 @@ transport.Transport.python=python_c
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode',choices=['deploy','submit','query','logs','collect','compare','selftest'])
+    p.add_argument('mode',choices=['deploy','submit','query','logs','collect','compare','selftest','cpu'])
     p.add_argument('--commit');p.add_argument('--job')
     p.add_argument('--kind',choices=['acceptance-continuous','acceptance-resume','preflight','formal'])
     p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true')
@@ -89,8 +89,8 @@ print(json.dumps(r))
         r=t.ssh(shlex.join(command),timeout=180)
         print(r);return
     assert a.job and a.job.startswith('letter-a0-20261112-');gridctl.valid(a.job)
-    if a.mode in ['submit','selftest']:
-        assert a.kind or a.mode=='selftest'
+    if a.mode in ['submit','selftest','cpu']:
+        assert a.kind or a.mode in ['selftest','cpu']
         gate=None
         if a.kind=='formal':
             gate=SUPPORT/'receipts/prelaunch_review.json'
@@ -111,8 +111,12 @@ print(json.dumps(r))
         if a.mode=='selftest':
             argv=[PYTHON,release+'/lc_rec/letter/scripts/runner_timeout_fixture.py']
             env['CUDA_VISIBLE_DEVICES']='';env.pop('DS_ACCELERATOR',None)
+        if a.mode=='cpu':
+            argv=[PYTHON,release+'/lc_rec/letter/scripts/formal_preflight_cpu.py',
+                  '--output',t.profile['job_root']+'/'+a.job+'/output/cpu']
+            env['CUDA_VISIBLE_DEVICES']='';env.pop('DS_ACCELERATOR',None)
         req.update(job_id=a.job,capture_version=commit,cwd=release,argv=argv,env=env,
-          timeout_seconds=5 if a.mode=='selftest' else 345600 if a.kind=='formal' else 1800,
+          timeout_seconds=5 if a.mode=='selftest' else 300 if a.mode=='cpu' else 345600 if a.kind=='formal' else 1800,
           inputs=[{'path':release+'/'+x['path'],'sha256':x['sha256']} for x in deployment['files'] if
                   x['path'].startswith(('lc_rec/letter/scripts/','lc_rec/letter/config/')) or x['path'].endswith('/precision_approval.json')])
         if gate:

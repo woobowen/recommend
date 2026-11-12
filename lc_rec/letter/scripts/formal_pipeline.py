@@ -91,7 +91,7 @@ def main():
             child=subprocess.Popen(command,stdin=subprocess.DEVNULL);children.append(child)
             while child.poll() is None:
                 resource()
-                try:child.wait(timeout=30)
+                try:child.wait(timeout=min(30,max(.01,limit-(time.monotonic()-started))))
                 except subprocess.TimeoutExpired:pass
             record.update(exit_code=child.returncode,ended_utc=utc());write(status_path,status)
             if child.returncode:raise RuntimeError(stage+' failed: '+str(child.returncode))
@@ -125,6 +125,12 @@ def main():
                     assert json.loads((output/'test_preflight'/('rank%d.json'%r)).read_text())['status']=='PREFLIGHT_INTERFACE_PASS'
             if a.kind=='formal':
                 selected=json.loads((training/'best_selection.json').read_text())
+                assert selected['run_commit']==a.run_commit
+                assert sha(training/'best_adapter/adapter_model.bin')==selected['adapter_sha256']
+                for r in [0,1]:
+                    proof=json.loads((training/('rank%d.json'%r)).read_text())
+                    assert proof['status']=='TRAINING_COMPLETE' and proof['global_step']==8240 and proof['epoch']==4.0
+                    assert proof['run_commit']==a.run_commit and proof['config_sha256']==sha(config)
                 run('test',[scripts/'formal_evaluate.py','--source-root',source,'--data-root',data,'--model',model,
                             '--adapter',training/'best_adapter','--output',output/'test','--run-commit',a.run_commit])
                 metrics=json.loads((output/'test/metrics.json').read_text())

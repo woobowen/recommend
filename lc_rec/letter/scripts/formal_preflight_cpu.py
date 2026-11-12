@@ -5,6 +5,8 @@ import hashlib
 import importlib.metadata
 import json
 import os
+import subprocess
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -55,6 +57,11 @@ def main():
             'versions':{n:importlib.metadata.version(n) for n in ['torch','transformers','accelerate','deepspeed','peft','bitsandbytes','fschat','flash-attn']},
             'extension':{'path':str(extension),'sha256':EXTENSION_SHA}}
     assert not torch.cuda.is_initialized();write(output/'cpu_acceptance.json',result)
+    scripts=Path(__file__).parent
+    for script,extra in [('test_formal_evaluate.py',[]),('test_formal_replay.py',['--output',str(output/'replay.json')])]:
+        cp=subprocess.run([sys.executable,str(scripts/script),*extra],capture_output=True,text=True)
+        write(output/(script+'.json'),{'argv':cp.args,'exit_code':cp.returncode,'stdout':cp.stdout,'stderr':cp.stderr})
+        assert cp.returncode==0,cp.stderr
     print(json.dumps({'status':'PASS','output':str(output)}))
 
 
