@@ -182,7 +182,7 @@ def observe_group(group):
             known[entry.name] = item
         elif candidate:
             result['unconfirmed_live'].append(dict(item,reason='GROUP_MEMBER_WITHOUT_OWNERSHIP_PROOF'))
-        elif (marked or exact_known) and group['job_id'].startswith('letter-a0-20261111-') and rec['uid']==group['uid'] and int(rec['start_ticks'])>=minimum:
+        elif (marked or exact_known) and group['job_id'].startswith(('letter-a0-20261111-','letter-a0-20261112-')) and rec['uid']==group['uid'] and int(rec['start_ticks'])>=minimum:
             # Torch elastic intentionally starts each rank in a new session.
             # Admit only this task namespace's marker/previously-proven exact
             # identities; signal_member still rechecks boot/PID/start/UID/PGID/
@@ -218,7 +218,7 @@ def signal_member(group, saved, signum):
         if rec['state']=='Z': return 'ALREADY_ZOMBIE'
         if not same_member(rec,saved,boot):
             raise RuntimeError('refuse signal: member identity changed')
-        a0_session=group['job_id'].startswith('letter-a0-20261111-') and rec['uid']==group['uid']
+        a0_session=group['job_id'].startswith(('letter-a0-20261111-','letter-a0-20261112-')) and rec['uid']==group['uid']
         if rec['uid']!=group['uid'] or (not a0_session and (rec['pgid']!=group['pgid'] or rec['session_id']!=group['session_id'])):
             raise RuntimeError('refuse signal: member left supported ownership scope')
         known = any(same_member(rec,v,boot) for v in group.get('known_members',[]))

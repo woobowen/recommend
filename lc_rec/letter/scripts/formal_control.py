@@ -115,8 +115,18 @@ print(json.dumps(r))
             argv=[PYTHON,release+'/lc_rec/letter/scripts/formal_preflight_cpu.py',
                   '--output',t.profile['job_root']+'/'+a.job+'/output/cpu']
             env['CUDA_VISIBLE_DEVICES']='';env.pop('DS_ACCELERATOR',None)
+        timeout=5 if a.mode=='selftest' else 300 if a.mode=='cpu' else 1800
+        if a.mode=='submit' and a.kind in ['formal','preflight']:
+            ledger_name='formal_seed42_ledger.json' if a.kind=='formal' else 'formal_det_preflight_20261112_ledger.json'
+            ledger=json.loads(t.python('import sys,json\nsys.path.insert(0,'+repr(release+'/lc_rec/letter/scripts')+')\nfrom formal_ledger import reconcile\nprint(json.dumps(reconcile('+repr('/data/bwwu/lc-rec/a0-normal-20261111/'+ledger_name)+')))'))
+            used=sum(x['wall_seconds'] for x in ledger['attempts'])
+            if a.kind=='formal':
+                assert not ledger['attempts'] or a.resume or a.resume_evaluation
+                timeout=int(345600-used-10)
+            else:timeout=int(1800-used-10)
+            assert timeout>0
         req.update(job_id=a.job,capture_version=commit,cwd=release,argv=argv,env=env,
-          timeout_seconds=5 if a.mode=='selftest' else 300 if a.mode=='cpu' else 345600 if a.kind=='formal' else 1800,
+          timeout_seconds=timeout,
           inputs=[{'path':release+'/'+x['path'],'sha256':x['sha256']} for x in deployment['files'] if
                   x['path'].startswith(('lc_rec/letter/scripts/','lc_rec/letter/config/')) or x['path'].endswith('/precision_approval.json')])
         if gate:

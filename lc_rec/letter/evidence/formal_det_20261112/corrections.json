@@ -1,0 +1,19 @@
+{
+  "task": "A0 formal deterministic Normal Instruments seed42 20261112",
+  "initial_round": 0,
+  "task_correction_rounds_used": 1,
+  "maximum_correction_rounds": 3,
+  "rounds": [
+    {
+      "round": 1,
+      "trigger": "Live query of preflight-r0 classified torchrun rank sessions as TASK_LEFT_SUPPORTED_GROUP because accepted runner's narrow allowlist named only 20261111 job prefix",
+      "root_cause": "New task job IDs use 20261112; original runner was reused without extending both identical narrow ownership predicates",
+      "correction": "Admit exactly the old and current A0 prefixes in observe_group and signal_member; retain same UID, dual marker, boot/PID/start/PGID/session and pidfd checks",
+      "active_export_policy": "Do not modify the active frozen preflight export or runner; original job ID and receipts remain intact",
+      "additional_prelaunch_hardening": "Controller derives outer runner timeout from reconciled cumulative ledger, retaining 10s cleanup reserve; pipeline retains 20s reserve and clips wait to remaining time",
+      "validation": "PENDING bounded no-GPU TERM-resistant separate-session timeout fixture under the new prefix",
+      "method_or_config_change": false
+    }
+  ],
+  "installations": []
+}
