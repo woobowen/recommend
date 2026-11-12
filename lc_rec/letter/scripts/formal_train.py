@@ -449,8 +449,8 @@ def main():
         else:
             with original_no_sync(current):yield
     trainer.accelerator.no_sync=zero2_native_accumulation
-    # Preserve intermediate acceptance checkpoints; formal uses author limit=1.
-    if a.probe_stop: trainer.args.save_total_limit=3
+    # Same storage policy in the bounded preflight and formal four-epoch path.
+    assert trainer.args.save_total_limit==cfg['storage_save_total_limit']==2
     try:
         result=trainer.train(resume_from_checkpoint=a.resume)
         assert_active(report['formal_attention'])
