@@ -1,0 +1,524 @@
+{
+  "checks": {
+    "grad_norm": {
+      "3": {
+        "candidate": 62.58864974975586,
+        "delta": 0.02355194091796875,
+        "pass": true,
+        "reference": 62.56509780883789,
+        "relative_percent": 0.037643896905475344,
+        "threshold": 0.06256609780883789
+      },
+      "4": {
+        "candidate": 64.50354766845703,
+        "delta": 0.9690208435058594,
+        "pass": false,
+        "reference": 63.53452682495117,
+        "relative_percent": 1.5251877867536225,
+        "threshold": 0.06353552682495117
+      }
+    },
+    "rank0.S1_to_S2.model": {
+      "difference_count": 0,
+      "first_paths": [],
+      "loaded_tensors": 1221,
+      "source_tensors": 1221,
+      "status": "EXACT"
+    },
+    "rank0.S1_to_S2.optimizer": {
+      "difference_count": 0,
+      "first_paths": [],
+      "loaded_tensors": 4,
+      "source_tensors": 4,
+      "status": "EXACT"
+    },
+    "rank0.diagnosis_forward": {
+      "different": 0,
+      "exact": 20,
+      "first_difference": null,
+      "pairs": 20
+    },
+    "rank0.diagnosis_parameter_gradient": {
+      "different": 6,
+      "exact": 10,
+      "first_difference": {
+        "candidate": {
+          "attempt_job_id": "letter-resume-20261112-repeat-r2",
+          "elapsed_seconds": 208.97604097798467,
+          "event": "diagnosis_parameter_gradient",
+          "gradient": {
+            "dtype": "torch.bfloat16",
+            "elements": 32768,
+            "sha256": "b8a7b96754099ced8b1f6bc277443b3a5e06bb41c98203122090b861f6ad7aad",
+            "shape": [
+              4096,
+              8
+            ]
+          },
+          "max_abs": 0.006744384765625,
+          "micro": 9,
+          "norm": 0.06445538252592087,
+          "parameter": "base_model.model.model.layers.0.self_attn.q_proj.lora_B.default.weight",
+          "step": 2,
+          "utc": "2026-11-12T05:25:00.252778+00:00"
+        },
+        "candidate_line": 16,
+        "comparison": {
+          "difference_count": 1,
+          "first_paths": [
+            [
+              "$.sha256",
+              "value"
+            ]
+          ],
+          "status": "DIFFERENT"
+        },
+        "reference": {
+          "attempt_job_id": "letter-resume-20261112-load-r1",
+          "elapsed_seconds": 209.3883543126285,
+          "event": "diagnosis_parameter_gradient",
+          "gradient": {
+            "dtype": "torch.bfloat16",
+            "elements": 32768,
+            "sha256": "90cb653e42d99733e6797c4de42d3425213ed31baf88e526db3c01cb37c5e908",
+            "shape": [
+              4096,
+              8
+            ]
+          },
+          "max_abs": 0.006683349609375,
+          "micro": 9,
+          "norm": 0.06402211636304855,
+          "parameter": "base_model.model.model.layers.0.self_attn.q_proj.lora_B.default.weight",
+          "step": 2,
+          "utc": "2026-11-12T05:17:59.863710+00:00"
+        },
+        "reference_line": 16
+      },
+      "pairs": 16
+    },
+    "rank0.loss": {
+      "exact": 4,
+      "first_failed_raw_event": {
+        "candidate": {
+          "attempt_job_id": "letter-resume-20261112-repeat-r2",
+          "ds_accumulation_boundary": false,
+          "ds_global_step_after": 3,
+          "ds_global_step_before": 3,
+          "elapsed_seconds": 234.09884817618877,
+          "event": "micro_loss",
+          "loss": 3.2369353771209717,
+          "scheduler_last_epoch": 3,
+          "step": 3,
+          "utc": "2026-11-12T05:25:25.375587+00:00"
+        },
+        "candidate_line": 85,
+        "reference": {
+          "attempt_job_id": "letter-resume-20261112-load-r1",
+          "ds_accumulation_boundary": false,
+          "ds_global_step_after": 3,
+          "ds_global_step_before": 3,
+          "elapsed_seconds": 234.55925458017737,
+          "event": "micro_loss",
+          "loss": 3.2492594718933105,
+          "scheduler_last_epoch": 3,
+          "step": 3,
+          "utc": "2026-11-12T05:18:25.034609+00:00"
+        },
+        "reference_line": 85
+      },
+      "pairs": 8,
+      "rows": [
+        {
+          "candidate": 3.2556426525115967,
+          "delta": 0.0,
+          "ordinal": 1,
+          "pass": true,
+          "reference": 3.2556426525115967,
+          "relative_percent": 0.0,
+          "threshold": 0.003256642652511597
+        },
+        {
+          "candidate": 3.2286994457244873,
+          "delta": 0.0,
+          "ordinal": 2,
+          "pass": true,
+          "reference": 3.2286994457244873,
+          "relative_percent": 0.0,
+          "threshold": 0.0032296994457244876
+        },
+        {
+          "candidate": 3.38384747505188,
+          "delta": 0.0,
+          "ordinal": 3,
+          "pass": true,
+          "reference": 3.38384747505188,
+          "relative_percent": 0.0,
+          "threshold": 0.00338484747505188
+        },
+        {
+          "candidate": 3.243962526321411,
+          "delta": 0.0,
+          "ordinal": 4,
+          "pass": true,
+          "reference": 3.243962526321411,
+          "relative_percent": 0.0,
+          "threshold": 0.0032449625263214115
+        },
+        {
+          "candidate": 3.058593273162842,
+          "delta": -0.002740621566772461,
+          "ordinal": 5,
+          "pass": true,
+          "reference": 3.0613338947296143,
+          "relative_percent": 0.08952377169608022,
+          "threshold": 0.0030623338947296146
+        },
+        {
+          "candidate": 3.2425758838653564,
+          "delta": -0.0026094913482666016,
+          "ordinal": 6,
+          "pass": true,
+          "reference": 3.245185375213623,
+          "relative_percent": 0.08041116443447625,
+          "threshold": 0.003246185375213623
+        },
+        {
+          "candidate": 3.2369353771209717,
+          "delta": -0.012324094772338867,
+          "ordinal": 7,
+          "pass": false,
+          "reference": 3.2492594718933105,
+          "relative_percent": 0.3792893389692188,
+          "threshold": 0.0032502594718933106
+        },
+        {
+          "candidate": 3.309380054473877,
+          "delta": 0.0010983943939208984,
+          "ordinal": 8,
+          "pass": true,
+          "reference": 3.308281660079956,
+          "relative_percent": 0.03320135667935698,
+          "threshold": 0.0033092816600799563
+        }
+      ],
+      "threshold_failures": 1
+    },
+    "rank0.pre.canonical_bnb": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank0.pre.gradients": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank0.pre.model": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank0.pre.optimizer": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank0.pre.parameters": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank0.pre.rng": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank0.pre.scheduler": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank1.S1_to_S2.model": {
+      "difference_count": 0,
+      "first_paths": [],
+      "loaded_tensors": 1221,
+      "source_tensors": 1221,
+      "status": "EXACT"
+    },
+    "rank1.S1_to_S2.optimizer": {
+      "difference_count": 0,
+      "first_paths": [],
+      "loaded_tensors": 4,
+      "source_tensors": 4,
+      "status": "EXACT"
+    },
+    "rank1.diagnosis_forward": {
+      "different": 0,
+      "exact": 20,
+      "first_difference": null,
+      "pairs": 20
+    },
+    "rank1.diagnosis_parameter_gradient": {
+      "different": 2,
+      "exact": 14,
+      "first_difference": {
+        "candidate": {
+          "attempt_job_id": "letter-resume-20261112-repeat-r2",
+          "elapsed_seconds": 213.40972283110023,
+          "event": "diagnosis_parameter_gradient",
+          "gradient": {
+            "dtype": "torch.bfloat16",
+            "elements": 32768,
+            "sha256": "e0789d66da83b5cf351f2bf68d03413a1d19ab115dcb399968065a41c003bfec",
+            "shape": [
+              4096,
+              8
+            ]
+          },
+          "max_abs": 0.005218505859375,
+          "micro": 12,
+          "norm": 0.05752052739262581,
+          "parameter": "base_model.model.model.layers.0.self_attn.q_proj.lora_B.default.weight",
+          "step": 2,
+          "utc": "2026-11-12T05:25:04.686697+00:00"
+        },
+        "candidate_line": 49,
+        "comparison": {
+          "difference_count": 1,
+          "first_paths": [
+            [
+              "$.sha256",
+              "value"
+            ]
+          ],
+          "status": "DIFFERENT"
+        },
+        "reference": {
+          "attempt_job_id": "letter-resume-20261112-load-r1",
+          "elapsed_seconds": 213.8605917999521,
+          "event": "diagnosis_parameter_gradient",
+          "gradient": {
+            "dtype": "torch.bfloat16",
+            "elements": 32768,
+            "sha256": "e2c3a09520587c3a16e894346e64aeaf05d02f0516579311fd54218c947827e7",
+            "shape": [
+              4096,
+              8
+            ]
+          },
+          "max_abs": 0.005218505859375,
+          "micro": 12,
+          "norm": 0.05757379159331322,
+          "parameter": "base_model.model.model.layers.0.self_attn.q_proj.lora_B.default.weight",
+          "step": 2,
+          "utc": "2026-11-12T05:18:04.335916+00:00"
+        },
+        "reference_line": 49
+      },
+      "pairs": 16
+    },
+    "rank1.loss": {
+      "exact": 4,
+      "first_failed_raw_event": {
+        "candidate": {
+          "attempt_job_id": "letter-resume-20261112-repeat-r2",
+          "ds_accumulation_boundary": false,
+          "ds_global_step_after": 3,
+          "ds_global_step_before": 3,
+          "elapsed_seconds": 231.1890472052619,
+          "event": "micro_loss",
+          "loss": 3.42592191696167,
+          "scheduler_last_epoch": 3,
+          "step": 3,
+          "utc": "2026-11-12T05:25:22.466020+00:00"
+        },
+        "candidate_line": 63,
+        "reference": {
+          "attempt_job_id": "letter-resume-20261112-load-r1",
+          "ds_accumulation_boundary": false,
+          "ds_global_step_after": 3,
+          "ds_global_step_before": 3,
+          "elapsed_seconds": 231.51973551977426,
+          "event": "micro_loss",
+          "loss": 3.4308395385742188,
+          "scheduler_last_epoch": 3,
+          "step": 3,
+          "utc": "2026-11-12T05:18:21.995060+00:00"
+        },
+        "reference_line": 63
+      },
+      "pairs": 8,
+      "rows": [
+        {
+          "candidate": 3.28108549118042,
+          "delta": 0.0,
+          "ordinal": 1,
+          "pass": true,
+          "reference": 3.28108549118042,
+          "relative_percent": 0.0,
+          "threshold": 0.0032820854911804202
+        },
+        {
+          "candidate": 3.2125182151794434,
+          "delta": 0.0,
+          "ordinal": 2,
+          "pass": true,
+          "reference": 3.2125182151794434,
+          "relative_percent": 0.0,
+          "threshold": 0.0032135182151794436
+        },
+        {
+          "candidate": 3.4473445415496826,
+          "delta": 0.0,
+          "ordinal": 3,
+          "pass": true,
+          "reference": 3.4473445415496826,
+          "relative_percent": 0.0,
+          "threshold": 0.003448344541549683
+        },
+        {
+          "candidate": 3.393336057662964,
+          "delta": 0.0,
+          "ordinal": 4,
+          "pass": true,
+          "reference": 3.393336057662964,
+          "relative_percent": 0.0,
+          "threshold": 0.003394336057662964
+        },
+        {
+          "candidate": 3.42592191696167,
+          "delta": -0.004917621612548828,
+          "ordinal": 5,
+          "pass": false,
+          "reference": 3.4308395385742188,
+          "relative_percent": 0.14333580912946114,
+          "threshold": 0.003431839538574219
+        },
+        {
+          "candidate": 3.5437755584716797,
+          "delta": 6.9141387939453125e-06,
+          "ordinal": 6,
+          "pass": true,
+          "reference": 3.5437686443328857,
+          "relative_percent": 0.0001951069465271737,
+          "threshold": 0.003544768644332886
+        },
+        {
+          "candidate": 3.4325337409973145,
+          "delta": -0.018301725387573242,
+          "ordinal": 7,
+          "pass": false,
+          "reference": 3.4508354663848877,
+          "relative_percent": 0.5303563605350973,
+          "threshold": 0.003451835466384888
+        },
+        {
+          "candidate": 3.243987560272217,
+          "delta": 0.002506256103515625,
+          "ordinal": 8,
+          "pass": true,
+          "reference": 3.241481304168701,
+          "relative_percent": 0.07731823411390523,
+          "threshold": 0.0032424813041687013
+        }
+      ],
+      "threshold_failures": 2
+    },
+    "rank1.pre.canonical_bnb": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank1.pre.gradients": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank1.pre.model": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank1.pre.optimizer": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank1.pre.parameters": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank1.pre.rng": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    },
+    "rank1.pre.scheduler": {
+      "difference_count": 0,
+      "first_paths": [],
+      "status": "EXACT"
+    }
+  },
+  "execution_status": "FINISHED",
+  "files": {
+    "jobs/letter-resume-20261112-cpu-r0/run/inspection/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt.json": {
+      "bytes": 60974,
+      "sha256": "7138c1a8abfd8735d3f994a5494404f1f6a9b9158abfe89ce858f7db96625ca4"
+    },
+    "jobs/letter-resume-20261112-cpu-r0/run/inspection/bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt.json": {
+      "bytes": 60629,
+      "sha256": "5e41f8ade42b6cc47c6c1b0cb2fbe3588dc6daf22f2a54dc54fc542212b110fa"
+    },
+    "jobs/letter-resume-20261112-cpu-r0/run/inspection/mp_rank_00_model_states.pt.json": {
+      "bytes": 474628,
+      "sha256": "15855b1070731822c66d08833f3da2717b7e2770f16c88a75bf17be9101bbe8c"
+    },
+    "jobs/letter-resume-20261112-load-r1/run/training/S2-train-begin.rank0.json": {
+      "bytes": 851242,
+      "sha256": "d301ee6b46c8f9d5709393c3425f3fd0c37c360bda77c2931ea19df795c3b62d"
+    },
+    "jobs/letter-resume-20261112-load-r1/run/training/S2-train-begin.rank1.json": {
+      "bytes": 850897,
+      "sha256": "229e053a02cf6108a4e24e6a2c5f4778fdf21e5e69c0bd60a1350ce9e9864740"
+    },
+    "jobs/letter-resume-20261112-load-r1/run/training/before_first_forward.rank0.json": {
+      "bytes": 851194,
+      "sha256": "d960822d00ca33705f54faa40de7bca6bd5fbe64e6b06ff0c8ba3ae575f73012"
+    },
+    "jobs/letter-resume-20261112-load-r1/run/training/before_first_forward.rank1.json": {
+      "bytes": 850849,
+      "sha256": "c8d9f9c8b689f1e65d9cf94e18932a34512006ff1d41662ff1bd94474a91bb5c"
+    },
+    "jobs/letter-resume-20261112-load-r1/run/training/events.rank0.jsonl": {
+      "bytes": 42756,
+      "sha256": "ecfeaba093c8cace39982b90c99826cac7e9aab23491b5ffa9365890b8d5c71f"
+    },
+    "jobs/letter-resume-20261112-load-r1/run/training/events.rank1.jsonl": {
+      "bytes": 42764,
+      "sha256": "ca84b907ec0d1e938a7ced09ce0edd20f003aeea2ce826a4237f481d0c769ba6"
+    },
+    "jobs/letter-resume-20261112-repeat-r2/run/training/before_first_forward.rank0.json": {
+      "bytes": 851194,
+      "sha256": "d960822d00ca33705f54faa40de7bca6bd5fbe64e6b06ff0c8ba3ae575f73012"
+    },
+    "jobs/letter-resume-20261112-repeat-r2/run/training/before_first_forward.rank1.json": {
+      "bytes": 850849,
+      "sha256": "c8d9f9c8b689f1e65d9cf94e18932a34512006ff1d41662ff1bd94474a91bb5c"
+    },
+    "jobs/letter-resume-20261112-repeat-r2/run/training/events.rank0.jsonl": {
+      "bytes": 42944,
+      "sha256": "18b844dd4e332c469e3de8b0010a0584324112c87c0b5568c40d79c5fc484ad6"
+    },
+    "jobs/letter-resume-20261112-repeat-r2/run/training/events.rank1.jsonl": {
+      "bytes": 42950,
+      "sha256": "2aa5de90eae4f5db01bc871c1c40b85fd55c8ccf26c768a12320314d9d273982"
+    }
+  },
+  "scope": "independent stdlib audit through execution bridge",
+  "threshold": {
+    "atol": 1e-06,
+    "rtol": 0.001
+  }
+}
