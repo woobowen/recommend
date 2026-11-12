@@ -284,8 +284,10 @@ def main():
     def strict_ds_load(engine, path):
         verify_checkpoint(path,a.run_commit,sha(a.config))
         saved=json.loads((Path(path)/'trainer_state.json').read_text())
-        loaded,client=engine.load_checkpoint(path,load_module_strict=True,
-                 load_optimizer_states=True,load_lr_scheduler_states=True)
+        from formal_bnb_reload import hot_scb_alias
+        with hot_scb_alias(engine.module,event):
+            loaded,client=engine.load_checkpoint(path,load_module_strict=True,
+                     load_optimizer_states=True,load_lr_scheduler_states=True)
         assert loaded and engine.global_steps==saved['global_step']
         # HF4.31/Accelerate0.21 keeps LambdaLR outside the DS engine. Persist it
         # separately rather than attaching it to engine.step (which double-steps

@@ -57,6 +57,8 @@ def main():
             'versions':{n:importlib.metadata.version(n) for n in ['torch','transformers','accelerate','deepspeed','peft','bitsandbytes','fschat','flash-attn']},
             'extension':{'path':str(extension),'sha256':EXTENSION_SHA}}
     assert not torch.cuda.is_initialized();write(output/'cpu_acceptance.json',result)
+    from formal_bnb_reload import cpu_regression
+    write(output/'bnb_hot_reload_cpu.json',cpu_regression())
     scripts=Path(__file__).parent
     for script,extra in [('test_formal_evaluate.py',[]),('test_formal_replay.py',['--output',str(output/'replay.json')])]:
         cp=subprocess.run([sys.executable,str(scripts/script),*extra],capture_output=True,text=True)
