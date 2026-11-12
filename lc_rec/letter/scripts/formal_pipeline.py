@@ -25,7 +25,7 @@ def main():
         p.add_argument('--'+n,required=True)
     p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true')
     p.add_argument('--prelaunch-review');a=p.parse_args()
-    assert a.kind in ['acceptance-continuous','acceptance-resume','formal']
+    assert a.kind in ['acceptance-continuous','acceptance-resume','preflight','formal']
     root=Path('/data/bwwu/lc-rec/a0-normal-20261111');root.mkdir(parents=True,exist_ok=True)
     job=Path(os.environ['GRID_JOB_DIR']);assert job.name==a.job_id
     scripts=Path(a.release)/'lc_rec/letter/scripts'
@@ -46,7 +46,8 @@ def main():
     if a.resume and a.kind=='formal':
         complete=sorted((x for x in training.glob('checkpoint-*') if (x/'complete.json').is_file()),key=lambda x:int(x.name.split('-')[-1]))
         assert complete and Path(a.resume).resolve()==complete[-1].resolve(),'only latest complete checkpoint may resume training'
-    ledger_path=root/('formal_seed42_ledger.json' if a.kind=='formal' else 'acceptance_ledger.json')
+    ledger_path=root/('formal_seed42_ledger.json' if a.kind=='formal' else
+                     'formal_det_preflight_20261112_ledger.json' if a.kind=='preflight' else 'acceptance_ledger.json')
     status_path=job/'output/pipeline.json'
     started=time.monotonic();utc=lambda:dt.datetime.now(dt.timezone.utc).isoformat()
     status={'status':'PREFLIGHT','job_id':a.job_id,'kind':a.kind,'run_commit':a.run_commit,
@@ -58,7 +59,8 @@ def main():
         assert all(x['job_id']!=a.job_id for x in ledger['attempts'])
         if a.kind=='formal' and ledger['attempts']: assert a.resume or a.resume_evaluation,'second fresh formal seed forbidden'
         used=sum(x['wall_seconds'] for x in ledger['attempts'])
-        limit=(345600-used) if a.kind=='formal' else (3600-sum(x['gpu_device_seconds'] for x in ledger['attempts']))/2
+        # Reserve 20s for identity-checked worker cleanup inside the total cap.
+        limit=(345600-used-20) if a.kind=='formal' else (3600-sum(x['gpu_device_seconds'] for x in ledger['attempts'])-40)/2
         assert limit>0
         gpu=subprocess.check_output(['nvidia-smi','--query-compute-apps=gpu_uuid,pid,process_name,used_memory','--format=csv'],text=True)
         assert len(gpu.strip().splitlines())==1,'GPU compute processes already present'
@@ -99,7 +101,8 @@ def main():
                   '--output',training,'--config',config,'--run-commit',a.run_commit,
                   '--precision-approval',a.precision_approval]
             if a.resume:args+=['--resume',a.resume]
-            if a.kind!='formal':args+=['--probe-stop','4','--probe-save','2']
+            if a.kind=='preflight':args+=['--probe-stop','12','--probe-save','2','--preflight-interfaces']
+            elif a.kind!='formal':args+=['--probe-stop','4','--probe-save','2']
             if a.resume_evaluation:
                 assert a.kind=='formal' and not a.resume and ledger['attempts'][:-1]
                 for r in [0,1]:
@@ -114,6 +117,12 @@ def main():
                 if a.kind=='formal' and (training/'best_selection.json').exists():
                     raise RuntimeError('training already completed: verify and use --resume-evaluation; never retrain from older best')
                 run('train',args)
+            if a.kind=='preflight':
+                run('test_interfaces',[scripts/'formal_evaluate.py','--source-root',source,'--data-root',data,'--model',model,
+                            '--adapter',training/'preflight_adapter','--output',output/'test_preflight','--run-commit',a.run_commit,
+                            '--preflight-users-per-rank','8'])
+                for r in [0,1]:
+                    assert json.loads((output/'test_preflight'/('rank%d.json'%r)).read_text())['status']=='PREFLIGHT_INTERFACE_PASS'
             if a.kind=='formal':
                 selected=json.loads((training/'best_selection.json').read_text())
                 run('test',[scripts/'formal_evaluate.py','--source-root',source,'--data-root',data,'--model',model,
@@ -121,7 +130,7 @@ def main():
                 metrics=json.loads((output/'test/metrics.json').read_text())
                 status.update(best_selection=selected,metrics=metrics)
                 for r in [0,1]:assert json.loads((training/('rank%d.json'%r)).read_text())['status']=='TRAINING_COMPLETE'
-            status.update(status='SUCCESS' if a.kind=='formal' else 'ACCEPTANCE_PATH_COMPLETE',exit_code=0)
+            status.update(status='SUCCESS' if a.kind=='formal' else 'PREFLIGHT_COMPLETE' if a.kind=='preflight' else 'ACCEPTANCE_PATH_COMPLETE',exit_code=0)
         except BaseException as e:
             import traceback
             status.update(status='FAILED',error=repr(e),traceback=traceback.format_exc(),exit_code=1)

@@ -1,0 +1,102 @@
+{
+  "host": "zwlab-01",
+  "uid": 1005,
+  "utc": "2026-11-12T17:52:37.331368+00:00",
+  "gpu": "index, uuid, name, memory.total [MiB], memory.used [MiB], utilization.gpu [%]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB, 0 %\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB, 0 %\n",
+  "compute": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\n",
+  "ram": "               total        used        free      shared  buff/cache   available\nMem:     265490894848  8785580032 26222485504     3514368 232120700928 256705314816\nSwap:    68719472640   152190976 68567281664\n",
+  "disk": "Filesystem                   1B-blocks          Used     Available Use% Mounted on\n/dev/mapper/vg0-lv--data 7937302376448 4752788819968 3104481161216  61% /data\n/dev/nvme0n1p3            913593581568  276656615424  590453436416  32% /\n",
+  "process": "    PID    PPID                  STARTED COMMAND\n 545343       1 Wed Sep 16 02:10:49 2026 /usr/lib/systemd/systemd --user\n 545347  545343 Wed Sep 16 02:10:49 2026 (sd-pam)\n 547702       1 Wed Sep 16 02:18:55 2026 /home/bwwu/.vscode-server/code-645f29cc3176500b4b5762ba887cf2a7f0ffdf2c --cli-data-dir /home/bwwu/.vscode-server/cli agent host\n2986753       1 Wed Sep 30 02:58:11 2026 sh /home/bwwu/.vscode-server/cli/servers/Stable-04c0d99f4fb0d8afe6ce4f0c58e31e183ac3e4b1/server/bin/code-server --install-extension=ms-python.python --install-extension=ms-toolsai.jupyter-renderers --install-extension=ms-toolsai.jupyter-keymap --install-extension=ms-toolsai.jupyter\n2986757 2986753 Wed Sep 30 02:58:11 2026 /home/bwwu/.vscode-server/cli/servers/Stable-04c0d99f4fb0d8afe6ce4f0c58e31e183ac3e4b1/server/node /home/bwwu/.vscode-server/cli/servers/Stable-04c0d99f4fb0d8afe6ce4f0c58e31e183ac3e4b1/server/out/server-main.js --install-extension=ms-python.python --install-extension=ms-toolsai.jupyter-renderers --install-extension=ms-toolsai.jupyter-keymap --install-extension=ms-toolsai.jupyter\n2994484  545343 Wed Sep 30 08:17:29 2026 /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\n3222366 3222347 Thu Nov 12 17:52:37 2026 sshd-session: bwwu@notty\n3222367 3222366 Thu Nov 12 17:52:37 2026 python3 -I -S -B -c import os,json,socket,subprocess,hashlib from pathlib import Path r={'host':socket.gethostname(),'uid':os.getuid(),'utc':__import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat()} for k,v in {'gpu':['nvidia-smi','--query-gpu=index,uuid,name,memory.total,memory.used,utilization.gpu','--format=csv'],'compute':['nvidia-smi','--query-compute-apps=gpu_uuid,pid,process_name,used_memory','--format=csv'],'ram':['free','-b'],'disk':['df','-B1','/data/bwwu','/home/bwwu'],'process':['ps','-u','bwwu','-o','pid,ppid,lstart,args']}.items():  r[k]=subprocess.check_output(v,text=True) r['ledger']={} root=Path('/data/bwwu/lc-rec/a0-normal-20261111') for p in root.glob('*ledger*.json'):r['ledger'][str(p)]=json.loads(p.read_text()) r['formal_training_exists']=(root/'formal_seed42/training').exists() r['root_entries']=[str(p) for p in root.glob('*')] print(json.dumps(r)) \n3222374 3222367 Thu Nov 12 17:52:37 2026 ps -u bwwu -o pid,ppid,lstart,args\n",
+  "ledger": {
+    "/data/bwwu/lc-rec/a0-normal-20261111/acceptance_ledger.json": {
+      "attempts": [
+        {
+          "job_id": "letter-a0-20261111-acceptance-cont-r0",
+          "kind": "acceptance-continuous",
+          "run_commit": "2843f7de98bd94f4878a437f9847db1eb4c64711",
+          "started_utc": "2026-11-11T17:35:13.934157+00:00",
+          "resume": null,
+          "wall_limit_seconds": 1800.0,
+          "ended_utc": "2026-11-11T17:36:37.730681+00:00",
+          "wall_seconds": 83.981657,
+          "gpu_device_seconds": 167.963314,
+          "status": "FAILED",
+          "pipeline_wall_seconds": 83.69596993084997,
+          "runner_cleanup_verified": true,
+          "runner_receipt": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-20261111-acceptance-cont-r0/status.json"
+        },
+        {
+          "job_id": "letter-a0-20261111-acceptance-cont-r1",
+          "kind": "acceptance-continuous",
+          "run_commit": "2ad3f2bc9290ed1606b7480bf730ece7656e73e6",
+          "started_utc": "2026-11-11T17:45:04.489387+00:00",
+          "resume": null,
+          "wall_limit_seconds": 1716.018343,
+          "ended_utc": "2026-11-11T17:46:27.808772+00:00",
+          "wall_seconds": 83.509734,
+          "gpu_device_seconds": 167.019468,
+          "status": "FAILED",
+          "pipeline_wall_seconds": 83.24979389924556,
+          "runner_cleanup_verified": true,
+          "runner_receipt": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-20261111-acceptance-cont-r1/status.json"
+        },
+        {
+          "job_id": "letter-a0-20261111-acceptance-cont-r2",
+          "kind": "acceptance-continuous",
+          "run_commit": "5b166e3bbfe3cacdbef0e245968025107cf169c1",
+          "started_utc": "2026-11-11T17:52:40.002793+00:00",
+          "resume": null,
+          "wall_limit_seconds": 1632.508609,
+          "ended_utc": "2026-11-11T17:53:58.594429+00:00",
+          "wall_seconds": 78.787413,
+          "gpu_device_seconds": 157.574826,
+          "status": "FAILED",
+          "pipeline_wall_seconds": 78.52743570692837,
+          "runner_cleanup_verified": true,
+          "runner_receipt": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-20261111-acceptance-cont-r2/status.json"
+        },
+        {
+          "job_id": "letter-a0-20261111-acceptance-cont-r3",
+          "kind": "acceptance-continuous",
+          "run_commit": "87ba6556ce7237f8ef32c690165449d0d6a28294",
+          "started_utc": "2026-11-11T17:59:38.136057+00:00",
+          "resume": null,
+          "wall_limit_seconds": 1553.721196,
+          "ended_utc": "2026-11-11T18:02:44.670968+00:00",
+          "wall_seconds": 186.728672,
+          "gpu_device_seconds": 373.457344,
+          "status": "SUCCEEDED",
+          "pipeline_wall_seconds": 186.31802131794393,
+          "runner_cleanup_verified": true,
+          "runner_receipt": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-20261111-acceptance-cont-r3/status.json"
+        },
+        {
+          "job_id": "letter-a0-20261111-acceptance-resume-r3",
+          "kind": "acceptance-resume",
+          "run_commit": "87ba6556ce7237f8ef32c690165449d0d6a28294",
+          "started_utc": "2026-11-11T18:04:07.882930+00:00",
+          "resume": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-cont-r3/training/checkpoint-2",
+          "wall_limit_seconds": 1366.992524,
+          "ended_utc": "2026-11-11T18:07:00.629656+00:00",
+          "wall_seconds": 173.156615,
+          "gpu_device_seconds": 346.31323,
+          "status": "SUCCEEDED",
+          "pipeline_wall_seconds": 172.8688830435276,
+          "runner_cleanup_verified": true,
+          "runner_receipt": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-20261111-acceptance-resume-r3/status.json"
+        }
+      ]
+    }
+  },
+  "formal_training_exists": false,
+  "root_entries": [
+    "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-resume-r3",
+    "/data/bwwu/lc-rec/a0-normal-20261111/acceptance_ledger.json",
+    "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-cont-r2",
+    "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-cont-r0",
+    "/data/bwwu/lc-rec/a0-normal-20261111/a0_gpu.lock",
+    "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-cont-r1",
+    "/data/bwwu/lc-rec/a0-normal-20261111/acceptance_comparison.json",
+    "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261111-acceptance-cont-r3"
+  ]
+}

@@ -15,8 +15,8 @@ import sys
 import tarfile
 
 REPO=Path(__file__).resolve().parents[3]
-SUPPORT=Path('/home/addaswsw/recommend-support/letter-a0-normal-20261111')
-REMOTE='/home/bwwu/lc-rec/letter-a0-normal-20261111'
+SUPPORT=Path('/home/addaswsw/recommend-support/letter-a0-normal-det-20261112')
+REMOTE='/home/bwwu/lc-rec/letter-a0-normal-det-20261112'
 PYTHON='/data/bwwu/envs/letter-20261110/bin/python'
 sys.path.insert(0,'/home/addaswsw/recommend-support/sid-extensions-p0/scripts')
 import transport
@@ -32,7 +32,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('mode',choices=['deploy','submit','query','logs','collect','compare','selftest'])
     p.add_argument('--commit');p.add_argument('--job')
-    p.add_argument('--kind',choices=['acceptance-continuous','acceptance-resume','formal'])
+    p.add_argument('--kind',choices=['acceptance-continuous','acceptance-resume','preflight','formal'])
     p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true')
     p.add_argument('--continuous');p.add_argument('--resumed')
     a=p.parse_args();SUPPORT.mkdir(exist_ok=True,parents=True)
@@ -88,7 +88,7 @@ print(json.dumps(r))
                  '--resumed',a.resumed,'--output','/data/bwwu/lc-rec/a0-normal-20261111/acceptance_comparison.json']
         r=t.ssh(shlex.join(command),timeout=180)
         print(r);return
-    assert a.job and a.job.startswith('letter-a0-20261111-');gridctl.valid(a.job)
+    assert a.job and a.job.startswith('letter-a0-20261112-');gridctl.valid(a.job)
     if a.mode in ['submit','selftest']:
         assert a.kind or a.mode=='selftest'
         gate=None
@@ -145,7 +145,7 @@ for base,prefix in roots:
 print(json.dumps(result))
 """
             data=json.loads(t.python(code,timeout=60))
-            dest=REPO/'lc_rec/letter/evidence/formal_20261111/jobs'/a.job
+            dest=REPO/'lc_rec/letter/evidence/formal_det_20261112/jobs'/a.job
             for n,v in data.items():
                 path=dest/n;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(v['text'].encode('utf-8'))
                 assert sha(path)==v['sha256']

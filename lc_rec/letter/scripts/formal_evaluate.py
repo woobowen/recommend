@@ -317,11 +317,15 @@ def main():
     for name in ("source-root", "data-root", "model", "adapter", "output", "run-commit"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--aggregate-only", action="store_true", help="CPU recheck of already complete two-rank JSONL files")
+    parser.add_argument("--preflight-users-per-rank", type=int, default=0,
+                        help="Explicit interface preflight only; does not emit formal metrics or full-test PASS")
     parser.add_argument("--minimum-host-free-gib", type=float, default=40.)
     parser.add_argument("--minimum-disk-free-gib", type=float, default=20.)
     parser.add_argument("--max-seconds", type=int, default=96 * 3600,
                         help="Evaluation stage cap; the enclosing job enforces the cumulative 96-hour cap")
     args = parser.parse_args()
+    if args.preflight_users_per_rank not in (0, 8) or (args.preflight_users_per_rank and args.aggregate_only):
+        raise ValueError("Only a separate fixed eight-user/rank preflight is supported")
     output = Path(args.output).resolve()
     output.mkdir(parents=True, exist_ok=True)
     source = author_source(args.source_root)
@@ -438,6 +442,8 @@ def main():
         generation_started = time.monotonic()
         with prediction_path.open("x") as stream, torch.no_grad():
             for iteration, (row_indices, inputs, targets) in enumerate(loader):
+                if args.preflight_users_per_rank and iteration >= args.preflight_users_per_rank:
+                    break
                 guard()
                 if row_indices != [assignment[iteration]]:
                     raise AssertionError("DataLoader order differs from original sampler assignment")
@@ -493,13 +499,13 @@ def main():
                     print(json.dumps({"stage": "test", "rank": rank, "completed_users": report["completed_users"],
                                       "assigned_users": len(assignment), "elapsed_seconds": report["elapsed_generation_seconds"]}), flush=True)
             os.fsync(stream.fileno())
-        if report["completed_users"] != len(assignment):
+        if report["completed_users"] != (args.preflight_users_per_rank or len(assignment)):
             raise AssertionError("Author test shard did not complete")
         report["elapsed_generation_seconds"] = time.monotonic() - generation_started
         report["status"] = "PREDICTIONS_COMPLETE"
         write(report_path, report)
         dist.barrier()
-        if rank == 0:
+        if rank == 0 and not args.preflight_users_per_rank:
             result = aggregate_predictions([output / f"predictions.rank{i}.jsonl" for i in range(world)],
                                            users, catalog, evaluator, run_commit=args.run_commit)
             result.update(RUN_COMMIT=args.run_commit, adapter_path=str(Path(args.adapter).resolve()),
@@ -510,7 +516,8 @@ def main():
             print(json.dumps({"stage": "test_complete", "metrics": result["metrics"],
                               "users": result["actual_test_users"], "anomalies": result["anomalies"]}), flush=True)
         dist.barrier()
-        report["status"] = "PASS"
+        report["status"] = "PREFLIGHT_INTERFACE_PASS" if args.preflight_users_per_rank else "PASS"
+        report["preflight_only"] = bool(args.preflight_users_per_rank)
     except BaseException as error:
         report["status"] = "FAIL"
         report["error"] = {"type": type(error).__name__, "message": str(error), "traceback": traceback.format_exc()}
@@ -525,7 +532,7 @@ def main():
         write(report_path, report)
         if dist is not None and dist.is_initialized():
             dist.destroy_process_group()
-    return 0 if report["status"] == "PASS" else 2
+    return 0 if report["status"] in ("PASS", "PREFLIGHT_INTERFACE_PASS") else 2
 
 
 if __name__ == "__main__":

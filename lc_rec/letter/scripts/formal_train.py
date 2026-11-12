@@ -36,6 +36,34 @@ def sha(path):
     return h.hexdigest()
 
 
+def checkpoint_required_files(step):
+    prefix='global_step%d/'%step
+    return {'adapter_model.bin','adapter_config.json','trainer_state.json','training_args.bin',
+            'external_scheduler.pth','latest','tokenizer.model','tokenizer_config.json',
+            'added_tokens.json','special_tokens_map.json',
+            'loader_state_0.pth','loader_state_1.pth','rng_state_0.pth','rng_state_1.pth',
+            prefix+'mp_rank_00_model_states.pt',
+            prefix+'bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt',
+            prefix+'bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt'}
+
+
+def verify_checkpoint(path, run_commit, config_sha256):
+    path=Path(path)
+    meta=json.loads((path/'complete.json').read_text())
+    assert meta['run_commit']==run_commit and meta['config_sha256']==config_sha256
+    assert meta['collective_ranks']==2
+    assert checkpoint_required_files(meta['global_step']) <= {r['path'] for r in meta['files']}
+    for row in meta['files']:
+        relative=Path(row['path'])
+        assert not relative.is_absolute() and '..' not in relative.parts
+        f=path/relative
+        assert f.is_file() and not f.is_symlink() and f.stat().st_size==row['bytes']>0
+        if row['sha256'] is not None:assert sha(f)==row['sha256']
+    assert (path/'latest').read_text().strip()=='global_step%d'%meta['global_step']
+    assert json.loads((path/'trainer_state.json').read_text())['global_step']==meta['global_step']
+    return meta
+
+
 def nosync_source_identity(callable_):
     # contextmanager's outer wrapper is defined in contextlib.py. Inspect the
     # original decorated Accelerator method, retaining the full-file guard.
@@ -55,10 +83,13 @@ def main():
     p.add_argument('--probe-save', type=int, default=2)
     p.add_argument('--precision-approval', required=True)
     p.add_argument('--diagnosis', help='Opt-in observational probe; never used by formal pipeline')
+    p.add_argument('--preflight-interfaces', action='store_true', help='Bounded validation/best reload interfaces; never a formal result')
     a = p.parse_args()
     rank = int(os.environ['RANK']); local = int(os.environ['LOCAL_RANK'])
     assert int(os.environ['WORLD_SIZE']) == 2
     cfg = json.loads(Path(a.config).read_text())
+    assert not a.diagnosis, 'Formal FA adaptation is independent of diagnostic observers'
+    assert not a.preflight_interfaces or a.probe_stop == 12
     author=json.loads(Path(a.config).with_name('author_instruments.json').read_text())
     for k,v in author.items():
         if k not in ['base_model','output_dir','resume_from_checkpoint','deepspeed','data_path','gradient_accumulation_steps']:
@@ -125,6 +156,8 @@ def main():
         events.write(json.dumps(record, ensure_ascii=False) + '\n')
         if kind != 'batch': print(json.dumps({'rank': rank, **record}), flush=True)
 
+    from formal_attention import install as install_formal_attention, assert_active
+    report['formal_attention'] = install_formal_attention(cfg, event)
     probe=None
     if a.diagnosis:
         assert a.probe_stop==4, 'diagnosis may only run bounded four-step acceptance'
@@ -172,11 +205,14 @@ def main():
          num_train_epochs=4,learning_rate=2e-4,weight_decay=.01,lr_scheduler_type='cosine',
          report_to=[],fp16=False,bf16=True,logging_steps=10,optim='adamw_torch',
          gradient_checkpointing=True,evaluation_strategy='epoch',save_strategy='epoch',
-         eval_steps=1309,save_steps=1309,save_total_limit=1,load_best_model_at_end=True,
+         eval_steps=1309,save_steps=1309,save_total_limit=cfg['storage_save_total_limit'],load_best_model_at_end=True,
          deepspeed=ds,ddp_find_unused_parameters=False,eval_delay=1,dataloader_num_workers=0,
          local_rank=local,disable_tqdm=True)
     assert ta.metric_for_best_model=='loss' and ta.greater_is_better is False
     report['training_arguments']=ta.to_dict()
+    report['checkpoint_storage_adaptation']={'author_save_total_limit':1,'effective_save_total_limit':2,
+          'reason':'retain best and latest complete recovery point; rotate only after collective complete marker'}
+    assert ta.save_total_limit==2
     report['deepspeed_requested']=ds
 
     def rng_capture(loader=None):
@@ -246,6 +282,7 @@ def main():
 
     # Make the native HF/DS strict module load explicit and verify its step.
     def strict_ds_load(engine, path):
+        verify_checkpoint(path,a.run_commit,sha(a.config))
         saved=json.loads((Path(path)/'trainer_state.json').read_text())
         loaded,client=engine.load_checkpoint(path,load_module_strict=True,
                  load_optimizer_states=True,load_lr_scheduler_states=True)
@@ -263,15 +300,15 @@ def main():
     saved_loader=None
     if a.resume:
         cp=Path(a.resume)
-        meta=json.loads((cp/'complete.json').read_text())
-        allowed=[a.run_commit]+(probe.config['accepted_resume_commits'] if probe else [])
-        assert meta['run_commit'] in allowed and meta['config_sha256']==sha(a.config)
-        for row in meta['files']:
-            f=cp/row['path'];assert f.is_file() and f.stat().st_size==row['bytes']
-            if row['sha256'] is not None: assert sha(f)==row['sha256']
+        meta=verify_checkpoint(cp,a.run_commit,sha(a.config))
         saved_loader=torch.load(cp/('loader_state_%d.pth'%rank),weights_only=False,map_location='cpu')
 
     class AuditTrainer(Trainer):
+        _writing_checkpoint = False
+        def _rotate_checkpoints(self, use_mtime=False, output_dir=None):
+            if self._writing_checkpoint:
+                return
+            return super()._rotate_checkpoints(use_mtime=use_mtime,output_dir=output_dir)
         def get_train_dataloader(self):
             result=ReplayLoader(super().get_train_dataloader(), saved_loader)
             self.replay_loader=result
@@ -305,7 +342,10 @@ def main():
             if metrics is not None and 'eval_loss' in metrics:
                 assert math.isfinite(float(metrics['eval_loss'])), 'nonfinite validation loss'
             if probe:probe.state('S0-before-save-step%d'%self.state.global_step,model,self.model_wrapped,self.lr_scheduler,rng_capture(self.replay_loader.loader))
-            super()._save_checkpoint(current,trial,metrics)
+            checkpoint_started=time.monotonic()
+            self._writing_checkpoint=True
+            try:super()._save_checkpoint(current,trial,metrics)
+            finally:self._writing_checkpoint=False
             cp=out/('checkpoint-%d'%self.state.global_step)
             # Native _save_checkpoint ran collectively, including DS optimizer,
             # scheduler, module states and rank-specific RNG. Add loader state.
@@ -318,12 +358,16 @@ def main():
                     if f.is_file() and f.name!='complete.json':
                         rows.append({'path':str(f.relative_to(cp)),'bytes':f.stat().st_size,
                                      'sha256':sha(f) if f.stat().st_size<8*1024**2 else None})
-                assert any('optim_states.pt' in r['path'] for r in rows)
+                assert checkpoint_required_files(self.state.global_step) <= {r['path'] for r in rows}
+                assert all(r['bytes']>0 for r in rows)
                 write(cp/'complete.json',{'run_commit':a.run_commit,'config_sha256':sha(a.config),
                      'global_step':self.state.global_step,'files':rows,'collective_ranks':2})
             dist.barrier()
+            if rank==0:self._rotate_checkpoints(use_mtime=False,output_dir=str(out))
+            dist.barrier()
             event('checkpoint_complete',path=str(cp),step=self.state.global_step,
-                  best=self.state.best_model_checkpoint,best_metric=self.state.best_metric)
+                  best=self.state.best_model_checkpoint,best_metric=self.state.best_metric,
+                  elapsed_seconds_checkpoint=time.monotonic()-checkpoint_started)
 
     class Callback(TrainerCallback):
         def on_train_begin(self,args,state,control,**kw):
@@ -354,6 +398,9 @@ def main():
         def on_step_end(self,args,state,control,**kw):
             engine=trainer.model_wrapped
             assert engine.global_steps==state.global_step
+            if state.global_step==report['initial_global_step']+1:
+                assert_active(report['formal_attention'])
+                write(rp,report)
             norm=engine.get_global_grad_norm()
             if norm is not None and not math.isfinite(float(norm)):raise FloatingPointError('nonfinite gradient norm')
             if a.probe_stop or state.global_step%10==0:
@@ -404,6 +451,7 @@ def main():
     if a.probe_stop: trainer.args.save_total_limit=3
     try:
         result=trainer.train(resume_from_checkpoint=a.resume)
+        assert_active(report['formal_attention'])
         if a.probe_stop:
             assert trainer.state.global_step==a.probe_stop
             engine=trainer.model_wrapped
@@ -413,6 +461,21 @@ def main():
                    'global_step':trainer.state.global_step,'rng':rng_capture(trainer.replay_loader.loader)}
             torch.save(state,out/('acceptance_state_%d.pt'%rank))
             event('acceptance_state_saved',step=trainer.state.global_step)
+            if a.preflight_interfaces:
+                # Real author validation examples, only for interface acceptance.
+                # Formal training still evaluates the complete original dataset.
+                from torch.utils.data import Subset
+                metrics=trainer.evaluate(eval_dataset=Subset(valid,list(range(32))))
+                assert math.isfinite(metrics['eval_loss'])
+                event('preflight_validation',records=32,metrics=metrics)
+                cp=out/('checkpoint-%d'%a.probe_stop)
+                assert (cp/'complete.json').is_file()
+                trainer.state.best_model_checkpoint=str(cp)
+                trainer.state.best_metric=metrics['eval_loss']
+                strict_ds_load(trainer.model_wrapped,str(cp))
+                trainer.save_model(str(out/'preflight_adapter'))
+                event('preflight_best_restore',checkpoint=str(cp),adapter=str(out/'preflight_adapter'),
+                      selection_scope='interface only; not formal best selection')
         else:
             assert trainer.state.global_step==8240 and trainer.state.epoch==4.0
             assert trainer.state.best_model_checkpoint and trainer.state.best_metric is not None
