@@ -1,0 +1,183 @@
+{
+  "original_run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+  "original_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+  "runner_wall_seconds": 45322.209405,
+  "pipeline_wall_seconds": 45321.944337884896,
+  "charged_gpu_device_seconds": 90643.88867576979,
+  "stages": [
+    {
+      "stage": "train",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nnodes=1",
+        "--nproc_per_node=2",
+        "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/scripts/formal_train.py",
+        "--source-root",
+        "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+        "--data-root",
+        "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data",
+        "--model",
+        "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+        "--output",
+        "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training",
+        "--config",
+        "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/config/formal_instruments_seed42.json",
+        "--run-commit",
+        "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+        "--precision-approval",
+        "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/evidence/formal_20261111/precision_approval.json"
+      ],
+      "started_utc": "2026-11-12T18:41:18.614744+00:00",
+      "exit_code": 0,
+      "ended_utc": "2026-11-13T05:00:50.620735+00:00",
+      "wall_seconds": 37172.005991
+    },
+    {
+      "stage": "test",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nnodes=1",
+        "--nproc_per_node=2",
+        "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/scripts/formal_evaluate.py",
+        "--source-root",
+        "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+        "--data-root",
+        "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data",
+        "--model",
+        "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+        "--adapter",
+        "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/best_adapter",
+        "--output",
+        "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0/test",
+        "--run-commit",
+        "4c6a83d9ba42dc2fe737792759e410ef1874da76"
+      ],
+      "started_utc": "2026-11-13T05:00:52.312988+00:00",
+      "exit_code": 0,
+      "ended_utc": "2026-11-13T07:16:40.374466+00:00",
+      "wall_seconds": 8148.061478
+    }
+  ],
+  "trainer_runtime_seconds": 37076.5684,
+  "validation_history": [
+    {
+      "utc": "2026-11-12T21:17:54.485243+00:00",
+      "elapsed_seconds": 9393.927104623057,
+      "event": "log",
+      "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+      "step": 2060,
+      "epoch": 1.0,
+      "values": {
+        "eval_loss": 1.840831995010376,
+        "eval_runtime": 836.2467,
+        "eval_samples_per_second": 59.246,
+        "eval_steps_per_second": 3.703,
+        "epoch": 1.0
+      }
+    },
+    {
+      "utc": "2026-11-12T23:48:11.679620+00:00",
+      "elapsed_seconds": 18411.121480779722,
+      "event": "log",
+      "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+      "step": 4120,
+      "epoch": 2.0,
+      "values": {
+        "eval_loss": 1.6257708072662354,
+        "eval_runtime": 826.172,
+        "eval_samples_per_second": 59.968,
+        "eval_steps_per_second": 3.749,
+        "epoch": 2.0
+      }
+    },
+    {
+      "utc": "2026-11-13T02:24:55.773597+00:00",
+      "elapsed_seconds": 27815.215458562598,
+      "event": "log",
+      "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+      "step": 6180,
+      "epoch": 3.0,
+      "values": {
+        "eval_loss": 1.5417826175689697,
+        "eval_runtime": 821.4312,
+        "eval_samples_per_second": 60.314,
+        "eval_steps_per_second": 3.77,
+        "epoch": 3.0
+      }
+    },
+    {
+      "utc": "2026-11-13T04:59:42.320874+00:00",
+      "elapsed_seconds": 37101.7627339419,
+      "event": "log",
+      "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+      "step": 8240,
+      "epoch": 4.0,
+      "values": {
+        "eval_loss": 1.5409067869186401,
+        "eval_runtime": 822.1264,
+        "eval_samples_per_second": 60.263,
+        "eval_steps_per_second": 3.767,
+        "epoch": 4.0
+      }
+    }
+  ],
+  "checkpoint_save_seconds": 130.11942426022142,
+  "training_gpu_peak_allocated_bytes": [
+    12741671936,
+    12742233088
+  ],
+  "training_gpu_peak_reserved_bytes": [
+    16120807424,
+    16120807424
+  ],
+  "inference_gpu_peak_allocated_bytes": [
+    19595225088,
+    19663409152
+  ],
+  "inference_gpu_peak_reserved_bytes": [
+    23779606528,
+    24612175872
+  ],
+  "test_rank_generation_wall_seconds": [
+    8007.138136555441,
+    7696.0432089800015
+  ],
+  "resources": {
+    "source": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-20261112-normal-det-seed42-r0/output/resources.jsonl",
+    "samples": 1511,
+    "first": {
+      "utc": "2026-11-12T18:41:18.556781+00:00",
+      "elapsed_seconds": 0.10677083767950535,
+      "mem_available": 256569090048,
+      "swap_used": 152190976,
+      "disk_available": 3019934068736,
+      "gpu": "0, 1, 24082, 0\n1, 1, 24082, 0\n",
+      "seconds_without_worklog_progress": 0.057928554713726044
+    },
+    "last": {
+      "utc": "2026-11-13T07:16:39.297609+00:00",
+      "elapsed_seconds": 45320.8476022454,
+      "mem_available": 252947595264,
+      "swap_used": 152190976,
+      "disk_available": 2981623218176,
+      "gpu": "0, 23669, 415, 0\n1, 22000, 2084, 0\n",
+      "seconds_without_worklog_progress": 0.05986753851175308
+    },
+    "min_host_available_bytes": 217277804544,
+    "max_swap_used_bytes": 152190976,
+    "min_disk_available_bytes": 2970751266816,
+    "max_seconds_without_worklog_progress": 811.7226178068668
+  },
+  "scope": "Original timing records reused read-only; train stage includes validation/checkpoints/best restore. GPU device time is charged two-device reservation, not kernel-active time. No GPU in final CPU audit.",
+  "validation_total_seconds": 3305.9763000000003,
+  "trainer_runtime_minus_validation_seconds": 33770.592099999994,
+  "trainer_runtime_minus_validation_scope": "Includes checkpoint writes and best restore; not pure GPU kernel time.",
+  "best_restore_interval_upper_bound_seconds": 25.016565427184105,
+  "best_restore_interval_scope": "Final checkpoint_complete to strict_ds_restored; includes intervening Trainer overhead; not separately instrumented load-only duration."
+}

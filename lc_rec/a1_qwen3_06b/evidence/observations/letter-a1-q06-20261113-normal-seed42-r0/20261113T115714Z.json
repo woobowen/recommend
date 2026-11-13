@@ -1,0 +1,79 @@
+{
+  "utc": "2026-11-13T11:57:15.096845+00:00",
+  "job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+  "kind": "formal",
+  "rank": {
+    "0": {
+      "status": "INITIALIZING",
+      "run_commit": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+      "events": []
+    },
+    "1": {
+      "status": "INITIALIZING",
+      "run_commit": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+      "events": []
+    }
+  },
+  "test_rank": {},
+  "pipeline": {
+    "status": "RUNNING",
+    "job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+    "kind": "formal",
+    "run_commit": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+    "output": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0",
+    "started_utc": "2026-11-13T11:57:04.931972+00:00",
+    "pid": 3238564,
+    "stages": [
+      {
+        "stage": "train",
+        "argv": [
+          "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/a1_qwen3_06b/scripts/train.py",
+          "--letter",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER",
+          "--model",
+          "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-0.6B-Base/da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+          "--output",
+          "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training",
+          "--config",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/a1_qwen3_06b/config/formal_instruments_seed42.json",
+          "--run-commit",
+          "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5"
+        ],
+        "started_utc": "2026-11-13T11:57:05.100597+00:00"
+      }
+    ],
+    "asset_gate": {
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-cpu-r0/cpu/assets_environment.json",
+      "sha256": "2026ca3caebfeedc969c1171feac0c7685357a84d66652a4bdc10183795a4516",
+      "model_revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd"
+    },
+    "gpu_start": "index, uuid, name, memory.total [MiB], memory.used [MiB]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n",
+    "phase": "train"
+  },
+  "resources": [
+    {
+      "utc": "2026-11-13T11:57:05.102821+00:00",
+      "elapsed_seconds": 0.170873885974288,
+      "mem_available": 256474824704,
+      "swap_used": 152190976,
+      "disk_available": 2957481963520,
+      "gpu": "0, 1, 24082, 0\n1, 1, 24082, 0\n",
+      "seconds_without_worklog_progress": 0.1254273448139429
+    }
+  ],
+  "gpu": "index, uuid, memory.used [MiB], utilization.gpu [%], temperature.gpu\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 4 MiB, 0 %, 28\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 396 MiB, 0 %, 28\n",
+  "runner": {
+    "status": "RUNNING",
+    "exit_code": null,
+    "cleanup_verified": false,
+    "worker_alive": true,
+    "supervisor_alive": true,
+    "workgroup_live": true
+  }
+}

@@ -1,6 +1,6 @@
 # A1 Qwen3-0.6B-Base × LETTER Instruments Normal
 
-本轮为用户2026-11-13明确批准的一次性完整seed42实验。当前CPU、真实训练/恢复/推理预验收均已通过，正在绑定非作者预审及最终固定E/R部署；正式训练尚未启动。以下早期阶段叙述是保留的历史记录，最新状态以本文件末尾为准。不能将预验收PASS称为完整baseline通过。
+本轮为用户2026-11-13明确批准的一次性完整seed42实验。A1 PRELAUNCH: PASS。唯一正式seed42已启动且两rank真实更新；A1 FORMAL TRAINING仍为RUNNING，完整实验尚未完成。以下早期阶段叙述是保留的历史记录，最新状态以本文件末尾为准。不能将预验收PASS称为完整baseline通过。
 
 实验卡：仅替换A0下游LLaMA-7B为官方Qwen3-0.6B-Base；固定作者918 SID/交互、17训练prompt、历史20、response-only CE(logits/0.8)、Int8/BF16、r8/alpha16/dropout.05、七投影、完整active tied Embedding/Head、AdamW2e-4/wd.01/cosine/warmup.01、micro8×acc4×2=global64、4epoch/8240实际更新核验、Validation loss选best、Prompt0 Beam20全24772用户。无early stopping、无测试选模。新增预验收≤60 GPU-device-min，唯一正式seed累计≤96小时；任务级round0＋最多3轮集中修正。
 
@@ -51,3 +51,10 @@ Round1 GPU复核真实失败于on_train_begin审计JSON：已确认393独立BF16
 
 
 CPU评价RUN已冻结并实际GitHub回读/服务器逐文件校验：`445f1475cd1dd70d19881dbc1639bb311f7cccf7`。正式GPU RUN采用下一固定提交，训练/推理/评价核心与本版逐字节相同；两份非作者报告与实际预跑源码身份已绑定。[评价版本身份](evidence/evaluation_run_identity.json)、[GitHub回读](evidence/evaluation_github_readback.json)。唯一拟正式job_id为`letter-a1-q06-20261113-normal-seed42-r0`，尚未提交。
+
+
+## 正式唯一seed42已独立启动，尚未完成
+
+GPU RUN `0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5`；CPU评价RUN `445f1475cd1dd70d19881dbc1639bb311f7cccf7`。job_id `letter-a1-q06-20261113-normal-seed42-r0`，启动`2026-11-13T11:57:04.931972+00:00`。断开提交SSH后真实supervisor/worker/两rank持续存活，两rank真实optimizer step10→20、Loss/LR/Grad Norm有限。[启动回执](evidence/formal_start.json)、[正式PASS gate](evidence/prelaunch_review.json)、[固定GPU源码回读](evidence/formal_gpu_github_readback.json)、[正式部署映射](evidence/deployments/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5.json)。
+
+训练路径`/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training`；正式测试及CPU评价位于同根`letter-a1-q06-20261113-normal-seed42-r0`。本地可用`python3 lc_rec/a1_qwen3_06b/scripts/control.py observe --commit 0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5 --job letter-a1-q06-20261113-normal-seed42-r0`只读接续。关闭Codex不取消服务器作业；后续先查原ID，禁止重提seed。当前没有完整训练/测试指标或最终DELIVERY/ZIP，不声明最终通过。

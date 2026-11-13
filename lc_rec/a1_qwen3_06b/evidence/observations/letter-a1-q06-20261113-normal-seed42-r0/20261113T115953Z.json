@@ -1,0 +1,185 @@
+{
+  "utc": "2026-11-13T11:59:54.122155+00:00",
+  "job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+  "kind": "formal",
+  "rank": {
+    "0": {
+      "status": "TRAINING",
+      "run_commit": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+      "events": [
+        {
+          "event": "optimizer_step",
+          "utc": "2026-11-13T11:58:17.218392+00:00",
+          "elapsed_seconds": 70.21275832876563,
+          "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+          "step": 10,
+          "epoch": 0.0048543689320388345,
+          "lr": [
+            2.4096385542168677e-05
+          ],
+          "grad_norm": 64.94112396240234
+        },
+        {
+          "event": "log",
+          "utc": "2026-11-13T11:58:17.219787+00:00",
+          "elapsed_seconds": 70.21415136940777,
+          "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+          "step": 10,
+          "epoch": 0.0048543689320388345,
+          "values": {
+            "loss": 15.9133,
+            "grad_norm": 64.94112396240234,
+            "learning_rate": 2.168674698795181e-05,
+            "epoch": 0.0048543689320388345
+          }
+        },
+        {
+          "event": "optimizer_step",
+          "utc": "2026-11-13T11:59:09.934432+00:00",
+          "elapsed_seconds": 122.92879877518862,
+          "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+          "step": 20,
+          "epoch": 0.009708737864077669,
+          "lr": [
+            4.8192771084337354e-05
+          ],
+          "grad_norm": 34.4680290222168
+        },
+        {
+          "event": "log",
+          "utc": "2026-11-13T11:59:09.935456+00:00",
+          "elapsed_seconds": 122.92982031404972,
+          "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+          "step": 20,
+          "epoch": 0.009708737864077669,
+          "values": {
+            "loss": 13.4698,
+            "grad_norm": 34.4680290222168,
+            "learning_rate": 4.578313253012048e-05,
+            "epoch": 0.009708737864077669
+          }
+        }
+      ]
+    },
+    "1": {
+      "status": "TRAINING",
+      "run_commit": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+      "events": [
+        {
+          "event": "optimizer_step",
+          "utc": "2026-11-13T11:58:17.217863+00:00",
+          "elapsed_seconds": 70.21213481388986,
+          "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+          "step": 10,
+          "epoch": 0.0048543689320388345,
+          "lr": [
+            2.4096385542168677e-05
+          ],
+          "grad_norm": 64.94112396240234
+        },
+        {
+          "event": "log",
+          "utc": "2026-11-13T11:58:17.219627+00:00",
+          "elapsed_seconds": 70.21389461867511,
+          "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+          "step": 10,
+          "epoch": 0.0048543689320388345,
+          "values": {
+            "loss": 15.9133,
+            "grad_norm": 64.94112396240234,
+            "learning_rate": 2.168674698795181e-05,
+            "epoch": 0.0048543689320388345
+          }
+        },
+        {
+          "event": "optimizer_step",
+          "utc": "2026-11-13T11:59:09.934012+00:00",
+          "elapsed_seconds": 122.92828465439379,
+          "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+          "step": 20,
+          "epoch": 0.009708737864077669,
+          "lr": [
+            4.8192771084337354e-05
+          ],
+          "grad_norm": 34.4680290222168
+        },
+        {
+          "event": "log",
+          "utc": "2026-11-13T11:59:09.935302+00:00",
+          "elapsed_seconds": 122.92956969421357,
+          "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+          "step": 20,
+          "epoch": 0.009708737864077669,
+          "values": {
+            "loss": 13.4698,
+            "grad_norm": 34.4680290222168,
+            "learning_rate": 4.578313253012048e-05,
+            "epoch": 0.009708737864077669
+          }
+        }
+      ]
+    }
+  },
+  "test_rank": {},
+  "pipeline": {
+    "status": "RUNNING",
+    "job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+    "kind": "formal",
+    "run_commit": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+    "output": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0",
+    "started_utc": "2026-11-13T11:57:04.931972+00:00",
+    "pid": 3238564,
+    "stages": [
+      {
+        "stage": "train",
+        "argv": [
+          "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/a1_qwen3_06b/scripts/train.py",
+          "--letter",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER",
+          "--model",
+          "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-0.6B-Base/da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+          "--output",
+          "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training",
+          "--config",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/a1_qwen3_06b/config/formal_instruments_seed42.json",
+          "--run-commit",
+          "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5"
+        ],
+        "started_utc": "2026-11-13T11:57:05.100597+00:00"
+      }
+    ],
+    "asset_gate": {
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-cpu-r0/cpu/assets_environment.json",
+      "sha256": "2026ca3caebfeedc969c1171feac0c7685357a84d66652a4bdc10183795a4516",
+      "model_revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd"
+    },
+    "gpu_start": "index, uuid, name, memory.total [MiB], memory.used [MiB]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n",
+    "phase": "train"
+  },
+  "resources": [
+    {
+      "utc": "2026-11-13T11:59:35.400210+00:00",
+      "elapsed_seconds": 150.46826698631048,
+      "mem_available": 252113178624,
+      "swap_used": 152190976,
+      "disk_available": 2957465305088,
+      "gpu": "0, 16580, 7504, 19\n1, 17182, 6902, 100\n",
+      "seconds_without_worklog_progress": 0.06689620763063431
+    }
+  ],
+  "gpu": "index, uuid, memory.used [MiB], utilization.gpu [%], temperature.gpu\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 16580 MiB, 37 %, 41\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 17182 MiB, 27 %, 39\n",
+  "runner": {
+    "status": "RUNNING",
+    "exit_code": null,
+    "cleanup_verified": false,
+    "worker_alive": true,
+    "supervisor_alive": true,
+    "workgroup_live": true
+  }
+}
