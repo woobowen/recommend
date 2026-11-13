@@ -1,0 +1,69 @@
+{
+  "status": "ACCEPTANCE_PATH_COMPLETE",
+  "job_id": "letter-a1-q06-20261113-inference-r3",
+  "kind": "inference",
+  "run_commit": "ea922c12d5872a95180c84d5660ec853138c10a4",
+  "output": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-inference-r3",
+  "started_utc": "2026-11-13T11:42:17.880193+00:00",
+  "pid": 3237608,
+  "stages": [
+    {
+      "stage": "train",
+      "status": "REUSED_VERIFIED_PREACCEPTANCE_TRAINING",
+      "training": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-continuous-r2/training",
+      "training_run_commit": "d9de77adfc92328f2bfd5e64ba40b652946f096f",
+      "inference_source_commit": "ea922c12d5872a95180c84d5660ec853138c10a4",
+      "adapter_binding": {
+        "status": "PASS_CPU_ALL_ADAPTER_TENSORS_EXACT",
+        "training_run_commit": "d9de77adfc92328f2bfd5e64ba40b652946f096f",
+        "checkpoint": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-continuous-r2/training/checkpoint-12",
+        "adapter": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-continuous-r2/training/preflight_adapter/adapter_model.bin",
+        "keys": 394,
+        "checkpoint_adapter_sha256": "095d7f3b7ed843c06a8470030d4048d1f14a42929d8a5f179f2ebdbd300a660f",
+        "inference_adapter_sha256": "095d7f3b7ed843c06a8470030d4048d1f14a42929d8a5f179f2ebdbd300a660f",
+        "all_shapes_dtypes_and_values_exact": true,
+        "GPU_model_loaded": false
+      }
+    },
+    {
+      "stage": "test_interfaces",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nnodes=1",
+        "--nproc_per_node=2",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/ea922c12d5872a95180c84d5660ec853138c10a4/lc_rec/a1_qwen3_06b/scripts/evaluate.py",
+        "--source-root",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/ea922c12d5872a95180c84d5660ec853138c10a4/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+        "--data-root",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/ea922c12d5872a95180c84d5660ec853138c10a4/lc_rec/letter/vendor/LETTER/data",
+        "--model",
+        "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-0.6B-Base/da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+        "--adapter",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-continuous-r2/training/preflight_adapter",
+        "--output",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-inference-r3/test_preflight",
+        "--run-commit",
+        "ea922c12d5872a95180c84d5660ec853138c10a4",
+        "--preflight-users-per-rank",
+        "8"
+      ],
+      "started_utc": "2026-11-13T11:42:24.227898+00:00",
+      "exit_code": 0,
+      "ended_utc": "2026-11-13T11:42:52.199837+00:00"
+    }
+  ],
+  "asset_gate": {
+    "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-cpu-r0/cpu/assets_environment.json",
+    "sha256": "2026ca3caebfeedc969c1171feac0c7685357a84d66652a4bdc10183795a4516",
+    "model_revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd"
+  },
+  "gpu_start": "index, uuid, name, memory.total [MiB], memory.used [MiB]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n",
+  "phase": "test_interfaces",
+  "exit_code": 0,
+  "ended_utc": "2026-11-13T11:42:52.208446+00:00",
+  "wall_seconds": 34.32728792540729,
+  "charged_gpu_device_seconds": 68.65457585081458
+}

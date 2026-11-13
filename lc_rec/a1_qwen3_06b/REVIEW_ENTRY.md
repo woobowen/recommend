@@ -1,6 +1,6 @@
 # A1 Qwen3-0.6B-Base × LETTER Instruments Normal
 
-本轮为用户2026-11-13明确批准的一次性完整seed42实验。当前阶段：正式路径适配，尚未GPU预验收，正式训练未启动；不能将历史PASS_TECHNICAL称为完整baseline通过。
+本轮为用户2026-11-13明确批准的一次性完整seed42实验。当前CPU、真实训练/恢复/推理预验收均已通过，正在绑定非作者预审及最终固定E/R部署；正式训练尚未启动。以下早期阶段叙述是保留的历史记录，最新状态以本文件末尾为准。不能将预验收PASS称为完整baseline通过。
 
 实验卡：仅替换A0下游LLaMA-7B为官方Qwen3-0.6B-Base；固定作者918 SID/交互、17训练prompt、历史20、response-only CE(logits/0.8)、Int8/BF16、r8/alpha16/dropout.05、七投影、完整active tied Embedding/Head、AdamW2e-4/wd.01/cosine/warmup.01、micro8×acc4×2=global64、4epoch/8240实际更新核验、Validation loss选best、Prompt0 Beam20全24772用户。无early stopping、无测试选模。新增预验收≤60 GPU-device-min，唯一正式seed累计≤96小时；任务级round0＋最多3轮集中修正。
 
@@ -35,3 +35,16 @@ Round1 GPU复核真实失败于on_train_begin审计JSON：已确认393独立BF16
 `continuous-r2`真实两rank完成12updates、CP2/12各23成员约4.418GB、32条Validation及196 Int8模块热strict恢复；整体runner仍保留FAILED，因为后续推理审计断言失败。`resume-r2`新进程从同CP2真实恢复至12并SUCCEEDED/cleanup verified；`compare-r2`独立CPU全状态对照PASS：每rank1363张量全部exact/零差，包括393trainable、FP32master/moments、196Int8动态；40个恢复microbatch输入/labels/loader、全部RNG、step/LR/loss/gradnorm精确相同。原容差没有放宽，也没有切换SDPA/kernel/精度。[原始完整对照](evidence/jobs/letter-a1-q06-20261113-compare-r2/run/comparison.json)。
 
 任务级最后round3修正推理审计器：已核实native PEFT把lm_head移至modules_to_tie，并将modules_to_save重写为embed_tokens/model.embed_tokens，当前adapter与历史Q06-L整份配置规范化后同型。改为检查真实双wrapper、同BF16 active Parameter/storage、392LoRA及394完整键/shape/dtype/值；不改训练或adapter。最后推理预验收将复用已通过的CP12及adapter，不重训reference。当前正式seed仍未启动；剩余GPU推理与非作者预审门槛尚待通过。
+
+
+## 最新预启动状态：真实门槛通过，正式作业仍待固定发布
+
+`inference-r3`源码`ea922c12d5872a95180c84d5660ec853138c10a4`真实SUCCEEDED/exit0/cleanup verified；两个rank共16名不同用户，每人20条完整Beam20候选，包含真实最大167token输入。CP12→preflight_adapter全部394个tensor的键、shape、BF16、值CPU exact，文件SHA同为`095d7f3b7ed843c06a8470030d4048d1f14a42929d8a5f179f2ebdbd300a660f`。实际native PEFT冷加载的全部394键/shape/dtype/值、393独立active对象和tied双wrapper/同Parameter/storage通过。[绑定原件](evidence/jobs/letter-a1-q06-20261113-inference-r3/run/adapter_binding.json)、[rank0原始预测](evidence/jobs/letter-a1-q06-20261113-inference-r3/run/test_preflight/predictions.rank0.jsonl)、[rank1原始预测](evidence/jobs/letter-a1-q06-20261113-inference-r3/run/test_preflight/predictions.rank1.jsonl)。位置约束150/256/256/256/EOS151643正确；12step接口预测的质量不代表正式结果。
+
+预验收live账本从5个terminal runner/cleanup回执reconcile后共590.881410 GPU-device-seconds＝9.848024device-min，包含失败、加载、保存与清收，低于60device-min。全部清收verified，formal seed42账本为空；两GPU各1MiB/无compute进程，可用RAM约256.5GB、磁盘约2.957TB。[原始账本与资源](evidence/prelaunch_budget_resources.json)。任务级三轮修正已全部使用，不重置计数；所有失败原件和终态保留。[修正记录](evidence/corrections.json)。
+
+[真实Qwen非作者预审](review/prelaunch_qwen_runtime.md)、[服务器pipeline及CPU衔接非作者预审](review/prelaunch_pipeline.md)、[成本条件估计](review/prelaunch_cost_estimate.md)。审核者实际读取主控桥接的原始源码/运行记录/预测，没有冒称独立SSH或GPU重跑。正式GPU RUN冻结后仍须绑定E/R固定字节映射、部署回执和最终PASS gate，之后才启动唯一正式seed。
+
+完整服务器流水线已接入：4epoch/8240真实updates→每轮49544条Validation→best strict恢复→BF16 Base+tied adapter→两rank全24772用户Prompt0 Beam20→A1独立预测SHA manifest→CPU原论文4项独立复算→16指标/CCE/SID诊断/分组/5000用户Bootstrap→独立扩展/统计核验→A0/A1配对及独立核验。CPU评价RUN先冻结，GPU RUN绑定其固定export；DELIVERY另外发布。任何A0身份常数均不冒充A1预测身份。
+
+训练、验证、best、全量测试和CPU统计由服务器自主衔接，不依赖Codex重新打开。关闭Codex不取消任务，也不表示离线AI仍在监控；重连先查原job_id，不重复新seed。完成全部实际结果、非作者终审、GitHub固定回读及轻量ZIP验证后才达到授权终点。尚无正式A1指标，未重训A0、未运行其他seed/模型/数据域/Shuffle，未同步main，未安装包或改全局配置。

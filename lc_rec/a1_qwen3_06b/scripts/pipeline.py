@@ -25,16 +25,19 @@ def main():
     for n in ['release','run-commit','job-id','kind']:
         p.add_argument('--'+n,required=True)
     p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true')
-    p.add_argument('--prelaunch-review');p.add_argument('--continuous');p.add_argument('--resumed');p.add_argument('--training');p.add_argument('--model-run-commit');a=p.parse_args()
+    p.add_argument('--prelaunch-review');p.add_argument('--continuous');p.add_argument('--resumed');p.add_argument('--training');p.add_argument('--model-run-commit');p.add_argument('--evaluation-commit');p.add_argument('--evaluation-release');a=p.parse_args()
     assert a.kind in ['cpu','compare','continuous','resume','formal','inference']
     root=Path('/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113');root.mkdir(parents=True,exist_ok=True)
     job=Path(os.environ['GRID_JOB_DIR']);assert job.name==a.job_id
     scripts=Path(a.release)/'lc_rec/a1_qwen3_06b/scripts'
     config=Path(a.release)/'lc_rec/a1_qwen3_06b/config/formal_instruments_seed42.json'
     if a.kind=='formal':
-        assert a.prelaunch_review
+        assert a.prelaunch_review and a.evaluation_commit and a.evaluation_release
+        assert len(a.evaluation_commit)==40 and Path(a.evaluation_release).name==a.evaluation_commit
+        evaluation_version=json.loads((Path(a.evaluation_release)/'RUN_VERSION.json').read_text())
+        assert evaluation_version['RUN_COMMIT']==a.evaluation_commit
         gate=json.loads(Path(a.prelaunch_review).read_text())
-        assert gate['status']=='PASS' and gate['RUN_COMMIT']==a.run_commit
+        assert gate['status']=='PASS' and gate['RUN_COMMIT']==a.run_commit and gate['evaluation_commit']==a.evaluation_commit
         assert gate['config_sha256']==sha(config)
         assert gate['source_sha256']=={str(p.relative_to(scripts.parent)):sha(p) for p in sorted(scripts.glob('*.py'))}
     letter=Path(a.release)/'lc_rec/letter/vendor/LETTER'
@@ -116,14 +119,16 @@ def main():
             assert time.monotonic()-started<limit,'CUMULATIVE_BUDGET_EXHAUSTED'
             assert v['seconds_without_worklog_progress']<7200,'NO_TASK_LOG_PROGRESS_FOR_TWO_HOURS'
 
-        def run(stage,args):
+        def run(stage,args,cpu=False):
             resource()
-            command=[sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2',*map(str,args)]
+            command=([sys.executable,*map(str,args)] if cpu else [sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2',*map(str,args)])
             record={'stage':stage,'argv':command,'started_utc':utc()};status['stages'].append(record)
             status.update(status='RUNNING',phase=stage);write(status_path,status)
             # No new session: inherited identity markers and process group stay
             # under the existing runner's pidfd-safe timeout/cleanup mechanism.
-            child=subprocess.Popen(command,stdin=subprocess.DEVNULL);children.append(child)
+            child_env=dict(os.environ) if cpu else None
+            if cpu:child_env['CUDA_VISIBLE_DEVICES']=''
+            child=subprocess.Popen(command,stdin=subprocess.DEVNULL,env=child_env);children.append(child)
             while child.poll() is None:
                 resource()
                 try:child.wait(timeout=min(30,max(.01,limit-(time.monotonic()-started))))
@@ -181,11 +186,35 @@ def main():
                     proof=json.loads((training/('rank%d.json'%r)).read_text())
                     assert proof['status']=='TRAINING_COMPLETE' and proof['global_step']==8240 and proof['epoch']==4.0
                     assert proof['run_commit']==a.run_commit and proof['config_sha256']==sha(config)
-                run('test',[scripts/'evaluate.py','--source-root',source,'--data-root',data,'--model',model,
-                            '--adapter',training/'best_adapter','--output',output/'test','--run-commit',a.run_commit])
-                metrics=json.loads((output/'test/metrics.json').read_text())
-                status.update(best_selection=selected,metrics=metrics)
+                test_output=output/'test'
+                prior_tests=[]
+                if a.resume_evaluation:
+                    for previous in ledger['attempts'][:-1]:
+                        candidate=root/previous['job_id']/'test'
+                        path=candidate/'metrics.json'
+                        if path.is_file():
+                            old=json.loads(path.read_text())
+                            if old['RUN_COMMIT']==a.run_commit and old['adapter_model_sha256']==selected['adapter_sha256'] and old['actual_test_users']==24772:
+                                assert all(json.loads((candidate/f'rank{r}.json').read_text())['status']=='PASS' for r in [0,1])
+                                prior_tests.append(candidate)
+                assert len(prior_tests)<=1,'More than one completed formal test for one seed; stop for identity review'
+                if prior_tests:
+                    test_output=prior_tests[0]
+                    status['stages'].append({'stage':'test','status':'REUSED_VERIFIED_COMPLETE_FULL_TEST','test_output':str(test_output),
+                                            'note':'Full SHA/user/target reconstruction follows in frozen-manifest independent CPU audit'})
+                else:
+                    run('test',[scripts/'evaluate.py','--source-root',source,'--data-root',data,'--model',model,
+                                '--adapter',training/'best_adapter','--output',test_output,'--run-commit',a.run_commit])
+                metrics=json.loads((test_output/'metrics.json').read_text())
+                status.update(best_selection=selected,metrics=metrics,test_output=str(test_output))
                 for r in [0,1]:assert json.loads((training/('rank%d.json'%r)).read_text())['status']=='TRAINING_COMPLETE'
+                evaluation_output=output/'offline_evaluation'
+                run('offline_evaluation',[Path(a.evaluation_release)/'lc_rec/a1_qwen3_06b/scripts/offline_pipeline.py',
+                    '--release',a.evaluation_release,'--evaluation-commit',a.evaluation_commit,'--gpu-run-commit',a.run_commit,
+                    '--test-dir',test_output,'--training',training,'--data-root',data,'--output',evaluation_output,'--job-id',a.job_id],cpu=True)
+                evaluated=json.loads((evaluation_output/'pipeline.json').read_text())
+                assert evaluated['status']=='PASS' and evaluated['EVALUATION_RUN_COMMIT']==a.evaluation_commit
+                status.update(evaluation_run_commit=a.evaluation_commit,evaluation_output=str(evaluation_output),extended_evaluation=evaluated)
             status.update(status='SUCCESS' if a.kind=='formal' else 'ACCEPTANCE_PATH_COMPLETE',exit_code=0)
         except BaseException as e:
             import traceback

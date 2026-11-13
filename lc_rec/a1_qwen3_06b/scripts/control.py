@@ -18,7 +18,7 @@ def main():
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('mode',choices=['deploy','submit','query','logs','collect','observe'])
  p.add_argument('--commit');p.add_argument('--job');p.add_argument('--kind',choices=['cpu','selftest','continuous','resume','formal','compare','inference'])
- p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true');p.add_argument('--continuous');p.add_argument('--resumed');p.add_argument('--training');p.add_argument('--model-run-commit');a=p.parse_args()
+ p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true');p.add_argument('--continuous');p.add_argument('--resumed');p.add_argument('--training');p.add_argument('--model-run-commit');p.add_argument('--evaluation-commit');a=p.parse_args()
  assert subprocess.check_output(['git','branch','--show-current'],cwd=REPO,text=True).strip()=='wbw-lc-rec'
  commit=subprocess.check_output(['git','rev-parse',a.commit or 'HEAD'],cwd=REPO,text=True).strip()
  t=transport.Transport('new-server');release=REMOTE+'/releases/'+commit
@@ -86,8 +86,14 @@ print(json.dumps(r))"""
    assert a.kind!='formal' or not ledger['attempts'] or a.resume or a.resume_evaluation
    timeout=int((345600 if a.kind=='formal' else 1800)-used-10);assert timeout>0
    if a.kind=='formal':
+    assert a.evaluation_commit
+    evaluation_commit=subprocess.check_output(['git','rev-parse',a.evaluation_commit],cwd=REPO,text=True).strip()
+    evaluation_deployment=json.loads((SUPPORT/'receipts'/('deployment-'+evaluation_commit+'.json')).read_text())
+    assert evaluation_deployment['RUN_COMMIT']==evaluation_commit
+    argv+=['--evaluation-commit',evaluation_commit,'--evaluation-release',evaluation_deployment['release']]
+    inputs.extend({'path':evaluation_deployment['release']+'/'+x['path'],'sha256':x['sha256']} for x in evaluation_deployment['files'] if '/scripts/' in x['path'] or '/review/' in x['path'] or '/config/' in x['path'])
     gate=SUPPORT/'receipts/prelaunch_review.json';review=json.loads(gate.read_text())
-    assert review['status']=='PASS' and review['RUN_COMMIT']==commit
+    assert review['status']=='PASS' and review['RUN_COMMIT']==commit and review['evaluation_commit']==evaluation_commit
     assert review['source_sha256']=={str(p.relative_to(TASK)):transport.sha(p) for p in sorted((TASK/'scripts').glob('*.py'))}
     remote_gate=t.profile['remote_support']+'/requests/'+a.job+'.prelaunch.json';t.put(gate,remote_gate)
     argv+=['--prelaunch-review',remote_gate];inputs.append({'path':remote_gate,'sha256':transport.sha(gate)})
