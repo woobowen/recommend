@@ -225,7 +225,11 @@ def strict_reload(args, report, torch, local_rank, source, indices):
     config = json.loads((adapter / "adapter_config.json").read_text())
     assert (config["r"], config["lora_alpha"], config["lora_dropout"]) == (8, 16, .05)
     assert set(config["target_modules"]) == {"q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "down_proj", "up_proj"}
-    assert set(config["modules_to_save"]) == {"embed_tokens", "lm_head"} and config.get("bias", "none") == "none"
+    # PEFT 0.21.2 ensure_weight_tying natively moves lm_head to
+    # modules_to_tie and rewrites modules_to_save to the embedding aliases.
+    # Validate the pinned native form, then the actual complete tied tensors.
+    assert set(config["modules_to_save"]) == {"embed_tokens", "model.embed_tokens"}
+    assert config.get("bias", "none") == "none"
     assert config.get("ensure_weight_tying") is True
     tokens = sorted({token for parts in indices.values() for token in parts})
     reference, metadata = tokenizer_for(args.model, tokens)
@@ -250,24 +254,56 @@ def strict_reload(args, report, torch, local_rank, source, indices):
     base.resize_token_embeddings(len(tokenizer), mean_resizing=False)
     model = PeftModel.from_pretrained(base, str(adapter), torch_dtype=torch.bfloat16,
                                      device_map={"": local_rank}, is_trainable=False, autocast_adapter_dtype=False)
+    from peft.utils.other import ModulesToSaveWrapper
+    runtime_config = model.peft_config["default"]
+    assert set(runtime_config.modules_to_tie) == {"lm_head"}
+    inp, head = model.get_input_embeddings(), model.get_output_embeddings()
+    assert isinstance(inp, ModulesToSaveWrapper) and isinstance(head, ModulesToSaveWrapper)
+    active = inp.modules_to_save["default"].weight
+    assert active is head.modules_to_save["default"].weight
+    assert active is inp.weight and active is head.weight
+    assert active.dtype == torch.bfloat16 and list(active.shape) == [152587, 1024]
+    lora = {n: v for n, v in model.named_parameters() if "lora_" in n}
+    assert len(lora) == 392 and sum(v.numel() for v in lora.values()) == 5046272
+    assert all(v.dtype == torch.bfloat16 for v in lora.values())
     saved = torch.load(adapter / "adapter_model.bin", map_location="cpu", weights_only=True)
     actual = get_peft_model_state_dict(model, save_embedding_layers=False)
     assert set(saved) == set(actual) and len(saved) == 394
+    emb_key, head_key = "base_model.model.model.embed_tokens.weight", "base_model.model.lm_head.weight"
+    assert emb_key in saved and head_key in saved and torch.equal(saved[emb_key], saved[head_key])
+    assert actual[emb_key].data_ptr() == actual[head_key].data_ptr()
+    native = json.loads((model_root / "config.json").read_text())
+    assert (native["hidden_size"], native["intermediate_size"], native["num_hidden_layers"], native["num_attention_heads"], native["num_key_value_heads"], native["head_dim"]) == (1024, 3072, 28, 16, 8, 128)
+    shapes = {emb_key: (152587, 1024), head_key: (152587, 1024)}
+    for layer in range(28):
+        for group, modules in [("self_attn", ["q_proj", "k_proj", "v_proj", "o_proj"]), ("mlp", ["gate_proj", "down_proj", "up_proj"])]:
+            for name in modules:
+                din = 3072 if name == "down_proj" else 2048 if name == "o_proj" else 1024
+                dout = 3072 if name in ["gate_proj", "up_proj"] else 2048 if name == "q_proj" else 1024
+                prefix = f"base_model.model.model.layers.{layer}.{group}.{name}."
+                shapes[prefix + "lora_A.weight"] = (8, din)
+                shapes[prefix + "lora_B.weight"] = (dout, 8)
+    assert set(shapes) == set(saved), "All 28x7 native projections plus both tied aliases required"
     checks = {}
     for key, tensor in saved.items():
         loaded = actual[key].detach()
-        assert loaded.dtype == torch.bfloat16, (key, str(loaded.dtype))
-        assert tensor.shape == loaded.shape, key
+        assert tensor.dtype == loaded.dtype == torch.bfloat16, (key, str(tensor.dtype), str(loaded.dtype))
+        assert tuple(tensor.shape) == shapes[key] and tensor.shape == loaded.shape, key
         for begin in range(0, tensor.shape[0], 1024):
             part = loaded[begin:begin+1024].cpu()
-            assert torch.isfinite(part).all() and torch.equal(tensor[begin:begin+1024].to(part.dtype), part), key
+            assert torch.isfinite(part).all() and torch.equal(tensor[begin:begin+1024], part), key
         checks[key] = {"shape": list(tensor.shape), "saved_dtype": str(tensor.dtype), "loaded_dtype": str(loaded.dtype),
-                       "finite_and_exact_after_explicit_dtype_conversion": True}
+                       "finite_exact_and_same_bf16_dtype": True}
     tied = sharing(model)
     assert tied["same_parameter_object"] and tied["same_storage"]
     report["strict_adapter_reload"] = {"keys": 394, "lora_keys": 392, "unique_training_parameters": 393,
                                        "all_active_embedding_head_and_sid_rows_checked": True,
-                                       "no_missing_keys_tolerated": True, "tensor_checks": checks, "sharing": tied}
+                                       "no_missing_keys_tolerated": True, "tensor_checks": checks, "sharing": tied,
+                                       "native_saved_modules_to_save": config["modules_to_save"],
+                                       "native_runtime_modules_to_tie": sorted(runtime_config.modules_to_tie),
+                                       "active_wrapper_types": [type(inp).__name__, type(head).__name__],
+                                       "independent_active_parameter_objects": len({id(v) for v in lora.values()} | {id(active)}),
+                                       "both_saved_tied_aliases_exact": True}
     del saved, actual
     model.eval()
     model.config.use_cache = True
@@ -405,7 +441,7 @@ def main():
             # Fixed raw-text envelope strata, plus the maximum Qwen-token length.
             # This does not alter the formal sampler/user axis.
             lengths = sorted(range(len(data)), key=lambda i: (len(tokenizer(data[i]["input_ids"])["input_ids"]), i))
-            positions = [0, len(data)//4, len(data)//2, len(data)-2]
+            positions = [0, len(data)//4, len(data)//2, len(data)-4]
             assignment = [lengths[min(len(data)-1, j + rank)] for j in positions]
             assignment += [lengths[-1-rank], lengths[len(data)*3//4+rank], lengths[len(data)//8+rank], lengths[len(data)*7//8+rank]]
             assert len(set(assignment)) == 8

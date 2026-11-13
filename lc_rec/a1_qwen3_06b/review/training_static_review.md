@@ -58,3 +58,103 @@ The reviewer reread both actual CPU import receipts:
 - `evidence/round1_cpu_full_stack_import.json`, SHA-256 `a7c686e4db1997c8d18ea5e87bab0a130a559ffb2210555e85bba6bebabfa06f`: Trainer, callback, arguments, Qwen3 class, PEFT, Accelerator, native loader/sampler, DeepSpeed and bnb imports pass; Torch available, TF/Flax unavailable, no CUDA context. These are main-controller-bridged server CPU receipts, not an independent reviewer execution or GPU test.
 
 All three core training/checkpoint/comparison files and both JSON configs were reread against fixed commit `a9d36910e20b95ab7df6622f29479b5d542f0b68` and remain byte-identical. Current control/pipeline diffs additionally allow explicit continuous/resumed comparison paths bounded under the A1 root and add a lightweight observation reader; they do not change the comparison standard, selected data, optimization, model, attention or generation. Round0 failure is not deleted, and the correction does not reset the task-level three-round limit or GPU budget. Actual round1 request/deployment and GPU outcomes still require their own evidence.
+
+## Round2 targeted native metadata correction review
+
+Decision: **STATIC_PASS_SCOPED_METADATA_CORRECTION**; no GPU or A1 PRELAUNCH PASS. Task correction rounds consumed: **2 of 3**. Actual installed-stack metadata-gate outcome and the next GPU outcome remain pending in this section.
+
+The retained `continuous-r1` attempt uses RUN `851425db7de3c70c6c4925740ecc20d38bae3686`. The reviewer read both rank failure tracebacks, event logs, runner terminal/cleanup and pipeline status under `evidence/jobs/letter-a1-q06-20261113-continuous-r1/`. The failing call is the report JSON write in `on_train_begin`, reporting `Out of range float values are not JSON compliant: inf`. Both ranks' final event is `probe_initial_state`, with HF and DS global steps0 and actual BF16 Parameters; neither contains a batch or optimizer-step event. Thus this attempt loaded/initialized the model but completed zero optimizer updates. Runner status remains FAILED/exit1, cleanup verified and `worker_may_be_live=false`; pipeline charged `39.43586024083197` GPU-device-seconds for `19.717930120415986` seconds wall. Original failure is preserved.
+
+Key retained evidence hashes:
+
+- r1 `job/status.json`: `c735f1a66111f348cd5f022deb00368e5546c56cfd82bcba3ee605c218892a91`.
+- r1 `job/work.log`: `3dad1f5629d8af9e9f846baca78cbd15247ac8f785cf336e341aaa6491c73d10`.
+- r1 `run/training/failure.rank0.json`: `ba1ec68f5709c49a31487a4f206e828fb2197e5a8714d057662c3a6909ffbcb6`.
+- r1 `run/training/events.rank0.jsonl`: `bdfd1940ea8ceab07b1f82b1a8344490a6fa5273a506d65457e0d109a6e14210`.
+- `evidence/round2_native_metadata_source.json`: `8b546046c35459b6c6125865d7fe89f0f653159470888d1eba9ae91936ca971e`.
+
+The bridged actual installed Accelerate source receipt identifies `utils/dataclasses.py` SHA-256 `6f6db1018c1be71436e34baec4b48ef3add91be8056a884cb032576dd867e90d`, line1290: `DeepSpeedPlugin.__post_init__` writes `steps_per_print=float("inf")` to suppress stdout logging. This is a native logging-control sentinel, not training loss or an optimizer value.
+
+The author added `deepspeed_metadata` to the checkpoint helper. It copies the top-level DS config dictionary and encodes only a built-in float positive infinity at the exact top-level `steps_per_print` key as an explicit provenance-bearing string. It then validates the entire copied subtree with `json.dumps(..., allow_nan=False)`. It does not sanitize arbitrary floats, mutate the original config, change the DeepSpeed engine, or modify global writer/event strict JSON policy. The two production callers are limited to `report.training_arguments.deepspeed` and `report.effective_ds`. All loss/gradient finite assertions and the compute/checkpoint/replay/comparison logic remain unchanged in the reviewed diff against r1.
+
+The reviewer independently imported the actual production helper locally, with no Torch or CUDA, and verified positive-sentinel encoding, finite2000 unchanged and original dictionary unchanged. Six negative cases were rejected: NaN at the allowed key; negative infinity there; positive infinity at an unrelated key; positive infinity at a nested same-name key; nested NaN; infinity inside a list. Global `write` and event functions still explicitly use `allow_nan=False`.
+
+Reviewed round2 working bytes:
+
+| File | SHA-256 |
+|---|---|
+| `scripts/train.py` | `b145d2f5606a3fa0703d39984860ade9401820d9f9cd2a750f8c21e499dcb88a` |
+| `scripts/checkpoint.py` | `11e6191c44abd7402c1e0720e1358bfe0edbf86b28b4dc12f1717daacf79a1cc` |
+| `scripts/metadata_check.py` | `fad418ae7cd2e18100b4948188098c3e259659c241f6106cc52cc124a41da9d7` |
+
+`metadata_check.py` is a separate CPU-only installed-dependency gate. It exercises the real DeepSpeedPlugin and TrainingArguments aliases, asserts no original config mutation and no CUDA context, and verifies unknown nonfinite values remain rejected. Its `use_cpu=True` and disabled BF16 setting apply only to this metadata gate; those settings do not enter formal training. This is a report-serialization engineering correction within the authorized recipe, not permission to alter any training or restoration criterion. Fixed round2 deployment, actual CPU gate and real resumed numerical acceptance still need their own receipts.
+
+### Actual installed-stack CPU gate received
+
+The reviewer subsequently read `evidence/round2_metadata_contract.json`, SHA-256 `ba70f6a8985e4a66d59581c2bba8d029b9af43ff7abda4b61f7cd0f6e103d49b`, 4,824 bytes. It records `PASS_CPU_METADATA_CONTRACT`, fixed export `d9de77adfc92328f2bfd5e64ba40b652946f096f`, actual interpreter argv/cwd, empty CUDA visibility and TF/Flax disabled, plus `cuda_context_created=false`. Torch2.6.0 / Accelerate1.12.0 / Transformers4.57.6 / DeepSpeed0.16.9 match the reviewed environment. The config SHA is the previously reviewed `e4db1e7ed995a6733b754cbfed53af9f5191fb37a4be3eba33481d3a13a31fae`; actual production checkpoint helper SHA is `11e6191c44abd7402c1e0720e1358bfe0edbf86b28b4dc12f1717daacf79a1cc`.
+
+The actual gate distinguishes two real TrainingArguments cases: ordinary requested config retains finite2000 because HfDeepSpeedConfig copies its input, while effective plugin config has the native positive-infinity sentinel; an already-resolved plugin config supplied to another TrainingArguments object carries the inherited sentinel. Both metadata encodings preserve the actual original configuration, and all five installed-gate unknown-nonfinite cases plus NaN loss / infinite grad-norm observations are rejected. This corrects the preliminary gate's aliasing assumption without changing production helper behavior or the training recipe.
+
+The reviewer reread the executed gate source and verified its SHA `869cb580cfd434c75169c7d80ac38cec77e60ca260ed1295fe865b6cb683c44b` against fixed export commit `d9de77adfc92328f2bfd5e64ba40b652946f096f`; production train/checkpoint bytes likewise match that commit and the prior reviewed hashes. The earlier table records the pre-execution gate version, while this paragraph identifies the actual executed version.
+
+Decision for this correction: **PASS_CPU_METADATA_ENGINEERING_FIX_ONLY**. This closes only the specific installed-stack report-serialization defect. The receipt was executed and bridged by the main controller; the reviewer independently read its source and evidence but did not SSH or repeat the server execution. Real GPU training, fresh-process checkpoint continuation/numerical comparison, best/validation and Beam20 acceptance remain outstanding. No additional correction round is created by receiving this evidence: the task remains at2 of3 rounds.
+
+## Native tied-module configuration: targeted round3 basis
+
+The real `continuous-r2` attempt reached two-rank `PROBE_COMPLETE` at12 updates using RUN `d9de77adfc92328f2bfd5e64ba40b652946f096f`. The reviewer directly read both retained training reports/events: they include complete checkpoints2/12, a real32-record validation interface, native strict hot restoration of checkpoint12, and `preflight_adapter` export. These are bounded training/interface events, not four-epoch or final-test results. The surrounding attempt then failed at the inference audit's requirement that saved `modules_to_save` literally equal `{embed_tokens,lm_head}`. Fresh-process numerical acceptance and actual Beam20 remain pending here.
+
+That literal assertion was erroneous for the pinned native PEFT implementation. The earlier static review did not identify this native config rewrite; this review corrects that omission using the original retained files and actual installed source. No trained model, adapter or sharing structure should be changed to satisfy the mistaken string assertion.
+
+Current saved `preflight_adapter/adapter_config.json` SHA-256 is `6e48b18ddd5201a518e0956a59287894902767c47dd672110cf27f4ea7a6bcde`. Its `modules_to_save` is `["embed_tokens","model.embed_tokens"]` and `ensure_weight_tying=true`. After normalizing only the order of `target_modules`, the entire current config equals the retained real historical Q06-L adapter config, not merely this one field.
+
+The reviewer first inspected the retained PEFT0.21.2 wheel, SHA-256 `106ab6077ff72c54d21577f9af5970e34bac7582cb14209f7b2b511e322a4eae`, and then checked the controller-bridged actual installed source files against that wheel byte-for-byte. All match. The installed-source receipt is `evidence/round3_native_tying_sources.json`:
+
+| Source | SHA-256 |
+|---|---|
+| `peft/tuners/lora/model.py` | `321964321e14ca0d9b4d81c4debcb486bae02193a576755b116ce35252e33555` |
+| `peft/tuners/tuners_utils.py` | `e7f99b2ac5766ea317bcb943619d8a2a2235057acb5b543a1973ae8938173659` |
+| `peft/utils/other.py` | `6b87957915ba399bfb6bbd57b9404aa12f0e9f4e27b19ef1b6c68ac052148f9b` |
+
+Actual native causal chain:
+
+1. `tuners_utils.py:1417–1443` detects tied embedding modules and `ensure_weight_tying`, then calls the LoRA-specific tie handler.
+2. `lora/model.py:1293–1326`, `_add_modules_to_save_to_tie`, puts the tied head names into `modules_to_tie`, appends the fully qualified input embedding name to `modules_to_save`, and removes head matches from the ordinary `modules_to_save` list. The observed list therefore has the expected native rewrite.
+3. `utils/other.py:1554–1566` wraps the tied destination modules with `tied_module` pointing to the active input-embedding adapter.
+4. `ModulesToSaveWrapper.update`, `utils/other.py:647–651`, explicitly assigns `new_linear.weight=tied_module.weight`; the head uses the same active Parameter, rather than an independently optimized clone. Its forward delegates to the active `modules_to_save` module (`614–617`).
+
+Recommended strict audit replacement: retain the fixed PEFT version/source, `ensure_weight_tying=true` and all LoRA recipe checks; recognize this exact native normalized config form rather than rewriting the adapter. After native load, require `modules_to_tie` to identify the actual `lm_head`, both input/output ModulesToSaveWrapper active-default modules to resolve to the full `[152587,1024]` BF16 matrix, and identical Parameter/storage. Keep all392 LoRA A/B tensors plus one independent active vocabulary Parameter, both saved embedding/head aliases, exactly394 adapter keys, exact expected shapes/dtypes/values, and no extra/missing keys. Both saved aliases must agree. Those semantic checks must execute on the real loaded inference model; simply deleting the string assertion would not be sufficient.
+
+This is evidence for correcting an audit/compatibility check without changing the trained research method. It does not authorize untied weights, changed optimizer membership, relaxed adapter-key checks or repeated training of the already completed continuous path. The last round3 correction must remain concentrated with any genuine fresh-process comparison findings and within the unchanged cumulative preflight budget.
+
+### Corrected inference audit static recheck
+
+The reviewer reread the corrected `evaluate.py`, SHA-256 `c08f6cceb982147009e6d602a6b693065830e33a5b24e7d40b1d79b7156981f1`. It now accepts the exact pinned native config rewrite and requires native runtime `modules_to_tie={lm_head}`, both active-default ModulesToSaveWrapper objects, the same full BF16 `[152587,1024]` Parameter/storage,392 LoRA Parameters /5,046,272 elements, both saved tied aliases, and the entire394-key tensor set with explicit per-projection dimensions.
+
+An additional strict-dtype gap was found and corrected within the same concentrated round3 review: the preceding check asserted only loaded BF16 dtype while converting saved tensors before comparison. The corrected source asserts saved and loaded dtype both BF16 and compares values without conversion. This prevents a malformed higher-precision payload from being silently rounded into an accepted checkpoint. No trained payload is modified.
+
+The reviewer independently evaluated only the static expected-key/shape declarations and compared all394 entries against the actual retained historical Q06-L adapter-save inventory; all names and shapes match. This uses genuine historical runtime tensor metadata to verify the new shape assumptions, not a generated model or a new inference run. Static decision: **PASS_STRICT_NATIVE_TYING_AUDIT_TO_REAL_INFERENCE**. Real corrected Beam20 execution is still pending.
+
+## Actual fresh-process training-state runtime review
+
+Decision: **PASS_BOUNDED_FULL_STATE_RESUME**. This closes the new formal training-state restoration gate for the tested12-step path only. Overall A1 PRELAUNCH remains pending corrected inference/resource acceptance and the main-controller aggregate gate.
+
+The reviewer read original requests, terminal/cleanup receipts, both sides' retained rank reports and full event files, checkpoint-completion manifests, and the actual CPU comparator result. All three jobs use RUN `d9de77adfc92328f2bfd5e64ba40b652946f096f`; requests pin train SHA `b145d2f5606a3fa0703d39984860ade9401820d9f9cd2a750f8c21e499dcb88a`, checkpoint helper SHA `11e6191c44abd7402c1e0720e1358bfe0edbf86b28b4dc12f1717daacf79a1cc`, comparator SHA `2a58c611318f96b315fb260d2dae6eaa577616e17bda62e2513aed2617747170`.
+
+- `letter-a1-q06-20261113-continuous-r2`: its training component reached12 updates and exported the adapter; the overall job remains FAILED because its later original inference assertion failed. This review does not relabel that whole job successful.
+- `letter-a1-q06-20261113-resume-r2`: fresh process strictly loaded continuous checkpoint2, replayed8 native-loader yields, performed10 further nonzero-LR updates to12, validated32 real records and strictly restored checkpoint12. Runner is SUCCEEDED/exit0 with verified cleanup and no possibly live worker.
+- `letter-a1-q06-20261113-compare-r2`: actual CPU comparison over both two-rank acceptance states is PASS, SUCCEEDED/exit0, verified cleanup and no possibly live worker.
+
+Actual comparator output is `evidence/jobs/letter-a1-q06-20261113-compare-r2/run/comparison.json`, 2,016,473 bytes, SHA-256 `0b3402cded34494fbcf22f372540a0439619975dcab799029d74227c5d7c495e`. The reviewer recomputed counts from every detailed comparison row: each rank has1363 tensors, every one finite and exactly equal, zero differing elements and zero tolerance violations. The original fixed criterion remains atol1e-6 /rtol1e-3; the observed result did not require numerical tolerance at all.
+
+Each side/rank schema includes393 trainable tensors /161,295,360 elements; an80,647,680-element FP32 master partition; equally complete FP32 exp_avg and exp_avg_sq; all196 quantized projection dynamic states; scheduler, Python/NumPy/Torch/CUDA/loader-generator RNG and loader state. Each rank's serialized continuous/resumed acceptance files also have identical full SHA-256:
+
+| Rank | Bytes per file | Continuous and resumed SHA-256 |
+|---|---:|---|
+|0|2,376,445,492|`d33e6cf54bc607323c0c51b29b88b24095241b2724edbe19737c9f0e8839e2c7`|
+|1|2,377,416,948|`774cf6c3fdcfff413ee014a5aad3f6175dd07aa1174a90e6d3dcdaa763436eac`|
+
+Independently of the comparator's event-summary booleans, the reviewer reread all retained raw event lines and recomputed the step2→12 joins. On each rank all40 microbatch input/label hashes, shapes and loader yields match exactly; all40 returned micro-losses and10 optimizer grad norms match exactly; LR sequences for steps3–12 match exactly and are nonzero/finite. The raw event-file SHAs also independently match the comparator's recorded input SHAs. Both fresh processes show strict restoration at2, `probe_initial_state` at2 with BF16 parameters, and `loader_replayed(replayed_batches=8, checkpoint_step=2)` before resumed batches.
+
+Manifest inspections found23 complete files per checkpoint, both-rank collective identity, `exclude_frozen_parameters=false`, no duplicate or unsafe member paths, fixed run/config identity and expected step. Continuous checkpoint2 total manifest bytes4,417,916,589 /manifest SHA `107921af2696c87e80f48823013d6589ae527b45d6450742310fb1f9a0e1970c`; continuous checkpoint12 bytes4,417,916,640 /SHA `c7cc9be23fb453c033ddc462e65c1104311c55fe3cfd913275bc052bbede81a9`; resumed checkpoint12 same byte total /manifest SHA `d6667e9a9184e1b850b7db241d37de11b6086252954f948a2b8b6bd6964bd48d`.
+
+Independence boundary: the main controller performed server/GPU/CPU execution and bridged the raw receipts; this nonauthor reviewer checked the original source, deployment identities, detailed comparison rows, native state coverage, raw logs and manifests. The reviewer independently recomputed event joins locally, but did not personally SSH, rerun GPU work, or unpickle the multi-GB acceptance files locally (Torch is unavailable in the local review interpreter). No such independent execution is claimed.

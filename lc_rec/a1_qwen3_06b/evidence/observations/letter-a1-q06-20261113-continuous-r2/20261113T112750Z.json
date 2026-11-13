@@ -1,0 +1,184 @@
+{
+  "utc": "2026-11-13T11:27:51.101646+00:00",
+  "job_id": "letter-a1-q06-20261113-continuous-r2",
+  "kind": "continuous",
+  "rank": {
+    "0": {
+      "status": "TRAINING",
+      "run_commit": "d9de77adfc92328f2bfd5e64ba40b652946f096f",
+      "events": [
+        {
+          "event": "batch",
+          "utc": "2026-11-13T11:27:48.228669+00:00",
+          "elapsed_seconds": 45.5330279590562,
+          "attempt_job_id": "letter-a1-q06-20261113-continuous-r2",
+          "step": 3,
+          "loader_yielded": 16,
+          "input_sha256": "fa37e134038f6eb68954227b8eba94bd487f9c9c7b8ea22bc112c8afd334f201",
+          "label_sha256": "0497cc995816aa9efbbb4969d45cf599cf65e756c0d00512d7de9a3911502508",
+          "shape": [
+            8,
+            160
+          ]
+        },
+        {
+          "event": "micro_loss",
+          "utc": "2026-11-13T11:27:49.347678+00:00",
+          "elapsed_seconds": 46.65203937608749,
+          "attempt_job_id": "letter-a1-q06-20261113-continuous-r2",
+          "step": 3,
+          "loss": 3.8486328125,
+          "current_gradient_accumulation_steps": 4
+        },
+        {
+          "event": "optimizer_step",
+          "utc": "2026-11-13T11:27:49.359366+00:00",
+          "elapsed_seconds": 46.66372453980148,
+          "attempt_job_id": "letter-a1-q06-20261113-continuous-r2",
+          "step": 4,
+          "epoch": 0.001941747572815534,
+          "lr": [
+            9.63855421686747e-06
+          ],
+          "grad_norm": 63.74159622192383
+        },
+        {
+          "event": "batch",
+          "utc": "2026-11-13T11:27:50.693554+00:00",
+          "elapsed_seconds": 47.99792099092156,
+          "attempt_job_id": "letter-a1-q06-20261113-continuous-r2",
+          "step": 4,
+          "loader_yielded": 20,
+          "input_sha256": "cc042c8660f848918d3eb37b3b6087b5f8817820395023282d87e8f471da6469",
+          "label_sha256": "488596e93a0e0d32a1f2061417a9cb2f2c44aa201f9a75d1a86eda592a22ebe3",
+          "shape": [
+            8,
+            148
+          ]
+        }
+      ]
+    },
+    "1": {
+      "status": "TRAINING",
+      "run_commit": "d9de77adfc92328f2bfd5e64ba40b652946f096f",
+      "events": [
+        {
+          "event": "batch",
+          "utc": "2026-11-13T11:27:48.232486+00:00",
+          "elapsed_seconds": 45.536825839430094,
+          "attempt_job_id": "letter-a1-q06-20261113-continuous-r2",
+          "step": 3,
+          "loader_yielded": 16,
+          "input_sha256": "a3c8b6789869444644a69485587dec9a3655bd8586ee35b5e110ee8fad6a5d0e",
+          "label_sha256": "2f25e0917ba38472146b47fde2d4d0bca88c99de50400fce93f81965298af578",
+          "shape": [
+            8,
+            171
+          ]
+        },
+        {
+          "event": "micro_loss",
+          "utc": "2026-11-13T11:27:49.347617+00:00",
+          "elapsed_seconds": 46.651959653012455,
+          "attempt_job_id": "letter-a1-q06-20261113-continuous-r2",
+          "step": 3,
+          "loss": 4.018487453460693,
+          "current_gradient_accumulation_steps": 4
+        },
+        {
+          "event": "optimizer_step",
+          "utc": "2026-11-13T11:27:49.359428+00:00",
+          "elapsed_seconds": 46.66376751754433,
+          "attempt_job_id": "letter-a1-q06-20261113-continuous-r2",
+          "step": 4,
+          "epoch": 0.001941747572815534,
+          "lr": [
+            9.63855421686747e-06
+          ],
+          "grad_norm": 63.74159622192383
+        },
+        {
+          "event": "batch",
+          "utc": "2026-11-13T11:27:50.755150+00:00",
+          "elapsed_seconds": 48.05950560886413,
+          "attempt_job_id": "letter-a1-q06-20261113-continuous-r2",
+          "step": 4,
+          "loader_yielded": 20,
+          "input_sha256": "3c459d543c3437093d5b872ec80cabb5c7d78e4049d582bea4de72975565808b",
+          "label_sha256": "e0c70ab55ae3d8c9744122461e6d8089eb66418039374ec66646ca9f489bea35",
+          "shape": [
+            8,
+            124
+          ]
+        }
+      ]
+    }
+  },
+  "test_rank": {},
+  "pipeline": {
+    "status": "RUNNING",
+    "job_id": "letter-a1-q06-20261113-continuous-r2",
+    "kind": "continuous",
+    "run_commit": "d9de77adfc92328f2bfd5e64ba40b652946f096f",
+    "output": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-continuous-r2",
+    "started_utc": "2026-11-13T11:27:00.772123+00:00",
+    "pid": 3236290,
+    "stages": [
+      {
+        "stage": "train",
+        "argv": [
+          "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/a1_qwen3_06b/scripts/train.py",
+          "--letter",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER",
+          "--model",
+          "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-0.6B-Base/da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+          "--output",
+          "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-continuous-r2/training",
+          "--config",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/a1_qwen3_06b/config/formal_instruments_seed42.json",
+          "--run-commit",
+          "d9de77adfc92328f2bfd5e64ba40b652946f096f",
+          "--probe-stop",
+          "12",
+          "--probe-save",
+          "2",
+          "--preflight-interfaces"
+        ],
+        "started_utc": "2026-11-13T11:27:00.939517+00:00"
+      }
+    ],
+    "asset_gate": {
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-cpu-r0/cpu/assets_environment.json",
+      "sha256": "2026ca3caebfeedc969c1171feac0c7685357a84d66652a4bdc10183795a4516",
+      "model_revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd"
+    },
+    "gpu_start": "index, uuid, name, memory.total [MiB], memory.used [MiB]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n",
+    "phase": "train"
+  },
+  "resources": [
+    {
+      "utc": "2026-11-13T11:27:30.999855+00:00",
+      "elapsed_seconds": 30.227757618762553,
+      "mem_available": 251807010816,
+      "swap_used": 152190976,
+      "disk_available": 2981566644224,
+      "gpu": "0, 9788, 14296, 11\n1, 13756, 10328, 14\n",
+      "seconds_without_worklog_progress": 0.05988927744328976
+    }
+  ],
+  "gpu": "index, uuid, memory.used [MiB], utilization.gpu [%], temperature.gpu\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 13156 MiB, 35 %, 35\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 13756 MiB, 30 %, 33\n",
+  "runner": {
+    "status": "RUNNING",
+    "exit_code": null,
+    "cleanup_verified": false,
+    "worker_alive": true,
+    "supervisor_alive": true,
+    "workgroup_live": true
+  }
+}

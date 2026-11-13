@@ -29,3 +29,9 @@ CPU job `letter-a1-q06-20261113-cpu-r0`，源码 `a9d36910e20b95ab7df6622f29479b
 runner timeout fixture `letter-a1-q06-20261113-runner-timeout-r0`按预期TIMED_OUT/-9，真实清收并无live；不是实验失败。第一次GPU预验收`continuous-r0`则真实FAILED：Trainer导入可选TF分支碰到Keras3/tf_keras缺失，发生在GPU/model初始化前，无更新。失败原件保留，计入同一预验收ledger。任务级round1将USE_TF/USE_FLAX设0并排除强制TF覆盖，真实CPU全Trainer/PEFT/Accelerate/DS/bnb导入通过；无安装或训练算术修改。后续GPU复核仍待完成。[修正记录](evidence/corrections.json)。
 
 Round1 GPU复核真实失败于on_train_begin审计JSON：已确认393独立BF16 trainable、196投影、loader8240/microbatches及global64，但尚无第一microbatch/update。实际Accelerate源码把steps_per_print置正inf作为stdout日志哨兵；不是Loss/Grad Norm非有限。任务级round2只对该DS配置报告字段作显式字符串编码，保持真实engine配置、kernel和strict JSON/训练finite判定；未知非有限值继续拒绝。原失败及预算保留，下一次真实GPU复核仍未完成。
+
+## 已验证的完整训练恢复门槛（仍未正式开训）
+
+`continuous-r2`真实两rank完成12updates、CP2/12各23成员约4.418GB、32条Validation及196 Int8模块热strict恢复；整体runner仍保留FAILED，因为后续推理审计断言失败。`resume-r2`新进程从同CP2真实恢复至12并SUCCEEDED/cleanup verified；`compare-r2`独立CPU全状态对照PASS：每rank1363张量全部exact/零差，包括393trainable、FP32master/moments、196Int8动态；40个恢复microbatch输入/labels/loader、全部RNG、step/LR/loss/gradnorm精确相同。原容差没有放宽，也没有切换SDPA/kernel/精度。[原始完整对照](evidence/jobs/letter-a1-q06-20261113-compare-r2/run/comparison.json)。
+
+任务级最后round3修正推理审计器：已核实native PEFT把lm_head移至modules_to_tie，并将modules_to_save重写为embed_tokens/model.embed_tokens，当前adapter与历史Q06-L整份配置规范化后同型。改为检查真实双wrapper、同BF16 active Parameter/storage、392LoRA及394完整键/shape/dtype/值；不改训练或adapter。最后推理预验收将复用已通过的CP12及adapter，不重训reference。当前正式seed仍未启动；剩余GPU推理与非作者预审门槛尚待通过。

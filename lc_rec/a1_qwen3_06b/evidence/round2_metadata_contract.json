@@ -1,0 +1,126 @@
+{
+  "status": "PASS_CPU_METADATA_CONTRACT",
+  "argv": [
+    "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/a1_qwen3_06b/scripts/metadata_check.py",
+    "--config",
+    "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/a1_qwen3_06b/config/ds_z2_bf16.json",
+    "--output",
+    "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/round2_metadata_contract.json"
+  ],
+  "versions": {
+    "torch": "2.6.0",
+    "accelerate": "1.12.0",
+    "transformers": "4.57.6",
+    "deepspeed": "0.16.9"
+  },
+  "cuda_context_created": false,
+  "scope": "Metadata only; no model, optimizer or GPU computation",
+  "config_sha256": "e4db1e7ed995a6733b754cbfed53af9f5191fb37a4be3eba33481d3a13a31fae",
+  "production_helper_source_sha256": "11e6191c44abd7402c1e0720e1358bfe0edbf86b28b4dc12f1717daacf79a1cc",
+  "plugin_source": {
+    "path": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/accelerate/utils/dataclasses.py",
+    "sha256": "6f6db1018c1be71436e34baec4b48ef3add91be8056a884cb032576dd867e90d"
+  },
+  "actual_plugin_positive_inf_sentinel": true,
+  "actual_training_arguments_positive_inf_sentinel": true,
+  "ordinary_requested_training_arguments_finite_config_preserved": true,
+  "inherited_effective_plugin_config_training_arguments_encoded": true,
+  "encoded_sentinel": "Infinity [Accelerate 1.12.0 DeepSpeedPlugin.__post_init__: steps_per_print stdout logging sentinel]",
+  "plugin_and_training_configuration_unchanged": true,
+  "finite_values_unchanged": true,
+  "negative_cases": {
+    "steps_per_print_nan": {
+      "rejected": true,
+      "type": "ValueError"
+    },
+    "steps_per_print_negative_inf": {
+      "rejected": true,
+      "type": "ValueError"
+    },
+    "other_top_level_positive_inf": {
+      "rejected": true,
+      "type": "ValueError"
+    },
+    "nested_positive_inf": {
+      "rejected": true,
+      "type": "ValueError"
+    },
+    "nested_nan": {
+      "rejected": true,
+      "type": "ValueError"
+    }
+  },
+  "nonfinite_training_observations_rejected": [
+    "loss_nan",
+    "grad_norm_inf"
+  ],
+  "encoded_effective_ds": {
+    "bf16": {
+      "enabled": "auto"
+    },
+    "zero_optimization": {
+      "stage": 2,
+      "allgather_partitions": true,
+      "allgather_bucket_size": 50000000,
+      "overlap_comm": true,
+      "reduce_scatter": true,
+      "reduce_bucket_size": 50000000,
+      "contiguous_gradients": true
+    },
+    "gradient_accumulation_steps": 4,
+    "gradient_clipping": 1.0,
+    "steps_per_print": "Infinity [Accelerate 1.12.0 DeepSpeedPlugin.__post_init__: steps_per_print stdout logging sentinel]",
+    "train_batch_size": "auto",
+    "train_micro_batch_size_per_gpu": "auto",
+    "wall_clock_breakdown": false,
+    "zero_allow_untested_optimizer": true,
+    "flops_profiler": {
+      "enabled": false
+    }
+  },
+  "encoded_training_deepspeed": {
+    "bf16": {
+      "enabled": "auto"
+    },
+    "zero_optimization": {
+      "stage": 2,
+      "allgather_partitions": true,
+      "allgather_bucket_size": 50000000,
+      "overlap_comm": true,
+      "reduce_scatter": true,
+      "reduce_bucket_size": 50000000,
+      "contiguous_gradients": true
+    },
+    "gradient_accumulation_steps": 4,
+    "gradient_clipping": 1.0,
+    "steps_per_print": "Infinity [Accelerate 1.12.0 DeepSpeedPlugin.__post_init__: steps_per_print stdout logging sentinel]",
+    "train_batch_size": "auto",
+    "train_micro_batch_size_per_gpu": "auto",
+    "wall_clock_breakdown": false,
+    "zero_allow_untested_optimizer": true,
+    "flops_profiler": {
+      "enabled": false
+    }
+  },
+  "encoded_training_arguments_sha256": "69da22f665fce9d3f24b3a005903f383d93ac22eca03ce2ad9970d0a07d9fadb",
+  "execution": {
+    "RUN_COMMIT": "d9de77adfc92328f2bfd5e64ba40b652946f096f",
+    "argv": [
+      "env",
+      "CUDA_VISIBLE_DEVICES=",
+      "USE_TF=0",
+      "USE_FLAX=0",
+      "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+      "-B",
+      "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/a1_qwen3_06b/scripts/metadata_check.py",
+      "--config",
+      "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/a1_qwen3_06b/config/ds_z2_bf16.json",
+      "--output",
+      "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/round2_metadata_contract.json"
+    ],
+    "cwd": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f",
+    "stdout": "{\"status\": \"PASS_CPU_METADATA_CONTRACT\", \"cuda_context_created\": false, \"negative_cases_rejected\": 5}\n",
+    "observed_utc": "2026-11-13T11:26:22.323285+00:00",
+    "mode": "bounded synchronous CPU gate; no GPU reservation"
+  }
+}

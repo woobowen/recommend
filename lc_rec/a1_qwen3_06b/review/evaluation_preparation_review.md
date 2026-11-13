@@ -169,6 +169,83 @@ bootstrap execution was performed. Actual paired runtime acceptance remains
 pending the complete real A1 prediction/derived-data evidence and independent
 statistical verification.
 
+## Fixed offline identity-chain source review
+
+The reviewer read the actual fixed blobs at
+`d9de77adfc92328f2bfd5e64ba40b652946f096f`, including `freeze_manifest.py`,
+`offline_pipeline.py`, original train/best export and inference metadata code,
+the Stage-A original evaluator, primary adaptation, independent extension,
+unchanged independent statistics and corrected paired entry. No formula audit or
+GPU rerun was substituted for this interface/identity review.
+
+The inspected chain is consistent: completed training rank records and selected
+best metadata bind the actual best adapter SHA; both completed prediction ranks
+bind that SHA and the same fixed model/data/author/generation identity; freezing
+streams and pins both prediction SHA/size/path records; Stage-A verifies complete
+raw users and original metrics under that RUN; primary and independent expanded
+evaluation use the same frozen manifest/Stage-A gate; the original statistics
+verifier checks full CSV/NPZ and groups/bootstrap; paired comparison binds both
+models' user axes and metric arrays. Original metadata hashes are checked again
+at the end. No field/path interface blocker was identified in these fixed bytes.
+
+| File under `lc_rec/a1_qwen3_06b/` | SHA-256 at that commit |
+| --- | --- |
+| `scripts/freeze_manifest.py` | `3ee7214c5d025bc08b80d7cde8376ade93e44b8d9e41b828fcb37d2950df016e` |
+| `scripts/offline_pipeline.py` | `2096bd8ef1b78be6535554fb03672e2219fb5b575e9466639cdc06bf5743396d` |
+| `scripts/offline_metrics.py` | `3a587285790a42de5d1d93e91d90d45d4d1766c768067238ff3c7b2976ced4a6` |
+| `scripts/paired.py` | `99d06cc3f78e74727b18e10da248c519d9af5e82c98e5ad7f23345bf9369a4d0` |
+| `review/independent_extended.py` | `ee193edd584a987093a254bb6b2886e6ba3b09fda8832b5bf6421a1b798ec20f` |
+
+One audit-coverage gap was reported: that version of `offline_pipeline.py`
+produces paired results but does not independently recompute their 5000 by 16
+replicate means/intervals. The original statistics verifier checks A1 single-model
+intervals, which cannot replace a paired interval check. This does not block GPU
+preflight/training; actual paired final acceptance requires the independent
+execution described next and its integration into the final CPU chain.
+
+## New independent paired verifier
+
+At the main controller's explicit delegation, the reviewer authored
+`lc_rec/a1_qwen3_06b/review/paired_verify.py`, **17013 bytes**, SHA-256
+`bb9bbcce7426e8f673891208fced71459aabae05b7572aef288c215611f366e7`.
+It imports neither the primary evaluator nor `paired.py`. Formal CLI:
+
+```text
+python paired_verify.py --a0 <A0-primary-root> --a1 <A1-primary-root>
+  --paired <main-paired-output-root> --output <new-review.json>
+```
+
+Its formal path checks the exact frozen A0 CSV/NPZ SHA; both primary summaries'
+actual per-user size/path/hash manifests and complete RUN/protocol identity;
+the reconstructed ordered-user axis; float64 finite matrix shape; fixed sixteen
+metric names/order; and exact CSV/NPZ values for both models, totaling **792704**
+metric entries. All users' targets, original/visible history and group metadata
+must match before subtraction. It also checks the main paired result's input
+hashes and the saved full paired draw array, not just its summary.
+
+The independent bootstrap uses **column-wise gather** on `A1-A0`, separate from
+the production multivariate gather. It generates 5000 by 16 means with PCG64
+seed20261113, replicate-major int64 user draws and linear 2.5/97.5 percentiles.
+All 80000 means, all interval endpoints, point estimates and relative changes
+are checked at the unchanged `1e-13` absolute tolerance. Input file stat stamps
+are checked after computation. The reviewer JSON includes actual source/input
+hashes and raw maximum numerical differences. Existing reviewer output is not
+overwritten; no output may be placed inside either primary input directory.
+
+Actual preparation command: `python3 -B .../review/paired_verify.py --self-test`.
+Exit 0; **11 directed synthetic checks PASS**, using four synthetic users and
+137 draws, NumPy 1.26.4. Checks include an independent scalar summation reference,
+block-size invariance, a constant paired shift, swap antisymmetry, identical-model
+zero difference, valid value/metadata pairs and rejection of row-permuted values,
+wrong columns, nonfinite values and mismatched target metadata. Maximum scalar
+replicate-mean difference was `2.7755575615628914e-17`. Syntax also passed.
+
+The synthetic CLI status is explicitly
+`PASS_SYNTHETIC_PAIRED_VERIFIER_ONLY`; it is not a formal A1 paired result. The
+full verifier's `PASS` can only follow a successful complete-data execution.
+No actual A1 formal prediction, derived matrix or bootstrap result was loaded
+in these self-tests. Pipeline integration and full real execution remain pending.
+
 No paired A0/A1 runtime result has been reviewed, and no significance conclusion
 is made. Future full-data acceptance still requires original-user/target axes,
 all raw predictions, independent rankings/CCE, grouping/statistics and actual

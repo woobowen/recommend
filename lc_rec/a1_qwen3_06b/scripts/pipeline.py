@@ -25,8 +25,8 @@ def main():
     for n in ['release','run-commit','job-id','kind']:
         p.add_argument('--'+n,required=True)
     p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true')
-    p.add_argument('--prelaunch-review');p.add_argument('--continuous');p.add_argument('--resumed');a=p.parse_args()
-    assert a.kind in ['cpu','compare','continuous','resume','formal']
+    p.add_argument('--prelaunch-review');p.add_argument('--continuous');p.add_argument('--resumed');p.add_argument('--training');p.add_argument('--model-run-commit');a=p.parse_args()
+    assert a.kind in ['cpu','compare','continuous','resume','formal','inference']
     root=Path('/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113');root.mkdir(parents=True,exist_ok=True)
     job=Path(os.environ['GRID_JOB_DIR']);assert job.name==a.job_id
     scripts=Path(a.release)/'lc_rec/a1_qwen3_06b/scripts'
@@ -61,6 +61,15 @@ def main():
     output=root/a.job_id;output.mkdir(exist_ok=True)
     training=(root/'formal_seed42/training') if a.kind=='formal' else output/'training'
     training.parent.mkdir(exist_ok=True,parents=True)
+    if a.kind=='inference':
+        assert a.training and a.model_run_commit
+        training=Path(a.training).resolve()
+        assert root.resolve() in training.parents and training.is_dir()
+        from checkpoint import verify_checkpoint
+        verify_checkpoint(training/'checkpoint-12',a.model_run_commit,sha(config))
+        for rank in [0,1]:
+            proof=json.loads((training/f'rank{rank}.json').read_text())
+            assert proof['status']=='PROBE_COMPLETE' and proof['global_step']==12 and proof['run_commit']==a.model_run_commit
     if a.resume and a.kind=='formal':assert Path(a.resume).resolve().parent==training.resolve()
     if a.resume and a.kind=='formal':
         complete=sorted((x for x in training.glob('checkpoint-*') if (x/'complete.json').is_file()),key=lambda x:int(x.name.split('-')[-1]))
@@ -127,7 +136,24 @@ def main():
                   '--output',training,'--config',config,'--run-commit',a.run_commit]
             if a.resume:args+=['--resume',a.resume]
             if a.kind in ['continuous','resume']:args+=['--probe-stop','12','--probe-save','2','--preflight-interfaces']
-            if a.resume_evaluation:
+            if a.kind=='inference':
+                import torch
+                cp_adapter=training/'checkpoint-12/adapter_model.bin'
+                inference_adapter=training/'preflight_adapter/adapter_model.bin'
+                left=torch.load(cp_adapter,map_location='cpu',weights_only=True)
+                right=torch.load(inference_adapter,map_location='cpu',weights_only=True)
+                assert set(left)==set(right) and len(left)==394
+                for name in left:
+                    assert left[name].dtype==right[name].dtype==torch.bfloat16
+                    assert left[name].shape==right[name].shape and torch.equal(left[name],right[name]),name
+                binding={'status':'PASS_CPU_ALL_ADAPTER_TENSORS_EXACT','training_run_commit':a.model_run_commit,
+                         'checkpoint':str(training/'checkpoint-12'),'adapter':str(inference_adapter),
+                         'keys':394,'checkpoint_adapter_sha256':sha(cp_adapter),'inference_adapter_sha256':sha(inference_adapter),
+                         'all_shapes_dtypes_and_values_exact':True,'GPU_model_loaded':False}
+                write(output/'adapter_binding.json',binding)
+                del left,right
+                status['stages'].append({'stage':'train','status':'REUSED_VERIFIED_PREACCEPTANCE_TRAINING','training':str(training),'training_run_commit':a.model_run_commit,'inference_source_commit':a.run_commit,'adapter_binding':binding})
+            elif a.resume_evaluation:
                 assert a.kind=='formal' and not a.resume and ledger['attempts'][:-1]
                 for r in [0,1]:
                     proof=json.loads((training/('rank%d.json'%r)).read_text())
@@ -141,7 +167,7 @@ def main():
                 if a.kind=='formal' and (training/'best_selection.json').exists():
                     raise RuntimeError('training already completed: verify and use --resume-evaluation; never retrain from older best')
                 run('train',args)
-            if a.kind=='continuous':
+            if a.kind in ['continuous','inference']:
                 run('test_interfaces',[scripts/'evaluate.py','--source-root',source,'--data-root',data,'--model',model,
                             '--adapter',training/'preflight_adapter','--output',output/'test_preflight','--run-commit',a.run_commit,
                             '--preflight-users-per-rank','8'])

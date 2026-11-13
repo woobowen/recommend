@@ -1,7 +1,7 @@
 {
   "task": "A1 Qwen3-0.6B Instruments seed42",
   "initial_round": 0,
-  "correction_rounds_used": 2,
+  "correction_rounds_used": 3,
   "maximum_correction_rounds": 3,
   "rounds": [
     {
@@ -25,7 +25,17 @@
       "failure_stage": "on_train_begin after DS/loader and 393 BF16 parameters verified, before first microbatch; zero optimizer updates",
       "change": "Report-only shallow DS config copy encodes this single positive-infinity key as explicit source-labelled string; original config/engine unchanged; all other nonfinite fields rejected; global allow_nan=False remains",
       "verification": "metadata_check.py production-helper and actual DeepSpeedPlugin/TrainingArguments CPU gate pending; nonauthor static helper tests passed",
-      "status": "GPU_RECHECK_PENDING"
+      "status": "CPU_METADATA_PASS_TRAINING_AND_FRESH_RESTORE_PASS_NEW_INFERENCE_AUDIT_BLOCKER"
+    },
+    {
+      "round": 3,
+      "failed_job": "letter-a1-q06-20261113-continuous-r2",
+      "failed_run_commit": "d9de77adfc92328f2bfd5e64ba40b652946f096f",
+      "root_cause": "Inference auditor mechanically required requested modules_to_save string list; native PEFT0.21.2 ensure_weight_tying rewrites lm_head into modules_to_tie and saved modules_to_save embedding aliases",
+      "change": "Strict native tying semantic validation of wrappers, same BF16 Parameter/storage, exact394 tensor keys/shapes/dtypes/values; preserve original trained adapter and all training source",
+      "verification": "continuous training12/CP2+12/32val/hotrestore PASS; fresh resume12 and two-rank1363tensors each all exact PASS; corrected inference pending",
+      "no_retraining": "New inference-only attempt reuses original d9 CP12/preflight_adapter, adds CPU full394tensor checkpoint/adapter equality binding; all earlier failure statuses/ledger retained",
+      "status": "INFERENCE_RECHECK_PENDING"
     }
   ]
 }

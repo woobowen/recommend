@@ -19,7 +19,8 @@ def main():
  ('primary',[sys.executable,str(scripts/'offline_metrics.py'),'--data-root',a.data_root,'--test-dir',a.test_dir,'--stage-a-report',str(out/'independent_original.json'),'--config',str(out/'a1_evaluation_v1.json'),'--official-cce',str(official),'--output',str(out/'primary'),'--evaluation-commit',a.evaluation_commit,'--manifest',str(out/'prediction_manifest.json')]),
  ('independent_extended',[sys.executable,str(task/'review/independent_extended.py'),'--data-root',a.data_root,'--test-dir',a.test_dir,'--stage-a-report',str(out/'independent_original.json'),'--output',str(out/'independent_extended.json'),'--official-cce',str(official),'--official-sha256',cfg['official_cce_sha256'],'--per-user',str(out/'primary/per_user.csv'),'--manifest',str(out/'prediction_manifest.json')]),
  ('independent_statistics',[sys.executable,str(old/'review/final_audit_20261113/statistics_verify.py'),'--data-root',str(Path(a.data_root)/'Instruments'),'--per-user',str(out/'primary/per_user.csv'),'--primary-bootstrap',str(out/'primary/bootstrap.json'),'--primary-draws',str(out/'primary/bootstrap_draw_means.npy'),'--self-test','--output',str(out/'independent_statistics.json')]),
- ('paired',[sys.executable,str(scripts/'paired.py'),'--a1',str(out/'primary'),'--output',str(out/'paired')])]
+ ('paired',[sys.executable,str(scripts/'paired.py'),'--a1',str(out/'primary'),'--output',str(out/'paired')]),
+ ('independent_paired',[sys.executable,str(task/'review/paired_verify.py'),'--a0','/data/bwwu/lc-rec/a0-final-audit-20261113/letter-a0-20261112-final-audit-20261113-offline-r1/primary','--a1',str(out/'primary'),'--paired',str(out/'paired'),'--output',str(out/'independent_paired.json')])]
  try:
   for name,argv in commands:
    tick=time.monotonic()
@@ -34,6 +35,7 @@ def main():
   assert all(main['first_target_rank_users'][str(r)]==independent['first_target_rank_counts'][str(r)] for r in range(1,21))
   assert main['first_target_rank_users']['miss']==independent['first_target_rank_counts']['not_in_top20']
   assert read(out/'independent_statistics.json')['status']=='PASS'
+  assert read(out/'independent_paired.json')['status']=='PASS'
   for name,v in before.items():assert Path(name).stat().st_size==v['bytes'] and sha(name)==v['sha256']
   status.update(status='PASS',all_16_mean_deltas=delta,original_metadata_unchanged=True,manifest_sha256=sha(out/'prediction_manifest.json'))
  except BaseException as e:status.update(status='FAIL',error=repr(e));raise

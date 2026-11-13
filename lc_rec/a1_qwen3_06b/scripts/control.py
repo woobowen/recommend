@@ -17,8 +17,8 @@ transport.Transport.python=lambda self,code,timeout=45:self.ssh(shlex.join(['pyt
 def main():
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('mode',choices=['deploy','submit','query','logs','collect','observe'])
- p.add_argument('--commit');p.add_argument('--job');p.add_argument('--kind',choices=['cpu','selftest','continuous','resume','formal','compare'])
- p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true');p.add_argument('--continuous');p.add_argument('--resumed');a=p.parse_args()
+ p.add_argument('--commit');p.add_argument('--job');p.add_argument('--kind',choices=['cpu','selftest','continuous','resume','formal','compare','inference'])
+ p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true');p.add_argument('--continuous');p.add_argument('--resumed');p.add_argument('--training');p.add_argument('--model-run-commit');a=p.parse_args()
  assert subprocess.check_output(['git','branch','--show-current'],cwd=REPO,text=True).strip()=='wbw-lc-rec'
  commit=subprocess.check_output(['git','rev-parse',a.commit or 'HEAD'],cwd=REPO,text=True).strip()
  t=transport.Transport('new-server');release=REMOTE+'/releases/'+commit
@@ -66,6 +66,9 @@ print(json.dumps(r))"""
   argv=[PYTHON,release+'/lc_rec/a1_qwen3_06b/scripts/pipeline.py','--release',release,'--run-commit',commit,'--job-id',a.job,'--kind',a.kind]
   if a.resume:argv+=['--resume',a.resume]
   if a.resume_evaluation:argv+=['--resume-evaluation']
+  if a.kind=='inference':
+   assert a.training and a.model_run_commit
+   argv+=['--training',a.training,'--model-run-commit',a.model_run_commit]
   if a.kind=='compare':
    assert a.continuous and a.resumed
    argv+=['--continuous',a.continuous,'--resumed',a.resumed]
@@ -104,7 +107,7 @@ r={{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'job_id':job.
 for base,prefix in [(job,'job'),(run,'run'),(root/'formal_seed42/training','formal_training')]:
  if base.exists():
   for q in base.rglob('*'):
-   if q.is_file() and not q.is_symlink() and q.suffix in ['.json','.jsonl','.log'] and q.stat().st_size<=8*1024**2 and not q.name.startswith('predictions'):
+   if q.is_file() and not q.is_symlink() and q.suffix in ['.json','.jsonl','.log'] and q.stat().st_size<=8*1024**2 and (not q.name.startswith('predictions') or ('test_preflight' in q.parts and q.stat().st_size<=1024**2)):
     b=q.read_bytes();r['files'][prefix+'/'+str(q.relative_to(base))]={{'text':b.decode(),'sha256':hashlib.sha256(b).hexdigest()}}
 r['gpu']=subprocess.check_output(['nvidia-smi','--query-gpu=index,uuid,memory.used,memory.free,utilization.gpu,temperature.gpu','--format=csv'],text=True)
 r['ram']=subprocess.check_output(['free','-b'],text=True);r['disk']=subprocess.check_output(['df','-B1',str(root) if root.exists() else '/data/bwwu'],text=True)

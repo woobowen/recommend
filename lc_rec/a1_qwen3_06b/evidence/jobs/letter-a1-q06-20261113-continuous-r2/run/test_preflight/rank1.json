@@ -1,0 +1,107 @@
+{
+  "schema": "letter_a1_qwen3_formal_test_v1",
+  "status": "FAIL",
+  "rank": 1,
+  "world_size": 2,
+  "local_rank": 1,
+  "RUN_COMMIT": "d9de77adfc92328f2bfd5e64ba40b652946f096f",
+  "host": "zwlab-01",
+  "pid": 3236497,
+  "argv": [
+    "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/a1_qwen3_06b/scripts/evaluate.py",
+    "--source-root",
+    "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+    "--data-root",
+    "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER/data",
+    "--model",
+    "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-0.6B-Base/da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+    "--adapter",
+    "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-continuous-r2/training/preflight_adapter",
+    "--output",
+    "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-continuous-r2/test_preflight",
+    "--run-commit",
+    "d9de77adfc92328f2bfd5e64ba40b652946f096f",
+    "--preflight-users-per-rank",
+    "8"
+  ],
+  "cwd": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f",
+  "interpreter": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+  "started_utc": "2026-11-13T11:28:57.262039+00:00",
+  "completed_users": 0,
+  "generation": {
+    "prompt_id": 0,
+    "num_beams": 20,
+    "num_return_sequences": 20,
+    "max_new_tokens": 10,
+    "early_stopping": true,
+    "filter_items": false,
+    "prefix": "fixed original per-position callback; no catalog Trie",
+    "per_rank_batch_size": 1,
+    "oom_beam_reduction": false,
+    "base_dtype": "BF16, unquantized original author LoRA inference branch",
+    "sampler": "original DistributedSampler shuffle=True, seed=0, epoch=0, drop_last=True"
+  },
+  "minimum_observed_host_memavailable_bytes": 255213019136,
+  "minimum_observed_output_free_bytes": 2967324999680,
+  "data_identity": {
+    "index": {
+      "path": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.index.json",
+      "bytes": 518041,
+      "sha256": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd"
+    },
+    "inter": {
+      "path": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.inter.json",
+      "bytes": 3312848,
+      "sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743"
+    },
+    "item": {
+      "path": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.item.json",
+      "bytes": 7526890,
+      "sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2"
+    }
+  },
+  "author_sources": {
+    "data.py": {
+      "path": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/data.py",
+      "sha256": "cfd7733325670792c0da32393752c49116cd2b0ce097ffd629cda1c224bddecc"
+    },
+    "collator.py": {
+      "path": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/collator.py",
+      "sha256": "e1ec6dec9aadf3c123ea45656fe2c58dc102ac075ca78bf9dff7df47cb5c29b8"
+    },
+    "evaluate.py": {
+      "path": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/evaluate.py",
+      "sha256": "6bcbf22965b59edebe2b37ff57c374cb6d3127d9c6254e0eba2b873459c6b357"
+    },
+    "test_ddp.py": {
+      "path": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/test_ddp.py",
+      "sha256": "a639395ba42d2e914fc5b8d9bbc73785160badfb80299053b1e359c36bbf6f0c"
+    },
+    "prompt.py": {
+      "path": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/prompt.py",
+      "sha256": "2415f1a2bece1fd27f961efd5beb3a52e0e997ba39c1f3825fec1292bf84f7d7"
+    }
+  },
+  "entry_sha256": "df0e35ced3fd9d6b8560beaeb54c84f1423ab24cd607b0db6aa121098cb65ea5",
+  "versions": {
+    "torch": "2.6.0",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "accelerate": "1.12.0"
+  },
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 4090",
+    "visible_devices": "0,1",
+    "total_memory_bytes": 25252724736
+  },
+  "error": {
+    "type": "AssertionError",
+    "message": "",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/a1_qwen3_06b/scripts/evaluate.py\", line 367, in main\n    model, tokenizer = strict_reload(args, report, torch, local_rank, source, indices)\n  File \"/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/d9de77adfc92328f2bfd5e64ba40b652946f096f/lc_rec/a1_qwen3_06b/scripts/evaluate.py\", line 228, in strict_reload\n    assert set(config[\"modules_to_save\"]) == {\"embed_tokens\", \"lm_head\"} and config.get(\"bias\", \"none\") == \"none\"\nAssertionError\n"
+  },
+  "elapsed_seconds": 4.662003175355494,
+  "finished_utc": "2026-11-13T11:29:01.923947+00:00",
+  "cpu_process_peak_rss_bytes": 686612480,
+  "gpu_peak_allocated_bytes": 0,
+  "gpu_peak_reserved_bytes": 0
+}
