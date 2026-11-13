@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "ORIGINAL_METRICS_INDEPENDENT_AUDIT": "PASS",
+  "checks": {
+    "cpu_runner_success": true,
+    "cpu_job_identity": true,
+    "independent_success": true,
+    "run_identity": true,
+    "independent_executed_script": true,
+    "actual_worker_argv": true,
+    "full_coverage": true,
+    "fixed_rank0": true,
+    "fixed_rank1": true,
+    "original_metrics_unchanged": true,
+    "unchanged_anomalies": true,
+    "unchanged_tolerances": true,
+    "hit@5_tolerance": true,
+    "hit@10_tolerance": true,
+    "ndcg@5_tolerance": true,
+    "ndcg@10_tolerance": true
+  },
+  "RUN_COMMIT": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+  "metric_deltas": {
+    "hit@5": {
+      "sum_absolute_delta": 0.0,
+      "mean_absolute_delta": 0.0
+    },
+    "hit@10": {
+      "sum_absolute_delta": 0.0,
+      "mean_absolute_delta": 0.0
+    },
+    "ndcg@5": {
+      "sum_absolute_delta": 1.0686562745831907e-11,
+      "mean_absolute_delta": 4.3021142204224816e-16
+    },
+    "ndcg@10": {
+      "sum_absolute_delta": 8.640199666842818e-12,
+      "mean_absolute_delta": 3.469446951953614e-16
+    }
+  },
+  "inputs": {
+    "independent_original.json": {
+      "bytes": 4920,
+      "sha256": "1293bd6231a1264bd0330d93b599211f8285ffe0ea6251b80e36f6893ba19859"
+    },
+    "stage_a_status.json": {
+      "bytes": 3981,
+      "sha256": "047b1a3ddd8b8e5aa85fbf5f075ca65483ddd3bc8b2d62df57131384be70263b"
+    },
+    "metrics.json": {
+      "bytes": 4065,
+      "sha256": "7cbbc077385923f284ee800b4318f2aefd4fd561b13c5925a24ae4e3429d471e"
+    }
+  },
+  "scope": "Reviewer inspected independent source and actual full CPU execution receipt; no second full prediction scan or GPU rerun",
+  "semantics": "Complete user relevance and mathematical definitions agree. HR sums/means are exact; NDCG accumulation differs only at documented floating-point roundoff scale. This is not bitwise aggregate equality.",
+  "correction": "Round0 failed before reading predictions because --data-root was incorrect; raw failure preserved. One task-level path correction, unchanged script and metric tolerances, then successful full r1 execution."
+}

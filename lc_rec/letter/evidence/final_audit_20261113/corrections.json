@@ -1,0 +1,22 @@
+{
+  "rounds_used": 2,
+  "maximum": 3,
+  "records": [
+    {
+      "round": 1,
+      "cause": "Initial controller supplied non-existent vendor/LETTER/LETTER-LC-Rec/data instead of actual vendor/LETTER/data. Failure before prediction scan.",
+      "change": "Only new CPU request data-root/output/job attempt changed; unchanged original independent script, original GPU assets/config/predictions untouched.",
+      "failed_job": "letter-a0-20261112-final-audit-20261113-stageA-r0",
+      "replacement_job": "letter-a0-20261112-final-audit-20261113-stageA-r1",
+      "verification": "r1 SUCCEEDED/exit0; complete24772-user original audit PASS; unchanged original tolerances."
+    },
+    {
+      "round": 2,
+      "cause": "CPU source deploy upload used a new remote source root; existing Transport correctly rejects SCP writes outside its accepted support root. Failure before upload/CPU launch.",
+      "change": "Upload the uniquely named source archive into existing accepted support/transfers; verify bytes then extract into separate immutable CPU source export. Shared transport/profile unchanged.",
+      "source_commit_before": "1706a9e",
+      "failed_operation": "offline_audit_control deploy",
+      "verification": "Deployment succeeded after scoped upload fix; seven fixed source/config/license files match git-derived SHA; CPU main+independent+bootstrap pipeline SUCCEEDED exit0 cleanup verified."
+    }
+  ]
+}

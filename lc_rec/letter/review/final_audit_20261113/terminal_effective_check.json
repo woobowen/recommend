@@ -1,0 +1,111 @@
+{
+  "status": "PASS",
+  "observed_utc": "2026-11-13T09:30:21.257966+00:00",
+  "RUN_COMMIT": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+  "checks": {
+    "host": true,
+    "run": true,
+    "rank0_identity": true,
+    "rank0_complete": true,
+    "rank0_training_arguments": true,
+    "rank0_zero2": true,
+    "rank0_batch": true,
+    "rank0_precision": true,
+    "rank0_trainable_scope": true,
+    "rank0_a_only": true,
+    "rank0_residual": true,
+    "rank0_data": true,
+    "rank0_model_revision": true,
+    "rank0_fa": true,
+    "rank1_identity": true,
+    "rank1_complete": true,
+    "rank1_training_arguments": true,
+    "rank1_zero2": true,
+    "rank1_batch": true,
+    "rank1_precision": true,
+    "rank1_trainable_scope": true,
+    "rank1_a_only": true,
+    "rank1_residual": true,
+    "rank1_data": true,
+    "rank1_model_revision": true,
+    "rank1_fa": true
+  },
+  "effective_fields": [
+    {
+      "rank": 0,
+      "training_arguments": {
+        "num_train_epochs": 4,
+        "max_steps": -1,
+        "per_device_train_batch_size": 8,
+        "per_device_eval_batch_size": 8,
+        "gradient_accumulation_steps": 4,
+        "optim": "adamw_torch",
+        "learning_rate": 0.0002,
+        "weight_decay": 0.01,
+        "warmup_ratio": 0.01,
+        "lr_scheduler_type": "cosine",
+        "bf16": true,
+        "fp16": false,
+        "gradient_checkpointing": true,
+        "evaluation_strategy": "epoch",
+        "save_strategy": "epoch",
+        "eval_delay": 1,
+        "load_best_model_at_end": true,
+        "save_total_limit": 2,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "seed": 42
+      },
+      "effective_batch": 64,
+      "zero_stage": 2,
+      "source_file": {
+        "path": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/rank0.json",
+        "bytes": 579860,
+        "sha256": "f500fe2b7f3cd59e3adeb9061d0dc55f9d452b652267e2f921a911db0e36f3c0"
+      }
+    },
+    {
+      "rank": 1,
+      "training_arguments": {
+        "num_train_epochs": 4,
+        "max_steps": -1,
+        "per_device_train_batch_size": 8,
+        "per_device_eval_batch_size": 8,
+        "gradient_accumulation_steps": 4,
+        "optim": "adamw_torch",
+        "learning_rate": 0.0002,
+        "weight_decay": 0.01,
+        "warmup_ratio": 0.01,
+        "lr_scheduler_type": "cosine",
+        "bf16": true,
+        "fp16": false,
+        "gradient_checkpointing": true,
+        "evaluation_strategy": "epoch",
+        "save_strategy": "epoch",
+        "eval_delay": 1,
+        "load_best_model_at_end": true,
+        "save_total_limit": 2,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "seed": 42
+      },
+      "effective_batch": 64,
+      "zero_stage": 2,
+      "source_file": {
+        "path": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/rank1.json",
+        "bytes": 579858,
+        "sha256": "c5477294ffb1b289a454c364af406c0c44581719961dd6759c886ce3106511a5"
+      }
+    }
+  ],
+  "input": {
+    "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/letter/review/final_audit_20261113/terminal_effective_raw.json",
+    "bytes": 830854,
+    "sha256": "ea363baac7b60a15c5cdd3aaa6626f50554520f5446c5f2b38068e6982b9de48"
+  },
+  "metadata_notes": [
+    "DeepSpeed steps_per_print=Infinity is a logging-disable sentinel, not a nonfinite loss or gradient observation.",
+    "a_only_bf16.adaptation inherits the historical string \"probe-only\" from compat; formal source/approval and actual formal argv establish approved use in this run. The original record is retained without mutation."
+  ],
+  "scope": "Nonauthor direct SSH read of final rank JSON and four small source files; no model/GPU/checkpoint payload work or remote mutation"
+}
