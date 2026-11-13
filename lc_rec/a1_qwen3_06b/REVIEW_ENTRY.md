@@ -21,3 +21,9 @@ Qwen使用原生SDPA/GC，无LLaMA FastChat、FA2 deterministic或LoRA A-only补
 16项排名/CCE、SID诊断、固定分组、5000次PCG64用户Bootstrap及A0/A1配对分析均按A0冻结协议；尚无A1正式预测或指标。不得把A0实测的非法/重复/碰撞数硬编码为A1门槛。
 
 GPT_UPLOAD_REQUIRED: NO（当前已发布材料只用于准备阶段核查；最终结果、审核、固定交付和ZIP仍未完成）。
+
+## 本轮CPU门槛与round1
+
+CPU job `letter-a1-q06-20261113-cpu-r0`，源码 `a9d36910e20b95ab7df6622f29479b5d542f0b68`，真实SUCCEEDED/exit0/cleanup verified。完整权重SHA、当前依赖、tokenizer全部9922物品及保存重载、全部长度分母、真实EOS/mask、CPU Int8 cold/hot序列化契约、A0配对CSV/NPZ当前SHA均通过；CUDA未初始化。训练/验证最大184 tokens，Prompt0测试最大167。
+
+runner timeout fixture `letter-a1-q06-20261113-runner-timeout-r0`按预期TIMED_OUT/-9，真实清收并无live；不是实验失败。第一次GPU预验收`continuous-r0`则真实FAILED：Trainer导入可选TF分支碰到Keras3/tf_keras缺失，发生在GPU/model初始化前，无更新。失败原件保留，计入同一预验收ledger。任务级round1将USE_TF/USE_FLAX设0并排除强制TF覆盖，真实CPU全Trainer/PEFT/Accelerate/DS/bnb导入通过；无安装或训练算术修改。后续GPU复核仍待完成。[修正记录](evidence/corrections.json)。

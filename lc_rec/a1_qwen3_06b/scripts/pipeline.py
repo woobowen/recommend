@@ -25,7 +25,7 @@ def main():
     for n in ['release','run-commit','job-id','kind']:
         p.add_argument('--'+n,required=True)
     p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true')
-    p.add_argument('--prelaunch-review');a=p.parse_args()
+    p.add_argument('--prelaunch-review');p.add_argument('--continuous');p.add_argument('--resumed');a=p.parse_args()
     assert a.kind in ['cpu','compare','continuous','resume','formal']
     root=Path('/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113');root.mkdir(parents=True,exist_ok=True)
     job=Path(os.environ['GRID_JOB_DIR']);assert job.name==a.job_id
@@ -46,7 +46,9 @@ def main():
         if a.kind=='cpu':
             command=[sys.executable,str(scripts/'cpu.py'),'--release',a.release,'--output',str(output/'cpu'),'--run-commit',a.run_commit]
         else:
-            command=[sys.executable,str(scripts/'compare.py'),'--continuous',str(root/'letter-a1-q06-20261113-continuous-r0/training'),'--resumed',str(root/'letter-a1-q06-20261113-resume-r0/training'),'--output',str(output/'comparison.json')]
+            assert a.continuous and a.resumed
+            assert all(root.resolve() in Path(v).resolve().parents for v in [a.continuous,a.resumed])
+            command=[sys.executable,str(scripts/'compare.py'),'--continuous',a.continuous,'--resumed',a.resumed,'--output',str(output/'comparison.json')]
         subprocess.run(command,check=True)
         write(job/'output/pipeline.json',{'status':'CPU_COMPLETE','RUN_COMMIT':a.run_commit,'kind':a.kind,'argv':command})
         return

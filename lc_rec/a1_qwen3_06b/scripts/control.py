@@ -18,7 +18,7 @@ def main():
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('mode',choices=['deploy','submit','query','logs','collect','observe'])
  p.add_argument('--commit');p.add_argument('--job');p.add_argument('--kind',choices=['cpu','selftest','continuous','resume','formal','compare'])
- p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true');a=p.parse_args()
+ p.add_argument('--resume');p.add_argument('--resume-evaluation',action='store_true');p.add_argument('--continuous');p.add_argument('--resumed');a=p.parse_args()
  assert subprocess.check_output(['git','branch','--show-current'],cwd=REPO,text=True).strip()=='wbw-lc-rec'
  commit=subprocess.check_output(['git','rev-parse',a.commit or 'HEAD'],cwd=REPO,text=True).strip()
  t=transport.Transport('new-server');release=REMOTE+'/releases/'+commit
@@ -61,11 +61,14 @@ print(json.dumps(r))"""
   deployment=json.loads((SUPPORT/'receipts'/('deployment-'+commit+'.json')).read_text())
   old=json.loads((REPO/'lc_rec/letter/evidence/autograd_20261110/jobs/letter-20261110-autograd-gpu-r0/request.json').read_text())
   req={k:old[k] for k in ['schema','host','user','uid','namespace','deployment_sha256']}
-  env=dict(old['env']);env.update(PYTHONUNBUFFERED='1',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1',TOKENIZERS_PARALLELISM='false')
-  env.pop('DS_ACCELERATOR',None);env['TORCH_EXTENSIONS_DIR']=DATA+'/torch_extensions'
+  env=dict(old['env']);env.update(PYTHONUNBUFFERED='1',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1',TOKENIZERS_PARALLELISM='false',USE_TF='0',USE_FLAX='0')
+  env.pop('DS_ACCELERATOR',None);env.pop('FORCE_TF_AVAILABLE',None);env['TORCH_EXTENSIONS_DIR']=DATA+'/torch_extensions'
   argv=[PYTHON,release+'/lc_rec/a1_qwen3_06b/scripts/pipeline.py','--release',release,'--run-commit',commit,'--job-id',a.job,'--kind',a.kind]
   if a.resume:argv+=['--resume',a.resume]
   if a.resume_evaluation:argv+=['--resume-evaluation']
+  if a.kind=='compare':
+   assert a.continuous and a.resumed
+   argv+=['--continuous',a.continuous,'--resumed',a.resumed]
   timeout=1800
   inputs=[{'path':release+'/'+r['path'],'sha256':r['sha256']} for r in deployment['files'] if '/scripts/' in r['path'] or '/config/' in r['path'] or '/vendor/' in r['path']]
   if a.kind=='selftest':
@@ -93,7 +96,7 @@ print(json.dumps(r))"""
  else:
   r=gridctl.query(t,a.job)
   if a.mode=='logs':print(t.ssh(shlex.join(['tail','-n','45',job+'/work.log'])))
-  if a.mode in ['collect','observe']:
+  if a.mode=='collect':
    code=f"""from pathlib import Path
 import json,hashlib,subprocess,datetime
 job=Path({job!r});root=Path({DATA!r});run=root/{a.job!r}
@@ -111,6 +114,35 @@ print(json.dumps(r))"""
    for n,v in data['files'].items():
     q=dest/n;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(v['text'].encode());assert transport.sha(q)==v['sha256']
    save('collected-'+a.job+'.json',{**{k:v for k,v in data.items() if k!='files'},'files':{k:v['sha256'] for k,v in data['files'].items()}})
+ if a.mode=='observe':
+  code=f"""from pathlib import Path
+import datetime,json,os,subprocess
+job=Path({job!r});root=Path({DATA!r});output=root/{a.job!r}
+req=json.loads((job/'request.json').read_text());kind=req['argv'][req['argv'].index('--kind')+1]
+training=root/'formal_seed42/training' if kind=='formal' else output/'training'
+x={{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'job_id':job.name,'kind':kind,'rank':{{}},'test_rank':{{}}}}
+def tail(path,n=12):
+ if not path.exists():return []
+ with path.open('rb') as f:
+  offset=max(0,path.stat().st_size-65536);f.seek(offset);lines=f.read().splitlines()
+ if offset:lines=lines[1:]
+ return [json.loads(z) for z in lines[-n:]]
+for rank in [0,1]:
+ p=training/('rank%d.json'%rank)
+ if p.exists():
+  v=json.loads(p.read_text());x['rank'][str(rank)]={{k:v[k] for k in ['status','global_step','epoch','best_checkpoint','best_metric','run_commit','error','elapsed_seconds','peak_allocated_bytes','peak_reserved_bytes'] if k in v}}
+ x['rank'].setdefault(str(rank),{{}})['events']=tail(training/('events.rank%d.jsonl'%rank),4)
+ p=output/('test' if kind=='formal' else 'test_preflight')/('rank%d.json'%rank)
+ if p.exists():
+  v=json.loads(p.read_text());x['test_rank'][str(rank)]={{k:v[k] for k in ['status','completed_users','assigned_users','elapsed_generation_seconds','error'] if k in v}}
+for name,p in [('pipeline',job/'output/pipeline.json'),('best_selection',training/'best_selection.json')]:
+ if p.exists():x[name]=json.loads(p.read_text())
+x['resources']=tail(job/'output/resources.jsonl',1)
+x['gpu']=subprocess.check_output(['nvidia-smi','--query-gpu=index,uuid,memory.used,utilization.gpu,temperature.gpu','--format=csv'],text=True)
+print(json.dumps(x))"""
+  data=json.loads(t.python(code,timeout=45));data['runner']={k:r.get(k) for k in ['status','exit_code','cleanup_verified','worker_alive','supervisor_alive','workgroup_live']}
+  stamp=dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%SZ');transport.atomic(TASK/'evidence/observations'/a.job/(stamp+'.json'),data)
+  print(json.dumps(data,indent=2))
  save(a.mode+'-'+a.job+'.json',r)
  print(json.dumps({k:r.get(k) for k in ['job_id','status','exit_code','cleanup_verified','worker_alive','supervisor_alive','workgroup_live']},indent=2))
 if __name__=='__main__':main()

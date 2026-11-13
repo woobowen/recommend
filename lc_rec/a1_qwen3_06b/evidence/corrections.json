@@ -1,0 +1,20 @@
+{
+  "task": "A1 Qwen3-0.6B Instruments seed42",
+  "initial_round": 0,
+  "correction_rounds_used": 1,
+  "maximum_correction_rounds": 3,
+  "rounds": [
+    {
+      "round": 1,
+      "failed_job": "letter-a1-q06-20261113-continuous-r0",
+      "failed_run_commit": "a9d36910e20b95ab7df6622f29479b5d542f0b68",
+      "root_cause": "Optional TensorFlow backend discovered Keras3 during PyTorch Trainer import; tf_keras absent",
+      "failure_stage": "Before CUDA set_device, distributed initialization and model loading; zero optimizer updates",
+      "change": "Task request env USE_TF=0 USE_FLAX=0; remove optional FORCE_TF_AVAILABLE override; no package install or training arithmetic change",
+      "verification": "round1_cpu_trainer_import.json: actual Trainer/Qwen class import, TF and Flax unavailable, no CUDA context",
+      "additional_scoped_engineering": "Read-only observe takes status/event tail; compare receives explicit preserved attempt paths rather than assuming round0 paths",
+      "preserved_evidence": "jobs/letter-a1-q06-20261113-continuous-r0/",
+      "status": "CPU_IMPORT_PASS_GPU_RECHECK_PENDING"
+    }
+  ]
+}

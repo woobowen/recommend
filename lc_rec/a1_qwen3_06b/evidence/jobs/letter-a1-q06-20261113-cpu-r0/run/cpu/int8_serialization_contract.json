@@ -1,0 +1,25 @@
+{
+  "status": "PASS_CPU_SERIALIZATION_CONTRACT",
+  "cuda_context_created": false,
+  "scope": "Synthetic CPU serialization; not a GPU/checkpoint recovery result",
+  "source": {
+    "path": "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/bitsandbytes/nn/modules.py",
+    "sha256": "e97af1a69794f192bf58e0154efb660f3d2ed0a00dade672c7d8f9a3d14b9e53",
+    "save_to_state_dict_line": 912,
+    "load_from_state_dict_line": 936,
+    "init_8bit_state_line": 975
+  },
+  "cold_native_strict": true,
+  "hot_native_error": "Loading a quantized checkpoint into non-quantized Linear8bitLt is not supported. Please call module.cuda() before module.load_state_dict()",
+  "hot_aliased_strict": true,
+  "SCB_storage_unchanged": true,
+  "weight_and_scale_values_unchanged": true,
+  "hot_layout_restored": true,
+  "events": [
+    {
+      "event": "strict_int8_load_layout",
+      "hot_scb_alias_count": 1,
+      "implementation": "existing SCB storage alias only during native strict load"
+    }
+  ]
+}
