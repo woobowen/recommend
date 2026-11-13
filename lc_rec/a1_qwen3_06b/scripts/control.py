@@ -104,7 +104,7 @@ for base,prefix in [(job,'job'),(run,'run'),(root/'formal_seed42/training','form
    if q.is_file() and not q.is_symlink() and q.suffix in ['.json','.jsonl','.log'] and q.stat().st_size<=8*1024**2 and not q.name.startswith('predictions'):
     b=q.read_bytes();r['files'][prefix+'/'+str(q.relative_to(base))]={{'text':b.decode(),'sha256':hashlib.sha256(b).hexdigest()}}
 r['gpu']=subprocess.check_output(['nvidia-smi','--query-gpu=index,uuid,memory.used,memory.free,utilization.gpu,temperature.gpu','--format=csv'],text=True)
-r['ram']=subprocess.check_output(['free','-b'],text=True);r['disk']=subprocess.check_output(['df','-B1',{DATA!r}],text=True)
+r['ram']=subprocess.check_output(['free','-b'],text=True);r['disk']=subprocess.check_output(['df','-B1',str(root) if root.exists() else '/data/bwwu'],text=True)
 print(json.dumps(r))"""
    data=json.loads(t.python(code,timeout=60))
    dest=TASK/'evidence/jobs'/a.job

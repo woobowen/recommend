@@ -17,6 +17,9 @@ def main():
  assert r['files']['model.safetensors']=={'bytes':1192135096,'sha256':'cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba'}
  cfg=json.loads((model/'config.json').read_text());assert cfg['model_type']=='qwen3' and cfg['tie_word_embeddings'] and cfg['num_hidden_layers']==28
  r['model_config']=cfg
+ from checkpoint import cpu_int8_state_contract
+ r['int8_serialization_contract']=cpu_int8_state_contract()
+ write(out/'int8_serialization_contract.json',r['int8_serialization_contract'])
  cmd=[sys.executable,str(root/'lc_rec/qwen_preflight_20261110/scripts/cpu_audit.py'),'--model',str(model),'--key','q06','--letter',str(root/'lc_rec/letter/vendor/LETTER'),'--output',str(out/'tokenizer_audit'),'--run-commit',a.run_commit]
  r['tokenizer_audit_argv']=cmd;start=time.monotonic();subprocess.run(cmd,check=True);r['tokenizer_audit_seconds']=time.monotonic()-start
  a0=Path('/data/bwwu/lc-rec/a0-final-audit-20261113/letter-a0-20261112-final-audit-20261113-offline-r1/primary')

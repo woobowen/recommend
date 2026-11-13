@@ -50,6 +50,12 @@ def main():
         subprocess.run(command,check=True)
         write(job/'output/pipeline.json',{'status':'CPU_COMPLETE','RUN_COMMIT':a.run_commit,'kind':a.kind,'argv':command})
         return
+    asset_path=root/'letter-a1-q06-20261113-cpu-r0/cpu/assets_environment.json'
+    assets=json.loads(asset_path.read_text())
+    assert assets['status']=='PASS' and assets['model_revision']==Path(model).name
+    assert assets['files']['model.safetensors']['bytes']==Path(model+'/model.safetensors').stat().st_size==1192135096
+    assert assets['files']['model.safetensors']['sha256']=='cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba'
+    assert assets['int8_serialization_contract']['status']=='PASS_CPU_SERIALIZATION_CONTRACT'
     output=root/a.job_id;output.mkdir(exist_ok=True)
     training=(root/'formal_seed42/training') if a.kind=='formal' else output/'training'
     training.parent.mkdir(exist_ok=True,parents=True)
@@ -62,7 +68,8 @@ def main():
     status_path=job/'output/pipeline.json'
     started=time.monotonic();utc=lambda:dt.datetime.now(dt.timezone.utc).isoformat()
     status={'status':'PREFLIGHT','job_id':a.job_id,'kind':a.kind,'run_commit':a.run_commit,
-            'output':str(output),'started_utc':utc(),'pid':os.getpid(),'stages':[]}
+            'output':str(output),'started_utc':utc(),'pid':os.getpid(),'stages':[],
+            'asset_gate':{'path':str(asset_path),'sha256':sha(asset_path),'model_revision':assets['model_revision']}}
     with (root/'a1_gpu.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         ledger=reconcile(ledger_path)

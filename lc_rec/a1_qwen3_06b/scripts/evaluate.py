@@ -161,7 +161,7 @@ def aggregate_predictions(paths, users, catalog, evaluator, require_rank_done=Tr
             if status["rank"] != rank or (run_commit is not None and status["RUN_COMMIT"] != run_commit):
                 raise AssertionError("Rank completion identity differs from requested evaluation")
             identity = {key: status[key] for key in ("RUN_COMMIT", "adapter_files", "data_identity",
-                                                    "author_sources", "generation", "allowed_callback_sha256")}
+                                                    "author_sources", "generation", "allowed_callback_sha256", "model")}
             if rank_identity is not None and identity != rank_identity:
                 raise AssertionError("Rank shards used different adapter/data/source/generation identities")
             rank_identity = identity
@@ -239,7 +239,13 @@ def strict_reload(args, report, torch, local_rank, source, indices):
     assert model_root.name == MODEL_REVISION
     report["model"] = {"name": "Qwen/Qwen3-0.6B-Base", "revision": MODEL_REVISION, "path": str(model_root),
                        "config_sha256": sha(model_root / "config.json"), "attention": "native SDPA",
-                       "weight_sha256": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba"}
+                       "weight_sha256": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba",
+                       "manifest_sha256": sha(model_root / "ASSET_MANIFEST.json"),
+                       "weight_bytes": (model_root / "model.safetensors").stat().st_size,
+                       "weight_mtime_ns": (model_root / "model.safetensors").stat().st_mtime_ns}
+    manifest = json.loads((model_root / "ASSET_MANIFEST.json").read_text())
+    assert manifest["revision"] == MODEL_REVISION and manifest["model_id"] == "Qwen/Qwen3-0.6B-Base"
+    assert report["model"]["weight_bytes"] == 1192135096
     base, loading = load_model(args.model, "qwen3", quantized=False, device=local_rank)
     base.resize_token_embeddings(len(tokenizer), mean_resizing=False)
     model = PeftModel.from_pretrained(base, str(adapter), torch_dtype=torch.bfloat16,
