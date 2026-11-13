@@ -1,0 +1,231 @@
+{
+  "A1_STATUS": "RUNNING_HEALTHY",
+  "query_started_utc": "2026-11-13T15:47:22.143088+00:00",
+  "crosscheck_started_utc": "2026-11-13T15:50:45.592533+00:00",
+  "query_finished_utc": "2026-11-13T15:50:45.786953+00:00",
+  "non_atomic_active_job_snapshot": true,
+  "job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+  "RUN_COMMIT": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+  "evaluation_RUN_COMMIT": "445f1475cd1dd70d19881dbc1639bb311f7cccf7",
+  "runner": {
+    "status": "RUNNING",
+    "exit_code": null,
+    "supervisor_alive": true,
+    "worker_alive": true,
+    "workgroup_live": true,
+    "process_identity_matches": [
+      {
+        "pid": 3238563,
+        "saved_identity_matches_current_proc": true
+      },
+      {
+        "pid": 3238564,
+        "saved_identity_matches_current_proc": true
+      },
+      {
+        "pid": 3238564,
+        "saved_identity_matches_current_proc": true
+      },
+      {
+        "pid": 3238572,
+        "saved_identity_matches_current_proc": true
+      },
+      {
+        "pid": 3238581,
+        "saved_identity_matches_current_proc": true
+      },
+      {
+        "pid": 3238582,
+        "saved_identity_matches_current_proc": true
+      }
+    ],
+    "supervisor_pid": 3238563,
+    "worker_pid": 3238564,
+    "supervisor_parent_pid": 1
+  },
+  "phase": "TRAINING_EPOCH_2",
+  "training": {
+    "steps": 2330,
+    "total_steps": 8240,
+    "percentage": 28.276699029126213,
+    "epoch": 1.1310679611650485,
+    "total_epochs": 4,
+    "ranks_consistent": true,
+    "step_growth_this_check": [
+      2290,
+      2330
+    ],
+    "latest_event_utc": "2026-11-13T15:50:29.785675+00:00",
+    "latest_train_loss": 1.7883,
+    "current_optimizer_lr": [
+      0.0001648327141960738
+    ],
+    "trainer_logged_previous_lr": 0.000164862032531443,
+    "gradient_norm": 5.286310195922852,
+    "recent_speed": {
+      "from_step": 2130,
+      "to_step": 2330,
+      "global_updates": 200,
+      "wall_seconds": 968.7025819960982,
+      "seconds_per_global_update": 4.8435129099804906,
+      "global_updates_per_second": 0.20646171871234423,
+      "global_presentations_per_second": 13.21354999759003,
+      "selection": "Latest20 optimizer intervals wholly within current epoch, excluding epoch1 Validation/checkpoint pause"
+    }
+  },
+  "validation": [
+    {
+      "event": "validation_complete",
+      "utc": "2026-11-13T15:28:30.691569+00:00",
+      "elapsed_seconds": 12683.68592774123,
+      "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+      "step": 2060,
+      "metrics": {
+        "eval_loss": 1.9656445980072021,
+        "eval_runtime": 1836.8844,
+        "eval_samples_per_second": 26.972,
+        "eval_steps_per_second": 1.686,
+        "epoch": 1.0
+      },
+      "records": 49544,
+      "seconds": 1836.8855583732948
+    }
+  ],
+  "best": {
+    "checkpoint": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-2060",
+    "eval_loss": 1.9656445980072021,
+    "source": "checkpoint2060 trainer_state plus both-rank validation events",
+    "final_best_recovery_performed": false
+  },
+  "checkpoints": [
+    {
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-2060",
+      "step": 2060,
+      "status": "PASS_SEAL_CONTRACT",
+      "members": 23,
+      "logical_bytes": 4417952648,
+      "small_member_hashes_checked": 18,
+      "large_payloads_size_only": true,
+      "full_tensor_load_or_recovery_test_performed": false
+    }
+  ],
+  "attempts": {
+    "attempts": [
+      {
+        "job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+        "kind": "formal",
+        "run_commit": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+        "started_utc": "2026-11-13T11:57:05.038996+00:00",
+        "resume": null,
+        "wall_limit_seconds": 345580
+      }
+    ]
+  },
+  "recovery": {
+    "formal_attempts": 1,
+    "resume_values": [
+      null
+    ],
+    "initial_global_steps": {
+      "0": 0,
+      "1": 0
+    },
+    "rotation_anomaly_observed": false,
+    "note": "Single original process/attempt; no recovery entry. Only CP2060 exists; no later rotation yet."
+  },
+  "test": {
+    "state": "NOT_STARTED",
+    "users_completed": 0,
+    "users_planned": 24772,
+    "rank_reports_present": {
+      "0": false,
+      "1": false
+    },
+    "failure_skip_counts": "NOT_APPLICABLE_TEST_NOT_STARTED",
+    "four_epochs_complete": false,
+    "formal_best_recovered": false,
+    "original_metrics": null,
+    "extended_pipeline": null,
+    "extended_CCE_bootstrap": "PENDING_SERVER_PIPELINE",
+    "new_evaluation_started_by_check": false
+  },
+  "health": {
+    "anomaly_scan_matches": [],
+    "scanned_worklog_source": {
+      "bytes_before": 330592,
+      "bytes_after": 330592,
+      "mtime_ns_before": 1794585029784720157,
+      "mtime_ns_after": 1794585029784720157,
+      "read_offset": 0,
+      "observed_bytes": 330592,
+      "observed_bytes_sha256": "2e3fcb4080e02feae8e302d088521d9b0cd1b68caec27db9092720e2515e0c48",
+      "capture_atomic": false
+    },
+    "recent_progress_age_seconds": 16.002099,
+    "resource_protection_trigger_observed": false,
+    "historical_max_log_silence_seconds": 1833.588432598859,
+    "historical_log_silence_explanation": "Epoch1 Validation took1836.9s, consistent with observed silence and below accepted7200s protection"
+  },
+  "resources": {
+    "gpu_csv": "index, uuid, memory.total [MiB], memory.used [MiB], memory.free [MiB], utilization.gpu [%], temperature.gpu\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 24564 MiB, 16594 MiB, 7490 MiB, 14 %, 40\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 24564 MiB, 17302 MiB, 6782 MiB, 8 %, 38\n",
+    "compute_apps_csv": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\nGPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 3238581, /data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python, 16584 MiB\nGPU-59cac3bd-3645-668b-79c8-839e0d878893, 3238582, /data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python, 17292 MiB\n",
+    "ram": "               total        used        free      shared  buff/cache   available\nMem:     265490894848 13922377728 28376879104   282087424 225172938752 251568517120\nSwap:    68719472640   152190976 68567281664\n",
+    "disk": "Filesystem                   1B-blocks          Used     Available Use% Mounted on\n/dev/mapper/vg0-lv--data 7937302376448 4904223031296 2953046949888  63% /data\n",
+    "observed_window": {
+      "samples": 468,
+      "min_mem_available": 251177275392,
+      "max_swap_used": 152190976,
+      "min_swap_used": 152190976,
+      "min_disk_available": 2953046949888,
+      "max_seconds_without_worklog_progress": 1833.588432598859
+    },
+    "latest_pipeline_sample": {
+      "utc": "2026-11-13T15:50:32.458492+00:00",
+      "elapsed_seconds": 14007.52654690668,
+      "mem_available": 251586351104,
+      "swap_used": 152190976,
+      "disk_available": 2953046949888,
+      "gpu": "0, 16594, 7490, 36\n1, 17302, 6782, 36\n",
+      "seconds_without_worklog_progress": 0.05902143660932779
+    }
+  },
+  "timing": {
+    "runner_started_utc": "2026-11-13T11:57:04.861057+00:00",
+    "elapsed_wall_seconds": 14020.925896,
+    "remaining_train_plus_validation_checkpoint_proxy_seconds": 34155.596619190925,
+    "remaining_training_updates": 5910,
+    "remaining_validation_passes": 3,
+    "validation_seconds_per_pass_proxy": 1836.8855583732948,
+    "checkpoint_seconds_per_save_proxy": 6.592882028780878,
+    "complete_pipeline_remaining_planning_hours": [
+      11,
+      13
+    ],
+    "test_time_assumption": "About1.6h based only on historical16-user preacceptance, not formal fulltest; loading/restore/CPU and throughput margin remain conditional",
+    "assumptions": [
+      "Latest20-interval training speed persists",
+      "Remaining3 validations comparable to real epoch1",
+      "Same hardware/resources, no recovery or long contention",
+      "Planning estimate, not promised completion time"
+    ],
+    "formal_budget_wall_hours": 96
+  },
+  "previous_network_failure": {
+    "commit": "e394357e9166311f2e9e6471f934d17e7e8f3924",
+    "check_utc": "2026-11-13T15:37:10Z",
+    "interpretation": "Previous connection timeout receipt retained; this request reached original live job. No resubmit or recovery performed."
+  },
+  "scope": [
+    "Existing job read-only state/metadata/log/process/resource check",
+    "No training, generation, evaluation, independent bootstrap or repair started",
+    "No experiment source/config/checkpoint/status modification",
+    "Commit only this new evidence directory"
+  ],
+  "limitations": [
+    "Final scientific audit and metrics pending",
+    "Checkpoint seal check: required roles,all sizes,small-file SHA; large tensor contents not rehashed/loaded",
+    "Live job snapshot spans two bounded reads; latest steps legitimately differ",
+    "Single-controller status check, no independent second SSH/GPU reproduction"
+  ],
+  "conflicts": []
+}
