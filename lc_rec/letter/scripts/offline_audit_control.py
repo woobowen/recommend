@@ -36,7 +36,7 @@ def main():
                     data=subprocess.check_output(['git','show',commit+':'+name],cwd=fc.REPO)
                     path=Path(temp)/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(data);tf.add(path,arcname=name,recursive=False)
                     rows.append({'path':name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
-        remote_archive=REMOTE+'/transfers/'+archive.name
+        remote_archive=t.profile['remote_support']+'/transfers/a0-final-audit-'+archive.name
         receipt=t.put(archive,remote_archive)
         code=f"""from pathlib import Path,PurePosixPath
 import json,tarfile,hashlib

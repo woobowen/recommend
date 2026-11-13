@@ -8,6 +8,7 @@ ranking metrics, explicit expanded-item CCE ranks, and Top-K SID diagnostics.
 """
 import argparse
 import collections
+import csv
 import datetime
 import hashlib
 import importlib.util
@@ -106,6 +107,21 @@ def expanded_cce(sids, target, sizes):
     return result
 
 
+def compare_derived_row(derived, row_idx, user, item, target, first, values):
+    require(derived.get("row_idx") == str(row_idx)
+            and derived.get("user_id") == user
+            and derived.get("target_item_id") == item
+            and derived.get("target_sid") == target, "Derived per-user identity mismatch")
+    require(derived.get("first_target_rank") == str(first or 0), "Derived first target rank mismatch")
+    deltas = {}
+    for key, expected in values.items():
+        actual = float(derived[key])
+        require(math.isfinite(actual), "Non-finite derived per-user metric")
+        deltas[key] = abs(actual - expected)
+        require(deltas[key] <= 1e-14, "Derived per-user metric mismatch: " + key)
+    return deltas
+
+
 def self_test(official_path=None, official_sha=None):
     checks = []
 
@@ -133,6 +149,18 @@ def self_test(official_path=None, official_sha=None):
     checks.append("Stable tied sequence scores")
     require(normalize("old Response: prompt Response: <a_1> <b_2>\n") == "<a_1><b_2>", "Response parsing")
     checks.append("Last Response separator and exact space normalization")
+    fixture = {"row_idx": "0", "user_id": "u", "target_item_id": "i", "target_sid": "t",
+               "first_target_rank": "0", "hit@5": "0"}
+    require(compare_derived_row(fixture, 0, "u", "i", "t", None, {"hit@5": 0}) == {"hit@5": 0},
+            "Derived no-hit row equality")
+    for field, bad in (("row_idx", "1"), ("target_sid", "wrong"), ("first_target_rank", "1"), ("hit@5", "1")):
+        changed = dict(fixture, **{field: bad})
+        try:
+            compare_derived_row(changed, 0, "u", "i", "t", None, {"hit@5": 0})
+        except ValueError:
+            checks.append("Derived wrong " + field + " rejected")
+        else:
+            raise AssertionError("Bad derived fixture was accepted: " + field)
 
     cases = [
         ("no_collision", ["a", "b", "c", "t"], {"a": 1, "b": 1, "c": 1, "t": 1}, 1., 1 / math.log2(5)),
@@ -177,7 +205,7 @@ def self_test(official_path=None, official_sha=None):
             "named_cce_cases": [case[0] for case in cases], "official_comparison": official_receipt}
 
 
-def aggregate(data_root, test_dir, stage_a_path):
+def aggregate(data_root, test_dir, stage_a_path, per_user_path=None):
     stage_a = read_json(stage_a_path)
     require(stage_a.get("status") == "PASS" and stage_a.get("run_commit") == RUN, "Stage-A audit not fixed PASS")
     loaded, asset_receipts = {}, {}
@@ -191,6 +219,21 @@ def aggregate(data_root, test_dir, stage_a_path):
     index, inter = loaded["index"], loaded["inter"]
     require(len(index) == 9922 and len(inter) == N and set(index) == set(loaded["item"]), "Asset axes")
     user_axis = list(inter)
+    derived_rows, per_user_receipt = None, None
+    if per_user_path is not None:
+        derived_rows = {}
+        with Path(per_user_path).open(newline="", encoding="utf-8") as stream:
+            reader = csv.DictReader(stream)
+            require(reader.fieldnames and len(reader.fieldnames) == len(set(reader.fieldnames)), "Duplicate CSV fields")
+            for row in reader:
+                i = int(row["row_idx"])
+                require(0 <= i < N and i not in derived_rows, "Derived CSV row coverage")
+                derived_rows[i] = row
+        require(set(derived_rows) == set(range(N)), "Derived CSV population incomplete")
+        per_user_receipt = {"path": str(per_user_path), "bytes": Path(per_user_path).stat().st_size,
+                            "sha256": hashlib.sha256(Path(per_user_path).read_bytes()).hexdigest(),
+                            "checked_rows": 0, "checked_metric_values": 0,
+                            "maximum_absolute_delta_by_metric": {}, "absolute_tolerance": 1e-14}
     sizes = collections.Counter("".join(tokens) for tokens in index.values())
     require(len(sizes) == 9897 and sum(g > 1 for g in sizes.values()) == 23, "Collision catalog")
     stage_manifests = {r["rank"]: r for r in stage_a["prediction_files"]}
@@ -226,6 +269,14 @@ def aggregate(data_root, test_dir, stage_a_path):
                         "Stored rank relevance does not match raw independent parsing")
                 metrics, first = ranking(sids, target)
                 cce = expanded_cce(sids, target, sizes)
+                if derived_rows is not None:
+                    differences = compare_derived_row(derived_rows[i], i, user_axis[i], item, target,
+                                                      first, {**metrics, **cce})
+                    per_user_receipt["checked_rows"] += 1
+                    per_user_receipt["checked_metric_values"] += len(differences)
+                    maxima = per_user_receipt["maximum_absolute_delta_by_metric"]
+                    for key, delta in differences.items():
+                        maxima[key] = max(maxima.get(key, 0), delta)
                 for key, value in {**metrics, **cce}.items():
                     all_values[key].append(value)
                 first_ranks[str(first) if first is not None else "not_in_top20"] += 1
@@ -295,6 +346,7 @@ def aggregate(data_root, test_dir, stage_a_path):
                 "group_size_distribution": dict(sorted(collections.Counter(sizes.values()).items())),
                 "target_collision_users": targets_collision},
             "assets": asset_receipts, "prediction_files": manifests, "bounded_examples": examples,
+            "per_user_comparison": per_user_receipt,
             "stage_a_receipt": {"path": str(stage_a_path), "sha256": hashlib.sha256(Path(stage_a_path).read_bytes()).hexdigest()},
             "policy": {"paper_sid_metrics": "Original raw normalization, stable descending sequence score, no filtering/deduplication, all target matches additive NDCG",
                        "mrr": "First target match reciprocal rank",
@@ -309,6 +361,8 @@ def main():
     parser.add_argument("--test-dir", type=Path)
     parser.add_argument("--stage-a-report", type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--per-user", type=Path,
+                        help="Optional primary CSV: independently compare each raw-prediction user and all 16 values")
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--official-cce", type=Path)
     parser.add_argument("--official-sha256")
@@ -324,7 +378,7 @@ def main():
         if not all((args.data_root, args.test_dir, args.stage_a_report, args.output, args.official_cce, args.official_sha256)):
             parser.error("Full audit needs data, test, Stage-A, output, and pinned official CCE")
         try:
-            report = aggregate(args.data_root, args.test_dir, args.stage_a_report)
+            report = aggregate(args.data_root, args.test_dir, args.stage_a_report, args.per_user)
             report["self_test"] = tests
             code = 0
         except Exception as error:

@@ -60,7 +60,7 @@ def main():
     status={'job_id':args.job_id,'original_run_commit':run,'evaluation_commit':args.evaluation_commit,
             'started_utc':dt.datetime.now(dt.timezone.utc).isoformat(),'gpu_used':False,'stages':stage_records,'status':'RUNNING'}
     commands=[('primary',[sys.executable,str(src/'scripts/offline_metrics.py'),'--data-root',str(original_data),'--test-dir',str(test),'--stage-a-report',str(stage),'--config',str(config),'--official-cce',str(official),'--output',str(out/'primary'),'--evaluation-commit',args.evaluation_commit]),
-              ('independent_extended',[sys.executable,str(review/'independent_extended.py'),'--data-root',str(original_data),'--test-dir',str(test),'--stage-a-report',str(stage),'--output',str(out/'independent_extended.json'),'--official-cce',str(official),'--official-sha256',cfg['official_cce_sha256']]),
+              ('independent_extended',[sys.executable,str(review/'independent_extended.py'),'--data-root',str(original_data),'--test-dir',str(test),'--stage-a-report',str(stage),'--output',str(out/'independent_extended.json'),'--official-cce',str(official),'--official-sha256',cfg['official_cce_sha256'],'--per-user',str(out/'primary/per_user.csv')]),
               ('independent_statistics',[sys.executable,str(review/'statistics_verify.py'),'--data-root',str(original_data/'Instruments'),'--per-user',str(out/'primary/per_user.csv'),'--primary-bootstrap',str(out/'primary/bootstrap.json'),'--primary-draws',str(out/'primary/bootstrap_draw_means.npy'),'--self-test','--output',str(out/'independent_statistics.json')])]
     try:
         for name,argv in commands:
