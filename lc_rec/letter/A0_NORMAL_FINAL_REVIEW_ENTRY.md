@@ -80,3 +80,11 @@ python3 lc_rec/letter/scripts/formal_control.py collect --commit 4c6a83d9ba42dc2
 2026-11-12 23:34:25 UTC，两rank真实完成epoch2 / step4120。第二次全量Validation于23:48:11 UTC完成，eval_loss `1.6257708072662354`，eval_runtime约 `826.172s`。23:48:42 UTC，checkpoint-4120完整保存，耗时约30.804s；19成员，总18,673,256,113 bytes，经必需成员、大小与小文件SHA只读核验。
 
 [第二轮checkpoint及原始两rank里程碑](evidence/formal_det_20261112/epoch2_checkpoint_audit.json)。阶段性best更新为checkpoint-4120；剩余两轮及最终best恢复、完整测试仍待执行。没有Early Stopping，没有运行测试选模，没有中断/恢复。Codex已在线监控超过5小时，服务端任务独立继续；用户关闭本地后重连查询原job，不提交新seed。
+
+## 六小时独立运行复核（仍为RUNNING）
+
+2026-11-13 00:49 UTC，原job已连续运行约6h08m，step5000 / epoch2.427，最近loss1.5035，双rank一致。当前best与最新完整恢复点为checkpoint-4120；尚无全量测试指标。
+
+[六小时身份与独占GPU核验](evidence/formal_det_20261112/runtime_six_hours.json)：10个核心文件仍与预审绑定SHA相同，GPU compute仅为原rank PID3227289/3227290，两张完整checkpoint标记均在，温度61/58°C。request文件字节SHA `af12fffefdefb88e96e4905ab0b84c359a6bfd035b97e93e4d41c2b90999e7b2`；runner使用不含换行的规范化JSON指纹 `a6b6c6f6518d389a7c777c5f44552bdcd1e180b6a40ebb100f547f4f3499ffd3`，各自均与启动时一致。
+
+[一次只读查询断言口径错误及核实](evidence/formal_det_20261112/six_hour_identity_query_note.json)：主控最初错误比较上述两种SHA，查询退出1；未改request、代码、配置或训练进程。随后按runner.canonical/digest与原始请求逐项比对通过，并明确标签；这不是实验重试或实质实现修正。任务级实质修正仍为2/3，原失败记录保留。
