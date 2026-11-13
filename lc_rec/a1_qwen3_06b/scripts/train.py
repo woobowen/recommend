@@ -19,7 +19,7 @@ import random
 import sys
 import time
 
-from checkpoint import (ReplayLoader, cpu_clone, int8_dynamic_state, rng_capture,
+from checkpoint import (ReplayLoader, cpu_clone, deepspeed_metadata, int8_dynamic_state, rng_capture,
                         seal_checkpoint, sha, strict_hot_int8_alias,
                         verify_checkpoint, write)
 
@@ -194,6 +194,14 @@ def main():
             report_to=[], logging_steps=10, disable_tqdm=True, local_rank=local,
             accelerator_config={'use_seedable_sampler': True})
         report['training_arguments'] = training_args.to_dict()
+        report['training_arguments']['deepspeed'] = deepspeed_metadata(report['training_arguments']['deepspeed'])
+        report['deepspeed_metadata_encoding'] = {
+            'scope': 'training_arguments.deepspeed.steps_per_print and effective_ds.steps_per_print only',
+            'original_value': 'positive IEEE float infinity',
+            'source': 'Accelerate 1.12.0 DeepSpeedPlugin.__post_init__ stdout logging sentinel',
+            'engine_configuration_modified': False,
+            'all_other_nonfinite_values_rejected': True,
+        }
         report['loss_scaling'] = {'model_accepts_loss_kwargs': False, 'compute_loss_func': None,
             'micro_loss': 'FP32 full-vocabulary causal CE(logits/0.8), mean over five labels per row',
             'Trainer': 'divide once by current_gradient_accumulation_steps=4',
@@ -394,7 +402,7 @@ def main():
                     event('probe_initial_state', global_step=state.global_step,
                           deepspeed_global_step=engine.global_steps,
                           parameter_dtypes=sorted({str(parameter.dtype) for parameter in trainable.values()}))
-                report.update(status='TRAINING', effective_ds=engine._config._param_dict,
+                report.update(status='TRAINING', effective_ds=deepspeed_metadata(engine._config._param_dict),
                               initial_global_step=state.global_step, optimizer_membership_exact=True,
                               scheduler_class=type(trainer.lr_scheduler).__module__ + '.' + type(trainer.lr_scheduler).__name__,
                               deepspeed_owns_scheduler=engine.lr_scheduler is not None)

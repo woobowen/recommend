@@ -10,6 +10,7 @@ def main():
  assert sha(a0/'per_user.csv')=='423309c6765395e42fc6a18a43706a4653d71692b184c65fe5755f78a34df6fb'
  assert sha(a0/'per_user_metrics.npz')=='d46590f04dcd0f8438b67ccea636b3310a61ff081e146305032c614f444a1689'
  assert not a.output.exists();a.output.mkdir(parents=True)
+ frozen_keys=([f'hit@{k}' for k in (1,5,10,20)]+[f'{m}@{k}' for m in ('ndcg','mrr') for k in (5,10,20)]+[f'{m}@{k}' for m in ('ItemHit','ItemNDCG') for k in (5,10,20)])
  rows=[];mat=[];keys=None
  for root in [a0,a.a1]:
   with (root/'per_user.csv').open() as f:rows.append(list(csv.DictReader(f)))
@@ -17,6 +18,10 @@ def main():
    k=z['keys'].tolist();v=z['values'];axis=str(z['user_axis_sha256'])
    assert axis=='1daf63ce4c77b0265777a46b61939006aafab0276b9106c742de602c8c7e867a'
    assert v.dtype==np.float64 and v.shape==(24772,16) and np.array_equal(z['row_idx'],np.arange(24772))
+   assert k==frozen_keys and np.isfinite(v).all()
+   csv_values=np.asarray([[float(row[key]) for key in frozen_keys] for row in rows[-1]],dtype=np.float64)
+   assert csv_values.shape==v.shape and np.array_equal(csv_values,v), 'CSV/NPZ full per-user values differ'
+   assert all(row['protocol_version']=='letter_instruments_beam20_v1' for row in rows[-1])
    assert keys is None or keys==k;keys=k;mat.append(v.copy())
  assert len(rows[0])==len(rows[1])==24772
  fields=['row_idx','user_id','user_axis_sha256','target_item_id','target_sid','target_group_size','visible_history_length','history_group','target_training_frequency','popularity_group','protocol_version']

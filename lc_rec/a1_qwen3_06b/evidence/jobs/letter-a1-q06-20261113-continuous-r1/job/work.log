@@ -1,0 +1,162 @@
+[2026-11-13 11:18:32,256] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-11-13 11:18:32,275] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[rank1]:[W1113 11:18:36.673766095 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank0]:[W1113 11:18:37.593916180 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+{"rank": 0, "event": "load_model", "utc": "2026-11-13T11:18:38.591157+00:00", "elapsed_seconds": 10.683549724519253, "attempt_job_id": "letter-a1-q06-20261113-continuous-r1"}
+`torch_dtype` is deprecated! Use `dtype` instead!
+{"rank": 1, "event": "load_model", "utc": "2026-11-13T11:18:38.615938+00:00", "elapsed_seconds": 10.707698239944875, "attempt_job_id": "letter-a1-q06-20261113-continuous-r1"}
+`torch_dtype` is deprecated! Use `dtype` instead!
+[2026-11-13 11:18:41,787] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-11-13 11:18:41,859] [INFO] [comm.py:669:init_distributed] cdb=None
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+Gradient accumulation steps mismatch: GradientAccumulationPlugin has 1, DeepSpeed config has 4. Using DeepSpeed's value.
+{"rank": 0, "event": "loader", "utc": "2026-11-13T11:18:42.177683+00:00", "elapsed_seconds": 14.270072498358786, "attempt_job_id": "letter-a1-q06-20261113-continuous-r1", "microbatches_per_epoch_per_rank": 8240, "updates_per_epoch": 2060, "total_updates": 8240, "presentations_per_epoch": 131840, "original_rows_per_epoch": 131837, "tail_repeated_presentations": 3, "batch_sampler": "BatchSamplerShard", "inner_sampler": "SeedableRandomSampler"}
+{"rank": 1, "event": "loader", "utc": "2026-11-13T11:18:42.220139+00:00", "elapsed_seconds": 14.31189767178148, "attempt_job_id": "letter-a1-q06-20261113-continuous-r1", "microbatches_per_epoch_per_rank": 8240, "updates_per_epoch": 2060, "total_updates": 8240, "presentations_per_epoch": 131840, "original_rows_per_epoch": 131837, "tail_repeated_presentations": 3, "batch_sampler": "BatchSamplerShard", "inner_sampler": "SeedableRandomSampler"}
+{"rank": 1, "event": "probe_initial_state", "utc": "2026-11-13T11:18:43.188005+00:00", "elapsed_seconds": 15.279767195694149, "attempt_job_id": "letter-a1-q06-20261113-continuous-r1", "global_step": 0, "deepspeed_global_step": 0, "parameter_dtypes": ["torch.bfloat16"]}
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/train.py", line 444, in main
+[rank1]:     result = trainer.train(resume_from_checkpoint=args.resume)
+[rank1]:   File "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py", line 2325, in train
+[rank1]:     return inner_training_loop(
+[rank1]:   File "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py", line 2573, in _inner_training_loop
+[rank1]:     self.control = self.callback_handler.on_train_begin(args, self.state, self.control)
+[rank1]:   File "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer_callback.py", line 506, in on_train_begin
+[rank1]:     return self.call_event("on_train_begin", args, state, control)
+[rank1]:   File "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer_callback.py", line 556, in call_event
+[rank1]:     result = getattr(callback, event)(
+[rank1]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/train.py", line 401, in on_train_begin
+[rank1]:     write(report_path, report)
+[rank1]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/checkpoint.py", line 35, in write
+[rank1]:     stream.write(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False, default=default) + '\n')
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/__init__.py", line 238, in dumps
+[rank1]:     **kw).encode(obj)
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 201, in encode
+[rank1]:     chunks = list(chunks)
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 431, in _iterencode
+[rank1]:     yield from _iterencode_dict(o, _current_indent_level)
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+[rank1]:     yield from chunks
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 397, in _iterencode_dict
+[rank1]:     yield _floatstr(value)
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 239, in floatstr
+[rank1]:     raise ValueError(
+[rank1]: ValueError: Out of range float values are not JSON compliant: inf
+
+[rank1]: During handling of the above exception, another exception occurred:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/train.py", line 521, in <module>
+[rank1]:     main()
+[rank1]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/train.py", line 511, in main
+[rank1]:     write(report_path, report)
+[rank1]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/checkpoint.py", line 35, in write
+[rank1]:     stream.write(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False, default=default) + '\n')
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/__init__.py", line 238, in dumps
+[rank1]:     **kw).encode(obj)
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 201, in encode
+[rank1]:     chunks = list(chunks)
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 431, in _iterencode
+[rank1]:     yield from _iterencode_dict(o, _current_indent_level)
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+[rank1]:     yield from chunks
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 397, in _iterencode_dict
+[rank1]:     yield _floatstr(value)
+[rank1]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 239, in floatstr
+[rank1]:     raise ValueError(
+[rank1]: ValueError: Out of range float values are not JSON compliant: inf
+{"rank": 0, "event": "probe_initial_state", "utc": "2026-11-13T11:18:43.895179+00:00", "elapsed_seconds": 15.987558890134096, "attempt_job_id": "letter-a1-q06-20261113-continuous-r1", "global_step": 0, "deepspeed_global_step": 0, "parameter_dtypes": ["torch.bfloat16"]}
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/train.py", line 444, in main
+[rank0]:     result = trainer.train(resume_from_checkpoint=args.resume)
+[rank0]:   File "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py", line 2325, in train
+[rank0]:     return inner_training_loop(
+[rank0]:   File "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer.py", line 2573, in _inner_training_loop
+[rank0]:     self.control = self.callback_handler.on_train_begin(args, self.state, self.control)
+[rank0]:   File "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer_callback.py", line 506, in on_train_begin
+[rank0]:     return self.call_event("on_train_begin", args, state, control)
+[rank0]:   File "/data/bwwu/envs/qwen-preflight-20261110-qwen3/lib/python3.10/site-packages/transformers/trainer_callback.py", line 556, in call_event
+[rank0]:     result = getattr(callback, event)(
+[rank0]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/train.py", line 401, in on_train_begin
+[rank0]:     write(report_path, report)
+[rank0]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/checkpoint.py", line 35, in write
+[rank0]:     stream.write(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False, default=default) + '\n')
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/__init__.py", line 238, in dumps
+[rank0]:     **kw).encode(obj)
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 201, in encode
+[rank0]:     chunks = list(chunks)
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 431, in _iterencode
+[rank0]:     yield from _iterencode_dict(o, _current_indent_level)
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+[rank0]:     yield from chunks
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 397, in _iterencode_dict
+[rank0]:     yield _floatstr(value)
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 239, in floatstr
+[rank0]:     raise ValueError(
+[rank0]: ValueError: Out of range float values are not JSON compliant: inf
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/train.py", line 521, in <module>
+[rank0]:     main()
+[rank0]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/train.py", line 511, in main
+[rank0]:     write(report_path, report)
+[rank0]:   File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/checkpoint.py", line 35, in write
+[rank0]:     stream.write(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False, default=default) + '\n')
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/__init__.py", line 238, in dumps
+[rank0]:     **kw).encode(obj)
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 201, in encode
+[rank0]:     chunks = list(chunks)
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 431, in _iterencode
+[rank0]:     yield from _iterencode_dict(o, _current_indent_level)
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+[rank0]:     yield from chunks
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 397, in _iterencode_dict
+[rank0]:     yield _floatstr(value)
+[rank0]:   File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/json/encoder.py", line 239, in floatstr
+[rank0]:     raise ValueError(
+[rank0]: ValueError: Out of range float values are not JSON compliant: inf
+W1113 11:18:45.094000 3235464 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3235473 closing signal SIGTERM
+E1113 11:18:45.359000 3235464 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 1 (pid: 3235474) of binary: /data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 922, in <module>
+    main()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-11-13_11:18:45
+  host      : zwlab-01
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 3235474)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/pipeline.py", line 178, in <module>
+    if __name__=='__main__':main()
+  File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/pipeline.py", line 143, in main
+    run('train',args)
+  File "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/pipeline.py", line 123, in run
+    if child.returncode:raise RuntimeError(stage+' failed: '+str(child.returncode))
+RuntimeError: train failed: 1

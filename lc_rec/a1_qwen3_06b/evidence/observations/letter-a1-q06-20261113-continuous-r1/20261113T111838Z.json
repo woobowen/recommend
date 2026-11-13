@@ -1,0 +1,98 @@
+{
+  "utc": "2026-11-13T11:18:40.593653+00:00",
+  "job_id": "letter-a1-q06-20261113-continuous-r1",
+  "kind": "continuous",
+  "rank": {
+    "0": {
+      "status": "INITIALIZING",
+      "run_commit": "851425db7de3c70c6c4925740ecc20d38bae3686",
+      "events": [
+        {
+          "event": "load_model",
+          "utc": "2026-11-13T11:18:38.591157+00:00",
+          "elapsed_seconds": 10.683549724519253,
+          "attempt_job_id": "letter-a1-q06-20261113-continuous-r1"
+        }
+      ]
+    },
+    "1": {
+      "status": "INITIALIZING",
+      "run_commit": "851425db7de3c70c6c4925740ecc20d38bae3686",
+      "events": [
+        {
+          "event": "load_model",
+          "utc": "2026-11-13T11:18:38.615938+00:00",
+          "elapsed_seconds": 10.707698239944875,
+          "attempt_job_id": "letter-a1-q06-20261113-continuous-r1"
+        }
+      ]
+    }
+  },
+  "test_rank": {},
+  "pipeline": {
+    "status": "RUNNING",
+    "job_id": "letter-a1-q06-20261113-continuous-r1",
+    "kind": "continuous",
+    "run_commit": "851425db7de3c70c6c4925740ecc20d38bae3686",
+    "output": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-continuous-r1",
+    "started_utc": "2026-11-13T11:18:25.999145+00:00",
+    "pid": 3235456,
+    "stages": [
+      {
+        "stage": "train",
+        "argv": [
+          "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/train.py",
+          "--letter",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/letter/vendor/LETTER",
+          "--model",
+          "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-0.6B-Base/da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+          "--output",
+          "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-continuous-r1/training",
+          "--config",
+          "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/config/formal_instruments_seed42.json",
+          "--run-commit",
+          "851425db7de3c70c6c4925740ecc20d38bae3686",
+          "--probe-stop",
+          "12",
+          "--probe-save",
+          "2",
+          "--preflight-interfaces"
+        ],
+        "started_utc": "2026-11-13T11:18:26.163651+00:00"
+      }
+    ],
+    "asset_gate": {
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-cpu-r0/cpu/assets_environment.json",
+      "sha256": "2026ca3caebfeedc969c1171feac0c7685357a84d66652a4bdc10183795a4516",
+      "model_revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd"
+    },
+    "gpu_start": "index, uuid, name, memory.total [MiB], memory.used [MiB]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n",
+    "phase": "train"
+  },
+  "resources": [
+    {
+      "utc": "2026-11-13T11:18:26.165611+00:00",
+      "elapsed_seconds": 0.16649005189538002,
+      "mem_available": 256501387264,
+      "swap_used": 152190976,
+      "disk_available": 2981599674368,
+      "gpu": "0, 1, 24082, 0\n1, 1, 24082, 0\n",
+      "seconds_without_worklog_progress": 0.12186604179441929
+    }
+  ],
+  "gpu": "index, uuid, memory.used [MiB], utilization.gpu [%], temperature.gpu\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 2582 MiB, 0 %, 30\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 2582 MiB, 0 %, 29\n",
+  "runner": {
+    "status": "RUNNING",
+    "exit_code": null,
+    "cleanup_verified": false,
+    "worker_alive": true,
+    "supervisor_alive": true,
+    "workgroup_live": true
+  }
+}

@@ -10,9 +10,36 @@ from __future__ import annotations
 from contextlib import contextmanager
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import random
+
+
+DEEPSPEED_LOGGING_SENTINEL = (
+    'Infinity [Accelerate 1.12.0 DeepSpeedPlugin.__post_init__: '
+    'steps_per_print stdout logging sentinel]'
+)
+
+
+def deepspeed_metadata(config):
+    """Encode only Accelerate's positive-inf stdout logging sentinel for JSON.
+
+    Accelerate 1.12.0 utils/dataclasses.py DeepSpeedPlugin.__post_init__ sets
+    config['steps_per_print'] = float('inf'). The engine/config is untouched;
+    a shallow report copy changes that single metadata value only. Every other
+    nonfinite value, including nested config values and negative inf/NaN at
+    steps_per_print, remains an error under strict JSON validation.
+    """
+    assert isinstance(config, dict), 'Expected an actual DeepSpeed config dictionary'
+    result = dict(config)
+    value = result.get('steps_per_print')
+    if type(value) is float and math.isinf(value) and value > 0:
+        result['steps_per_print'] = DEEPSPEED_LOGGING_SENTINEL
+    # Validate this one config subtree. This is deliberately not a general
+    # nonfinite sanitizer and does not touch training loss/gradient evidence.
+    json.dumps(result, allow_nan=False)
+    return result
 
 
 def sha(path):

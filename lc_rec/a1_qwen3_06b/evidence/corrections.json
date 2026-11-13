@@ -1,7 +1,7 @@
 {
   "task": "A1 Qwen3-0.6B Instruments seed42",
   "initial_round": 0,
-  "correction_rounds_used": 1,
+  "correction_rounds_used": 2,
   "maximum_correction_rounds": 3,
   "rounds": [
     {
@@ -14,7 +14,18 @@
       "verification": "round1_cpu_trainer_import.json: actual Trainer/Qwen class import, TF and Flax unavailable, no CUDA context",
       "additional_scoped_engineering": "Read-only observe takes status/event tail; compare receives explicit preserved attempt paths rather than assuming round0 paths",
       "preserved_evidence": "jobs/letter-a1-q06-20261113-continuous-r0/",
-      "status": "CPU_IMPORT_PASS_GPU_RECHECK_PENDING"
+      "status": "RECHECK_REACHED_DEEPSPEED_INITIALIZATION_NEW_METADATA_BLOCKER"
+    },
+    {
+      "round": 2,
+      "failed_job": "letter-a1-q06-20261113-continuous-r1",
+      "failed_run_commit": "851425db7de3c70c6c4925740ecc20d38bae3686",
+      "root_cause": "Accelerate1.12 native DeepSpeedPlugin sets steps_per_print to positive infinity as stdout logging sentinel; strict report JSON rejected this metadata value",
+      "actual_source": "round2_native_metadata_source.json",
+      "failure_stage": "on_train_begin after DS/loader and 393 BF16 parameters verified, before first microbatch; zero optimizer updates",
+      "change": "Report-only shallow DS config copy encodes this single positive-infinity key as explicit source-labelled string; original config/engine unchanged; all other nonfinite fields rejected; global allow_nan=False remains",
+      "verification": "metadata_check.py production-helper and actual DeepSpeedPlugin/TrainingArguments CPU gate pending; nonauthor static helper tests passed",
+      "status": "GPU_RECHECK_PENDING"
     }
   ]
 }

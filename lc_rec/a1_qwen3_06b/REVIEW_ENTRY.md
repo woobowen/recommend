@@ -27,3 +27,5 @@ GPT_UPLOAD_REQUIRED: NO（当前已发布材料只用于准备阶段核查；最
 CPU job `letter-a1-q06-20261113-cpu-r0`，源码 `a9d36910e20b95ab7df6622f29479b5d542f0b68`，真实SUCCEEDED/exit0/cleanup verified。完整权重SHA、当前依赖、tokenizer全部9922物品及保存重载、全部长度分母、真实EOS/mask、CPU Int8 cold/hot序列化契约、A0配对CSV/NPZ当前SHA均通过；CUDA未初始化。训练/验证最大184 tokens，Prompt0测试最大167。
 
 runner timeout fixture `letter-a1-q06-20261113-runner-timeout-r0`按预期TIMED_OUT/-9，真实清收并无live；不是实验失败。第一次GPU预验收`continuous-r0`则真实FAILED：Trainer导入可选TF分支碰到Keras3/tf_keras缺失，发生在GPU/model初始化前，无更新。失败原件保留，计入同一预验收ledger。任务级round1将USE_TF/USE_FLAX设0并排除强制TF覆盖，真实CPU全Trainer/PEFT/Accelerate/DS/bnb导入通过；无安装或训练算术修改。后续GPU复核仍待完成。[修正记录](evidence/corrections.json)。
+
+Round1 GPU复核真实失败于on_train_begin审计JSON：已确认393独立BF16 trainable、196投影、loader8240/microbatches及global64，但尚无第一microbatch/update。实际Accelerate源码把steps_per_print置正inf作为stdout日志哨兵；不是Loss/Grad Norm非有限。任务级round2只对该DS配置报告字段作显式字符串编码，保持真实engine配置、kernel和strict JSON/训练finite判定；未知非有限值继续拒绝。原失败及预算保留，下一次真实GPU复核仍未完成。
