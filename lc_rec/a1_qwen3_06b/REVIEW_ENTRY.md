@@ -48,3 +48,6 @@ Round1 GPU复核真实失败于on_train_begin审计JSON：已确认393独立BF16
 完整服务器流水线已接入：4epoch/8240真实updates→每轮49544条Validation→best strict恢复→BF16 Base+tied adapter→两rank全24772用户Prompt0 Beam20→A1独立预测SHA manifest→CPU原论文4项独立复算→16指标/CCE/SID诊断/分组/5000用户Bootstrap→独立扩展/统计核验→A0/A1配对及独立核验。CPU评价RUN先冻结，GPU RUN绑定其固定export；DELIVERY另外发布。任何A0身份常数均不冒充A1预测身份。
 
 训练、验证、best、全量测试和CPU统计由服务器自主衔接，不依赖Codex重新打开。关闭Codex不取消任务，也不表示离线AI仍在监控；重连先查原job_id，不重复新seed。完成全部实际结果、非作者终审、GitHub固定回读及轻量ZIP验证后才达到授权终点。尚无正式A1指标，未重训A0、未运行其他seed/模型/数据域/Shuffle，未同步main，未安装包或改全局配置。
+
+
+CPU评价RUN已冻结并实际GitHub回读/服务器逐文件校验：`445f1475cd1dd70d19881dbc1639bb311f7cccf7`。正式GPU RUN采用下一固定提交，训练/推理/评价核心与本版逐字节相同；两份非作者报告与实际预跑源码身份已绑定。[评价版本身份](evidence/evaluation_run_identity.json)、[GitHub回读](evidence/evaluation_github_readback.json)。唯一拟正式job_id为`letter-a1-q06-20261113-normal-seed42-r0`，尚未提交。
