@@ -1,0 +1,667 @@
+{
+  "utc": "2026-11-13T08:23:19.980219+00:00",
+  "job_id": "letter-a0-20261112-normal-det-seed42-r0",
+  "kind": "formal",
+  "training": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training",
+  "rank": {
+    "0": {
+      "report": {
+        "status": "TRAINING_COMPLETE",
+        "run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+        "config_sha256": "133e0e88f4158ab2806ebaa973eb87a0d98c68c98690bcc5cab62e8d126ae9b7",
+        "global_step": 8240,
+        "epoch": 4.0,
+        "best_checkpoint": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/checkpoint-8240",
+        "best_metric": 1.5409067869186401,
+        "initial_global_step": 0,
+        "elapsed_seconds": 37165.37208361365,
+        "peak_allocated_bytes": 12741671936,
+        "peak_reserved_bytes": 16120807424,
+        "formal_attention": {
+          "enabled": true,
+          "recipe": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+          "interface_sha256": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+          "fastchat_sha256": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e",
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2",
+          "version": "2.7.4.post1",
+          "torch_global_deterministic": false,
+          "cublas_workspace_config": null,
+          "tensor_observers": false,
+          "calls": {
+            "flash_attn_func": 0,
+            "flash_attn_varlen_kvpacked_func": 2505856,
+            "native_dense": 0,
+            "native_varlen": 1054720,
+            "extension_dense": 0,
+            "extension_varlen": 1054720
+          },
+          "signatures": {
+            "flash_attn_func": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+            "flash_attn_varlen_kvpacked_func": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)"
+          }
+        }
+      },
+      "recent_events": [
+        {
+          "utc": "2026-11-13T04:46:00.194013+00:00",
+          "elapsed_seconds": 36279.635862922296,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 8240,
+          "epoch": 4.0,
+          "values": {
+            "loss": 1.3901,
+            "learning_rate": 0.0,
+            "epoch": 4.0
+          }
+        },
+        {
+          "utc": "2026-11-13T04:46:00.194148+00:00",
+          "elapsed_seconds": 36279.63599565998,
+          "event": "epoch_end",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 8240,
+          "epoch": 4.0
+        },
+        {
+          "utc": "2026-11-13T04:59:42.320874+00:00",
+          "elapsed_seconds": 37101.7627339419,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 8240,
+          "epoch": 4.0,
+          "values": {
+            "eval_loss": 1.5409067869186401,
+            "eval_runtime": 822.1264,
+            "eval_samples_per_second": 60.263,
+            "eval_steps_per_second": 3.767,
+            "epoch": 4.0
+          }
+        },
+        {
+          "utc": "2026-11-13T05:00:12.598728+00:00",
+          "elapsed_seconds": 37132.040584976785,
+          "event": "checkpoint_complete",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "path": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/checkpoint-8240",
+          "step": 8240,
+          "best": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/checkpoint-8240",
+          "best_metric": 1.5409067869186401,
+          "elapsed_seconds_checkpoint": 30.27752389293164
+        },
+        {
+          "utc": "2026-11-13T05:00:12.616326+00:00",
+          "elapsed_seconds": 37132.05817754101,
+          "event": "bnb_hot_scb_alias_begin",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "modules": 224,
+          "hot_modules": 224,
+          "modules_source_sha256": "e97af1a69794f192bf58e0154efb660f3d2ed0a00dade672c7d8f9a3d14b9e53",
+          "scope": "native strict checkpoint load only; no requantization"
+        },
+        {
+          "utc": "2026-11-13T05:00:37.614353+00:00",
+          "elapsed_seconds": 37157.056213483214,
+          "event": "bnb_hot_scb_alias_loaded",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "modules": 224,
+          "hot_modules": 224,
+          "parameter_identity_and_cache_aliases_preserved": true
+        },
+        {
+          "utc": "2026-11-13T05:00:37.615299+00:00",
+          "elapsed_seconds": 37157.05715040397,
+          "event": "strict_ds_restored",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "path": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/checkpoint-8240",
+          "global_step": 8240,
+          "scheduler": {
+            "base_lrs": [
+              0.0002,
+              0.0002
+            ],
+            "last_epoch": 8240,
+            "verbose": false,
+            "_step_count": 8241,
+            "_get_lr_called_within_step": false,
+            "_last_lr": [
+              0.0
+            ],
+            "lr_lambdas": [
+              {},
+              {}
+            ]
+          },
+          "client_keys": [
+            "buffer_names",
+            "ds_config",
+            "ds_version",
+            "frozen_param_fragments",
+            "frozen_param_shapes",
+            "global_samples",
+            "param_shapes",
+            "shared_params"
+          ]
+        },
+        {
+          "utc": "2026-11-13T05:00:37.980183+00:00",
+          "elapsed_seconds": 37157.42203629296,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 8240,
+          "epoch": 4.0,
+          "values": {
+            "train_runtime": 37076.5684,
+            "train_samples_per_second": 14.223,
+            "train_steps_per_second": 0.222,
+            "total_flos": 2.9949688921173524e+18,
+            "train_loss": 1.798311912781984,
+            "epoch": 4.0
+          }
+        }
+      ]
+    },
+    "1": {
+      "report": {
+        "status": "TRAINING_COMPLETE",
+        "run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+        "config_sha256": "133e0e88f4158ab2806ebaa973eb87a0d98c68c98690bcc5cab62e8d126ae9b7",
+        "global_step": 8240,
+        "epoch": 4.0,
+        "best_checkpoint": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/checkpoint-8240",
+        "best_metric": 1.5409067869186401,
+        "initial_global_step": 0,
+        "elapsed_seconds": 37165.37189222034,
+        "peak_allocated_bytes": 12742233088,
+        "peak_reserved_bytes": 16120807424,
+        "formal_attention": {
+          "enabled": true,
+          "recipe": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+          "interface_sha256": "d8eaf989a5401fedd23d11a336a7f38e67596d0a4d5a279df14cbe2d7de2ed75",
+          "fastchat_sha256": "de6b3211ea8a7a860f3bea6fc1529c5f0f58732421a156f1b8e62881b58afe6e",
+          "extension_sha256": "49bd9d3367051b74dd86039532a3786cdf324fd88befcd0b7b3f3aeaae1abbd2",
+          "version": "2.7.4.post1",
+          "torch_global_deterministic": false,
+          "cublas_workspace_config": null,
+          "tensor_observers": false,
+          "calls": {
+            "flash_attn_func": 0,
+            "flash_attn_varlen_kvpacked_func": 2505856,
+            "native_dense": 0,
+            "native_varlen": 1054720,
+            "extension_dense": 0,
+            "extension_varlen": 1054720
+          },
+          "signatures": {
+            "flash_attn_func": "(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)",
+            "flash_attn_varlen_kvpacked_func": "(q, kv, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0, alibi_slopes=None, deterministic=False, return_attn_probs=False)"
+          }
+        }
+      },
+      "recent_events": [
+        {
+          "utc": "2026-11-13T04:46:00.194138+00:00",
+          "elapsed_seconds": 36279.63579969667,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 8240,
+          "epoch": 4.0,
+          "values": {
+            "loss": 1.3901,
+            "learning_rate": 0.0,
+            "epoch": 4.0
+          }
+        },
+        {
+          "utc": "2026-11-13T04:46:00.194268+00:00",
+          "elapsed_seconds": 36279.63592586387,
+          "event": "epoch_end",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 8240,
+          "epoch": 4.0
+        },
+        {
+          "utc": "2026-11-13T04:59:42.320867+00:00",
+          "elapsed_seconds": 37101.762532101944,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 8240,
+          "epoch": 4.0,
+          "values": {
+            "eval_loss": 1.5409067869186401,
+            "eval_runtime": 822.1259,
+            "eval_samples_per_second": 60.263,
+            "eval_steps_per_second": 3.767,
+            "epoch": 4.0
+          }
+        },
+        {
+          "utc": "2026-11-13T05:00:12.598753+00:00",
+          "elapsed_seconds": 37132.04042768851,
+          "event": "checkpoint_complete",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "path": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/checkpoint-8240",
+          "step": 8240,
+          "best": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/checkpoint-8240",
+          "best_metric": 1.5409067869186401,
+          "elapsed_seconds_checkpoint": 30.27755073737353
+        },
+        {
+          "utc": "2026-11-13T05:00:12.617425+00:00",
+          "elapsed_seconds": 37132.059088217095,
+          "event": "bnb_hot_scb_alias_begin",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "modules": 224,
+          "hot_modules": 224,
+          "modules_source_sha256": "e97af1a69794f192bf58e0154efb660f3d2ed0a00dade672c7d8f9a3d14b9e53",
+          "scope": "native strict checkpoint load only; no requantization"
+        },
+        {
+          "utc": "2026-11-13T05:00:35.699051+00:00",
+          "elapsed_seconds": 37155.14072149061,
+          "event": "bnb_hot_scb_alias_loaded",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "modules": 224,
+          "hot_modules": 224,
+          "parameter_identity_and_cache_aliases_preserved": true
+        },
+        {
+          "utc": "2026-11-13T05:00:35.699910+00:00",
+          "elapsed_seconds": 37155.14157166518,
+          "event": "strict_ds_restored",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "path": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/checkpoint-8240",
+          "global_step": 8240,
+          "scheduler": {
+            "base_lrs": [
+              0.0002,
+              0.0002
+            ],
+            "last_epoch": 8240,
+            "verbose": false,
+            "_step_count": 8241,
+            "_get_lr_called_within_step": false,
+            "_last_lr": [
+              0.0
+            ],
+            "lr_lambdas": [
+              {},
+              {}
+            ]
+          },
+          "client_keys": [
+            "buffer_names",
+            "ds_config",
+            "ds_version",
+            "frozen_param_fragments",
+            "frozen_param_shapes",
+            "global_samples",
+            "param_shapes",
+            "shared_params"
+          ]
+        },
+        {
+          "utc": "2026-11-13T05:00:37.979982+00:00",
+          "elapsed_seconds": 37157.42165188491,
+          "event": "log",
+          "attempt_job_id": "letter-a0-20261112-normal-det-seed42-r0",
+          "step": 8240,
+          "epoch": 4.0,
+          "values": {
+            "train_runtime": 37075.51,
+            "train_samples_per_second": 14.224,
+            "train_steps_per_second": 0.222,
+            "total_flos": 2.9949688921173524e+18,
+            "train_loss": 1.798311912781984,
+            "epoch": 4.0
+          }
+        }
+      ]
+    }
+  },
+  "pipeline": {
+    "status": "SUCCESS",
+    "job_id": "letter-a0-20261112-normal-det-seed42-r0",
+    "kind": "formal",
+    "run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+    "output": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0",
+    "started_utc": "2026-11-12T18:41:18.450032+00:00",
+    "pid": 3227273,
+    "stages": [
+      {
+        "stage": "train",
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/scripts/formal_train.py",
+          "--source-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--output",
+          "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training",
+          "--config",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/config/formal_instruments_seed42.json",
+          "--run-commit",
+          "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+          "--precision-approval",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/evidence/formal_20261111/precision_approval.json"
+        ],
+        "started_utc": "2026-11-12T18:41:18.614744+00:00",
+        "exit_code": 0,
+        "ended_utc": "2026-11-13T05:00:50.620735+00:00"
+      },
+      {
+        "stage": "test",
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=2",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/scripts/formal_evaluate.py",
+          "--source-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--adapter",
+          "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/best_adapter",
+          "--output",
+          "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0/test",
+          "--run-commit",
+          "4c6a83d9ba42dc2fe737792759e410ef1874da76"
+        ],
+        "started_utc": "2026-11-13T05:00:52.312988+00:00",
+        "exit_code": 0,
+        "ended_utc": "2026-11-13T07:16:40.374466+00:00"
+      }
+    ],
+    "gpu_start": "index, uuid, name, memory.total [MiB], memory.used [MiB]\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB\n",
+    "phase": "test",
+    "best_selection": {
+      "checkpoint": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/checkpoint-8240",
+      "metric": "eval_loss",
+      "greater_is_better": false,
+      "value": 1.5409067869186401,
+      "adapter_sha256": "f4651c5c6e6ed841cd3384c0c8ebfab30880e94597e515ffa21916b876001ed5",
+      "run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+      "completed_training_step": 8240,
+      "loaded_best_checkpoint_step": 8240
+    },
+    "metrics": {
+      "status": "PASS",
+      "test_complete": true,
+      "actual_test_users": 24772,
+      "valid_result_users": 24772,
+      "failed_users": 0,
+      "skipped_users": 0,
+      "all_row_indices_exactly_once": true,
+      "expected_user_axis_sha256": "cece0a15214d60f24a73537700dad07e319ed592891b8c34c8d4901b57eacc13",
+      "metric_sums": {
+        "hit@5": 2237.0,
+        "hit@10": 2808.0,
+        "ndcg@5": 1923.8704101140602,
+        "ndcg@10": 2107.62980211034
+      },
+      "metrics": {
+        "hit@5": 0.0903035685451316,
+        "hit@10": 0.11335378653318262,
+        "ndcg@5": 0.07766310391224206,
+        "ndcg@10": 0.08508113200832956
+      },
+      "prediction_wall_seconds_max_rank": 8007.138136555441,
+      "anomalies": {
+        "candidate_count": 495440,
+        "legal_complete_sid_candidates": 494462,
+        "invalid_complete_sid_candidates": 978,
+        "duplicate_candidate_occurrences": 0,
+        "colliding_sid_candidate_occurrences": 4384,
+        "users_with_invalid_sid": 724,
+        "users_with_duplicate_sid": 0,
+        "users_with_colliding_sid_candidate": 3660,
+        "targets_with_colliding_sid": 122,
+        "complete_sid_legal_rate": 0.9980259970934926
+      },
+      "prediction_files": [
+        {
+          "rank": 0,
+          "path": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0/test/predictions.rank0.jsonl",
+          "users": 12386,
+          "bytes": 190712530,
+          "sha256": "bdcbdde15d3ac6850708888e055aa67ae61212dbb675d9f915b9947b2a208bde"
+        },
+        {
+          "rank": 1,
+          "path": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0/test/predictions.rank1.jsonl",
+          "users": 12386,
+          "bytes": 190154918,
+          "sha256": "f5d2ce538bfe86b024c38070f74cce3411a457554ae08ec610ec26987570c629"
+        }
+      ],
+      "independent_standard_library_recomputation_matches_original_evaluator": true,
+      "evaluator_policy": {
+        "parsing": "split('Response:')[-1].strip().replace(' ', '')",
+        "sorting": "stable descending original sequences_scores",
+        "filter_items": false,
+        "deduplicate_candidates": false,
+        "collisions": "exact complete SID string match; original item identities are not disambiguated",
+        "ndcg": "sum all matching candidate discounts, including repeated matches, as original evaluator",
+        "hit": "at least one target SID in first k; one held-out item per user (HR/Recall terminology)"
+      },
+      "RUN_COMMIT": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+      "adapter_path": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/best_adapter",
+      "adapter_model_sha256": "f4651c5c6e6ed841cd3384c0c8ebfab30880e94597e515ffa21916b876001ed5",
+      "data_identity": {
+        "index": {
+          "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.index.json",
+          "bytes": 518041,
+          "sha256": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd"
+        },
+        "inter": {
+          "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.inter.json",
+          "bytes": 3312848,
+          "sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743"
+        },
+        "item": {
+          "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.item.json",
+          "bytes": 7526890,
+          "sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2"
+        }
+      },
+      "generation": {
+        "prompt_id": 0,
+        "num_beams": 20,
+        "num_return_sequences": 20,
+        "max_new_tokens": 10,
+        "early_stopping": true,
+        "filter_items": false,
+        "prefix": "fixed original per-position callback; no catalog Trie",
+        "per_rank_batch_size": 1,
+        "oom_beam_reduction": false,
+        "base_dtype": "BF16, unquantized original author LoRA inference branch",
+        "sampler": "original DistributedSampler shuffle=True, seed=0, epoch=0, drop_last=True"
+      },
+      "original_evaluator_sha256": "6bcbf22965b59edebe2b37ff57c374cb6d3127d9c6254e0eba2b873459c6b357"
+    },
+    "exit_code": 0,
+    "ended_utc": "2026-11-13T07:16:40.394862+00:00",
+    "wall_seconds": 45321.944337884896,
+    "charged_gpu_device_seconds": 90643.88867576979
+  },
+  "best_selection": {
+    "checkpoint": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/checkpoint-8240",
+    "metric": "eval_loss",
+    "greater_is_better": false,
+    "value": 1.5409067869186401,
+    "adapter_sha256": "f4651c5c6e6ed841cd3384c0c8ebfab30880e94597e515ffa21916b876001ed5",
+    "run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+    "completed_training_step": 8240,
+    "loaded_best_checkpoint_step": 8240
+  },
+  "metrics": {
+    "status": "PASS",
+    "test_complete": true,
+    "actual_test_users": 24772,
+    "valid_result_users": 24772,
+    "failed_users": 0,
+    "skipped_users": 0,
+    "all_row_indices_exactly_once": true,
+    "expected_user_axis_sha256": "cece0a15214d60f24a73537700dad07e319ed592891b8c34c8d4901b57eacc13",
+    "metric_sums": {
+      "hit@5": 2237.0,
+      "hit@10": 2808.0,
+      "ndcg@5": 1923.8704101140602,
+      "ndcg@10": 2107.62980211034
+    },
+    "metrics": {
+      "hit@5": 0.0903035685451316,
+      "hit@10": 0.11335378653318262,
+      "ndcg@5": 0.07766310391224206,
+      "ndcg@10": 0.08508113200832956
+    },
+    "prediction_wall_seconds_max_rank": 8007.138136555441,
+    "anomalies": {
+      "candidate_count": 495440,
+      "legal_complete_sid_candidates": 494462,
+      "invalid_complete_sid_candidates": 978,
+      "duplicate_candidate_occurrences": 0,
+      "colliding_sid_candidate_occurrences": 4384,
+      "users_with_invalid_sid": 724,
+      "users_with_duplicate_sid": 0,
+      "users_with_colliding_sid_candidate": 3660,
+      "targets_with_colliding_sid": 122,
+      "complete_sid_legal_rate": 0.9980259970934926
+    },
+    "prediction_files": [
+      {
+        "rank": 0,
+        "path": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0/test/predictions.rank0.jsonl",
+        "users": 12386,
+        "bytes": 190712530,
+        "sha256": "bdcbdde15d3ac6850708888e055aa67ae61212dbb675d9f915b9947b2a208bde"
+      },
+      {
+        "rank": 1,
+        "path": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0/test/predictions.rank1.jsonl",
+        "users": 12386,
+        "bytes": 190154918,
+        "sha256": "f5d2ce538bfe86b024c38070f74cce3411a457554ae08ec610ec26987570c629"
+      }
+    ],
+    "independent_standard_library_recomputation_matches_original_evaluator": true,
+    "evaluator_policy": {
+      "parsing": "split('Response:')[-1].strip().replace(' ', '')",
+      "sorting": "stable descending original sequences_scores",
+      "filter_items": false,
+      "deduplicate_candidates": false,
+      "collisions": "exact complete SID string match; original item identities are not disambiguated",
+      "ndcg": "sum all matching candidate discounts, including repeated matches, as original evaluator",
+      "hit": "at least one target SID in first k; one held-out item per user (HR/Recall terminology)"
+    },
+    "RUN_COMMIT": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+    "adapter_path": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/best_adapter",
+    "adapter_model_sha256": "f4651c5c6e6ed841cd3384c0c8ebfab30880e94597e515ffa21916b876001ed5",
+    "data_identity": {
+      "index": {
+        "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.index.json",
+        "bytes": 518041,
+        "sha256": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd"
+      },
+      "inter": {
+        "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.inter.json",
+        "bytes": 3312848,
+        "sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743"
+      },
+      "item": {
+        "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.item.json",
+        "bytes": 7526890,
+        "sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2"
+      }
+    },
+    "generation": {
+      "prompt_id": 0,
+      "num_beams": 20,
+      "num_return_sequences": 20,
+      "max_new_tokens": 10,
+      "early_stopping": true,
+      "filter_items": false,
+      "prefix": "fixed original per-position callback; no catalog Trie",
+      "per_rank_batch_size": 1,
+      "oom_beam_reduction": false,
+      "base_dtype": "BF16, unquantized original author LoRA inference branch",
+      "sampler": "original DistributedSampler shuffle=True, seed=0, epoch=0, drop_last=True"
+    },
+    "original_evaluator_sha256": "6bcbf22965b59edebe2b37ff57c374cb6d3127d9c6254e0eba2b873459c6b357"
+  },
+  "ledger": {
+    "attempts": [
+      {
+        "job_id": "letter-a0-20261112-normal-det-seed42-r0",
+        "kind": "formal",
+        "run_commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+        "started_utc": "2026-11-12T18:41:18.555238+00:00",
+        "resume": null,
+        "wall_limit_seconds": 345580,
+        "ended_utc": "2026-11-13T07:16:40.394372+00:00",
+        "wall_seconds": 45321.944337884896,
+        "gpu_device_seconds": 90643.88867576979,
+        "status": "SUCCESS"
+      }
+    ]
+  },
+  "test_rank": {
+    "0": {
+      "status": "PASS",
+      "completed_users": 12386,
+      "assigned_users": 12386,
+      "elapsed_generation_seconds": 8007.138136555441,
+      "elapsed_seconds": 8140.063992069103,
+      "gpu_peak_allocated_bytes": 19595225088,
+      "gpu_peak_reserved_bytes": 23779606528
+    },
+    "1": {
+      "status": "PASS",
+      "completed_users": 12386,
+      "assigned_users": 12386,
+      "elapsed_generation_seconds": 7696.0432089800015,
+      "elapsed_seconds": 8140.064196679741,
+      "gpu_peak_allocated_bytes": 19663409152,
+      "gpu_peak_reserved_bytes": 24612175872
+    }
+  },
+  "gpu": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 1, 24082, 0\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 1, 24082, 0\n",
+  "mem_available": 256463233024,
+  "swap_used": 152190976,
+  "disk_available": 2981623218176,
+  "runner": {
+    "status": "SUCCEEDED",
+    "started_at": "2026-11-12T18:41:18.357863+00:00",
+    "ended_at": "2026-11-13T07:16:40.567268+00:00",
+    "exit_code": 0,
+    "request_sha256": "a6b6c6f6518d389a7c777c5f44552bdcd1e180b6a40ebb100f547f4f3499ffd3",
+    "worker_alive": false,
+    "supervisor_alive": false,
+    "cleanup_verified": true,
+    "workgroup_observation": {
+      "observed_at": "2026-11-13T08:23:17.756520+00:00",
+      "source": "captured_at_launch",
+      "boot_changed": false,
+      "owned_live": [],
+      "unconfirmed_live": [],
+      "unsupported_live": [],
+      "zombies": [],
+      "scan_errors": [],
+      "scan_complete": true,
+      "verified_empty": true
+    }
+  }
+}
