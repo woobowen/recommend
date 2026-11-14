@@ -1,0 +1,89 @@
+{
+  "protocol_version": "letter_instruments_beam20_v1",
+  "dataset": "Instruments",
+  "users": 24772,
+  "user_axis": "insertion order of frozen Instruments.inter.json",
+  "target_item": "items[-1]",
+  "target_sid": "join(frozen index[target_item])",
+  "original_run_commit": "f0242b9f90ae23a4979d688a287734ca9f88cea1",
+  "model_revision": "4782ad278652c7c71b72204d462d6d01eaaf7549",
+  "prompt_id": 0,
+  "beams": 20,
+  "parser": "raw_decoded.split('Response:')[-1].strip().replace(' ', '')",
+  "sort": "stable descending sequence_score, ties retain generation_order",
+  "filter_items": false,
+  "deduplicate": false,
+  "hit_k": [
+    1,
+    5,
+    10,
+    20
+  ],
+  "ndcg_k": [
+    5,
+    10,
+    20
+  ],
+  "mrr_k": [
+    5,
+    10,
+    20
+  ],
+  "cce_k": [
+    5,
+    10,
+    20
+  ],
+  "hit": "any target SID match within K; equals Recall for single target",
+  "ndcg": "sum all target SID matches at ranks r<=K of 1/log2(r+1)",
+  "mrr": "1/r for FIRST target SID occurrence r<=K, otherwise 0",
+  "cce": "first target only; P=sum(prefix group sizes); g=target group size; m=min(g,max(0,K-P)); ItemHit=m/g; ItemNDCG=sum(i=1..m,1/log2(P+i+1))/g",
+  "cce_unknown_sid_group_size": 1,
+  "cce_duplicates": "each prefix occurrence expands; target first occurrence only",
+  "sid_coverage_denominator": 9897,
+  "duplicate_rate": "(K-number of distinct SIDs in user Top-K)/(users*K), including invalid SIDs",
+  "collision_candidate": "valid SID whose catalog group size >1",
+  "history_groups": [
+    "0-5",
+    "6-10",
+    "11-20"
+  ],
+  "visible_history": "items[:-1][-20:] excluding padding",
+  "popularity": {
+    "source": "every original training-visible items[:-2] occurrence once per user",
+    "thresholds": "positive catalog frequencies, nearest-rank ceil(n/3),ceil(2*n/3), ties never split",
+    "groups": "UNSEEN count=0; LONG_TAIL 0<count<=q1; MID q1<count<=q2; POPULAR count>q2",
+    "designation": "SUPPLEMENTARY_ANALYSIS; exploratory grouping fixed before performance calculation"
+  },
+  "bootstrap": {
+    "unit": "user",
+    "replacement": true,
+    "repetitions": 5000,
+    "seed": 20261113,
+    "rng": "numpy Generator PCG64",
+    "draw_order": "replicate-major then user-major; int64 integers(0,N)",
+    "percentiles": [
+      2.5,
+      97.5
+    ],
+    "percentile_method": "linear",
+    "scope": "Overall16 conditional on fixed trained model and fixed shuffle realization, not training-seed or shuffle-realization variance"
+  },
+  "per_user_format": "CSV in row_idx order, no candidate texts; identity, groups, first rank, generation_seconds and 16 float64 metric columns; companion NPZ float64 matrix",
+  "result_layers": [
+    "original paper SID-level",
+    "expanded ranking and SID diagnostics",
+    "CCE and supplementary statistics"
+  ],
+  "additional_metric_reference": "NO_DIRECT_PAPER_REFERENCE",
+  "official_cce_commit": "6dd5d314f62d3379e664a52c9007e7645556970c",
+  "official_cce_sha256": "173c257a8711a885e8f6d5abcdb0ad2510ad4fab01c1700631b5ec261f50cd2d",
+  "paper": "https://arxiv.org/html/2605.25330v2",
+  "cost_format": "wall seconds per stage separately from GPU-device-seconds; per-user generation_seconds excludes model loading and CPU serialization",
+  "asset_sha256": {
+    "index": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd",
+    "inter": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743",
+    "item": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2"
+  },
+  "user_axis_sha256": "1daf63ce4c77b0265777a46b61939006aafab0276b9106c742de602c8c7e867a"
+}

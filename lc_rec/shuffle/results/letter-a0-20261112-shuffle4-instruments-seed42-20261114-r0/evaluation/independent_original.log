@@ -1,0 +1,123 @@
+{
+  "status": "PASS",
+  "run_commit": "f0242b9f90ae23a4979d688a287734ca9f88cea1",
+  "actual_test_users": 24772,
+  "beam_candidates_per_user": 20,
+  "skipped_users": 0,
+  "metric_sums": {
+    "hit@5": 1601.0,
+    "hit@10": 2020.0,
+    "ndcg@5": 1231.463541651162,
+    "ndcg@10": 1365.6628446586797
+  },
+  "metrics": {
+    "hit@5": 0.0646294203132569,
+    "hit@10": 0.08154367834652027,
+    "ndcg@5": 0.04971191432468763,
+    "ndcg@10": 0.05512929293794121
+  },
+  "metric_deltas": {
+    "hit@5": {
+      "sum_absolute_delta": 0.0,
+      "mean_absolute_delta": 0.0
+    },
+    "hit@10": {
+      "sum_absolute_delta": 0.0,
+      "mean_absolute_delta": 0.0
+    },
+    "ndcg@5": {
+      "sum_absolute_delta": 1.8189894035458565e-12,
+      "mean_absolute_delta": 7.632783294297951e-17
+    },
+    "ndcg@10": {
+      "sum_absolute_delta": 5.229594535194337e-12,
+      "mean_absolute_delta": 2.1510571102112408e-16
+    }
+  },
+  "anomalies": {
+    "candidate_count": 495440,
+    "legal_complete_sid_candidates": 495408,
+    "invalid_complete_sid_candidates": 32,
+    "duplicate_candidate_occurrences": 0,
+    "colliding_sid_candidate_occurrences": 2814,
+    "users_with_invalid_sid": 27,
+    "users_with_duplicate_sid": 0,
+    "users_with_colliding_sid_candidate": 2576,
+    "targets_with_colliding_sid": 122,
+    "complete_sid_legal_rate": 0.9999354109478443
+  },
+  "assets": {
+    "Instruments.index.json": {
+      "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.index.json",
+      "bytes": 518041,
+      "sha256": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd"
+    },
+    "Instruments.inter.json": {
+      "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.inter.json",
+      "bytes": 3312848,
+      "sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743"
+    },
+    "Instruments.item.json": {
+      "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.item.json",
+      "bytes": 7526890,
+      "sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2"
+    }
+  },
+  "rank_metadata": [
+    {
+      "path": "/data/bwwu/lc-rec/letter-shuffle-20261114/letter-a0-20261112-shuffle4-instruments-seed42-20261114-r0/test/rank0.json",
+      "bytes": 158611,
+      "sha256": "f76cb9f9c712bf73b55fde77d28cac6a63b335be7b9324ea5c5937cad9ae3245"
+    },
+    {
+      "path": "/data/bwwu/lc-rec/letter-shuffle-20261114/letter-a0-20261112-shuffle4-instruments-seed42-20261114-r0/test/rank1.json",
+      "bytes": 158611,
+      "sha256": "8ba80ad9990d4bd0955f1ec7220592b56b8e5aa0295ded83f7e40baac3cf82f9"
+    }
+  ],
+  "prediction_files": [
+    {
+      "rank": 0,
+      "path": "/data/bwwu/lc-rec/letter-shuffle-20261114/letter-a0-20261112-shuffle4-instruments-seed42-20261114-r0/test/predictions.rank0.jsonl",
+      "users": 12386,
+      "bytes": 233912996,
+      "sha256": "7cca6bbb87be051cbc1c3b9891d45d8360cff52e213288ab9762ec3aeccf5b13"
+    },
+    {
+      "rank": 1,
+      "path": "/data/bwwu/lc-rec/letter-shuffle-20261114/letter-a0-20261112-shuffle4-instruments-seed42-20261114-r0/test/predictions.rank1.jsonl",
+      "users": 12386,
+      "bytes": 233104661,
+      "sha256": "d7d2439831bfb92617d13602c5e61695e1b88bb53e77a2eeaa9002b1671e8871"
+    }
+  ],
+  "original_metrics": {
+    "path": "/data/bwwu/lc-rec/letter-shuffle-20261114/letter-a0-20261112-shuffle4-instruments-seed42-20261114-r0/test/metrics.json",
+    "bytes": 4111,
+    "sha256": "72d39f1ebc503554c1ed7fed35e457ef8b8576f62521dc930698ee47614c5565"
+  },
+  "policy": "Stable score sort; complete SID equality; no filtering, deduplication or collision changes; duplicate target NDCG additive",
+  "tolerances": {
+    "metric_mean": 1e-13,
+    "metric_sum": 1e-09
+  },
+  "limits": [
+    "Recorded predictions only; no GPU/model/training rerun",
+    "No independent token decoding or allowed-token callback execution",
+    "Adapter manifests compared; model tensors not reloaded",
+    "Controller bridge execution; reviewer did not directly SSH"
+  ],
+  "audit": "INDEPENDENT_STDLIB_RECOMPUTE",
+  "exit_code": 0,
+  "argv": [
+    "/home/bwwu/lc-rec/letter-shuffle-20261114/releases/f0242b9f90ae23a4979d688a287734ca9f88cea1/lc_rec/letter/review/formal_det_20261112/independent_metrics.py",
+    "--data-root",
+    "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data",
+    "--test-dir",
+    "/data/bwwu/lc-rec/letter-shuffle-20261114/letter-a0-20261112-shuffle4-instruments-seed42-20261114-r0/test",
+    "--output",
+    "/data/bwwu/lc-rec/letter-shuffle-20261114/letter-a0-20261112-shuffle4-instruments-seed42-20261114-r0/evaluation/independent_original.json"
+  ],
+  "created_utc": "2026-11-14T12:22:27.210837+00:00",
+  "script_sha256": "d21d0eb6479564cd83c534a6a7dd926e48c8d50af6e72578280e94c87fc10473"
+}

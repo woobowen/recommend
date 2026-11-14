@@ -1,0 +1,65 @@
+--- /home/bwwu/lc-rec/letter-shuffle-20261114/releases/f0242b9f90ae23a4979d688a287734ca9f88cea1/lc_rec/a1_qwen3_06b/scripts/evaluate.py
++++ derived
+@@ -322,7 +322,7 @@
+     parser.add_argument("--max-seconds", type=int, default=96 * 3600,
+                         help="Evaluation stage cap; the enclosing job enforces the cumulative 96-hour cap")
+     args = parser.parse_args()
+-    if args.preflight_users_per_rank not in (0, 8) or (args.preflight_users_per_rank and args.aggregate_only):
++    if args.preflight_users_per_rank not in (0, 16) or (args.preflight_users_per_rank and args.aggregate_only):
+         raise ValueError("Only a separate fixed eight-user/rank preflight is supported")
+     output = Path(args.output).resolve()
+     output.mkdir(parents=True, exist_ok=True)
+@@ -391,7 +391,7 @@
+         sys.path.insert(0, str(source))
+         from data import SeqRecDataset
+         sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "qwen_preflight_20261110/scripts"))
+-        from common import Allowed
++        from runtime import ShuffleAllowed as Allowed
+         from utils import set_seed
+         set_seed(42)
+         torch.cuda.reset_peak_memory_stats()
+@@ -401,6 +401,7 @@
+                          "total_memory_bytes": torch.cuda.get_device_properties(local_rank).total_memory}
+         load_started = time.monotonic()
+         model, tokenizer = strict_reload(args, report, torch, local_rank, source, indices)
++        runtime.loaded(model, tokenizer, args, report)
+         torch.cuda.synchronize()
+         report["model_load_and_strict_verification_seconds"] = time.monotonic() - load_started
+         guard()
+@@ -438,15 +439,8 @@
+         report["assigned_users"] = len(assignment)
+         report["assignment_sha256"] = hashlib.sha256(json.dumps(assignment, separators=(",", ":")).encode()).hexdigest()
+         if args.preflight_users_per_rank:
+-            # Fixed raw-text envelope strata, plus the maximum Qwen-token length.
+-            # This does not alter the formal sampler/user axis.
+-            lengths = sorted(range(len(data)), key=lambda i: (len(tokenizer(data[i]["input_ids"])["input_ids"]), i))
+-            positions = [0, len(data)//4, len(data)//2, len(data)-4]
+-            assignment = [lengths[min(len(data)-1, j + rank)] for j in positions]
+-            assignment += [lengths[-1-rank], lengths[len(data)*3//4+rank], lengths[len(data)//8+rank], lengths[len(data)*7//8+rank]]
+-            assert len(set(assignment)) == 8
++            assignment = runtime.preflight_assignment(rank)
+             report["preflight_assignment"] = assignment
+-            report["full_test_max_input_tokens"] = len(tokenizer(data[lengths[-1]]["input_ids"])["input_ids"])
+         loader = DataLoader(indexed, batch_size=1, sampler=assignment, collate_fn=collate,
+                             num_workers=0, pin_memory=True)
+         write(report_path, report)
+@@ -460,8 +454,9 @@
+                 if row_indices != [assignment[iteration]]:
+                     raise AssertionError("DataLoader order differs from original sampler assignment")
+                 index = row_indices[0]
++                inputs, shuffle_record = runtime.intervene(inputs, index, data, tokenizer)
+                 input_ids = inputs["input_ids"][0].tolist()
+-                allowed.bind(input_ids, data[index]["input_ids"])
++                allowed.bind(input_ids, data[index]["input_ids"], shuffle_record)
+                 inputs = inputs.to(torch.device("cuda", local_rank))
+                 tick = time.monotonic()
+                 generated = model.generate(input_ids=inputs["input_ids"], attention_mask=inputs["attention_mask"],
+@@ -495,7 +490,7 @@
+                                        "eos_position": eos, "raw_decoded": text,
+                                        "sequence_score": score, "sid": normalized_prediction(text)})
+                 order = sorted(range(BEAMS), key=lambda i: scores[i], reverse=True)
+-                row = {**users[index], "rank": rank, "prompt_id": 0, "input_token_ids": input_ids,
++                row = {**users[index], "rank": rank, "prompt_id": 0, "input_token_ids": input_ids, "shuffle": shuffle_record,
+                        "input_nonpadding_tokens": int(inputs["attention_mask"].sum()),
+                        "candidates": candidates, "sorted_generation_order": order,
+                        "relevance": [int(candidates[i]["sid"] == targets[0]) for i in order],

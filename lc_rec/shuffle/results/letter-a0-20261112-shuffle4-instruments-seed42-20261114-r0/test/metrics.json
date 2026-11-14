@@ -1,0 +1,95 @@
+{
+  "status": "PASS",
+  "test_complete": true,
+  "actual_test_users": 24772,
+  "valid_result_users": 24772,
+  "failed_users": 0,
+  "skipped_users": 0,
+  "all_row_indices_exactly_once": true,
+  "expected_user_axis_sha256": "cece0a15214d60f24a73537700dad07e319ed592891b8c34c8d4901b57eacc13",
+  "metric_sums": {
+    "hit@5": 1601.0,
+    "hit@10": 2020.0,
+    "ndcg@5": 1231.4635416511637,
+    "ndcg@10": 1365.662844658685
+  },
+  "metrics": {
+    "hit@5": 0.0646294203132569,
+    "hit@10": 0.08154367834652027,
+    "ndcg@5": 0.0497119143246877,
+    "ndcg@10": 0.05512929293794142
+  },
+  "prediction_wall_seconds_max_rank": 8023.574166379869,
+  "anomalies": {
+    "candidate_count": 495440,
+    "legal_complete_sid_candidates": 495408,
+    "invalid_complete_sid_candidates": 32,
+    "duplicate_candidate_occurrences": 0,
+    "colliding_sid_candidate_occurrences": 2814,
+    "users_with_invalid_sid": 27,
+    "users_with_duplicate_sid": 0,
+    "users_with_colliding_sid_candidate": 2576,
+    "targets_with_colliding_sid": 122,
+    "complete_sid_legal_rate": 0.9999354109478443
+  },
+  "prediction_files": [
+    {
+      "rank": 0,
+      "path": "/data/bwwu/lc-rec/letter-shuffle-20261114/letter-a0-20261112-shuffle4-instruments-seed42-20261114-r0/test/predictions.rank0.jsonl",
+      "users": 12386,
+      "bytes": 233912996,
+      "sha256": "7cca6bbb87be051cbc1c3b9891d45d8360cff52e213288ab9762ec3aeccf5b13"
+    },
+    {
+      "rank": 1,
+      "path": "/data/bwwu/lc-rec/letter-shuffle-20261114/letter-a0-20261112-shuffle4-instruments-seed42-20261114-r0/test/predictions.rank1.jsonl",
+      "users": 12386,
+      "bytes": 233104661,
+      "sha256": "d7d2439831bfb92617d13602c5e61695e1b88bb53e77a2eeaa9002b1671e8871"
+    }
+  ],
+  "independent_standard_library_recomputation_matches_original_evaluator": true,
+  "evaluator_policy": {
+    "parsing": "split('Response:')[-1].strip().replace(' ', '')",
+    "sorting": "stable descending original sequences_scores",
+    "filter_items": false,
+    "deduplicate_candidates": false,
+    "collisions": "exact complete SID string match; original item identities are not disambiguated",
+    "ndcg": "sum all matching candidate discounts, including repeated matches, as original evaluator",
+    "hit": "at least one target SID in first k; one held-out item per user (HR/Recall terminology)"
+  },
+  "RUN_COMMIT": "f0242b9f90ae23a4979d688a287734ca9f88cea1",
+  "adapter_path": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/best_adapter",
+  "adapter_model_sha256": "f4651c5c6e6ed841cd3384c0c8ebfab30880e94597e515ffa21916b876001ed5",
+  "data_identity": {
+    "index": {
+      "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.index.json",
+      "bytes": 518041,
+      "sha256": "33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd"
+    },
+    "inter": {
+      "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.inter.json",
+      "bytes": 3312848,
+      "sha256": "0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743"
+    },
+    "item": {
+      "path": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data/Instruments/Instruments.item.json",
+      "bytes": 7526890,
+      "sha256": "1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2"
+    }
+  },
+  "generation": {
+    "prompt_id": 0,
+    "num_beams": 20,
+    "num_return_sequences": 20,
+    "max_new_tokens": 10,
+    "early_stopping": true,
+    "filter_items": false,
+    "prefix": "fixed original per-position callback; no catalog Trie",
+    "per_rank_batch_size": 1,
+    "oom_beam_reduction": false,
+    "base_dtype": "BF16, unquantized original author LoRA inference branch",
+    "sampler": "original DistributedSampler shuffle=True, seed=0, epoch=0, drop_last=True"
+  },
+  "original_evaluator_sha256": "6bcbf22965b59edebe2b37ff57c374cb6d3127d9c6254e0eba2b873459c6b357"
+}
