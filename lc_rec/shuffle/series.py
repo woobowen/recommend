@@ -23,7 +23,12 @@ def main():
         result['wall_seconds']=time.monotonic()-started
         tmp=out/'summary.partial';tmp.write_text(json.dumps(result,indent=2)+'\n');tmp.replace(out/'summary.json')
     try:
-        for request in plan['jobs']:
+        for index,request in enumerate(plan['jobs']):
+            args=request['argv'];model,n=plan['order'][index]
+            assert args[args.index('--model-key')+1]==model and int(args[args.index('--shuffle-n')+1])==n
+            if index:
+                assert args[args.index('--previous-job')+1]==plan['jobs'][index-1]['job_id']
+            else:assert '--previous-job' not in args
             assert time.monotonic()-started<64800
             root=Path(plan['job_root']);job=root/request['job_id']
             request_path=Path(plan['requests_root'])/(request['job_id']+'.json')
@@ -37,13 +42,14 @@ def main():
             stage={'job_id':request['job_id'],'acceptance':reply,'status':reply['status']}
             result['stages'].append(stage);save()
             while True:
-                status=json.loads((job/'status.json').read_text())
+                status=json.loads(subprocess.check_output(['/usr/bin/python3','-I','-S','-B',str(runner),
+                    'query',str(job)],env=environment,text=True,timeout=45))
                 stage['status']=status['status'];save()
-                if status['status'] in ['SUCCEEDED','FAILED','TIMED_OUT','INTERRUPTED','WORKERS_TERMINATED','CLEANUP_UNCONFIRMED']:
+                if status['status'] not in ['ACCEPTED','RUNNING']:
                     break
                 assert time.monotonic()-started<64800,'Series18h hard wall reserve'
                 time.sleep(30)
-            assert status['status']=='SUCCEEDED' and status['exit_code']==0 and status['cleanup']['verified'],request['job_id']
+            assert status['status']=='SUCCEEDED' and status['exit_code']==0 and status['cleanup_verified'] and not status['worker_alive'] and not status['workgroup_live'],request['job_id']
             output=request['argv'][request['argv'].index('--output')+1]
             summary=json.loads((Path(output)/'summary.json').read_text())
             assert summary['status']=='PASS'

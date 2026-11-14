@@ -21,6 +21,7 @@ def sha(path):
 def main():
     p=argparse.ArgumentParser()
     for n in ['model-key','test-dir','output','run-commit']:p.add_argument('--'+n,required=True)
+    p.add_argument('--cpu-audit');p.add_argument('--shuffle-n',type=int,choices=[0,3,4],default=0)
     a=p.parse_args();assert os.environ.get('CUDA_VISIBLE_DEVICES')==''
     root=Path(__file__).resolve().parent;lc=root.parent;out=Path(a.output);out.mkdir(exist_ok=False)
     evaluation_commit=json.loads((lc.parent/'RUN_VERSION.json').read_text())['RUN_COMMIT']
@@ -44,6 +45,17 @@ def main():
               'model_key':a.model_key,'status':'FROZEN_INPUTS','gpu_run_commit':a.run_commit,
               'test_dir':str(test.resolve()),'predictions':predictions}
     (out/'prediction_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    if a.shuffle_n:
+        assert a.cpu_audit
+        data=Path(base['data-root'])/'Instruments';normal=Path(base['normal_test_dir'])
+        run('independent_inputs',[sys.executable,str(root/'review/independent_inputs.py'),
+            '--index',str(data/'Instruments.index.json'),'--inter',str(data/'Instruments.inter.json'),
+            '--audit',a.cpu_audit,'--row-key','row_idx','--target-key','target','--axis-key','user_axis_sha256',
+            '--uid-key','user_id','--normal',str(normal/'predictions.rank0.jsonl'),str(normal/'predictions.rank1.jsonl'),
+            '--shuffle',str(test/'predictions.rank0.jsonl'),str(test/'predictions.rank1.jsonl'),'--n',str(a.shuffle_n)])
+        raw=(out/'independent_inputs.log').read_text()
+        assert json.loads(raw)['status']=='PASS_INDEPENDENT_INPUT_REPLAY'
+        (out/'independent_inputs.json').write_text(raw)
     original=lc/'letter/review/formal_det_20261112/independent_metrics.py'
     run('independent_original',[sys.executable,str(original),'--data-root',base['data-root'],
                               '--test-dir',str(test),'--output',str(out/'independent_original.json')])
@@ -69,6 +81,15 @@ def main():
     main=json.loads((out/'primary/metrics.json').read_text());ind=json.loads((out/'independent_extended.json').read_text())
     assert set(main['metrics'])==set(ind['metrics']) and len(main['metrics'])==16
     assert max(abs(main['metrics'][k]-ind['metrics'][k]) for k in main['metrics'])<=1e-13
+    mapping={'candidates':'candidates','valid':'valid','invalid':'invalid',
+             'duplicates':'duplicate_occurrences','colliding':'collision_candidates',
+             'users_invalid':'users_with_invalid','users_duplicate':'users_with_duplicate',
+             'users_colliding':'users_with_collision','unique_valid_sids':'unique_valid_sids',
+             'unique_valid_sid_coverage':'unique_valid_sid_coverage'}
+    for k in ['5','10','20']:
+        for left,right in mapping.items():assert main['sid_statistics'][k][left]==ind['sid_diagnostics'][k][right]
+    for rank in range(1,21):assert main['first_target_rank_users'][str(rank)]==ind['first_target_rank_counts'][str(rank)]
+    assert main['first_target_rank_users']['miss']==ind['first_target_rank_counts']['not_in_top20']
     run('independent_statistics',[sys.executable,str(lc/'letter/review/final_audit_20261113/statistics_verify.py'),
         '--data-root',str(Path(base['data-root'])/'Instruments'),'--per-user',str(out/'primary/per_user.csv'),
         '--primary-bootstrap',str(out/'primary/bootstrap.json'),'--primary-draws',str(out/'primary/bootstrap_draw_means.npy'),
@@ -80,6 +101,7 @@ def main():
         '--shuffle-test',str(test),'--output',str(out/'paired')])
     assert json.loads((out/'independent_statistics.json').read_text())['status']=='PASS'
     result={'status':'PASS','INPUT_PREDICTION_RUN_COMMIT':a.run_commit,'EVALUATION_RUN_COMMIT':evaluation_commit,
+            'shuffle_n':a.shuffle_n,'normal_prediction_CPU_regression_fixture':a.shuffle_n==0,
             'model_key':a.model_key,'GPU_used':False,'wall_seconds':time.monotonic()-tick,'stages':records}
     (out/'summary.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
 

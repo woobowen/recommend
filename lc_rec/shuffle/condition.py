@@ -26,6 +26,11 @@ def main():
     gate=json.loads(Path(a.prelaunch_gate).read_text())
     assert gate['status']=='PASS' and gate['SHUFFLE_RUN_COMMIT']==a.run_commit
     assert gate['A1_NORMAL_REVIEW']=='PASS'
+    receipt=Path(gate['preflight_receipt']['path'])
+    assert hashlib.sha256(receipt.read_bytes()).hexdigest()==gate['preflight_receipt']['sha256']
+    assert json.loads(receipt.read_text())['status']=='PASS'
+    preflight_status=json.loads((Path('/home/bwwu/grid-audits/sid-extensions-p0/jobs')/gate['preflight_job_id']/'status.json').read_text())
+    assert preflight_status['status']=='SUCCEEDED' and preflight_status['cleanup']['verified']
     for name,expected in gate['core_source_sha256'].items():
         assert hashlib.sha256((root/name).read_bytes()).hexdigest()==expected
     for model,expected in gate['cpu_audit_sha256'].items():
@@ -82,9 +87,15 @@ def main():
             gpu_idle()
             reports=[json.loads((out/'test'/('rank%d.json'%rank)).read_text()) for rank in [0,1]]
             assert all(x['status']=='PASS' and x['completed_users']==12386 for x in reports)
+            files=[root/'entry.py',root/'runtime.py',root/'core.py',root/'config.json']
+            for rank in [0,1]:files += [out/'test'/('derived.rank%d.py'%rank),out/'test'/('derived.rank%d.diff'%rank)]
+            atomic(out/'execution_sources.json',{'RUN_COMMIT':a.run_commit,
+                'rank_entry_sha256_field_means':'frozen original entry; actual derived execution is separately hashed here',
+                'files':[{'path':str(p),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in files]})
             cpu_python=cfg['baselines']['a1']['python'];env=dict(os.environ,CUDA_VISIBLE_DEVICES='')
             argv=[cpu_python,str(root/'evaluate_condition.py'),'--model-key',a.model_key,'--test-dir',str(out/'test'),
-                  '--output',str(out/'evaluation'),'--run-commit',a.run_commit]
+                  '--output',str(out/'evaluation'),'--run-commit',a.run_commit,'--shuffle-n',a.shuffle_n,
+                  '--cpu-audit',str(Path(a.cpu_root)/a.model_key/'audit.json')]
             tick=time.monotonic()
             with (out/'evaluation.log').open('x') as log:
                 r=subprocess.run(argv,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=1700)
