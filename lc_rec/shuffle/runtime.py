@@ -26,6 +26,7 @@ def preflight_assignment(rank):
 def intervene(inputs, index, data, tokenizer):
     global CONTEXT
     import torch
+    original_ids_tensor = inputs['input_ids']
     ids = inputs['input_ids'][0].tolist()
     mask = inputs['attention_mask'][0].tolist()
     uid = list(data.inters)[index]
@@ -41,7 +42,9 @@ def intervene(inputs, index, data, tokenizer):
               'evidence': evidence, 'cpu_manifest_sha256': CPU['manifest']['sha256']}
     inputs['input_ids'] = torch.tensor([new], dtype=inputs['input_ids'].dtype,
                                      device=inputs['input_ids'].device)
-    CONTEXT = dict(record=record, groups=groups, target=target, text=data[index]['input_ids'])
+    CONTEXT = dict(record=record, groups=groups, target=target, text=data[index]['input_ids'],
+                   original_ids_tensor=original_ids_tensor,
+                   original_mask_tensor=inputs['attention_mask'])
     return inputs, record
 
 
@@ -87,12 +90,29 @@ def loaded(model, tokenizer, args, report):
 
 
 def install_acceptance(model, tok, args, report):
+    import ast
+    from types import SimpleNamespace
     import torch
     import time
     import os
     rank = int(os.environ['RANK'])
     out = Path(args.output)
     generate = model.generate
+    parameter_versions = {name: (id(p), p.data_ptr(), p._version) for name, p in model.named_parameters()}
+    from entry import FROZEN
+    original_entry = Path(__file__).resolve().parents[1]/FROZEN[OPTIONS.model_key][0]
+    source = original_entry.read_text()
+    assert hashlib.sha256(source.encode()).hexdigest() == FROZEN[OPTIONS.model_key][1]
+    calls = [node for node in ast.walk(ast.parse(source)) if isinstance(node, ast.Call)
+             and isinstance(node.func, ast.Attribute) and isinstance(node.func.value, ast.Name)
+             and node.func.value.id == 'model' and node.func.attr == 'generate']
+    assert len(calls) == 1
+    expression = ast.Expression(body=calls[0]);ast.fix_missing_locations(expression)
+    reference_call = compile(expression, str(original_entry), 'eval')
+    report['unmodified_reference_generation_expression'] = {
+        'source': str(original_entry), 'source_sha256': FROZEN[OPTIONS.model_key][1],
+        'expression': ast.get_source_segment(source, calls[0]),
+        'harness_scope': 'Exact frozen generate expression, original collate tensors and native callback; shared strictly loaded model. Not a separate full CLI run.'}
     historical = {}
     root = CPU['normal_test_dir']
     wanted = set(preflight_assignment(rank))
@@ -125,12 +145,21 @@ def install_acceptance(model, tok, args, report):
         receipt = {'row_idx': row_idx, 'conditions': {}, 'cache_position': []}
         generated_by_condition = {}
         for label, n in [('original', 0), ('OFF', 0), ('S3', 3), ('S4', 4)]:
-            ids, ev = transform(raw, mask, ctx['groups'], set(CPU['token_ids'].values()), n, row_idx)
-            new = torch.tensor([ids], dtype=kwargs['input_ids'].dtype, device=kwargs['input_ids'].device)
             callback = kwargs['prefix_allowed_tokens_fn']
-            if isinstance(callback, ShuffleAllowed):
-                record = dict(ctx['record'], n=n)
-                callback.bind(ids, ctx['text'], record)
+            if label == 'original':
+                # Bypass transform, tensor reconstruction and ShuffleAllowed.
+                ids, ev = raw, {'path': 'original collate tensors, no intervention'}
+                new = ctx['original_ids_tensor'].to(kwargs['input_ids'].device)
+                original_mask = ctx['original_mask_tensor'].to(kwargs['attention_mask'].device)
+                if isinstance(callback, ShuffleAllowed):
+                    callback = callback.original
+                    callback.bind(ids, ctx['text'])
+            else:
+                ids, ev = transform(raw, mask, ctx['groups'], set(CPU['token_ids'].values()), n, row_idx)
+                new = torch.tensor([ids], dtype=kwargs['input_ids'].dtype, device=kwargs['input_ids'].device)
+                if isinstance(callback, ShuffleAllowed):
+                    record = dict(ctx['record'], n=n)
+                    callback.bind(ids, ctx['text'], record)
             # Verify the actual active lookup layer, before RoPE/attention.
             with torch.no_grad():
                 emb = model.get_input_embeddings()
@@ -142,6 +171,7 @@ def install_acceptance(model, tok, args, report):
                     # Use the ID identity within this four-token group; layers
                     # are distinct registered symbols even when numbers match.
                     old = raw[start:start+4]
+                    assert len(set(old)) == 4
                     mapping = [old.index(token) for token in ids[start:start+4]]
                     assert torch.equal(lookup[:, start:start+4], original_emb[:, start:start+4][:, mapping])
                 outside = [i for i in range(len(raw)) if i not in sid_positions]
@@ -169,7 +199,12 @@ def install_acceptance(model, tok, args, report):
             handle = model.get_base_model().model.register_forward_pre_hook(before_forward, with_kwargs=True)
             try:
                 tick = time.monotonic()
-                generated = generate(**dict(kwargs, input_ids=new))
+                if label == 'original':
+                    generated = eval(reference_call, {'model': SimpleNamespace(generate=generate),
+                        'inputs': {'input_ids': new, 'attention_mask': original_mask},
+                        'allowed': callback, 'BEAMS': 20, 'tokenizer': tok})
+                else:
+                    generated = generate(**dict(kwargs, input_ids=new))
                 torch.cuda.synchronize()
             finally:
                 handle.remove()
@@ -184,6 +219,7 @@ def install_acceptance(model, tok, args, report):
             generated_by_condition[label] = (suffixes, scores)
             receipt['conditions'][label] = {'input_ids': ids, 'evidence': ev,
                 'sequences': suffixes, 'scores': scores.tolist(), 'lookup_equivalence_exact': True,
+                'embedding_sha256': hashlib.sha256(lookup.contiguous().view(torch.uint8).cpu().numpy().tobytes()).hexdigest(),
                 'prefill': calls[0], 'generation_seconds': time.monotonic()-tick}
             if label == 'OFF':
                 returned = generated
@@ -191,6 +227,8 @@ def install_acceptance(model, tok, args, report):
                 del generated
         assert generated_by_condition['original'][0] == generated_by_condition['OFF'][0]
         assert torch.equal(generated_by_condition['original'][1], generated_by_condition['OFF'][1])
+        assert receipt['conditions']['original']['embedding_sha256'] == receipt['conditions']['OFF']['embedding_sha256']
+        assert {name: (id(p), p.data_ptr(), p._version) for name, p in model.named_parameters()} == parameter_versions
         old = historical[row_idx]
         assert old['input_token_ids'] == raw
         expected_suffixes = [c['generated_token_ids'] for c in old['candidates']]
