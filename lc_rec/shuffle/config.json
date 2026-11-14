@@ -1,0 +1,60 @@
+{
+  "protocol": "GRID-LETTER-SHUFFLE-V1",
+  "shuffle_seed": 42,
+  "conditions": [
+    [
+      "a0",
+      3
+    ],
+    [
+      "a0",
+      4
+    ],
+    [
+      "a1",
+      3
+    ],
+    [
+      "a1",
+      4
+    ]
+  ],
+  "budget": {
+    "preflight_device_seconds": 3600,
+    "formal_wall_seconds": 64800,
+    "a0_condition_seconds": 14400,
+    "a1_condition_seconds": 10800
+  },
+  "baselines": {
+    "a0": {
+      "source-root": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+      "data-root": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data",
+      "model": "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+      "adapter": "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/best_adapter",
+      "output": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0/test",
+      "run-commit": "4c6a83d9ba42dc2fe737792759e410ef1874da76",
+      "python": "/data/bwwu/envs/letter-20261110/bin/python",
+      "entry": "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/scripts/formal_evaluate.py",
+      "adapter_identity": {
+        "bytes": 579461138,
+        "sha256": "f4651c5c6e6ed841cd3384c0c8ebfab30880e94597e515ffa21916b876001ed5"
+      },
+      "normal_test_dir": "/data/bwwu/lc-rec/a0-normal-20261111/letter-a0-20261112-normal-det-seed42-r0/test"
+    },
+    "a1": {
+      "source-root": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+      "data-root": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER/data",
+      "model": "/data/bwwu/lc-rec/qwen-preflight-20261110/models/Qwen3-0.6B-Base/da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+      "adapter": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/best_adapter",
+      "output": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test",
+      "run-commit": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+      "python": "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+      "entry": "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/a1_qwen3_06b/scripts/evaluate.py",
+      "adapter_identity": {
+        "bytes": 635225010,
+        "sha256": "fe96ea74fc3c7253b0c3687239266b0f073e1a51ef9158e7d97bf30b4527bd03"
+      },
+      "normal_test_dir": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test"
+    }
+  }
+}
