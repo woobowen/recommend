@@ -1,0 +1,146 @@
+{
+  "status": "PASS",
+  "gpu_used": false,
+  "GPU_RUN_COMMIT": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+  "EVALUATION_RUN_COMMIT": "445f1475cd1dd70d19881dbc1639bb311f7cccf7",
+  "job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+  "stages": [
+    {
+      "stage": "independent_original",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/445f1475cd1dd70d19881dbc1639bb311f7cccf7/lc_rec/letter/review/formal_det_20261112/independent_metrics.py",
+        "--data-root",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER/data",
+        "--test-dir",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test",
+        "--output",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/independent_original.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.637085370719433
+    },
+    {
+      "stage": "primary",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/445f1475cd1dd70d19881dbc1639bb311f7cccf7/lc_rec/a1_qwen3_06b/scripts/offline_metrics.py",
+        "--data-root",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER/data",
+        "--test-dir",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test",
+        "--stage-a-report",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/independent_original.json",
+        "--config",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/a1_evaluation_v1.json",
+        "--official-cce",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/445f1475cd1dd70d19881dbc1639bb311f7cccf7/lc_rec/letter/review/final_audit_20261113/external/official_cce.py",
+        "--output",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/primary",
+        "--evaluation-commit",
+        "445f1475cd1dd70d19881dbc1639bb311f7cccf7",
+        "--manifest",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/prediction_manifest.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 16.82426251284778
+    },
+    {
+      "stage": "independent_extended",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/445f1475cd1dd70d19881dbc1639bb311f7cccf7/lc_rec/a1_qwen3_06b/review/independent_extended.py",
+        "--data-root",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER/data",
+        "--test-dir",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test",
+        "--stage-a-report",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/independent_original.json",
+        "--output",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/independent_extended.json",
+        "--official-cce",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/445f1475cd1dd70d19881dbc1639bb311f7cccf7/lc_rec/letter/review/final_audit_20261113/external/official_cce.py",
+        "--official-sha256",
+        "173c257a8711a885e8f6d5abcdb0ad2510ad4fab01c1700631b5ec261f50cd2d",
+        "--per-user",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/primary/per_user.csv",
+        "--manifest",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/prediction_manifest.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.242685550823808
+    },
+    {
+      "stage": "independent_statistics",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/445f1475cd1dd70d19881dbc1639bb311f7cccf7/lc_rec/letter/review/final_audit_20261113/statistics_verify.py",
+        "--data-root",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER/data/Instruments",
+        "--per-user",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/primary/per_user.csv",
+        "--primary-bootstrap",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/primary/bootstrap.json",
+        "--primary-draws",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/primary/bootstrap_draw_means.npy",
+        "--self-test",
+        "--output",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/independent_statistics.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 14.212706891819835
+    },
+    {
+      "stage": "paired",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/445f1475cd1dd70d19881dbc1639bb311f7cccf7/lc_rec/a1_qwen3_06b/scripts/paired.py",
+        "--a1",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/primary",
+        "--output",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/paired"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.303559890948236
+    },
+    {
+      "stage": "independent_paired",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/445f1475cd1dd70d19881dbc1639bb311f7cccf7/lc_rec/a1_qwen3_06b/review/paired_verify.py",
+        "--a0",
+        "/data/bwwu/lc-rec/a0-final-audit-20261113/letter-a0-20261112-final-audit-20261113-offline-r1/primary",
+        "--a1",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/primary",
+        "--paired",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/paired",
+        "--output",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/independent_paired.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 14.062025882303715
+    }
+  ],
+  "all_16_mean_deltas": {
+    "hit@1": 0.0,
+    "hit@5": 0.0,
+    "hit@10": 0.0,
+    "hit@20": 0.0,
+    "ndcg@5": 0.0,
+    "ndcg@10": 0.0,
+    "ndcg@20": 0.0,
+    "mrr@5": 0.0,
+    "mrr@10": 0.0,
+    "mrr@20": 0.0,
+    "ItemHit@5": 0.0,
+    "ItemHit@10": 0.0,
+    "ItemHit@20": 0.0,
+    "ItemNDCG@5": 0.0,
+    "ItemNDCG@10": 0.0,
+    "ItemNDCG@20": 0.0
+  },
+  "original_metadata_unchanged": true,
+  "manifest_sha256": "038107db291d363d5a5ba3324c694454f444d90b1059a6368d27f4508fd86a06",
+  "elapsed_seconds": 70.2911100173369,
+  "finished_utc": "2026-11-14T02:50:46.281050+00:00"
+}

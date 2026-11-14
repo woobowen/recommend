@@ -1,0 +1,742 @@
+{
+  "A1_STATUS": "COMPLETE_PENDING_AUDIT",
+  "actual_phase": "SUCCEEDED",
+  "initial_observation_utc": "2026-11-14T03:40:33.569108+00:00",
+  "crosscheck_started_utc": "2026-11-14T03:42:24.660385+00:00",
+  "query_finished_utc": "2026-11-14T03:42:25.029179+00:00",
+  "job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+  "GPU_RUN_COMMIT": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+  "CPU_EVALUATION_RUN_COMMIT": "445f1475cd1dd70d19881dbc1639bb311f7cccf7",
+  "runner": {
+    "status": "SUCCEEDED",
+    "exit_code": 0,
+    "supervisor_alive": false,
+    "worker_alive": false,
+    "workgroup_live": false,
+    "cleanup_verified": true,
+    "cleanup_reason": "NORMAL_EXIT_CHECK",
+    "owned_live": [],
+    "scan_errors": []
+  },
+  "training": {
+    "step": 8240,
+    "total_steps": 8240,
+    "epoch": 4.0,
+    "total_epochs": 4,
+    "percentage": 100.0,
+    "both_ranks_complete": true,
+    "last_train_log": {
+      "event": "log",
+      "utc": "2026-11-14T01:04:26.334800+00:00",
+      "elapsed_seconds": 47239.329161814414,
+      "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+      "step": 8240,
+      "epoch": 4.0,
+      "values": {
+        "loss": 1.507,
+        "grad_norm": 3.239900827407837,
+        "learning_rate": 7.416667680004708e-12,
+        "epoch": 4.0
+      }
+    },
+    "reported_whole_training_mean_loss": 1.8943513990605918,
+    "recent_seconds_per_update_before_final_validation": 4.843836969402619,
+    "current_progress_growth": "N/A_TERMINAL_SUCCESS"
+  },
+  "validation": [
+    {
+      "epoch": 1.0,
+      "step": 2060,
+      "validation_loss": 1.9656445980072021,
+      "records": 49544,
+      "completed_utc": "2026-11-13T15:28:30.691569+00:00",
+      "seconds": 1836.8855583732948,
+      "status": "COMPLETE"
+    },
+    {
+      "epoch": 2.0,
+      "step": 4120,
+      "validation_loss": 1.6748563051223755,
+      "records": 49544,
+      "completed_utc": "2026-11-13T18:50:33.330885+00:00",
+      "seconds": 1799.442320764996,
+      "status": "COMPLETE"
+    },
+    {
+      "epoch": 3.0,
+      "step": 6180,
+      "validation_loss": 1.5704634189605713,
+      "records": 49544,
+      "completed_utc": "2026-11-13T22:11:27.762088+00:00",
+      "seconds": 1817.761363942176,
+      "status": "COMPLETE"
+    },
+    {
+      "epoch": 4.0,
+      "step": 8240,
+      "validation_loss": 1.5451041460037231,
+      "records": 49544,
+      "completed_utc": "2026-11-14T01:34:06.275884+00:00",
+      "seconds": 1779.9409062583,
+      "status": "COMPLETE"
+    }
+  ],
+  "best_selection": {
+    "run_commit": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+    "checkpoint": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-8240",
+    "metric": "eval_loss",
+    "greater_is_better": false,
+    "value": 1.5451041460037231,
+    "completed_training_step": 8240,
+    "loaded_best_checkpoint_step": 8240,
+    "adapter_sha256": "fe96ea74fc3c7253b0c3687239266b0f073e1a51ef9158e7d97bf30b4527bd03",
+    "adapter_bytes": 635225010,
+    "adapter_keys": 394,
+    "sharing": {
+      "same_parameter_object": true,
+      "same_storage": true,
+      "input_shape": [
+        152587,
+        1024
+      ],
+      "output_shape": [
+        152587,
+        1024
+      ],
+      "input_dtype": "torch.bfloat16",
+      "output_dtype": "torch.bfloat16",
+      "input_requires_grad": true,
+      "output_requires_grad": true
+    }
+  },
+  "best_restore_evidence": "Both existing rank event files contain strict_ds_restored at CP8240 before training_complete; test adapter SHA matches saved best selection",
+  "checkpoints": [
+    {
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-6180",
+      "status": "PASS_SEAL_CONTRACT",
+      "global_step": 6180,
+      "members": 23,
+      "logical_bytes": 4418024267,
+      "small_sha_checked": 18,
+      "large_content_rehashed": false
+    },
+    {
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-8240",
+      "status": "PASS_SEAL_CONTRACT",
+      "global_step": 8240,
+      "members": 23,
+      "logical_bytes": 4418060301,
+      "small_sha_checked": 18,
+      "large_content_rehashed": false
+    }
+  ],
+  "checkpoint_history": [
+    {
+      "event": "checkpoint_complete",
+      "utc": "2026-11-13T15:28:37.284622+00:00",
+      "elapsed_seconds": 12690.278986743651,
+      "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+      "step": 2060,
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-2060",
+      "best": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-2060",
+      "best_metric": 1.9656445980072021,
+      "seconds": 6.592882028780878
+    },
+    {
+      "event": "checkpoint_complete",
+      "utc": "2026-11-13T18:50:40.103592+00:00",
+      "elapsed_seconds": 24813.09795525577,
+      "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+      "step": 4120,
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-4120",
+      "best": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-4120",
+      "best_metric": 1.6748563051223755,
+      "seconds": 6.772581773810089
+    },
+    {
+      "event": "checkpoint_complete",
+      "utc": "2026-11-13T22:11:34.766455+00:00",
+      "elapsed_seconds": 36867.76082075946,
+      "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+      "step": 6180,
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-6180",
+      "best": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-6180",
+      "best_metric": 1.5704634189605713,
+      "seconds": 7.004210100509226
+    },
+    {
+      "event": "checkpoint_complete",
+      "utc": "2026-11-14T01:34:12.941864+00:00",
+      "elapsed_seconds": 49025.93622921873,
+      "attempt_job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+      "step": 8240,
+      "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-8240",
+      "best": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-8240",
+      "best_metric": 1.5451041460037231,
+      "seconds": 6.665835062973201
+    }
+  ],
+  "latest_recoverable_checkpoint": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/formal_seed42/training/checkpoint-8240",
+  "checkpoint_rotation": "Four checkpoint_complete events; only CP6180 and CP8240 retained, consistent with limit2; no anomaly observed",
+  "test": {
+    "status": "PASS",
+    "complete": true,
+    "users": 24772,
+    "expected_users": 24772,
+    "percentage": 100.0,
+    "rank_completed": {
+      "0": 12386,
+      "1": 12386
+    },
+    "candidates": 495440,
+    "candidates_per_user": 20,
+    "failed_users": 0,
+    "skipped_users": 0,
+    "all_row_indices_exactly_once": true,
+    "adapter_sha256": "fe96ea74fc3c7253b0c3687239266b0f073e1a51ef9158e7d97bf30b4527bd03",
+    "prediction_files": [
+      {
+        "rank": 0,
+        "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test/predictions.rank0.jsonl",
+        "users": 12386,
+        "bytes": 184629790,
+        "sha256": "790506cf834bca27f4bb01d35d7d4048d494872f74ff4d9a8bcdac516c475b4d"
+      },
+      {
+        "rank": 1,
+        "path": "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test/predictions.rank1.jsonl",
+        "users": 12386,
+        "bytes": 184130524,
+        "sha256": "028a74dbab9ba2afaa018994b1518c465d20d58ce05218720634e5c42a4a2a45"
+      }
+    ],
+    "predictions_rehashed_by_this_check": false
+  },
+  "original_metrics": {
+    "hit@5": 0.08719522041014048,
+    "hit@10": 0.10693524947521395,
+    "ndcg@5": 0.07437704664550565,
+    "ndcg@10": 0.08068596214524136
+  },
+  "extended_metrics": {
+    "hit@1": 0.061359599547876634,
+    "hit@5": 0.08719522041014048,
+    "hit@10": 0.10693524947521395,
+    "hit@20": 0.1309139350880026,
+    "ndcg@5": 0.07437704664550523,
+    "ndcg@10": 0.08068596214524096,
+    "ndcg@20": 0.08679036194181051,
+    "mrr@5": 0.0701800419828839,
+    "mrr@10": 0.07274082489446611,
+    "mrr@20": 0.07443719688270331,
+    "ItemHit@5": 0.08671080251897303,
+    "ItemHit@10": 0.10643737553151407,
+    "ItemHit@20": 0.13067172614241887,
+    "ItemNDCG@5": 0.07355197141394668,
+    "ItemNDCG@10": 0.07986342061774329,
+    "ItemNDCG@20": 0.08602703961104441
+  },
+  "SID_diagnostics": {
+    "5": {
+      "candidates": 123860,
+      "valid": 123848,
+      "invalid": 12,
+      "duplicates": 0,
+      "colliding": 2245,
+      "users_invalid": 12,
+      "users_duplicate": 0,
+      "users_colliding": 2051,
+      "valid_rate": 0.9999031164217665,
+      "invalid_rate": 9.688357823348942e-05,
+      "duplicate_rate": 0.0,
+      "collision_candidate_rate": 0.018125302761181978,
+      "users_invalid_rate": 0.00048441789116744714,
+      "users_duplicate_rate": 0.0,
+      "users_colliding_rate": 0.08279509123203617,
+      "unique_valid_sids": 1817,
+      "coverage_denominator": 9897,
+      "unique_valid_sid_coverage": 0.18359098716782862
+    },
+    "10": {
+      "candidates": 247720,
+      "valid": 247687,
+      "invalid": 33,
+      "duplicates": 0,
+      "colliding": 3284,
+      "users_invalid": 33,
+      "users_duplicate": 0,
+      "users_colliding": 2912,
+      "valid_rate": 0.999866785079929,
+      "invalid_rate": 0.00013321492007104796,
+      "duplicate_rate": 0.0,
+      "collision_candidate_rate": 0.013256902954949136,
+      "users_invalid_rate": 0.0013321492007104796,
+      "users_duplicate_rate": 0.0,
+      "users_colliding_rate": 0.1175520749233005,
+      "unique_valid_sids": 2533,
+      "coverage_denominator": 9897,
+      "unique_valid_sid_coverage": 0.25593614226533296
+    },
+    "20": {
+      "candidates": 495440,
+      "valid": 495201,
+      "invalid": 239,
+      "duplicates": 0,
+      "colliding": 3745,
+      "users_invalid": 205,
+      "users_duplicate": 0,
+      "users_colliding": 3177,
+      "valid_rate": 0.9995176005167125,
+      "invalid_rate": 0.00048239948328758275,
+      "duplicate_rate": 0.0,
+      "collision_candidate_rate": 0.00755893751009204,
+      "users_invalid_rate": 0.008275472307443889,
+      "users_duplicate_rate": 0.0,
+      "users_colliding_rate": 0.12824963668658163,
+      "unique_valid_sids": 3375,
+      "coverage_denominator": 9897,
+      "unique_valid_sid_coverage": 0.3410124280084874
+    }
+  },
+  "first_target_rank_users": {
+    "1": 1520,
+    "2": 201,
+    "3": 174,
+    "4": 140,
+    "5": 125,
+    "6": 105,
+    "7": 100,
+    "8": 86,
+    "9": 99,
+    "10": 99,
+    "11": 94,
+    "12": 63,
+    "13": 79,
+    "14": 67,
+    "15": 73,
+    "16": 59,
+    "17": 63,
+    "18": 42,
+    "19": 27,
+    "20": 27,
+    "miss": 21529
+  },
+  "collision_catalog": {
+    "items": 9922,
+    "unique_sids": 9897,
+    "groups": 23,
+    "affected_items": 48,
+    "maximum_group_size": 3,
+    "group_size_distribution": {
+      "2": 21,
+      "3": 2
+    },
+    "target_collision_users": 122
+  },
+  "generation_cost": {
+    "definition": "per-user synchronized model.generate seconds; excludes loading/CPU serialization",
+    "p50_seconds": 0.3529871003702283,
+    "p95_seconds": 0.357066538836807,
+    "mean_seconds": 0.3527980705526315,
+    "sum_user_seconds": 8739.513803729787,
+    "sum_user_seconds_is_not_end_to_end_wall": true
+  },
+  "bootstrap": {
+    "repetitions": 5000,
+    "seed": 20261113,
+    "rng": "numpy Generator PCG64",
+    "intervals": {
+      "hit@1": {
+        "estimate": 0.061359599547876634,
+        "low": 0.05829061036654287,
+        "high": 0.0643064750524786
+      },
+      "hit@5": {
+        "estimate": 0.08719522041014048,
+        "low": 0.08360144518004198,
+        "high": 0.09074761827870176
+      },
+      "hit@10": {
+        "estimate": 0.10693524947521395,
+        "low": 0.10293880187308252,
+        "high": 0.11073086549329887
+      },
+      "hit@20": {
+        "estimate": 0.1309139350880026,
+        "low": 0.12659454222509284,
+        "high": 0.13507185532052318
+      },
+      "ndcg@5": {
+        "estimate": 0.07437704664550523,
+        "low": 0.07116282967745786,
+        "high": 0.07746343499869461
+      },
+      "ndcg@10": {
+        "estimate": 0.08068596214524096,
+        "low": 0.07744940817589058,
+        "high": 0.08378564287808486
+      },
+      "ndcg@20": {
+        "estimate": 0.08679036194181051,
+        "low": 0.0835363476041983,
+        "high": 0.0899301312259703
+      },
+      "mrr@5": {
+        "estimate": 0.0701800419828839,
+        "low": 0.06703521112546429,
+        "high": 0.07321774584207975
+      },
+      "mrr@10": {
+        "estimate": 0.07274082489446611,
+        "low": 0.06958092926537622,
+        "high": 0.0757726140977138
+      },
+      "mrr@20": {
+        "estimate": 0.07443719688270331,
+        "low": 0.07128670340295067,
+        "high": 0.07745348642992651
+      },
+      "ItemHit@5": {
+        "estimate": 0.08671080251897303,
+        "low": 0.08311803649281446,
+        "high": 0.09026320038753431
+      },
+      "ItemHit@10": {
+        "estimate": 0.10643737553151407,
+        "low": 0.10250820819204479,
+        "high": 0.11023198234565908
+      },
+      "ItemHit@20": {
+        "estimate": 0.13067172614241887,
+        "low": 0.1263927014371064,
+        "high": 0.13482964637493944
+      },
+      "ItemNDCG@5": {
+        "estimate": 0.07355197141394668,
+        "low": 0.07036577693199494,
+        "high": 0.07663164680164242
+      },
+      "ItemNDCG@10": {
+        "estimate": 0.07986342061774329,
+        "low": 0.07665441620189657,
+        "high": 0.08292303241147503
+      },
+      "ItemNDCG@20": {
+        "estimate": 0.08602703961104441,
+        "low": 0.08278770510615524,
+        "high": 0.08914094672326095
+      }
+    },
+    "source": "Existing server output only"
+  },
+  "groups_source": "existing_results/offline_evaluation/primary/groups.json",
+  "A0_A1_paired": {
+    "status": "PASS_PAIRED_USER_AXIS",
+    "users": 24772,
+    "identity_fields_exact": [
+      "row_idx",
+      "user_id",
+      "user_axis_sha256",
+      "target_item_id",
+      "target_sid",
+      "target_group_size",
+      "visible_history_length",
+      "history_group",
+      "target_training_frequency",
+      "popularity_group",
+      "protocol_version"
+    ],
+    "user_axis_sha256": "1daf63ce4c77b0265777a46b61939006aafab0276b9106c742de602c8c7e867a",
+    "bootstrap": {
+      "repetitions": 5000,
+      "seed": 20261113,
+      "rng": "numpy PCG64",
+      "replacement": true,
+      "draw_order": "replicate-major int64, same selected user indices for both models",
+      "percentile_method": "linear",
+      "seconds": 9.22268530447036
+    },
+    "metrics": {
+      "hit@1": {
+        "A0": 0.06450831584046504,
+        "A1": 0.061359599547876634,
+        "absolute_A1_minus_A0": -0.0031487162925884077,
+        "relative_difference": -0.04881101376720903,
+        "difference_CI95_low": -0.004562611012433392,
+        "difference_CI95_high": -0.0017358307766833522
+      },
+      "hit@5": {
+        "A0": 0.0903035685451316,
+        "A1": 0.08719522041014048,
+        "absolute_A1_minus_A0": -0.0031083481349911124,
+        "relative_difference": -0.03442109968708084,
+        "difference_CI95_low": -0.005368964960439206,
+        "difference_CI95_high": -0.0009274584207976895
+      },
+      "hit@10": {
+        "A0": 0.11335378653318262,
+        "A1": 0.10693524947521395,
+        "absolute_A1_minus_A0": -0.0064185370579686735,
+        "relative_difference": -0.05662393162393162,
+        "difference_CI95_low": -0.009002099144195058,
+        "difference_CI95_high": -0.003713870498950428
+      },
+      "hit@20": {
+        "A0": 0.13858388503148716,
+        "A1": 0.1309139350880026,
+        "absolute_A1_minus_A0": -0.0076699499434845775,
+        "relative_difference": -0.05534517914360616,
+        "difference_CI95_low": -0.010536089132891975,
+        "difference_CI95_high": -0.004682706281285322
+      },
+      "ndcg@5": {
+        "A0": 0.07766310391224163,
+        "A1": 0.07437704664550523,
+        "absolute_A1_minus_A0": -0.003286057266736392,
+        "relative_difference": -0.04231169115323535,
+        "difference_CI95_low": -0.004770103150421417,
+        "difference_CI95_high": -0.001824383433663453
+      },
+      "ndcg@10": {
+        "A0": 0.08508113200832922,
+        "A1": 0.08068596214524096,
+        "absolute_A1_minus_A0": -0.004395169863088258,
+        "relative_difference": -0.05165857293316199,
+        "difference_CI95_low": -0.005801674723790043,
+        "difference_CI95_high": -0.0029724568285382923
+      },
+      "ndcg@20": {
+        "A0": 0.09146554910635438,
+        "A1": 0.08679036194181051,
+        "absolute_A1_minus_A0": -0.004675187164543862,
+        "relative_difference": -0.051114186819210414,
+        "difference_CI95_low": -0.006074677089205625,
+        "difference_CI95_high": -0.0032987887201645794
+      },
+      "mrr@5": {
+        "A0": 0.07351176058991334,
+        "A1": 0.0701800419828839,
+        "absolute_A1_minus_A0": -0.003331718607029438,
+        "relative_difference": -0.0453222529333162,
+        "difference_CI95_low": -0.004690107110178156,
+        "difference_CI95_high": -0.001980041310081274
+      },
+      "mrr@10": {
+        "A0": 0.07655129062766718,
+        "A1": 0.07274082489446611,
+        "absolute_A1_minus_A0": -0.0038104657332010683,
+        "relative_difference": -0.04977663605613841,
+        "difference_CI95_low": -0.005120811723553728,
+        "difference_CI95_high": -0.002495502634823241
+      },
+      "mrr@20": {
+        "A0": 0.07830539761333742,
+        "A1": 0.07443719688270331,
+        "absolute_A1_minus_A0": -0.003868200730634111,
+        "relative_difference": -0.04939890286663019,
+        "difference_CI95_low": -0.005152740459910856,
+        "difference_CI95_high": -0.0025861660181515553
+      },
+      "ItemHit@5": {
+        "A0": 0.08973841433876958,
+        "A1": 0.08671080251897303,
+        "absolute_A1_minus_A0": -0.0030276118197965496,
+        "relative_difference": -0.03373819163292853,
+        "difference_CI95_low": -0.0052478604876473435,
+        "difference_CI95_high": -0.0008477313095430325
+      },
+      "ItemHit@10": {
+        "A0": 0.11303084127240433,
+        "A1": 0.10643737553151407,
+        "absolute_A1_minus_A0": -0.006593465740890259,
+        "relative_difference": -0.05833333333333339,
+        "difference_CI95_low": -0.009150115722051778,
+        "difference_CI95_high": -0.003888799181872006
+      },
+      "ItemHit@20": {
+        "A0": 0.138139835297917,
+        "A1": 0.13067172614241887,
+        "absolute_A1_minus_A0": -0.007468109155498143,
+        "relative_difference": -0.054061952074810044,
+        "difference_CI95_low": -0.010334248344905539,
+        "difference_CI95_high": -0.004480865493298886
+      },
+      "ItemNDCG@5": {
+        "A0": 0.07683032838933833,
+        "A1": 0.07355197141394668,
+        "absolute_A1_minus_A0": -0.0032783569753916525,
+        "relative_difference": -0.04267008932694588,
+        "difference_CI95_low": -0.004756300843692709,
+        "difference_CI95_high": -0.0018049748029416385
+      },
+      "ItemNDCG@10": {
+        "A0": 0.08431750877895493,
+        "A1": 0.07986342061774329,
+        "absolute_A1_minus_A0": -0.004454088161211636,
+        "relative_difference": -0.05282518691210841,
+        "difference_CI95_low": -0.005842042396344751,
+        "difference_CI95_high": -0.0030212507042471732
+      },
+      "ItemNDCG@20": {
+        "A0": 0.09066989688786065,
+        "A1": 0.08602703961104441,
+        "absolute_A1_minus_A0": -0.004642857276816237,
+        "relative_difference": -0.05120616032638112,
+        "difference_CI95_low": -0.006028648237988419,
+        "difference_CI95_high": -0.0032647314083734955
+      }
+    },
+    "inputs": {
+      "/data/bwwu/lc-rec/a0-final-audit-20261113/letter-a0-20261112-final-audit-20261113-offline-r1/primary": {
+        "per_user.csv": "423309c6765395e42fc6a18a43706a4653d71692b184c65fe5755f78a34df6fb",
+        "per_user_metrics.npz": "d46590f04dcd0f8438b67ccea636b3310a61ff081e146305032c614f444a1689"
+      },
+      "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/primary": {
+        "per_user.csv": "30c42ad73994597b80ad16be65ff9b386502e145ce1da46ea3c8390ca10b92c2",
+        "per_user_metrics.npz": "6141f21905aa4544625c62b51dcc5a1bc275214a839b200b6e741409b9c2c197"
+      }
+    },
+    "limits": "Conditional on two fixed trained configurations; not training-seed variance or evidence isolating the SID effect."
+  },
+  "existing_offline_program_results": {
+    "pipeline_status": "PASS",
+    "GPU_RUN_COMMIT": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+    "EVALUATION_RUN_COMMIT": "445f1475cd1dd70d19881dbc1639bb311f7cccf7",
+    "stages": [
+      {
+        "stage": "independent_original",
+        "exit_code": 0,
+        "seconds": 6.637085370719433
+      },
+      {
+        "stage": "primary",
+        "exit_code": 0,
+        "seconds": 16.82426251284778
+      },
+      {
+        "stage": "independent_extended",
+        "exit_code": 0,
+        "seconds": 8.242685550823808
+      },
+      {
+        "stage": "independent_statistics",
+        "exit_code": 0,
+        "seconds": 14.212706891819835
+      },
+      {
+        "stage": "paired",
+        "exit_code": 0,
+        "seconds": 10.303559890948236
+      },
+      {
+        "stage": "independent_paired",
+        "exit_code": 0,
+        "seconds": 14.062025882303715
+      }
+    ],
+    "reported_statuses": {
+      "independent_original.json": "PASS",
+      "independent_extended.json": "PASS",
+      "independent_statistics.json": "PASS",
+      "independent_paired.json": "PASS"
+    },
+    "note": "These programs ran earlier in the original authorized server pipeline; this check only read their existing receipts. Final nonauthor scientific review remains pending."
+  },
+  "formal_ledger": {
+    "attempts": [
+      {
+        "job_id": "letter-a1-q06-20261113-normal-seed42-r0",
+        "kind": "formal",
+        "run_commit": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+        "started_utc": "2026-11-13T11:57:05.038996+00:00",
+        "resume": null,
+        "wall_limit_seconds": 345580,
+        "ended_utc": "2026-11-14T02:50:46.330402+00:00",
+        "wall_seconds": 53621.39842854068,
+        "gpu_device_seconds": 107242.79685708135,
+        "status": "SUCCESS"
+      }
+    ]
+  },
+  "timing": {
+    "runner_started_utc": "2026-11-13T11:57:04.861057+00:00",
+    "runner_ended_utc": "2026-11-14T02:50:46.514479+00:00",
+    "runner_wall_seconds": 53621.653422,
+    "ledger_recorded_wall_seconds": 53621.39842854068,
+    "conservative_readonly_cumulative_wall_seconds": 53621.653422,
+    "ledger_row_source": "Pipeline finally values; preserved unchanged. Read-only max with terminal runner includes cleanup; no ledger reconciliation write performed.",
+    "within_96_hour_budget": true,
+    "budget_hours": 96,
+    "remaining_execution_estimate_seconds": 0,
+    "stages": [
+      {
+        "stage": "train",
+        "started_utc": "2026-11-13T11:57:05.100597+00:00",
+        "ended_utc": "2026-11-14T01:34:25.015900+00:00",
+        "exit_code": 0,
+        "wall_seconds": 49039.915303
+      },
+      {
+        "stage": "test",
+        "started_utc": "2026-11-14T01:34:26.872678+00:00",
+        "ended_utc": "2026-11-14T02:49:33.072781+00:00",
+        "exit_code": 0,
+        "wall_seconds": 4506.200103
+      },
+      {
+        "stage": "offline_evaluation",
+        "started_utc": "2026-11-14T02:49:33.145516+00:00",
+        "ended_utc": "2026-11-14T02:50:46.328432+00:00",
+        "exit_code": 0,
+        "wall_seconds": 73.182916
+      }
+    ]
+  },
+  "resources": {
+    "gpu_csv": "index, uuid, memory.total [MiB], memory.used [MiB], memory.free [MiB], utilization.gpu [%], temperature.gpu\n0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 24564 MiB, 1 MiB, 24082 MiB, 0 %, 28\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 24564 MiB, 1 MiB, 24082 MiB, 0 %, 27\n",
+    "compute_apps_csv": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\n",
+    "ram": "               total        used        free      shared  buff/cache   available\nMem:     265490894848  8929964032 27709210624     3518464 230478340096 256560930816\nSwap:    68719472640   152190976 68567281664\n",
+    "disk": "Filesystem                   1B-blocks          Used     Available Use% Mounted on\n/dev/mapper/vg0-lv--data 7937302376448 4909670539264 2947599441920  63% /data\n",
+    "runtime_resource_window": {
+      "samples": 1788,
+      "min_mem_available": 250379694080,
+      "max_swap_used": 152190976,
+      "min_swap_used": 152190976,
+      "min_disk_available": 2945500549120,
+      "max_seconds_without_worklog_progress": 1833.588432598859
+    },
+    "idle_gpu_explanation": "Normal after terminal success and verified cleanup; not a failure"
+  },
+  "anomalies": {
+    "scanned_worklog_matches": [],
+    "scanned_worklog_identity": {
+      "bytes_before": 1276709,
+      "bytes_after": 1276709,
+      "mtime_ns_before": 1794624570935329722,
+      "mtime_ns_after": 1794624570935329722,
+      "read_offset": 0,
+      "observed_bytes": 1276709,
+      "observed_bytes_sha256": "8ce129e1bccc9a7069374a4f7c0f41ae5c37cace68f68f9600e0208912c09585",
+      "capture_atomic": false
+    },
+    "formal_attempts": 1,
+    "resume": null,
+    "interruption_or_retry_observed": false,
+    "resource_protection_trigger_observed": false,
+    "max_runtime_log_silence_seconds": 1833.588432598859,
+    "log_silence_context": "Consistent with first validation lasting1836.9s, below7200s watchdog; ended job has no expectation of new logs"
+  },
+  "audit_boundary": {
+    "FINAL_AUDIT_PASS": false,
+    "final_non_author_review": "PENDING_NOT_PERFORMED_IN_THIS_STATUS_CHECK",
+    "final_delivery_or_ZIP": "NOT_CREATED_BY_THIS_CHECK"
+  },
+  "scope": "One read-only status observation and bounded existing-artifact crosscheck, then GitHub publication only. No new computation, evaluation, recovery, repair or experiment modification.",
+  "limitations": [
+    "No final scientific audit asserted",
+    "Checkpoint content verification limited to existing manifest sizes/required roles/small-file SHA; no large checkpoint/model/adapter/prediction content rehash/load",
+    "Raw JSON output identities and byte-preserving copies supplied; no new user-level metric recomputation",
+    "Snapshot spans separate bounded reads, with all times explicit"
+  ],
+  "conflicts": []
+}
