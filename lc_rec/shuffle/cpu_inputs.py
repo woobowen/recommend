@@ -33,6 +33,12 @@ def main():
                            his_sep=', ', index_file='.index.json', add_prefix=False)
     data = SeqRecDataset(args, mode='test', sample_num=-1)
     data.set_prompt(0)
+    asset_hashes = {'index': '33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd',
+                    'inter': '0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743',
+                    'item': '1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2'}
+    for kind, expected in asset_hashes.items():
+        path = Path(a.data_root)/'Instruments'/('Instruments.'+kind+'.json')
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
     assert len(data) == 24772
     tokens = sorted({t for parts in data.indices.values() for t in parts})
     lookup = {t: tok.encode(t, add_special_tokens=False) for t in tokens}
@@ -110,6 +116,11 @@ def main():
                            'sha256': hashlib.sha256(manifest.read_bytes()).hexdigest()},
               'token_ids': lookup, 'tokenizer_vocab_sha256': digest(tok.get_vocab()),
               'normal_test_dir': a.normal_test_dir,
+              'asset_sha256': asset_hashes,
+              'saved_tokenizer_files': {p.name: {'bytes': p.stat().st_size,
+                  'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
+                  for p in Path(a.adapter).iterdir() if p.is_file() and
+                  (p.name.startswith('tokenizer') or p.name in ['added_tokens.json', 'special_tokens_map.json', 'vocab.json', 'merges.txt'])},
               'invariants': ['exact_groups', 'nonhistory_unchanged', 'multiset_conserved',
                              'OFF_exact', 'S3_fourth_fixed', 'nonidentity', 'padding', 'target_unchanged']}
     (out / 'audit.json').write_text(json.dumps(result, indent=2) + '\n')

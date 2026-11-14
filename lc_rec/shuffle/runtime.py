@@ -16,6 +16,7 @@ def configure(options):
     OPTIONS = options
     CPU = json.loads(Path(options.cpu_audit).read_text())
     assert CPU['status'] == 'PASS_CPU_FULL_INPUTS' and CPU['model_key'] == options.model_key
+    assert sys.flags.optimize == 0, 'All runtime assertions must remain active'
 
 
 def preflight_assignment(rank):
@@ -69,6 +70,13 @@ class ShuffleAllowed:
 def loaded(model, tokenizer, args, report):
     global TOKENIZER
     TOKENIZER = tokenizer
+    assert tokenizer.get_vocab() and len(set(CPU['token_ids'].values())) == 918
+    for symbol, token_id in CPU['token_ids'].items():
+        assert tokenizer.encode(symbol, add_special_tokens=False) == [token_id]
+    for name, identity in CPU['saved_tokenizer_files'].items():
+        path = Path(args.adapter)/name
+        assert path.stat().st_size == identity['bytes']
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == identity['sha256']
     report['shuffle'] = {'n': OPTIONS.shuffle_n, 'seed': 42, 'protocol': 'GRID-LETTER-SHUFFLE-V1',
                          'cpu_manifest_sha256': CPU['manifest']['sha256'],
                          'intervention': 'complete original tokenization then within-history-item Token ID permutation',
