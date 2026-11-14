@@ -58,6 +58,7 @@ def main():
                  'lc_rec/a1_qwen3_06b/scripts/offline_metrics.py',
                  'lc_rec/a1_qwen3_06b/review/independent_extended.py',
                  'lc_rec/letter/config/a0_evaluation_v1.json', 'lc_rec/letter/review/final_audit_20261113',
+                 'lc_rec/letter/review/formal_det_20261112/independent_metrics.py',
                  'lc_rec/a1_qwen3_06b/review/final_20261114']
         paths = [x for x in paths if subprocess.run(['git','cat-file','-e',commit+':'+x],cwd=REPO,capture_output=True).returncode==0]
         subprocess.run(['git', 'archive', '--format=tar.gz', '--output=' + str(archive), commit, *paths], cwd=REPO, check=True)
