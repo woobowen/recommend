@@ -1,0 +1,110 @@
+{
+  "status": "PASS",
+  "scope": "Final source syntax, launch CLI and directed core tests; no GPU/model execution",
+  "checks": [
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "lc_rec/shuffle"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "lc_rec/shuffle/launch.py",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "usage: launch.py [-h] --commit COMMIT {prepare,submit}\n\npositional arguments:\n  {prepare,submit}\n\noptions:\n  -h, --help        show this help message and exit\n  --commit COMMIT\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "lc_rec.shuffle.test_core",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_rank_order_and_python_hash_independence (lc_rec.shuffle.test_core.Tests.test_rank_order_and_python_hash_independence) ... ok\ntest_realistic_boundaries_conservation_padding_and_replay (lc_rec.shuffle.test_core.Tests.test_realistic_boundaries_conservation_padding_and_replay) ... ok\ntest_reference_and_rejection (lc_rec.shuffle.test_core.Tests.test_reference_and_rejection) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.039s\n\nOK\n"
+    }
+  ],
+  "sources": [
+    {
+      "path": "lc_rec/shuffle/gpu_pipeline.py",
+      "sha256": "62eeb7d502923ba9a1a0dbede9adf0e16bb704c1442c1a6a0bf9ae8fa714a7db"
+    },
+    {
+      "path": "lc_rec/shuffle/series.py",
+      "sha256": "60935d57f8e2b9bcb662a2b09a9f685862b3ff3b9235d5c1a0532a5fa4179a9b"
+    },
+    {
+      "path": "lc_rec/shuffle/launch.py",
+      "sha256": "b3597089148f05cbb934109a5aefedd09406e83b8caafa8e4f4162986a772855"
+    },
+    {
+      "path": "lc_rec/shuffle/evaluate_condition.py",
+      "sha256": "441f36f9622061dfa10ce3bf4401d43e80e333ee44918de1be919186823c9cf4"
+    },
+    {
+      "path": "lc_rec/shuffle/control.py",
+      "sha256": "65a6df1e9f0290f769b7f76d184cec0afe8a35779038ad0741dd6553dca0715e"
+    },
+    {
+      "path": "lc_rec/shuffle/paired_and_changes.py",
+      "sha256": "e48fed508610a19dfc1a57e91e20b134c84a096d09ca7131de32e185d643a8ca"
+    },
+    {
+      "path": "lc_rec/shuffle/core.py",
+      "sha256": "1faf505bde5a7bc68fb9cf7ff45e0bc0c8d3ca2a1cf2bd7dc35618849e71ea2f"
+    },
+    {
+      "path": "lc_rec/shuffle/entry.py",
+      "sha256": "e6d74d71ff161e2bbc78cb62a0f470c98a32b5f0e1fa765322cc20fa96c0d0e9"
+    },
+    {
+      "path": "lc_rec/shuffle/runtime.py",
+      "sha256": "b477b8e274641ef8df45d3680248d570c9da2ed9465ab97e2ebc2dae8fe5eabd"
+    },
+    {
+      "path": "lc_rec/shuffle/prepare_cpu.py",
+      "sha256": "7cb369b244f6a84761c01a722364275d902894a75f75421347c374797a3a20f7"
+    },
+    {
+      "path": "lc_rec/shuffle/bind_cpu.py",
+      "sha256": "2662784b42ae48a1b31a20b0e37ff811103a4f77087cea546c2209a44a6d031a"
+    },
+    {
+      "path": "lc_rec/shuffle/condition.py",
+      "sha256": "3b129375a2bb247a25433617ee2df44b7fa341db8f60ebe02ca47b6d9c6ccbaa"
+    },
+    {
+      "path": "lc_rec/shuffle/test_core.py",
+      "sha256": "bc9ccfb225f95569a98951aa1bce49faee365286bed39d7990bb0f2ad0c8a115"
+    },
+    {
+      "path": "lc_rec/shuffle/preflight_receipt.py",
+      "sha256": "254c05a1b65ed20a6cde352ea3b00c55adc9e9f3d492b7565533dad051622e7d"
+    },
+    {
+      "path": "lc_rec/shuffle/cpu_inputs.py",
+      "sha256": "ad56fcde3722b87b9670c4f5d3e0bfb04db96f89472b4dc3b35c622167a99771"
+    },
+    {
+      "path": "lc_rec/shuffle/review/independent_inputs.py",
+      "sha256": "9bfc1a37d1123943f6061b976ac6553d426fea55446b3e77f2c9d203b96bfc33"
+    },
+    {
+      "path": "lc_rec/shuffle/review/cleanup_probe.py",
+      "sha256": "4c93aa9c2cf86b365943e33b6792b23eb15dff1fe63fd0adf732397dca04e538"
+    }
+  ]
+}

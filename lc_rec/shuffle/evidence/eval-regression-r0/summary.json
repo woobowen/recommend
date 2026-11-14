@@ -1,0 +1,96 @@
+{
+  "status": "PASS",
+  "INPUT_PREDICTION_RUN_COMMIT": "0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5",
+  "EVALUATION_RUN_COMMIT": "74de17ba843c6508809a66e8c952124be3441d90",
+  "model_key": "a1",
+  "GPU_used": false,
+  "wall_seconds": 74.04193041939288,
+  "stages": [
+    {
+      "stage": "independent_original",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "/home/bwwu/lc-rec/letter-shuffle-20261114/releases/74de17ba843c6508809a66e8c952124be3441d90/lc_rec/letter/review/formal_det_20261112/independent_metrics.py",
+        "--data-root",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER/data",
+        "--test-dir",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test",
+        "--output",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/independent_original.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 6.586785257793963
+    },
+    {
+      "stage": "primary",
+      "source": "/home/bwwu/lc-rec/letter-shuffle-20261114/releases/74de17ba843c6508809a66e8c952124be3441d90/lc_rec/a1_qwen3_06b/scripts/offline_metrics.py",
+      "sha256": "3a587285790a42de5d1d93e91d90d45d4d1766c768067238ff3c7b2976ced4a6",
+      "wall_seconds": 15.158317878842354,
+      "exit_code": 0
+    },
+    {
+      "stage": "independent_extended",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "/home/bwwu/lc-rec/letter-shuffle-20261114/releases/74de17ba843c6508809a66e8c952124be3441d90/lc_rec/a1_qwen3_06b/review/independent_extended.py",
+        "--data-root",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER/data",
+        "--test-dir",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test",
+        "--stage-a-report",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/independent_original.json",
+        "--manifest",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/prediction_manifest.json",
+        "--per-user",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/primary/per_user.csv",
+        "--official-cce",
+        "/home/bwwu/lc-rec/letter-shuffle-20261114/releases/74de17ba843c6508809a66e8c952124be3441d90/lc_rec/letter/review/final_audit_20261113/external/official_cce.py",
+        "--official-sha256",
+        "173c257a8711a885e8f6d5abcdb0ad2510ad4fab01c1700631b5ec261f50cd2d",
+        "--output",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/independent_extended.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.192591343075037
+    },
+    {
+      "stage": "independent_statistics",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "/home/bwwu/lc-rec/letter-shuffle-20261114/releases/74de17ba843c6508809a66e8c952124be3441d90/lc_rec/letter/review/final_audit_20261113/statistics_verify.py",
+        "--data-root",
+        "/home/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/releases/0e3e2c6f5c1a76152ea0228390d94ffc1ff75ba5/lc_rec/letter/vendor/LETTER/data/Instruments",
+        "--per-user",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/primary/per_user.csv",
+        "--primary-bootstrap",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/primary/bootstrap.json",
+        "--primary-draws",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/primary/bootstrap_draw_means.npy",
+        "--self-test",
+        "--output",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/independent_statistics.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 14.062768536619842
+    },
+    {
+      "stage": "paired",
+      "argv": [
+        "/data/bwwu/envs/qwen-preflight-20261110-qwen3/bin/python",
+        "/home/bwwu/lc-rec/letter-shuffle-20261114/releases/74de17ba843c6508809a66e8c952124be3441d90/lc_rec/shuffle/paired_and_changes.py",
+        "--normal-primary",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/offline_evaluation/primary",
+        "--shuffle-primary",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/primary",
+        "--normal-test",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test",
+        "--shuffle-test",
+        "/data/bwwu/lc-rec/a1-qwen3-06b-instruments-20261113/letter-a1-q06-20261113-normal-seed42-r0/test",
+        "--output",
+        "/data/bwwu/lc-rec/letter-shuffle-20261114/eval-regression-r0/paired"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 28.966491721570492
+    }
+  ]
+}

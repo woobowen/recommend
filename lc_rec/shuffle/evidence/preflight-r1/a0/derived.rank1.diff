@@ -1,0 +1,48 @@
+--- /home/bwwu/lc-rec/letter-shuffle-20261114/releases/85c9d4473fb408c9635d904972910e8fffb7b26b/lc_rec/letter/scripts/formal_evaluate.py
++++ derived
+@@ -324,7 +324,7 @@
+     parser.add_argument("--max-seconds", type=int, default=96 * 3600,
+                         help="Evaluation stage cap; the enclosing job enforces the cumulative 96-hour cap")
+     args = parser.parse_args()
+-    if args.preflight_users_per_rank not in (0, 8) or (args.preflight_users_per_rank and args.aggregate_only):
++    if args.preflight_users_per_rank not in (0, 16) or (args.preflight_users_per_rank and args.aggregate_only):
+         raise ValueError("Only a separate fixed eight-user/rank preflight is supported")
+     output = Path(args.output).resolve()
+     output.mkdir(parents=True, exist_ok=True)
+@@ -402,6 +402,7 @@
+                          "total_memory_bytes": torch.cuda.get_device_properties(local_rank).total_memory}
+         load_started = time.monotonic()
+         model, tokenizer = strict_reload(args, report, torch, local_rank, source, indices)
++        runtime.loaded(model, tokenizer, args, report)
+         torch.cuda.synchronize()
+         report["model_load_and_strict_verification_seconds"] = time.monotonic() - load_started
+         guard()
+@@ -435,7 +436,10 @@
+             raise AssertionError("Original sampler would lose or duplicate test users")
+         report["assigned_users"] = len(assignment)
+         report["assignment_sha256"] = hashlib.sha256(json.dumps(assignment, separators=(",", ":")).encode()).hexdigest()
+-        loader = DataLoader(indexed, batch_size=1, sampler=sampler, collate_fn=collate,
++        if args.preflight_users_per_rank:
++            assignment = runtime.preflight_assignment(rank)
++            report["preflight_assignment"] = assignment
++        loader = DataLoader(indexed, batch_size=1, sampler=assignment, collate_fn=collate,
+                             num_workers=2, pin_memory=True)
+         write(report_path, report)
+         dist.barrier()
+@@ -448,6 +452,7 @@
+                 if row_indices != [assignment[iteration]]:
+                     raise AssertionError("DataLoader order differs from original sampler assignment")
+                 index = row_indices[0]
++                inputs, shuffle_record = runtime.intervene(inputs, index, data, tokenizer)
+                 input_ids = inputs["input_ids"][0].tolist()
+                 inputs = inputs.to(torch.device("cuda", local_rank))
+                 tick = time.monotonic()
+@@ -480,7 +485,7 @@
+                                        "eos_position": eos, "raw_decoded": text,
+                                        "sequence_score": score, "sid": normalized_prediction(text)})
+                 order = sorted(range(BEAMS), key=lambda i: scores[i], reverse=True)
+-                row = {**users[index], "rank": rank, "prompt_id": 0, "input_token_ids": input_ids,
++                row = {**users[index], "rank": rank, "prompt_id": 0, "input_token_ids": input_ids, "shuffle": shuffle_record,
+                        "input_nonpadding_tokens": int(inputs["attention_mask"].sum()),
+                        "candidates": candidates, "sorted_generation_order": order,
+                        "relevance": [int(candidates[i]["sid"] == targets[0]) for i in order],
