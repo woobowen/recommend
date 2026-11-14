@@ -52,7 +52,7 @@ def adapt(text, model):
 
 
 def main():
-    p = argparse.ArgumentParser()
+    p = argparse.ArgumentParser(allow_abbrev=False)
     p.add_argument('--model-key', choices=FROZEN, required=True)
     p.add_argument('--shuffle-n', type=int, choices=[0, 3, 4], required=True)
     p.add_argument('--acceptance', action='store_true')

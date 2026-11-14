@@ -23,7 +23,7 @@ def gpu_idle():
 
 def main():
     p=argparse.ArgumentParser()
-    for n in ['output','cpu-root','run-commit']:p.add_argument('--'+n,required=True)
+    for n in ['output','cpu-root','run-commit','job-id']:p.add_argument('--'+n,required=True)
     a=p.parse_args();root=Path(__file__).resolve().parent
     config=json.loads((root/'config.json').read_text())
     cpu=Path(a.cpu_root);assert json.loads((cpu/'summary.json').read_text())['status']=='PASS_CPU_PREPARATION'
@@ -33,10 +33,20 @@ def main():
     with lock_path.open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         ledger=json.loads(ledger_path.read_text()) if ledger_path.exists() else {'attempts':[]}
+        # Include accepted runner startup and cleanup in every prior attempt.
+        # Legacy r0 is explicit, so changing attempt names cannot reset usage.
+        for previous in ledger['attempts']:
+            job_id=previous.get('job_id','letter-shuffle-20261114-preflight-r0')
+            status=json.loads((Path('/home/bwwu/grid-audits/sid-extensions-p0/jobs')/job_id/'status.json').read_text())
+            assert status['status'] in ['SUCCEEDED','FAILED','TIMED_OUT','CANCELLED']
+            assert status.get('cleanup',{}).get('verified') is True
+            wall=(datetime.datetime.fromisoformat(status['ended_at'])-datetime.datetime.fromisoformat(status['started_at'])).total_seconds()
+            previous['device_seconds']=max(previous['device_seconds'],2*wall)
+            previous['runner_terminal_reconciled']=True
         used=sum(r['device_seconds'] for r in ledger['attempts'])
         assert used<3600
         attempt={'output':str(out),'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
-                 'status':'RUNNING','device_seconds':0,'stages':[],'pid':os.getpid()}
+                 'status':'RUNNING','device_seconds':0,'stages':[],'pid':os.getpid(),'job_id':a.job_id}
         ledger['attempts'].append(attempt)
         started=time.monotonic()
         def save():
