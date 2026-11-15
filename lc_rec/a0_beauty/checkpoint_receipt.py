@@ -57,7 +57,8 @@ def write_receipt(checkpoint, output, *, run_commit, config_sha256, data_identit
                'epoch': epoch, 'global_step': step, 'eval_loss': float(eval_loss),
                'best_checkpoint': best_checkpoint, 'best_metric': best_metric,
                'checkpoint_path': str(cp.resolve()), 'attempt_job_id': attempt,
-               'manifest_sha256': hashlib.sha256(raw).hexdigest(), 'manifest': manifest}
+               'manifest_sha256': hashlib.sha256(raw).hexdigest(), 'manifest': manifest,
+               'manifest_json': raw.decode('utf-8')}
     payload = (json.dumps(receipt, sort_keys=True, separators=(',', ':'),
                           ensure_ascii=False, allow_nan=False) + '\n').encode()
     directory = Path(output) / 'checkpoint_receipts'

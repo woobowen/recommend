@@ -167,3 +167,8 @@ class StageControl:
                 record.update(status='COMPLETE', artifact_evidence=evidence)
             durable_write(state_path, record)
             return record
+
+
+if __name__ == "__main__":
+    from production_control import main
+    main()

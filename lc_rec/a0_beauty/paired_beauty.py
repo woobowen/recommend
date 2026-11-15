@@ -18,7 +18,7 @@ def validate_metric_matrix(np, keys, matrix):
     assert np.isfinite(matrix).all()
 
 
-def validate_provenance(primary, test):
+def validate_provenance(primary, test, source_context=None):
     """Bind evaluated files to completed formal rank reports; no training proof implied."""
     metrics=json.loads((primary/'metrics.json').read_text())
     assert metrics['status']=='PASS' and metrics['users']==22363
@@ -35,6 +35,12 @@ def validate_provenance(primary, test):
     prediction_files=metrics['prediction_files']
     assert len(prediction_files)==2
     identities=[]
+    if source_context is not None:
+        from production_identity import verify_predictions
+        condition='normal'
+        first=json.loads((test/'rank0.json').read_text())
+        if 'shuffle' in first:condition='s'+str(first['shuffle']['n'])
+        verify_predictions(test,run,source_context['best'],condition,source_context['scope'])
     for rank in (0,1):
         report=json.loads((test/f'rank{rank}.json').read_text())
         assert report['status']=='PASS' and report['rank']==rank and report['preflight_only'] is False
@@ -68,14 +74,12 @@ def paired_bootstrap(np, difference):
     return draws,low,high
 
 
-def main():
+def process(a, source_context=None):
     import numpy as np
-    p=argparse.ArgumentParser()
-    for n in ['normal-primary','shuffle-primary','normal-test','shuffle-test','output']:p.add_argument('--'+n,required=True)
-    a=p.parse_args();out=Path(a.output);out.mkdir(exist_ok=False)
+    out=Path(a.output);out.mkdir(exist_ok=False)
     started=time.monotonic();roots=[Path(a.normal_primary),Path(a.shuffle_primary)]
-    provenance=[validate_provenance(roots[0],Path(a.normal_test)),
-                validate_provenance(roots[1],Path(a.shuffle_test))]
+    provenance=[validate_provenance(roots[0],Path(a.normal_test),source_context),
+                validate_provenance(roots[1],Path(a.shuffle_test),source_context)]
     assert provenance[0]['adapter_files']==provenance[1]['adapter_files'], 'Adapter identity mismatch'
     rows=[];matrices=[];keys=None;identities={}
     for root in roots:
@@ -130,7 +134,7 @@ def main():
                 changed['top20_set_changed']+=set(old)!=set(now)
     assert seen==set(range(22363))
     for key in ['top1_changed','top20_ordered_changed','top20_set_changed']:changed[key+'_fraction']=changed[key]/22363
-    result={'status':'PASS','users':22363,'identity_fields_exact':fields,'metrics':metrics,
+    result={'scope':source_context['scope'] if source_context else 'LEGACY_PROVENANCE_ONLY','status':'PASS','users':22363,'identity_fields_exact':fields,'metrics':metrics,
       'bootstrap':{'repetitions':5000,'seed':20261113,'rng':'PCG64','replacement':True,'percentile':'95% linear',
        'scope':'User uncertainty conditional on fixed trained model and fixed shuffle realization; not training-seed or permutation variance.'},
       'independent_verification':{'source':str(independent_path),'source_sha256':hashlib.sha256(independent_path.read_bytes()).hexdigest(),
@@ -138,5 +142,16 @@ def main():
       'inputs':identities,'prediction_provenance':provenance,'changes':changed,'elapsed_seconds':time.monotonic()-started}
     (out/'paired_comparison.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({'status':'PASS','users':22363}))
 
+
+def main():
+    p=argparse.ArgumentParser()
+    for n in ['normal-primary','shuffle-primary','normal-test','shuffle-test','output']:p.add_argument('--'+n,required=True)
+    p.add_argument('--training-root',required=True)
+    p.add_argument('--training-run-commit',required=True)
+    p.add_argument('--training-config-sha256',required=True)
+    a=p.parse_args()
+    from production_identity import verify_training
+    best=verify_training(a.training_root,a.training_run_commit,a.training_config_sha256)
+    process(a,source_context={'scope':'FORMAL','best':best})
 
 if __name__=='__main__':main()
