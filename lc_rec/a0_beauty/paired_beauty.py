@@ -53,6 +53,21 @@ def module(path):
     value=importlib.util.module_from_spec(spec);spec.loader.exec_module(value);return value
 
 
+def paired_bootstrap(np, difference):
+    """Frozen paired-user calculation shared by the production entry and CPU tests."""
+    if difference.shape != (22363, 16) or difference.dtype != np.float64:
+        raise ValueError('expected full Beauty user-by-metric float64 matrix')
+    if not np.isfinite(difference).all():
+        raise ValueError('nonfinite paired differences')
+    rng=np.random.Generator(np.random.PCG64(20261113))
+    draws=np.empty((5000,16),dtype=np.float64)
+    for begin in range(0,5000,8):
+        selected=rng.integers(0,22363,size=(min(8,5000-begin),22363),dtype=np.int64)
+        draws[begin:begin+len(selected)]=difference[selected].mean(axis=1)
+    low,high=np.percentile(draws,[2.5,97.5],axis=0,method='linear')
+    return draws,low,high
+
+
 def main():
     import numpy as np
     p=argparse.ArgumentParser()
@@ -81,11 +96,7 @@ def main():
         assert left['row_idx']==right['row_idx']==str(i)
         assert all(left[f]==right[f] for f in fields)
     difference=matrices[1]-matrices[0]
-    rng=np.random.Generator(np.random.PCG64(20261113));draws=np.empty((5000,16),dtype=np.float64)
-    for begin in range(0,5000,8):
-        selected=rng.integers(0,22363,size=(min(8,5000-begin),22363),dtype=np.int64)
-        draws[begin:begin+len(selected)]=difference[selected].mean(axis=1)
-    low,high=np.percentile(draws,[2.5,97.5],axis=0,method='linear')
+    draws,low,high=paired_bootstrap(np,difference)
     np.save(out/'paired_bootstrap_difference_means.npy',draws)
     # Distinct previously reviewed implementation, column-wise rather than joint gather.
     independent_path=Path(__file__).resolve().parents[1]/'letter/review/final_audit_20261113/statistics_verify.py'
