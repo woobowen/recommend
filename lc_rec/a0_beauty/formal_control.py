@@ -78,12 +78,12 @@ class Runner:
             return None
         return json.loads(subprocess.check_output(
             ['/usr/bin/python3', '-I', '-S', '-B', str(self.path), 'query', str(job)],
-            text=True, timeout=45))
+            text=True, timeout=45, env={k:v for k,v in os.environ.items() if k not in ('GRID_JOB_ID','GRID_JOB_DIR')}))
 
     def submit(self, request_path):
         return json.loads(subprocess.check_output(
             ['/usr/bin/python3', '-I', '-S', '-B', str(self.path), 'submit',
-             str(self.job_root), str(request_path)], text=True, timeout=60))
+             str(self.job_root), str(request_path)], text=True, timeout=60, env={k:v for k,v in os.environ.items() if k not in ('GRID_JOB_ID','GRID_JOB_DIR')}))
 
 
 class StageControl:

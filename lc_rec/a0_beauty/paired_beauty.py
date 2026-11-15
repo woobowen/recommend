@@ -36,7 +36,10 @@ def validate_provenance(primary, test, source_context=None):
     assert len(prediction_files)==2
     identities=[]
     if source_context is not None:
-        from production_identity import verify_predictions
+        from production_identity import verify_predictions, verify_training
+        supplied=source_context['best']
+        fresh=verify_training(supplied['training_root'],supplied['run_commit'],supplied['config_sha256'],source_context['scope'])
+        assert fresh==supplied, 'source context does not match current training artifacts'
         condition='normal'
         first=json.loads((test/'rank0.json').read_text())
         if 'shuffle' in first:condition='s'+str(first['shuffle']['n'])

@@ -89,7 +89,7 @@ print(json.dumps(version))
               'config':config,'config_sha256':'24b568161f2d71d3c5962372a38683b2d33ee5d6d5064de0612215946a8106fd',
               'asset_sha256':{'index':'be3fb890e59b5443824cdebc560ef349191b97f20d3aecad4727de2d6b212c82','inter':'8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5','item':'74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330'},
               'runner':runner,'runner_sha256':dep['runner_sha256'],'job_root':jobs,'namespace':ns,'env':env,
-              'task_id':a.commit[:12],'fixture_root':FIXTURE,'stage_seconds':{s:1200 for s in ['train','verify_best_adapter','normal','normal_eval','s3','s3_eval','s4','s4_eval','paired','collect']},
+              'task_id':a.commit[:12],'temporary_root':BASE,'fixture_root':FIXTURE,'stage_seconds':{s:1200 for s in ['train','verify_best_adapter','normal','normal_eval','s3','s3_eval','s4','s4_eval','paired','collect']},
               'budget':{'train_normal':700,'s3':400,'s4':400,'cpu':remaining-1600,'total':remaining-100,'cleanup_reserve':10},
               'inputs':dep['files']}
         # Synthetic model is a non-compute placeholder but still an absolute path.

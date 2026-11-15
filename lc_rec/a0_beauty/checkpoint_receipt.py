@@ -14,7 +14,7 @@ import tempfile
 
 def write_receipt(checkpoint, output, *, run_commit, config_sha256, data_identity,
                   epoch, step, eval_loss, best_checkpoint, best_metric, attempt,
-                  required_files, expected_manifest):
+                  required_files, expected_manifest, scope='FORMAL', validation_records=44726):
     cp = Path(checkpoint)
     raw = (cp / 'complete.json').read_bytes()
     manifest = json.loads(raw)
@@ -52,7 +52,9 @@ def write_receipt(checkpoint, output, *, run_commit, config_sha256, data_identit
         seen.add(name)
     if not set(required_files) <= seen:
         raise ValueError('incomplete checkpoint manifest')
-    receipt = {'schema': 'beauty_checkpoint_receipt_v1', 'run_commit': run_commit,
+    if scope not in ('FORMAL','SYNTHETIC_CPU_INTEGRATION_ONLY') or validation_records != 44726:
+        raise ValueError('receipt validation scope')
+    receipt = {'scope':scope, 'validation_records':validation_records, 'schema': 'beauty_checkpoint_receipt_v1', 'run_commit': run_commit,
                'config_sha256': config_sha256, 'data_identity': data_identity,
                'epoch': epoch, 'global_step': step, 'eval_loss': float(eval_loss),
                'best_checkpoint': best_checkpoint, 'best_metric': best_metric,

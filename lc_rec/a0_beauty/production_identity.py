@@ -2,6 +2,7 @@
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 from formal_control import durable_write
 from formal_train import checkpoint_required_files, verify_checkpoint
@@ -67,7 +68,9 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
         need({k:v['sha256'] for k,v in report['data_identity'].items()}==ASSETS, 'training data identity')
         ev=[json.loads(x) for x in (root/f'events.rank{rank}.jsonl').read_text().splitlines()]
         validation=[x for x in ev if x['event']=='log' and 'eval_loss' in x.get('values',{})]
-        need([(x['step'],x['epoch']) for x in validation]==list(zip(STEPS,(1.,2.,3.,4.))), 'four ordered complete validation events required')
+        need({(x['step'],x['epoch']) for x in validation}==set(zip(STEPS,(1.,2.,3.,4.))), 'four complete validation epochs required')
+        validation=list({x['step']:x for x in validation}.values())
+        need([x['step'] for x in validation]==list(STEPS),'validation epoch order')
         need(all(math.isfinite(x['values']['eval_loss']) for x in validation), 'nonfinite validation loss')
         events.append((ev,validation))
     losses=[x['values']['eval_loss'] for x in events[0][1]]
@@ -76,6 +79,12 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
     for p in sorted((root/'checkpoint_receipts').glob('*.json')):
         r=load(p);step=r['global_step'];need(step in STEPS, 'unexpected checkpoint receipt')
         need(r['run_commit']==commit and r['config_sha256']==config_sha, 'receipt source mismatch')
+        need(r['scope']==scope and r['validation_records']==44726,'receipt scope/full validation')
+        for ev,_ in events:
+            saves=[x for x in ev if x['event']=='checkpoint_complete' and x['step']==step]
+            need(any(x.get('attempt_job_id')==r['attempt_job_id'] and x['values']['eval_loss']==r['eval_loss'] for x in ev if x['event']=='log' and x['step']==step and 'eval_loss' in x.get('values',{})),'validation/save attempt binding')
+            need(len(saves)==1 and saves[0]['attempt_job_id']==r['attempt_job_id'] and
+                 Path(saves[0]['path'])==Path(r['checkpoint_path']), 'receipt/save-event attempt binding')
         need({k:v['sha256'] for k,v in r['data_identity'].items()}==ASSETS, 'receipt data mismatch')
         m=r['manifest'];raw=r['manifest_json'].encode('utf-8')
         need(json.loads(raw)==m,'receipt raw manifest content')
@@ -101,12 +110,30 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
     for ev,_ in events:
         restored=[x for x in ev if x['event']=='strict_ds_restored']
         need(restored and Path(restored[-1]['path'])==best and restored[-1]['global_step']==best_step, 'strict best restore proof missing')
+    if scope=='FORMAL':
+        from formal_control import digest, Runner
+        plan=load(load(root.parent/'plan.identity.json')['path']);state=load(root.parent/'state.json')
+        need(plan['run_commit']==commit and plan['config_sha256']==config_sha,'formal control source binding')
+        training_attempts=[x for x in state['attempts'] if x['stage']=='train']
+        known={x['job_id']:x for x in training_attempts}
+        for r in receipts.values():need(r['attempt_job_id'] in known,'receipt from unaccepted training attempt')
+        for attempt in training_attempts:
+            req=load(Path(plan['job_root'])/attempt['job_id']/'request.json')
+            accepted=load(Path(plan['job_root'])/attempt['job_id']/'accepted.json')
+            need(digest(req)==attempt['request_sha256']==accepted['request_sha256'] and
+                 req['capture_version']==commit and req['beauty_stage']=='train' and
+                 req['beauty_config_sha256']==config_sha and req['beauty_input_identity']==ASSETS,'accepted training request identity')
+        latest=training_attempts[-1]
+        if os.environ.get('GRID_JOB_ID')!=latest['job_id']:
+            status=Runner(plan['runner'],plan['runner_sha256'],plan['job_root']).query(latest['job_id'])
+            need(status['status']=='SUCCEEDED' and status['exit_code']==0 and status['cleanup_verified'] and
+                 not status['worker_alive'] and not status['workgroup_live'],'formal training runner completion')
     adapter=root/'best_adapter'
     need(sha(adapter/'adapter_model.bin')==selected['adapter_sha256'], 'exported Adapter SHA')
     import torch
     checkpoint=torch.load(best/'adapter_model.bin',map_location='cpu',weights_only=False)
     exported=torch.load(adapter/'adapter_model.bin',map_location='cpu',weights_only=False)
-    need(set(checkpoint)==set(exported) and all(torch.equal(v,exported[k]) for k,v in checkpoint.items()), 'export is not selected checkpoint tensor state')
+    need(set(checkpoint)==set(exported) and all(v.dtype==exported[k].dtype and v.shape==exported[k].shape and torch.equal(v,exported[k]) for k,v in checkpoint.items()), 'export is not selected checkpoint tensor state')
     if scope=='FORMAL':
         from formal_evaluate import expected_adapter_shapes
         need({k:tuple(v.shape) for k,v in exported.items()}==expected_adapter_shapes(), 'Adapter/Embedding/Head shapes')
@@ -117,7 +144,7 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
     token_names=('tokenizer.model','tokenizer_config.json','added_tokens.json','special_tokens_map.json')
     for name in token_names:need(sha(best/name)==sha(adapter/name), 'Tokenizer differs from selected checkpoint: '+name)
     files={p.name:{k:v for k,v in identity(p).items() if k!='path'} for p in sorted(adapter.iterdir()) if p.is_file()}
-    return {'verified':True,'scope':scope,'run_commit':commit,'config_sha256':config_sha,'best_step':best_step,
+    return {'verified':True,'scope':scope,'training_root':str(root),'run_commit':commit,'config_sha256':config_sha,'best_step':best_step,
             'adapter_files':files,'selection':identity(root/'best_selection.json'),
             'receipts':[identity(p) for p in sorted((root/'checkpoint_receipts').glob('*.json'))]}
 
@@ -132,6 +159,7 @@ def verify_predictions(test, commit, best, condition, scope='FORMAL'):
         need({k:v['sha256'] for k,v in r['data_identity'].items()}==ASSETS, 'prediction data mismatch')
         need(r['adapter_files']==best['adapter_files'], 'prediction is not selected Adapter/Tokenizer')
         if condition!='normal':
-            need(r['shuffle']['n']==int(condition[-1]) and r['shuffle']['protocol']=='GRID-LETTER-SHUFFLE-V1', 'Shuffle condition mismatch')
+            need(r['shuffle']['n']==int(condition[-1]) and r['shuffle']['protocol']=='GRID-LETTER-SHUFFLE-V1' and r['shuffle']['seed']==42, 'Shuffle condition mismatch')
+        else:need('shuffle' not in r,'Normal contains Shuffle intervention')
         identities.append(identity(test/f'predictions.rank{rank}.jsonl'))
     return {'verified':True,'scope':scope,'prediction_run_commit':commit,'prediction_files':identities,'adapter_files':best['adapter_files']}

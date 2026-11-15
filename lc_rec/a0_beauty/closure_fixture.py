@@ -46,7 +46,7 @@ def compute(plan,stage,output,resume=None):
             write(cp/'complete.json',manifest)
             r=write_receipt(cp,training,run_commit=plan['run_commit'],config_sha256=plan['config_sha256'],data_identity=data,
                 epoch=float(epoch),step=step,eval_loss=loss,best_checkpoint=trainer.state.best_model_checkpoint,
-                best_metric=best[1],attempt=plan['task_id'],required_files=checkpoint_required_files(step),expected_manifest=manifest)
+                best_metric=best[1],attempt=plan['task_id'],required_files=checkpoint_required_files(step),expected_manifest=manifest,scope=SYNTHETIC)
             receipts.append(identity(r))
             # Actual installed Transformers 4.31 rotation, including best protection.
             Trainer._rotate_checkpoints(trainer,use_mtime=False,output_dir=str(training))
@@ -60,7 +60,8 @@ def compute(plan,stage,output,resume=None):
             write(training/f'rank{rank}.json',{'scope':SYNTHETIC,'status':'TRAINING_COMPLETE','rank':rank,'probe':False,
                 'run_commit':plan['run_commit'],'config_sha256':plan['config_sha256'],'global_step':8214,'epoch':4.,'data_identity':data,
                 'data':{'train_rows':131413,'valid_rows':44726,'validation_subset_preflight_only':False,'tokenizer_vocab':32965}})
-            ev=[{'event':'log','step':s,'epoch':float(i+1),'values':{'eval_loss':loss}} for i,(s,loss) in enumerate(zip(STEPS,losses))]
+            ev=[{'event':'log','attempt_job_id':plan['task_id'],'step':s,'epoch':float(i+1),'values':{'eval_loss':loss}} for i,(s,loss) in enumerate(zip(STEPS,losses))]
+            ev.extend({'event':'checkpoint_complete','step':step,'attempt_job_id':plan['task_id'],'path':str(training/f'checkpoint-{step}')} for step in STEPS)
             ev.append({'event':'strict_ds_restored','path':str(selected),'global_step':best[0]})
             (training/f'events.rank{rank}.jsonl').write_text(''.join(json.dumps(x)+'\n' for x in ev))
         durable_write(output/'fixture_boundary.json',{'scope':SYNTHETIC,'external_model_compute_replaced':True,

@@ -48,6 +48,14 @@ def validate_plan(p):
     need(side['job_root']==p['job_root'] and side['namespace']==p['namespace']['namespace'],'isolated runner sidecar')
     need(sha(p['runner']+'.deployment.json')==p['namespace']['deployment_sha256'],'sidecar hash')
     for row in p['inputs']:check_file(row)
+    version=read(Path(p['release'])/'RUN_VERSION.json')
+    need(version['run_commit']==p['run_commit'],'export is not the pinned code commit')
+    required=('production_control.py','production_pipeline.py','production_identity.py','formal_train.py','formal_evaluate.py','paired_beauty.py','offline_metrics.py','checkpoint_receipt.py','shuffle_entry.py','shuffle_runtime.py','shuffle_cpu_inputs.py')
+    supplied={x['path']:x['sha256'] for x in p['inputs']}
+    version_rows={x['path']:x['sha256'] for x in version['files']}
+    for name in required:
+        target=str(Path(p['release'])/'lc_rec/a0_beauty'/name)
+        need(target in supplied and supplied[target]==version_rows[target],'production source not bound: '+name)
     need(p['inputs'] and any(Path(r['path'])==Path(p['config']) for r in p['inputs']),'config must be pinned input')
     if p['evidence_scope']=='FORMAL':
         need(Path(p['model']).name=='4782ad278652c7c71b72204d462d6d01eaaf7549','model revision')
@@ -129,8 +137,16 @@ class Control:
         if p['evidence_scope']=='FORMAL':authorize(p,authorization,authorization_sha256)
         with locked(self.root/'.control.lock'):
             state=read(self.state_path);self.charge(state)
+            disk=os.statvfs(self.root)
+            need(disk.f_bavail*disk.f_frsize>=max(100*1024**3,disk.f_blocks*disk.f_frsize//10),'disk safety reserve')
+            memory={line.split(':')[0]:int(line.split()[1])*1024 for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:')}
+            need(memory['MemAvailable']>=40*1024**3,'host memory reserve')
+            if p['evidence_scope']==SYNTHETIC:
+                temp=Path(p.get('temporary_root',p['root']))
+                need(sum(x.stat().st_size for x in temp.rglob('*') if x.is_file())<=8*1024**3,'8GiB CPU temporary space limit')
             stage=next((s for s in STAGES if state['stages'].get(s,{}).get('status')!='COMPLETE'),None)
-            if stage is None:return state
+            if stage is None:
+                state['status']='COMPLETE';durable_write(self.state_path,state);return state
             old=state['stages'].get(stage)
             if old:
                 a=state['attempts'][old['attempt_index']];status=a.get('runner')
@@ -157,6 +173,11 @@ class Control:
             stage_used=sum(a.get('charged_seconds',0) for a in state['attempts'] if a['stage']==stage)
             remaining=min(p['stage_seconds'][stage]-stage_used,p['budget'][group(stage)]-used[group(stage)],p['budget']['total']-sum(used.values()))-p['budget']['cleanup_reserve']
             need(remaining>=1,'cumulative budget exhausted')
+            if p['evidence_scope']=='FORMAL' and stage in ('train','normal','s3','s4'):
+                gpu=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],text=True)
+                need(not gpu.strip(),'runtime GPU resource check: existing compute process')
+                actual=subprocess.check_output(['nvidia-smi','--query-gpu=uuid','--format=csv,noheader'],text=True).splitlines()
+                need(actual==p['gpu_uuids'],'runtime physical GPU identities changed')
             n=sum(a['stage']==stage for a in state['attempts'])
             req,out=self.factory(p,stage,n,min(345600,int(remaining)),self.path,authorization,authorization_sha256,resume)
             path=self.root/'requests'/f'{stage}-a{n}.json';path.parent.mkdir(parents=True,exist_ok=True)
