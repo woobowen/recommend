@@ -54,3 +54,27 @@ def audit_two_rank_epoch(rank_rows, n, expected_repeats=11):
             'duplicates': {str(k): v - 1 for k, v in sorted(counts.items()) if v > 1},
             'rank_order_sha256': [hashlib.sha256(json.dumps(x, separators=(',', ':')).encode()).hexdigest()
                                   for x in rank_rows]}
+
+
+def reconstruct_native_shards(n, generator_state, batches_per_rank):
+    """Replay the installed native RandomSampler/Accelerate sharding on a clone.
+
+    The caller supplies rank 0's generator state immediately before
+    DataLoaderShard synchronizes it. This never touches the live generator.
+    """
+    import itertools
+    import torch
+    from torch.utils.data import RandomSampler, BatchSampler
+    from accelerate.data_loader import BatchSamplerShard
+
+    result = []
+    for rank in range(2):
+        generator = torch.Generator()
+        generator.set_state(generator_state.cpu())
+        sampler = RandomSampler(range(n), replacement=False, generator=generator)
+        batches = BatchSampler(sampler, batch_size=8, drop_last=False)
+        shard = BatchSamplerShard(batches, num_processes=2, process_index=rank,
+                                  split_batches=False, even_batches=True)
+        result.append([row for batch in itertools.islice(shard, batches_per_rank)
+                       for row in batch])
+    return result

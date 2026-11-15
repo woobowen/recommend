@@ -1,7 +1,8 @@
 # Beauty: training accumulation boundary requiring a decision
 
-This is an unresolved method/continuity question, not a preflight PASS or RUN.
-No Beauty training has been started.
+The user has approved the narrowly scoped control and native-padding changes
+described below. This document is not a real-model preflight PASS or formal
+RUN. No Beauty training has been started.
 
 The pinned LETTER loader produced 131,413 training examples. In the installed
 Accelerate 0.21.0 `BatchSamplerShard`, micro-batch 8 and world size 2 yield
@@ -96,6 +97,33 @@ SHA-256 `801163240076d8284002fe39f188978c5b60fb4b291cb578e52cb09889bf0435`.
 This is not cross-process, HF Trainer, actual data loader, validation, LoRA,
 or full-model recovery proof. A non-author agent reviewed only a bridged text
 description and explicitly could not read or execute the real artifacts.
+
+An additional independent-process toy ZeRO-2 recovery job,
+`letter-a0-beauty-cross-resume-20261115-r0`, exited 0 and verified process
+cleanup. It charged at most 58.1703 GPU-device-seconds. Its preserved archive
+is `/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-beauty-cross-resume-20261115-r0/evidence.tar.gz`,
+325,908 bytes, SHA-256
+`33930b72fc4be210b27125356a30ab5b27c830641dcda7ab413c5440e612c3da`.
+The independent launches matched the toy inputs, RNG, weights, optimizer and
+scheduler. This still does not exercise actual Trainer, Beauty or validation.
+
+The anchored draft Trainer loop was also tested with a CPU toy model and
+`eval_delay=1`: validation occurred after microbatch 10, 20, 30 and 40, at
+optimizer steps 2, 5, 7 and 10. The first trial exposed that the unmodified
+Trainer's fractional `state.epoch` skipped first-epoch validation; the draft
+sets it to the actually completed epoch immediately before its epoch callback.
+The v1, v2 and v3 outputs preserve the observations. This is not a DeepSpeed
+or real-model comparison. Two earlier concentrated corrections and this
+boundary correction consume the conservatively counted three task-level
+correction rounds; this count is not reset by a new session.
+
+The independent `test_native_reconstruction.py` uses the installed Accelerate
+`DataLoaderShard` and a cloned generator to compare all rank rows against a
+separately built native `RandomSampler` and `BatchSamplerShard` at Beauty's
+actual length. It checks 11 repeated slots, without observing real distributed
+training. The draft training entry additionally records each real consumed row
+and checks it against reconstruction from rank 0's synchronized generator.
+Per-epoch actual duplicated row identities are therefore pending formal run.
 
 ## Existing preliminary evidence
 
