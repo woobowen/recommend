@@ -457,8 +457,18 @@ def main():
                         rows.append({'path':str(f.relative_to(cp)),'bytes':f.stat().st_size,'sha256':sha(f)})
                 assert checkpoint_required_files(self.state.global_step) <= {r['path'] for r in rows}
                 assert all(r['bytes']>0 for r in rows)
-                write(cp/'complete.json',{'run_commit':a.run_commit,'config_sha256':sha(a.config),
-                     'global_step':self.state.global_step,'files':rows,'collective_ranks':2})
+                complete={'run_commit':a.run_commit,'config_sha256':sha(a.config),
+                     'global_step':self.state.global_step,'files':rows,'collective_ranks':2}
+                write(cp/'complete.json',complete)
+                if not a.boundary_preflight:
+                    from checkpoint_receipt import write_receipt
+                    if metrics is None or 'eval_loss' not in metrics:
+                        raise ValueError('formal checkpoint lacks validation loss')
+                    write_receipt(cp, out, run_commit=a.run_commit, config_sha256=sha(a.config),
+                        data_identity=data_identity, epoch=self.state.epoch, step=self.state.global_step,
+                        eval_loss=metrics['eval_loss'], best_checkpoint=self.state.best_model_checkpoint,
+                        best_metric=self.state.best_metric, attempt=os.environ.get('GRID_JOB_ID'),
+                        required_files=checkpoint_required_files(self.state.global_step), expected_manifest=complete)
             dist.barrier()
             if rank==0:self._rotate_checkpoints(use_mtime=False,output_dir=str(out))
             dist.barrier()

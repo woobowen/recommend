@@ -1,5 +1,24 @@
 # A0 Beauty formal engineering review — partial
 
+## Production closure work in progress — NOT READY
+
+The current work adds fail-closed persistent control primitives and a checkpoint
+receipt hook. These are not a complete production controller: stage-specific
+request construction and artifact verification, the formal best-source proof,
+the unified evaluation path, real CPU torchrun runner tests and full pipeline
+acceptance remain incomplete. The control primitive rejects formal scope; it
+must not be used to launch a formal job. Receipt code changes training-file
+bytes solely to record completion evidence before rotation; it is not yet
+validated in a full GPU training run. The earlier sections below are historical
+evidence, not proof of the new work.
+
+`TECHNICAL_ENGINEERING_CHECKS: FAIL`
+`NONAUTHOR_REVIEW: PENDING`
+`FORMAL_ENGINEERING_READINESS: PARTIAL`
+`FORMAL_READY_CANDIDATE: NO`
+`FORMAL_LAUNCH_AUTHORIZED: NO`
+
+
 ## Follow-up CPU evidence — still partial
 
 Code snapshot `420d09c40f4435a2061c57223e7c1db066beb696` adds an isolated
