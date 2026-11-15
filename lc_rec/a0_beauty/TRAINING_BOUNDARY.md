@@ -71,6 +71,18 @@ accumulation reset; `*_0.stdout` demonstrates continuous synchronization
 positions when that reset is disabled. Neither run establishes DeepSpeed
 optimizer behavior or validates an actual Beauty run.
 
+The guarded two-GPU observational job `letter-a0-beauty-zero-state-20261115-r0`
+exited 0 and verified task cleanup. The guard charged 28.8251 GPU-device-seconds
+as a wall-time reservation upper bound. After two microbatches of its synthetic
+model, both ranks held nonzero partitioned data in
+`DeepSpeedZeroOptimizer.averaged_gradients`, with `micro_step_id=1` and
+`engine.micro_steps=2`; all exposed parameter `.grad` fields were null. After
+four microbatches the averaged gradient slots were null and an optimizer step
+had occurred. At ten microbatches the partial-gradient state reappeared. See
+`evidence/zero2-state-r0/` for the actual request, rank observations and runner
+exit/cleanup evidence. This was a small-model observation, not a Beauty-model
+checkpoint or recovery acceptance.
+
 ## Existing preliminary evidence
 
 - The actual dataset loader and target split were checked for all rows;

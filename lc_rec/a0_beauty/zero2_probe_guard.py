@@ -27,8 +27,20 @@ record = {'job_id': os.environ['GRID_JOB_ID'], 'argv': command, 'gpu_start': gpu
           'budget_max_device_seconds': 360, 'scope':'small synthetic observation, not Beauty model acceptance'}
 start = time.monotonic()
 try:
-    result = subprocess.run(command, timeout=160)
-    record['exit_code'] = result.returncode
+    child = subprocess.Popen(command)
+    try:
+        record['exit_code'] = child.wait(timeout=150)
+    except subprocess.TimeoutExpired:
+        # torchrun workers can own separate process groups. Give torchrun's
+        # signal handler time to shut down its workers before the runner's
+        # outer deadline; the runner still verifies task-wide cleanup.
+        record['timed_out'] = True
+        child.terminate()
+        try:
+            record['exit_code'] = child.wait(timeout=8)
+        except subprocess.TimeoutExpired:
+            child.kill()
+            record['exit_code'] = child.wait()
 finally:
     record['wall_seconds'] = time.monotonic() - start
     record['charged_device_seconds_upper_bound'] = 2 * record['wall_seconds']
