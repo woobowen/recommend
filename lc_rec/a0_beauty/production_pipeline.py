@@ -57,6 +57,23 @@ def evaluation(plan, condition, output):
     return {'prediction_proof':proof,'stage_a':identity(output/'stage_a.json'),'metrics':identity(output/'primary/metrics.json')}
 
 
+def validate_worker_context(plan,stage,output,resume=None,*,job_id=None,job_dir=None):
+    from formal_control import digest
+    job_id=job_id or os.environ.get('GRID_JOB_ID')
+    job_dir=job_dir or os.environ.get('GRID_JOB_DIR')
+    need(job_id and job_dir and Path(job_dir)==Path(plan['job_root'])/job_id,'runner-owned worker context required')
+    state=load(Path(plan['root'])/'state.json');record=state['stages'][stage]
+    attempt=state['attempts'][record['attempt_index']]
+    req=load(Path(job_dir)/'request.json');accepted=load(Path(job_dir)/'accepted.json')
+    need(attempt['job_id']==job_id and digest(req)==attempt['request_sha256']==accepted['request_sha256'],'worker request identity')
+    need(req['beauty_stage']==stage and req['capture_version']==plan['run_commit'],'worker stage/source identity')
+    need(Path(record['output'])==Path(output) and Path(output).is_relative_to(Path(plan['root'])/'attempts'/stage),'worker output scope')
+    if resume:
+        from production_control import resume_point
+        need(stage=='train' and Path(resume)==resume_point(training_root(plan),plan['run_commit'],plan['config_sha256']),'worker recovery source')
+    return {'job_id':job_id,'request_sha256':digest(req),'output':str(output)}
+
+
 def actual_compute(plan, stage, output, resume=None):
     scope_guard(plan['root'],'FORMAL')
     scripts=Path(plan['release'])/'lc_rec/a0_beauty'
@@ -90,6 +107,7 @@ def actual_compute(plan, stage, output, resume=None):
 
 def execute_stage(plan, stage, output, *, compute=actual_compute, resume=None):
     need(stage in STAGES,'unknown production stage')
+    validate_worker_context(plan,stage,output,resume)
     output=Path(output);scope_guard(output,plan['evidence_scope']);output.mkdir(parents=True,exist_ok=False)
     if stage in GPU:
         compute(plan,stage,output,resume)
