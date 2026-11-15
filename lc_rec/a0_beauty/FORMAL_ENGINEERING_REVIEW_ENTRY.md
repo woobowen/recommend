@@ -1,5 +1,37 @@
 # A0 Beauty formal engineering review — partial
 
+## Follow-up CPU evidence — still partial
+
+Code snapshot `420d09c40f4435a2061c57223e7c1db066beb696` adds an isolated
+driver for `formal_evaluate.load_evaluator`, `audit_prediction`, and
+`aggregate_predictions`. The original LETTER evaluator was actually called on
+the existing synthetic Normal, S3 and S4 candidate shards, each with 22,363
+users. The author evaluator and all six input shards were bound by SHA in the
+server request. Job `letter-beauty-letter-evaluator-cpu-420d09c40f44-r0` exited
+0 and reported verified cleanup; the raw request, status, log and result are in
+`evidence/formal-engineering-cpu-r1/`. The output is synthetic, not model
+inference or research results. This isolated evaluator does not establish a
+production controller or end-to-end production evaluation.
+
+The same snapshot extracts the existing paired Bootstrap mathematics into
+`paired_bootstrap`, which the formal CLI calls only after its existing source
+gate. `test_paired_bootstrap_full_cpu.py` used SHA-checked per-user matrices
+from the prior synthetic fixture and independently recomputed both comparisons.
+The largest draw discrepancies were `3.99853761212654e-15` for S3 and
+`3.939557013943329e-15` for S4. The raw result is in the same evidence directory.
+This tests the production mathematical function, not the full paired CLI or
+formal best-Adapter provenance.
+
+No production controller, training provenance proof, actual CPU torchrun
+runner acceptance, cumulative recovery budget, authorization gate, full
+end-to-end controller dry-run, or new nonauthor review was completed in this
+follow-up. Three attempted nonauthor agents reported they had no file or
+execution tools; no independent review PASS is claimed. The configured
+`storage_save_total_limit=2` and checkpoint rotation also require a durable
+per-epoch completeness proof before rotation if all four epochs are to be
+verified; simply requiring four checkpoint directories after training conflicts
+with the existing retention behavior. No formal GPU job was submitted.
+
 `FORMAL_ENGINEERING_READINESS: PARTIAL`
 `TECHNICAL_ENGINEERING_CHECKS: FAIL`
 `NONAUTHOR_REVIEW: PENDING`
