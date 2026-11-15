@@ -1,0 +1,23 @@
+{
+  "status": "FAILED",
+  "error": "TypeError('string indices must be integers')",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/a0_beauty/formal_train.py\", line 656, in <module>\n    try:main()\n  File \"/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/a0_beauty/formal_train.py\", line 577, in main\n    result=trainer.train(resume_from_checkpoint=a.resume)\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py\", line 1539, in train\n    return inner_training_loop(\n  File \"<beauty_trainer_inner_loop>\", line 376, in _inner_training_loop\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py\", line 2226, in _maybe_log_save_evaluate\n    metrics = self.evaluate(ignore_keys=ignore_keys_for_eval)\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py\", line 2934, in evaluate\n    output = eval_loop(\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py\", line 3113, in evaluation_loop\n    for step, inputs in enumerate(dataloader):\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/data_loader.py\", line 384, in __iter__\n    current_batch = next(dataloader_iter)\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/utils/data/dataloader.py\", line 708, in __next__\n    data = self._next_data()\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/utils/data/dataloader.py\", line 764, in _next_data\n    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration\n  File \"/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py\", line 55, in fetch\n    return self.collate_fn(data)\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer_utils.py\", line 704, in __call__\n    return self.data_collator(features)\n  File \"/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/a0_beauty/training_rows.py\", line 31, in __call__\n    result = self.collator([sample for _, sample in batch])\n  File \"/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/collator.py\", line 25, in __call__\n    input_texts = [d[\"input_ids\"] for d in batch]\n  File \"/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/collator.py\", line 25, in <listcomp>\n    input_texts = [d[\"input_ids\"] for d in batch]\nTypeError: string indices must be integers\n",
+  "argv": [
+    "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/a0_beauty/formal_train.py",
+    "--source-root",
+    "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+    "--data-root",
+    "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3",
+    "--model",
+    "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+    "--output",
+    "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-boundary-model-20261115-r0/continuous",
+    "--config",
+    "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/a0_beauty/config/formal_beauty_seed42.json",
+    "--run-commit",
+    "a7b2cd23a661600687bc143c37a995802cfdb016",
+    "--precision-approval",
+    "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+    "--boundary-preflight"
+  ]
+}

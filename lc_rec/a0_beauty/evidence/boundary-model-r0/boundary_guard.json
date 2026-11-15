@@ -1,0 +1,46 @@
+{
+  "job_id": "letter-a0-beauty-boundary-model-20261115-r0",
+  "run_commit": "a7b2cd23a661600687bc143c37a995802cfdb016",
+  "started_utc": "2026-11-15T04:15:21.648411+00:00",
+  "gpu_start": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 1\nGPU-59cac3bd-3645-668b-79c8-839e0d878893, 1\n",
+  "memory_available": 256499736576,
+  "large_output_path": "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-boundary-model-20261115-r0",
+  "disk_data_free": 2945672032256,
+  "prior_charged_device_seconds_upper_bound": 117.2274,
+  "wall_cap_seconds": 1650,
+  "stages": [
+    {
+      "mode": "continuous",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nnodes=1",
+        "--nproc_per_node=2",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/a0_beauty/formal_train.py",
+        "--source-root",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+        "--data-root",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3",
+        "--model",
+        "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+        "--output",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-boundary-model-20261115-r0/continuous",
+        "--config",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/a0_beauty/config/formal_beauty_seed42.json",
+        "--run-commit",
+        "a7b2cd23a661600687bc143c37a995802cfdb016",
+        "--precision-approval",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-release-a7b2cd2/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+        "--boundary-preflight"
+      ],
+      "start_utc": "2026-11-15T04:15:21.694219+00:00",
+      "exit_code": 1,
+      "end_utc": "2026-11-15T04:17:00.632279+00:00"
+    }
+  ],
+  "status": "STARTED",
+  "wall_seconds": 98.983832385391,
+  "charged_device_seconds_upper_bound": 197.967664770782
+}

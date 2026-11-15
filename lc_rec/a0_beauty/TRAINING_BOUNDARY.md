@@ -2,7 +2,9 @@
 
 The user has approved the narrowly scoped control and native-padding changes
 described below. This document is not a real-model preflight PASS or formal
-RUN. No Beauty training has been started.
+RUN. The later real-model preflight attempted short training and failed at
+validation; see `BLOCKED_BOUNDARY_PREFLIGHT.md`. No formal Beauty training
+has been started.
 
 The pinned LETTER loader produced 131,413 training examples. In the installed
 Accelerate 0.21.0 `BatchSamplerShard`, micro-batch 8 and world size 2 yield
