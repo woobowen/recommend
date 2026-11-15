@@ -49,7 +49,7 @@ def verify_prediction_stage(plan, condition):
         users,catalog,original.load_evaluator(original.author_source(plan['source_root'])),
         require_rank_done=True,run_commit=plan['prediction_run_commit'])
     need(audit['actual_test_users']==22363 and
-         audit['expected_user_axis_sha256']=='7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f',
+         audit['expected_user_axis_sha256']=='abe0ed0fad612da1a4293927ba09698a47dff6687ecff33e83fadf05c918ea4c',
          'complete canonical generation user axis')
     proof['full_user_audit']=audit
     return proof
