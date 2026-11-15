@@ -60,7 +60,8 @@ def verify_checkpoint(path, run_commit, config_sha256):
         assert not relative.is_absolute() and '..' not in relative.parts
         f=path/relative
         assert f.is_file() and not f.is_symlink() and f.stat().st_size==row['bytes']>0
-        if row['sha256'] is not None:assert sha(f)==row['sha256']
+        assert isinstance(row['sha256'],str) and len(row['sha256'])==64
+        assert sha(f)==row['sha256'], 'checkpoint file identity mismatch: '+str(relative)
     assert (path/'latest').read_text().strip()=='global_step%d'%meta['global_step']
     assert json.loads((path/'trainer_state.json').read_text())['global_step']==meta['global_step']
     return meta
@@ -357,6 +358,21 @@ def main():
             assert self._beauty_resume_state is not None
             restore_partial(self.model_wrapped,self.lr_scheduler,self.accelerator,self._beauty_resume_state,
                             run_commit=a.run_commit,config_sha256=sha(a.config))
+            restored=partial_snapshot(self.model_wrapped,self.lr_scheduler,self.accelerator,
+                self._beauty_resume_state['loader_state'],run_commit=a.run_commit,config_sha256=sha(a.config))
+            def exact(left,right):
+                if isinstance(left,torch.Tensor):
+                    return isinstance(right,torch.Tensor) and left.dtype==right.dtype and left.shape==right.shape and torch.equal(left,right)
+                if isinstance(left,np.ndarray):
+                    return isinstance(right,np.ndarray) and left.dtype==right.dtype and np.array_equal(left,right)
+                if isinstance(left,dict):
+                    return isinstance(right,dict) and set(left)==set(right) and all(exact(left[k],right[k]) for k in left)
+                if isinstance(left,(list,tuple)):
+                    return type(left) is type(right) and len(left)==len(right) and all(exact(x,y) for x,y in zip(left,right))
+                return left==right
+            assert exact(self._beauty_resume_state,restored), 'partial checkpoint state differs immediately after restore'
+            event('partial_restore_exact',micro_steps=restored['micro_steps'],global_steps=restored['global_steps'],
+                  optimizer_micro_step_id=restored['optimizer_micro_step_id'])
         def _rotate_checkpoints(self, use_mtime=False, output_dir=None):
             if self._writing_checkpoint:
                 return
@@ -427,8 +443,7 @@ def main():
                 rows=[]
                 for f in sorted(cp.rglob('*')):
                     if f.is_file() and f.name!='complete.json':
-                        rows.append({'path':str(f.relative_to(cp)),'bytes':f.stat().st_size,
-                                     'sha256':sha(f) if f.stat().st_size<8*1024**2 or f.name.startswith('partial_rank') else None})
+                        rows.append({'path':str(f.relative_to(cp)),'bytes':f.stat().st_size,'sha256':sha(f)})
                 assert checkpoint_required_files(self.state.global_step) <= {r['path'] for r in rows}
                 assert all(r['bytes']>0 for r in rows)
                 write(cp/'complete.json',{'run_commit':a.run_commit,'config_sha256':sha(a.config),
