@@ -12,6 +12,11 @@ from offline_metrics import ASSETS, KEYS
 if not __debug__:
     raise RuntimeError('Pairing identity checks require Python assertions enabled')
 
+def validate_metric_matrix(np, keys, matrix):
+    assert keys==KEYS, 'canonical metric columns and order required'
+    assert matrix.shape==(22363,16) and matrix.dtype==np.float64
+    assert np.isfinite(matrix).all()
+
 
 def validate_provenance(primary, test):
     """Bind evaluated files to completed formal rank reports; no training proof implied."""
@@ -62,9 +67,8 @@ def main():
         with (root/'per_user.csv').open() as f:rows.append(list(csv.DictReader(f)))
         with np.load(root/'per_user_metrics.npz',allow_pickle=False) as z:
             newkeys=z['keys'].tolist();matrix=z['values'].copy()
-            assert newkeys==KEYS and (keys is None or keys==newkeys);keys=newkeys
-            assert matrix.shape==(22363,16) and matrix.dtype==np.float64
-            assert np.isfinite(matrix).all()
+            validate_metric_matrix(np,newkeys,matrix)
+            assert keys is None or keys==newkeys;keys=newkeys
             assert np.array_equal(z['row_idx'],np.arange(22363))
             assert str(z['user_axis_sha256'])=='7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f'
             assert np.array_equal(matrix,np.asarray([[float(r[k]) for k in keys] for r in rows[-1]]))

@@ -40,7 +40,27 @@ def main():
    assert control.poll() is None
    final=runner.observe_group(group)
    assert final['verified_empty'],repr(final)
-   print(json.dumps({'status':'PASS_CPU_ISOLATED','candidate_sha256':hashlib.sha256(candidate.read_bytes()).hexdigest(),'timeout_345600_accept':True,'timeout_345601_rejected':True,'marked_session_owned_and_pidfd_signalled':True,'unmarked_control_untouched':True,'cleanup_verified':True,'formal_submit':False}))
+   # Full runner lifecycle on a distinct synthetic-only job.  It starts only
+   # two sleeping Python processes; no model, CUDA or formal job is involved.
+   jobid2='letter-a0-beauty-cpu-runner-check-lifecycle';jobdir2=jobs/jobid2
+   child="import subprocess,sys,time; subprocess.Popen([sys.executable,'-c','import time;time.sleep(120)'],start_new_session=True); time.sleep(120)"
+   request={**req,'job_id':jobid2,'timeout_seconds':2,'argv':[sys.executable,'-c',child]}
+   request_path=root/'synthetic_request.json';request_path.write_text(json.dumps(request))
+   cmd=[sys.executable,'-I','-S','-B',str(candidate)]
+   accepted=json.loads(subprocess.check_output(cmd+['submit',str(jobs),str(request_path)],text=True))
+   assert accepted['submission']=='ACCEPTED'
+   deadline=time.monotonic()+20
+   while True:
+    status=json.loads(subprocess.check_output(cmd+['query',str(jobdir2)],text=True))
+    if status['status'] not in ('ACCEPTED','RUNNING'):break
+    if time.monotonic()>deadline:raise TimeoutError('isolated synthetic runner lifecycle')
+    time.sleep(.1)
+   assert status['status']=='TIMED_OUT' and status['cleanup_verified'] and not status['workgroup_live'],status
+   assert any(x['member']['pid']!=status['worker']['pid'] for x in status['cleanup']['events']), 'escaped worker not cleaned'
+   duplicate=json.loads(subprocess.check_output(cmd+['submit',str(jobs),str(request_path)],text=True))
+   assert duplicate['submission']=='EXISTING_NO_RESTART'
+   assert control.poll() is None
+   print(json.dumps({'status':'PASS_CPU_ISOLATED','candidate_sha256':hashlib.sha256(candidate.read_bytes()).hexdigest(),'timeout_345600_accept':True,'timeout_345601_rejected':True,'marked_session_owned_and_pidfd_signalled':True,'synthetic_submit_timeout_cleanup_and_no_duplicate':True,'unmarked_control_untouched':True,'cleanup_verified':True,'formal_submit':False}))
   finally:
    for p in (worker,leader,control):
     if p is not None and p.poll() is None:

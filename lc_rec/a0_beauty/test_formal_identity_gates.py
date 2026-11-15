@@ -2,12 +2,19 @@
 import copy, hashlib, json, tempfile
 from pathlib import Path
 from offline_metrics import ASSETS, verify_bootstrap_config
-from paired_beauty import validate_provenance
+from paired_beauty import validate_provenance,validate_metric_matrix
+from offline_metrics import KEYS
+import numpy as np
 
 def write(p,v): p.write_text(json.dumps(v))
 def main():
  cfg={'unit':'user','replacement':True,'repetitions':5000,'seed':20261113,'rng':'numpy Generator PCG64','percentiles':[2.5,97.5],'percentile_method':'linear'}
  verify_bootstrap_config(cfg)
+ matrix=np.zeros((22363,16),dtype=np.float64);validate_metric_matrix(np,KEYS,matrix)
+ for keys,values in [(KEYS[::-1],matrix),(KEYS[:-1],matrix),(KEYS,matrix[:2]),(KEYS,np.full((22363,16),np.nan))]:
+  try:validate_metric_matrix(np,keys,values)
+  except AssertionError:pass
+  else:raise AssertionError('invalid metric matrix accepted')
  for key in cfg:
   b=copy.deepcopy(cfg); b[key]=None
   try: verify_bootstrap_config(b)
