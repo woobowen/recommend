@@ -22,6 +22,7 @@ SOURCE='/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-infer-63f13def
 def main():
     p=argparse.ArgumentParser();p.add_argument('mode',choices=['deploy','submit','query','collect']);p.add_argument('--commit',required=True);a=p.parse_args()
     LOCAL.mkdir(parents=True,exist_ok=True);t=transport.Transport('new-server')
+    t.profile=dict(t.profile,remote_support=BASE) # scoped instance only; no shared profile edit
     release=BASE+'/releases/'+a.commit;root=BASE+'/SYNTHETIC_CPU_INTEGRATION_ONLY_'+a.commit[:12]
     runner=BASE+'/runner-beauty-cc1a1e277faa.py';jobs=BASE+'/cpu-jobs'
     job='letter-a0-beauty-cpu-runner-check-main-'+a.commit[:12]
@@ -39,14 +40,15 @@ import tarfile,json,hashlib,os,pwd,socket,datetime
 base=Path({BASE!r});release=Path({release!r});archive=Path({remote_archive!r})
 assert hashlib.sha256(archive.read_bytes()).hexdigest()=={transport.sha(archive)!r}
 with tarfile.open(archive) as tf:
- members=tf.getmembers();assert all(m.isfile() and not Path(m.name).is_absolute() and '..' not in Path(m.name).parts for m in members)
+ members=tf.getmembers();assert all((m.isfile() or m.isdir()) and not Path(m.name).is_absolute() and '..' not in Path(m.name).parts for m in members)
  assert len({{m.name for m in members}})==len(members)
  release.mkdir(parents=True,exist_ok=True)
  for m in members:
+  if not m.isfile():continue
   b=tf.extractfile(m).read();p=release/m.name;p.parent.mkdir(parents=True,exist_ok=True)
   if p.exists():assert p.read_bytes()==b
   else:p.write_bytes(b)
-rows=[{{'path':str(release/m.name),'relative':m.name,'bytes':(release/m.name).stat().st_size,'sha256':hashlib.sha256((release/m.name).read_bytes()).hexdigest()}} for m in members]
+rows=[{{'path':str(release/m.name),'relative':m.name,'bytes':(release/m.name).stat().st_size,'sha256':hashlib.sha256((release/m.name).read_bytes()).hexdigest()}} for m in members if m.isfile()]
 import sys
 sys.path.insert(0,str(release/'lc_rec/a0_beauty'))
 from derive_formal_runner import derive
