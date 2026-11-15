@@ -21,6 +21,7 @@ SOURCE='/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-infer-63f13def
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('mode',choices=['deploy','submit','query','collect']);p.add_argument('--commit',required=True);a=p.parse_args()
+    a.commit=subprocess.check_output(['git','rev-parse',a.commit],cwd=REPO,text=True).strip()
     LOCAL.mkdir(parents=True,exist_ok=True);t=transport.Transport('new-server')
     t.profile=dict(t.profile,remote_support=BASE) # scoped instance only; no shared profile edit
     release=BASE+'/releases/'+a.commit;root=BASE+'/SYNTHETIC_CPU_INTEGRATION_ONLY_'+a.commit[:12]
