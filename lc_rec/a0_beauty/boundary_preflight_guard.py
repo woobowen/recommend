@@ -17,6 +17,14 @@ import time
 release = Path(sys.argv[1]).resolve(strict=True)
 commit = sys.argv[2]
 assert len(commit) == 40 and all(c in '0123456789abcdef' for c in commit)
+manifest=json.loads((release/'export-manifest.json').read_text())
+assert manifest['git_commit']==commit
+for row in manifest['files']:
+    relative=Path(row['path'])
+    assert not relative.is_absolute() and '..' not in relative.parts
+    path=release/relative
+    assert path.is_file() and not path.is_symlink() and path.stat().st_size==row['bytes']
+    assert hashlib.sha256(path.read_bytes()).hexdigest()==row['sha256']
 job = Path(os.environ['GRID_JOB_DIR']).resolve(strict=True)
 out = job / 'output'
 large = Path('/data/bwwu/lc-rec/a0-beauty-20261115') / os.environ['GRID_JOB_ID']
