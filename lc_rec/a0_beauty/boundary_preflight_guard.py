@@ -13,6 +13,8 @@ import shutil
 import subprocess
 import sys
 import time
+from preflight_budget import ledger
+from preflight_subprocess import run
 
 release = Path(sys.argv[1]).resolve(strict=True)
 commit = sys.argv[2]
@@ -57,29 +59,46 @@ assert shutil.disk_usage(str(out)).free >= 100*1024**3
 assert not large.exists(), 'attempt directory already exists; query existing job'
 large.mkdir(parents=True,exist_ok=False)
 
-# Earlier three probes charged 117.2274 device-seconds conservatively. This
-# stage reserves at most 2*1650 seconds, keeping the total below 3600.
-wall_cap = 1650
+# Account for every existing Beauty job, including failed attempts. A separate
+# cleanup reserve prevents a time-limit termination from spending the balance.
+budget=ledger('/home/bwwu/grid-audits/sid-extensions-p0/jobs',os.environ['GRID_JOB_ID'])
+wall_cap=budget['wall_cap_seconds']
 record = {'job_id':os.environ['GRID_JOB_ID'], 'run_commit':commit,
           'started_utc':dt.datetime.now(dt.timezone.utc).isoformat(),
           'gpu_start':gpus,'memory_available':mem['MemAvailable'],
           'large_output_path':str(large),
           'disk_data_free':shutil.disk_usage('/data').free,
-          'prior_charged_device_seconds_upper_bound':117.2274,
+          'budget':budget,
           'wall_cap_seconds':wall_cap,'stages':[],'status':'STARTED'}
 start=time.monotonic()
 try:
-    for mode in ('continuous','early','resumed','generation_interface'):
+    for mode in ('continuous','early','resumed','compare','shuffle_bind','normal','shuffle_acceptance'):
         assert not subprocess.check_output(['nvidia-smi','--query-compute-apps=pid',
                                             '--format=csv,noheader'], text=True).strip()
         root=large/mode
         assert not root.exists()
         launcher=[sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2']
-        if mode=='generation_interface':
-            argv=launcher+[str(release/'lc_rec/a0_beauty/formal_evaluate.py'),
+        user_manifest=release/'lc_rec/a0_beauty/config/preflight_users_seed42.json'
+        if mode=='compare':
+            argv=[sys.executable,str(release/'lc_rec/a0_beauty/boundary_compare.py'),
+                  '--continuous',str(large/'continuous'),'--early',str(large/'early'),
+                  '--resumed',str(large/'resumed'),'--output',str(out/'boundary_compare.json')]
+        elif mode=='shuffle_bind':
+            argv=[sys.executable,str(release/'lc_rec/a0_beauty/preflight_shuffle_bind.py'),
+                  '--source-root',str(source),'--data-root',str(data),'--model',str(model),
+                  '--adapter',str(large/'continuous/preflight_adapter'),'--manifest',str(user_manifest),
+                  '--normal-test-dir',str(large/'normal'),'--output',str(root)]
+        elif mode in ('normal','shuffle_acceptance'):
+            entry=release/('lc_rec/a0_beauty/formal_evaluate.py' if mode=='normal' else 'lc_rec/a0_beauty/shuffle_entry.py')
+            argv=launcher+[str(entry)]
+            if mode=='shuffle_acceptance':
+                argv+=['--model-key','a0','--shuffle-n','0','--acceptance',
+                       '--cpu-audit',str(large/'shuffle_bind/audit.json')]
+            argv += [
                  '--source-root',str(source),'--data-root',str(data),'--model',str(model),
                  '--adapter',str(large/'continuous/preflight_adapter'),'--output',str(root),
-                 '--run-commit',commit,'--preflight-users-per-rank','8']
+                 '--run-commit',commit,'--preflight-users-per-rank','16',
+                 '--preflight-manifest',str(user_manifest)]
         else:
             argv=launcher+[str(script),'--source-root',str(source),
                   '--data-root',str(data),'--model',str(model),'--output',str(root),
@@ -91,37 +110,42 @@ try:
         record['stages'].append(stage)
         remaining=wall_cap-(time.monotonic()-start)
         assert remaining>0
-        child=subprocess.Popen(argv)
-        try:
-            while child.poll() is None:
-                remaining=wall_cap-(time.monotonic()-start)
-                current_mem={line.split(':')[0]: int(line.split()[1])*1024
-                             for line in Path('/proc/meminfo').read_text().splitlines() if len(line.split())>=2}
-                disk=shutil.disk_usage('/data')
-                observed={'utc':dt.datetime.now(dt.timezone.utc).isoformat(),
-                          'mode':mode,'memory_available':current_mem['MemAvailable'],
-                          'data_free':disk.free,
-                          'gpu':subprocess.check_output(['nvidia-smi','--query-gpu=uuid,memory.used,utilization.gpu',
-                                                        '--format=csv,noheader,nounits'],text=True)}
-                with (out/'boundary_resources.jsonl').open('a') as stream:stream.write(json.dumps(observed)+'\n')
-                if remaining<=0:raise TimeoutError('preflight budget exhausted')
-                if current_mem['MemAvailable']<40*1024**3:raise RuntimeError('host memory safety reserve reached')
-                if disk.free<max(100*1024**3,disk.total//10):raise RuntimeError('data disk safety reserve reached')
-                output_disk=shutil.disk_usage(str(out))
-                if output_disk.free<max(100*1024**3,output_disk.total//10):raise RuntimeError('output disk safety reserve reached')
-                try:child.wait(timeout=min(20,remaining))
-                except subprocess.TimeoutExpired:pass
-            stage['exit_code']=child.returncode
-        except BaseException as error:
-            stage['interrupted']=repr(error);child.terminate()
-            try: stage['exit_code']=child.wait(timeout=8)
-            except subprocess.TimeoutExpired:child.kill();stage['exit_code']=child.wait()
-            raise
+        def observe():
+            remaining=wall_cap-(time.monotonic()-start)
+            current_mem={line.split(':')[0]: int(line.split()[1])*1024
+                         for line in Path('/proc/meminfo').read_text().splitlines() if len(line.split())>=2}
+            disk=shutil.disk_usage('/data')
+            observed={'utc':dt.datetime.now(dt.timezone.utc).isoformat(),
+                      'mode':mode,'memory_available':current_mem['MemAvailable'],
+                      'data_free':disk.free,
+                      'charged_device_seconds_upper_bound':2*(time.monotonic()-start),
+                      'gpu':subprocess.check_output(['nvidia-smi','--query-gpu=uuid,memory.used,utilization.gpu',
+                                                    '--format=csv,noheader,nounits'],text=True)}
+            with (out/'boundary_resources.jsonl').open('a') as stream:stream.write(json.dumps(observed)+'\n')
+            if remaining<=0:raise TimeoutError('preflight budget exhausted')
+            if current_mem['MemAvailable']<40*1024**3:raise RuntimeError('host memory safety reserve reached')
+            if disk.free<max(100*1024**3,disk.total//10):raise RuntimeError('data disk safety reserve reached')
+            output_disk=shutil.disk_usage(str(out))
+            if output_disk.free<max(100*1024**3,output_disk.total//10):raise RuntimeError('output disk safety reserve reached')
+        run(argv,start+wall_cap,stage,observe)
         stage['end_utc']=dt.datetime.now(dt.timezone.utc).isoformat()
         assert stage['exit_code']==0 and not stage.get('timed_out'), mode
-    record['status']='ALL_FOUR_EXECUTED_AWAITING_INDEPENDENT_COMPARISON'
+        if mode=='compare':
+            assert json.loads((out/'boundary_compare.json').read_text())['status']=='PASS'
+        if mode in ('normal','shuffle_acceptance'):
+            for rank in (0,1):
+                info=json.loads((root/('rank%d.json'%rank)).read_text())
+                assert info['status']=='PREFLIGHT_INTERFACE_PASS' and info['completed_users']==16
+                if mode=='shuffle_acceptance':
+                    result=json.loads((root/('acceptance.rank%d.json'%rank)).read_text())
+                    assert result['status']=='PASS' and result['users']==16
+    record['status']='ALL_STAGES_EXECUTED_AWAITING_REVIEW'
+except BaseException as error:
+    record['status']='TIMED_OUT' if isinstance(error,TimeoutError) else 'FAILED'
+    record['error']=repr(error)
+    raise
 finally:
     record['wall_seconds']=time.monotonic()-start
     record['charged_device_seconds_upper_bound']=2*record['wall_seconds']
     (out/'boundary_guard.json').write_text(json.dumps(record,indent=2)+'\n')
-assert record['status']=='ALL_FOUR_EXECUTED_AWAITING_INDEPENDENT_COMPARISON'
+assert record['status']=='ALL_STAGES_EXECUTED_AWAITING_REVIEW'

@@ -16,7 +16,7 @@ def configure(options):
     global OPTIONS, CPU
     OPTIONS = options
     CPU = json.loads(Path(options.cpu_audit).read_text())
-    assert CPU['status'] == 'PASS_CPU_FULL_INPUTS' and CPU['model_key'] == options.model_key
+    assert CPU['status'] in ('PASS_CPU_FULL_INPUTS','PASS_CPU_PREFLIGHT_BOUND') and CPU['model_key'] == options.model_key
     assert sys.flags.optimize == 0, 'All runtime assertions must remain active'
 
 
@@ -117,12 +117,19 @@ def install_acceptance(model, tok, args, report):
     historical = {}
     root = CPU['normal_test_dir']
     wanted = set(preflight_assignment(rank))
+    assert CPU['manifest']['sha256']==hashlib.sha256(Path(args.preflight_manifest).read_bytes()).hexdigest()
+    for shard in (0,1):
+        prior=json.loads((Path(root)/('rank%d.json'%shard)).read_text())
+        assert prior['status']=='PREFLIGHT_INTERFACE_PASS' and prior['RUN_COMMIT']==args.run_commit
+        assert prior['adapter_files']['adapter_model.bin']['sha256']==report['adapter_files']['adapter_model.bin']['sha256']
+        assert prior['preflight_manifest']['sha256']==CPU['manifest']['sha256']
     # Read only once. Historical rows are not rewritten or regenerated in full.
     for shard in [0, 1]:
         with (Path(root) / ('predictions.rank%d.jsonl' % shard)).open() as stream:
             for line in stream:
                 row = json.loads(line)
                 if row['row_idx'] in wanted:
+                    assert row['row_idx'] not in historical
                     historical[row['row_idx']] = row
     assert set(historical) == wanted
     evidence = []

@@ -319,13 +319,16 @@ def main():
     parser.add_argument("--aggregate-only", action="store_true", help="CPU recheck of already complete two-rank JSONL files")
     parser.add_argument("--preflight-users-per-rank", type=int, default=0,
                         help="Explicit interface preflight only; does not emit formal metrics or full-test PASS")
+    parser.add_argument("--preflight-manifest", help="Frozen outcome-blind 16-user-per-rank manifest")
     parser.add_argument("--minimum-host-free-gib", type=float, default=40.)
     parser.add_argument("--minimum-disk-free-gib", type=float, default=20.)
     parser.add_argument("--max-seconds", type=int, default=96 * 3600,
                         help="Evaluation stage cap; the enclosing job enforces the cumulative 96-hour cap")
     args = parser.parse_args()
-    if args.preflight_users_per_rank not in (0, 8) or (args.preflight_users_per_rank and args.aggregate_only):
-        raise ValueError("Only a separate fixed eight-user/rank preflight is supported")
+    if args.preflight_users_per_rank not in (0, 16) or (args.preflight_users_per_rank and args.aggregate_only):
+        raise ValueError("Only a separate fixed sixteen-user/rank preflight is supported")
+    if bool(args.preflight_users_per_rank) != bool(args.preflight_manifest):
+        raise ValueError("Preflight requires a manifest; formal evaluation forbids it")
     output = Path(args.output).resolve()
     output.mkdir(parents=True, exist_ok=True)
     source = author_source(args.source_root)
@@ -434,6 +437,16 @@ def main():
         assignment = assignments[rank]
         if len(assignment) != (11182 if rank == 0 else 11181):
             raise AssertionError("Beauty sampler assignment has unexpected size")
+        if args.preflight_users_per_rank:
+            from preflight_users import validate
+            manifest_path=Path(args.preflight_manifest).resolve(strict=True)
+            manifest=json.loads(manifest_path.read_text())
+            if manifest.get('asset_sha256')!={k:v['sha256'] for k,v in identities.items()}:
+                raise AssertionError('Preflight manifest uses different Beauty assets')
+            selection=validate(manifest,users,assignments)
+            assignment=selection[rank]
+            report["preflight_manifest"]={"path":str(manifest_path),"sha256":sha(manifest_path),
+                                           "assignments":selection}
         report["assigned_users"] = len(assignment)
         report["assignment_sha256"] = hashlib.sha256(json.dumps(assignment, separators=(",", ":")).encode()).hexdigest()
         loader = DataLoader(indexed, batch_size=1, sampler=assignment, collate_fn=collate,

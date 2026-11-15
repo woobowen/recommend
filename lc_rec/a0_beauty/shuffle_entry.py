@@ -11,7 +11,7 @@ from pathlib import Path
 import sys
 
 FROZEN = {
-    'a0': ('a0_beauty/formal_evaluate.py', 'fb67f22ba4e391312644731015e707fd8490399256f4130b27282b77ccda5e8a'),
+    'a0': ('a0_beauty/formal_evaluate.py', '998c5b3201954d9c72fa71aeb5ba6e7473dc6ce6e5fcce342889f6fde4daf20f'),
 }
 
 
@@ -21,8 +21,6 @@ def adapt(text, model):
         if text.count(old) != 1:
             raise ValueError('Frozen source anchor is not unique: ' + old[:80])
         text = text.replace(old, new)
-    change('args.preflight_users_per_rank not in (0, 8)',
-           'args.preflight_users_per_rank not in (0, 16)')
     if model == 'a1':
         begin = text.index('        if args.preflight_users_per_rank:\n            # Fixed raw-text')
         end = text.index('        loader = DataLoader', begin)
@@ -36,7 +34,7 @@ def adapt(text, model):
     else:
         change('        loader = DataLoader(indexed, batch_size=1, sampler=assignment, collate_fn=collate,',
                '''        if args.preflight_users_per_rank:
-            assignment = runtime.preflight_assignment(rank)
+            assert assignment == runtime.preflight_assignment(rank)
             report["preflight_assignment"] = assignment
         loader = DataLoader(indexed, batch_size=1, sampler=assignment, collate_fn=collate,''')
     change('                input_ids = inputs["input_ids"][0].tolist()',
