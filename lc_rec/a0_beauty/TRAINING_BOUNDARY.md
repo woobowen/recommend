@@ -45,9 +45,9 @@ occurrences = 8,213 full batches of 64 plus 20 examples; 8,214 full batches of
 64 require 525,696 occurrences, 44 more. The 8,214 full-update claim therefore
 depends on the original sampler's 44 repeated slots across four epochs. This
 was already the native sampler policy, not a new padding rule invented here,
-but the user's prohibition makes it necessary to confirm which constraint
-controls. The formal GPU chain remains gated on this decision and on the
-required bounded acceptance.
+and the user has explicitly approved retaining this native padding as a
+limited exception. The formal GPU chain remains gated on the required
+cross-epoch accumulation and strict recovery acceptance.
 
 Read-only installed-source identities on `zwlab-01`:
 `accelerate/data_loader.py` SHA-256
@@ -64,6 +64,12 @@ both partial and complete accumulation boundaries, comparing pending gradients,
 parameter value, step counts, RNG, input order and validation positions after
 serialization. It is not a test of Hugging Face Trainer, DeepSpeed, GPUs or
 the real checkpoint implementation.
+
+`accelerate_epoch_probe.py` exercises the actual installed Accelerate on short
+CPU epochs. Its saved `*_1.stdout` demonstrates the default end-of-dataloader
+accumulation reset; `*_0.stdout` demonstrates continuous synchronization
+positions when that reset is disabled. Neither run establishes DeepSpeed
+optimizer behavior or validates an actual Beauty run.
 
 ## Existing preliminary evidence
 
