@@ -56,7 +56,25 @@ def main():
     incomplete=training/'checkpoint-9000';incomplete.mkdir(exist_ok=False)
     try:need(resume_point(training,plan['run_commit'],plan['config_sha256'])==selected,'incomplete checkpoint was selected')
     finally:incomplete.rmdir()
-    result={'scope':SYNTHETIC,'latest_complete_checkpoint':str(selected),'status':'PASS','two_clients_one_accepted_job':job,'runner_terminal':s,
+    # Exercise genuine FORMAL preparation against the existing Beauty/base
+    # assets. These are explicitly unapproved prospective limits, not a grant.
+    formalroot=Path(plan['root']).parent/('FORMAL_PREPARED_NOT_SUBMITTED_'+version['run_commit'][:12])
+    formal=dict(p,scope='FORMAL_SUBMIT',evidence_scope='FORMAL',root=str(formalroot),
+        task_id=version['run_commit'][:12]+'-prepared',model='/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549',
+        env=dict(p['env'],CUDA_VISIBLE_DEVICES='0,1'),
+        prelaunch_review=str(formalroot/'NOT_GRANTED.prelaunch.json'),precision_approval=str(formalroot/'NOT_SUPPLIED.precision.json'),
+        gpu_uuids=[],budget={'train_normal':345600,'s3':16200,'s4':16200,'cpu':3600,'total':381600,'cleanup_reserve':20})
+    formalpath=formalroot/'plan.json';durable_write(formalpath,formal)
+    cli=str(Path(__file__).with_name('formal_control.py'))
+    prepared=subprocess.run([sys.executable,cli,'prepare','--plan',str(formalpath)],capture_output=True,text=True,timeout=60)
+    need(prepared.returncode==0,'genuine formal preparation failed: '+prepared.stderr)
+    denied=subprocess.run([sys.executable,cli,'step','--plan',str(formalpath)],capture_output=True,text=True,timeout=60)
+    need(denied.returncode!=0 and 'separate user launch authorization' in denied.stderr,'formal CLI submitted without authorization')
+    need(not read(formalroot/'state.json')['attempts'],'unauthorized formal request was accepted')
+    formal_check={'prepare_exit':prepared.returncode,'prepare_stdout':prepared.stdout,
+                  'submit_without_authorization_exit':denied.returncode,'submit_stderr':denied.stderr,
+                  'prospective_budgets_are_authorized':False,'plan':identity(formalpath)}
+    result={'formal_prepare_and_rejection':formal_check,'scope':SYNTHETIC,'latest_complete_checkpoint':str(selected),'status':'PASS','two_clients_one_accepted_job':job,'runner_terminal':s,
             'exit0_missing_output_rejected':missing,'observations':observations,'worker_alive_after_clients_exit':live_after_clients_exit,'third_client_exit':third.returncode}
     durable_write(root/'conformance.json',result);print(json.dumps(result))
 
