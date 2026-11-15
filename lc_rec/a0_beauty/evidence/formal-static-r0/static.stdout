@@ -1,0 +1,53 @@
+{
+  "status": "PARTIAL",
+  "checks": {
+    "train_recipe_config": true,
+    "formal_vs_preflight_dataset_boundaries": true,
+    "epoch_arithmetic": true,
+    "formal_train_guard": true,
+    "formal_shard_sizes": true,
+    "preflight_manifest_disallowed_formally": true,
+    "beam20": true,
+    "metrics_beauty_axis": true,
+    "paired_beauty_adaptation": true,
+    "old_shuffle_controller_unsafe_for_beauty": true
+  },
+  "epoch_schedule": [
+    {
+      "epoch": 1,
+      "consumed": 8214,
+      "updates": 2053,
+      "pending_microbatches": 2
+    },
+    {
+      "epoch": 2,
+      "consumed": 16428,
+      "updates": 4107,
+      "pending_microbatches": 0
+    },
+    {
+      "epoch": 3,
+      "consumed": 24642,
+      "updates": 6160,
+      "pending_microbatches": 2
+    },
+    {
+      "epoch": 4,
+      "consumed": 32856,
+      "updates": 8214,
+      "pending_microbatches": 0
+    }
+  ],
+  "blockers": [
+    "No verified Beauty formal train\u2192Normal\u2192Shuffle3\u2192Shuffle4 controller with authorization and resource gates",
+    "Historical Shuffle evaluation controller hardcodes Instruments user counts and assets",
+    "Beauty paired adapter is only synthetically tested; full-population pipeline and independent recomputation are not validated"
+  ],
+  "scope": "static source inspection and arithmetic only; no formal job submitted",
+  "files_sha256": {
+    "formal_train.py": "77e0a2fa17402ddb177d974365bbd0cd20b54e3a84d544bf9fc36c69e5ab1f61",
+    "formal_evaluate.py": "998c5b3201954d9c72fa71aeb5ba6e7473dc6ce6e5fcce342889f6fde4daf20f",
+    "offline_metrics.py": "789ea90e6329772fe63bc15a3f0f9946363ab64a37eafdc6e9570d8bd432cbe5",
+    "paired_beauty.py": "6a9270cbe2f4b6cd192e0bc2f36a86967577c14dfbd0b74f2b6bff142deb65cf"
+  }
+}
