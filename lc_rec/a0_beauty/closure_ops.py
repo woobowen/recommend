@@ -33,6 +33,9 @@ def main():
         names=subprocess.check_output(['git','ls-tree','-r','--name-only',a.commit,'lc_rec/a0_beauty'],cwd=REPO,text=True).splitlines()
         names=[x for x in names if Path(x).suffix in ('.py','.json') and '/evidence/' not in x]
         names+=['lc_rec/letter/config/a0_evaluation_v1.json','lc_rec/letter/review/final_audit_20261113/external/official_cce.py','lc_rec/letter/review/final_audit_20261113/statistics_verify.py','lc_rec/letter/scripts/formal_runner.py']
+        names += ['lc_rec/shuffle/core.py','lc_rec/letter/config/author_instruments.json']
+        names += ['lc_rec/letter/scripts/'+x for x in ('compat.py','formal_attention.py','formal_bnb_reload.py')]
+        names += ['lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/'+x for x in ('data.py','collator.py','evaluate.py','test_ddp.py','prompt.py','utils.py','modeling_letter.py','config/ds_z2_bf16.json')]
         archive=LOCAL/(a.commit+'.tar.gz')
         subprocess.run(['git','archive','--format=tar.gz','--output='+str(archive),a.commit,*names],cwd=REPO,check=True)
         remote_archive=BASE+'/'+archive.name;t.put(archive,remote_archive)

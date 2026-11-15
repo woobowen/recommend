@@ -57,6 +57,12 @@ def validate_plan(p):
         target=str(Path(p['release'])/'lc_rec/a0_beauty'/name)
         need(target in supplied and supplied[target]==version_rows[target],'production source not bound: '+name)
     need(p['inputs'] and any(Path(r['path'])==Path(p['config']) for r in p['inputs']),'config must be pinned input')
+    for relative in ('lc_rec/shuffle/core.py','lc_rec/letter/config/author_instruments.json',
+                     'lc_rec/letter/scripts/compat.py','lc_rec/letter/scripts/formal_attention.py','lc_rec/letter/scripts/formal_bnb_reload.py'):
+        target=str(Path(p['release'])/relative)
+        need(target in supplied and supplied[target]==version_rows[target],'missing production dependency: '+relative)
+    from production_pipeline import actual_source_root
+    actual_source_root(p)
     if p['evidence_scope']=='FORMAL':
         need(Path(p['model']).name=='4782ad278652c7c71b72204d462d6d01eaaf7549','model revision')
         need(sha(Path(p['model'])/'config.json')=='e4c3dea29aefc16c0e63825f9ae097dbf5cb5d7c320843a84257e11be3b452c8','base model config')

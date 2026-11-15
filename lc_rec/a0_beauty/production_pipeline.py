@@ -74,10 +74,20 @@ def validate_worker_context(plan,stage,output,resume=None,*,job_id=None,job_dir=
     return {'job_id':job_id,'request_sha256':digest(req),'output':str(output)}
 
 
+def actual_source_root(plan):
+    from formal_evaluate import author_source
+    source=author_source(plan['source_root'])
+    expected=Path(plan['release'])/'lc_rec/letter/vendor/LETTER/LETTER-LC-Rec'
+    for name in ('data.py','collator.py','evaluate.py','test_ddp.py','prompt.py','utils.py','modeling_letter.py','config/ds_z2_bf16.json'):
+        need(sha(source/name)==sha(expected/name),'frozen author source mismatch: '+name)
+    return source
+
+
 def actual_compute(plan, stage, output, resume=None):
     scope_guard(plan['root'],'FORMAL')
     scripts=Path(plan['release'])/'lc_rec/a0_beauty'
-    common=['--source-root',plan['source_root'],'--data-root',plan['data_root'],'--model',plan['model']]
+    source=actual_source_root(plan)
+    common=['--source-root',str(source),'--data-root',plan['data_root'],'--model',plan['model']]
     argv=[plan['python'],'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2']
     if stage=='train':
         argv += [str(scripts/'formal_train.py'),*common,'--output',str(training_root(plan)),
@@ -91,7 +101,7 @@ def actual_compute(plan, stage, output, resume=None):
             audit=Path(plan['root'])/'shuffle_inputs'
             if not audit.exists():
                 subprocess.run([plan['python'],str(scripts/'shuffle_cpu_inputs.py'),'--model-key','a0',
-                    '--adapter',str(training_root(plan)/'best_adapter'),'--source-root',plan['source_root'],
+                    '--adapter',str(training_root(plan)/'best_adapter'),'--source-root',str(source),
                     '--data-root',plan['data_root'],'--output',str(audit),
                     '--normal-test-dir',str(locations(plan,'normal')/'test')],check=True)
             proof=load(audit/'audit.json');need(proof['status']=='PASS_CPU_FULL_INPUTS' and proof['asset_sha256']==ASSETS,'CPU shuffle audit')
