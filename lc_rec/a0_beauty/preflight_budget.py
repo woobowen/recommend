@@ -12,7 +12,7 @@ REQUIRED = {
 LIMIT = 3600.0
 
 
-def ledger(jobs_root, current_job=None, reserve_seconds=60.0, max_wall=1500.0):
+def ledger(jobs_root, current_job=None, reserve_seconds=60.0, max_wall=1500.0, limit=LIMIT):
     root = Path(jobs_root)
     paths = list(root.glob('letter-a0-beauty-*'))
     names = [p.name for p in paths]
@@ -27,7 +27,7 @@ def ledger(jobs_root, current_job=None, reserve_seconds=60.0, max_wall=1500.0):
             raise ValueError('job identity or terminal state invalid: '+p.name)
         if status.get('worker_may_be_live') is not False or not status.get('cleanup',{}).get('verified'):
             raise ValueError('job cleanup not verified: '+p.name)
-        candidates=[x for x in (p/'output/guard.json', p/'output/boundary_guard.json') if x.is_file()]
+        candidates=[x for x in (p/'output/guard.json', p/'output/boundary_guard.json',p/'output/inference_guard.json') if x.is_file()]
         if len(candidates)!=1:
             raise ValueError('missing or ambiguous accounting: '+p.name)
         receipt=json.loads(candidates[0].read_text())
@@ -38,8 +38,8 @@ def ledger(jobs_root, current_job=None, reserve_seconds=60.0, max_wall=1500.0):
             raise ValueError('invalid charge: '+p.name)
         rows.append({'job_id':p.name,'status':status['status'],'charged_device_seconds':cost})
     total=math.fsum(r['charged_device_seconds'] for r in rows)
-    remaining=LIMIT-total
+    remaining=limit-total
     wall=min(max_wall,remaining/2-reserve_seconds)
     if wall<=0: raise ValueError('GPU budget exhausted or reserve unavailable')
     return {'jobs':rows,'prior_device_seconds':total,'remaining_device_seconds':remaining,
-            'cleanup_reserve_wall_seconds':reserve_seconds,'wall_cap_seconds':wall,'limit_device_seconds':LIMIT}
+            'cleanup_reserve_wall_seconds':reserve_seconds,'wall_cap_seconds':wall,'limit_device_seconds':limit}

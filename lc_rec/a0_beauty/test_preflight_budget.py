@@ -22,6 +22,8 @@ with tempfile.TemporaryDirectory() as temp:
     r=ledger(root)
     assert len(r['jobs'])==4 and abs(r['prior_device_seconds']-315.1950616836558)<1e-9
     assert r['wall_cap_seconds']==1500 and r['remaining_device_seconds']>3284
+    extended=ledger(root,limit=7200,max_wall=1740)
+    assert extended['limit_device_seconds']==7200 and extended['wall_cap_seconds']==1740
     missing=root/names[-1]/'output/guard.json';saved=missing.read_bytes();missing.unlink()
     reject(lambda:ledger(root));missing.write_bytes(saved)
     d=json.loads(saved);d['job_id']=names[0];missing.write_text(json.dumps(d))
