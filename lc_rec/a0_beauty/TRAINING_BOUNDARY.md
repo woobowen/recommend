@@ -32,9 +32,38 @@ implementation would require 8,214 updates if all 32,856 micro-batches are
 consumed in groups of four; it also requires a verified treatment of
 intermediate validation/checkpoint accumulation state. Merely increasing
 `max_steps` is insufficient evidence of correct recovery or method equivalence.
-The user has been asked to approve this research-relevant adjustment. The
-dependent formal GPU chain remains gated until that answer and the required
-bounded acceptance exist.
+The user has approved a control and recovery adaptation to complete four full
+epochs with continuous gradient accumulation, subject to strict validation,
+but also expressly prohibits repeating samples to obtain the step count.
+
+The original length probe overlooked a material fact: Accelerate 0.21's
+`BatchSamplerShard(even_batches=True)` completes the final pair of batches by
+repeating 11 examples per epoch. `training_sampler_padding_probe.py` uses the
+installed class and a fixed synthetic permutation to verify 131,424 slots for
+131,413 distinct examples. Four passes without repeats contain 525,652 example
+occurrences = 8,213 full batches of 64 plus 20 examples; 8,214 full batches of
+64 require 525,696 occurrences, 44 more. The 8,214 full-update claim therefore
+depends on the original sampler's 44 repeated slots across four epochs. This
+was already the native sampler policy, not a new padding rule invented here,
+but the user's prohibition makes it necessary to confirm which constraint
+controls. The formal GPU chain remains gated on this decision and on the
+required bounded acceptance.
+
+Read-only installed-source identities on `zwlab-01`:
+`accelerate/data_loader.py` SHA-256
+`7741d477a6fb02f18f8e5871d348b963fc669a51821f43102215255f02c48cb8`;
+`transformers/trainer.py` SHA-256
+`24a579e7af77c3699020ac16c1b4ad16d64aa584dafe52a90d0807c381174f31`;
+`deepspeed/runtime/engine.py` SHA-256
+`88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d`;
+`deepspeed/runtime/zero/stage_1_and_2.py` SHA-256
+`7e03bb5b2c923b2291ed28b663b1b605aa1384f68aa23b5744951183cc42fef6`.
+
+`accumulation_boundary_model.py` tests a small synthetic CPU state machine at
+both partial and complete accumulation boundaries, comparing pending gradients,
+parameter value, step counts, RNG, input order and validation positions after
+serialization. It is not a test of Hugging Face Trainer, DeepSpeed, GPUs or
+the real checkpoint implementation.
 
 ## Existing preliminary evidence
 
