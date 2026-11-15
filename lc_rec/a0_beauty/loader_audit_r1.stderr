@@ -1,0 +1,67 @@
+The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers, 8-bit multiplication, and GPU quantization are unavailable.
+Traceback (most recent call last):
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1099, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 32, in <module>
+    from ...modeling_utils import PreTrainedModel
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/modeling_utils.py", line 38, in <module>
+    from .deepspeed import deepspeed_config, is_deepspeed_zero3_enabled
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/deepspeed.py", line 37, in <module>
+    from accelerate.utils.deepspeed import HfDeepSpeedConfig as DeepSpeedConfig
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/__init__.py", line 3, in <module>
+    from .accelerator import Accelerator
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/accelerator.py", line 35, in <module>
+    from .checkpointing import load_accelerator_state, load_custom_state, save_accelerator_state, save_custom_state
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/checkpointing.py", line 24, in <module>
+    from .utils import (
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/utils/__init__.py", line 133, in <module>
+    from .launch import (
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/utils/launch.py", line 33, in <module>
+    from ..utils.other import is_port_in_use, merge_dicts
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/utils/other.py", line 30, in <module>
+    from deepspeed import DeepSpeedEngine
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/__init__.py", line 11, in <module>
+    from . import transformer
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/transformer/__init__.py", line 7, in <module>
+    from .inference.config import DeepSpeedInferenceConfig
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/transformer/inference/__init__.py", line 7, in <module>
+    from ....model_implementations.transformers.ds_transformer import DeepSpeedTransformerInference
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/model_implementations/__init__.py", line 6, in <module>
+    from .transformers.ds_transformer import DeepSpeedTransformerInference
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/model_implementations/transformers/ds_transformer.py", line 17, in <module>
+    if deepspeed.HAS_TRITON and get_accelerator().is_triton_supported():
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/accelerator/cuda_accelerator.py", line 245, in is_triton_supported
+    major, _ = torch.cuda.get_device_capability()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 507, in get_device_capability
+    prop = get_device_properties(device)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 523, in get_device_properties
+    _lazy_init()  # will define _get_device_properties
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 319, in _lazy_init
+    torch._C._cuda_init()
+RuntimeError: No CUDA GPUs are available
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+  File "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/collator.py", line 10, in <module>
+    from transformers import LlamaForCausalLM, LlamaTokenizer, LlamaConfig, T5Tokenizer, T5Config, T5ForConditionalGeneration
+  File "<frozen importlib._bootstrap>", line 1075, in _handle_fromlist
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1090, in __getattr__
+    value = getattr(module, name)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1089, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1101, in _get_module
+    raise RuntimeError(
+RuntimeError: Failed to import transformers.models.llama.modeling_llama because of the following error (look up to see its traceback):
+No CUDA GPUs are available

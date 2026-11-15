@@ -13,5 +13,10 @@ independently establish item metadata semantics or equality to GRID records.
 The historical A0 test sampler uses `drop_last=True` on two ranks. Beauty has 22,363
 test users, so this sampler drops one user; `drop_last=False` pads a duplicate. A
 validated, non-overlapping full-coverage assignment is required before formal test.
-Training, tokenizer, checkpoint, evaluation and Shuffle adaptations and their CPU/GPU
-acceptance, independent reviews, and full experiment remain outstanding.
+The local Normal evaluation and Shuffle entry adaptations are drafts; only
+synthetic aggregation, sampler and preliminary full-user CPU checks have run.
+The actual loader and tokenizer have now been checked; the response mask was
+sampled. See `TRAINING_BOUNDARY.md` for the unresolved full-epoch and resume
+semantics discovered from the actual pinned training software. Training,
+checkpoint and evaluation/Shuffle adaptations, GPU acceptance, independent
+final reviews, and the full experiment remain outstanding.
