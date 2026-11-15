@@ -83,6 +83,20 @@ had occurred. At ten microbatches the partial-gradient state reappeared. See
 exit/cleanup evidence. This was a small-model observation, not a Beauty-model
 checkpoint or recovery acceptance.
 
+The subsequent job `letter-a0-beauty-zero-resume-20261115-r0` exited 0,
+with verified cleanup and a charged wall-time upper bound of 30.2321
+GPU-device-seconds. On each rank, a toy model's native checkpoint plus saved
+`averaged_gradients`, microstep counters, scheduler and RNG was restored into
+a second engine **within the same process**. The following ten microbatches
+matched exactly for inputs, loss, model tensors, optimizer state, scheduler and
+RNG. `evidence/zero2-resume-r0/` contains the small request, terminal and rank
+receipts; the complete 188,799-byte verified evidence archive is retained at
+`/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-beauty-zero-resume-20261115-r0/evidence.tar.gz`,
+SHA-256 `801163240076d8284002fe39f188978c5b60fb4b291cb578e52cb09889bf0435`.
+This is not cross-process, HF Trainer, actual data loader, validation, LoRA,
+or full-model recovery proof. A non-author agent reviewed only a bridged text
+description and explicitly could not read or execute the real artifacts.
+
 ## Existing preliminary evidence
 
 - The actual dataset loader and target split were checked for all rows;
