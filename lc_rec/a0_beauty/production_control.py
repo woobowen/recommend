@@ -83,6 +83,14 @@ def authorize(plan, receipt, expected_digest):
     return True
 
 
+def resume_point(root,commit,config_sha):
+    from formal_train import verify_checkpoint
+    cps=sorted((x for x in Path(root).glob('checkpoint-*') if (x/'complete.json').is_file()),key=lambda x:int(x.name.split('-')[-1]))
+    need(cps,'no complete recovery checkpoint')
+    verify_checkpoint(cps[-1],commit,config_sha)
+    return cps[-1]
+
+
 def request(plan,stage,attempt,timeout,plan_path,authorization=None,authorization_sha256=None,resume=None):
     prefix='letter-a0-beauty-cpu-runner-check-' if plan['evidence_scope']==SYNTHETIC else 'letter-a0-beauty-formal-'
     job=prefix+plan['task_id']+'-'+stage.replace('_','-')+'-a'+str(attempt)
@@ -165,9 +173,8 @@ class Control:
                     from formal_train import verify_checkpoint
                     root=Path(p['root'])/'training'
                     need(not (root/'best_selection.json').exists(),'completed training must not restart')
-                    cps=sorted(root.glob('checkpoint-*'),key=lambda x:int(x.name.split('-')[-1]))
-                    need(cps and resume and Path(resume)==cps[-1],'only latest complete checkpoint may resume')
-                    verify_checkpoint(resume,p['run_commit'],p['config_sha256'])
+                    cp=resume_point(root,p['run_commit'],p['config_sha256'])
+                    need(resume and Path(resume)==cp,'only latest complete checkpoint may resume')
                 else:need(not resume,'resume checkpoint belongs only to training')
             used={g:sum(a.get('charged_seconds',0) for a in state['attempts'] if group(a['stage'])==g) for g in ('train_normal','s3','s4','cpu')}
             stage_used=sum(a.get('charged_seconds',0) for a in state['attempts'] if a['stage']==stage)

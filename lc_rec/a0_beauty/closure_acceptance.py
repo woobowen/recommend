@@ -4,6 +4,7 @@ import concurrent.futures
 import datetime as dt
 import importlib.util
 import json
+import hashlib
 import os
 from pathlib import Path
 import subprocess
@@ -91,7 +92,7 @@ def negative_tests(p,path,runner):
     need(len(list(training.glob('checkpoint-*')))==2,'receipt failure changed retained checkpoints')
     # Durable-controller fault injection retains the original state separately.
     import copy
-    baseline=read(control.state_path);faultroot=root/'fault_injection';faultroot.mkdir(exist_ok=True)
+    baseline=read(control.state_path);faultroot=root/('fault_injection_'+identity(__file__)['sha256'][:12]);faultroot.mkdir(exist_ok=True)
     durable_write(faultroot/'original_state.json',baseline)
     for mode in ('worker_live','cleanup_unknown','budget_exhausted','unknown_supervisor','cpu_retry'):
         fake=copy.deepcopy(baseline);fake['stages']['collect']['status']='RUNNING'
@@ -172,10 +173,11 @@ def runner_tests(p,runner,out):
     import signal
     unmarked_env={k:v for k,v in os.environ.items() if k not in ('GRID_JOB_ID','GRID_JOB_DIR')}
     control=subprocess.Popen([p['python'],'-c','import time;time.sleep(180)'],env=unmarked_env,start_new_session=True,stdin=subprocess.DEVNULL)
-    pidfd=os.pidfd_open(control.pid)
+    control_stat=(Path('/proc')/str(control.pid)/'stat').read_text().rsplit(')',1)[1].split()[19]
+    durable_write(root/'unmarked-control.json',{'pid':control.pid,'start_ticks':control_stat,'bounded_seconds':180})
     try:
         for mode,limit in [('success',45),('failure',45),('timeout',8)]:
-            req=dict(prototype,job_id='letter-a0-beauty-cpu-runner-check-'+p['task_id']+'-'+mode,
+            req=dict(prototype,job_id='letter-a0-beauty-cpu-runner-check-'+p['task_id']+'-'+hashlib.sha256(str(root).encode()).hexdigest()[:6]+'-'+mode,
                      argv=[p['python'],'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2','--max-restarts=0',str(script),'--mode',mode,'--output',str(root/mode)],timeout_seconds=limit)
             path=root/(mode+'.request.json');durable_write(path,req);requests.append((mode,req,path))
             accepted=runner.submit(path)
@@ -193,8 +195,10 @@ def runner_tests(p,runner,out):
             results[mode]['identity_conflict']=rejection(lambda:runner.submit(cp))
             need(control.poll() is None,'unrelated unmarked control was terminated')
     finally:
-        if control.poll() is None:signal.pidfd_send_signal(pidfd,signal.SIGTERM)
-        control.wait(timeout=10);os.close(pidfd)
+        if control.poll() is None:
+            helper="import os,sys,signal; p=int(sys.argv[1]); fd=os.pidfd_open(p); fields=open('/proc/'+str(p)+'/stat').read().rsplit(')',1)[1].split(); assert fields[19]==sys.argv[2] and os.stat('/proc/'+str(p)).st_uid==os.getuid(); signal.pidfd_send_signal(fd,signal.SIGTERM); os.close(fd)"
+            subprocess.run(['/usr/bin/python3','-I','-S','-B','-c',helper,str(control.pid),control_stat],check=True)
+        control.wait(timeout=10)
     results['unrelated_control_protected']={'pid':control.pid,'checked_after_all_cases':True,'cleanup':'own pidfd'}
 
     spec=importlib.util.spec_from_file_location('fixed_beauty_runner',p['runner']);r=importlib.util.module_from_spec(spec);spec.loader.exec_module(r)
@@ -219,6 +223,7 @@ def main():
     state=read(c.state_path);need(len(state['attempts'])==10 and all(x['status']=='COMPLETE' for x in state['stages'].values()),'full ten-stage pipeline')
     tests=negative_tests(p,a.plan,runner)
     tests['lost_submit_response']=lost_result
+    durable_write(root/'fault_acceptance.json',tests)
     process_tests=runner_tests(p,runner,root/'torchrun_acceptance')
     final={'scope':SYNTHETIC,'status':'PASS','elapsed_seconds':time.monotonic()-started,
            'pipeline_state':identity(c.state_path),'stages':list(state['stages']),

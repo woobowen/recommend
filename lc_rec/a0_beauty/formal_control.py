@@ -1,9 +1,8 @@
-"""Fail-closed persistent control primitives for the Beauty production pipeline.
+"""Beauty control entry point and legacy test compatibility primitives.
 
-This module is deliberately not a launch entry point.  Stage-specific request
-construction, artifact validators and the formal authorization gate must be
-wired before it can launch the Beauty pipeline.  In particular, no generic
-command-submission CLI is exposed here.
+CLI execution delegates to production_control.Control, which owns formal
+requests, artifact validation, authorization and cumulative recovery budgets.
+StageControl remains only for inherited small tests; production does not use it.
 """
 import contextlib
 import fcntl

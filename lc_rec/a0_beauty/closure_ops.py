@@ -79,7 +79,7 @@ print(json.dumps(version))
 '''
         dep=json.loads(t.python(code,timeout=90));save('deployment.json',dep);print(json.dumps({'release':release,'files':len(dep['files']),'inherited_cpu_seconds':dep['historical_cpu_wall_seconds']}));return
     if a.mode=='submit':
-        dep=json.loads((LOCAL/'deployment.json').read_text());remaining=int(7200-dep['historical_cpu_wall_seconds']-60)
+        dep=json.loads((LOCAL/'deployment.json').read_text());assert dep['run_commit']==a.commit;remaining=int(7200-dep['historical_cpu_wall_seconds']-60)
         assert remaining>1800
         env={'CUDA_VISIBLE_DEVICES':'','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4','OMP_NUM_THREADS':'2','OPENBLAS_NUM_THREADS':'2','PYTHONDONTWRITEBYTECODE':'1','PYTHONUNBUFFERED':'1','USE_TF':'0','TOKENIZERS_PARALLELISM':'false','HF_HUB_OFFLINE':'1','TRANSFORMERS_OFFLINE':'1'}
         ns={'host':dep['sidecar']['hostname'],'user':dep['sidecar']['user'],'uid':dep['sidecar']['uid'],'namespace':dep['sidecar']['namespace'],'deployment_sha256':dep['sidecar_sha256']}

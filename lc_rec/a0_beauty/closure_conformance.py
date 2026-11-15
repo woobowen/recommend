@@ -21,7 +21,11 @@ def factory(p,stage,n,timeout,path,*unused):
 def main():
     plan=read(sys.argv[1]);need(plan['evidence_scope']==SYNTHETIC,'test-only entry')
     root=Path(plan['root'])/'concurrent_clients';root.mkdir(exist_ok=False)
-    p=dict(plan,root=str(root),task_id=plan['task_id']+'-lock')
+    release=Path(__file__).resolve().parents[2]
+    version=read(release/'RUN_VERSION.json')
+    p=dict(plan,root=str(root),task_id=version['run_commit'][:12]+'-lock',
+           release=str(release),run_commit=version['run_commit'],prediction_run_commit=version['run_commit'],
+           config=str(release/'lc_rec/a0_beauty/config/formal_beauty_seed42.json'),inputs=version['files'])
     path=root/'plan.json';durable_write(path,p)
     clients=[subprocess.Popen([sys.executable,__file__,'--client',str(path)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True) for _ in range(2)]
     observations=[]
@@ -45,7 +49,14 @@ def main():
     except FileNotFoundError as e:missing={'rejected':True,'error':repr(e)}
     else:raise AssertionError('exit0 without artifacts accepted')
     need(read(root/'state.json')['stages']['train']['status']!='COMPLETE','missing output advanced chain')
-    result={'scope':SYNTHETIC,'status':'PASS','two_clients_one_accepted_job':job,'runner_terminal':s,
+    from production_control import resume_point
+    training=Path(plan['root'])/'training'
+    selected=resume_point(training,plan['run_commit'],plan['config_sha256'])
+    need(selected.name=='checkpoint-8214','resume selected best rather than latest')
+    incomplete=training/'checkpoint-9000';incomplete.mkdir(exist_ok=False)
+    try:need(resume_point(training,plan['run_commit'],plan['config_sha256'])==selected,'incomplete checkpoint was selected')
+    finally:incomplete.rmdir()
+    result={'scope':SYNTHETIC,'latest_complete_checkpoint':str(selected),'status':'PASS','two_clients_one_accepted_job':job,'runner_terminal':s,
             'exit0_missing_output_rejected':missing,'observations':observations,'worker_alive_after_clients_exit':live_after_clients_exit,'third_client_exit':third.returncode}
     durable_write(root/'conformance.json',result);print(json.dumps(result))
 
