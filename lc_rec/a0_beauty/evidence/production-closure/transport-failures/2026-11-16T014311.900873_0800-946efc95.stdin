@@ -1,0 +1,40 @@
+from pathlib import Path
+import tarfile,json,hashlib,os,pwd,socket,datetime
+base=Path('/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115');release=Path('/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/42720e4760cc031bb7eee8e7d2890719bcb61eef');archive=Path('/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/42720e4760cc031bb7eee8e7d2890719bcb61eef.tar.gz')
+assert hashlib.sha256(archive.read_bytes()).hexdigest()=='b6a685da7276037edc173505bd1a201bc9025a1ed3693817a66266f9580447f0'
+with tarfile.open(archive) as tf:
+ members=tf.getmembers();assert all((m.isfile() or m.isdir()) and not Path(m.name).is_absolute() and '..' not in Path(m.name).parts for m in members)
+ assert len({m.name for m in members})==len(members)
+ release.mkdir(parents=True,exist_ok=True)
+ for m in members:
+  if not m.isfile():continue
+  b=tf.extractfile(m).read();p=release/m.name;p.parent.mkdir(parents=True,exist_ok=True)
+  if p.exists():assert p.read_bytes()==b
+  else:p.write_bytes(b)
+rows=[{'path':str(release/m.name),'relative':m.name,'bytes':(release/m.name).stat().st_size,'sha256':hashlib.sha256((release/m.name).read_bytes()).hexdigest()} for m in members if m.isfile()]
+import sys
+sys.path.insert(0,str(release/'lc_rec/a0_beauty'))
+from derive_formal_runner import derive
+runner=Path('/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/runner-beauty-cc1a1e277faa.py');payload=derive(release/'lc_rec/letter/scripts/formal_runner.py')
+assert hashlib.sha256(payload).hexdigest()=='cc1a1e277faa9bc713a4d0d1b620248d47c398e8ed17d4ed3d7ab52805cc657e'
+if runner.exists():assert runner.read_bytes()==payload
+else:runner.write_bytes(payload)
+Path('/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/cpu-jobs').mkdir(exist_ok=True)
+side={'job_root':'/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/cpu-jobs','hostname':socket.gethostname(),'uid':os.getuid(),'user':pwd.getpwuid(os.getuid()).pw_name,'namespace':'beauty-production-closure-cpu-only'}
+sidepath=Path(str(runner)+'.deployment.json');b=(json.dumps(side,sort_keys=True)+'\n').encode()
+if sidepath.exists():assert sidepath.read_bytes()==b
+else:sidepath.write_bytes(b)
+# Inherit every known Beauty CPU attempt conservatively; nested test job costs
+# will also be retained rather than creating a fresh 7200s allowance per name.
+prior=[]
+for p in list(Path('/home/bwwu/grid-audits/sid-extensions-p0/jobs').glob('letter-beauty*/request.json'))+list(Path('/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/cpu-jobs').glob('*/request.json')):
+ req=json.loads(p.read_text())
+ if req.get('env',{}).get('CUDA_VISIBLE_DEVICES')!='':continue
+ state=json.loads((p.parent/'status.json').read_text())
+ assert state['status'] not in ('ACCEPTED','RUNNING') and state.get('cleanup',{}).get('verified'),str(p)
+ if state.get('started_at') and state.get('ended_at'):
+  seconds=(datetime.datetime.fromisoformat(state['ended_at'])-datetime.datetime.fromisoformat(state['started_at'])).total_seconds()
+  prior.append({'job_id':req['job_id'],'wall_seconds':seconds,'status_sha256':hashlib.sha256((p.parent/'status.json').read_bytes()).hexdigest()})
+version={'run_commit':'42720e4760cc031bb7eee8e7d2890719bcb61eef','release':str(release),'files':rows,'runner_sha256':hashlib.sha256(payload).hexdigest(),'runner':str(runner),'sidecar':side,'sidecar_sha256':hashlib.sha256(b).hexdigest(),'historical_cpu_costs':prior,'historical_cpu_wall_seconds':sum(r['wall_seconds'] for r in prior),'export_not_checkout':True}
+(release/'RUN_VERSION.json').write_text(json.dumps(version,indent=2)+'\n')
+print(json.dumps(version))

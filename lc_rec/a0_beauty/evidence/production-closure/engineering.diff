@@ -1,0 +1,1690 @@
+diff --git a/lc_rec/a0_beauty/checkpoint_receipt.py b/lc_rec/a0_beauty/checkpoint_receipt.py
+index 329a96b..404f803 100644
+--- a/lc_rec/a0_beauty/checkpoint_receipt.py
++++ b/lc_rec/a0_beauty/checkpoint_receipt.py
+@@ -14,7 +14,7 @@ import tempfile
+ 
+ def write_receipt(checkpoint, output, *, run_commit, config_sha256, data_identity,
+                   epoch, step, eval_loss, best_checkpoint, best_metric, attempt,
+-                  required_files, expected_manifest):
++                  required_files, expected_manifest, scope='FORMAL', validation_records=44726):
+     cp = Path(checkpoint)
+     raw = (cp / 'complete.json').read_bytes()
+     manifest = json.loads(raw)
+@@ -52,12 +52,15 @@ def write_receipt(checkpoint, output, *, run_commit, config_sha256, data_identit
+         seen.add(name)
+     if not set(required_files) <= seen:
+         raise ValueError('incomplete checkpoint manifest')
+-    receipt = {'schema': 'beauty_checkpoint_receipt_v1', 'run_commit': run_commit,
++    if scope not in ('FORMAL','SYNTHETIC_CPU_INTEGRATION_ONLY') or validation_records != 44726:
++        raise ValueError('receipt validation scope')
++    receipt = {'scope':scope, 'validation_records':validation_records, 'schema': 'beauty_checkpoint_receipt_v1', 'run_commit': run_commit,
+                'config_sha256': config_sha256, 'data_identity': data_identity,
+                'epoch': epoch, 'global_step': step, 'eval_loss': float(eval_loss),
+                'best_checkpoint': best_checkpoint, 'best_metric': best_metric,
+                'checkpoint_path': str(cp.resolve()), 'attempt_job_id': attempt,
+-               'manifest_sha256': hashlib.sha256(raw).hexdigest(), 'manifest': manifest}
++               'manifest_sha256': hashlib.sha256(raw).hexdigest(), 'manifest': manifest,
++               'manifest_json': raw.decode('utf-8')}
+     payload = (json.dumps(receipt, sort_keys=True, separators=(',', ':'),
+                           ensure_ascii=False, allow_nan=False) + '\n').encode()
+     directory = Path(output) / 'checkpoint_receipts'
+diff --git a/lc_rec/a0_beauty/closure_acceptance.py b/lc_rec/a0_beauty/closure_acceptance.py
+new file mode 100644
+index 0000000..6e880b3
+--- /dev/null
++++ b/lc_rec/a0_beauty/closure_acceptance.py
+@@ -0,0 +1,268 @@
++"""Server CPU acceptance of production control, real runner and full data pipeline."""
++import argparse
++import concurrent.futures
++import datetime as dt
++import importlib.util
++import json
++import hashlib
++import os
++from pathlib import Path
++import subprocess
++import sys
++import time
++from formal_control import durable_write, read, digest, Runner
++from production_control import Control, request, authorize
++from production_identity import need, identity, SYNTHETIC
++
++
++def factory(p,stage,n,timeout,path,*args):
++    req,out=request(p,stage,n,timeout,path)
++    req['argv']=[p['python'],str(Path(__file__).with_name('closure_fixture.py')),'--plan',str(path),'--stage',stage,'--output',out]
++    return req,out
++
++
++def wait(runner,job,seconds=90):
++    end=time.monotonic()+seconds
++    while True:
++        result=runner.query(job)
++        if result and result['status'] not in ('ACCEPTED','RUNNING'):return result
++        need(time.monotonic()<end,'test wait timeout '+job);time.sleep(.25)
++
++
++def rejection(fn):
++    try:fn()
++    except Exception as e:return {'rejected':True,'exception':repr(e)}
++    raise AssertionError('negative accepted')
++
++
++def negative_tests(p,path,runner):
++    from production_identity import verify_training,verify_predictions
++    from production_pipeline import best_evidence,locations
++    from unittest.mock import patch
++    import shutil
++    root=Path(p['root']);results={}
++    results['formal_authorization_missing']=rejection(lambda:authorize(dict(p,scope='FORMAL_SUBMIT'),None,None))
++    results['plan_budget_reset']=rejection(lambda:Control(path,request_factory=factory,runner=runner) if False else _changed_plan(path,p))
++    best=best_evidence(p);training=root/'training'
++    cp=training/f"checkpoint-{best['best_step']}";manifest=cp/'complete.json';raw=manifest.read_bytes()
++    try:
++        manifest.write_text('{}');results['corrupt_checkpoint']=rejection(lambda:best_evidence(p))
++    finally:manifest.write_bytes(raw)
++    selected=training/'best_selection.json';raw=selected.read_bytes();v=read(selected)
++    try:
++        durable_write(selected,dict(v,checkpoint=str(training/'checkpoint-8214')))
++        results['wrong_best']=rejection(lambda:best_evidence(p))
++    finally:selected.write_bytes(raw)
++    receipt=next((training/'checkpoint_receipts').glob('*.json'));raw=receipt.read_bytes();v=read(receipt)
++    try:
++        durable_write(receipt,dict(v,run_commit='0'*40));results['receipt_run_mismatch']=rejection(lambda:best_evidence(p))
++    finally:receipt.write_bytes(raw)
++    test=locations(p,'normal')/'test';rpath=test/'rank0.json';raw=rpath.read_bytes();v=read(rpath)
++    try:
++        durable_write(rpath,dict(v,adapter_files={}));results['wrong_generation_adapter']=rejection(lambda:verify_predictions(test,p['run_commit'],best,'normal',SYNTHETIC))
++    finally:rpath.write_bytes(raw)
++    results['synthetic_into_formal']=rejection(lambda:verify_training(training,p['run_commit'],p['config_sha256'],'FORMAL'))
++    # Fault boundaries are injected into the actual durable controller; no model stage rerun.
++    control=Control(path,request_factory=factory,runner=runner)
++    state=read(control.state_path);last=state['stages']['collect'];last_copy=dict(last)
++    try:
++        last['status']='RUNNING';durable_write(control.state_path,state)
++        with patch.object(control,'validator',side_effect=ValueError('injected CPU evaluation failure')):
++            results['evaluation_failure']=rejection(control.step)
++        need(read(control.state_path)['stages']['normal']['status']=='COMPLETE','evaluation failure reran generation')
++        actual=runner.query(state['attempts'][last['attempt_index']]['job_id'])
++        query0=runner.query
++        target=actual['job_id']
++        with patch.object(runner,'query',side_effect=lambda job:dict(actual,cleanup_verified=False) if job==target else query0(job)):
++            results['cleanup_unconfirmed']=rejection(control.step)
++        with patch.object(runner,'query',side_effect=ConnectionError('injected unreachable transport')):
++            results['runner_unreachable']=rejection(control.step)
++    finally:
++        state['stages']['collect']=last_copy;durable_write(control.state_path,state)
++    # Same actual receipt helper; failures must leave retained checkpoint entities untouched.
++    from checkpoint_receipt import write_receipt
++    r=read(next((training/'checkpoint_receipts').glob('*4107*.json')))
++    kwargs=dict(run_commit=p['run_commit'],config_sha256=p['config_sha256'],data_identity=r['data_identity'],
++        epoch=r['epoch'],step=r['global_step'],eval_loss=r['eval_loss'],best_checkpoint=r['best_checkpoint'],
++        best_metric=r['best_metric'],attempt=r['attempt_job_id'],required_files={x['path'] for x in r['manifest']['files']},
++        expected_manifest=r['manifest'],scope=SYNTHETIC)
++    results['receipt_conflict']=rejection(lambda:write_receipt(cp,training,**dict(kwargs,eval_loss=123.)))
++    with patch('checkpoint_receipt.os.link',side_effect=OSError('INJECTED_RECEIPT_WRITE_FAILURE')):
++        results['receipt_write_failure']=rejection(lambda:write_receipt(cp,training,**dict(kwargs,attempt='write-failure-fixture')))
++    need(len(list(training.glob('checkpoint-*')))==2,'receipt failure changed retained checkpoints')
++    # Durable-controller fault injection retains the original state separately.
++    import copy
++    baseline=read(control.state_path);faultroot=root/('fault_injection_'+identity(__file__)['sha256'][:12]);faultroot.mkdir(exist_ok=True)
++    durable_write(faultroot/'original_state.json',baseline)
++    for mode in ('worker_live','cleanup_unknown','budget_exhausted','unknown_supervisor','cpu_retry'):
++        fake=copy.deepcopy(baseline);fake['stages']['collect']['status']='RUNNING'
++        idx=fake['stages']['collect']['attempt_index'];target=fake['attempts'][idx]['job_id']
++        actual=query0(target);submit0=runner.submit
++        def q(job):
++            value=query0(job)
++            if job!=target:return value
++            if mode=='worker_live':return dict(value,status='RUNNING',worker_alive=True,workgroup_live=True)
++            if mode=='unknown_supervisor':return dict(value,status='CONTROL_LOST')
++            if mode=='cleanup_unknown':return dict(value,cleanup_verified=False)
++            return dict(value,status='FAILED',exit_code=1)
++        if mode=='budget_exhausted':fake['attempts'][idx]['charged_seconds']=p['budget']['cpu']
++        durable_write(control.state_path,fake)
++        try:
++            with patch.object(runner,'query',side_effect=q):
++                if mode=='worker_live':
++                    with patch.object(runner,'submit',side_effect=AssertionError('duplicate while alive')):
++                        observation=control.step();need(observation['stages']['collect']['status']!='COMPLETE','live worker marked complete')
++                    results[mode]={'no_resubmit':True}
++                elif mode=='cpu_retry':
++                    with patch.object(runner,'submit',wraps=submit0) as submitted:
++                        control.step(retry='collect')
++                        need(submitted.call_count==1,'CPU retry not submitted once')
++                        req=read(Path(read(control.state_path)['attempts'][-1]['request_path']))
++                        need(req['beauty_stage']=='collect','CPU retry reran GPU generation')
++                        need(req['timeout_seconds']<=p['stage_seconds']['collect']-fake['attempts'][idx].get('charged_seconds',0)-10,'retry reset stage budget')
++                        retry_job=req['job_id']
++                    result=wait(runner,retry_job);need(result['status']=='SUCCEEDED' and result['cleanup_verified'],'real CPU-only retry failed')
++                    results[mode]={'job_id':retry_job,'timeout_seconds':req['timeout_seconds'],'completed_generation_preserved':True}
++                else:results[mode]=rejection(lambda:control.step(retry='collect'))
++            durable_write(faultroot/(mode+'.json'),read(control.state_path))
++        finally:
++            current=read(control.state_path)
++            known_ids={x['job_id'] for x in baseline['attempts']}
++            for row in current['attempts']:
++                if row['job_id'] not in known_ids:baseline['attempts'].append(row)
++            durable_write(control.state_path,baseline)
++    # Different clients concurrently query a completed stage: no new accepted request.
++    with patch.object(runner,'submit',side_effect=AssertionError('duplicate completed pipeline')):
++        with concurrent.futures.ThreadPoolExecutor(2) as pool:list(pool.map(lambda _:Control(path,request_factory=factory,runner=runner).step(),range(2)))
++    results['two_clients_completed_pipeline_no_resubmit']=True
++    # Paired CLI processing rejects newly covered column and user-axis drift before bootstrap.
++    from paired_beauty import process
++    from production_pipeline import locations
++    from types import SimpleNamespace
++    import numpy as np
++    for kind in ('columns','user_axis'):
++        derivative=faultroot/kind;shutil.copytree(locations(p,'normal_eval')/'primary',derivative)
++        f=derivative/'per_user_metrics.npz'
++        with np.load(f,allow_pickle=False) as z:payload={k:z[k].copy() for k in z.files}
++        if kind=='columns':payload['keys']=payload['keys'][::-1]
++        else:payload['row_idx']=payload['row_idx'][::-1]
++        np.savez_compressed(f,**payload)
++        m=read(derivative/'metrics.json')
++        m['per_user_files']=[identity(derivative/Path(x['path']).name) for x in m['per_user_files']]
++        durable_write(derivative/'metrics.json',m)
++        args=SimpleNamespace(normal_primary=str(derivative),shuffle_primary=str(locations(p,'s3_eval')/'primary'),
++             normal_test=str(locations(p,'normal')/'test'),shuffle_test=str(locations(p,'s3')/'test'),output=str(faultroot/(kind+'-rejected')))
++        results['paired_'+kind]=rejection(lambda:process(args,source_context={'scope':SYNTHETIC,'best':best_evidence(p)}))
++    # The generation completion gate itself must reject bad rows, before
++    # normal_eval can run. Only the artifact location is redirected; real
++    # training provenance, data axis, rank evidence and author audit stay live.
++    from production_pipeline import verify_prediction_stage
++    original_test=locations(p,'normal')/'test'
++    first_rows=[]
++    for rank in (0,1):
++        with (original_test/f'predictions.rank{rank}.jsonl').open() as f:first_rows.append(json.loads(next(f)))
++    cases={
++        'rank':(lambda rows:rows[0].update(rank=1),'rank'),
++        'target':(lambda rows:rows[0].update(target='WRONG'),'target'),
++        'score':(lambda rows:rows[0]['candidates'][0].update(sequence_score=float('nan')),'score'),
++        'beams':(lambda rows:rows[0]['candidates'].pop(),'twenty'),
++    }
++    for kind,(mutate,message) in cases.items():
++        derivative=faultroot/('generation_'+kind);test=derivative/'test';test.mkdir(parents=True)
++        rows=copy.deepcopy(first_rows);mutate(rows)
++        for rank in (0,1):
++            shutil.copyfile(original_test/f'rank{rank}.json',test/f'rank{rank}.json')
++            (test/f'predictions.rank{rank}.jsonl').write_text(json.dumps(rows[rank])+'\n')
++        with patch('production_pipeline.locations',return_value=derivative):
++            rejected=rejection(lambda:verify_prediction_stage(p,'normal'))
++        need(message in rejected['exception'],'generation gate rejected for unintended reason')
++        results['generation_gate_'+kind]=rejected
++    # Reusing an old completion record must not bless modified candidate bytes.
++    derivative=faultroot/'generation_rank'
++    shutil.copyfile(locations(p,'normal')/'stage_result.json',derivative/'stage_result.json')
++    with patch('production_pipeline.locations',return_value=derivative):
++        rejected=rejection(lambda:verify_prediction_stage(p,'normal'))
++    # Saved artifact paths are also bound to the actual accepted output.
++    results['generation_saved_identity']=rejected
++    return results
++
++
++def _changed_plan(path,p):
++    raw=path.read_bytes()
++    try:
++        durable_write(path,dict(p,task_id=p['task_id']+'x'))
++        Control(path,request_factory=factory)
++    finally:path.write_bytes(raw)
++
++
++def runner_tests(p,runner,out):
++    from unittest.mock import patch
++    root=Path(out);root.mkdir(parents=True,exist_ok=False)
++    prototype,_=factory(p,'normal',90,60,Path(p['root'])/'plan.json')
++    script=Path(__file__).with_name('closure_torch_worker.py')
++    results={};requests=[]
++    import signal
++    unmarked_env={k:v for k,v in os.environ.items() if k not in ('GRID_JOB_ID','GRID_JOB_DIR')}
++    control=subprocess.Popen([p['python'],'-c','import time;time.sleep(180)'],env=unmarked_env,start_new_session=True,stdin=subprocess.DEVNULL)
++    control_stat=(Path('/proc')/str(control.pid)/'stat').read_text().rsplit(')',1)[1].split()[19]
++    durable_write(root/'unmarked-control.json',{'pid':control.pid,'start_ticks':control_stat,'bounded_seconds':180})
++    try:
++        for mode,limit in [('success',45),('failure',45),('timeout',8)]:
++            req=dict(prototype,job_id='letter-a0-beauty-cpu-runner-check-'+p['task_id']+'-'+hashlib.sha256(str(root).encode()).hexdigest()[:6]+'-'+mode,
++                     argv=[p['python'],'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2','--max-restarts=0',str(script),'--mode',mode,'--output',str(root/mode)],timeout_seconds=limit)
++            path=root/(mode+'.request.json');durable_write(path,req);requests.append((mode,req,path))
++            accepted=runner.submit(path)
++            # Separate subprocess clients on every Runner operation; caller/session can exit.
++            live=runner.query(req['job_id']);durable_write(root/(mode+'.initial.json'),live)
++            status=wait(runner,req['job_id'],75);durable_write(root/(mode+'.terminal.json'),status)
++            need(status['cleanup_verified'] and not status['worker_alive'] and not status['workgroup_live'],'torchrun process cleanup')
++            need(status['status']==('SUCCEEDED' if mode=='success' else 'FAILED' if mode=='failure' else 'TIMED_OUT'),'real worker exit propagation')
++            workers=[read(root/mode/f'rank{rank}.identity.json') for rank in (0,1)]
++            need(len({x['pid'] for x in workers})==2 and all(x['job_id']==req['job_id'] and x['job_dir']==str(Path(p['job_root'])/req['job_id']) for x in workers),'actual CPU worker identities/markers')
++            need(all(x['pid']!=status['worker']['pid'] for x in workers),'worker is torchrun agent')
++            duplicate=runner.submit(path);need(duplicate['submission']=='EXISTING_NO_RESTART','duplicate restart')
++            results[mode]={'job_id':req['job_id'],'status':status['status'],'exit_code':status['exit_code'],'cleanup':status['cleanup_verified'],'agent':status['worker'],'workers':workers}
++            conflict=dict(req,timeout_seconds=limit+1);cp=root/(mode+'.conflict.json');durable_write(cp,conflict)
++            results[mode]['identity_conflict']=rejection(lambda:runner.submit(cp))
++            need(control.poll() is None,'unrelated unmarked control was terminated')
++    finally:
++        if control.poll() is None:
++            helper="import os,sys,signal; p=int(sys.argv[1]); fd=os.pidfd_open(p); fields=open('/proc/'+str(p)+'/stat').read().rsplit(')',1)[1].split(); assert fields[19]==sys.argv[2] and os.stat('/proc/'+str(p)).st_uid==os.getuid(); signal.pidfd_send_signal(fd,signal.SIGTERM); os.close(fd)"
++            subprocess.run(['/usr/bin/python3','-I','-S','-B','-c',helper,str(control.pid),control_stat],check=True)
++        control.wait(timeout=10)
++    results['unrelated_control_protected']={'pid':control.pid,'checked_after_all_cases':True,'cleanup':'own pidfd'}
++
++    spec=importlib.util.spec_from_file_location('fixed_beauty_runner',p['runner']);r=importlib.util.module_from_spec(spec);spec.loader.exec_module(r)
++    sample=dict(requests[0][1],timeout_seconds=345600);r.verify(sample)
++    results['deadline_345600']=True;results['deadline_345601']=rejection(lambda:r.verify(dict(sample,timeout_seconds=345601)))
++    return results
++
++
++def main():
++    ap=argparse.ArgumentParser();ap.add_argument('--plan',type=Path,required=True);a=ap.parse_args();p=read(a.plan)
++    need(os.environ.get('CUDA_VISIBLE_DEVICES')=='','CPU-only acceptance')
++    started=time.monotonic();root=Path(p['root'])
++    c=Control(a.plan,request_factory=factory)
++    runner=c.runner
++    # Accepted reply loss: the real submission happens, client loses its reply.
++    from unittest.mock import patch
++    original=runner.submit
++    def lost(path):original(path);raise TimeoutError('injected lost submit response AFTER acceptance')
++    with patch.object(runner,'submit',side_effect=lost):lost_result=rejection(c.step)
++    c=Control(a.plan,request_factory=factory) # reconstruct client from durable facts
++    c.run()
++    state=read(c.state_path);need(len(state['attempts'])==10 and all(x['status']=='COMPLETE' for x in state['stages'].values()),'full ten-stage pipeline')
++    tests=negative_tests(p,a.plan,runner)
++    tests['lost_submit_response']=lost_result
++    durable_write(root/'fault_acceptance.json',tests)
++    process_tests=runner_tests(p,runner,root/'torchrun_acceptance')
++    final={'scope':SYNTHETIC,'status':'PASS','elapsed_seconds':time.monotonic()-started,
++           'pipeline_state':identity(c.state_path),'stages':list(state['stages']),
++           'negative_tests':tests,'runner_tests':process_tests,'gpu_used':False,
++           'external_boundaries':['train GPU computation replaced by labeled checkpoint fixture',
++            'generation replaced by hash-checked byte copies of existing candidates'],
++           'not_replaced':['Runner submission/query','locks/persistent state/budget','training/Adapter source verification',
++            'original LETTER evaluator','offline_metrics 16 metrics/CCE/5000 bootstrap','full paired CSV/NPZ/change/5000 bootstrap processing']}
++    durable_write(root/'acceptance.json',final);print(json.dumps(final),flush=True)
++
++if __name__=='__main__':main()
+diff --git a/lc_rec/a0_beauty/closure_conformance.py b/lc_rec/a0_beauty/closure_conformance.py
+new file mode 100644
+index 0000000..b870766
+--- /dev/null
++++ b/lc_rec/a0_beauty/closure_conformance.py
+@@ -0,0 +1,84 @@
++"""Additional bounded real-client lock/output tests; no model or evaluator run."""
++import concurrent.futures
++import copy
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++import time
++from formal_control import durable_write, read, Runner
++from production_control import Control,request
++from production_identity import need,identity,SYNTHETIC
++
++
++def factory(p,stage,n,timeout,path,*unused):
++    req,out=request(p,stage,n,timeout,path)
++    req['argv']=[p['python'],'-c','import time;time.sleep(5)']
++    return req,out
++
++
++def main():
++    plan=read(sys.argv[1]);need(plan['evidence_scope']==SYNTHETIC,'test-only entry')
++    root=Path(plan['root'])/'concurrent_clients';root.mkdir(exist_ok=False)
++    release=Path(__file__).resolve().parents[2]
++    version=read(release/'RUN_VERSION.json')
++    p=dict(plan,root=str(root),task_id=version['run_commit'][:12]+'-lock',
++           release=str(release),run_commit=version['run_commit'],prediction_run_commit=version['run_commit'],
++           config=str(release/'lc_rec/a0_beauty/config/formal_beauty_seed42.json'),inputs=version['files'])
++    path=root/'plan.json';durable_write(path,p)
++    clients=[subprocess.Popen([sys.executable,__file__,'--client',str(path)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True) for _ in range(2)]
++    observations=[]
++    for client in clients:
++        stdout,stderr=client.communicate(timeout=30)
++        need(client.returncode==0,'client failure: '+stderr)
++        observations.append(json.loads(stdout))
++    state=read(root/'state.json');need(len(state['attempts'])==1,'concurrent clients duplicated accepted job')
++    job=state['attempts'][0]['job_id'];runner=Runner(p['runner'],p['runner_sha256'],p['job_root'])
++    live_after_clients_exit=runner.query(job)
++    need(live_after_clients_exit['worker_alive'],'test clients did not exit while worker alive')
++    third=subprocess.run([sys.executable,__file__,'--client',str(path)],capture_output=True,text=True,timeout=30)
++    need(third.returncode==0 and len(read(root/'state.json')['attempts'])==1,'reopened client duplicated job')
++    deadline=time.monotonic()+20
++    while True:
++        s=runner.query(job)
++        if s['status'] not in ('ACCEPTED','RUNNING'):break
++        need(time.monotonic()<deadline,'bounded concurrent test');time.sleep(.1)
++    need(s['status']=='SUCCEEDED' and s['cleanup_verified'],'real CPU request cleanup')
++    try:Control(path,request_factory=factory).step()
++    except FileNotFoundError as e:missing={'rejected':True,'error':repr(e)}
++    else:raise AssertionError('exit0 without artifacts accepted')
++    need(read(root/'state.json')['stages']['train']['status']!='COMPLETE','missing output advanced chain')
++    from production_control import resume_point
++    training=Path(plan['root'])/'training'
++    selected=resume_point(training,plan['run_commit'],plan['config_sha256'])
++    need(selected.name=='checkpoint-8214','resume selected best rather than latest')
++    incomplete=training/'checkpoint-9000';incomplete.mkdir(exist_ok=False)
++    try:need(resume_point(training,plan['run_commit'],plan['config_sha256'])==selected,'incomplete checkpoint was selected')
++    finally:incomplete.rmdir()
++    # Exercise genuine FORMAL preparation against the existing Beauty/base
++    # assets. These are explicitly unapproved prospective limits, not a grant.
++    formalroot=Path(plan['root']).parent/('FORMAL_PREPARED_NOT_SUBMITTED_'+version['run_commit'][:12])
++    formal=dict(p,scope='FORMAL_SUBMIT',evidence_scope='FORMAL',root=str(formalroot),
++        task_id=version['run_commit'][:12]+'-prepared',model='/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549',
++        env=dict(p['env'],CUDA_VISIBLE_DEVICES='0,1'),
++        prelaunch_review=str(formalroot/'NOT_GRANTED.prelaunch.json'),precision_approval=str(formalroot/'NOT_SUPPLIED.precision.json'),
++        gpu_uuids=[],budget={'train_normal':345600,'s3':16200,'s4':16200,'cpu':3600,'total':381600,'cleanup_reserve':20})
++    formalpath=formalroot/'plan.json';durable_write(formalpath,formal)
++    cli=str(Path(__file__).with_name('formal_control.py'))
++    prepared=subprocess.run([sys.executable,cli,'prepare','--plan',str(formalpath)],capture_output=True,text=True,timeout=60)
++    need(prepared.returncode==0,'genuine formal preparation failed: '+prepared.stderr)
++    denied=subprocess.run([sys.executable,cli,'step','--plan',str(formalpath)],capture_output=True,text=True,timeout=60)
++    need(denied.returncode!=0 and 'separate user launch authorization' in denied.stderr,'formal CLI submitted without authorization')
++    need(not read(formalroot/'state.json')['attempts'],'unauthorized formal request was accepted')
++    formal_check={'prepare_exit':prepared.returncode,'prepare_stdout':prepared.stdout,
++                  'submit_without_authorization_exit':denied.returncode,'submit_stderr':denied.stderr,
++                  'prospective_budgets_are_authorized':False,'plan':identity(formalpath)}
++    result={'formal_prepare_and_rejection':formal_check,'scope':SYNTHETIC,'latest_complete_checkpoint':str(selected),'status':'PASS','two_clients_one_accepted_job':job,'runner_terminal':s,
++            'exit0_missing_output_rejected':missing,'observations':observations,'worker_alive_after_clients_exit':live_after_clients_exit,'third_client_exit':third.returncode}
++    durable_write(root/'conformance.json',result);print(json.dumps(result))
++
++if __name__=='__main__':
++    if sys.argv[1]=='--client':
++        print(json.dumps(Control(sys.argv[2],request_factory=factory).step()))
++    else:main()
+diff --git a/lc_rec/a0_beauty/closure_dependencies.py b/lc_rec/a0_beauty/closure_dependencies.py
+new file mode 100644
+index 0000000..e71f759
+--- /dev/null
++++ b/lc_rec/a0_beauty/closure_dependencies.py
+@@ -0,0 +1,25 @@
++"""Import/path closure without importing Trainer or loading any model."""
++import importlib,json,sys
++from pathlib import Path
++from formal_control import read,durable_write
++from production_identity import need,identity,SYNTHETIC
++from production_pipeline import actual_source_root
++p=read(sys.argv[1]);need(p['evidence_scope']==SYNTHETIC,'CPU fixture source only')
++release=Path(__file__).resolve().parents[2];version=read(release/'RUN_VERSION.json')
++new=dict(p,release=str(release));source=actual_source_root(new)
++need(actual_source_root(dict(new,source_root=str(source)))==source,'direct/wrapper author root mismatch')
++sys.path.insert(0,str(release/'lc_rec/letter/scripts'))
++imports={}
++for name in ('formal_train','shuffle_runtime','shuffle_cpu_inputs','compat','formal_attention','formal_bnb_reload','trainer_loop_patch','zero2_partial_state','training_rows','epoch_schedule'):
++ m=importlib.import_module(name);imports[name]=identity(m.__file__)
++need(str(release) in imports['compat']['path'],'compat loaded from outside export')
++import core
++need(Path(core.__file__)==release/'lc_rec/shuffle/core.py','Shuffle core escaped fixed export')
++from production_control import validate_plan
++q=dict(new,run_commit=version['run_commit'],prediction_run_commit=version['run_commit'],
++       config=str(release/'lc_rec/a0_beauty/config/formal_beauty_seed42.json'),inputs=version['files'])
++validate_plan(q)
++result={'scope':SYNTHETIC,'status':'PASS','no_model_loaded':True,'no_trainer_import':True,
++        'normalized_author_source':str(source),'imports':imports,'core':identity(core.__file__),
++        'export_commit':version['run_commit'],'config_author':identity(release/'lc_rec/letter/config/author_instruments.json')}
++durable_write(Path(p['root'])/'dependency_check.json',result);print(json.dumps(result))
+diff --git a/lc_rec/a0_beauty/closure_finalize_check.py b/lc_rec/a0_beauty/closure_finalize_check.py
+new file mode 100644
+index 0000000..359b3ff
+--- /dev/null
++++ b/lc_rec/a0_beauty/closure_finalize_check.py
+@@ -0,0 +1,28 @@
++"""Targeted verification for terminal-state and backwards-clock budget guards."""
++import copy
++import json
++from pathlib import Path
++import sys
++from unittest.mock import patch
++from formal_control import read,durable_write
++from production_control import Control
++from closure_acceptance import factory
++from production_pipeline import validate_stage
++from production_identity import need,identity,SYNTHETIC
++
++planpath=Path(sys.argv[1]);p=read(planpath);need(p['evidence_scope']==SYNTHETIC,'test scope only')
++c=Control(planpath,request_factory=factory);before=read(c.state_path)
++need(all(x['status']=='COMPLETE' for x in before['stages'].values()),'completed pipeline input')
++for stage,v in before['stages'].items():validate_stage(p,stage,v['output'])
++reconcile=copy.deepcopy(before);reconcile['stages']['collect']['status']='RUNNING';durable_write(c.state_path,reconcile)
++after=c.step();need(after['status']=='COMPLETE' and after['stages']['collect']['status']=='COMPLETE','final stage did not close pipeline')
++query=c.runner.query;target=after['attempts'][-1]['job_id'];actual=query(target)
++try:
++    with patch.object(c.runner,'query',side_effect=lambda job:dict(actual,ended_at='2000-01-01T00:00:00+00:00') if job==target else query(job)):
++        try:c.step()
++        except ValueError as e:need('clock moved backwards' in str(e),'wrong clock rejection');rejected=repr(e)
++        else:raise AssertionError('backwards-clock refund accepted')
++finally:durable_write(c.state_path,after)
++result={'scope':SYNTHETIC,'status':'PASS','all_ten_stage_artifacts_revalidated':True,'terminal_state':after['status'],
++        'backwards_clock_rejected':rejected,'production_control':identity(Path(__file__).with_name('production_control.py'))}
++durable_write(Path(p['root'])/'finalize_check.json',result);print(json.dumps(result))
+diff --git a/lc_rec/a0_beauty/closure_fixture.py b/lc_rec/a0_beauty/closure_fixture.py
+new file mode 100644
+index 0000000..ec73e12
+--- /dev/null
++++ b/lc_rec/a0_beauty/closure_fixture.py
+@@ -0,0 +1,101 @@
++"""Explicit CPU test boundary for production_pipeline, never selectable by formal CLI."""
++import json
++import os
++from pathlib import Path
++import shutil
++from types import SimpleNamespace
++from formal_control import durable_write
++from formal_train import checkpoint_required_files, write
++from checkpoint_receipt import write_receipt
++from production_identity import ASSETS, SYNTHETIC, STEPS, need, sha, identity, load
++from production_pipeline import execute_stage
++
++
++def compute(plan,stage,output,resume=None):
++    need(plan['evidence_scope']==SYNTHETIC and SYNTHETIC in plan['root'],'test isolation')
++    need(os.environ.get('CUDA_VISIBLE_DEVICES')=='','CPU only')
++    data={k:{'sha256':v} for k,v in ASSETS.items()}
++    training=Path(plan['root'])/'training'
++    if stage=='train':
++        import torch
++        import ast, importlib.util, logging, re
++        from typing import List
++        source=Path(importlib.util.find_spec('transformers').origin).parent/'trainer.py'
++        raw=source.read_text();tree=ast.parse(raw)
++        cls=next(x for x in tree.body if isinstance(x,ast.ClassDef) and x.name=='Trainer')
++        methods=[x for x in cls.body if isinstance(x,ast.FunctionDef) and x.name in ('_rotate_checkpoints','_sorted_checkpoints')]
++        need(len(methods)==2,'installed Trainer rotation methods')
++        namespace={'Path':Path,'os':os,'re':re,'shutil':shutil,'logger':logging.getLogger('rotation'), 'List':List,'PREFIX_CHECKPOINT_DIR':'checkpoint'}
++        for method in methods:exec(compile(ast.Module(body=[method],type_ignores=[]),str(source),'exec'),namespace)
++        Trainer=type('InstalledTrainerRotation',(),{x.name:namespace[x.name] for x in methods})
++        trainer=Trainer()
++
++        trainer.args=SimpleNamespace(save_total_limit=2)
++        trainer.state=SimpleNamespace(best_model_checkpoint=None)
++        training.mkdir(exist_ok=False)
++        receipts=[];losses=[4.,2.,2.,3.];best=None
++        for epoch,(step,loss) in enumerate(zip(STEPS,losses),1):
++            cp=training/f'checkpoint-{step}';cp.mkdir()
++            for name in checkpoint_required_files(step):
++                p=cp/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b'SYNTHETIC_CHECKPOINT_NOT_A_MODEL\n')
++            torch.save({'SYNTHETIC_TEST_TENSOR':torch.tensor([float(step)])},cp/'adapter_model.bin')
++            write(cp/'trainer_state.json',{'global_step':step});(cp/'latest').write_text(f'global_step{step}\n')
++            if best is None or loss<best[1]:best=(step,loss);trainer.state.best_model_checkpoint=str(cp)
++            rows=[{k:v for k,v in identity(p).items() if k!='path'}|{'path':str(p.relative_to(cp))} for p in sorted(cp.rglob('*')) if p.is_file()]
++            manifest={'run_commit':plan['run_commit'],'config_sha256':plan['config_sha256'],'global_step':step,'files':rows,'collective_ranks':2}
++            write(cp/'complete.json',manifest)
++            r=write_receipt(cp,training,run_commit=plan['run_commit'],config_sha256=plan['config_sha256'],data_identity=data,
++                epoch=float(epoch),step=step,eval_loss=loss,best_checkpoint=trainer.state.best_model_checkpoint,
++                best_metric=best[1],attempt=plan['task_id'],required_files=checkpoint_required_files(step),expected_manifest=manifest,scope=SYNTHETIC)
++            receipts.append(identity(r))
++            # Actual installed Transformers 4.31 rotation, including best protection.
++            Trainer._rotate_checkpoints(trainer,use_mtime=False,output_dir=str(training))
++        adapter=training/'best_adapter';adapter.mkdir()
++        selected=training/f'checkpoint-{best[0]}'
++        for name in ('adapter_model.bin','adapter_config.json','tokenizer.model','tokenizer_config.json','added_tokens.json','special_tokens_map.json'):
++            shutil.copyfile(selected/name,adapter/name)
++        write(training/'best_selection.json',{'checkpoint':str(selected),'metric':'eval_loss','greater_is_better':False,'value':best[1],
++            'adapter_sha256':sha(adapter/'adapter_model.bin'),'run_commit':plan['run_commit'],'completed_training_step':8214,'loaded_best_checkpoint_step':best[0]})
++        for rank in (0,1):
++            write(training/f'rank{rank}.json',{'scope':SYNTHETIC,'status':'TRAINING_COMPLETE','rank':rank,'probe':False,
++                'run_commit':plan['run_commit'],'config_sha256':plan['config_sha256'],'global_step':8214,'epoch':4.,'data_identity':data,
++                'data':{'train_rows':131413,'valid_rows':44726,'validation_subset_preflight_only':False,'tokenizer_vocab':32965}})
++            ev=[{'event':'log','attempt_job_id':plan['task_id'],'step':s,'epoch':float(i+1),'values':{'eval_loss':loss}} for i,(s,loss) in enumerate(zip(STEPS,losses))]
++            ev.extend({'event':'checkpoint_complete','step':step,'attempt_job_id':plan['task_id'],'path':str(training/f'checkpoint-{step}')} for step in STEPS)
++            ev.append({'event':'strict_ds_restored','path':str(selected),'global_step':best[0]})
++            (training/f'events.rank{rank}.jsonl').write_text(''.join(json.dumps(x)+'\n' for x in ev))
++        durable_write(output/'fixture_boundary.json',{'scope':SYNTHETIC,'external_model_compute_replaced':True,
++            'receipts':receipts,'retained_checkpoints':[p.name for p in training.glob('checkpoint-*')],
++            'rotation_source':identity(source)})
++    else:
++        condition={'normal':'Normal','s3':'S3','s4':'S4'}[stage]
++        origin=Path(plan['fixture_root']);summary=load(origin/'summary.json')
++        need(load(origin/'SYNTHETIC_NOTICE.json')['designation']==SYNTHETIC,'fixture designation')
++        adapter=training/'best_adapter'
++        files={p.name:{k:v for k,v in identity(p).items() if k!='path'} for p in adapter.iterdir() if p.is_file()}
++        test=output/'test';test.mkdir()
++        for rank in (0,1):
++            source=origin/condition/'synthetic_predictions'/f'predictions.rank{rank}.jsonl'
++            expected=summary['conditions'][condition]['prediction_files'][rank]
++            need(sha(source)==expected['sha256'] and source.stat().st_size==expected['bytes'],'frozen synthetic prediction identity')
++            shutil.copyfile(source,test/source.name) # byte reuse; no candidate generation
++            old=load(source.parent/f'rank{rank}.json')
++            report={'scope':SYNTHETIC,'status':'PASS','rank':rank,'preflight_only':False,'RUN_COMMIT':plan['prediction_run_commit'],
++                 'run_commit':plan['prediction_run_commit'],'completed_users':11182 if rank==0 else 11181,
++                 'adapter_files':files,'data_identity':data,'author_sources':{'scope':SYNTHETIC},
++                 'generation':{'scope':SYNTHETIC},'allowed_callback_sha256':'SYNTHETIC_NOT_GPU',
++                 'elapsed_generation_seconds':0.,'assignment_sha256':old['assignment_sha256']}
++            if stage!='normal':report['shuffle']={'n':int(stage[-1]),'protocol':'GRID-LETTER-SHUFFLE-V1','seed':42}
++            durable_write(test/f'rank{rank}.json',report)
++        durable_write(output/'fixture_boundary.json',{'scope':SYNTHETIC,'external_gpu_generation_replaced':True,
++             'original_predictions':[identity(origin/condition/'synthetic_predictions'/f'predictions.rank{r}.jsonl') for r in (0,1)]})
++
++
++def main():
++    import argparse
++    p=argparse.ArgumentParser()
++    for n in ('plan','stage','output'):p.add_argument('--'+n,required=True)
++    a=p.parse_args();plan=load(a.plan)
++    execute_stage(plan,a.stage,a.output,compute=compute)
++
++if __name__=='__main__':main()
+diff --git a/lc_rec/a0_beauty/closure_followup.py b/lc_rec/a0_beauty/closure_followup.py
+new file mode 100644
+index 0000000..67b82fe
+--- /dev/null
++++ b/lc_rec/a0_beauty/closure_followup.py
+@@ -0,0 +1,23 @@
++"""Recheck changed control/negative paths against an existing completed CPU pipeline."""
++import json
++from pathlib import Path
++import sys
++import time
++from closure_acceptance import factory,negative_tests,runner_tests
++from production_control import Control
++from production_identity import need,identity,SYNTHETIC
++from formal_control import read,durable_write
++
++p=read(sys.argv[1]);need(p['evidence_scope']==SYNTHETIC,'synthetic-only followup')
++c=Control(sys.argv[1],request_factory=factory)
++need(all(x['status']=='COMPLETE' for x in read(c.state_path)['stages'].values()),'reuse only a completed pipeline')
++suffix=identity(Path(__file__).with_name('closure_acceptance.py'))['sha256'][:12]
++root=Path(p['root']);start=time.monotonic()
++tests=negative_tests(p,Path(sys.argv[1]),c.runner);durable_write(root/('fault_acceptance_'+suffix+'.json'),tests)
++processes=runner_tests(p,c.runner,root/('torchrun_followup_'+suffix))
++# No train/generation/evaluator stage is submitted by this followup.
++result={'scope':SYNTHETIC,'status':'PASS','negative_tests':tests,'runner_tests':processes,
++        'elapsed_seconds':time.monotonic()-start,'source_files':[identity(Path(__file__).with_name(n)) for n in
++         ('production_control.py','production_identity.py','production_pipeline.py','closure_acceptance.py','closure_followup.py')],
++        'reused_pipeline_run_commit':p['run_commit']}
++durable_write(root/('followup_'+suffix+'.json'),result);print(json.dumps(result))
+diff --git a/lc_rec/a0_beauty/closure_ops.py b/lc_rec/a0_beauty/closure_ops.py
+new file mode 100644
+index 0000000..9a3162f
+--- /dev/null
++++ b/lc_rec/a0_beauty/closure_ops.py
+@@ -0,0 +1,127 @@
++"""Task-scoped WSL deployment/collection using the existing Windows SSH transport."""
++import argparse
++import base64
++import hashlib
++import json
++from pathlib import Path
++import shlex
++import subprocess
++import sys
++import tarfile
++sys.path.insert(0,'/home/addaswsw/recommend-support/sid-extensions-p0/scripts')
++import transport
++
++REPO=Path(__file__).resolve().parents[2]
++LOCAL=Path('/home/addaswsw/recommend-support/beauty-production-closure-20261115')
++BASE='/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115'
++PYTHON='/data/bwwu/envs/letter-20261110/bin/python'
++FIXTURE='/data/bwwu/lc-rec/a0-beauty-20261115/SYNTHETIC_CPU_INTEGRATION_ONLY_271df1e33054_r0'
++DATA='/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3'
++SOURCE='/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-infer-63f13def364d/release'
++
++def main():
++    p=argparse.ArgumentParser();p.add_argument('mode',choices=['deploy','submit','query','collect']);p.add_argument('--commit',required=True);a=p.parse_args()
++    a.commit=subprocess.check_output(['git','rev-parse',a.commit],cwd=REPO,text=True).strip()
++    LOCAL.mkdir(parents=True,exist_ok=True);t=transport.Transport('new-server')
++    t.profile=dict(t.profile,remote_support=BASE) # scoped instance only; no shared profile edit
++    release=BASE+'/releases/'+a.commit;root=BASE+'/SYNTHETIC_CPU_INTEGRATION_ONLY_'+a.commit[:12]
++    runner=BASE+'/runner-beauty-cc1a1e277faa.py';jobs=BASE+'/cpu-jobs'
++    job='letter-a0-beauty-cpu-runner-check-main-'+a.commit[:12]
++    def save(n,v):transport.atomic(LOCAL/n,v)
++    if a.mode=='deploy':
++        t.identity()
++        names=subprocess.check_output(['git','ls-tree','-r','--name-only',a.commit,'lc_rec/a0_beauty'],cwd=REPO,text=True).splitlines()
++        names=[x for x in names if Path(x).suffix in ('.py','.json') and '/evidence/' not in x]
++        names+=['lc_rec/letter/config/a0_evaluation_v1.json','lc_rec/letter/review/final_audit_20261113/external/official_cce.py','lc_rec/letter/review/final_audit_20261113/statistics_verify.py','lc_rec/letter/scripts/formal_runner.py']
++        names += ['lc_rec/shuffle/core.py','lc_rec/letter/config/author_instruments.json']
++        names += ['lc_rec/letter/scripts/'+x for x in ('compat.py','formal_attention.py','formal_bnb_reload.py')]
++        names += ['lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/'+x for x in ('data.py','collator.py','evaluate.py','test_ddp.py','prompt.py','utils.py','modeling_letter.py','config/ds_z2_bf16.json')]
++        archive=LOCAL/(a.commit+'.tar.gz')
++        subprocess.run(['git','archive','--format=tar.gz','--output='+str(archive),a.commit,*names],cwd=REPO,check=True)
++        remote_archive=BASE+'/'+archive.name;t.put(archive,remote_archive)
++        code=f'''from pathlib import Path
++import tarfile,json,hashlib,os,pwd,socket,datetime
++base=Path({BASE!r});release=Path({release!r});archive=Path({remote_archive!r})
++assert hashlib.sha256(archive.read_bytes()).hexdigest()=={transport.sha(archive)!r}
++with tarfile.open(archive) as tf:
++ members=tf.getmembers();assert all((m.isfile() or m.isdir()) and not Path(m.name).is_absolute() and '..' not in Path(m.name).parts for m in members)
++ assert len({{m.name for m in members}})==len(members)
++ release.mkdir(parents=True,exist_ok=True)
++ for m in members:
++  if not m.isfile():continue
++  b=tf.extractfile(m).read();p=release/m.name;p.parent.mkdir(parents=True,exist_ok=True)
++  if p.exists():assert p.read_bytes()==b
++  else:p.write_bytes(b)
++rows=[{{'path':str(release/m.name),'relative':m.name,'bytes':(release/m.name).stat().st_size,'sha256':hashlib.sha256((release/m.name).read_bytes()).hexdigest()}} for m in members if m.isfile()]
++import sys
++sys.path.insert(0,str(release/'lc_rec/a0_beauty'))
++from derive_formal_runner import derive
++runner=Path({runner!r});payload=derive(release/'lc_rec/letter/scripts/formal_runner.py')
++assert hashlib.sha256(payload).hexdigest()=='cc1a1e277faa9bc713a4d0d1b620248d47c398e8ed17d4ed3d7ab52805cc657e'
++if runner.exists():assert runner.read_bytes()==payload
++else:runner.write_bytes(payload)
++Path({jobs!r}).mkdir(exist_ok=True)
++side={{'job_root':{jobs!r},'hostname':socket.gethostname(),'uid':os.getuid(),'user':pwd.getpwuid(os.getuid()).pw_name,'namespace':'beauty-production-closure-cpu-only'}}
++sidepath=Path(str(runner)+'.deployment.json');b=(json.dumps(side,sort_keys=True)+'\\n').encode()
++if sidepath.exists():assert sidepath.read_bytes()==b
++else:sidepath.write_bytes(b)
++# Inherit every known Beauty CPU attempt conservatively; nested test job costs
++# will also be retained rather than creating a fresh 7200s allowance per name.
++prior=[]
++for p in list(Path('/home/bwwu/grid-audits/sid-extensions-p0/jobs').glob('letter-beauty*/request.json'))+list(Path({jobs!r}).glob('*/request.json')):
++ req=json.loads(p.read_text())
++ if req.get('env',{{}}).get('CUDA_VISIBLE_DEVICES')!='':continue
++ state=json.loads((p.parent/'status.json').read_text())
++ assert state['status'] not in ('ACCEPTED','RUNNING') and state.get('cleanup',{{}}).get('verified'),str(p)
++ if state.get('started_at') and state.get('ended_at'):
++  seconds=(datetime.datetime.fromisoformat(state['ended_at'])-datetime.datetime.fromisoformat(state['started_at'])).total_seconds()
++  prior.append({{'job_id':req['job_id'],'wall_seconds':seconds,'status_sha256':hashlib.sha256((p.parent/'status.json').read_bytes()).hexdigest()}})
++version={{'run_commit':{a.commit!r},'release':str(release),'files':rows,'runner_sha256':hashlib.sha256(payload).hexdigest(),'runner':str(runner),'sidecar':side,'sidecar_sha256':hashlib.sha256(b).hexdigest(),'historical_cpu_costs':prior,'historical_cpu_wall_seconds':sum(r['wall_seconds'] for r in prior),'export_not_checkout':True}}
++(release/'RUN_VERSION.json').write_text(json.dumps(version,indent=2)+'\\n')
++print(json.dumps(version))
++'''
++        dep=json.loads(t.python(code,timeout=90));save('deployment.json',dep);print(json.dumps({'release':release,'files':len(dep['files']),'inherited_cpu_seconds':dep['historical_cpu_wall_seconds']}));return
++    if a.mode=='submit':
++        dep=json.loads((LOCAL/'deployment.json').read_text());assert dep['run_commit']==a.commit;remaining=int(7200-dep['historical_cpu_wall_seconds']-60)
++        assert remaining>1800
++        env={'CUDA_VISIBLE_DEVICES':'','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4','OMP_NUM_THREADS':'2','OPENBLAS_NUM_THREADS':'2','PYTHONDONTWRITEBYTECODE':'1','PYTHONUNBUFFERED':'1','USE_TF':'0','TOKENIZERS_PARALLELISM':'false','HF_HUB_OFFLINE':'1','TRANSFORMERS_OFFLINE':'1'}
++        ns={'host':dep['sidecar']['hostname'],'user':dep['sidecar']['user'],'uid':dep['sidecar']['uid'],'namespace':dep['sidecar']['namespace'],'deployment_sha256':dep['sidecar_sha256']}
++        config=release+'/lc_rec/a0_beauty/config/formal_beauty_seed42.json'
++        plan={'scope':'SYNTHETIC_TEST','evidence_scope':'SYNTHETIC_CPU_INTEGRATION_ONLY','run_commit':a.commit,'prediction_run_commit':a.commit,
++              'root':root,'release':release,'python':PYTHON,'data_root':DATA,'source_root':SOURCE,'model':'SYNTHETIC_NO_MODEL',
++              'config':config,'config_sha256':'24b568161f2d71d3c5962372a38683b2d33ee5d6d5064de0612215946a8106fd',
++              'asset_sha256':{'index':'be3fb890e59b5443824cdebc560ef349191b97f20d3aecad4727de2d6b212c82','inter':'8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5','item':'74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330'},
++              'runner':runner,'runner_sha256':dep['runner_sha256'],'job_root':jobs,'namespace':ns,'env':env,
++              'task_id':a.commit[:12],'temporary_root':BASE,'fixture_root':FIXTURE,'stage_seconds':{s:1200 for s in ['train','verify_best_adapter','normal','normal_eval','s3','s3_eval','s4','s4_eval','paired','collect']},
++              'budget':{'train_normal':700,'s3':400,'s4':400,'cpu':remaining-1600,'total':remaining-100,'cleanup_reserve':10},
++              'inputs':dep['files']}
++        # Synthetic model is a non-compute placeholder but still an absolute path.
++        plan['model']=root+'/SYNTHETIC_NO_MODEL'
++        local_plan=LOCAL/'plan.json';save('plan.json',plan);remote_plan=root+'/plan.json';t.put(local_plan,remote_plan)
++        req=dict(schema=1,**ns,capture_version=a.commit,cwd=release,
++                 argv=[PYTHON,release+'/lc_rec/a0_beauty/closure_acceptance.py','--plan',remote_plan],
++                 env=env,timeout_seconds=remaining,inputs=[{'path':x['path'],'sha256':x['sha256']} for x in dep['files']]+[{'path':remote_plan,'sha256':transport.sha(local_plan)}],job_id=job)
++        save('request.json',req);remote_req=BASE+'/'+job+'.json';t.put(LOCAL/'request.json',remote_req)
++        reply=json.loads(t.ssh(shlex.join(['/usr/bin/python3','-I','-S','-B',runner,'submit',jobs,remote_req]),timeout=60));save('submit.json',reply);print(json.dumps(reply));return
++    result=json.loads(t.ssh(shlex.join(['/usr/bin/python3','-I','-S','-B',runner,'query',jobs+'/'+job]),timeout=45));save('last-query.json',result)
++    if a.mode=='query':
++        print(json.dumps({k:result.get(k) for k in ['job_id','status','exit_code','cleanup_verified','worker_alive','workgroup_live']}))
++        print(t.ssh(shlex.join(['tail','-n','35',jobs+'/'+job+'/work.log'])));return
++    code=f'''from pathlib import Path
++import json,hashlib,base64
++roots=[(Path({jobs!r})/{job!r},'runner'),(Path({root!r}),'pipeline')];files={{}}
++for child in Path({jobs!r}).glob('*'+{a.commit[:12]!r}+'*'):
++ if child.name!={job!r}:roots.append((child,'child-jobs/'+child.name))
++for base,prefix in roots:
++ for p in base.rglob('*'):
++  if p.is_file() and not p.is_symlink() and p.suffix in ('.json','.jsonl','.log') and p.stat().st_size<2*1024**2 and not p.name.startswith('predictions') and 'training/checkpoint-' not in str(p):
++   b=p.read_bytes();files[prefix+'/'+str(p.relative_to(base))]={{'data':base64.b64encode(b).decode(),'sha256':hashlib.sha256(b).hexdigest()}}
++print(json.dumps(files))'''
++    got=json.loads(t.python(code,timeout=90));dest=REPO/'lc_rec/a0_beauty/evidence/production-closure/server'/a.commit[:12]
++    for n,v in got.items():
++        path=dest/n;path.parent.mkdir(parents=True,exist_ok=True);b=base64.b64decode(v['data']);assert hashlib.sha256(b).hexdigest()==v['sha256'];path.write_bytes(b)
++    for name in ('deployment.json','plan.json','request.json','submit.json','last-query.json'):
++        (dest/name).write_bytes((LOCAL/name).read_bytes())
++    print(json.dumps({'collected_files':len(got),'status':result['status']}))
++
++if __name__=='__main__':main()
+diff --git a/lc_rec/a0_beauty/closure_torch_worker.py b/lc_rec/a0_beauty/closure_torch_worker.py
+new file mode 100644
+index 0000000..d2d33bf
+--- /dev/null
++++ b/lc_rec/a0_beauty/closure_torch_worker.py
+@@ -0,0 +1,22 @@
++"""Bounded real CPU Gloo ranks for runner identity/exit/timeout acceptance."""
++import argparse
++import datetime
++import os
++from pathlib import Path
++import time
++import torch
++import torch.distributed as dist
++from formal_control import durable_write
++
++p=argparse.ArgumentParser();p.add_argument('--mode',choices=['success','failure','timeout'],required=True);p.add_argument('--output',required=True);a=p.parse_args()
++assert os.environ['CUDA_VISIBLE_DEVICES']=='' and os.environ['TORCHELASTIC_MAX_RESTARTS']=='0'
++rank=int(os.environ['RANK']);root=Path(a.output);root.mkdir(parents=True,exist_ok=True)
++stat=(Path('/proc')/str(os.getpid())/'stat').read_text().rsplit(')',1)[1].split()
++durable_write(root/f'rank{rank}.identity.json',{'rank':rank,'pid':os.getpid(),'ppid':os.getppid(),'pgid':os.getpgid(0),'session':os.getsid(0),
++ 'start_ticks':stat[19],'boot_id':Path('/proc/sys/kernel/random/boot_id').read_text().strip(),'job_id':os.environ['GRID_JOB_ID'],'job_dir':os.environ['GRID_JOB_DIR'],'cuda_visible':os.environ['CUDA_VISIBLE_DEVICES']})
++dist.init_process_group('gloo',timeout=datetime.timedelta(seconds=20))
++x=torch.tensor([rank+1]);dist.all_reduce(x);assert x.item()==3
++if a.mode=='failure' and rank==1:raise RuntimeError('INTENTIONAL_CPU_RANK_FAILURE')
++if a.mode in ('failure','timeout'):time.sleep(90)
++dist.barrier();dist.destroy_process_group()
++durable_write(root/f'rank{rank}.done.json',{'rank':rank,'sum':x.item(),'status':'CPU_COMPLETE'})
+diff --git a/lc_rec/a0_beauty/closure_worker_guard.py b/lc_rec/a0_beauty/closure_worker_guard.py
+new file mode 100644
+index 0000000..f211970
+--- /dev/null
++++ b/lc_rec/a0_beauty/closure_worker_guard.py
+@@ -0,0 +1,22 @@
++"""Check worker admission using the real accepted requests of the completed CPU run."""
++from pathlib import Path
++import json,sys
++from formal_control import read,durable_write
++from production_pipeline import validate_worker_context
++from production_identity import need,identity,SYNTHETIC
++p=read(sys.argv[1]);need(p['evidence_scope']==SYNTHETIC,'test scope')
++s=read(Path(p['root'])/'state.json');checked={}
++for stage,rec in s['stages'].items():
++ a=s['attempts'][rec['attempt_index']];job=a['job_id'];directory=str(Path(p['job_root'])/job)
++ checked[stage]=validate_worker_context(p,stage,rec['output'],job_id=job,job_dir=directory)
++ for wrong in (str(Path(p['root'])/'foreign-output'),rec['output']+'-wrong'):
++  try:validate_worker_context(p,stage,wrong,job_id=job,job_dir=directory)
++  except ValueError:pass
++  else:raise AssertionError('worker accepted foreign output')
++from paired_beauty import process
++try:process(None)
++except ValueError as e:need('positive training source context' in str(e),'missing context rejected for wrong reason')
++else:raise AssertionError('unbound pairing accepted')
++result={'scope':SYNTHETIC,'status':'PASS','real_accepted_worker_contexts':checked,'foreign_outputs_rejected':20,
++        'unbound_pairing_rejected':True,'sources':[identity(Path(__file__).with_name(x)) for x in ('production_pipeline.py','paired_beauty.py')]}
++durable_write(Path(p['root'])/'worker_context_check.json',result);print(json.dumps(result))
+diff --git a/lc_rec/a0_beauty/evidence/production-closure/source/formal_requests.original.py b/lc_rec/a0_beauty/evidence/production-closure/source/formal_requests.original.py
+new file mode 100644
+index 0000000..375c960
+--- /dev/null
++++ b/lc_rec/a0_beauty/evidence/production-closure/source/formal_requests.original.py
+@@ -0,0 +1,94 @@
++"""Prepare fixed Beauty GPU-stage requests; does not authorize or submit jobs.
++
++This module is an incomplete production integration: callers must verify the
++training source chain, deploy a fixed export, implement per-stage validators,
++and enforce the separately granted formal authorization before any submission.
++No caller-supplied executable or free-form command is accepted.
++"""
++from pathlib import Path
++import re
++
++
++GPU_STAGES = ('train', 'normal', 's3', 's4')
++
++
++def _absolute(value, key):
++    if not isinstance(value, str) or not Path(value).is_absolute() or '..' in Path(value).parts:
++        raise ValueError('absolute path required: ' + key)
++    return value
++
++
++def build_gpu_request(plan, stage):
++    """Build, but never submit, a request for a named Beauty GPU stage.
++
++    Inputs are explicit, previously identified files; their actual hashes are
++    checked by the existing Runner at submission.  The prepare operation is
++    useful only after external identity and per-stage validation are wired.
++    """
++    if stage not in GPU_STAGES:
++        raise ValueError('unsupported GPU stage')
++    if plan.get('scope') != 'FORMAL_PREPARE':
++        raise PermissionError('request construction is preparation only')
++    commit = plan.get('run_commit', '')
++    config_sha = plan.get('config_sha256', '')
++    if not re.fullmatch(r'[0-9a-f]{40}', commit) or not re.fullmatch(r'[0-9a-f]{64}', config_sha):
++        raise ValueError('full code and configuration identities required')
++    paths = plan['paths']
++    required = ('release', 'python', 'source_root', 'data_root', 'model', 'output_root',
++                'train_config', 'precision_approval', 'prelaunch_review', 'cpu_audit')
++    for key in required:
++        _absolute(paths[key], key)
++    root = Path(paths['release']) / 'lc_rec' / 'a0_beauty'
++    out = Path(paths['output_root'])
++    train = out / 'training'
++    adapter = train / 'best_adapter'
++    command = [paths['python'], '-m', 'torch.distributed.run', '--standalone',
++               '--nnodes=1', '--nproc_per_node=2']
++    common = ['--source-root', paths['source_root'], '--data-root', paths['data_root'],
++              '--model', paths['model']]
++    if stage == 'train':
++        command += [str(root / 'formal_train.py'), *common, '--output', str(train),
++                    '--config', paths['train_config'], '--run-commit', commit,
++                    '--precision-approval', paths['precision_approval'],
++                    '--prelaunch-review', paths['prelaunch_review']]
++    else:
++        if stage == 'normal':
++            command += [str(root / 'formal_evaluate.py')]
++        else:
++            command += [str(root / 'shuffle_entry.py'), '--model-key', 'a0',
++                        '--shuffle-n', '3' if stage == 's3' else '4',
++                        '--cpu-audit', paths['cpu_audit']]
++        command += [*common, '--adapter', str(adapter), '--output', str(out / stage),
++                    '--run-commit', commit]
++    stage_config = plan['stages'][stage]
++    job_id = stage_config['job_id']
++    if not re.fullmatch(r'letter-a0-beauty-formal-[A-Za-z0-9_.-]{1,65}', job_id):
++        raise ValueError('invalid Beauty formal job ID')
++    timeout = stage_config['timeout_seconds']
++    if type(timeout) is not int or not 0 < timeout <= 345600:
++        raise ValueError('invalid job timeout')
++    if not isinstance(plan.get('input_identity'), dict) or not plan['input_identity']:
++        raise ValueError('data and model identities required')
++    inputs = stage_config['inputs']
++    if not isinstance(inputs, list) or not inputs:
++        raise ValueError('fixed input manifest required')
++    for entry in inputs:
++        _absolute(entry['path'], 'input')
++        if not re.fullmatch(r'[0-9a-f]{64}', entry.get('sha256', '')):
++            raise ValueError('input SHA required')
++    by_path = {entry['path']: entry['sha256'] for entry in inputs}
++    if by_path.get(paths['train_config']) != config_sha:
++        raise ValueError('request must bind the exact configuration file')
++    runner = plan['runner_namespace']
++    environment = dict(plan['environment'])
++    devices = environment.get('CUDA_VISIBLE_DEVICES', '').split(',')
++    if len(devices) != 2 or len(set(devices)) != 2 or any(not x.isdecimal() for x in devices):
++        raise ValueError('formal two-rank GPU mapping must be supplied explicitly')
++    if 'GRID_JOB_ID' in environment or 'GRID_JOB_DIR' in environment:
++        raise ValueError('runner identity markers are runner-owned')
++    return {'schema': 1, 'host': runner['host'], 'user': runner['user'], 'uid': runner['uid'],
++            'namespace': runner['namespace'], 'deployment_sha256': runner['deployment_sha256'],
++            'capture_version': commit, 'cwd': paths['release'], 'argv': command,
++            'env': environment, 'timeout_seconds': timeout, 'inputs': inputs, 'job_id': job_id,
++            'beauty_stage': stage, 'beauty_config_sha256': config_sha,
++            'beauty_input_identity': plan['input_identity']}
+diff --git a/lc_rec/a0_beauty/formal_control.py b/lc_rec/a0_beauty/formal_control.py
+index 1353ca5..058685c 100644
+--- a/lc_rec/a0_beauty/formal_control.py
++++ b/lc_rec/a0_beauty/formal_control.py
+@@ -1,9 +1,8 @@
+-"""Fail-closed persistent control primitives for the Beauty production pipeline.
++"""Beauty control entry point and legacy test compatibility primitives.
+ 
+-This module is deliberately not a launch entry point.  Stage-specific request
+-construction, artifact validators and the formal authorization gate must be
+-wired before it can launch the Beauty pipeline.  In particular, no generic
+-command-submission CLI is exposed here.
++CLI execution delegates to production_control.Control, which owns formal
++requests, artifact validation, authorization and cumulative recovery budgets.
++StageControl remains only for inherited small tests; production does not use it.
+ """
+ import contextlib
+ import fcntl
+@@ -78,12 +77,12 @@ class Runner:
+             return None
+         return json.loads(subprocess.check_output(
+             ['/usr/bin/python3', '-I', '-S', '-B', str(self.path), 'query', str(job)],
+-            text=True, timeout=45))
++            text=True, timeout=45, env={k:v for k,v in os.environ.items() if k not in ('GRID_JOB_ID','GRID_JOB_DIR')}))
+ 
+     def submit(self, request_path):
+         return json.loads(subprocess.check_output(
+             ['/usr/bin/python3', '-I', '-S', '-B', str(self.path), 'submit',
+-             str(self.job_root), str(request_path)], text=True, timeout=60))
++             str(self.job_root), str(request_path)], text=True, timeout=60, env={k:v for k,v in os.environ.items() if k not in ('GRID_JOB_ID','GRID_JOB_DIR')}))
+ 
+ 
+ class StageControl:
+@@ -167,3 +166,8 @@ class StageControl:
+                 record.update(status='COMPLETE', artifact_evidence=evidence)
+             durable_write(state_path, record)
+             return record
++
++
++if __name__ == "__main__":
++    from production_control import main
++    main()
+diff --git a/lc_rec/a0_beauty/formal_requests.py b/lc_rec/a0_beauty/formal_requests.py
+new file mode 100644
+index 0000000..e193dea
+--- /dev/null
++++ b/lc_rec/a0_beauty/formal_requests.py
+@@ -0,0 +1,2 @@
++"""Beauty request factory. Original draft retained in evidence/production-closure/source/."""
++from production_control import request as build_stage_request
+diff --git a/lc_rec/a0_beauty/paired_beauty.py b/lc_rec/a0_beauty/paired_beauty.py
+index 1422f3d..94249fc 100644
+--- a/lc_rec/a0_beauty/paired_beauty.py
++++ b/lc_rec/a0_beauty/paired_beauty.py
+@@ -18,7 +18,7 @@ def validate_metric_matrix(np, keys, matrix):
+     assert np.isfinite(matrix).all()
+ 
+ 
+-def validate_provenance(primary, test):
++def validate_provenance(primary, test, source_context=None):
+     """Bind evaluated files to completed formal rank reports; no training proof implied."""
+     metrics=json.loads((primary/'metrics.json').read_text())
+     assert metrics['status']=='PASS' and metrics['users']==22363
+@@ -35,6 +35,15 @@ def validate_provenance(primary, test):
+     prediction_files=metrics['prediction_files']
+     assert len(prediction_files)==2
+     identities=[]
++    if source_context is not None:
++        from production_identity import verify_predictions, verify_training
++        supplied=source_context['best']
++        fresh=verify_training(supplied['training_root'],supplied['run_commit'],supplied['config_sha256'],source_context['scope'])
++        assert fresh==supplied, 'source context does not match current training artifacts'
++        condition='normal'
++        first=json.loads((test/'rank0.json').read_text())
++        if 'shuffle' in first:condition='s'+str(first['shuffle']['n'])
++        verify_predictions(test,run,source_context['best'],condition,source_context['scope'])
+     for rank in (0,1):
+         report=json.loads((test/f'rank{rank}.json').read_text())
+         assert report['status']=='PASS' and report['rank']==rank and report['preflight_only'] is False
+@@ -68,14 +77,14 @@ def paired_bootstrap(np, difference):
+     return draws,low,high
+ 
+ 
+-def main():
++def process(a, source_context=None):
++    if source_context is None:
++        raise ValueError('positive training source context required')
+     import numpy as np
+-    p=argparse.ArgumentParser()
+-    for n in ['normal-primary','shuffle-primary','normal-test','shuffle-test','output']:p.add_argument('--'+n,required=True)
+-    a=p.parse_args();out=Path(a.output);out.mkdir(exist_ok=False)
++    out=Path(a.output);out.mkdir(exist_ok=False)
+     started=time.monotonic();roots=[Path(a.normal_primary),Path(a.shuffle_primary)]
+-    provenance=[validate_provenance(roots[0],Path(a.normal_test)),
+-                validate_provenance(roots[1],Path(a.shuffle_test))]
++    provenance=[validate_provenance(roots[0],Path(a.normal_test),source_context),
++                validate_provenance(roots[1],Path(a.shuffle_test),source_context)]
+     assert provenance[0]['adapter_files']==provenance[1]['adapter_files'], 'Adapter identity mismatch'
+     rows=[];matrices=[];keys=None;identities={}
+     for root in roots:
+@@ -130,7 +139,7 @@ def main():
+                 changed['top20_set_changed']+=set(old)!=set(now)
+     assert seen==set(range(22363))
+     for key in ['top1_changed','top20_ordered_changed','top20_set_changed']:changed[key+'_fraction']=changed[key]/22363
+-    result={'status':'PASS','users':22363,'identity_fields_exact':fields,'metrics':metrics,
++    result={'scope':source_context['scope'] if source_context else 'LEGACY_PROVENANCE_ONLY','status':'PASS','users':22363,'identity_fields_exact':fields,'metrics':metrics,
+       'bootstrap':{'repetitions':5000,'seed':20261113,'rng':'PCG64','replacement':True,'percentile':'95% linear',
+        'scope':'User uncertainty conditional on fixed trained model and fixed shuffle realization; not training-seed or permutation variance.'},
+       'independent_verification':{'source':str(independent_path),'source_sha256':hashlib.sha256(independent_path.read_bytes()).hexdigest(),
+@@ -139,4 +148,15 @@ def main():
+     (out/'paired_comparison.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({'status':'PASS','users':22363}))
+ 
+ 
++def main():
++    p=argparse.ArgumentParser()
++    for n in ['normal-primary','shuffle-primary','normal-test','shuffle-test','output']:p.add_argument('--'+n,required=True)
++    p.add_argument('--training-root',required=True)
++    p.add_argument('--training-run-commit',required=True)
++    p.add_argument('--training-config-sha256',required=True)
++    a=p.parse_args()
++    from production_identity import verify_training
++    best=verify_training(a.training_root,a.training_run_commit,a.training_config_sha256)
++    process(a,source_context={'scope':'FORMAL','best':best})
++
+ if __name__=='__main__':main()
+diff --git a/lc_rec/a0_beauty/prepare_production_plan.py b/lc_rec/a0_beauty/prepare_production_plan.py
+new file mode 100644
+index 0000000..20257ab
+--- /dev/null
++++ b/lc_rec/a0_beauty/prepare_production_plan.py
+@@ -0,0 +1,42 @@
++"""Prepare a complete formal plan without approval creation or submission.
++
++Budget JSON must be explicitly supplied following user confirmation.  The
++result is an execution-capable blueprint; prepare/query never launch it.
++"""
++import argparse
++from pathlib import Path
++from formal_control import durable_write
++from production_control import validate_plan, STAGES
++from production_identity import load, sha, ASSETS, need
++
++
++def main():
++    p=argparse.ArgumentParser(allow_abbrev=False)
++    for name in ('deployment','root','data-root','source-root','model','python','runner','precision-approval','prelaunch-review','budget','task-id'):
++        p.add_argument('--'+name,required=True)
++    p.add_argument('--gpu-uuids',nargs=2,required=True)
++    a=p.parse_args();dep=load(a.deployment);release=dep['release'];budget=load(a.budget)
++    side=load(a.runner+'.deployment.json')
++    need(sha(a.runner)=='cc1a1e277faa9bc713a4d0d1b620248d47c398e8ed17d4ed3d7ab52805cc657e','tested Beauty Runner bytes')
++    need(side['namespace'].startswith('beauty-') and side['job_root']!='/home/bwwu/grid-audits/sid-extensions-p0/jobs','Beauty isolated deployment required')
++    root=Path(a.root);path=root/'plan.json'
++    config=str(Path(release)/'lc_rec/a0_beauty/config/formal_beauty_seed42.json')
++    plan={'scope':'FORMAL_SUBMIT','evidence_scope':'FORMAL','task_id':a.task_id,'root':str(root),
++          'run_commit':dep['run_commit'],'prediction_run_commit':dep['run_commit'],'release':release,
++          'config':config,'config_sha256':sha(config),'asset_sha256':ASSETS,'inputs':dep['files'],
++          'data_root':a.data_root,'source_root':a.source_root,'model':a.model,'python':a.python,
++          'runner':a.runner,'runner_sha256':sha(a.runner),'job_root':side['job_root'],
++          'namespace':{'host':side['hostname'],'user':side['user'],'uid':side['uid'],
++                       'namespace':side['namespace'],'deployment_sha256':sha(a.runner+'.deployment.json')},
++          'precision_approval':a.precision_approval,'prelaunch_review':a.prelaunch_review,
++          'gpu_uuids':a.gpu_uuids,'stage_seconds':budget['stage_seconds'],'budget':budget['budget'],
++          'env':{'CUDA_VISIBLE_DEVICES':'0,1','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
++                 'LD_LIBRARY_PATH':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib',
++                 'OMP_NUM_THREADS':'4','OPENBLAS_NUM_THREADS':'2','PYTHONDONTWRITEBYTECODE':'1','PYTHONUNBUFFERED':'1',
++                 'PYTHONOPTIMIZE':'0','TOKENIZERS_PARALLELISM':'false','HF_HUB_OFFLINE':'1','TRANSFORMERS_OFFLINE':'1'}}
++    validate_plan(plan)
++    if path.exists():need(load(path)==plan,'preserve existing immutable plan')
++    else:durable_write(path,plan)
++    print('PREPARED_NOT_SUBMITTED',path)
++
++if __name__=='__main__':main()
+diff --git a/lc_rec/a0_beauty/production_control.py b/lc_rec/a0_beauty/production_control.py
+new file mode 100644
+index 0000000..9bb31de
+--- /dev/null
++++ b/lc_rec/a0_beauty/production_control.py
+@@ -0,0 +1,249 @@
++"""Beauty server-side control: immutable plans, accepted Runner jobs, bounded recovery.
++
++The CLI accepts formal plans only. Authorization is a separately supplied user
++receipt AND its digest taken from the subsequent explicit user authorization;
++no approval is created here and a plan cannot authorize itself.
++"""
++import argparse
++import datetime as dt
++import json
++import os
++from pathlib import Path
++import re
++import subprocess
++import sys
++import time
++from formal_control import durable_write, locked, read, digest, Runner
++from production_identity import need, sha, check_file, scope_guard, ASSETS, SYNTHETIC
++
++STAGES=('train','verify_best_adapter','normal','normal_eval','s3','s3_eval','s4','s4_eval','paired','collect')
++ACTIVE={'ACCEPTED','RUNNING','UNCONFIRMED','CONTROL_LOST'}
++
++def group(stage):
++    return 'train_normal' if stage in ('train','normal') else stage if stage in ('s3','s4') else 'cpu'
++
++
++def validate_plan(p):
++    need(p['scope'] in ('FORMAL_PREPARE','FORMAL_SUBMIT','SYNTHETIC_TEST'),'unknown plan scope')
++    need(p['evidence_scope']==(SYNTHETIC if p['scope']=='SYNTHETIC_TEST' else 'FORMAL'),'scope mismatch')
++    scope_guard(p['root'],p['evidence_scope'])
++    need(re.fullmatch('[0-9a-f]{40}',p['run_commit']) and re.fullmatch('[0-9a-f]{40}',p['prediction_run_commit']),'full source commits required')
++    need(p['prediction_run_commit']==p['run_commit'],'new generation must use pinned source commit')
++    need(sha(p['config'])==p['config_sha256'],'configuration SHA')
++    cfg=read(p['config'])
++    need(cfg['dataset']=='Beauty' and cfg['epochs']==4 and cfg['storage_save_total_limit']==2 and
++         (cfg['seed'],cfg['per_device_batch_size'],cfg['gradient_accumulation_steps'],cfg['world_size'])==(42,8,4,2),'frozen training configuration')
++    need(p['asset_sha256']==ASSETS,'frozen data identities')
++    for key in ('root','release','python','data_root','source_root','model','config','runner','job_root'):
++        need(Path(p[key]).is_absolute() and '..' not in Path(p[key]).parts,'absolute canonical path: '+key)
++    need(p['config_sha256']=='24b568161f2d71d3c5962372a38683b2d33ee5d6d5064de0612215946a8106fd','frozen effective recipe')
++    for k,v in ASSETS.items():need(sha(Path(p['data_root'])/'Beauty'/f'Beauty.{k}.json')==v,'data asset hash')
++    need(set(p['stage_seconds'])==set(STAGES) and all(type(x) is int and 0<x<=345600 for x in p['stage_seconds'].values()),'stage wall limits')
++    need(set(p['budget'])=={'train_normal','s3','s4','cpu','total','cleanup_reserve'},'budget schema')
++    need(all(type(x) is int and x>0 for x in p['budget'].values()),'positive budgets')
++    need(p['budget']['cleanup_reserve']>=10 and p['budget']['total']>=sum(p['budget'][k] for k in ('train_normal','s3','s4','cpu')),'total budget must cover all groups')
++    need(re.fullmatch(r'[A-Za-z0-9_.-]{1,35}',p['task_id']),'stable task identity')
++    need(sha(p['runner'])==p['runner_sha256'],'runner byte identity')
++    side=read(p['runner']+'.deployment.json')
++    need(side['job_root']==p['job_root'] and side['namespace']==p['namespace']['namespace'],'isolated runner sidecar')
++    need(sha(p['runner']+'.deployment.json')==p['namespace']['deployment_sha256'],'sidecar hash')
++    for row in p['inputs']:check_file(row)
++    version=read(Path(p['release'])/'RUN_VERSION.json')
++    need(version['run_commit']==p['run_commit'],'export is not the pinned code commit')
++    required=('production_control.py','production_pipeline.py','production_identity.py','formal_train.py','formal_evaluate.py','paired_beauty.py','offline_metrics.py','checkpoint_receipt.py','shuffle_entry.py','shuffle_runtime.py','shuffle_cpu_inputs.py')
++    supplied={x['path']:x['sha256'] for x in p['inputs']}
++    version_rows={x['path']:x['sha256'] for x in version['files']}
++    for name in required:
++        target=str(Path(p['release'])/'lc_rec/a0_beauty'/name)
++        need(target in supplied and supplied[target]==version_rows[target],'production source not bound: '+name)
++    need(p['inputs'] and any(Path(r['path'])==Path(p['config']) for r in p['inputs']),'config must be pinned input')
++    for relative in ('lc_rec/shuffle/core.py','lc_rec/letter/config/author_instruments.json',
++                     'lc_rec/letter/scripts/compat.py','lc_rec/letter/scripts/formal_attention.py','lc_rec/letter/scripts/formal_bnb_reload.py'):
++        target=str(Path(p['release'])/relative)
++        need(target in supplied and supplied[target]==version_rows[target],'missing production dependency: '+relative)
++    from production_pipeline import actual_source_root
++    actual_source_root(p)
++    if p['evidence_scope']=='FORMAL':
++        need(Path(p['model']).name=='4782ad278652c7c71b72204d462d6d01eaaf7549','model revision')
++        need(sha(Path(p['model'])/'config.json')=='e4c3dea29aefc16c0e63825f9ae097dbf5cb5d7c320843a84257e11be3b452c8','base model config')
++        need(p['env'].get('CUDA_VISIBLE_DEVICES') and p['env'].get('PYTHONOPTIMIZE','0')=='0','formal environment')
++    else:need(p['env'].get('CUDA_VISIBLE_DEVICES')=='','CPU test visibility')
++    return p
++
++
++def authorize(plan, receipt, expected_digest):
++    need(plan['scope']=='FORMAL_SUBMIT','FORMAL_PREPARE never submits')
++    if not receipt or not expected_digest:raise PermissionError('separate user launch authorization and user-pinned digest required')
++    need(re.fullmatch('[0-9a-f]{64}',expected_digest) and sha(receipt)==expected_digest,'user authorization digest')
++    r=read(receipt)
++    need(r.get('authorized_by')=='user' and r.get('user_message_reference') and r.get('authorization_text'),'authorization provenance')
++    need(r.get('action')=='FORMAL_BEAUTY_TRAIN_NORMAL_S3_S4' and r.get('plan_sha256')==digest(plan),'authorization scope/immutable plan')
++    need(r.get('run_commit')==plan['run_commit'] and r.get('config_sha256')==plan['config_sha256'] and
++         r.get('budget')==plan['budget'] and r.get('task_id')==plan['task_id'],'authorization version/config/budget/job')
++    need(dt.datetime.fromisoformat(r['expires_utc'])>dt.datetime.now(dt.timezone.utc),'authorization expired')
++    # An independent prelaunch technical review is distinct from user launch approval.
++    review=read(plan['prelaunch_review'])
++    need(review['status']=='PASS' and review['RUN_COMMIT']==plan['run_commit'] and
++         review['config_sha256']==plan['config_sha256'] and
++         review['formal_train_sha256']==sha(Path(plan['release'])/'lc_rec/a0_beauty/formal_train.py'),'prelaunch review identity')
++    return True
++
++
++def resume_point(root,commit,config_sha):
++    from formal_train import verify_checkpoint
++    cps=sorted((x for x in Path(root).glob('checkpoint-*') if (x/'complete.json').is_file()),key=lambda x:int(x.name.split('-')[-1]))
++    need(cps,'no complete recovery checkpoint')
++    verify_checkpoint(cps[-1],commit,config_sha)
++    return cps[-1]
++
++
++def request(plan,stage,attempt,timeout,plan_path,authorization=None,authorization_sha256=None,resume=None):
++    prefix='letter-a0-beauty-cpu-runner-check-' if plan['evidence_scope']==SYNTHETIC else 'letter-a0-beauty-formal-'
++    job=prefix+plan['task_id']+'-'+stage.replace('_','-')+'-a'+str(attempt)
++    need(len(job)<=91,'job ID length')
++    output=str(Path(plan['root'])/'attempts'/stage/f'a{attempt}')
++    script=Path(plan['release'])/'lc_rec/a0_beauty/production_pipeline.py'
++    argv=[plan['python'],str(script),'--plan',str(plan_path),'--stage',stage,'--output',output]
++    if authorization:argv+=['--authorization',authorization,'--authorization-sha256',authorization_sha256]
++    if resume:argv+=['--resume',resume]
++    ns=plan['namespace']
++    env=dict(plan['env']);env['CUDA_VISIBLE_DEVICES']=env.get('CUDA_VISIBLE_DEVICES','') if stage in ('train','normal','s3','s4') else ''
++    inputs=[{'path':x['path'],'sha256':x['sha256']} for x in plan['inputs']]+[{'path':str(plan_path),'sha256':sha(plan_path)}]
++    if authorization:inputs.append({'path':authorization,'sha256':authorization_sha256})
++    return dict(schema=1,host=ns['host'],user=ns['user'],uid=ns['uid'],namespace=ns['namespace'],
++                deployment_sha256=ns['deployment_sha256'],capture_version=plan['run_commit'],
++                cwd=plan['release'],argv=argv,env=env,timeout_seconds=timeout,inputs=inputs,job_id=job,
++                beauty_stage=stage,beauty_config_sha256=plan['config_sha256'],beauty_input_identity=plan['asset_sha256']),output
++
++
++class Control:
++    def __init__(self,plan_path,*,request_factory=request,validator=None,runner=None):
++        self.path=Path(plan_path).resolve();self.plan=validate_plan(read(self.path))
++        self.root=Path(self.plan['root']);self.root.mkdir(parents=True,exist_ok=True)
++        self.factory=request_factory;self.validator=validator
++        self.runner=runner or Runner(self.plan['runner'],self.plan['runner_sha256'],self.plan['job_root'])
++        self.state_path=self.root/'state.json'
++        with locked(self.root/'.identity.lock'):
++            identity_path=self.root/'plan.identity.json'
++            sealed={'sha256':digest(self.plan),'path':str(self.path),'task_id':self.plan['task_id']}
++            if identity_path.exists():need(read(identity_path)==sealed,'task plan changed; budget/job identity cannot reset')
++            else:durable_write(identity_path,sealed)
++            if not self.state_path.exists():durable_write(self.state_path,{'stages':{},'attempts':[],'status':'PREPARED_NOT_SUBMITTED'})
++
++    def charge(self,state):
++        for a in state['attempts']:
++            status=self.runner.query(a['job_id'])
++            if status is None:
++                need(a.get('status')=='SUBMITTING','accepted job missing; cannot reset ledger')
++                continue
++            need(status['request_sha256']==a['request_sha256'],'queried request identity')
++            start=status.get('started_at') or status.get('received_at')
++            end=status.get('ended_at')
++            if start:
++                now=dt.datetime.now(dt.timezone.utc)
++                elapsed=((dt.datetime.fromisoformat(end) if end else now)-dt.datetime.fromisoformat(start)).total_seconds()
++                need(elapsed>=0,'clock moved backwards; budget is unresolved')
++                a['charged_seconds']=max(a.get('charged_seconds',0),elapsed)
++            a.update(status=status['status'],runner=status)
++        durable_write(self.state_path,state)
++
++    def step(self,authorization=None,authorization_sha256=None,retry=None,resume=None):
++        p=self.plan
++        if p['evidence_scope']=='FORMAL':authorize(p,authorization,authorization_sha256)
++        with locked(self.root/'.control.lock'):
++            state=read(self.state_path);self.charge(state)
++            disk=os.statvfs(self.root)
++            need(disk.f_bavail*disk.f_frsize>=max(100*1024**3,disk.f_blocks*disk.f_frsize//10),'disk safety reserve')
++            memory={line.split(':')[0]:int(line.split()[1])*1024 for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:')}
++            need(memory['MemAvailable']>=40*1024**3,'host memory reserve')
++            if p['evidence_scope']==SYNTHETIC:
++                temp=Path(p.get('temporary_root',p['root']))
++                need(sum(x.stat().st_size for x in temp.rglob('*') if x.is_file())<=8*1024**3,'8GiB CPU temporary space limit')
++            stage=next((s for s in STAGES if state['stages'].get(s,{}).get('status')!='COMPLETE'),None)
++            if stage is None:
++                state['status']='COMPLETE';durable_write(self.state_path,state);return state
++            old=state['stages'].get(stage)
++            if old:
++                a=state['attempts'][old['attempt_index']];status=a.get('runner')
++                if status is None:raise RuntimeError('submit outcome unknown; reconcile original job before restart')
++                need(status['status'] not in ('UNCONFIRMED','CONTROL_LOST'),'unresolved supervisor; query original identity, no automatic restart')
++                if status['status'] in ACTIVE or status.get('worker_alive') or status.get('workgroup_live'):
++                    state['status']='WAITING_OR_UNKNOWN';durable_write(self.state_path,state);return state
++                need(status.get('cleanup_verified') is True,'cleanup unconfirmed; dependency stopped')
++                if status['status']=='SUCCEEDED' and status.get('exit_code')==0:
++                    from production_pipeline import validate_stage
++                    (self.validator or validate_stage)(p,stage,old['output'])
++                    old['status']='COMPLETE';state['status']='COMPLETE' if stage==STAGES[-1] else 'ADVANCING';durable_write(self.state_path,state);return state
++                need(retry==stage,'failed stage requires explicit retry; downstream stopped')
++                if stage=='train':
++                    from production_identity import verify_training, check_file
++                    from formal_train import verify_checkpoint
++                    root=Path(p['root'])/'training'
++                    need(not (root/'best_selection.json').exists(),'completed training must not restart')
++                    cp=resume_point(root,p['run_commit'],p['config_sha256'])
++                    need(resume and Path(resume)==cp,'only latest complete checkpoint may resume')
++                else:need(not resume,'resume checkpoint belongs only to training')
++            used={g:sum(a.get('charged_seconds',0) for a in state['attempts'] if group(a['stage'])==g) for g in ('train_normal','s3','s4','cpu')}
++            stage_used=sum(a.get('charged_seconds',0) for a in state['attempts'] if a['stage']==stage)
++            remaining=min(p['stage_seconds'][stage]-stage_used,p['budget'][group(stage)]-used[group(stage)],p['budget']['total']-sum(used.values()))-p['budget']['cleanup_reserve']
++            need(remaining>=1,'cumulative budget exhausted')
++            if p['evidence_scope']=='FORMAL' and stage in ('train','normal','s3','s4'):
++                gpu=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],text=True)
++                need(not gpu.strip(),'runtime GPU resource check: existing compute process')
++                actual=subprocess.check_output(['nvidia-smi','--query-gpu=uuid','--format=csv,noheader'],text=True).splitlines()
++                need(actual==p['gpu_uuids'],'runtime physical GPU identities changed')
++            n=sum(a['stage']==stage for a in state['attempts'])
++            req,out=self.factory(p,stage,n,min(345600,int(remaining)),self.path,authorization,authorization_sha256,resume)
++            path=self.root/'requests'/f'{stage}-a{n}.json';path.parent.mkdir(parents=True,exist_ok=True)
++            if path.exists():need(read(path)==req,'request ID conflict')
++            else:durable_write(path,req)
++            accepted=self.runner.query(req['job_id'])
++            attempt={'stage':stage,'attempt':n,'job_id':req['job_id'],'request_sha256':digest(req),
++                     'request_path':str(path),'status':'SUBMITTING','charged_seconds':0}
++            state['stages'][stage]={'status':'SUBMITTING','output':out,'attempt_index':len(state['attempts'])}
++            state['attempts'].append(attempt);durable_write(self.state_path,state)
++            # The durable SUBMITTING record precedes the external call. A lost
++            # response is resolved by querying this same ID, never by resubmit.
++            reply=accepted if accepted is not None else self.runner.submit(path)
++            need(reply['request_sha256']==digest(req),'runner accepted another request')
++            attempt.update(status=reply['status'],runner=reply);state['status']='RUNNING'
++            durable_write(self.state_path,state);return state
++
++    def run(self,authorization=None,authorization_sha256=None,retry=None,resume=None):
++        # Only one live controller loop; per-step lock still protects queries.
++        with (self.root/'.daemon.lock').open('a') as f:
++            import fcntl
++            fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB)
++            while True:
++                state=self.step(authorization,authorization_sha256,retry,resume)
++                if all(state['stages'].get(s,{}).get('status')=='COMPLETE' for s in STAGES):return state
++                retry=None;resume=None;time.sleep(1 if self.plan['evidence_scope']==SYNTHETIC else 15)
++
++
++def main():
++    p=argparse.ArgumentParser(allow_abbrev=False)
++    p.add_argument('mode',choices=['prepare','query','step','run','start'])
++    p.add_argument('--plan',required=True);p.add_argument('--authorization');p.add_argument('--authorization-sha256')
++    p.add_argument('--retry',choices=STAGES);p.add_argument('--resume')
++    a=p.parse_args();plan=read(a.plan)
++    need(plan['evidence_scope']=='FORMAL','formal CLI does not expose test boundaries')
++    c=Control(a.plan)
++    if a.mode=='prepare':print(json.dumps({'status':'PREPARED_NOT_SUBMITTED','plan_sha256':digest(plan)}));return
++    if a.mode=='query':
++        with locked(c.root/'.control.lock'):
++            state=read(c.state_path);c.charge(state)
++        print(json.dumps(state));return
++    authorize(plan,a.authorization,a.authorization_sha256)
++    if a.mode=='start':
++        args=[plan['python'],str(Path(__file__).resolve()),'run','--plan',str(c.path),
++              '--authorization',a.authorization,'--authorization-sha256',a.authorization_sha256]
++        if a.retry:args+=['--retry',a.retry]
++        if a.resume:args+=['--resume',a.resume]
++        env={k:v for k,v in os.environ.items() if k not in ('GRID_JOB_ID','GRID_JOB_DIR')}
++        with (c.root/'controller.log').open('ab') as log:
++            proc=subprocess.Popen(args,env=env,stdin=subprocess.DEVNULL,stdout=log,stderr=log,start_new_session=True,close_fds=True)
++        print(json.dumps({'controller_pid':proc.pid,'plan':str(c.path),'state':str(c.state_path)}));return
++    state=(c.step if a.mode=='step' else c.run)(a.authorization,a.authorization_sha256,a.retry,a.resume)
++    print(json.dumps(state))
++
++if __name__=='__main__':main()
+diff --git a/lc_rec/a0_beauty/production_identity.py b/lc_rec/a0_beauty/production_identity.py
+new file mode 100644
+index 0000000..9914e95
+--- /dev/null
++++ b/lc_rec/a0_beauty/production_identity.py
+@@ -0,0 +1,165 @@
++"""Beauty production provenance; CPU-readable and shared by launch and acceptance."""
++import hashlib
++import json
++import math
++import os
++from pathlib import Path
++from formal_control import durable_write
++from formal_train import checkpoint_required_files, verify_checkpoint
++from offline_metrics import ASSETS
++
++STEPS = (2053, 4107, 6160, 8214)
++AXIS = '7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f'
++SYNTHETIC = 'SYNTHETIC_CPU_INTEGRATION_ONLY'
++
++
++def need(condition, reason):
++    if not condition:
++        raise ValueError(reason)
++
++
++def sha(path):
++    h = hashlib.sha256()
++    with Path(path).open('rb') as f:
++        for b in iter(lambda: f.read(4*1024**2), b''):
++            h.update(b)
++    return h.hexdigest()
++
++
++def load(path):
++    return json.loads(Path(path).read_text())
++
++
++def identity(path):
++    path = Path(path)
++    need(path.is_file() and not path.is_symlink(), 'regular artifact required: '+str(path))
++    return {'path':str(path.resolve()), 'bytes':path.stat().st_size, 'sha256':sha(path)}
++
++
++def check_file(row, path=None):
++    actual = identity(path or row['path'])
++    need(all(actual[k] == row[k] for k in ('bytes','sha256')), 'artifact hash mismatch: '+actual['path'])
++    return actual
++
++
++def scope_guard(path, scope, record=None):
++    need(scope in ('FORMAL', SYNTHETIC), 'unknown evidence scope')
++    if scope == SYNTHETIC:
++        need(SYNTHETIC in str(path), 'test path must be isolated and labeled')
++        if record is not None:
++            need(record.get('scope') == SYNTHETIC, 'synthetic evidence scope missing')
++    else:
++        need('SYNTHETIC' not in str(path) and 'preflight' not in str(path).lower(), 'nonformal path')
++        if record is not None:
++            need(record.get('scope', 'FORMAL') == 'FORMAL', 'nonformal evidence')
++
++
++def verify_training(root, commit, config_sha, scope='FORMAL'):
++    """Prove native earliest-minimum selection, retained entities and export tensors."""
++    root = Path(root); scope_guard(root, scope)
++    events=[]
++    for rank in (0,1):
++        report=load(root/f'rank{rank}.json');scope_guard(root,scope,report)
++        need(report['status']=='TRAINING_COMPLETE' and report['rank']==rank and not report['probe'], 'training incomplete/probe')
++        need(report['run_commit']==commit and report['config_sha256']==config_sha, 'training RUN/config mismatch')
++        need(report['global_step']==8214 and report['epoch']==4.0, 'formal epoch/update count')
++        need(report['data']['train_rows']==131413 and report['data']['valid_rows']==44726 and
++             not report['data']['validation_subset_preflight_only'] and report['data']['tokenizer_vocab']==32965, 'full training/validation scope')
++        need({k:v['sha256'] for k,v in report['data_identity'].items()}==ASSETS, 'training data identity')
++        ev=[json.loads(x) for x in (root/f'events.rank{rank}.jsonl').read_text().splitlines()]
++        validation=[x for x in ev if x['event']=='log' and 'eval_loss' in x.get('values',{})]
++        need({(x['step'],x['epoch']) for x in validation}==set(zip(STEPS,(1.,2.,3.,4.))), 'four complete validation epochs required')
++        validation=list({x['step']:x for x in validation}.values())
++        need([x['step'] for x in validation]==list(STEPS),'validation epoch order')
++        need(all(math.isfinite(x['values']['eval_loss']) for x in validation), 'nonfinite validation loss')
++        events.append((ev,validation))
++    losses=[x['values']['eval_loss'] for x in events[0][1]]
++    need(losses==[x['values']['eval_loss'] for x in events[1][1]], 'rank validation disagreement')
++    receipts={}
++    for p in sorted((root/'checkpoint_receipts').glob('*.json')):
++        r=load(p);step=r['global_step'];need(step in STEPS, 'unexpected checkpoint receipt')
++        need(r['run_commit']==commit and r['config_sha256']==config_sha, 'receipt source mismatch')
++        need(r['scope']==scope and r['validation_records']==44726,'receipt scope/full validation')
++        for ev,_ in events:
++            saves=[x for x in ev if x['event']=='checkpoint_complete' and x['step']==step]
++            need(any(x.get('attempt_job_id')==r['attempt_job_id'] and x['values']['eval_loss']==r['eval_loss'] for x in ev if x['event']=='log' and x['step']==step and 'eval_loss' in x.get('values',{})),'validation/save attempt binding')
++            need(len(saves)==1 and saves[0]['attempt_job_id']==r['attempt_job_id'] and
++                 Path(saves[0]['path'])==Path(r['checkpoint_path']), 'receipt/save-event attempt binding')
++        need({k:v['sha256'] for k,v in r['data_identity'].items()}==ASSETS, 'receipt data mismatch')
++        m=r['manifest'];raw=r['manifest_json'].encode('utf-8')
++        need(json.loads(raw)==m,'receipt raw manifest content')
++        need(hashlib.sha256(raw).hexdigest()==r['manifest_sha256'], 'receipt manifest hash')
++        need(m['collective_ranks']==2 and m['global_step']==step and m['run_commit']==commit and m['config_sha256']==config_sha, 'collective completion identity')
++        rows=m['files'];need(len(rows)==len({x['path'] for x in rows}), 'duplicate checkpoint member')
++        need(checkpoint_required_files(step)<={x['path'] for x in rows}, 'incomplete checkpoint manifest')
++        need(all(x['bytes']>0 and len(x['sha256'])==64 for x in rows), 'invalid checkpoint member identity')
++        need(r['epoch']==STEPS.index(step)+1 and r['eval_loss']==losses[STEPS.index(step)], 'receipt validation binding')
++        need(Path(r['checkpoint_path'])==root/f'checkpoint-{step}', 'foreign checkpoint path')
++        if step in receipts:need(receipts[step]['manifest_sha256']==r['manifest_sha256'] and receipts[step]['eval_loss']==r['eval_loss'], 'conflicting receipt attempts')
++        receipts[step]=r
++    need(set(receipts)==set(STEPS), 'missing epoch receipt')
++    # Transformers 4.31 uses a strict comparator: an equal loss keeps the earlier best.
++    best_index=min(range(4),key=lambda i:losses[i]);best_step=STEPS[best_index]
++    selected=load(root/'best_selection.json');best=root/f'checkpoint-{best_step}'
++    need(selected['run_commit']==commit and Path(selected['checkpoint'])==best and selected['value']==losses[best_index], 'best selection mismatch')
++    need(selected['metric']=='eval_loss' and selected['greater_is_better'] is False and selected['completed_training_step']==8214 and selected['loaded_best_checkpoint_step']==best_step, 'best restoration identity')
++    kept=list(root.glob('checkpoint-*'));need(len(kept)==2 and best in kept and root/'checkpoint-8214' in kept, 'best/latest retention policy')
++    for cp in set((best,root/'checkpoint-8214')):
++        verify_checkpoint(cp,commit,config_sha)
++        need(sha(cp/'complete.json')==receipts[int(cp.name.split('-')[-1])]['manifest_sha256'], 'retained manifest differs from receipt')
++    for ev,_ in events:
++        restored=[x for x in ev if x['event']=='strict_ds_restored']
++        need(restored and Path(restored[-1]['path'])==best and restored[-1]['global_step']==best_step, 'strict best restore proof missing')
++    if scope=='FORMAL':
++        from formal_control import digest, Runner
++        plan=load(load(root.parent/'plan.identity.json')['path']);state=load(root.parent/'state.json')
++        need(plan['run_commit']==commit and plan['config_sha256']==config_sha,'formal control source binding')
++        training_attempts=[x for x in state['attempts'] if x['stage']=='train']
++        known={x['job_id']:x for x in training_attempts}
++        for r in receipts.values():need(r['attempt_job_id'] in known,'receipt from unaccepted training attempt')
++        for attempt in training_attempts:
++            req=load(Path(plan['job_root'])/attempt['job_id']/'request.json')
++            accepted=load(Path(plan['job_root'])/attempt['job_id']/'accepted.json')
++            need(digest(req)==attempt['request_sha256']==accepted['request_sha256'] and
++                 req['capture_version']==commit and req['beauty_stage']=='train' and
++                 req['beauty_config_sha256']==config_sha and req['beauty_input_identity']==ASSETS,'accepted training request identity')
++        latest=training_attempts[-1]
++        if os.environ.get('GRID_JOB_ID')!=latest['job_id']:
++            status=Runner(plan['runner'],plan['runner_sha256'],plan['job_root']).query(latest['job_id'])
++            need(status['status']=='SUCCEEDED' and status['exit_code']==0 and status['cleanup_verified'] and
++                 not status['worker_alive'] and not status['workgroup_live'],'formal training runner completion')
++    adapter=root/'best_adapter'
++    need(sha(adapter/'adapter_model.bin')==selected['adapter_sha256'], 'exported Adapter SHA')
++    import torch
++    checkpoint=torch.load(best/'adapter_model.bin',map_location='cpu',weights_only=False)
++    exported=torch.load(adapter/'adapter_model.bin',map_location='cpu',weights_only=False)
++    need(set(checkpoint)==set(exported) and all(v.dtype==exported[k].dtype and v.shape==exported[k].shape and torch.equal(v,exported[k]) for k,v in checkpoint.items()), 'export is not selected checkpoint tensor state')
++    if scope=='FORMAL':
++        from formal_evaluate import expected_adapter_shapes
++        need({k:tuple(v.shape) for k,v in exported.items()}==expected_adapter_shapes(), 'Adapter/Embedding/Head shapes')
++        cfg=load(adapter/'adapter_config.json')
++        need((cfg['r'],cfg['lora_alpha'],cfg['lora_dropout'])==(8,16,.05) and
++             set(cfg['target_modules'])=={'q_proj','k_proj','v_proj','o_proj','gate_proj','down_proj','up_proj'} and
++             set(cfg['modules_to_save'])=={'embed_tokens','lm_head'}, 'frozen exported LoRA configuration')
++    token_names=('tokenizer.model','tokenizer_config.json','added_tokens.json','special_tokens_map.json')
++    for name in token_names:need(sha(best/name)==sha(adapter/name), 'Tokenizer differs from selected checkpoint: '+name)
++    files={p.name:{k:v for k,v in identity(p).items() if k!='path'} for p in sorted(adapter.iterdir()) if p.is_file()}
++    return {'verified':True,'scope':scope,'training_root':str(root),'run_commit':commit,'config_sha256':config_sha,'best_step':best_step,
++            'adapter_files':files,'selection':identity(root/'best_selection.json'),
++            'receipts':[identity(p) for p in sorted((root/'checkpoint_receipts').glob('*.json'))]}
++
++
++def verify_predictions(test, commit, best, condition, scope='FORMAL'):
++    test=Path(test);scope_guard(test,scope);need(best['scope']==scope, 'model evidence scope mismatch')
++    identities=[]
++    for rank in (0,1):
++        r=load(test/f'rank{rank}.json');scope_guard(test,scope,r)
++        need(r['status']=='PASS' and r['rank']==rank and r['preflight_only'] is False and r['RUN_COMMIT']==commit, 'prediction completion/RUN')
++        need(r['completed_users']==(11182 if rank==0 else 11181), 'prediction user count')
++        need({k:v['sha256'] for k,v in r['data_identity'].items()}==ASSETS, 'prediction data mismatch')
++        need(r['adapter_files']==best['adapter_files'], 'prediction is not selected Adapter/Tokenizer')
++        if condition!='normal':
++            need(r['shuffle']['n']==int(condition[-1]) and r['shuffle']['protocol']=='GRID-LETTER-SHUFFLE-V1' and r['shuffle']['seed']==42, 'Shuffle condition mismatch')
++        else:need('shuffle' not in r,'Normal contains Shuffle intervention')
++        identities.append(identity(test/f'predictions.rank{rank}.jsonl'))
++    return {'verified':True,'scope':scope,'prediction_run_commit':commit,'prediction_files':identities,'adapter_files':best['adapter_files']}
+diff --git a/lc_rec/a0_beauty/production_pipeline.py b/lc_rec/a0_beauty/production_pipeline.py
+new file mode 100644
+index 0000000..45a98b9
+--- /dev/null
++++ b/lc_rec/a0_beauty/production_pipeline.py
+@@ -0,0 +1,200 @@
++"""Fixed Beauty production stages. Test drivers may inject external compute only."""
++import argparse
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++from types import SimpleNamespace
++from formal_control import durable_write
++from production_identity import (need, load, identity, sha, check_file, scope_guard,
++                                 verify_training, verify_predictions, SYNTHETIC)
++from offline_metrics import ASSETS, KEYS
++
++STAGES=('train','verify_best_adapter','normal','normal_eval','s3','s3_eval','s4','s4_eval','paired','collect')
++GPU={'train','normal','s3','s4'}
++
++
++def locations(plan, stage):
++    """Successful dependency locations are immutable request outputs, not guessed names."""
++    return Path(load(Path(plan['root'])/'state.json')['stages'][stage]['output'])
++
++
++def training_root(plan):
++    return Path(plan['root'])/'training'
++
++
++def best_evidence(plan):
++    # Revalidate on every model consumer; a saved PASS alone is not a source gate.
++    return verify_training(training_root(plan),plan['run_commit'],plan['config_sha256'],plan['evidence_scope'])
++
++
++def verify_prediction_stage(plan, condition):
++    import formal_evaluate as original
++    best=best_evidence(plan)
++    output=locations(plan,condition);test=output/'test'
++    proof=verify_predictions(test,plan['prediction_run_commit'],best,condition,plan['evidence_scope'])
++    # A completed generation is an immutable candidate artifact. Reconcile its
++    # saved hashes before any subsequent evaluator/model consumer uses it.
++    saved=output/'stage_result.json'
++    if saved.exists():
++        record=load(saved)
++        need(record['stage']==condition and record['run_commit']==plan['run_commit'] and
++             record['scope']==plan['evidence_scope'],'saved generation identity')
++        need(record['output']==str(output) and record['proof']['prediction_files']==proof['prediction_files'],
++             'saved generation candidate identity changed')
++        for row in record['proof']['prediction_files']:check_file(row)
++    _,catalog,users,_=original.catalog_and_users(plan['data_root'])
++    audit=original.aggregate_predictions([test/f'predictions.rank{rank}.jsonl' for rank in (0,1)],
++        users,catalog,original.load_evaluator(original.author_source(plan['source_root'])),
++        require_rank_done=True,run_commit=plan['prediction_run_commit'])
++    need(audit['actual_test_users']==22363 and
++         audit['expected_user_axis_sha256']=='abe0ed0fad612da1a4293927ba09698a47dff6687ecff33e83fadf05c918ea4c',
++         'complete canonical generation user axis')
++    proof['full_user_audit']=audit
++    return proof
++
++
++def evaluation(plan, condition, output):
++    import formal_evaluate as original
++    import offline_metrics
++    test=locations(plan,condition)/'test';source=original.author_source(plan['source_root'])
++    proof=verify_prediction_stage(plan,condition)
++    _,catalog,users,_=original.catalog_and_users(plan['data_root'])
++    # Both formal and synthetic acceptance supply scoped, validated rank evidence.
++    stage=original.aggregate_predictions([test/f'predictions.rank{r}.jsonl' for r in (0,1)],
++                users,catalog,original.load_evaluator(source),run_commit=plan['prediction_run_commit'])
++    stage.update(RUN_COMMIT=plan['prediction_run_commit'],scope=plan['evidence_scope'])
++    durable_write(output/'stage_a.json',stage)
++    cfg=load(Path(plan['release'])/'lc_rec/letter/config/a0_evaluation_v1.json')
++    cfg.update(protocol_version='letter_beauty_beam20_v1',dataset='Beauty',users=22363,
++               original_run_commit=plan['prediction_run_commit'],sid_coverage_denominator=12088,
++               asset_sha256=ASSETS,user_axis_sha256='7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f')
++    durable_write(output/'evaluation_config.json',cfg)
++    offline_metrics.evaluate(SimpleNamespace(output=output/'primary',test_dir=test,
++        stage_a_report=output/'stage_a.json',config=output/'evaluation_config.json',
++        official_cce=Path(plan['release'])/'lc_rec/letter/review/final_audit_20261113/external/official_cce.py',
++        data_root=Path(plan['data_root']),run_commit=plan['prediction_run_commit'],evaluation_commit=plan['run_commit']))
++    return {'prediction_proof':proof,'stage_a':identity(output/'stage_a.json'),'metrics':identity(output/'primary/metrics.json')}
++
++
++def validate_worker_context(plan,stage,output,resume=None,*,job_id=None,job_dir=None):
++    from formal_control import digest
++    job_id=job_id or os.environ.get('GRID_JOB_ID')
++    job_dir=job_dir or os.environ.get('GRID_JOB_DIR')
++    need(job_id and job_dir and Path(job_dir)==Path(plan['job_root'])/job_id,'runner-owned worker context required')
++    state=load(Path(plan['root'])/'state.json');record=state['stages'][stage]
++    attempt=state['attempts'][record['attempt_index']]
++    req=load(Path(job_dir)/'request.json');accepted=load(Path(job_dir)/'accepted.json')
++    need(attempt['job_id']==job_id and digest(req)==attempt['request_sha256']==accepted['request_sha256'],'worker request identity')
++    need(req['beauty_stage']==stage and req['capture_version']==plan['run_commit'],'worker stage/source identity')
++    need(Path(record['output'])==Path(output) and Path(output).is_relative_to(Path(plan['root'])/'attempts'/stage),'worker output scope')
++    if resume:
++        from production_control import resume_point
++        need(stage=='train' and Path(resume)==resume_point(training_root(plan),plan['run_commit'],plan['config_sha256']),'worker recovery source')
++    return {'job_id':job_id,'request_sha256':digest(req),'output':str(output)}
++
++
++def actual_source_root(plan):
++    from formal_evaluate import author_source
++    source=author_source(plan['source_root'])
++    expected=Path(plan['release'])/'lc_rec/letter/vendor/LETTER/LETTER-LC-Rec'
++    for name in ('data.py','collator.py','evaluate.py','test_ddp.py','prompt.py','utils.py','modeling_letter.py','config/ds_z2_bf16.json'):
++        need(sha(source/name)==sha(expected/name),'frozen author source mismatch: '+name)
++    return source
++
++
++def actual_compute(plan, stage, output, resume=None):
++    scope_guard(plan['root'],'FORMAL')
++    scripts=Path(plan['release'])/'lc_rec/a0_beauty'
++    source=actual_source_root(plan)
++    common=['--source-root',str(source),'--data-root',plan['data_root'],'--model',plan['model']]
++    argv=[plan['python'],'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2']
++    if stage=='train':
++        argv += [str(scripts/'formal_train.py'),*common,'--output',str(training_root(plan)),
++                 '--config',plan['config'],'--run-commit',plan['run_commit'],
++                 '--precision-approval',plan['precision_approval'],'--prelaunch-review',plan['prelaunch_review']]
++        if resume:argv+=['--resume',resume]
++    else:
++        best_evidence(plan)
++        if stage=='normal':argv += [str(scripts/'formal_evaluate.py')]
++        else:
++            audit=Path(plan['root'])/'shuffle_inputs'
++            if not audit.exists():
++                subprocess.run([plan['python'],str(scripts/'shuffle_cpu_inputs.py'),'--model-key','a0',
++                    '--adapter',str(training_root(plan)/'best_adapter'),'--source-root',str(source),
++                    '--data-root',plan['data_root'],'--output',str(audit),
++                    '--normal-test-dir',str(locations(plan,'normal')/'test')],check=True)
++            proof=load(audit/'audit.json');need(proof['status']=='PASS_CPU_FULL_INPUTS' and proof['asset_sha256']==ASSETS,'CPU shuffle audit')
++            check_file(proof['manifest'])
++            argv += [str(scripts/'shuffle_entry.py'),'--model-key','a0','--shuffle-n',stage[-1],'--cpu-audit',str(audit/'audit.json')]
++        argv += [*common,'--adapter',str(training_root(plan)/'best_adapter'),'--output',str(output/'test'),
++                 '--run-commit',plan['prediction_run_commit']]
++    durable_write(output/'compute_argv.json',{'argv':argv,'python':plan['python'],'scope':'FORMAL'})
++    # Same runner-owned markers and inherited process group; torchrun worker
++    # sessions remain subject to the scoped runner's pidfd ownership checks.
++    subprocess.run(argv,check=True,stdin=subprocess.DEVNULL)
++
++
++def execute_stage(plan, stage, output, *, compute=actual_compute, resume=None):
++    need(stage in STAGES,'unknown production stage')
++    validate_worker_context(plan,stage,output,resume)
++    output=Path(output);scope_guard(output,plan['evidence_scope']);output.mkdir(parents=True,exist_ok=False)
++    if stage in GPU:
++        compute(plan,stage,output,resume)
++        if stage=='train':proof=verify_training(training_root(plan),plan['run_commit'],plan['config_sha256'],plan['evidence_scope'])
++        else:proof=verify_prediction_stage(plan,stage)
++    elif stage=='verify_best_adapter':proof=best_evidence(plan)
++    elif stage.endswith('_eval'):proof=evaluation(plan,stage[:-5],output)
++    elif stage=='paired':
++        from paired_beauty import process
++        results={}
++        for condition in ('s3','s4'):
++            for c in ('normal',condition):verify_prediction_stage(plan,c)
++            args=SimpleNamespace(normal_primary=str(locations(plan,'normal_eval')/'primary'),
++                  shuffle_primary=str(locations(plan,condition+'_eval')/'primary'),
++                  normal_test=str(locations(plan,'normal')/'test'),shuffle_test=str(locations(plan,condition)/'test'),
++                  output=str(output/condition))
++            process(args,source_context={'scope':plan['evidence_scope'],'best':best_evidence(plan)})
++            results[condition]=identity(output/condition/'paired_comparison.json')
++        proof=results
++    else:
++        results={}
++        for c in ('normal','s3','s4'):
++            m=load(locations(plan,c+'_eval')/'primary/metrics.json')
++            need(m['status']=='PASS' and list(m['metrics'])==KEYS,'metrics schema')
++            results[c]={'metrics':m['metrics'],'file':identity(locations(plan,c+'_eval')/'primary/metrics.json')}
++        paired=locations(plan,'paired')
++        proof={'conditions':results,'paired':{c:identity(paired/c/'paired_comparison.json') for c in ('s3','s4')}}
++        durable_write(output/'summary.json',{'scope':plan['evidence_scope'],'formal_launch_authorized':False,**proof})
++    result={'stage':stage,'verified':True,'scope':plan['evidence_scope'],'run_commit':plan['run_commit'],
++            'proof':proof,'output':str(output),'files':[identity(p) for p in sorted(output.rglob('*'))
++             if p.is_file() and p.suffix in ('.json','.npz','.npy','.csv') and not p.name.startswith('predictions')]}
++    durable_write(output/'stage_result.json',result)
++    return result
++
++
++def validate_stage(plan,stage,output):
++    result=load(Path(output)/'stage_result.json')
++    need(result['verified'] is True and result['stage']==stage and result['run_commit']==plan['run_commit'] and result['scope']==plan['evidence_scope'],'stage result identity')
++    for row in result['files']:check_file(row)
++    if stage in ('train','verify_best_adapter'):best_evidence(plan)
++    elif stage in ('normal','s3','s4'):verify_prediction_stage(plan,stage)
++    elif stage.endswith('_eval'):
++        metrics=load(Path(output)/'primary/metrics.json')
++        need(metrics['status']=='PASS' and metrics['users']==22363 and list(metrics['metrics'])==KEYS and metrics['official_cce_full_user_comparisons']==22363,'extended evaluation incomplete')
++        for row in metrics['per_user_files']:check_file(row)
++    return result
++
++
++def main():
++    p=argparse.ArgumentParser(allow_abbrev=False)
++    for n in ('plan','stage','output'):p.add_argument('--'+n,required=True)
++    p.add_argument('--resume');p.add_argument('--authorization');p.add_argument('--authorization-sha256')
++    a=p.parse_args();plan=load(a.plan)
++    from production_control import validate_plan, authorize
++    validate_plan(plan);need(plan['evidence_scope']=='FORMAL','production CLI refuses test scope')
++    authorize(plan,a.authorization,a.authorization_sha256)
++    execute_stage(plan,a.stage,a.output,resume=a.resume)
++
++if __name__=='__main__':main()

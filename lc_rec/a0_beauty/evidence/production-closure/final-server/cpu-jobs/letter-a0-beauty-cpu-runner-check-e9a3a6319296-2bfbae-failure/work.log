@@ -1,0 +1,39 @@
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/e9a3a631929600757b7a99b5763540c6dd9d2b99/lc_rec/a0_beauty/closure_torch_worker.py", line 19, in <module>
+[rank1]:     if a.mode=='failure' and rank==1:raise RuntimeError('INTENTIONAL_CPU_RANK_FAILURE')
+[rank1]: RuntimeError: INTENTIONAL_CPU_RANK_FAILURE
+W1115 18:31:08.213000 3276823 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3276833 closing signal SIGTERM
+E1115 18:31:08.278000 3276823 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 1 (pid: 3276834) of binary: /data/bwwu/envs/letter-20261110/bin/python
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 922, in <module>
+    main()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/e9a3a631929600757b7a99b5763540c6dd9d2b99/lc_rec/a0_beauty/closure_torch_worker.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-11-15_18:31:08
+  host      : zwlab-01
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 3276834)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
