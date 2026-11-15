@@ -78,6 +78,8 @@ def paired_bootstrap(np, difference):
 
 
 def process(a, source_context=None):
+    if source_context is None:
+        raise ValueError('positive training source context required')
     import numpy as np
     out=Path(a.output);out.mkdir(exist_ok=False)
     started=time.monotonic();roots=[Path(a.normal_primary),Path(a.shuffle_primary)]
