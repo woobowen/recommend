@@ -1,0 +1,157 @@
+{
+  "job_id": "letter-a0-beauty-e2e-20261116-r0",
+  "run_commit": "f54a2b505fd2d8767109a11d330a7064aff8af5e",
+  "started_utc": "2026-11-15T05:23:41.754201+00:00",
+  "gpu_start": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 1\nGPU-59cac3bd-3645-668b-79c8-839e0d878893, 1\n",
+  "memory_available": 256512946176,
+  "large_output_path": "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-e2e-20261116-r0",
+  "disk_data_free": 2945670291456,
+  "budget": {
+    "jobs": [
+      {
+        "job_id": "letter-a0-beauty-boundary-model-20261115-r0",
+        "status": "FAILED",
+        "charged_device_seconds": 197.967664770782
+      },
+      {
+        "job_id": "letter-a0-beauty-cross-resume-20261115-r0",
+        "status": "SUCCEEDED",
+        "charged_device_seconds": 58.17027708142996
+      },
+      {
+        "job_id": "letter-a0-beauty-zero-resume-20261115-r0",
+        "status": "SUCCEEDED",
+        "charged_device_seconds": 30.232078190892935
+      },
+      {
+        "job_id": "letter-a0-beauty-zero-state-20261115-r0",
+        "status": "SUCCEEDED",
+        "charged_device_seconds": 28.825041640549898
+      }
+    ],
+    "prior_device_seconds": 315.1950616836548,
+    "remaining_device_seconds": 3284.804938316345,
+    "cleanup_reserve_wall_seconds": 60.0,
+    "wall_cap_seconds": 1500.0,
+    "limit_device_seconds": 3600.0
+  },
+  "wall_cap_seconds": 1500.0,
+  "stages": [
+    {
+      "mode": "continuous",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nnodes=1",
+        "--nproc_per_node=2",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/a0_beauty/formal_train.py",
+        "--source-root",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+        "--data-root",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3",
+        "--model",
+        "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+        "--output",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-e2e-20261116-r0/continuous",
+        "--config",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/a0_beauty/config/formal_beauty_seed42.json",
+        "--run-commit",
+        "f54a2b505fd2d8767109a11d330a7064aff8af5e",
+        "--precision-approval",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+        "--boundary-preflight"
+      ],
+      "start_utc": "2026-11-15T05:23:41.809025+00:00",
+      "exit_code": 0,
+      "end_utc": "2026-11-15T05:33:38.581308+00:00"
+    },
+    {
+      "mode": "early",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nnodes=1",
+        "--nproc_per_node=2",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/a0_beauty/formal_train.py",
+        "--source-root",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+        "--data-root",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3",
+        "--model",
+        "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+        "--output",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-e2e-20261116-r0/early",
+        "--config",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/a0_beauty/config/formal_beauty_seed42.json",
+        "--run-commit",
+        "f54a2b505fd2d8767109a11d330a7064aff8af5e",
+        "--precision-approval",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+        "--boundary-preflight",
+        "--stop-after-epoch",
+        "1"
+      ],
+      "start_utc": "2026-11-15T05:33:38.636693+00:00",
+      "exit_code": 0,
+      "end_utc": "2026-11-15T05:38:04.988662+00:00"
+    },
+    {
+      "mode": "resumed",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nnodes=1",
+        "--nproc_per_node=2",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/a0_beauty/formal_train.py",
+        "--source-root",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+        "--data-root",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3",
+        "--model",
+        "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+        "--output",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-e2e-20261116-r0/resumed",
+        "--config",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/a0_beauty/config/formal_beauty_seed42.json",
+        "--run-commit",
+        "f54a2b505fd2d8767109a11d330a7064aff8af5e",
+        "--precision-approval",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+        "--boundary-preflight",
+        "--resume",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-e2e-20261116-r0/early/checkpoint-2"
+      ],
+      "start_utc": "2026-11-15T05:38:05.043626+00:00",
+      "exit_code": 0,
+      "end_utc": "2026-11-15T05:48:17.487761+00:00"
+    },
+    {
+      "mode": "compare",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/a0_beauty/boundary_compare.py",
+        "--continuous",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-e2e-20261116-r0/continuous",
+        "--early",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-e2e-20261116-r0/early",
+        "--resumed",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/letter-a0-beauty-e2e-20261116-r0/resumed",
+        "--output",
+        "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-a0-beauty-e2e-20261116-r0/output/boundary_compare.json"
+      ],
+      "start_utc": "2026-11-15T05:48:17.540242+00:00",
+      "interrupted": "TimeoutError('preflight wall budget exhausted')",
+      "exit_code": -15
+    }
+  ],
+  "status": "TIMED_OUT",
+  "error": "TimeoutError('preflight wall budget exhausted')",
+  "wall_seconds": 1500.675885843113,
+  "charged_device_seconds_upper_bound": 3001.351771686226
+}

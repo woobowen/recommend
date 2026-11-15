@@ -1,0 +1,33 @@
+[2026-11-15 05:49:48,435] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)
+Traceback (most recent call last):
+  File "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/a0_beauty/boundary_compare.py", line 74, in <module>
+    if __name__=='__main__':main()
+  File "/home/bwwu/grid-audits/sid-extensions-p0/transfers/beauty-preflight-f54a2b505fd2/release/lc_rec/a0_beauty/boundary_compare.py", line 34, in main
+    left=torch.load(a.continuous/f'boundary_pre_best_rank{rank}.pt',map_location='cpu',weights_only=False)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/serialization.py", line 1471, in load
+    return _load(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/serialization.py", line 1964, in _load
+    result = unpickler.load()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/serialization.py", line 1953, in find_class
+    return super().find_class(mod_name, name)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/__init__.py", line 11, in <module>
+    from . import transformer
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/transformer/__init__.py", line 7, in <module>
+    from .inference.config import DeepSpeedInferenceConfig
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/ops/transformer/inference/__init__.py", line 7, in <module>
+    from ....model_implementations.transformers.ds_transformer import DeepSpeedTransformerInference
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/model_implementations/__init__.py", line 6, in <module>
+    from .transformers.ds_transformer import DeepSpeedTransformerInference
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/model_implementations/transformers/ds_transformer.py", line 17, in <module>
+    if deepspeed.HAS_TRITON and get_accelerator().is_triton_supported():
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/accelerator/cuda_accelerator.py", line 245, in is_triton_supported
+    major, _ = torch.cuda.get_device_capability()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 507, in get_device_capability
+    prop = get_device_properties(device)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 523, in get_device_properties
+    _lazy_init()  # will define _get_device_properties
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/cuda/__init__.py", line 319, in _lazy_init
+    torch._C._cuda_init()
+RuntimeError: No CUDA GPUs are available
