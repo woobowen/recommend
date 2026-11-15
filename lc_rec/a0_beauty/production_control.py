@@ -136,7 +136,8 @@ class Control:
             if start:
                 now=dt.datetime.now(dt.timezone.utc)
                 elapsed=((dt.datetime.fromisoformat(end) if end else now)-dt.datetime.fromisoformat(start)).total_seconds()
-                a['charged_seconds']=max(a.get('charged_seconds',0),elapsed,0)
+                need(elapsed>=0,'clock moved backwards; budget is unresolved')
+                a['charged_seconds']=max(a.get('charged_seconds',0),elapsed)
             a.update(status=status['status'],runner=status)
         durable_write(self.state_path,state)
 
@@ -166,7 +167,7 @@ class Control:
                 if status['status']=='SUCCEEDED' and status.get('exit_code')==0:
                     from production_pipeline import validate_stage
                     (self.validator or validate_stage)(p,stage,old['output'])
-                    old['status']='COMPLETE';state['status']='ADVANCING';durable_write(self.state_path,state);return state
+                    old['status']='COMPLETE';state['status']='COMPLETE' if stage==STAGES[-1] else 'ADVANCING';durable_write(self.state_path,state);return state
                 need(retry==stage,'failed stage requires explicit retry; downstream stopped')
                 if stage=='train':
                     from production_identity import verify_training, check_file
