@@ -384,6 +384,17 @@ def main():
             event('loader',length=len(result),batch_sampler=type(result.batch_sampler).__name__,
                   sampler_generator=type(result.synchronized_generator).__name__)
             return result
+        def get_eval_dataloader(self, eval_dataset=None):
+            # Validation yields native LETTER dictionaries, whereas training
+            # yields (row index, sample) pairs. Preserve Trainer's own loader
+            # construction and distributed evaluation; only select its collator.
+            indexed=self.data_collator
+            assert isinstance(indexed, IndexedCollator)
+            self.data_collator=indexed.collator
+            try:
+                return super().get_eval_dataloader(eval_dataset)
+            finally:
+                self.data_collator=indexed
         def _load_rng_state(self, checkpoint):
             # ReplayLoader restores before resumed input is consumed. Native HF
             # restores after fetching the first resumed input, which is too late.
