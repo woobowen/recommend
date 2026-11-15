@@ -30,8 +30,29 @@ def best_evidence(plan):
 
 
 def verify_prediction_stage(plan, condition):
+    import formal_evaluate as original
     best=best_evidence(plan)
-    return verify_predictions(locations(plan,condition)/'test',plan['prediction_run_commit'],best,condition,plan['evidence_scope'])
+    output=locations(plan,condition);test=output/'test'
+    proof=verify_predictions(test,plan['prediction_run_commit'],best,condition,plan['evidence_scope'])
+    # A completed generation is an immutable candidate artifact. Reconcile its
+    # saved hashes before any subsequent evaluator/model consumer uses it.
+    saved=output/'stage_result.json'
+    if saved.exists():
+        record=load(saved)
+        need(record['stage']==condition and record['run_commit']==plan['run_commit'] and
+             record['scope']==plan['evidence_scope'],'saved generation identity')
+        need(record['output']==str(output) and record['proof']['prediction_files']==proof['prediction_files'],
+             'saved generation candidate identity changed')
+        for row in record['proof']['prediction_files']:check_file(row)
+    _,catalog,users,_=original.catalog_and_users(plan['data_root'])
+    audit=original.aggregate_predictions([test/f'predictions.rank{rank}.jsonl' for rank in (0,1)],
+        users,catalog,original.load_evaluator(original.author_source(plan['source_root'])),
+        require_rank_done=True,run_commit=plan['prediction_run_commit'])
+    need(audit['actual_test_users']==22363 and
+         audit['expected_user_axis_sha256']=='7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f',
+         'complete canonical generation user axis')
+    proof['full_user_audit']=audit
+    return proof
 
 
 def evaluation(plan, condition, output):
@@ -122,7 +143,7 @@ def execute_stage(plan, stage, output, *, compute=actual_compute, resume=None):
     if stage in GPU:
         compute(plan,stage,output,resume)
         if stage=='train':proof=verify_training(training_root(plan),plan['run_commit'],plan['config_sha256'],plan['evidence_scope'])
-        else:proof=verify_predictions(output/'test',plan['prediction_run_commit'],best_evidence(plan),stage,plan['evidence_scope'])
+        else:proof=verify_prediction_stage(plan,stage)
     elif stage=='verify_best_adapter':proof=best_evidence(plan)
     elif stage.endswith('_eval'):proof=evaluation(plan,stage[:-5],output)
     elif stage=='paired':

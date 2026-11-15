@@ -153,6 +153,37 @@ def negative_tests(p,path,runner):
         args=SimpleNamespace(normal_primary=str(derivative),shuffle_primary=str(locations(p,'s3_eval')/'primary'),
              normal_test=str(locations(p,'normal')/'test'),shuffle_test=str(locations(p,'s3')/'test'),output=str(faultroot/(kind+'-rejected')))
         results['paired_'+kind]=rejection(lambda:process(args,source_context={'scope':SYNTHETIC,'best':best_evidence(p)}))
+    # The generation completion gate itself must reject bad rows, before
+    # normal_eval can run. Only the artifact location is redirected; real
+    # training provenance, data axis, rank evidence and author audit stay live.
+    from production_pipeline import verify_prediction_stage
+    original_test=locations(p,'normal')/'test'
+    first_rows=[]
+    for rank in (0,1):
+        with (original_test/f'predictions.rank{rank}.jsonl').open() as f:first_rows.append(json.loads(next(f)))
+    cases={
+        'rank':(lambda rows:rows[0].update(rank=1),'rank'),
+        'target':(lambda rows:rows[0].update(target='WRONG'),'target'),
+        'score':(lambda rows:rows[0]['candidates'][0].update(sequence_score=float('nan')),'score'),
+        'beams':(lambda rows:rows[0]['candidates'].pop(),'twenty'),
+    }
+    for kind,(mutate,message) in cases.items():
+        derivative=faultroot/('generation_'+kind);test=derivative/'test';test.mkdir(parents=True)
+        rows=copy.deepcopy(first_rows);mutate(rows)
+        for rank in (0,1):
+            shutil.copyfile(original_test/f'rank{rank}.json',test/f'rank{rank}.json')
+            (test/f'predictions.rank{rank}.jsonl').write_text(json.dumps(rows[rank])+'\n')
+        with patch('production_pipeline.locations',return_value=derivative):
+            rejected=rejection(lambda:verify_prediction_stage(p,'normal'))
+        need(message in rejected['exception'],'generation gate rejected for unintended reason')
+        results['generation_gate_'+kind]=rejected
+    # Reusing an old completion record must not bless modified candidate bytes.
+    derivative=faultroot/'generation_rank'
+    shutil.copyfile(locations(p,'normal')/'stage_result.json',derivative/'stage_result.json')
+    with patch('production_pipeline.locations',return_value=derivative):
+        rejected=rejection(lambda:verify_prediction_stage(p,'normal'))
+    # Saved artifact paths are also bound to the actual accepted output.
+    results['generation_saved_identity']=rejected
     return results
 
 
