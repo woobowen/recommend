@@ -18,8 +18,18 @@ def compute(plan,stage,output,resume=None):
     training=Path(plan['root'])/'training'
     if stage=='train':
         import torch
-        from transformers import Trainer
-        trainer=Trainer.__new__(Trainer)
+        import ast, importlib.util, logging, re
+        from typing import List
+        source=Path(importlib.util.find_spec('transformers').origin).parent/'trainer.py'
+        raw=source.read_text();tree=ast.parse(raw)
+        cls=next(x for x in tree.body if isinstance(x,ast.ClassDef) and x.name=='Trainer')
+        methods=[x for x in cls.body if isinstance(x,ast.FunctionDef) and x.name in ('_rotate_checkpoints','_sorted_checkpoints')]
+        need(len(methods)==2,'installed Trainer rotation methods')
+        namespace={'Path':Path,'os':os,'re':re,'shutil':shutil,'logger':logging.getLogger('rotation'), 'List':List,'PREFIX_CHECKPOINT_DIR':'checkpoint'}
+        for method in methods:exec(compile(ast.Module(body=[method],type_ignores=[]),str(source),'exec'),namespace)
+        Trainer=type('InstalledTrainerRotation',(),{x.name:namespace[x.name] for x in methods})
+        trainer=Trainer()
+
         trainer.args=SimpleNamespace(save_total_limit=2)
         trainer.state=SimpleNamespace(best_model_checkpoint=None)
         training.mkdir(exist_ok=False)
@@ -55,7 +65,7 @@ def compute(plan,stage,output,resume=None):
             (training/f'events.rank{rank}.jsonl').write_text(''.join(json.dumps(x)+'\n' for x in ev))
         durable_write(output/'fixture_boundary.json',{'scope':SYNTHETIC,'external_model_compute_replaced':True,
             'receipts':receipts,'retained_checkpoints':[p.name for p in training.glob('checkpoint-*')],
-            'rotation_source':identity(__import__('inspect').getsourcefile(Trainer._rotate_checkpoints))})
+            'rotation_source':identity(source)})
     else:
         condition={'normal':'Normal','s3':'S3','s4':'S4'}[stage]
         origin=Path(plan['fixture_root']);summary=load(origin/'summary.json')

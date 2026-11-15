@@ -65,7 +65,7 @@ else:sidepath.write_bytes(b)
 # Inherit every known Beauty CPU attempt conservatively; nested test job costs
 # will also be retained rather than creating a fresh 7200s allowance per name.
 prior=[]
-for p in Path('/home/bwwu/grid-audits/sid-extensions-p0/jobs').glob('letter-beauty*/request.json'):
+for p in list(Path('/home/bwwu/grid-audits/sid-extensions-p0/jobs').glob('letter-beauty*/request.json'))+list(Path({jobs!r}).glob('*/request.json')):
  req=json.loads(p.read_text())
  if req.get('env',{{}}).get('CUDA_VISIBLE_DEVICES')!='':continue
  state=json.loads((p.parent/'status.json').read_text())
@@ -107,12 +107,14 @@ print(json.dumps(version))
     code=f'''from pathlib import Path
 import json,hashlib,base64
 roots=[(Path({jobs!r})/{job!r},'runner'),(Path({root!r}),'pipeline')];files={{}}
+for child in Path({jobs!r}).glob('*'+{a.commit[:12]!r}+'*'):
+ if child.name!={job!r}:roots.append((child,'child-jobs/'+child.name))
 for base,prefix in roots:
  for p in base.rglob('*'):
   if p.is_file() and not p.is_symlink() and p.suffix in ('.json','.jsonl','.log') and p.stat().st_size<2*1024**2 and not p.name.startswith('predictions') and 'training/checkpoint-' not in str(p):
    b=p.read_bytes();files[prefix+'/'+str(p.relative_to(base))]={{'data':base64.b64encode(b).decode(),'sha256':hashlib.sha256(b).hexdigest()}}
 print(json.dumps(files))'''
-    got=json.loads(t.python(code,timeout=90));dest=REPO/'lc_rec/a0_beauty/evidence/production-closure/server'
+    got=json.loads(t.python(code,timeout=90));dest=REPO/'lc_rec/a0_beauty/evidence/production-closure/server'/a.commit[:12]
     for n,v in got.items():
         path=dest/n;path.parent.mkdir(parents=True,exist_ok=True);b=base64.b64decode(v['data']);assert hashlib.sha256(b).hexdigest()==v['sha256'];path.write_bytes(b)
     for name in ('deployment.json','plan.json','request.json','submit.json','last-query.json'):
