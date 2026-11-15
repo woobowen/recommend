@@ -7,6 +7,40 @@ import json
 import math
 from pathlib import Path
 import time
+from offline_metrics import ASSETS, KEYS
+
+if not __debug__:
+    raise RuntimeError('Pairing identity checks require Python assertions enabled')
+
+
+def validate_provenance(primary, test):
+    """Bind evaluated files to completed formal rank reports; no training proof implied."""
+    metrics=json.loads((primary/'metrics.json').read_text())
+    assert metrics['status']=='PASS' and metrics['users']==22363
+    run=metrics['run_commit']
+    assert isinstance(run,str) and len(run)==40 and all(c in '0123456789abcdef' for c in run)
+    assert {k:v['sha256'] for k,v in metrics['assets'].items()}==ASSETS
+    per_user_files=metrics['per_user_files']
+    assert len(per_user_files)==2
+    saved_by_name={Path(v['path']).name:v for v in per_user_files}
+    assert set(saved_by_name)=={'per_user.csv','per_user_metrics.npz'}
+    for name,saved in saved_by_name.items():
+        path=primary/name
+        assert saved['bytes']==path.stat().st_size and saved['sha256']==hashlib.sha256(path.read_bytes()).hexdigest()
+    prediction_files=metrics['prediction_files']
+    assert len(prediction_files)==2
+    identities=[]
+    for rank in (0,1):
+        report=json.loads((test/f'rank{rank}.json').read_text())
+        assert report['status']=='PASS' and report['rank']==rank and report['preflight_only'] is False
+        assert report['RUN_COMMIT']==run and report['completed_users']==(11182 if rank==0 else 11181)
+        assert {k:v['sha256'] for k,v in report['data_identity'].items()}==ASSETS
+        pred=test/f'predictions.rank{rank}.jsonl'; saved=prediction_files[rank]
+        assert saved['bytes']==pred.stat().st_size and saved['sha256']==hashlib.sha256(pred.read_bytes()).hexdigest()
+        identities.append(report['adapter_files'])
+    assert identities[0]==identities[1]
+    assert identities[0]['adapter_model.bin']['sha256']!='e56abd90bd3cc55d3786df04971a670bc12c54578110d255b5e7f3f4ec76af07'
+    return {'run_commit':run,'adapter_files':identities[0]}
 
 
 def module(path):
@@ -20,13 +54,17 @@ def main():
     for n in ['normal-primary','shuffle-primary','normal-test','shuffle-test','output']:p.add_argument('--'+n,required=True)
     a=p.parse_args();out=Path(a.output);out.mkdir(exist_ok=False)
     started=time.monotonic();roots=[Path(a.normal_primary),Path(a.shuffle_primary)]
+    provenance=[validate_provenance(roots[0],Path(a.normal_test)),
+                validate_provenance(roots[1],Path(a.shuffle_test))]
+    assert provenance[0]['adapter_files']==provenance[1]['adapter_files'], 'Adapter identity mismatch'
     rows=[];matrices=[];keys=None;identities={}
     for root in roots:
         with (root/'per_user.csv').open() as f:rows.append(list(csv.DictReader(f)))
         with np.load(root/'per_user_metrics.npz',allow_pickle=False) as z:
             newkeys=z['keys'].tolist();matrix=z['values'].copy()
-            assert keys is None or keys==newkeys;keys=newkeys
+            assert newkeys==KEYS and (keys is None or keys==newkeys);keys=newkeys
             assert matrix.shape==(22363,16) and matrix.dtype==np.float64
+            assert np.isfinite(matrix).all()
             assert np.array_equal(z['row_idx'],np.arange(22363))
             assert str(z['user_axis_sha256'])=='7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f'
             assert np.array_equal(matrix,np.asarray([[float(r[k]) for k in keys] for r in rows[-1]]))
@@ -82,7 +120,7 @@ def main():
        'scope':'User uncertainty conditional on fixed trained model and fixed shuffle realization; not training-seed or permutation variance.'},
       'independent_verification':{'source':str(independent_path),'source_sha256':hashlib.sha256(independent_path.read_bytes()).hexdigest(),
        'maximum_draw_difference':max_draw,'maximum_interval_difference':max_ci,'tolerance':1e-13},
-      'inputs':identities,'changes':changed,'elapsed_seconds':time.monotonic()-started}
+      'inputs':identities,'prediction_provenance':provenance,'changes':changed,'elapsed_seconds':time.monotonic()-started}
     (out/'paired_comparison.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({'status':'PASS','users':22363}))
 
 

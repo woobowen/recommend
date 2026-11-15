@@ -14,6 +14,9 @@ import sys
 import time
 
 N = 22363
+# CPU-verified torch 2.6 seed-0 randperm, rank-strided, without padding.
+RANK_ASSIGNMENT_SHA = ('8eb669c968e313c79df1bba3f16b16bd94ce1e0d6697728ff528c1da3de01363',
+                       'ea9c57674be765e0424ac991e986823a5b8587cfee3d162c3b38a46deaf4f173')
 ASSETS = {'index': 'be3fb890e59b5443824cdebc560ef349191b97f20d3aecad4727de2d6b212c82',
           'inter': '8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5',
           'item': '74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330'}
@@ -118,6 +121,13 @@ def selftest(official):
     return {'status': 'PASS', 'numerical_assertions': assertions + 4, 'cce_cases': receipts}
 
 
+def verify_bootstrap_config(cfg):
+    frozen = {'unit': 'user', 'replacement': True, 'repetitions': 5000,
+              'seed': 20261113, 'rng': 'numpy Generator PCG64',
+              'percentiles': [2.5, 97.5], 'percentile_method': 'linear'}
+    require(all(cfg.get(k) == v for k, v in frozen.items()), 'Frozen bootstrap protocol mismatch')
+
+
 def evaluate(args):
     import numpy as np
     started = time.monotonic()
@@ -126,6 +136,7 @@ def evaluate(args):
     require(args.test_dir.resolve() not in output.resolve().parents and output.resolve() != args.test_dir.resolve(), 'Original results are read only')
     output.mkdir(parents=True)
     cfg = load(args.config)
+    verify_bootstrap_config(cfg['bootstrap'])
     require(cfg['protocol_version'] == 'letter_beauty_beam20_v1' and cfg['original_run_commit'] == args.run_commit, 'Protocol identity')
     require(len(args.run_commit) == len(args.evaluation_commit) == 40 and all(c in '0123456789abcdef' for c in args.run_commit + args.evaluation_commit), 'Commit identity')
     require(cfg['dataset'] == 'Beauty' and cfg['users'] == N and cfg['asset_sha256'] == ASSETS and cfg['sid_coverage_denominator'] == 12088, 'Beauty configuration identity')
@@ -223,6 +234,7 @@ def evaluate(args):
         require((before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_size,after.st_mtime_ns,after.st_ctime_ns), 'Original prediction changed')
         assignment_sha = hashlib.sha256(json.dumps(assignments,separators=(',',':')).encode()).hexdigest()
         require(assignment_sha == rank_report['assignment_sha256'] and len(assignments)==(N+1-rank)//2, 'Original rank assignment identity')
+        require(assignment_sha == RANK_ASSIGNMENT_SHA[rank], 'Frozen rank sampler order mismatch')
         manifests.append({**inherited, 'mtime_ns': after.st_mtime_ns, 'ctime_ns': after.st_ctime_ns, 'assignment_sha256': assignment_sha, 'hash_recomputed': True})
     require(len(seen) == N and sum(first_counts.values()) == N, 'Complete population')
     means = {key: math.fsum(matrix[:,j])/N for j,key in enumerate(KEYS)}
