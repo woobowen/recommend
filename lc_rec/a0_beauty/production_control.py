@@ -18,6 +18,9 @@ from production_identity import need, sha, check_file, scope_guard, ASSETS, SYNT
 
 STAGES=('train','verify_best_adapter','normal','normal_eval','s3','s3_eval','s4','s4_eval','paired','collect')
 ACTIVE={'ACCEPTED','RUNNING','UNCONFIRMED','CONTROL_LOST'}
+# This is a server-owned Beauty registry, not a path supplied by the plan or
+# Runner sidecar. Moving a job root must never create another budget ledger.
+EXPERIMENT_REGISTRY=Path('/data/bwwu/lc-rec/a0-beauty-20261115/formal-experiment-registry')
 
 def group(stage):
     return 'train_normal' if stage in ('train','normal') else stage if stage in ('s3','s4') else 'cpu'
@@ -52,19 +55,22 @@ def experiment_binding(plan, seal=False):
     """A formal seed cannot acquire another ledger by changing root/job ID.
 
     Preparation only checks existing facts. The first authorized submission
-    seals the stable experiment identity in the fixed private Runner job root.
+    seals the stable experiment identity in a plan-independent registry.
     """
     if plan['evidence_scope']!='FORMAL':return
     key=digest({'dataset':'Beauty','assets':plan['asset_sha256'],
                 'config':plan['config_sha256'],'model_revision':Path(plan['model']).name,
                 'seed':42,'protocol':'GRID-LETTER-SHUFFLE-V1','conditions':['normal','s3','s4']})
-    directory=Path(plan['job_root'])/'.formal-experiments'
+    directory=EXPERIMENT_REGISTRY
     record={'experiment_sha256':key,'root':str(Path(plan['root']).resolve()),
             'task_id':plan['task_id'],'plan_sha256':digest(plan)}
     if not directory.exists() and not seal:return
     with locked(directory/(key+'.lock')):
         path=directory/(key+'.json')
-        if path.exists():need(read(path)==record,'formal experiment already bound to original ledger/plan')
+        if path.exists():
+            need(read(path)==record,'formal experiment already bound to original ledger/plan')
+            need((Path(record['root'])/'state.json').is_file(),
+                 'sealed experiment state missing; do not reset the budget ledger')
         elif seal:durable_write(path,record)
 
 

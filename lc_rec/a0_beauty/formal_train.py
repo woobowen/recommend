@@ -39,7 +39,12 @@ def sha(path):
 
 def approval_json(path, expected_sha256):
     """Read and verify the same approval bytes before importing training code."""
-    raw=Path(path).read_bytes()
+    import stat
+    fd=os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    with os.fdopen(fd, 'rb') as stream:
+        if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+            raise ValueError('regular approval file required')
+        raw=stream.read()
     if not expected_sha256 or hashlib.sha256(raw).hexdigest()!=expected_sha256:
         raise ValueError('formal approval content identity mismatch')
     return json.loads(raw)
