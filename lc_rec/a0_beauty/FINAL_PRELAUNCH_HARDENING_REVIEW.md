@@ -1,3 +1,39 @@
+# 2026-11-16：外部审核 PASS，Beauty 正式 Plan 已封存、未提交
+
+本轮接收用户转交的外部 GPT 审核包，ZIP SHA-256 `a9e6d89a75501d455754e2ed2eb9d95bc02a030370e3fa8071b68300059a83cb`。外部审核 [JSON 原件](evidence/plan-seal-20261116/Beauty_A0_External_Prelaunch_Review_20261116.json) 7166 字节，SHA-256 `3a18da80530451d72efde8aed46e7d51ad44b5bcd4b3396e579fab328de53a97`，由用户通过附件与独立给定 SHA 转交；没有修改字节。来源依据是用户转交与固定摘要，JSON 的 reviewer 字符串本身并不认证作者；[审核说明](evidence/plan-seal-20261116/Beauty_A0_External_Prelaunch_Review_20261116.md) 和 [MANIFEST](evidence/plan-seal-20261116/MANIFEST.json) 保留原件。外部审核是固定源码/原始证据的独立技术审核，不是 GPU 启动授权，也不是外部审核者亲自 SSH 验证。
+
+Codex 本轮在服务器重新验证审核引用的 [14份证据、96份 export 文件及输入](evidence/plan-seal-20261116/server-input-verification.json)，并 [逐文件对照 Git](evidence/plan-seal-20261116/git-export-verification.json)，均通过。用户批准的 [预算文件](evidence/prelaunch-hardening/budget-user-approved.json) SHA `2bcd27d8b7c6dbdfe373e3fe97d9bbcc8ca9b2626e54d482241fea46f7936deb`：Train＋Normal共享108000秒、S3/S4各16200秒、CPU共享3600秒、总144000秒、每attempt预留120秒；GPU阶段上限280800 GPU-device-seconds（78 device-hours）。阶段上限和组/总预算同时约束并累计attempt，不可相加。
+
+依固定候选调用既有 builder，并在前后调用 `approval_documents(..., require_pass=True)` 及 `validate_plan`。[实际执行脚本](evidence/plan-seal-20261116/seal_execution.py)、[输出](evidence/plan-seal-20261116/seal_execution.stdout)、[执行回执](evidence/plan-seal-20261116/execution-receipt.json)；进程退出0。脚本从已发布封存步骤提取，仅添加用户提供的原始审核文件 SHA 前置断言，实际 argv 记录在脚本及候选中。真实 [plan.json](evidence/plan-seal-20261116/plan.json) 为33818字节，服务器路径 `/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json`，文件 SHA-256 `f5a3e7cb81269f637b92d29e021462aa72a3dd3ee86ff1ec8dfb95e93e1a08fc`；Controller 采用的 **canonical plan digest** 为 `0597958bcf852be1537252507a6c20e153256d3135f990b7362e45e867f95206`。两者不同，后续用户授权必须绑定 canonical digest。
+
+[封存后实际校验](evidence/plan-seal-20261116/sealed-plan-validation.json) 显示生产 `validate_plan`、审核 PASS 和文件哈希、96输入、资产、环境、设备、预算及阶段时限均与候选一致；正式 `prepare` 和 `query` 返回 `PREPARED_NOT_SUBMITTED`、attempts为空（[原始输出](evidence/plan-seal-20261116/controller-prepare-query.stdout)）。实际 `authorize(plan,None,None)` 按预期拒绝。没有调用真实 `start`，不创建用户启动授权。授权摘要不匹配、审批漂移、GPU或预算漂移等仍使用历史固定的隔离负向测试证据，不以修改真实正式审批文件的方式测试。
+
+服务器 `zwlab-01` / UID1005；两张 4090 分别为 `GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae` 和 `GPU-59cac3bd-3645-668b-79c8-839e0d878893`，快照时各1 MiB、0%、无 compute app。正式Runner SHA `cc1a1e277faa9bc713a4d0d1b620248d47c398e8ed17d4ed3d7ab52805cc657e`，sidecar SHA `eafd22574dc2d07fd253822732a572200032fcd7e88654140021e2e045087894`；namespace `beauty-formal-candidate-5b2917d`，正式 job root 为空。实验系列 `beauty-a0-seed42-original`，task ID `beauty-a0-seed42-formal`；registry 尚未创建或分配额度。工程 RUN 始终 `6e1b211d9c37f358c43b1540b40b17f6703150d2`，未修改生产源码和科研方法；实际 best Adapter、真实预测及指标必须在后续获授权运行后产生和核验。启动当天须重新确认设备、进程和资源。
+
+```text
+EXTERNAL_GPT_REVIEW: PASS
+EXTERNAL_REVIEW_SHA: PASS
+REVIEW_EVIDENCE_FILES: PASS
+APPROVED_BUDGET: PASS
+RUNNER_IDENTITY: PASS
+RELEASE_IDENTITY: PASS
+PLAN_SEAL_VALIDATION: PASS
+METHOD_INVARIANCE: PASS
+PLAN_CANDIDATE_COMPLETE: YES
+PLAN_SEALED: YES
+PLAN_SHA256: f5a3e7cb81269f637b92d29e021462aa72a3dd3ee86ff1ec8dfb95e93e1a08fc
+PLAN_CANONICAL_DIGEST: 0597958bcf852be1537252507a6c20e153256d3135f990b7362e45e867f95206
+FORMAL_BUDGET_USER_APPROVED: YES
+FORMAL_PLAN_SUBMITTED: NO
+FORMAL_LAUNCH_AUTHORIZED: NO
+TECHNICAL_PRELAUNCH_AUDIT: PASS
+READY_FOR_FINAL_USER_LAUNCH_AUTHORIZATION: YES
+```
+
+下方是此前固定 DELIVERY `96f50eff64f609210102da81e5849692407e6fb7` 的历史记录；其中审核 PENDING 和 Plan 未封存是当时事实，已由上方本轮结果更新。
+
+---
+
 # 2026-11-15：预算已批准，独立审核与正式封存待完成
 
 用户在本次任务消息明确批准 Train＋Normal 108000 秒、S3/S4 各16200 秒、CPU 3600 秒、总144000 秒及120秒清收余量；双GPU上限280800 GPU-device-seconds。此批准不包含正式启动。新的 [预算批准记录](evidence/prelaunch-hardening/budget-user-approved.json) SHA-256 `2bcd27d8b7c6dbdfe373e3fe97d9bbcc8ca9b2626e54d482241fea46f7936deb`，服务器同字节副本位于 `/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/budget-user-approved.json`。历史候选文件未更改，其旧的“未批准”标记表示生成时状态，以本段用户新批准为准。该记录不是用户启动授权收据。
