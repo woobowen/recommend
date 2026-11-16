@@ -1,0 +1,73 @@
+{
+  "schema": "beauty_user_launch_authorization_v1",
+  "scope": "FORMAL",
+  "authorization_kind": "USER_LAUNCH_AUTHORIZATION",
+  "authorized_by": "user",
+  "record_prepared_by": "ChatGPT, transcription of the user authorization in the immediately preceding message; not a digital signature",
+  "user_message_reference": "GRID project conversation: user message on 2026-11-16 immediately preceding this launch task, beginning 我现在授权启动，我们的方案和计划完全通过. No platform message ID was available or invented.",
+  "authorization_text": "我现在授权启动，我们的方案和计划完全通过，请完全按照这次的要求和计划给我发给codex的详细完整专业的提示词，记得让codex不要擅自停止（让它正式启动实验并且监视半个小时后就可以先停止监视了，之后我会隔一段时间让它重新监视的），而是按照我们的提示词要求完整完成任务后再返回结果和审核包，并且把需要上传的/审核的内容上传到GitHub，方便你二重审核",
+  "authorization_text_sha256": "2e0acde110a444a9c4d763f9e76d5a1f41d27aef9b2f0ba2db7d6e56e93e13e4",
+  "action": "FORMAL_BEAUTY_TRAIN_NORMAL_S3_S4",
+  "run_commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
+  "sealed_delivery_commit": "002022ea051a4c4f490dd9dee46b87167f44304e",
+  "plan_sha256": "0597958bcf852be1537252507a6c20e153256d3135f990b7362e45e867f95206",
+  "plan_digest_semantics": "formal_control.digest(plan): SHA-256 of sorted compact UTF-8 JSON, ensure_ascii=False and allow_nan=False; NOT raw plan file SHA",
+  "plan_file_sha256": "f5a3e7cb81269f637b92d29e021462aa72a3dd3ee86ff1ec8dfb95e93e1a08fc",
+  "plan_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json",
+  "config_sha256": "24b568161f2d71d3c5962372a38683b2d33ee5d6d5064de0612215946a8106fd",
+  "task_id": "beauty-a0-seed42-formal",
+  "experiment_series": "beauty-a0-seed42-original",
+  "budget": {
+    "cleanup_reserve": 120,
+    "cpu": 3600,
+    "s3": 16200,
+    "s4": 16200,
+    "total": 144000,
+    "train_normal": 108000
+  },
+  "stage_seconds": {
+    "collect": 600,
+    "normal": 21600,
+    "normal_eval": 900,
+    "paired": 1200,
+    "s3": 16200,
+    "s3_eval": 900,
+    "s4": 16200,
+    "s4_eval": 900,
+    "train": 108000,
+    "verify_best_adapter": 900
+  },
+  "gpu_device_seconds_max": 280800,
+  "gpu_device_hours_max": 78,
+  "issued_utc": "2026-11-16T06:14:25+00:00",
+  "expires_utc": "2026-11-23T00:00:00+00:00",
+  "expiry_note": "Administrative validity for this exact previously approved single experimental series. It does not extend the 144000-second cumulative budget, authorize a second run, or promise uninterrupted execution. Do not rewrite or extend without renewed user authorization.",
+  "authorized_stages": [
+    "train",
+    "verify_best_adapter",
+    "normal",
+    "normal_eval",
+    "s3",
+    "s3_eval",
+    "s4",
+    "s4_eval",
+    "paired",
+    "collect"
+  ],
+  "monitoring": {
+    "codex_window_seconds": 1800,
+    "window_start": "first verified RUNNING status of the actual formal train attempt, with actual worker/rank evidence; record the observed start and end",
+    "suggested_observations_seconds": [
+      0,
+      300,
+      900,
+      1800
+    ],
+    "after_window": "End only the active Codex monitoring; keep the independent server controller, supervisors and accepted experiment jobs running and allow ordered stages to advance under the sealed plan.",
+    "followup": "User will request later monitoring. Query the original task and its ledger; never re-submit just because the Codex session reopened."
+  },
+  "new_independent_experiment_authorized": false,
+  "changes_authorized": "Only operational launch/transport/observation/evidence handling that preserves the sealed source, plan, config, inputs and budget; no in-place modification of frozen runtime code.",
+  "failure_policy": "Stop dependent progression on actual failure under the existing controller; retain logs/checkpoints and budget accounting. No blind GPU restart, new seed, new series, ledger reset or methodology change.",
+  "authenticity_boundary": "This file records the actual user message; its hash protects bytes, not identity. Codex must compare the quoted authorization with the user-forwarded task and independently pinned receipt SHA in that task. Do not claim the user manually authored this JSON or supplied a digital signature."
+}
