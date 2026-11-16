@@ -1,6 +1,6 @@
 """Bounded CPU-only checks of production guards; all approvals are synthetic."""
 import copy
-import datetime as dt
+import importlib.util
 import json
 import tempfile
 import unittest
@@ -81,6 +81,19 @@ class PrelaunchGuards(unittest.TestCase):
         with self.assertRaises(ValueError):control.authorize(changed,str(receipt),expected)
         doc['expires_utc']='2000-01-01T00:00:00+00:00';receipt.write_text(json.dumps(doc))
         with self.assertRaises(ValueError):control.authorize(self.plan,str(receipt),control.sha(receipt))
+
+    def test_real_runner_rejects_changed_approval_input(self):
+        path=Path(__file__).parent/'evidence/production-closure/runner/runner-beauty-cc1a1e277faa.py'
+        spec=importlib.util.spec_from_file_location('synthetic_runner_guard',path)
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        row=self.plan['approval_files']['precision_approval']
+        request={'schema':1,'job_id':'synthetic-guard','argv':['/usr/bin/python3'],
+                 'cwd':str(self.base),'timeout_seconds':30,'env':{},
+                 'inputs':[{'path':row['path'],'sha256':row['sha256']}]}
+        with patch.object(module,'verify_namespace'):
+            module.verify(request)
+            Path(row['path']).write_text('SYNTHETIC_DRIFT')
+            with self.assertRaises(AssertionError):module.verify(request)
 
     def test_registry_blocks_root_task_jobroot_and_missing_ledger(self):
         control.experiment_binding(self.plan,seal=True)
