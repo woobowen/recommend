@@ -21,6 +21,7 @@ ACTIVE={'ACCEPTED','RUNNING','UNCONFIRMED','CONTROL_LOST'}
 # This is a server-owned Beauty registry, not a path supplied by the plan or
 # Runner sidecar. Moving a job root must never create another budget ledger.
 EXPERIMENT_REGISTRY=Path('/data/bwwu/lc-rec/a0-beauty-20261115/formal-experiment-registry')
+INITIAL_SERIES='beauty-a0-seed42-original'
 
 def group(stage):
     return 'train_normal' if stage in ('train','normal') else stage if stage in ('s3','s4') else 'cpu'
@@ -58,9 +59,12 @@ def experiment_binding(plan, seal=False):
     seals the stable experiment identity in a plan-independent registry.
     """
     if plan['evidence_scope']!='FORMAL':return
+    series=plan.get('experiment_series',INITIAL_SERIES)
+    need(re.fullmatch(r'[A-Za-z0-9_.-]{1,64}',series), 'invalid experiment series')
     key=digest({'dataset':'Beauty','assets':plan['asset_sha256'],
                 'config':plan['config_sha256'],'model_revision':Path(plan['model']).name,
-                'seed':42,'protocol':'GRID-LETTER-SHUFFLE-V1','conditions':['normal','s3','s4']})
+                'seed':42,'protocol':'GRID-LETTER-SHUFFLE-V1','conditions':['normal','s3','s4'],
+                'series':series})
     directory=EXPERIMENT_REGISTRY
     record={'experiment_sha256':key,'root':str(Path(plan['root']).resolve()),
             'task_id':plan['task_id'],'plan_sha256':digest(plan)}
@@ -143,6 +147,12 @@ def authorize(plan, receipt, expected_digest):
     need(r.get('action')=='FORMAL_BEAUTY_TRAIN_NORMAL_S3_S4' and r.get('plan_sha256')==digest(plan),'authorization scope/immutable plan')
     need(r.get('run_commit')==plan['run_commit'] and r.get('config_sha256')==plan['config_sha256'] and
          r.get('budget')==plan['budget'] and r.get('task_id')==plan['task_id'],'authorization version/config/budget/job')
+    series=plan.get('experiment_series',INITIAL_SERIES)
+    need(r.get('experiment_series')==series,'authorization experiment series')
+    if series!=INITIAL_SERIES:
+        need(r.get('new_independent_experiment_authorized') is True and
+             r.get('prior_experiment_series') and r['prior_experiment_series']!=series,
+             'new series requires separate explicit user authorization and prior-series reference')
     need(dt.datetime.fromisoformat(r['expires_utc'])>dt.datetime.now(dt.timezone.utc),'authorization expired')
     # An independent prelaunch technical review is distinct from user launch approval.
     approval_documents(plan,require_pass=True)

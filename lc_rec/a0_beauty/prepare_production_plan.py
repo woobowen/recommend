@@ -6,7 +6,7 @@ result is an execution-capable blueprint; prepare/query never launch it.
 import argparse
 from pathlib import Path
 from formal_control import durable_write
-from production_control import validate_plan, STAGES
+from production_control import validate_plan, STAGES, INITIAL_SERIES
 from production_identity import load, sha, identity, ASSETS, need
 
 
@@ -14,6 +14,7 @@ def main():
     p=argparse.ArgumentParser(allow_abbrev=False)
     for name in ('deployment','root','data-root','source-root','model','python','runner','precision-approval','prelaunch-review','budget','task-id'):
         p.add_argument('--'+name,required=True)
+    p.add_argument('--experiment-series',default=INITIAL_SERIES)
     p.add_argument('--gpu-uuids',nargs=2,required=True)
     a=p.parse_args();dep=load(a.deployment);release=dep['release'];budget=load(a.budget)
     side=load(a.runner+'.deployment.json')
@@ -22,6 +23,7 @@ def main():
     root=Path(a.root);path=root/'plan.json'
     config=str(Path(release)/'lc_rec/a0_beauty/config/formal_beauty_seed42.json')
     plan={'scope':'FORMAL_SUBMIT','evidence_scope':'FORMAL','task_id':a.task_id,'root':str(root),
+          'experiment_series':a.experiment_series,
           'run_commit':dep['run_commit'],'prediction_run_commit':dep['run_commit'],'release':release,
           'config':config,'config_sha256':sha(config),'asset_sha256':ASSETS,'inputs':dep['files'],
           'data_root':a.data_root,'source_root':a.source_root,'model':a.model,'python':a.python,

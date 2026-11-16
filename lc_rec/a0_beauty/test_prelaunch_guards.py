@@ -74,7 +74,7 @@ class PrelaunchGuards(unittest.TestCase):
              'authorization_text':'SYNTHETIC_FIXTURE','action':'FORMAL_BEAUTY_TRAIN_NORMAL_S3_S4',
              'plan_sha256':digest(self.plan),'run_commit':self.plan['run_commit'],
              'config_sha256':self.plan['config_sha256'],'budget':self.plan['budget'],
-             'task_id':self.plan['task_id'], 'expires_utc':'2099-01-01T00:00:00+00:00'}
+             'task_id':self.plan['task_id'], 'experiment_series':control.INITIAL_SERIES, 'expires_utc':'2099-01-01T00:00:00+00:00'}
         receipt.write_text(json.dumps(doc)); expected=control.sha(receipt)
         with self.assertRaises(ValueError):control.authorize(self.plan,str(receipt),expected)
         with patch.object(control,'scope_guard'):
@@ -83,6 +83,14 @@ class PrelaunchGuards(unittest.TestCase):
         changed=copy.deepcopy(self.plan);changed['budget']={'fixture':121}
         with patch.object(control,'scope_guard'):
             with self.assertRaises(ValueError):control.authorize(changed,str(receipt),expected)
+        next_plan=copy.deepcopy(self.plan);next_plan['experiment_series']='separately-authorized-series'
+        doc['experiment_series']=next_plan['experiment_series'];doc['plan_sha256']=digest(next_plan)
+        receipt.write_text(json.dumps(doc))
+        with patch.object(control,'scope_guard'):
+            with self.assertRaises(ValueError):control.authorize(next_plan,str(receipt),control.sha(receipt))
+            doc['new_independent_experiment_authorized']=True;doc['prior_experiment_series']=control.INITIAL_SERIES
+            receipt.write_text(json.dumps(doc)); self.assertTrue(control.authorize(next_plan,str(receipt),control.sha(receipt)))
+        doc['experiment_series']=control.INITIAL_SERIES;doc['plan_sha256']=digest(self.plan)
         doc['expires_utc']='2000-01-01T00:00:00+00:00';receipt.write_text(json.dumps(doc))
         with patch.object(control,'scope_guard'):
             with self.assertRaises(ValueError):control.authorize(self.plan,str(receipt),control.sha(receipt))
