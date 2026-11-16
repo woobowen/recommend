@@ -136,6 +136,9 @@ def authorize(plan, receipt, expected_digest):
     if not receipt or not expected_digest:raise PermissionError('separate user launch authorization and user-pinned digest required')
     need(re.fullmatch('[0-9a-f]{64}',expected_digest) and sha(receipt)==expected_digest,'user authorization digest')
     r=read(receipt)
+    scope_guard(receipt,'FORMAL')
+    need(r.get('scope')=='FORMAL' and r.get('authorization_kind')=='USER_LAUNCH_AUTHORIZATION',
+         'formal user launch receipt required; test receipts are never accepted')
     need(r.get('authorized_by')=='user' and r.get('user_message_reference') and r.get('authorization_text'),'authorization provenance')
     need(r.get('action')=='FORMAL_BEAUTY_TRAIN_NORMAL_S3_S4' and r.get('plan_sha256')==digest(plan),'authorization scope/immutable plan')
     need(r.get('run_commit')==plan['run_commit'] and r.get('config_sha256')==plan['config_sha256'] and

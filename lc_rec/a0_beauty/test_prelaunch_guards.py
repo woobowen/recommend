@@ -69,18 +69,23 @@ class PrelaunchGuards(unittest.TestCase):
 
     def test_authorization_digest_plan_binding_and_expiry(self):
         receipt=self.base/'SYNTHETIC_AUTHORIZATION.json'
-        doc={'authorized_by':'user','user_message_reference':'SYNTHETIC_FIXTURE',
+        doc={'scope':'FORMAL','authorization_kind':'USER_LAUNCH_AUTHORIZATION',
+             'authorized_by':'user','user_message_reference':'SYNTHETIC_FIXTURE',
              'authorization_text':'SYNTHETIC_FIXTURE','action':'FORMAL_BEAUTY_TRAIN_NORMAL_S3_S4',
              'plan_sha256':digest(self.plan),'run_commit':self.plan['run_commit'],
              'config_sha256':self.plan['config_sha256'],'budget':self.plan['budget'],
              'task_id':self.plan['task_id'], 'expires_utc':'2099-01-01T00:00:00+00:00'}
         receipt.write_text(json.dumps(doc)); expected=control.sha(receipt)
-        self.assertTrue(control.authorize(self.plan,str(receipt),expected))
+        with self.assertRaises(ValueError):control.authorize(self.plan,str(receipt),expected)
+        with patch.object(control,'scope_guard'):
+            self.assertTrue(control.authorize(self.plan,str(receipt),expected))
         with self.assertRaises(ValueError):control.authorize(self.plan,str(receipt),'0'*64)
         changed=copy.deepcopy(self.plan);changed['budget']={'fixture':121}
-        with self.assertRaises(ValueError):control.authorize(changed,str(receipt),expected)
+        with patch.object(control,'scope_guard'):
+            with self.assertRaises(ValueError):control.authorize(changed,str(receipt),expected)
         doc['expires_utc']='2000-01-01T00:00:00+00:00';receipt.write_text(json.dumps(doc))
-        with self.assertRaises(ValueError):control.authorize(self.plan,str(receipt),control.sha(receipt))
+        with patch.object(control,'scope_guard'):
+            with self.assertRaises(ValueError):control.authorize(self.plan,str(receipt),control.sha(receipt))
 
     def test_real_runner_rejects_changed_approval_input(self):
         path=Path(__file__).parent/'evidence/production-closure/runner/runner-beauty-cc1a1e277faa.py'
