@@ -1,3 +1,76 @@
+# 2026-11-15：预算已批准，独立审核与正式封存待完成
+
+用户在本次任务消息明确批准 Train＋Normal 108000 秒、S3/S4 各16200 秒、CPU 3600 秒、总144000 秒及120秒清收余量；双GPU上限280800 GPU-device-seconds。此批准不包含正式启动。新的 [预算批准记录](evidence/prelaunch-hardening/budget-user-approved.json) SHA-256 `2bcd27d8b7c6dbdfe373e3fe97d9bbcc8ca9b2626e54d482241fea46f7936deb`，服务器同字节副本位于 `/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/budget-user-approved.json`。历史候选文件未更改，其旧的“未批准”标记表示生成时状态，以本段用户新批准为准。该记录不是用户启动授权收据。
+
+独立审核仍为 PENDING：此前审核代理明确不能读取或执行文件；本次用户没有提供独立审核 PASS 文件，也没有自称出具该记录。本轮主控检查不能替代非作者审核。正式审核文件缺失，因此尚无封存 Plan，也无正式 GPU 任务。固定候选仍是 [formal-candidate.json](evidence/prelaunch-hardening/formal-candidate.json)，SHA-256 `cd5e7ab6b15f27a506079fea8786d6e6e1dbfdcd3bfb6c5a49ddaf9f43f1ec5e`。本轮没有修改工程源码、计算方法或已有历史文件。
+
+重核服务器 [资源](evidence/final-budget-review/server-resource-snapshot.txt) 和 [身份](evidence/final-budget-review/server-identity.json)：96文件 SHA 与服务器清单匹配，且 [Git 逐文件对照](evidence/final-budget-review/git-export-check.json) 96/96 一致；Runner SHA `cc1a1e277faa9bc713a4d0d1b620248d47c398e8ed17d4ed3d7ab52805cc657e`，sidecar SHA `eafd22574dc2d07fd253822732a572200032fcd7e88654140021e2e045087894`，正式 jobs 目录为空、正式输出与 registry 尚未创建。两张GPU UUID未变、各1 MiB、0%利用率、无 compute app；这是当前快照，启动时重新检查。时区 `2026-11-16 04:48 UTC` 即 `2026-11-15 23:48 America/New_York`。
+
+[本轮有界负向测试](evidence/final-budget-review/test_start_denial.py) 使用真实服务器资产、已批准预算及生产 builder/Controller，在 SYNTHETIC 目录中仅对测试根路径 guard 打补丁，并将 Popen 替换为遇调用即失败的监视器；未修改正式源码。实际 `start` 缺少授权时抛 PermissionError、Popen未调用、attempts为空，退出0；[原始输出](evidence/final-budget-review/test_start_denial.stdout)。未打补丁的生产验证拒绝该合成路径；PENDING review 不能满足实际 `authorize`。测试执行0.163秒，不是正式训练或正式GPU。
+
+## 取得真实外部审核后的单次封存入口
+
+**先决条件：** 独立审核者已实际读取固定源码与证据并出具其真实 PASS；操作人从真实渠道核验身份和文件，而非自行编造。审核 JSON 的 `candidate_plan_sha256` 必须等于上述原始候选 SHA，其他必需字段见下方历史封存说明。将真实文件放到候选固定路径 `independent-prelaunch-review.json`。以下在服务器运行，只构造与核验 Plan，不含启动动作；审核来源真实性仍需人工核验。
+
+关键区别：现有 `prepare_production_plan.py` 的 `validate_plan` 仅校验审核字节，**不会在构造时要求审核 PASS**；正式 `authorize` 才要求 PASS。本次未改生产源码（历史任务已有三轮集中修正），因此必须先后调用现有 `approval_documents(..., require_pass=True)` 并比对审核 SHA，只有所有检查通过才将产物称为封存计划。若构造后检查失败，保留产生的文件并报告未封存，不得启动或以删除账本解决。
+
+```bash
+cd /data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty
+PYTHONOPTIMIZE=0 PYTHONDONTWRITEBYTECODE=1 /data/bwwu/envs/letter-20261110/bin/python - <<'PYSEAL'
+import hashlib, json, subprocess
+from pathlib import Path
+from production_identity import identity
+from production_control import approval_documents, validate_plan
+from formal_control import digest
+base=Path('/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d')
+candidate=base/'formal-candidate-v2.json'
+budget=base/'budget-user-approved.json'
+review=base/'independent-prelaunch-review.json'
+assert hashlib.sha256(candidate.read_bytes()).hexdigest()=='cd5e7ab6b15f27a506079fea8786d6e6e1dbfdcd3bfb6c5a49ddaf9f43f1ec5e'
+assert hashlib.sha256(budget.read_bytes()).hexdigest()=='2bcd27d8b7c6dbdfe373e3fe97d9bbcc8ca9b2626e54d482241fea46f7936deb'
+c=json.loads(candidate.read_text()); b=json.loads(budget.read_text()); r=json.loads(review.read_text())
+assert b['budget']==c['budget']['budget'] and b['stage_seconds']==c['budget']['stage_seconds']
+assert r['candidate_plan_sha256']=='cd5e7ab6b15f27a506079fea8786d6e6e1dbfdcd3bfb6c5a49ddaf9f43f1ec5e'
+args=c['seal_argv_after_real_independent_review']; precision=Path(args[args.index('--precision-approval')+1]); release=Path(args[args.index('--deployment')+1]).parent
+assert hashlib.sha256(precision.read_bytes()).hexdigest()==c['precision_approval_sha256']
+pr={'prelaunch_review':str(review),'precision_approval':str(precision),'approval_files':{'prelaunch_review':identity(review),'precision_approval':identity(precision)},'run_commit':c['engineering_commit'],'config_sha256':c['effective_config_sha256'],'release':str(release)}
+review_sha=pr['approval_files']['prelaunch_review']['sha256']
+approval_documents(pr,require_pass=True)
+args[args.index('--budget')+1]=str(budget)
+subprocess.run(args,check=True)
+plan_path=Path(args[args.index('--root')+1])/'plan.json'; raw=plan_path.read_bytes(); plan=json.loads(raw)
+validate_plan(plan); approval_documents(plan,require_pass=True)
+assert plan['approval_files']['prelaunch_review']['sha256']==review_sha
+assert plan['budget']==b['budget'] and plan['stage_seconds']==b['stage_seconds']
+print(json.dumps({'status':'SEALED_NOT_SUBMITTED','path':str(plan_path),'file_sha256':hashlib.sha256(raw).hexdigest(),'canonical_plan_digest':digest(plan),'review_sha256':review_sha}))
+PYSEAL
+```
+
+`PLAN_SEAL_READY` 表示上面既有生产函数与实际 builder 的准备及缺授权负例均已验证，且提供了不改生产源码的操作顺序；完整真实 PASS 文件的端到端封存尚无法实测。用户仍需另行批准最终 Plan、预算及执行范围并独立提供授权收据 SHA。`formal_control.py start` 不在本轮运行。
+
+```text
+INDEPENDENT_PRELAUNCH_REVIEW: PENDING
+EXTERNAL_GPT_REVIEW: PENDING
+METHOD_INVARIANCE: PASS
+PROVENANCE_AUDIT: PASS
+APPROVAL_SHA_BINDING: PASS
+CROSS_ROOT_BUDGET_GUARD: PASS
+RUNNER_DEPLOYMENT: PASS
+BUDGET_CONFIGURATION: PASS
+FORMAL_BUDGET_USER_APPROVED: YES
+PLAN_CANDIDATE_COMPLETE: YES
+PLAN_SEAL_READY: YES
+PLAN_SEALED: NO
+FORMAL_PLAN_SUBMITTED: NO
+FORMAL_LAUNCH_AUTHORIZED: NO
+TECHNICAL_PRELAUNCH_AUDIT: PASS
+FORMAL_READY_CANDIDATE: YES
+```
+
+下方为固定 DELIVERY `db00b1fc6d16d8fcbb7d347fc25f09a64ef311ef` 的历史工程收口记录，其预算批准状态是当时事实，不覆盖本段新授权。
+
+---
+
 # A0 Beauty 启动前工程收口与审核入口
 
 本文件对应工程源码及 CPU RUN `6e1b211d9c37f358c43b1540b40b17f6703150d2`。正式 Beauty GPU 训练和全量生成未运行；预算未获用户授权。真实独立审核文件、用户授权及其外部 SHA 均尚未取得。本文件是主控技术审核，不是非作者审核。
