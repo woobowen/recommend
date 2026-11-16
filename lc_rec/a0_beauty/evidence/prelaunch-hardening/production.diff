@@ -1,0 +1,258 @@
+diff --git a/lc_rec/a0_beauty/formal_train.py b/lc_rec/a0_beauty/formal_train.py
+index 5f79aa4..1a94880 100644
+--- a/lc_rec/a0_beauty/formal_train.py
++++ b/lc_rec/a0_beauty/formal_train.py
+@@ -37,6 +37,19 @@ def sha(path):
+     return h.hexdigest()
+ 
+ 
++def approval_json(path, expected_sha256):
++    """Read and verify the same approval bytes before importing training code."""
++    import stat
++    fd=os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
++    with os.fdopen(fd, 'rb') as stream:
++        if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
++            raise ValueError('regular approval file required')
++        raw=stream.read()
++    if not expected_sha256 or hashlib.sha256(raw).hexdigest()!=expected_sha256:
++        raise ValueError('formal approval content identity mismatch')
++    return json.loads(raw)
++
++
+ def checkpoint_required_files(step):
+     prefix='global_step%d/'%step
+     return {'adapter_model.bin','adapter_config.json','trainer_state.json','training_args.bin',
+@@ -85,18 +98,20 @@ def main():
+     p.add_argument('--probe-stop', type=int, default=0)
+     p.add_argument('--probe-save', type=int, default=2)
+     p.add_argument('--precision-approval', required=True)
++    p.add_argument('--precision-approval-sha256')
+     p.add_argument('--diagnosis', help='Opt-in observational probe; never used by formal pipeline')
+     p.add_argument('--preflight-interfaces', action='store_true', help='Bounded validation/best reload interfaces; never a formal result')
+     p.add_argument('--boundary-preflight', action='store_true', help='Four short 10-microbatch epochs for boundary acceptance only')
+     p.add_argument('--stop-after-epoch', type=int, default=0, choices=[0,1,3], help='Preflight-only early stop at a completed epoch')
+     p.add_argument('--prelaunch-review', help='Required for formal training after completed preflight')
++    p.add_argument('--prelaunch-review-sha256')
+     a = p.parse_args()
+     rank = int(os.environ['RANK']); local = int(os.environ['LOCAL_RANK'])
+     assert int(os.environ['WORLD_SIZE']) == 2
+     cfg = json.loads(Path(a.config).read_text())
+     if not a.boundary_preflight:
+         assert a.prelaunch_review, 'Formal training requires a completed non-author prelaunch review'
+-        gate=json.loads(Path(a.prelaunch_review).read_text())
++        gate=approval_json(a.prelaunch_review,a.prelaunch_review_sha256)
+         assert gate['status']=='PASS' and gate['RUN_COMMIT']==a.run_commit
+         assert gate['config_sha256']==sha(a.config) and gate['formal_train_sha256']==sha(__file__)
+     assert not a.diagnosis, 'Formal FA adaptation is independent of diagnostic observers'
+@@ -108,7 +123,8 @@ def main():
+             assert cfg[k]==v, 'unapproved author setting drift: '+k
+     assert cfg['dataset']=='Beauty'
+     assert (cfg['gradient_accumulation_steps'],cfg['global_batch'],cfg['world_size'])==(4,64,2)
+-    approval = json.loads(Path(a.precision_approval).read_text())
++    approval = (json.loads(Path(a.precision_approval).read_text()) if a.boundary_preflight
++                else approval_json(a.precision_approval,a.precision_approval_sha256))
+     assert approval['formal_a_only_bf16_authorized'] is True
+     out = Path(a.output); out.mkdir(parents=True, exist_ok=True)
+     started = time.monotonic()
+diff --git a/lc_rec/a0_beauty/prepare_production_plan.py b/lc_rec/a0_beauty/prepare_production_plan.py
+index 20257ab..c3b0cee 100644
+--- a/lc_rec/a0_beauty/prepare_production_plan.py
++++ b/lc_rec/a0_beauty/prepare_production_plan.py
+@@ -6,14 +6,15 @@ result is an execution-capable blueprint; prepare/query never launch it.
+ import argparse
+ from pathlib import Path
+ from formal_control import durable_write
+-from production_control import validate_plan, STAGES
+-from production_identity import load, sha, ASSETS, need
++from production_control import validate_plan, STAGES, INITIAL_SERIES
++from production_identity import load, sha, identity, ASSETS, need
+ 
+ 
+ def main():
+     p=argparse.ArgumentParser(allow_abbrev=False)
+     for name in ('deployment','root','data-root','source-root','model','python','runner','precision-approval','prelaunch-review','budget','task-id'):
+         p.add_argument('--'+name,required=True)
++    p.add_argument('--experiment-series',default=INITIAL_SERIES)
+     p.add_argument('--gpu-uuids',nargs=2,required=True)
+     a=p.parse_args();dep=load(a.deployment);release=dep['release'];budget=load(a.budget)
+     side=load(a.runner+'.deployment.json')
+@@ -22,6 +23,7 @@ def main():
+     root=Path(a.root);path=root/'plan.json'
+     config=str(Path(release)/'lc_rec/a0_beauty/config/formal_beauty_seed42.json')
+     plan={'scope':'FORMAL_SUBMIT','evidence_scope':'FORMAL','task_id':a.task_id,'root':str(root),
++          'experiment_series':a.experiment_series,
+           'run_commit':dep['run_commit'],'prediction_run_commit':dep['run_commit'],'release':release,
+           'config':config,'config_sha256':sha(config),'asset_sha256':ASSETS,'inputs':dep['files'],
+           'data_root':a.data_root,'source_root':a.source_root,'model':a.model,'python':a.python,
+@@ -29,6 +31,9 @@ def main():
+           'namespace':{'host':side['hostname'],'user':side['user'],'uid':side['uid'],
+                        'namespace':side['namespace'],'deployment_sha256':sha(a.runner+'.deployment.json')},
+           'precision_approval':a.precision_approval,'prelaunch_review':a.prelaunch_review,
++          'approval_files':{'precision_approval':identity(a.precision_approval),
++                            'prelaunch_review':identity(a.prelaunch_review)},
++          'export_manifest':identity(Path(release)/'RUN_VERSION.json'),
+           'gpu_uuids':a.gpu_uuids,'stage_seconds':budget['stage_seconds'],'budget':budget['budget'],
+           'env':{'CUDA_VISIBLE_DEVICES':'0,1','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
+                  'LD_LIBRARY_PATH':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib',
+diff --git a/lc_rec/a0_beauty/production_control.py b/lc_rec/a0_beauty/production_control.py
+index 9bb31de..c860375 100644
+--- a/lc_rec/a0_beauty/production_control.py
++++ b/lc_rec/a0_beauty/production_control.py
+@@ -18,11 +18,66 @@ from production_identity import need, sha, check_file, scope_guard, ASSETS, SYNT
+ 
+ STAGES=('train','verify_best_adapter','normal','normal_eval','s3','s3_eval','s4','s4_eval','paired','collect')
+ ACTIVE={'ACCEPTED','RUNNING','UNCONFIRMED','CONTROL_LOST'}
++# This is a server-owned Beauty registry, not a path supplied by the plan or
++# Runner sidecar. Moving a job root must never create another budget ledger.
++EXPERIMENT_REGISTRY=Path('/data/bwwu/lc-rec/a0-beauty-20261115/formal-experiment-registry')
++INITIAL_SERIES='beauty-a0-seed42-original'
+ 
+ def group(stage):
+     return 'train_normal' if stage in ('train','normal') else stage if stage in ('s3','s4') else 'cpu'
+ 
+ 
++def approval_documents(plan, require_pass=False):
++    """Approval bytes are part of the plan, never a mutable path-only input."""
++    documents={}
++    for key in ('prelaunch_review','precision_approval'):
++        row=plan['approval_files'][key]
++        need(row['path']==plan[key], 'approval path binding: '+key)
++        check_file(row)
++        raw=Path(row['path']).read_bytes()
++        import hashlib
++        need(hashlib.sha256(raw).hexdigest()==row['sha256'], 'approval changed during read')
++        documents[key]=json.loads(raw)
++    need(documents['precision_approval'].get('formal_a_only_bf16_authorized') is True,
++         'existing user precision approval required')
++    if require_pass:
++        review=documents['prelaunch_review']
++        need(review['status']=='PASS' and review['RUN_COMMIT']==plan['run_commit'] and
++             review['config_sha256']==plan['config_sha256'] and
++             review['formal_train_sha256']==sha(Path(plan['release'])/'lc_rec/a0_beauty/formal_train.py'),
++             'prelaunch review identity')
++        need(review.get('review_kind') in ('INDEPENDENT_NONAUTHOR','EXTERNAL_GPT_REVIEW') and
++             review.get('reviewer') and review.get('evidence_files'), 'independent review evidence required')
++        for row in review['evidence_files']:check_file(row)
++    return documents
++
++
++def experiment_binding(plan, seal=False):
++    """A formal seed cannot acquire another ledger by changing root/job ID.
++
++    Preparation only checks existing facts. The first authorized submission
++    seals the stable experiment identity in a plan-independent registry.
++    """
++    if plan['evidence_scope']!='FORMAL':return
++    series=plan.get('experiment_series',INITIAL_SERIES)
++    need(re.fullmatch(r'[A-Za-z0-9_.-]{1,64}',series), 'invalid experiment series')
++    key=digest({'dataset':'Beauty','assets':plan['asset_sha256'],
++                'config':plan['config_sha256'],'model_revision':Path(plan['model']).name,
++                'seed':42,'protocol':'GRID-LETTER-SHUFFLE-V1','conditions':['normal','s3','s4'],
++                'series':series})
++    directory=EXPERIMENT_REGISTRY
++    record={'experiment_sha256':key,'root':str(Path(plan['root']).resolve()),
++            'task_id':plan['task_id'],'plan_sha256':digest(plan)}
++    if not directory.exists() and not seal:return
++    with locked(directory/(key+'.lock')):
++        path=directory/(key+'.json')
++        if path.exists():
++            need(read(path)==record,'formal experiment already bound to original ledger/plan')
++            need((Path(record['root'])/'state.json').is_file(),
++                 'sealed experiment state missing; do not reset the budget ledger')
++        elif seal:durable_write(path,record)
++
++
+ def validate_plan(p):
+     need(p['scope'] in ('FORMAL_PREPARE','FORMAL_SUBMIT','SYNTHETIC_TEST'),'unknown plan scope')
+     need(p['evidence_scope']==(SYNTHETIC if p['scope']=='SYNTHETIC_TEST' else 'FORMAL'),'scope mismatch')
+@@ -64,9 +119,18 @@ def validate_plan(p):
+     from production_pipeline import actual_source_root
+     actual_source_root(p)
+     if p['evidence_scope']=='FORMAL':
++        check_file(p['export_manifest'])
++        need(p['export_manifest']['path']==str(Path(p['release'])/'RUN_VERSION.json'),'export manifest path')
++        for row in version['files']:
++            need(supplied.get(row['path'])==row['sha256'],'incomplete fixed export inputs')
++        approval_documents(p)
+         need(Path(p['model']).name=='4782ad278652c7c71b72204d462d6d01eaaf7549','model revision')
+         need(sha(Path(p['model'])/'config.json')=='e4c3dea29aefc16c0e63825f9ae097dbf5cb5d7c320843a84257e11be3b452c8','base model config')
+         need(p['env'].get('CUDA_VISIBLE_DEVICES') and p['env'].get('PYTHONOPTIMIZE','0')=='0','formal environment')
++        need(len(p['gpu_uuids'])==2 and len(set(p['gpu_uuids']))==2 and
++             all(re.fullmatch('GPU-[0-9a-f-]{36}',x) for x in p['gpu_uuids']) and
++             p['env']['CUDA_VISIBLE_DEVICES']=='0,1','two fixed physical GPU mappings required')
++        need('cpu-only' not in p['namespace']['namespace'],'CPU deployment is not formal deployment')
+     else:need(p['env'].get('CUDA_VISIBLE_DEVICES')=='','CPU test visibility')
+     return p
+ 
+@@ -76,16 +140,22 @@ def authorize(plan, receipt, expected_digest):
+     if not receipt or not expected_digest:raise PermissionError('separate user launch authorization and user-pinned digest required')
+     need(re.fullmatch('[0-9a-f]{64}',expected_digest) and sha(receipt)==expected_digest,'user authorization digest')
+     r=read(receipt)
++    scope_guard(receipt,'FORMAL')
++    need(r.get('scope')=='FORMAL' and r.get('authorization_kind')=='USER_LAUNCH_AUTHORIZATION',
++         'formal user launch receipt required; test receipts are never accepted')
+     need(r.get('authorized_by')=='user' and r.get('user_message_reference') and r.get('authorization_text'),'authorization provenance')
+     need(r.get('action')=='FORMAL_BEAUTY_TRAIN_NORMAL_S3_S4' and r.get('plan_sha256')==digest(plan),'authorization scope/immutable plan')
+     need(r.get('run_commit')==plan['run_commit'] and r.get('config_sha256')==plan['config_sha256'] and
+          r.get('budget')==plan['budget'] and r.get('task_id')==plan['task_id'],'authorization version/config/budget/job')
++    series=plan.get('experiment_series',INITIAL_SERIES)
++    need(r.get('experiment_series')==series,'authorization experiment series')
++    if series!=INITIAL_SERIES:
++        need(r.get('new_independent_experiment_authorized') is True and
++             r.get('prior_experiment_series') and r['prior_experiment_series']!=series,
++             'new series requires separate explicit user authorization and prior-series reference')
+     need(dt.datetime.fromisoformat(r['expires_utc'])>dt.datetime.now(dt.timezone.utc),'authorization expired')
+     # An independent prelaunch technical review is distinct from user launch approval.
+-    review=read(plan['prelaunch_review'])
+-    need(review['status']=='PASS' and review['RUN_COMMIT']==plan['run_commit'] and
+-         review['config_sha256']==plan['config_sha256'] and
+-         review['formal_train_sha256']==sha(Path(plan['release'])/'lc_rec/a0_beauty/formal_train.py'),'prelaunch review identity')
++    approval_documents(plan,require_pass=True)
+     return True
+ 
+ 
+@@ -109,6 +179,13 @@ def request(plan,stage,attempt,timeout,plan_path,authorization=None,authorizatio
+     ns=plan['namespace']
+     env=dict(plan['env']);env['CUDA_VISIBLE_DEVICES']=env.get('CUDA_VISIBLE_DEVICES','') if stage in ('train','normal','s3','s4') else ''
+     inputs=[{'path':x['path'],'sha256':x['sha256']} for x in plan['inputs']]+[{'path':str(plan_path),'sha256':sha(plan_path)}]
++    if plan['evidence_scope']=='FORMAL':
++        approval_documents(plan,require_pass=True)
++        bindings=[*plan['approval_files'].values(),plan['export_manifest'],
++                  {'path':plan['runner'],'sha256':plan['runner_sha256']},
++                  {'path':plan['runner']+'.deployment.json','sha256':plan['namespace']['deployment_sha256']}]
++        bindings+=approval_documents(plan,require_pass=True)['prelaunch_review']['evidence_files']
++        for row in bindings:inputs.append({'path':row['path'],'sha256':row['sha256']})
+     if authorization:inputs.append({'path':authorization,'sha256':authorization_sha256})
+     return dict(schema=1,host=ns['host'],user=ns['user'],uid=ns['uid'],namespace=ns['namespace'],
+                 deployment_sha256=ns['deployment_sha256'],capture_version=plan['run_commit'],
+@@ -119,6 +196,7 @@ def request(plan,stage,attempt,timeout,plan_path,authorization=None,authorizatio
+ class Control:
+     def __init__(self,plan_path,*,request_factory=request,validator=None,runner=None):
+         self.path=Path(plan_path).resolve();self.plan=validate_plan(read(self.path))
++        experiment_binding(self.plan)
+         self.root=Path(self.plan['root']);self.root.mkdir(parents=True,exist_ok=True)
+         self.factory=request_factory;self.validator=validator
+         self.runner=runner or Runner(self.plan['runner'],self.plan['runner_sha256'],self.plan['job_root'])
+@@ -151,6 +229,7 @@ class Control:
+         p=self.plan
+         if p['evidence_scope']=='FORMAL':authorize(p,authorization,authorization_sha256)
+         with locked(self.root/'.control.lock'):
++            if p['evidence_scope']=='FORMAL':experiment_binding(p,seal=True)
+             state=read(self.state_path);self.charge(state)
+             disk=os.statvfs(self.root)
+             need(disk.f_bavail*disk.f_frsize>=max(100*1024**3,disk.f_blocks*disk.f_frsize//10),'disk safety reserve')
+diff --git a/lc_rec/a0_beauty/production_pipeline.py b/lc_rec/a0_beauty/production_pipeline.py
+index 45a98b9..e7b0188 100644
+--- a/lc_rec/a0_beauty/production_pipeline.py
++++ b/lc_rec/a0_beauty/production_pipeline.py
+@@ -113,7 +113,9 @@ def actual_compute(plan, stage, output, resume=None):
+     if stage=='train':
+         argv += [str(scripts/'formal_train.py'),*common,'--output',str(training_root(plan)),
+                  '--config',plan['config'],'--run-commit',plan['run_commit'],
+-                 '--precision-approval',plan['precision_approval'],'--prelaunch-review',plan['prelaunch_review']]
++                 '--precision-approval',plan['precision_approval'],'--prelaunch-review',plan['prelaunch_review'],
++                 '--precision-approval-sha256',plan['approval_files']['precision_approval']['sha256'],
++                 '--prelaunch-review-sha256',plan['approval_files']['prelaunch_review']['sha256']]
+         if resume:argv+=['--resume',resume]
+     else:
+         best_evidence(plan)

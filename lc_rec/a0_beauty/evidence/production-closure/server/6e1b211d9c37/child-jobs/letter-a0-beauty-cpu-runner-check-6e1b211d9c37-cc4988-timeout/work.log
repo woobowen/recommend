@@ -1,0 +1,29 @@
+W1116 02:48:41.777000 3279484 site-packages/torch/distributed/elastic/agent/server/api.py:719] Received Signals.SIGTERM death signal, shutting down workers
+W1116 02:48:41.778000 3279484 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3279494 closing signal SIGTERM
+W1116 02:48:41.778000 3279484 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3279495 closing signal SIGTERM
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 922, in <module>
+    main()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 260, in launch_agent
+    result = agent.run()
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/elastic/metrics/api.py", line 137, in wrapper
+    result = f(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/elastic/agent/server/api.py", line 711, in run
+    result = self._invoke_run(role)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/elastic/agent/server/api.py", line 870, in _invoke_run
+    time.sleep(monitor_interval)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py", line 84, in _terminate_process_handler
+    raise SignalException(f"Process {os.getpid()} got signal: {sigval}", sigval=sigval)
+torch.distributed.elastic.multiprocessing.api.SignalException: Process 3279484 got signal: 15

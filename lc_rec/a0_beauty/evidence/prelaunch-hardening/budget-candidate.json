@@ -1,0 +1,22 @@
+{
+  "status": "CANDIDATE_NOT_USER_APPROVED",
+  "units": "wall_seconds",
+  "stage_seconds": {
+    "train": 108000,
+    "verify_best_adapter": 900,
+    "normal": 21600,
+    "normal_eval": 900,
+    "s3": 16200,
+    "s3_eval": 900,
+    "s4": 16200,
+    "s4_eval": 900,
+    "paired": 1200,
+    "collect": 600
+  },
+  "budget": {"train_normal":108000,"s3":16200,"s4":16200,"cpu":3600,"total":144000,"cleanup_reserve":120},
+  "gpu_device_seconds_max": 280800,
+  "gpu_device_hours_max": 78,
+  "historical_instruments_train_normal_wall_seconds":45322.209,
+  "historical_single_shuffle_limit_seconds":14400,
+  "notes":"Each attempt has 120 seconds withheld from its remaining minimum stage/group/total limit for cleanup. Stage ceilings are not additive and attempts share their original stage and group caps. 30 hours is 2.383 times historical Instruments wall time, not a Beauty measurement; CPU stages share one hour. Reduced overhead versus a 96-hour cap increases timeout/recovery risk. A fresh resource and GPU identity check is mandatory before launch."
+}
