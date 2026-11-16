@@ -37,6 +37,14 @@ def sha(path):
     return h.hexdigest()
 
 
+def approval_json(path, expected_sha256):
+    """Read and verify the same approval bytes before importing training code."""
+    raw=Path(path).read_bytes()
+    if not expected_sha256 or hashlib.sha256(raw).hexdigest()!=expected_sha256:
+        raise ValueError('formal approval content identity mismatch')
+    return json.loads(raw)
+
+
 def checkpoint_required_files(step):
     prefix='global_step%d/'%step
     return {'adapter_model.bin','adapter_config.json','trainer_state.json','training_args.bin',
@@ -85,18 +93,20 @@ def main():
     p.add_argument('--probe-stop', type=int, default=0)
     p.add_argument('--probe-save', type=int, default=2)
     p.add_argument('--precision-approval', required=True)
+    p.add_argument('--precision-approval-sha256')
     p.add_argument('--diagnosis', help='Opt-in observational probe; never used by formal pipeline')
     p.add_argument('--preflight-interfaces', action='store_true', help='Bounded validation/best reload interfaces; never a formal result')
     p.add_argument('--boundary-preflight', action='store_true', help='Four short 10-microbatch epochs for boundary acceptance only')
     p.add_argument('--stop-after-epoch', type=int, default=0, choices=[0,1,3], help='Preflight-only early stop at a completed epoch')
     p.add_argument('--prelaunch-review', help='Required for formal training after completed preflight')
+    p.add_argument('--prelaunch-review-sha256')
     a = p.parse_args()
     rank = int(os.environ['RANK']); local = int(os.environ['LOCAL_RANK'])
     assert int(os.environ['WORLD_SIZE']) == 2
     cfg = json.loads(Path(a.config).read_text())
     if not a.boundary_preflight:
         assert a.prelaunch_review, 'Formal training requires a completed non-author prelaunch review'
-        gate=json.loads(Path(a.prelaunch_review).read_text())
+        gate=approval_json(a.prelaunch_review,a.prelaunch_review_sha256)
         assert gate['status']=='PASS' and gate['RUN_COMMIT']==a.run_commit
         assert gate['config_sha256']==sha(a.config) and gate['formal_train_sha256']==sha(__file__)
     assert not a.diagnosis, 'Formal FA adaptation is independent of diagnostic observers'
@@ -108,7 +118,8 @@ def main():
             assert cfg[k]==v, 'unapproved author setting drift: '+k
     assert cfg['dataset']=='Beauty'
     assert (cfg['gradient_accumulation_steps'],cfg['global_batch'],cfg['world_size'])==(4,64,2)
-    approval = json.loads(Path(a.precision_approval).read_text())
+    approval = (json.loads(Path(a.precision_approval).read_text()) if a.boundary_preflight
+                else approval_json(a.precision_approval,a.precision_approval_sha256))
     assert approval['formal_a_only_bf16_authorized'] is True
     out = Path(a.output); out.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()

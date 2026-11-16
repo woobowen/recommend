@@ -7,7 +7,7 @@ import argparse
 from pathlib import Path
 from formal_control import durable_write
 from production_control import validate_plan, STAGES
-from production_identity import load, sha, ASSETS, need
+from production_identity import load, sha, identity, ASSETS, need
 
 
 def main():
@@ -29,6 +29,9 @@ def main():
           'namespace':{'host':side['hostname'],'user':side['user'],'uid':side['uid'],
                        'namespace':side['namespace'],'deployment_sha256':sha(a.runner+'.deployment.json')},
           'precision_approval':a.precision_approval,'prelaunch_review':a.prelaunch_review,
+          'approval_files':{'precision_approval':identity(a.precision_approval),
+                            'prelaunch_review':identity(a.prelaunch_review)},
+          'export_manifest':identity(Path(release)/'RUN_VERSION.json'),
           'gpu_uuids':a.gpu_uuids,'stage_seconds':budget['stage_seconds'],'budget':budget['budget'],
           'env':{'CUDA_VISIBLE_DEVICES':'0,1','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
                  'LD_LIBRARY_PATH':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib',

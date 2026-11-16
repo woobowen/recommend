@@ -113,7 +113,9 @@ def actual_compute(plan, stage, output, resume=None):
     if stage=='train':
         argv += [str(scripts/'formal_train.py'),*common,'--output',str(training_root(plan)),
                  '--config',plan['config'],'--run-commit',plan['run_commit'],
-                 '--precision-approval',plan['precision_approval'],'--prelaunch-review',plan['prelaunch_review']]
+                 '--precision-approval',plan['precision_approval'],'--prelaunch-review',plan['prelaunch_review'],
+                 '--precision-approval-sha256',plan['approval_files']['precision_approval']['sha256'],
+                 '--prelaunch-review-sha256',plan['approval_files']['prelaunch_review']['sha256']]
         if resume:argv+=['--resume',resume]
     else:
         best_evidence(plan)

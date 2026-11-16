@@ -23,6 +23,51 @@ def group(stage):
     return 'train_normal' if stage in ('train','normal') else stage if stage in ('s3','s4') else 'cpu'
 
 
+def approval_documents(plan, require_pass=False):
+    """Approval bytes are part of the plan, never a mutable path-only input."""
+    documents={}
+    for key in ('prelaunch_review','precision_approval'):
+        row=plan['approval_files'][key]
+        need(row['path']==plan[key], 'approval path binding: '+key)
+        check_file(row)
+        raw=Path(row['path']).read_bytes()
+        import hashlib
+        need(hashlib.sha256(raw).hexdigest()==row['sha256'], 'approval changed during read')
+        documents[key]=json.loads(raw)
+    need(documents['precision_approval'].get('formal_a_only_bf16_authorized') is True,
+         'existing user precision approval required')
+    if require_pass:
+        review=documents['prelaunch_review']
+        need(review['status']=='PASS' and review['RUN_COMMIT']==plan['run_commit'] and
+             review['config_sha256']==plan['config_sha256'] and
+             review['formal_train_sha256']==sha(Path(plan['release'])/'lc_rec/a0_beauty/formal_train.py'),
+             'prelaunch review identity')
+        need(review.get('review_kind') in ('INDEPENDENT_NONAUTHOR','EXTERNAL_GPT_REVIEW') and
+             review.get('reviewer') and review.get('evidence_files'), 'independent review evidence required')
+        for row in review['evidence_files']:check_file(row)
+    return documents
+
+
+def experiment_binding(plan, seal=False):
+    """A formal seed cannot acquire another ledger by changing root/job ID.
+
+    Preparation only checks existing facts. The first authorized submission
+    seals the stable experiment identity in the fixed private Runner job root.
+    """
+    if plan['evidence_scope']!='FORMAL':return
+    key=digest({'dataset':'Beauty','assets':plan['asset_sha256'],
+                'config':plan['config_sha256'],'model_revision':Path(plan['model']).name,
+                'seed':42,'protocol':'GRID-LETTER-SHUFFLE-V1','conditions':['normal','s3','s4']})
+    directory=Path(plan['job_root'])/'.formal-experiments'
+    record={'experiment_sha256':key,'root':str(Path(plan['root']).resolve()),
+            'task_id':plan['task_id'],'plan_sha256':digest(plan)}
+    if not directory.exists() and not seal:return
+    with locked(directory/(key+'.lock')):
+        path=directory/(key+'.json')
+        if path.exists():need(read(path)==record,'formal experiment already bound to original ledger/plan')
+        elif seal:durable_write(path,record)
+
+
 def validate_plan(p):
     need(p['scope'] in ('FORMAL_PREPARE','FORMAL_SUBMIT','SYNTHETIC_TEST'),'unknown plan scope')
     need(p['evidence_scope']==(SYNTHETIC if p['scope']=='SYNTHETIC_TEST' else 'FORMAL'),'scope mismatch')
@@ -64,9 +109,18 @@ def validate_plan(p):
     from production_pipeline import actual_source_root
     actual_source_root(p)
     if p['evidence_scope']=='FORMAL':
+        check_file(p['export_manifest'])
+        need(p['export_manifest']['path']==str(Path(p['release'])/'RUN_VERSION.json'),'export manifest path')
+        for row in version['files']:
+            need(supplied.get(row['path'])==row['sha256'],'incomplete fixed export inputs')
+        approval_documents(p)
         need(Path(p['model']).name=='4782ad278652c7c71b72204d462d6d01eaaf7549','model revision')
         need(sha(Path(p['model'])/'config.json')=='e4c3dea29aefc16c0e63825f9ae097dbf5cb5d7c320843a84257e11be3b452c8','base model config')
         need(p['env'].get('CUDA_VISIBLE_DEVICES') and p['env'].get('PYTHONOPTIMIZE','0')=='0','formal environment')
+        need(len(p['gpu_uuids'])==2 and len(set(p['gpu_uuids']))==2 and
+             all(re.fullmatch('GPU-[0-9a-f-]{36}',x) for x in p['gpu_uuids']) and
+             p['env']['CUDA_VISIBLE_DEVICES']=='0,1','two fixed physical GPU mappings required')
+        need('cpu-only' not in p['namespace']['namespace'],'CPU deployment is not formal deployment')
     else:need(p['env'].get('CUDA_VISIBLE_DEVICES')=='','CPU test visibility')
     return p
 
@@ -82,10 +136,7 @@ def authorize(plan, receipt, expected_digest):
          r.get('budget')==plan['budget'] and r.get('task_id')==plan['task_id'],'authorization version/config/budget/job')
     need(dt.datetime.fromisoformat(r['expires_utc'])>dt.datetime.now(dt.timezone.utc),'authorization expired')
     # An independent prelaunch technical review is distinct from user launch approval.
-    review=read(plan['prelaunch_review'])
-    need(review['status']=='PASS' and review['RUN_COMMIT']==plan['run_commit'] and
-         review['config_sha256']==plan['config_sha256'] and
-         review['formal_train_sha256']==sha(Path(plan['release'])/'lc_rec/a0_beauty/formal_train.py'),'prelaunch review identity')
+    approval_documents(plan,require_pass=True)
     return True
 
 
@@ -109,6 +160,13 @@ def request(plan,stage,attempt,timeout,plan_path,authorization=None,authorizatio
     ns=plan['namespace']
     env=dict(plan['env']);env['CUDA_VISIBLE_DEVICES']=env.get('CUDA_VISIBLE_DEVICES','') if stage in ('train','normal','s3','s4') else ''
     inputs=[{'path':x['path'],'sha256':x['sha256']} for x in plan['inputs']]+[{'path':str(plan_path),'sha256':sha(plan_path)}]
+    if plan['evidence_scope']=='FORMAL':
+        approval_documents(plan,require_pass=True)
+        bindings=[*plan['approval_files'].values(),plan['export_manifest'],
+                  {'path':plan['runner'],'sha256':plan['runner_sha256']},
+                  {'path':plan['runner']+'.deployment.json','sha256':plan['namespace']['deployment_sha256']}]
+        bindings+=approval_documents(plan,require_pass=True)['prelaunch_review']['evidence_files']
+        for row in bindings:inputs.append({'path':row['path'],'sha256':row['sha256']})
     if authorization:inputs.append({'path':authorization,'sha256':authorization_sha256})
     return dict(schema=1,host=ns['host'],user=ns['user'],uid=ns['uid'],namespace=ns['namespace'],
                 deployment_sha256=ns['deployment_sha256'],capture_version=plan['run_commit'],
@@ -119,6 +177,7 @@ def request(plan,stage,attempt,timeout,plan_path,authorization=None,authorizatio
 class Control:
     def __init__(self,plan_path,*,request_factory=request,validator=None,runner=None):
         self.path=Path(plan_path).resolve();self.plan=validate_plan(read(self.path))
+        experiment_binding(self.plan)
         self.root=Path(self.plan['root']);self.root.mkdir(parents=True,exist_ok=True)
         self.factory=request_factory;self.validator=validator
         self.runner=runner or Runner(self.plan['runner'],self.plan['runner_sha256'],self.plan['job_root'])
@@ -151,6 +210,7 @@ class Control:
         p=self.plan
         if p['evidence_scope']=='FORMAL':authorize(p,authorization,authorization_sha256)
         with locked(self.root/'.control.lock'):
+            if p['evidence_scope']=='FORMAL':experiment_binding(p,seal=True)
             state=read(self.state_path);self.charge(state)
             disk=os.statvfs(self.root)
             need(disk.f_bavail*disk.f_frsize>=max(100*1024**3,disk.f_blocks*disk.f_frsize//10),'disk safety reserve')
