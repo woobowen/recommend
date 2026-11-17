@@ -1,0 +1,111 @@
+{
+  "assessment": "CONFIRMED_FAILURE_PAIRED_TIMEOUT",
+  "first_snapshot_utc": "2026-11-17T01:55:34.797501+00:00",
+  "last_snapshot_utc": "2026-11-17T01:57:16.902993+00:00",
+  "snapshot_interval_seconds": 102.105492,
+  "run_commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
+  "prior_delivery": "c7a08689735a63eaaef296d9cc823f893cf1ec75",
+  "prior_step": 5380,
+  "completed_training_step": 8214,
+  "training_updates_since_prior": 2834,
+  "training_epoch": 4,
+  "best_checkpoint": "checkpoint-6160",
+  "best_eval_loss": 1.6796015501022339,
+  "validation_eval_losses": [
+    2.037837505340576,
+    1.7599639892578125,
+    1.6796015501022339,
+    1.7213084697723389
+  ],
+  "completed_stages": [
+    "normal",
+    "normal_eval",
+    "s3",
+    "s3_eval",
+    "s4",
+    "s4_eval",
+    "train",
+    "verify_best_adapter"
+  ],
+  "failed_stage": "paired",
+  "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-paired-a0",
+  "attempt": 0,
+  "runner_exit_code": -15,
+  "runner_timeout_seconds": 1080,
+  "runner_ended_utc": "2026-11-17T01:56:01.270816+00:00",
+  "runner_cleanup_verified": true,
+  "controller_alive": false,
+  "controller_error": "ValueError: failed stage requires explicit retry; downstream stopped",
+  "stale_state_note": "Overall WAITING_OR_UNKNOWN and paired SUBMITTING remain; actual attempt is TIMED_OUT and controller has exited.",
+  "paired_s3_result": "PASS record exists; paired stage as a whole did not pass",
+  "paired_s4_result": "No paired_comparison.json observed",
+  "pending_stage": "collect (dependency blocked; not submitted)",
+  "metrics_existing_not_finally_audited": {
+    "normal": {
+      "status": "PASS",
+      "users": 22363,
+      "hit@10": 0.0711890175736708,
+      "ndcg@10": 0.04036952463325642
+    },
+    "s3": {
+      "status": "PASS",
+      "users": 22363,
+      "hit@10": 0.03532620846934669,
+      "ndcg@10": 0.017507923242284795
+    },
+    "s4": {
+      "status": "PASS",
+      "users": 22363,
+      "hit@10": 0.03215132137906363,
+      "ndcg@10": 0.015404916867707267
+    }
+  },
+  "budget_used_seconds": {
+    "train_normal": 45142.113032,
+    "s3": 7675.447545,
+    "s4": 7666.541627,
+    "cpu": 1624.322855,
+    "total": 62108.425059
+  },
+  "budget_remaining_seconds": {
+    "train_normal": 62857.886968,
+    "s3": 8524.552455000001,
+    "s4": 8533.458373000001,
+    "cpu": 1975.677145,
+    "total": 81891.574941
+  },
+  "paired_stage_remaining_seconds": 119.51884500000006,
+  "cleanup_reserve_per_request_seconds": 120,
+  "paired_new_compute_headroom_seconds_under_existing_formula": -0.48115499999994427,
+  "budget_note": "Remaining global/CPU budget does not override exhausted paired stage compute allowance; no budget or retry changed.",
+  "initial_cause": "Combined paired stage exceeded its 1080-second Runner request. S3 comparison completed; later comparison did not produce final S4 result before timeout. Exact operation at timeout was not recorded, so not attributed specifically to bootstrap or input verification.",
+  "eta": "Blocked; no reliable completion ETA under unchanged Plan.",
+  "production_code_modified": false,
+  "restart_or_resume": false,
+  "new_compute_submitted": false,
+  "remote_cancelled_by_codex": false,
+  "server_experiment_continuing": false,
+  "installed_dependencies": [],
+  "files": [
+    {
+      "name": "status-check-20261117T015412Z-query.json",
+      "bytes": 82317,
+      "sha256": "b3b7a835700367a8b7b3cd68dfb7182e98e3567327331037c3546cc70e0d34da"
+    },
+    {
+      "name": "status-check-20261117T015412Z-1-excerpt.json",
+      "bytes": 1266982,
+      "sha256": "0d478628c09d610f7693d168b908aa2aff178f527f380ef55661ec2e115af326"
+    },
+    {
+      "name": "status-check-20261117T015412Z-2-excerpt.json",
+      "bytes": 1269367,
+      "sha256": "5bc938d5b02ec6fe7f41d0d37c8a82a45eb228af0b54897340e203a834bb303e"
+    },
+    {
+      "name": "status-check-20261117T015412Z.py",
+      "bytes": 4311,
+      "sha256": "afb9f1b99fba59357d71650286908626a80f8ad83f08026f91cbd0900f37d4dc"
+    }
+  ]
+}
