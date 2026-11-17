@@ -1,5 +1,7 @@
 # LC-Rec Instruments / original LLaMA reproduction preparation
 
+> 当前研究阅读入口：[SID 顺序扰动：GRID 与 LETTER-LC-Rec](../docs/research/sid-order/README.md)。下文是 2026-11-08 原 LC-Rec 六任务准备阶段记录；其中历史授权限制不覆盖其后另行授权并已完成的 LETTER 单任务实验。原文和当时状态保留。
+
 This is a one-time, bounded preparation task authorized on 2026-11-08. It does not authorize formal4epoch training, five-seed training, Qwen, another dataset, Shuffle, MLP, attention analysis, RL, CoT, or a new loss. Stop after publication and a validated lightweight review ZIP.
 
 Official source: [RUCAIBox/LC-Rec](https://github.com/RUCAIBox/LC-Rec/tree/e6f1b3b3f8b4fee55a49a7b3dfeba29dbfcf0669), commit `e6f1b3b3f8b4fee55a49a7b3dfeba29dbfcf0669`; [paper v4](https://arxiv.org/html/2311.09049v4). `vendor/original/` is an unmodified, Git-blob-verified source snapshot, not a submodule. No LICENSE file exists at this upstream commit; upstream provenance and notices remain intact. Model licensing is separate, preserved in `evidence/assets/hf_LICENSE` and the model card; public access is not a new license grant.

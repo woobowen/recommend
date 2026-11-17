@@ -84,3 +84,7 @@ Instruments 对应样例：`lc_rec/shuffle/FINAL_REVIEW_ENTRY.md` 固定 A0 GPU 
 - 已读 LETTER Shuffle 核心、派生入口、两域最终审计及配置；Beauty 派生实际运行源码、全部 prompt/data/collator 的对应版本和所有各阶段 request 尚未完整逐项核对。结果和历史内部审核为仓库报告的声明，本轮未独立重算。
 - 历史各项外部 ZIP、模型/数据/权重/LFS 实载、服务器 release 本轮未核验；如网页审核必须检查这些外部回执，需要原交付包或指定可核位置。`GRID_LLM_SID_Research_Record_20261114.md` 未取得，未作为证据。
 - 三名非作者子代理均报告无文件/命令工具，未真正读原件；本方案非作者审核 NOT_PERFORMED_WITH_REASON。不存在由本轮虚构签名或 PASS；已有历史审核仅引用并保持其原范围。
+
+## 后续落实说明（2026-11-17）
+
+用户在上轮 PARTIAL 交付后明确授权文档实施：现有 `docs/research/sid-order/README.md`、`GRID.md`、`LETTER.md` 和 `sources.json` 是本轮实际导航，两个 README 增加入口；生产路径未迁移。前文为上轮写作时的状态与建议，不应改写成当时已完成。上轮目录统计错误及程序化重算见 `inventory.json` 的 correction 和新导航 checks；原 `checks.json` 保持历史原件。

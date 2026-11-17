@@ -1,0 +1,94 @@
+{
+  "review_scope": "External audit of uploaded proposal ZIP, four proposal files at fixed GitHub delivery, branch/tree identity, original task requirements, and targeted primary-source spot checks. No server access, repo writes, experiments or reorganization.",
+  "delivery_commit": "700d5fb4560aca329442bf799c851a377693e75b",
+  "proposal_content_commit": "82e84cfae39029f4c7afb30f14be378168b4f0da",
+  "zip": {
+    "bytes": 11338,
+    "sha256": "3f6b4213328005dc30a8f2546e7b6379d7d61a21628b97edf648d57209600f6c",
+    "entries": 6,
+    "crc": "PASS",
+    "manifest_files_matched": 5,
+    "duplicate_or_unsafe_paths": false
+  },
+  "github_files": [
+    {
+      "path": "REORGANIZATION_PROPOSAL.md",
+      "bytes": 14950,
+      "sha256": "b73cfba2db18c5d5fbbb033e89ccf87e1c4289586a0448840865b911ff3801a0",
+      "git_blob": "ce41caf3f0161d6eeed938bd52852bf9cccbbd18",
+      "github_matches": true
+    },
+    {
+      "path": "checks.json",
+      "bytes": 871,
+      "sha256": "925f413aa0cf6cc5f6a89f70c1e5ffb9402d6e420fef2024e06ce9bec7fc319f",
+      "git_blob": "e3526095849372033810466681487590df661fc4",
+      "github_matches": true
+    },
+    {
+      "path": "inventory.json",
+      "bytes": 3215,
+      "sha256": "4c747e7b377ed29a363be840d26fee106e26db0fa451dd2c947feaecbb4a54b9",
+      "git_blob": "137d84d5ec88a9919a60215b8511e2a11943d7e4",
+      "github_matches": true
+    },
+    {
+      "path": "path-map.csv",
+      "bytes": 1158,
+      "sha256": "12d2da0586366f2933b60524373056ab55e10aea4eb90c183b6182aca829fea9",
+      "git_blob": "01a50aee2697a7cab2be0cda593391e8da30b811",
+      "github_matches": true
+    }
+  ],
+  "published_delta": "Two commits; four added files only, all under docs/repository-organization/2026-11-17-proposal/. No existing tracked file modifications.",
+  "grid_ref": "9767729a5114e21b9c949892af3d759baca6a98e",
+  "lc_ref_observed": "700d5fb4560aca329442bf799c851a377693e75b",
+  "shared_tree_check": "Eight shared top-level objects at the two inventory snapshots match; LC adds lc_rec.",
+  "limited_secret_scan_matches": [],
+  "findings": [
+    {
+      "id": "F1",
+      "kind": "concrete_inventory_error",
+      "detail": "inventory.json.grid_top_level contains the nonexistent top-level key \"\\\"GRID baseline\" with 9 entries as well as GRID baseline with 2185. The real Git root tree has only GRID baseline. The exact cause is unverified; mishandling quoted git paths is a plausible explanation."
+    },
+    {
+      "id": "F2",
+      "kind": "required_work_incomplete",
+      "detail": "Seven aggregate experiment rows do not resolve all important model/domain/condition variants to per-stage full RUN commits, effective configurations, exact entry files/functions and asset identity evidence. Some are only patterns or directory references."
+    },
+    {
+      "id": "F3",
+      "kind": "insufficient_implementation_mapping",
+      "detail": "path-map.csv contains 12 broad preserve/link rules; implementation-note destinations remain placeholders rather than concrete document paths."
+    },
+    {
+      "id": "F4",
+      "kind": "known_uncompleted_inspection",
+      "detail": "Proposal uses the Instruments Shuffle path as evidence while expressly leaving the Beauty-specific derived entry binding unverified. Fixed Beauty shuffle_entry.py is readable, so that is not demonstrated external unavailability."
+    },
+    {
+      "id": "F5",
+      "kind": "scope_boundary_not_automatic_blocker",
+      "detail": "No server/LFS weight verification and no repeat metric calculations are not required for a documented navigation-only reorganization. These limitations must be labeled, not upgraded to demands for rerunning historical experiments."
+    },
+    {
+      "id": "F6",
+      "kind": "review_boundary",
+      "detail": "Unavailable nonauthor agents do not establish PASS, but do not prevent the author completing source mapping and internal checks. This external audit cannot supply missing inventory content."
+    }
+  ],
+  "disposition": {
+    "artifact_integrity": "PASS",
+    "published_scope_preservation": "PASS",
+    "proposal_direction": "SUPPORTED_WITH_RECOMMENDATIONS",
+    "complete_inventory_acceptance": "PARTIAL",
+    "reorganization_implementation": "NOT_EXECUTED",
+    "next_implementation_authorized_here": false
+  },
+  "future_recommendation": "After explicit user confirmation, authorize one bounded documentation-only task combining source-map completion, inventory correction, theme/route documentation, minimal README navigation, link/result checks and publication. Keep existing production paths and branches; treat physical migration or new branch ownership as separate important decisions.",
+  "limitations": [
+    "No direct access to Codex WSL worktree; untracked-file protection supported by its receipt, not byte-level independent recheck.",
+    "Only representative external research execution chains re-opened; this is not a repeat of all GPU/CPU scientific audits.",
+    "GitHub authentication and source retrieval were read-only."
+  ]
+}
