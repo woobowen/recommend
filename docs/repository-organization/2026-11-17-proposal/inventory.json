@@ -1,0 +1,93 @@
+{
+  "snapshot_utc": "2026-11-17T09:31:07Z",
+  "snapshots": {
+    "grid": "9767729a5114e21b9c949892af3d759baca6a98e",
+    "lc": "12eb8b176b156f3be7d7533ee8f443db02441303"
+  },
+  "counts": {
+    "grid": 4758,
+    "lc": 11175
+  },
+  "grid_top_level": {
+    "\"GRID baseline": 9,
+    "Baseline Results": 3,
+    "GRID baseline": 2185,
+    "README.md": 1,
+    "docs": 68,
+    "experiments": 140,
+    "manifests": 2214,
+    "references": 125,
+    "tools": 13
+  },
+  "lc_second_level": {
+    "lc_rec/.gitignore": 1,
+    "lc_rec/README.md": 1,
+    "lc_rec/REVIEW_ENTRY.md": 1,
+    "lc_rec/a0_beauty": 2255,
+    "lc_rec/a1_qwen3_06b": 291,
+    "lc_rec/config": 3,
+    "lc_rec/evidence": 112,
+    "lc_rec/letter": 2309,
+    "lc_rec/offload": 267,
+    "lc_rec/qwen_preflight_20261110": 357,
+    "lc_rec/qwen_six_task_20261111": 262,
+    "lc_rec/review": 9,
+    "lc_rec/rules": 7,
+    "lc_rec/scripts": 6,
+    "lc_rec/shuffle": 293,
+    "lc_rec/six_task_lora": 202,
+    "lc_rec/vendor": 41
+  },
+  "scope": "Git tracked path enumeration; source contents selectively read; not server or LFS verification",
+  "experiments": [
+    {
+      "family": "GRID Beauty A/B Normal/S3/S4",
+      "status": "formal",
+      "code_or_config": "experiments/formal_20261015/specs/beauty-{a,b}-{0,3,4}.json",
+      "run_evidence": "manifests/grid-formal-20261015/FINAL_VERSION_MAP.json",
+      "result": "manifests/grid-formal-20261015/FINAL_RECEIPT.md"
+    },
+    {
+      "family": "GRID Toys/Sports B",
+      "status": "formal; A missing",
+      "code_or_config": "experiments/shuffle_20261017/specs/",
+      "run_evidence": "manifests/grid-shuffle-20261017/EXECUTION_SUMMARY.json",
+      "result": "manifests/grid-shuffle-20261017/FINAL_REPORT.md"
+    },
+    {
+      "family": "GRID MLP 3 domains",
+      "status": "formal",
+      "code_or_config": "experiments/beauty_extensions/mlp_formal.py",
+      "run_evidence": "manifests/grid-formal-20261015/FINAL_VERSION_MAP.json",
+      "result": "manifests/grid-formal-20261015/FINAL_RECEIPT.md"
+    },
+    {
+      "family": "LETTER Instruments A0/A1",
+      "status": "formal; historical report internal audit",
+      "code_or_config": "lc_rec/shuffle/entry.py",
+      "run_evidence": "lc_rec/shuffle/FINAL_REVIEW_ENTRY.md",
+      "result": "lc_rec/shuffle/results/RESULTS.md"
+    },
+    {
+      "family": "LETTER Beauty A0",
+      "status": "formal generation; supplemental statistics; external audit pending",
+      "code_or_config": "lc_rec/a0_beauty/config/formal_beauty_seed42.json",
+      "run_evidence": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/FINAL_AUDIT.md",
+      "result": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/FINAL_AUDIT.md"
+    },
+    {
+      "family": "LC six task",
+      "status": "bounded preflight; formal blocked",
+      "code_or_config": "lc_rec/vendor/original/",
+      "run_evidence": "lc_rec/six_task_lora/REVIEW_ENTRY.md",
+      "result": "lc_rec/six_task_lora/REVIEW_ENTRY.md"
+    },
+    {
+      "family": "Parallel",
+      "status": "source not recovered",
+      "code_or_config": "docs/sid-extensions/experiments/parallel.md",
+      "run_evidence": "docs/sid-extensions/experiments/parallel.md",
+      "result": "UNKNOWN"
+    }
+  ]
+}
