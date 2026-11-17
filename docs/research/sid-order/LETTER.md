@@ -22,6 +22,22 @@ Beauty 固定 RUN `6e1b211d9c37f358c43b1540b40b17f6703150d2` 有自己的 [shuff
 
 额外修改分别是：FA2 backward deterministic 及双 rank 工程边界（训练行为须按原 RUN 阅读）；Beauty 域数据、965 token 与不等长分片（数据域适配）；Shuffle 的 token 组内置换（研究干预）；CPU CCE、分组与 Bootstrap（评价扩展）。这些改变的来源及对应阶段在映射中，不把所有差异称为环境适配。
 
+## Beauty 阶段来源与训练适配
+
+训练、生成、评价是不同 Runner 阶段：[训练 request](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/a0_beauty/evidence/formal-launch-20261116/request.json) 的 `beauty_stage=train`，仅证明训练调用，不能充当生成 request。[归档 state](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/state.json) 的 `attempts` 分别记录 `normal`/`s3`/`s4` 与 `normal_eval`/`s3_eval`/`s4_eval` 的 job、attempt、请求路径、摘要和实际 worker argv；[sources.json](sources.json) 对每组给出对应 selector、预测 rank 文件身份与 primary metrics。六个生成/评价 request 的原始字节未随该证据归档；记录的请求摘要不是本轮对原文件字节重算的结果。训练 request 原件的原始文件 SHA 为 `f930c136e44fce00cad5bf05573779144e43aa108184c1dfc603762be20002b8`；对其排序键、紧凑 JSON 的规范化 SHA 为 state 中 `abd09c34bc141f0f97772a54ebd85d467c48d3f2d00252b0c8e5de5e98ac1e86`，两种身份不混用。
+
+[固定训练源码 formal_train.py](https://github.com/woobowen/recommend/blob/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/formal_train.py)、[trainer_loop_patch.py](https://github.com/woobowen/recommend/blob/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/trainer_loop_patch.py)、[zero2_partial_state.py](https://github.com/woobowen/recommend/blob/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/zero2_partial_state.py) 与 [既有工程审核](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/a0_beauty/FORMAL_ENGINEERING_REVIEW_ENTRY.md) 是下表依据。早期补丁文件的 DRAFT 注释属于其写作阶段，后来授权和正式运行以固定 Plan、训练 request 与最终审计为准。
+
+| 实际改动 | 原因与保持项 | 源码及既有核验、边界 |
+|---|---|---|
+| `AuditTrainer`、`build_trainer_loop` 和 `sync_with_dataloader=False` 跨 epoch 保留未满的梯度累积 | 消费完整四轮微批后再按 GAS4 更新；micro-batch 与 optimizer update 不等价。epoch 验证发生在边界，8214 是已批准协议中的更新数，不是追加重训；原 sampler 补齐保留，每轮审计 11 个重复样本。 | `formal_train.py::Callback.on_epoch_end`、`trainer_loop_patch.py::patch_text`；[短程验收材料](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/a0_beauty/evidence/e2e-20261116-r0/manifest.json)只覆盖其试验范围。 |
+| `IndexedDataset` / `IndexedCollator` 包装训练索引，验证时恢复作者 collator | 训练索引用于核对实际消费顺序，验证数据是原字典结构，不能用训练索引包装的 collator 直接处理；模型监督及验证目的保留。 | `training_rows.py`、`AuditTrainer.get_eval_dataloader`；[第一轮输入及损失比较](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/a0_beauty/evidence/e2e-20261116-r0/early-comparison.json)，只证明其中所列容差与样本范围。 |
+| `ReplayLoader`、`saved_partial`、`partial_snapshot` 和 restore | 记录数据顺序、未完成累积的梯度及 micro-step、RNG 和 scheduler；恢复前先重放 CPU 数据构造并核顺序，DS 严格恢复 optimizer 等状态。 | `formal_train.py::ReplayLoader`、`zero2_partial_state.py::snapshot/restore`；Continuous/Early/Resumed 是有界预验收，不承诺任意环境或中断均逐位恢复。正式训练实际是否恢复不能从恢复能力推定；本次不声称发生过正式 resume。 |
+| ZeRO-2 `no_sync` 兼容限定当前实例 | Accelerate 0.21.0 与 DeepSpeed 0.16.9 组合下，仅对指定 stage-2 engine 使用局部上下文，让 DS 保留自身累积和同步行为；非全局关闭同步。 | `formal_train.py::zero2_native_accumulation` 中版本、engine、GAS 和 batch 断言；不得外推其他版本。 |
+| checkpoint 完成标记与 receipt 后轮转，存储上限2 | 集体保存模型/optimizer、loader 和 partial state 后写 `complete.json` 与 receipt，再轮转；保留 best 与最新恢复点。按最低 validation loss 选 checkpoint-6160 并核导出 adapter，非选最后 8214。 | `AuditTrainer._save_checkpoint`、`checkpoint_receipt.py`；[最终审计](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/FINAL_AUDIT.md)绑定 adapter。 |
+
+FA2 deterministic backward 是已有共享适配；训练实际以 Int8 主干加 LoRA/BF16 配置加载，生成回执另记录 BF16 unquantized Base。模型、loss 和已确认核心超参数的沿用不意味着跨 epoch 调度、保存及恢复行为无需单独说明，也不宣称任何运行数学轨迹普遍等价。S3 复用原配对产物，S4 采用独立补算；Normal 是对照，没有单独 Shuffle 配对作业。
+
 ## 结果与状态
 
 表为原 SID 字段，0–1 比例；完整 16 指标、碰撞修正 ItemHit/ItemNDCG（CCE）、覆盖率、分组和 5000 次用户 Bootstrap 见 [Instruments 结果](https://github.com/woobowen/recommend/blob/3396d45a041424fe4af625bfc0b047467150c5c1/lc_rec/shuffle/results/RESULTS.md) 和 [Beauty 最终审计](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/FINAL_AUDIT.md)。用户 Bootstrap 是冻结模型和一次置换下的不确定性，不是训练 seed 方差；没有 S4−S3 专项配对检验。分组数字是描述统计，不借总体 CI 说明分组显著。

@@ -1261,42 +1261,184 @@
       "route": "LETTER A0",
       "domain": "Beauty",
       "condition": "normal",
-      "status": "formal generation; supplemental statistics completed; external scientific audit pending",
+      "status": "formal generation and primary evaluation completed; supplemental summary completed; external scientific audit pending",
       "training_run": {
-        "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
-        "selection": "checkpoint-6160",
-        "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-train-a0"
+        "role": "training",
+        "stage": "train",
+        "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-train-a0",
+        "attempt": 0,
+        "status": "SUCCEEDED",
+        "request": {
+          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+          "path": "lc_rec/a0_beauty/evidence/formal-launch-20261116/request.json",
+          "role": "training"
+        },
+        "request_availability": "archived bytes; canonical JSON sha matched against state; raw bytes sha separately recorded",
+        "recorded_request_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/requests/train-a0.json",
+        "recorded_request_sha256": "abd09c34bc141f0f97772a54ebd85d467c48d3f2d00252b0c8e5de5e98ac1e86",
+        "worker_argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/production_pipeline.py",
+          "--plan",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json",
+          "--stage",
+          "train",
+          "--output",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/train/a0",
+          "--authorization",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/user-launch-authorization-20261116.json",
+          "--authorization-sha256",
+          "ca733239d9c95a35a4c5504f8dc205c1039d91399df29630ef0b48d5caaa1963"
+        ],
+        "state": {
+          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+          "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/state.json",
+          "selector": "attempts[stage=train]"
+        },
+        "selection": {
+          "checkpoint": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/training/checkpoint-6160",
+          "metric": "eval_loss",
+          "greater_is_better": false,
+          "value": 1.6796015501022339,
+          "adapter_sha256": "dd9f3d2983af7ce85ace99534bd23df9362d9cd91ac39d0b356b219cb790b1c1",
+          "run_commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
+          "completed_training_step": 8214,
+          "loaded_best_checkpoint_step": 6160
+        },
+        "raw_bytes_sha256": "f930c136e44fce00cad5bf05573779144e43aa108184c1dfc603762be20002b8"
       },
       "run": {
         "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
-        "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-normal-a0",
-        "evaluation_job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-normal-eval-a0",
-        "request": {
-          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
-          "path": "lc_rec/a0_beauty/evidence/formal-launch-20261116/request.json"
+        "generation": {
+          "role": "generation",
+          "stage": "normal",
+          "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-normal-a0",
+          "attempt": 0,
+          "status": "SUCCEEDED",
+          "request": null,
+          "request_availability": "bytes not archived; path and sha recorded in state, not recomputed",
+          "recorded_request_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/requests/normal-a0.json",
+          "recorded_request_sha256": "13246b4312639f98c5ed4b8222f561c4cf7b92ae60871df27505466f0d0c2ae0",
+          "worker_argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/production_pipeline.py",
+            "--plan",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json",
+            "--stage",
+            "normal",
+            "--output",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/normal/a0",
+            "--authorization",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/user-launch-authorization-20261116.json",
+            "--authorization-sha256",
+            "ca733239d9c95a35a4c5504f8dc205c1039d91399df29630ef0b48d5caaa1963"
+          ],
+          "state": {
+            "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+            "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/state.json",
+            "selector": "attempts[stage=normal]"
+          },
+          "rank_reports": [
+            {
+              "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+              "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/normal-generation/rank0.json"
+            },
+            {
+              "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+              "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/normal-generation/rank1.json"
+            }
+          ]
         },
-        "request_scope": "parent launch request; child job IDs indexed in supplement evidence; individual child request not included in supplemental evidence"
+        "evaluation": {
+          "role": "evaluation",
+          "stage": "normal_eval",
+          "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-normal-eval-a0",
+          "attempt": 0,
+          "status": "SUCCEEDED",
+          "request": null,
+          "request_availability": "bytes not archived; path and sha recorded in state, not recomputed",
+          "recorded_request_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/requests/normal_eval-a0.json",
+          "recorded_request_sha256": "75a963f4c64d2032f979cb5b3c6c0aa3bfba806dc00b28b42df06d8963caa9b6",
+          "worker_argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/production_pipeline.py",
+            "--plan",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json",
+            "--stage",
+            "normal_eval",
+            "--output",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/normal_eval/a0",
+            "--authorization",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/user-launch-authorization-20261116.json",
+            "--authorization-sha256",
+            "ca733239d9c95a35a4c5504f8dc205c1039d91399df29630ef0b48d5caaa1963"
+          ],
+          "state": {
+            "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+            "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/state.json",
+            "selector": "attempts[stage=normal_eval]"
+          },
+          "primary_metrics": {
+            "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+            "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/normal-primary/metrics.json"
+          },
+          "evaluation_config_recorded": {
+            "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/normal_eval/a0/evaluation_config.json",
+            "bytes": 3096,
+            "sha256": "1c6e899aadd7e84519d6ce88e0e20723e14f38ec7575114af6ce4826b0e0d5b1"
+          },
+          "evaluation_script_recorded": {
+            "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/offline_metrics.py",
+            "bytes": 18939,
+            "sha256": "bac195ad9df3459a22aa97a34b58c5e5f0b062dfccbe3d48f747fed9e995321d"
+          }
+        }
+      },
+      "pairing": {
+        "role": "no_shuffle_pair",
+        "scope": "Normal is the control"
       },
       "primary_metrics": {
         "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
         "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/normal-primary/metrics.json"
       },
-      "supplement": {
-        "commit": "1934c01eee767b665ef1043995ffc741958e30e0",
-        "job_id": "letter-a0-beauty-supp-s4-paired-20261117-a0",
-        "request": {
-          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
-          "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/run/request.json"
+      "predictions": [
+        {
+          "bytes": 173317927,
+          "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/normal/a0/test/predictions.rank0.jsonl",
+          "rank": 0,
+          "sha256": "90acbd6bc0bb11c9173332035b43fc4bf40391128ff5a6dab0069486b5c80519",
+          "users": 11182,
+          "mtime_ns": 1794863091813569065,
+          "ctime_ns": 1794863091813569065,
+          "assignment_sha256": "8eb669c968e313c79df1bba3f16b16bd94ce1e0d6697728ff528c1da3de01363",
+          "hash_recomputed": true
         },
-        "scope": "independent S4 paired supplement; original paired timeout and original collect not run"
-      },
+        {
+          "bytes": 173501802,
+          "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/normal/a0/test/predictions.rank1.jsonl",
+          "rank": 1,
+          "sha256": "74c8e582e8d142731e71371fc508e1549a9fbd61f34f162f1ae69ad9af0c3bf4",
+          "users": 11181,
+          "mtime_ns": 1794862512110340797,
+          "ctime_ns": 1794862512110340797,
+          "assignment_sha256": "ea9c57674be765e0424ac991e986823a5b8587cfee3d162c3b38a46deaf4f173",
+          "hash_recomputed": true
+        }
+      ],
       "implementation": {
         "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
         "path": "lc_rec/a0_beauty/formal_evaluate.py"
       },
       "config": {
         "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
-        "path": "lc_rec/a0_beauty/config/formal_beauty_seed42.json"
+        "path": "lc_rec/a0_beauty/config/formal_beauty_seed42.json",
+        "sha256": "24b568161f2d71d3c5962372a38683b2d33ee5d6d5064de0612215946a8106fd",
+        "role": "training_config"
+      },
+      "plan": {
+        "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+        "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/plan.json"
       },
       "assets_recorded": {
         "data": {
@@ -1354,7 +1496,7 @@
         "ItemNDCG@10": 0.040132917475758464,
         "ItemNDCG@20": 0.047403309523761386
       },
-      "read_scope": "Beauty entry/runtime/evaluate, config, supplement request and summary read; no server/LFS revalidation"
+      "read_scope": "state, plan, primary metrics and train request checked; child request bytes absent; server and LFS not revalidated"
     },
     {
       "id": "letter-beauty-a0-s3",
@@ -1362,42 +1504,187 @@
       "route": "LETTER A0",
       "domain": "Beauty",
       "condition": "s3",
-      "status": "formal generation; supplemental statistics completed; external scientific audit pending",
+      "status": "formal generation and primary evaluation completed; supplemental summary completed; external scientific audit pending",
       "training_run": {
-        "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
-        "selection": "checkpoint-6160",
-        "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-train-a0"
+        "role": "training",
+        "stage": "train",
+        "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-train-a0",
+        "attempt": 0,
+        "status": "SUCCEEDED",
+        "request": {
+          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+          "path": "lc_rec/a0_beauty/evidence/formal-launch-20261116/request.json",
+          "role": "training"
+        },
+        "request_availability": "archived bytes; canonical JSON sha matched against state; raw bytes sha separately recorded",
+        "recorded_request_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/requests/train-a0.json",
+        "recorded_request_sha256": "abd09c34bc141f0f97772a54ebd85d467c48d3f2d00252b0c8e5de5e98ac1e86",
+        "worker_argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/production_pipeline.py",
+          "--plan",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json",
+          "--stage",
+          "train",
+          "--output",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/train/a0",
+          "--authorization",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/user-launch-authorization-20261116.json",
+          "--authorization-sha256",
+          "ca733239d9c95a35a4c5504f8dc205c1039d91399df29630ef0b48d5caaa1963"
+        ],
+        "state": {
+          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+          "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/state.json",
+          "selector": "attempts[stage=train]"
+        },
+        "selection": {
+          "checkpoint": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/training/checkpoint-6160",
+          "metric": "eval_loss",
+          "greater_is_better": false,
+          "value": 1.6796015501022339,
+          "adapter_sha256": "dd9f3d2983af7ce85ace99534bd23df9362d9cd91ac39d0b356b219cb790b1c1",
+          "run_commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
+          "completed_training_step": 8214,
+          "loaded_best_checkpoint_step": 6160
+        },
+        "raw_bytes_sha256": "f930c136e44fce00cad5bf05573779144e43aa108184c1dfc603762be20002b8"
       },
       "run": {
         "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
-        "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-s3-a0",
-        "evaluation_job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-s3-eval-a0",
-        "request": {
-          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
-          "path": "lc_rec/a0_beauty/evidence/formal-launch-20261116/request.json"
+        "generation": {
+          "role": "generation",
+          "stage": "s3",
+          "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-s3-a0",
+          "attempt": 0,
+          "status": "SUCCEEDED",
+          "request": null,
+          "request_availability": "bytes not archived; path and sha recorded in state, not recomputed",
+          "recorded_request_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/requests/s3-a0.json",
+          "recorded_request_sha256": "576075044d5c742051e844e2a3c9c0357ba3754320cb76ab7d7ea5aa47cb5c00",
+          "worker_argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/production_pipeline.py",
+            "--plan",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json",
+            "--stage",
+            "s3",
+            "--output",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/s3/a0",
+            "--authorization",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/user-launch-authorization-20261116.json",
+            "--authorization-sha256",
+            "ca733239d9c95a35a4c5504f8dc205c1039d91399df29630ef0b48d5caaa1963"
+          ],
+          "state": {
+            "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+            "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/state.json",
+            "selector": "attempts[stage=s3]"
+          },
+          "rank_reports": [
+            {
+              "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+              "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/s3-generation/rank0.json"
+            },
+            {
+              "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+              "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/s3-generation/rank1.json"
+            }
+          ]
         },
-        "request_scope": "parent launch request; child job IDs indexed in supplement evidence; individual child request not included in supplemental evidence"
+        "evaluation": {
+          "role": "evaluation",
+          "stage": "s3_eval",
+          "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-s3-eval-a0",
+          "attempt": 0,
+          "status": "SUCCEEDED",
+          "request": null,
+          "request_availability": "bytes not archived; path and sha recorded in state, not recomputed",
+          "recorded_request_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/requests/s3_eval-a0.json",
+          "recorded_request_sha256": "e28ffe868622f3dd0b58532ce323d28f48379f69b0b1e702d036bff5adce0fdd",
+          "worker_argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/production_pipeline.py",
+            "--plan",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json",
+            "--stage",
+            "s3_eval",
+            "--output",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/s3_eval/a0",
+            "--authorization",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/user-launch-authorization-20261116.json",
+            "--authorization-sha256",
+            "ca733239d9c95a35a4c5504f8dc205c1039d91399df29630ef0b48d5caaa1963"
+          ],
+          "state": {
+            "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+            "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/state.json",
+            "selector": "attempts[stage=s3_eval]"
+          },
+          "primary_metrics": {
+            "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+            "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/s3-primary/metrics.json"
+          },
+          "evaluation_config_recorded": {
+            "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/s3_eval/a0/evaluation_config.json",
+            "bytes": 3096,
+            "sha256": "1c6e899aadd7e84519d6ce88e0e20723e14f38ec7575114af6ce4826b0e0d5b1"
+          },
+          "evaluation_script_recorded": {
+            "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/offline_metrics.py",
+            "bytes": 18939,
+            "sha256": "bac195ad9df3459a22aa97a34b58c5e5f0b062dfccbe3d48f747fed9e995321d"
+          }
+        }
+      },
+      "pairing": {
+        "role": "original_s3_paired",
+        "result": {
+          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+          "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/s3/paired_comparison.json"
+        }
       },
       "primary_metrics": {
         "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
         "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/s3-primary/metrics.json"
       },
-      "supplement": {
-        "commit": "1934c01eee767b665ef1043995ffc741958e30e0",
-        "job_id": "letter-a0-beauty-supp-s4-paired-20261117-a0",
-        "request": {
-          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
-          "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/run/request.json"
+      "predictions": [
+        {
+          "bytes": 212777913,
+          "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/s3/a0/test/predictions.rank0.jsonl",
+          "rank": 0,
+          "sha256": "ad459b9c222117853cb55ec35bd05ae17ce74e93189417ff8b4d050d6a62f406",
+          "users": 11182,
+          "mtime_ns": 1794871054996135171,
+          "ctime_ns": 1794871054996135171,
+          "assignment_sha256": "8eb669c968e313c79df1bba3f16b16bd94ce1e0d6697728ff528c1da3de01363",
+          "hash_recomputed": true
         },
-        "scope": "independent S4 paired supplement; original paired timeout and original collect not run"
-      },
+        {
+          "bytes": 213051510,
+          "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/s3/a0/test/predictions.rank1.jsonl",
+          "rank": 1,
+          "sha256": "b531161a89b1dfa77940bafbc127d513924b5eccc376e8d35e61036f8b42caab",
+          "users": 11181,
+          "mtime_ns": 1794870823869872050,
+          "ctime_ns": 1794870823869872050,
+          "assignment_sha256": "ea9c57674be765e0424ac991e986823a5b8587cfee3d162c3b38a46deaf4f173",
+          "hash_recomputed": true
+        }
+      ],
       "implementation": {
         "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
         "path": "lc_rec/a0_beauty/shuffle_entry.py"
       },
       "config": {
         "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
-        "path": "lc_rec/a0_beauty/config/formal_beauty_seed42.json"
+        "path": "lc_rec/a0_beauty/config/formal_beauty_seed42.json",
+        "sha256": "24b568161f2d71d3c5962372a38683b2d33ee5d6d5064de0612215946a8106fd",
+        "role": "training_config"
+      },
+      "plan": {
+        "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+        "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/plan.json"
       },
       "assets_recorded": {
         "data": {
@@ -1455,7 +1742,7 @@
         "ItemNDCG@10": 0.017461100671688684,
         "ItemNDCG@20": 0.022062503575678676
       },
-      "read_scope": "Beauty entry/runtime/evaluate, config, supplement request and summary read; no server/LFS revalidation"
+      "read_scope": "state, plan, primary metrics and train request checked; child request bytes absent; server and LFS not revalidated"
     },
     {
       "id": "letter-beauty-a0-s4",
@@ -1463,42 +1750,190 @@
       "route": "LETTER A0",
       "domain": "Beauty",
       "condition": "s4",
-      "status": "formal generation; supplemental statistics completed; external scientific audit pending",
+      "status": "formal generation and primary evaluation completed; supplemental summary completed; external scientific audit pending",
       "training_run": {
-        "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
-        "selection": "checkpoint-6160",
-        "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-train-a0"
+        "role": "training",
+        "stage": "train",
+        "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-train-a0",
+        "attempt": 0,
+        "status": "SUCCEEDED",
+        "request": {
+          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+          "path": "lc_rec/a0_beauty/evidence/formal-launch-20261116/request.json",
+          "role": "training"
+        },
+        "request_availability": "archived bytes; canonical JSON sha matched against state; raw bytes sha separately recorded",
+        "recorded_request_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/requests/train-a0.json",
+        "recorded_request_sha256": "abd09c34bc141f0f97772a54ebd85d467c48d3f2d00252b0c8e5de5e98ac1e86",
+        "worker_argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/production_pipeline.py",
+          "--plan",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json",
+          "--stage",
+          "train",
+          "--output",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/train/a0",
+          "--authorization",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/user-launch-authorization-20261116.json",
+          "--authorization-sha256",
+          "ca733239d9c95a35a4c5504f8dc205c1039d91399df29630ef0b48d5caaa1963"
+        ],
+        "state": {
+          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+          "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/state.json",
+          "selector": "attempts[stage=train]"
+        },
+        "selection": {
+          "checkpoint": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/training/checkpoint-6160",
+          "metric": "eval_loss",
+          "greater_is_better": false,
+          "value": 1.6796015501022339,
+          "adapter_sha256": "dd9f3d2983af7ce85ace99534bd23df9362d9cd91ac39d0b356b219cb790b1c1",
+          "run_commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
+          "completed_training_step": 8214,
+          "loaded_best_checkpoint_step": 6160
+        },
+        "raw_bytes_sha256": "f930c136e44fce00cad5bf05573779144e43aa108184c1dfc603762be20002b8"
       },
       "run": {
         "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
-        "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-s4-a0",
-        "evaluation_job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-s4-eval-a0",
-        "request": {
-          "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
-          "path": "lc_rec/a0_beauty/evidence/formal-launch-20261116/request.json"
+        "generation": {
+          "role": "generation",
+          "stage": "s4",
+          "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-s4-a0",
+          "attempt": 0,
+          "status": "SUCCEEDED",
+          "request": null,
+          "request_availability": "bytes not archived; path and sha recorded in state, not recomputed",
+          "recorded_request_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/requests/s4-a0.json",
+          "recorded_request_sha256": "a8378227ba63c67953ba64f40c8757eb12d99e84354c7687e2db64ecce778046",
+          "worker_argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/production_pipeline.py",
+            "--plan",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json",
+            "--stage",
+            "s4",
+            "--output",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/s4/a0",
+            "--authorization",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/user-launch-authorization-20261116.json",
+            "--authorization-sha256",
+            "ca733239d9c95a35a4c5504f8dc205c1039d91399df29630ef0b48d5caaa1963"
+          ],
+          "state": {
+            "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+            "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/state.json",
+            "selector": "attempts[stage=s4]"
+          },
+          "rank_reports": [
+            {
+              "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+              "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/s4-generation/rank0.json"
+            },
+            {
+              "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+              "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/s4-generation/rank1.json"
+            }
+          ]
         },
-        "request_scope": "parent launch request; child job IDs indexed in supplement evidence; individual child request not included in supplemental evidence"
+        "evaluation": {
+          "role": "evaluation",
+          "stage": "s4_eval",
+          "job_id": "letter-a0-beauty-formal-beauty-a0-seed42-formal-s4-eval-a0",
+          "attempt": 0,
+          "status": "SUCCEEDED",
+          "request": null,
+          "request_availability": "bytes not archived; path and sha recorded in state, not recomputed",
+          "recorded_request_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/requests/s4_eval-a0.json",
+          "recorded_request_sha256": "89bc60cafc27770e4df36f50148babbdb6e174f0429a008b65a96f5d238c0ee2",
+          "worker_argv": [
+            "/data/bwwu/envs/letter-20261110/bin/python",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/production_pipeline.py",
+            "--plan",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/plan.json",
+            "--stage",
+            "s4_eval",
+            "--output",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/s4_eval/a0",
+            "--authorization",
+            "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/user-launch-authorization-20261116.json",
+            "--authorization-sha256",
+            "ca733239d9c95a35a4c5504f8dc205c1039d91399df29630ef0b48d5caaa1963"
+          ],
+          "state": {
+            "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+            "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/state.json",
+            "selector": "attempts[stage=s4_eval]"
+          },
+          "primary_metrics": {
+            "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+            "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/s4-primary/metrics.json"
+          },
+          "evaluation_config_recorded": {
+            "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/s4_eval/a0/evaluation_config.json",
+            "bytes": 3096,
+            "sha256": "1c6e899aadd7e84519d6ce88e0e20723e14f38ec7575114af6ce4826b0e0d5b1"
+          },
+          "evaluation_script_recorded": {
+            "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/offline_metrics.py",
+            "bytes": 18939,
+            "sha256": "bac195ad9df3459a22aa97a34b58c5e5f0b062dfccbe3d48f747fed9e995321d"
+          }
+        }
       },
-      "primary_metrics": {
-        "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
-        "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/s4-primary/metrics.json"
-      },
-      "supplement": {
+      "pairing": {
+        "role": "s4_supplemental_pair",
         "commit": "1934c01eee767b665ef1043995ffc741958e30e0",
         "job_id": "letter-a0-beauty-supp-s4-paired-20261117-a0",
         "request": {
           "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
           "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/run/request.json"
         },
-        "scope": "independent S4 paired supplement; original paired timeout and original collect not run"
+        "scope": "S4 independent CPU supplement; original paired timed out and collect not run"
       },
+      "primary_metrics": {
+        "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+        "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/s4-primary/metrics.json"
+      },
+      "predictions": [
+        {
+          "bytes": 212824405,
+          "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/s4/a0/test/predictions.rank0.jsonl",
+          "rank": 0,
+          "sha256": "d7270842ed78ec70dc12a5ff8e3597fb8db71f8eff840866d38534316a392c6b",
+          "users": 11182,
+          "mtime_ns": 1794878682219319292,
+          "ctime_ns": 1794878682219319292,
+          "assignment_sha256": "8eb669c968e313c79df1bba3f16b16bd94ce1e0d6697728ff528c1da3de01363",
+          "hash_recomputed": true
+        },
+        {
+          "bytes": 213099824,
+          "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/attempts/s4/a0/test/predictions.rank1.jsonl",
+          "rank": 1,
+          "sha256": "f347bc20833f905b70ab4473a296212013a4754a02096cc3dd5750a615f170a6",
+          "users": 11181,
+          "mtime_ns": 1794879038324631004,
+          "ctime_ns": 1794879038324631004,
+          "assignment_sha256": "ea9c57674be765e0424ac991e986823a5b8587cfee3d162c3b38a46deaf4f173",
+          "hash_recomputed": true
+        }
+      ],
       "implementation": {
         "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
         "path": "lc_rec/a0_beauty/shuffle_entry.py"
       },
       "config": {
         "commit": "6e1b211d9c37f358c43b1540b40b17f6703150d2",
-        "path": "lc_rec/a0_beauty/config/formal_beauty_seed42.json"
+        "path": "lc_rec/a0_beauty/config/formal_beauty_seed42.json",
+        "sha256": "24b568161f2d71d3c5962372a38683b2d33ee5d6d5064de0612215946a8106fd",
+        "role": "training_config"
+      },
+      "plan": {
+        "commit": "12eb8b176b156f3be7d7533ee8f443db02441303",
+        "path": "lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/evidence/original/control/plan.json"
       },
       "assets_recorded": {
         "data": {
@@ -1556,7 +1991,7 @@
         "ItemNDCG@10": 0.015325953178936827,
         "ItemNDCG@20": 0.020099007897458807
       },
-      "read_scope": "Beauty entry/runtime/evaluate, config, supplement request and summary read; no server/LFS revalidation"
+      "read_scope": "state, plan, primary metrics and train request checked; child request bytes absent; server and LFS not revalidated"
     }
   ]
 }

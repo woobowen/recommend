@@ -19,3 +19,5 @@
 - 原 LC 六任务 [有界技术审核](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/six_task_lora/REVIEW_ENTRY.md)、[offload](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/offload/REVIEW_ENTRY.md)、[Qwen 单任务预跑](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/qwen_preflight_20261110/REVIEW_ENTRY.md)及[六任务 Qwen 预跑](https://github.com/woobowen/recommend/blob/12eb8b176b156f3be7d7533ee8f443db02441303/lc_rec/qwen_six_task_20261111/REVIEW_ENTRY.md)是不同阶段，不能当成正式 LETTER 单任务结果。
 
 Git 中保存源码、轻量配置与结果/回执；大模型、数据、checkpoint 和预测常为服务器引用，Git LFS 指针也不等于实体。本次文档工作没有现场重验这些资产。历史报告的内部审查、原任务状态和之后的外部审核按各自时间保留。文档所示指标来自既有结果，不重跑模型或重算统计。
+
+2026-11-17 针对旧版外审的角色来源修正及检查范围见 [R1—R4 收尾依据](checks/CLOSURE_R1_R4.md)；该记录不代表新版网页外审已通过。

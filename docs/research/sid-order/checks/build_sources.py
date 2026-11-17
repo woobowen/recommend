@@ -17,9 +17,7 @@ counts={}
 for name,ref in [('grid',G),('lc_experiments',L),('start',B)]:
  ps=paths(ref); c=count(ps);assert len(ps)==len(set(ps))==sum(c.values());assert set(c)==set(rootnames(ref));counts[name]={'commit':ref,'total':len(ps),'top_level':c}
 assert counts['grid']['top_level']['GRID baseline']==2194 and '"GRID baseline' not in counts['grid']['top_level']
-old=root.parents[1]/'repository-organization/2026-11-17-proposal/inventory.json'
-old_data=json.loads(old.read_text());old_data['grid_top_level']=counts['grid']['top_level'];old_data['correction']={'old_error':'previous inventory had an erroneous quoted GRID baseline key and split its count','method':'git ls-tree -r -z --name-only, split NUL, compare actual root tree, no stripping','history':'prior published 700d5fb retains the original error','snapshots':counts,'authoritative_condition_mapping':'docs/research/sid-order/sources.json'};old.write_text(json.dumps(old_data,ensure_ascii=False,indent=2)+'\n')
-(root/'checks/path_counts.json').write_text(json.dumps({'method':'NUL-delimited actual Git tree','synthetic_special_path_roundtrip':'PASS','counts':counts},ensure_ascii=False,indent=2)+'\n')
+# Preserve historical inventory and path-count receipts; this build writes only sources.json.
 rows=[]
 version=obj(G,'manifests/grid-formal-20261015/FINAL_VERSION_MAP.json')
 for r in version['job_map']:
@@ -38,9 +36,38 @@ for model in ('a0','a1'):
   v=normal if cond=='normal' else inst['conditions'][model+'-'+cond]['metrics']; job=('letter-a0-20261112-normal-det-seed42-r0' if model=='a0' else 'letter-a1-q06-20261113-normal-seed42-r0') if cond=='normal' else inst['conditions'][model+'-'+cond]['job_id']; p=normal_entry if cond=='normal' else inst['conditions'][model+'-'+cond]['path']+'/job/request.json'
   req=obj(I,p) if cond!='normal' else None
   rows.append({'id':f'letter-instruments-{model}-{cond.lower()}','family':'sid-order','route':'LETTER '+model.upper(),'domain':'Instruments','condition':cond,'status':'formal completed','training_run':{'commit':normal['run_commit'],'job_id':('letter-a0-20261112-normal-det-seed42-r0' if model=='a0' else 'letter-a1-q06-20261113-normal-seed42-r0'),'selection':'checkpoint-8240','request':loc(I,'lc_rec/letter/evidence/formal_det_20261112/jobs/letter-a0-20261112-normal-det-seed42-r0/job/request.json' if model=='a0' else 'lc_rec/a1_qwen3_06b/evidence/jobs/letter-a1-q06-20261113-normal-seed42-r0/job/request.json')},'run':{'commit':v['run_commit'],'evaluation_commit':v['evaluation_commit'],'job_id':job,'request_or_normal_entry':loc(I,p)},'implementation':loc(I,'lc_rec/shuffle/entry.py' if cond!='normal' else ('lc_rec/letter/scripts/formal_evaluate.py' if model=='a0' else 'lc_rec/a1_qwen3_06b/scripts/evaluate.py')),'config':loc(I,cfg),'assets_recorded':{'evidence':loc(I,'lc_rec/shuffle/FINAL_REVIEW_ENTRY.md'),'sid_sha256':'33c87e28c52ae367985bdf494cb49d676d181e13a39497b4ad035f46111546dd','inter_sha256':'0a11d47791d90483005da93c36d826679e20e4592d1d2b86518d5f56f218e743','item_sha256':'1d9938e576a8d964e6b977a2b63aa56402840a788eaa6685f26f0d910a7133f2','adapter_sha256':('f4651c5c6e6ed841cd3384c0c8ebfab30880e94597e515ffa21916b876001ed5' if model=='a0' else 'fe96ea74fc3c7253b0c3687239266b0f073e1a51ef9158e7d97bf30b4527bd03'),'status':'historical recorded identity; server not reverified'},'result':loc(I,'lc_rec/shuffle/results/SUMMARY.json'),'result_key':('models.'+model+'.Normal.metrics' if cond=='normal' else 'conditions.'+model+'-'+cond+'.metrics.metrics'),'metrics':v['metrics'],'read_scope':'normal final review and summary read; shuffle request and summary read; server not reverified'})
-beautyp='lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/'; bs=obj(L,beautyp+'evidence/results/beauty_supplemental_final_summary.json'); bconf=obj(BR,'lc_rec/a0_beauty/config/formal_beauty_seed42.json'); req=obj(L,beautyp+'evidence/run/request.json')
+beautyp='lc_rec/a0_beauty/evidence/paired-s4-supplement-20261117/'
+bs=obj(L,beautyp+'evidence/results/beauty_supplemental_final_summary.json')
+state=obj(L,beautyp+'evidence/original/control/state.json')
+plan=obj(L,beautyp+'evidence/original/control/plan.json')
+train_request='lc_rec/a0_beauty/evidence/formal-launch-20261116/request.json'
+train_obj=obj(L,train_request)
+assert train_obj['beauty_stage']=='train' and plan['run_commit']==BR
+assert __import__('hashlib').sha256(get(BR,'lc_rec/a0_beauty/config/formal_beauty_seed42.json')).hexdigest()==plan['config_sha256']
+def phase(stage, role):
+ found=[x for x in state['attempts'] if x['stage']==stage]; assert len(found)==1
+ a=found[0]; argv=a['runner']['worker']['argv']; assert argv[argv.index('--stage')+1]==stage
+ return {'role':role,'stage':stage,'job_id':a['job_id'],'attempt':a['attempt'],'status':a['status'],
+ 'request':None,'request_availability':'bytes not archived; path and sha recorded in state, not recomputed',
+ 'recorded_request_path':a['request_path'],'recorded_request_sha256':a['request_sha256'],
+ 'worker_argv':argv,'state':{'commit':L,'path':beautyp+'evidence/original/control/state.json','selector':'attempts[stage='+stage+']'}}
 for cond in ('normal','s3','s4'):
- v=bs['conditions'][cond]; job='letter-a0-beauty-formal-beauty-a0-seed42-formal-'+cond+'-a0'
- rows.append({'id':'letter-beauty-a0-'+cond,'family':'sid-order','route':'LETTER A0','domain':'Beauty','condition':cond,'status':'formal generation; supplemental statistics completed; external scientific audit pending','training_run':{'commit':BR,'selection':'checkpoint-6160','job_id':'letter-a0-beauty-formal-beauty-a0-seed42-formal-train-a0'},'run':{'commit':BR,'job_id':job,'evaluation_job_id':job.replace('-'+cond+'-a0','-'+cond+'-eval-a0'),'request':loc(L,'lc_rec/a0_beauty/evidence/formal-launch-20261116/request.json'),'request_scope':'parent launch request; child job IDs indexed in supplement evidence; individual child request not included in supplemental evidence'},'primary_metrics':loc(L,beautyp+'evidence/original/'+cond+'-primary/metrics.json'),'supplement':{'commit':S,'job_id':'letter-a0-beauty-supp-s4-paired-20261117-a0','request':loc(L,beautyp+'evidence/run/request.json'),'scope':'independent S4 paired supplement; original paired timeout and original collect not run'},'implementation':loc(BR,'lc_rec/a0_beauty/formal_evaluate.py' if cond=='normal' else 'lc_rec/a0_beauty/shuffle_entry.py'),'config':loc(BR,'lc_rec/a0_beauty/config/formal_beauty_seed42.json'),'assets_recorded':{'data':bs['audit']['data_assets'],'best_checkpoint':bs['best_selection'],'input_manifest':loc(L,beautyp+'evidence/run/input-manifest.json')},'result':loc(L,beautyp+'evidence/results/beauty_supplemental_final_summary.json'),'result_key':'conditions.'+cond+'.metrics','metrics':v['metrics'],'read_scope':'Beauty entry/runtime/evaluate, config, supplement request and summary read; no server/LFS revalidation'})
+ v=bs['conditions'][cond]; primary_path=beautyp+'evidence/original/'+cond+'-primary/metrics.json'; primary=obj(L,primary_path)
+ training=phase('train','training'); training['request']=dict(loc(L,train_request),role='training');training['request_availability']='archived bytes; canonical JSON sha matched against state; raw bytes sha separately recorded';training['selection']=bs['best_selection']
+ training['raw_bytes_sha256']=__import__('hashlib').sha256(get(L,train_request)).hexdigest()
+ assert __import__('hashlib').sha256(json.dumps(train_obj,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()).hexdigest()==training['recorded_request_sha256']
+ gen=phase(cond,'generation');gen['rank_reports']=[loc(L,beautyp+'evidence/original/'+cond+'-generation/rank'+str(rank)+'.json') for rank in (0,1)]; ev=phase(cond+'_eval','evaluation');ev['primary_metrics']=loc(L,primary_path);ev['evaluation_config_recorded']=primary['config'];ev['evaluation_script_recorded']=primary['script']
+ paired=({'role':'no_shuffle_pair','scope':'Normal is the control'} if cond=='normal' else
+ {'role':'original_s3_paired','result':loc(L,beautyp+'evidence/original/s3/paired_comparison.json')} if cond=='s3' else
+ {'role':'s4_supplemental_pair','commit':S,'job_id':obj(L,beautyp+'evidence/run/request.json')['job_id'],'request':loc(L,beautyp+'evidence/run/request.json'),'scope':'S4 independent CPU supplement; original paired timed out and collect not run'})
+ rows.append({'id':'letter-beauty-a0-'+cond,'family':'sid-order','route':'LETTER A0','domain':'Beauty','condition':cond,'status':'formal generation and primary evaluation completed; supplemental summary completed; external scientific audit pending',
+ 'training_run':training,'run':{'commit':BR,'generation':gen,'evaluation':ev},'pairing':paired,
+ 'primary_metrics':loc(L,primary_path),'predictions':primary['prediction_files'],
+ 'implementation':loc(BR,'lc_rec/a0_beauty/formal_evaluate.py' if cond=='normal' else 'lc_rec/a0_beauty/shuffle_entry.py'),
+ 'config':dict(loc(BR,'lc_rec/a0_beauty/config/formal_beauty_seed42.json'),sha256=plan['config_sha256'],role='training_config'),
+ 'plan':loc(L,beautyp+'evidence/original/control/plan.json'),
+ 'assets_recorded':{'data':bs['audit']['data_assets'],'best_checkpoint':bs['best_selection'],'input_manifest':loc(L,beautyp+'evidence/run/input-manifest.json')},
+ 'result':loc(L,beautyp+'evidence/results/beauty_supplemental_final_summary.json'),'result_key':'conditions.'+cond+'.metrics','metrics':v['metrics'],
+ 'read_scope':'state, plan, primary metrics and train request checked; child request bytes absent; server and LFS not revalidated'})
 assert len(rows)==21 and len({r['id'] for r in rows})==21
 (root/'sources.json').write_text(json.dumps({'schema':1,'method':'fixed Git objects; historical assets are recorded references, not revalidated','snapshots':{'grid':G,'lc':L,'start':B},'conditions':rows},ensure_ascii=False,indent=2)+'\n')
