@@ -1,5 +1,7 @@
 # recommend
 
+> **当前分支：`wbw-sid-order`。** 本分支是 SID 内部码字顺序研究的后续开发与统一导航入口；历史实验仍由各自固定 RUN 定位。先读[研究主题总览](docs/research/README.md)和[主题结构与维护边界](docs/research/sid-order/STRUCTURE.md)。
+
 ## 研究主题导航
 
 [SID 顺序扰动：GRID 与 LETTER-LC-Rec](docs/research/sid-order/README.md) 汇集实验流程、配置、结果与固定运行证据。原 GRID baseline 和 Baseline Results 保留原路径；下方下载命令是历史示例，按实际资产需求获取，不构成新作业授权。
