@@ -1,0 +1,675 @@
+{
+  "root": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009",
+  "runs": [
+    {
+      "run": "beauty_rkmeans_qwen_20261010_012253",
+      "embedding_path": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/beauty_rkmeans_qwen_20261010_012253/item_embeddings.pt",
+      "embedding_sha256": "95f052e956fc2192cca2e1bf65b20f08ba30233db706c75aa53eeba62ec41996",
+      "shape": [
+        12101,
+        3584
+      ],
+      "dtype": "torch.float32",
+      "all_finite": true,
+      "norm_min": 135.24061425206972,
+      "norm_mean": 170.07364574965624,
+      "norm_median": 168.6036123354085,
+      "norm_max": 251.52316843325454,
+      "norm_std_population": 12.817014236520707,
+      "unit_norm_fraction_at_1e-4": 0.0,
+      "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/beauty_rkmeans_qwen_20261010_012253/quantizer_train/checkpoints/checkpoint_000_000030.ckpt",
+      "checkpoint_normalize_residuals": {
+        "value": true,
+        "pickle_offset": 4781
+      }
+    },
+    {
+      "run": "toys_rkmeans_qwen_20261010_093036",
+      "embedding_path": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/toys_rkmeans_qwen_20261010_093036/item_embeddings.pt",
+      "embedding_sha256": "d0f0fb9128871a1863b3195b2aebe35976765eabe6abea8d39d6a0070ac7f8ca",
+      "shape": [
+        11924,
+        3584
+      ],
+      "dtype": "torch.float32",
+      "all_finite": true,
+      "norm_min": 130.16322443436175,
+      "norm_mean": 169.9521943434803,
+      "norm_median": 169.218607450081,
+      "norm_max": 267.0034013708335,
+      "norm_std_population": 10.913158601099363,
+      "unit_norm_fraction_at_1e-4": 0.0,
+      "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/toys_rkmeans_qwen_20261010_093036/quantizer_train/checkpoints/checkpoint_000_000030.ckpt",
+      "checkpoint_normalize_residuals": {
+        "value": true,
+        "pickle_offset": 4777
+      }
+    }
+  ],
+  "source_evidence": {
+    "_运行/generate_qwen_embeddings.py": [
+      {
+        "line": 60,
+        "text": "        raise RuntimeError('Use at least two free 11-GiB GPUs for the full FP16 Qwen model')"
+      },
+      {
+        "line": 61,
+        "text": "    for i in range(torch.cuda.device_count()):"
+      },
+      {
+        "line": 62,
+        "text": "        if torch.cuda.mem_get_info(i)[0] < 9*1024**3:"
+      },
+      {
+        "line": 63,
+        "text": "            raise RuntimeError(f'Selected GPU {i} has less than 9 GiB free; select free GPUs')"
+      },
+      {
+        "line": 64,
+        "text": "    max_memory = {i: '9GiB' for i in range(torch.cuda.device_count())}"
+      },
+      {
+        "line": 65,
+        "text": "    max_memory['cpu'] = '32GiB'"
+      },
+      {
+        "line": 66,
+        "text": "    model = AutoModel.from_pretrained(args.model, local_files_only=True,"
+      },
+      {
+        "line": 67,
+        "text": "        torch_dtype=torch.float16, device_map='auto', max_memory=max_memory,"
+      },
+      {
+        "line": 68,
+        "text": "        low_cpu_mem_usage=True).eval()"
+      },
+      {
+        "line": 69,
+        "text": "    model.config.use_cache = False"
+      },
+      {
+        "line": 70,
+        "text": "    aggregate = EmbeddingAggregator(MeanAggregation())"
+      },
+      {
+        "line": 71,
+        "text": "    device = model.get_input_embeddings().weight.device"
+      },
+      {
+        "line": 72,
+        "text": "    output = torch.empty(len(rows), cfg.hidden_size, dtype=torch.float32)"
+      },
+      {
+        "line": 73,
+        "text": "    start = time.time()"
+      },
+      {
+        "line": 74,
+        "text": "    with torch.inference_mode():"
+      },
+      {
+        "line": 75,
+        "text": "        for offset in range(0, len(rows), args.batch_size):"
+      },
+      {
+        "line": 76,
+        "text": "            texts = [rows[i] for i in range(offset, min(offset+args.batch_size, len(rows)))]"
+      },
+      {
+        "line": 77,
+        "text": "            tokens = tokenizer(texts, max_length=128, padding='max_length', truncation=True,"
+      },
+      {
+        "line": 78,
+        "text": "                               add_special_tokens=True, return_tensors='pt').to(device)"
+      },
+      {
+        "line": 79,
+        "text": "            hidden = model(**tokens, use_cache=False).last_hidden_state"
+      },
+      {
+        "line": 80,
+        "text": "            vectors = aggregate(hidden, tokens.attention_mask.to(hidden.device)).float().cpu()"
+      },
+      {
+        "line": 81,
+        "text": "            if not torch.isfinite(vectors).all():"
+      },
+      {
+        "line": 82,
+        "text": "                raise ValueError('Non-finite Qwen item vector')"
+      },
+      {
+        "line": 83,
+        "text": "            output[offset:offset+len(texts)] = vectors"
+      },
+      {
+        "line": 84,
+        "text": "            if offset % 100 == 0:"
+      },
+      {
+        "line": 85,
+        "text": "                print(f'{offset}/{len(rows)} items, elapsed={time.time()-start:.0f}s', flush=True)"
+      },
+      {
+        "line": 86,
+        "text": "    args.output.parent.mkdir(parents=True, exist_ok=True)"
+      },
+      {
+        "line": 87,
+        "text": "    temporary = args.output.with_suffix('.partial')"
+      },
+      {
+        "line": 88,
+        "text": "    torch.save(output, temporary)"
+      }
+    ],
+    "src/models/components/network_blocks/aggregation_strategy.py": [
+      {
+        "line": 55,
+        "text": "        # Select the embeddings for the specified row ids"
+      },
+      {
+        "line": 56,
+        "text": "        embeddings = embeddings["
+      },
+      {
+        "line": 57,
+        "text": "            row_ids"
+      },
+      {
+        "line": 58,
+        "text": "        ]  # Shape (return_size, sequence_length, embedding_dim)"
+      },
+      {
+        "line": 59,
+        "text": "        # Create a mask to select the last K items of sequences"
+      },
+      {
+        "line": 60,
+        "text": "        mask = create_last_k_mask(embeddings.size(1), last_item_index, self.last_k)"
+      },
+      {
+        "line": 61,
+        "text": "        mask = mask.to(dtype=embeddings.dtype, device=embeddings.device)"
+      },
+      {
+        "line": 62,
+        "text": ""
+      },
+      {
+        "line": 63,
+        "text": "        # Apply the mask to the embeddings"
+      },
+      {
+        "line": 64,
+        "text": "        masked_embeddings = embeddings * mask.unsqueeze("
+      },
+      {
+        "line": 65,
+        "text": "            2"
+      },
+      {
+        "line": 66,
+        "text": "        )  # Shape (return_size, sequence_length, embedding_dim)"
+      },
+      {
+        "line": 67,
+        "text": ""
+      },
+      {
+        "line": 68,
+        "text": "        # Sum the masked embeddings and divide by the count of non-zero elements in the mask"
+      },
+      {
+        "line": 69,
+        "text": "        sum_embeddings = torch.sum("
+      },
+      {
+        "line": 70,
+        "text": "            masked_embeddings, dim=1"
+      },
+      {
+        "line": 71,
+        "text": "        )  # Shape (return_size, embedding_dim)"
+      },
+      {
+        "line": 72,
+        "text": "        count = ("
+      },
+      {
+        "line": 73,
+        "text": "            torch.sum(mask, dim=1).clamp(min=1).unsqueeze(1)"
+      },
+      {
+        "line": 74,
+        "text": "        )  # Shape (return_size, embedding_dim)"
+      },
+      {
+        "line": 75,
+        "text": "        return sum_embeddings / count  # Shape (return_size, embedding_dim)"
+      }
+    ],
+    "src/modules/clustering/residual_quantization.py": [
+      {
+        "line": 18,
+        "text": "    def __init__("
+      },
+      {
+        "line": 19,
+        "text": "        self,"
+      },
+      {
+        "line": 20,
+        "text": "        n_layers: Optional[int] = None,"
+      },
+      {
+        "line": 21,
+        "text": "        normalization_layer: nn.Module = nn.Identity(),"
+      },
+      {
+        "line": 22,
+        "text": "        encoder: nn.Module = nn.Identity(),"
+      },
+      {
+        "line": 23,
+        "text": "        decoder: nn.Module = nn.Identity(),"
+      },
+      {
+        "line": 24,
+        "text": "        quantization_layer: Optional[BaseClusteringModule] = None,"
+      },
+      {
+        "line": 25,
+        "text": "        quantization_layer_list: Optional[nn.ModuleList] = None,"
+      },
+      {
+        "line": 26,
+        "text": "        init_buffer_size: int = 1000,"
+      },
+      {
+        "line": 27,
+        "text": "        training_loop_function: callable = None,"
+      },
+      {
+        "line": 28,
+        "text": "        quantization_loss_weight: float = 1.0,"
+      },
+      {
+        "line": 29,
+        "text": "        reconstruction_loss_function: Optional[nn.Module] = None,"
+      },
+      {
+        "line": 30,
+        "text": "        reconstruction_loss_weight: float = 0.0,"
+      },
+      {
+        "line": 31,
+        "text": "        normalize_residuals: bool = True,"
+      },
+      {
+        "line": 32,
+        "text": "        optimizer: Optional[torch.optim.Optimizer] = None,"
+      },
+      {
+        "line": 204,
+        "text": "        cluster_ids = []"
+      },
+      {
+        "line": 205,
+        "text": "        current_residuals = embeddings"
+      },
+      {
+        "line": 206,
+        "text": "        all_residuals = [] if self.track_residuals else None"
+      },
+      {
+        "line": 207,
+        "text": "        quantized_embeddings = torch.zeros_like(embeddings)"
+      },
+      {
+        "line": 208,
+        "text": "        quantization_loss = torch.tensor(0.0).to(self.device)"
+      },
+      {
+        "line": 209,
+        "text": ""
+      },
+      {
+        "line": 210,
+        "text": "        for idx, layer in enumerate(self.quantization_layer_list):"
+      },
+      {
+        "line": 211,
+        "text": "            if self.normalize_residuals:"
+      },
+      {
+        "line": 212,
+        "text": "                current_residuals = nn.functional.normalize("
+      },
+      {
+        "line": 213,
+        "text": "                    current_residuals, dim=-1"
+      },
+      {
+        "line": 214,
+        "text": "                )  # normalize along the feature dimension"
+      },
+      {
+        "line": 246,
+        "text": "            if train_layer:"
+      },
+      {
+        "line": 247,
+        "text": "                # We call model step inside forward because we need to get the"
+      },
+      {
+        "line": 248,
+        "text": "                # quantization layer's loss, which is computed in the model step"
+      },
+      {
+        "line": 249,
+        "text": "                layer_ids, layer_embeddings, layer_loss = layer.model_step("
+      },
+      {
+        "line": 250,
+        "text": "                    current_residuals"
+      },
+      {
+        "line": 251,
+        "text": "                )"
+      },
+      {
+        "line": 252,
+        "text": "                quantization_loss += layer_loss"
+      },
+      {
+        "line": 253,
+        "text": "            else:"
+      },
+      {
+        "line": 254,
+        "text": "                layer_ids, layer_embeddings = layer.predict_step(current_residuals)"
+      },
+      {
+        "line": 255,
+        "text": ""
+      },
+      {
+        "line": 256,
+        "text": "            cluster_ids.append(layer_ids)  # batch_size"
+      },
+      {
+        "line": 257,
+        "text": "            quantized_embeddings = quantized_embeddings + layer_embeddings"
+      },
+      {
+        "line": 258,
+        "text": "            current_residuals = current_residuals - layer_embeddings"
+      },
+      {
+        "line": 287,
+        "text": "        input_embeddings = model_input.transformed_features[\"input_embedding\"].to("
+      },
+      {
+        "line": 288,
+        "text": "            self.device"
+      },
+      {
+        "line": 289,
+        "text": "        )"
+      },
+      {
+        "line": 290,
+        "text": "        normalized_input_embeddings = self.normalization_layer(input_embeddings)"
+      },
+      {
+        "line": 291,
+        "text": "        encoded_embeddings = self.encoder(normalized_input_embeddings)"
+      },
+      {
+        "line": 292,
+        "text": "        ("
+      },
+      {
+        "line": 293,
+        "text": "            cluster_ids,"
+      },
+      {
+        "line": 294,
+        "text": "            all_residuals,"
+      },
+      {
+        "line": 295,
+        "text": "            quantized_embeddings,"
+      },
+      {
+        "line": 296,
+        "text": "            quantization_loss,"
+      },
+      {
+        "line": 297,
+        "text": "        ) = self.forward(encoded_embeddings)"
+      },
+      {
+        "line": 298,
+        "text": ""
+      },
+      {
+        "line": 299,
+        "text": "        if ("
+      },
+      {
+        "line": 300,
+        "text": "            self.trainer.state.fn != TrainerFn.PREDICTING"
+      },
+      {
+        "line": 301,
+        "text": "            and self.reconstruction_loss_function is not None"
+      }
+    ],
+    "configs/experiment/rkmeans_train_flat.yaml": [
+      {
+        "line": 138,
+        "text": "model:"
+      },
+      {
+        "line": 139,
+        "text": "  _target_: src.modules.clustering.residual_quantization.ResidualQuantization"
+      },
+      {
+        "line": 140,
+        "text": "  track_residuals: true"
+      },
+      {
+        "line": 141,
+        "text": "  verbose: true"
+      },
+      {
+        "line": 142,
+        "text": "  train_layer_wise: true"
+      },
+      {
+        "line": 143,
+        "text": "  normalize_residuals: true"
+      },
+      {
+        "line": 144,
+        "text": "  input_dim: ${embedding_dim}"
+      },
+      {
+        "line": 145,
+        "text": "  n_layers: ${num_hierarchies}"
+      },
+      {
+        "line": 146,
+        "text": "  init_buffer_size: 3072"
+      },
+      {
+        "line": 147,
+        "text": "  quantization_layer:"
+      },
+      {
+        "line": 148,
+        "text": "    _target_: src.models.modules.clustering.mini_batch_kmeans.MiniBatchKMeans"
+      },
+      {
+        "line": 149,
+        "text": "    n_clusters: ${codebook_width}"
+      },
+      {
+        "line": 150,
+        "text": "    n_features: ${model.input_dim}"
+      },
+      {
+        "line": 151,
+        "text": "    distance_function:"
+      },
+      {
+        "line": 152,
+        "text": "      _target_: src.components.distance_functions.SquaredEuclideanDistance"
+      }
+    ],
+    "configs/experiment/rkmeans_inference_flat.yaml": [
+      {
+        "line": 11,
+        "text": "model:"
+      },
+      {
+        "line": 12,
+        "text": "  _target_: src.modules.clustering.residual_quantization.ResidualQuantization"
+      },
+      {
+        "line": 13,
+        "text": "  track_residuals: true"
+      },
+      {
+        "line": 14,
+        "text": "  verbose: true"
+      },
+      {
+        "line": 15,
+        "text": "  train_layer_wise: true"
+      },
+      {
+        "line": 16,
+        "text": "  normalize_residuals: true"
+      },
+      {
+        "line": 17,
+        "text": "  input_dim: ${embedding_dim}"
+      },
+      {
+        "line": 18,
+        "text": "  n_layers: ${num_hierarchies}"
+      },
+      {
+        "line": 19,
+        "text": "  init_buffer_size: 3072"
+      },
+      {
+        "line": 20,
+        "text": "  quantization_layer:"
+      },
+      {
+        "line": 21,
+        "text": "    _target_: src.models.modules.clustering.mini_batch_kmeans.MiniBatchKMeans"
+      },
+      {
+        "line": 22,
+        "text": "    n_clusters: ${codebook_width}"
+      },
+      {
+        "line": 23,
+        "text": "    n_features: ${model.input_dim}"
+      },
+      {
+        "line": 24,
+        "text": "    distance_function:"
+      },
+      {
+        "line": 25,
+        "text": "      _target_: src.components.distance_functions.SquaredEuclideanDistance"
+      }
+    ],
+    "_运行/run_pipeline.py": [
+      {
+        "line": 129,
+        "text": "    if args.stage in ('all', 'quantize'):"
+      },
+      {
+        "line": 130,
+        "text": "        info = json.loads(embedding.with_suffix('.json').read_text())"
+      },
+      {
+        "line": 131,
+        "text": "        if info['architecture'] != 'qwen2' or info['dataset'] != args.dataset:"
+      },
+      {
+        "line": 132,
+        "text": "            raise ValueError('Expected vectors generated by this Qwen experiment')"
+      },
+      {
+        "line": 133,
+        "text": "        dim = info['shape'][1]"
+      },
+      {
+        "line": 134,
+        "text": "        common = [f'data_dir={data}', f'paths.root_dir={ROOT}', 'trainer.devices=1',"
+      },
+      {
+        "line": 135,
+        "text": "            '++trainer.strategy=auto', 'trainer.precision=32-true', 'extras.print_config=false',"
+      },
+      {
+        "line": 136,
+        "text": "            f'embedding_path={embedding}', f'embedding_dim={dim}',"
+      },
+      {
+        "line": 137,
+        "text": "            'num_hierarchies=3', 'codebook_width=256']"
+      },
+      {
+        "line": 138,
+        "text": "        out = execute('quantizer_train', [sys.executable, str(ROOT/'_运行/grid_stage.py'),"
+      },
+      {
+        "line": 139,
+        "text": "            f'experiment={args.method}_train_flat', 'train=true', 'test=false', 'ckpt_path=null',"
+      },
+      {
+        "line": 140,
+        "text": "            '++callbacks.restart_job=null']+common+workers('data_loading.datamodule.train_dataloader_config.'), gpu_ids[0])"
+      },
+      {
+        "line": 141,
+        "text": "        checkpoint = json.loads((out/'stage_result.json').read_text())['checkpoint']"
+      },
+      {
+        "line": 142,
+        "text": "        if not Path(checkpoint).resolve().is_relative_to(run):"
+      },
+      {
+        "line": 143,
+        "text": "            raise ValueError('Quantizer checkpoint must belong to this run')"
+      },
+      {
+        "line": 144,
+        "text": "        out = execute('sid_generation', [sys.executable, str(ROOT/'_运行/grid_stage.py'),"
+      },
+      {
+        "line": 145,
+        "text": "            f'experiment={args.method}_inference_flat', f'ckpt_path={checkpoint}',"
+      },
+      {
+        "line": 146,
+        "text": "            'callbacks.bq_writer=null', '++callbacks.restart_job=null']+common+"
+      },
+      {
+        "line": 147,
+        "text": "            workers('data_loading.datamodule.predict_dataloader_config.'), gpu_ids[0])"
+      }
+    ]
+  }
+}

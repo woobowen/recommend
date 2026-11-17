@@ -1,0 +1,63 @@
+{
+  "experiment": "Independent LLM2Vec validation of Qwen SID semantic refinement",
+  "run_full_experiment": true,
+  "user_authorized_start": true,
+  "gpu_allocation": {"beauty": [0, 1], "toys": [2, 3]},
+  "seed": 20261113,
+  "base_model": "meta-llama/Meta-Llama-3-8B-Instruct",
+  "mntp_adapter": {
+    "repo": "McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp",
+    "revision": "31474e395ada192e8ed1586db6be79fb3b70c9c0"
+  },
+  "primary_adapter": {
+    "repo": "McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
+    "revision": "baa8ebf04a1c2500e61288e7dad65e8ae42601a7"
+  },
+  "secondary_adapter": {
+    "repo": "McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse",
+    "revision": "1cb7b735326d13a8541db8f57f35da5373f5e9c6"
+  },
+  "encoding": {
+    "dtype": "float16",
+    "low_bit_quantization": false,
+    "bidirectional": true,
+    "attention_implementation": "sdpa",
+    "pooling": "mean",
+    "max_length": 256,
+    "doc_max_length": 224,
+    "initial_batch_size": 2,
+    "instruction": "Represent this product for semantic similarity:",
+    "skip_instruction_in_pooling": true,
+    "primary_text": "title_only",
+    "secondary_text": "title_and_brand",
+    "excluded_fields": ["categories", "price", "sid", "previous_llama_labels"],
+    "output_dimension": 4096,
+    "saved_dtype": "float32",
+    "l2_normalize": true,
+    "semantic_vector_quantization": false
+  },
+  "statistics": {
+    "sid_positions": [0, 1, 2],
+    "minimum_group_size": 2,
+    "threshold_sensitivity_runs": false,
+    "primary_transition": "1_to_2",
+    "third_level_role": "supporting_evidence_with_coverage",
+    "three_code_path_display_top_k": 20,
+    "inference_scope": "all_eligible_groups_and_proper_refinement_edges",
+    "unchanged_membership_edges": "report_separately_exclude_from_refinement_denominator",
+    "primary_aggregation": "macro_mean_over_eligible_child_nodes",
+    "secondary_aggregations": ["item_weighted"],
+    "path_condition": "S1<S2<=S3; both sets must properly shrink",
+    "random_controls": ["within_first_prefix", "within_second_prefix"],
+    "improvement_epsilon": 0.000001,
+    "permutations": 999,
+    "bootstrap_repetitions": 2000,
+    "bootstrap_unit": "first_sid_prefix_subtree",
+    "multiple_testing": "Holm for 2 primary 1_to_2 tests across Beauty and Toys",
+    "arithmetic_dtype": "float64_for_aggregated_statistics"
+  },
+  "datasets": {
+    "beauty": {"items": 12101, "baseline": "beauty_rkmeans_qwen_20261010_012253"},
+    "toys": {"items": 11924, "baseline": "toys_rkmeans_qwen_20261010_093036"}
+  }
+}

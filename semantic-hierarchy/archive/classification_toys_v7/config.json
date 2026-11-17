@@ -1,0 +1,30 @@
+{
+  "experiment": "sid_prefix_semantics_v1",
+  "root": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009",
+  "model": "models/Meta-Llama-3.1-8B-Instruct",
+  "datasets": {
+    "beauty": {"expected_items": 12101, "baseline": "beauty_rkmeans_qwen_20261010_012253"},
+    "toys": {"expected_items": 11924, "baseline": "toys_rkmeans_qwen_20261010_093036"}
+  },
+  "seed": 20261109,
+  "discovery_items": 1500,
+  "review_items": 250,
+  "context_tokens": 8192,
+  "classification_max_new_tokens": 1024,
+  "taxonomy_max_new_tokens": 4096,
+  "max_items_per_classification_request": 20,
+  "max_items_per_discovery_request": 35,
+  "prefix_lengths": [1, 2, 3],
+  "main_min_group_size": 2,
+  "display_min_group_size": 5,
+  "top_k_base_min_group_size": 2,
+  "top_k": [10, 20, 50, 100],
+  "main_display_k": 20,
+  "permutations": 1000,
+  "gpu_pairs": [[0, 1], [2, 3]],
+  "weight_dtype": "float16",
+  "quantization": null,
+  "sampling": false,
+  "unknown_label": "UNKNOWN",
+  "status": "PREPARATION_ONLY_WAIT_FOR_USER_CONFIRMATION"
+}
