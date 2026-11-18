@@ -50,11 +50,11 @@ def main():
         'stage_seconds':seconds,'budget':{'train_normal':151200,'s3':16200,'s4':16200,'cpu':5400,'total':189000,'cleanup_reserve':120},
         'env':env,'formal_budget_status':'PLANNING_ONLY_REQUIRES_SEPARATE_USER_LAUNCH_AUTHORIZATION'}
     validate_plan(plan)
-    plan_path=root/'plan.json';root.mkdir(parents=True,exist_ok=True)
+    plan_path=root/'preparation-plan.json';root.mkdir(parents=True,exist_ok=True)
     if plan_path.exists():need(json.loads(plan_path.read_text())==plan,'immutable prepared plan')
     else:durable_write(plan_path,plan)
-    c=Control(plan_path)
-    state=json.loads(c.state_path.read_text());need(not state['attempts'],'dry-run no submitted attempts')
+    state={'status':'DRAFT_PREPARED_NOT_SEALED','attempts':[],'stages':{}}
+    need(not (root/'plan.identity.json').exists() and not (root/'state.json').exists(),'dry-run must not seal final launch plan')
     negative=[]
     def reject(name,fn,expected):
         try:fn()

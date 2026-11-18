@@ -43,7 +43,10 @@ def check_file(row, path=None):
 
 
 def scope_guard(path, scope, record=None):
-    need(scope in ('FORMAL', SYNTHETIC), 'unknown evidence scope')
+    need(scope in ('FORMAL', 'PREFLIGHT', SYNTHETIC), 'unknown evidence scope')
+    if scope=='PREFLIGHT':
+        if record is not None:need(record.get('scope')=='PREFLIGHT','preflight evidence scope missing')
+        return
     if scope == SYNTHETIC:
         need(SYNTHETIC in str(path), 'test path must be isolated and labeled')
         if record is not None:
@@ -57,6 +60,7 @@ def scope_guard(path, scope, record=None):
 def verify_training(root, commit, config_sha, scope='FORMAL'):
     """Prove native earliest-minimum selection, retained entities and export tensors."""
     root = Path(root); scope_guard(root, scope)
+    if scope=='PREFLIGHT':return verify_preflight_training(root,commit,config_sha)
     events=[]
     for rank in (0,1):
         report=load(root/f'rank{rank}.json');scope_guard(root,scope,report)
@@ -155,8 +159,9 @@ def verify_predictions(test, commit, best, condition, scope='FORMAL'):
     identities=[]
     for rank in (0,1):
         r=load(test/f'rank{rank}.json');scope_guard(test,scope,r)
-        need(r['status']=='PASS' and r['rank']==rank and r['preflight_only'] is False and r['RUN_COMMIT']==commit, 'prediction completion/RUN')
-        need(r['completed_users']==(11182 if rank==0 else 11181), 'prediction user count')
+        need(r['status']==('PREFLIGHT_INTERFACE_PASS' if scope=='PREFLIGHT' else 'PASS') and r['rank']==rank and r['preflight_only']==(scope=='PREFLIGHT') and r['RUN_COMMIT']==commit, 'prediction completion/RUN')
+        need(r['completed_users']==(16 if scope=='PREFLIGHT' else (11182 if rank==0 else 11181)), 'prediction user count')
+        need(r['condition']==condition,'prediction condition identity')
         need({k:v['sha256'] for k,v in r['data_identity'].items()}==ASSETS, 'prediction data mismatch')
         need(r['adapter_files']==best['adapter_files'], 'prediction is not selected Adapter/Tokenizer')
         if condition!='normal':
@@ -164,3 +169,36 @@ def verify_predictions(test, commit, best, condition, scope='FORMAL'):
         else:need('shuffle' not in r,'Normal contains Shuffle intervention')
         identities.append(identity(test/f'predictions.rank{rank}.jsonl'))
     return {'verified':True,'scope':scope,'prediction_run_commit':commit,'prediction_files':identities,'adapter_files':best['adapter_files']}
+
+
+def verify_preflight_training(root, commit, config_sha):
+    """Strict finite trajectory evidence; never satisfies formal acceptance."""
+    validations=[]
+    for rank in (0,1):
+        report=load(root/f'rank{rank}.json')
+        need(report['scope']=='PREFLIGHT' and report['experiment_id']==EXPERIMENT_ID,'preflight experiment')
+        need(report['status']=='BOUNDARY_PREFLIGHT_COMPLETE' and report['probe'] is True and
+             report['global_step']==10 and report['epoch']==4.,'four short preflight epochs')
+        need(report['run_commit']==commit and report['config_sha256']==config_sha,'preflight training source/config')
+        need({k:v['sha256'] for k,v in report['data_identity'].items()}==ASSETS,'preflight data')
+        need(report['optimizer_membership_exact'] and report['optimizer_parameter_count']==288571392,'preflight optimizer set')
+        need(report['parameter_update_validation']['status']=='PASS','preflight update/freeze inventory')
+        events=[json.loads(x) for x in (root/f'events.rank{rank}.jsonl').read_text().splitlines()]
+        losses={e['step']:e['values']['eval_loss'] for e in events if e['event']=='log' and 'eval_loss' in e.get('values',{})}
+        need(set(losses)=={2,5,7,10} and all(math.isfinite(x) for x in losses.values()),'preflight validation boundaries')
+        validations.append(losses)
+    need(validations[0]==validations[1],'preflight rank validation disagreement')
+    selected=load(root/'best_selection.json');best_step=min((2,5,7,10),key=lambda s:validations[0][s])
+    need(selected['scope']=='PREFLIGHT' and selected['loaded_best_checkpoint_step']==best_step and
+         selected['completed_training_step']==10 and selected['export_matches_selected_checkpoint_tensors'],'preflight native best restoration')
+    adapter=root/'preflight_adapter'
+    provenance=verify_adapter_identity(adapter,scope='PREFLIGHT',run_commit=commit)
+    source=provenance['checkpoint_source'];cp=Path(source['path'])
+    if cp.is_dir():
+        verify_checkpoint(cp,commit,config_sha);manifest=cp/'complete.json'
+    else:manifest=root/'verified_checkpoint_manifests'/(cp.name+'.complete.json')
+    need(sha(manifest)==source['complete_sha256'] and source['global_step']==best_step,'selected preflight checkpoint manifest')
+    files={p.name:{k:v for k,v in identity(p).items() if k!='path'} for p in sorted(adapter.iterdir()) if p.is_file()}
+    return {'verified':True,'scope':'PREFLIGHT','training_root':str(root),'run_commit':commit,
+        'config_sha256':config_sha,'best_step':best_step,'adapter_files':files,'selection':identity(root/'best_selection.json'),
+        'selected_checkpoint_manifest':identity(manifest)}

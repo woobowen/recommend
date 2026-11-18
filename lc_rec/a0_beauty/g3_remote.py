@@ -36,7 +36,7 @@ def selected():
             keep.append(n)
     keep.extend(['lc_rec/letter/evidence/formal_20261111/precision_approval.json',
         'lc_rec/letter/review/final_audit_20261113/external/official_cce.py',
-        'lc_rec/letter/review/final_audit_20261113/external/statistics_verify.py'])
+        'lc_rec/letter/review/final_audit_20261113/statistics_verify.py'])
     return sorted(set(keep))
 
 

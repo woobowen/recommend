@@ -313,8 +313,10 @@ def main():
     p.add_argument('--retry',choices=STAGES);p.add_argument('--resume')
     a=p.parse_args();plan=read(a.plan)
     need(plan['evidence_scope']=='FORMAL','formal CLI does not expose test boundaries')
+    if a.mode=='prepare':
+        validate_plan(plan)
+        print(json.dumps({'status':'PREPARED_NOT_SUBMITTED','plan_sha256':digest(plan)}));return
     c=Control(a.plan)
-    if a.mode=='prepare':print(json.dumps({'status':'PREPARED_NOT_SUBMITTED','plan_sha256':digest(plan)}));return
     if a.mode=='query':
         with locked(c.root/'.control.lock'):
             state=read(c.state_path);c.charge(state)

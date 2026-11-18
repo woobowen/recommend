@@ -23,7 +23,7 @@ def main():
     side=load(a.runner+'.deployment.json')
     need(sha(a.runner)=='cc1a1e277faa9bc713a4d0d1b620248d47c398e8ed17d4ed3d7ab52805cc657e','tested Beauty Runner bytes')
     need(side['namespace'].startswith('beauty-') and side['job_root']!='/home/bwwu/grid-audits/sid-extensions-p0/jobs','Beauty isolated deployment required')
-    root=Path(a.root);path=root/'plan.json'
+    root=Path(a.root);path=root/('plan.json' if a.submission_plan else 'preparation-plan.json')
     config=str(Path(release)/'lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json')
     need(not a.submission_plan or a.prelaunch_review,'submission plan requires web review')
     plan={'scope':'FORMAL_SUBMIT' if a.submission_plan else 'FORMAL_PREPARE','evidence_scope':'FORMAL','task_id':a.task_id,'root':str(root),

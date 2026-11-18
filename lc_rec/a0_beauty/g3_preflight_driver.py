@@ -96,7 +96,7 @@ def main():
                     from formal_train import verify_checkpoint
                     from g3_identity import verify_adapter_identity
                     verify_adapter_identity(root/'preflight_adapter',scope='PREFLIGHT',run_commit=a.run_commit)
-                    archived=out/'continuous_checkpoint_manifests';archived.mkdir()
+                    archived=root/'verified_checkpoint_manifests';archived.mkdir()
                     removed=[]
                     for cp in sorted(root.glob('checkpoint-*')):
                         verify_checkpoint(cp,a.run_commit,sha(scripts/'config/formal_g3_beauty_seed42.json'))

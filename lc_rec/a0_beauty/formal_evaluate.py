@@ -498,9 +498,16 @@ def main():
     if len(args.run_commit) != 40 or any(c not in "0123456789abcdef" for c in args.run_commit):
         raise ValueError("--run-commit must be a complete lowercase commit SHA")
     if args.aggregate_only:
+        verify_adapter_identity(args.adapter,scope='FORMAL',model=args.model)
+        requested_model_sha=sha(Path(args.adapter)/'g3_identity.json')
+        for rank in range(2):
+            completed=json.loads((output/f'rank{rank}.json').read_text())
+            if completed.get('model_identity_sha256')!=requested_model_sha:
+                raise AssertionError('Aggregate request adapter differs from prediction model')
         _, catalog, users, _ = catalog_and_users(args.data_root)
         result = aggregate_predictions([output / f"predictions.rank{rank}.jsonl" for rank in range(2)],
-                                       users, catalog, load_evaluator(source), run_commit=args.run_commit)
+                                       users, catalog, load_evaluator(source), run_commit=args.run_commit,
+                                       condition=args.condition)
         result["RUN_COMMIT"] = args.run_commit
         write(output / "metrics.recomputed.json", result)
         return 0
