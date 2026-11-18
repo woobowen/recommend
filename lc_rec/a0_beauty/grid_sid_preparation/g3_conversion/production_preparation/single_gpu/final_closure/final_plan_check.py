@@ -267,7 +267,10 @@ def main():
     check('--verify-normal-off' in commands['normal'] and
           all('--verify-normal-off' not in commands[s] for s in ('s3','s4')), 'normal OFF check')
     train_env = {**os.environ,'RANK':'0','LOCAL_RANK':'0','WORLD_SIZE':'1'}
-    cmd('direct train CLI missing authorization', commands['train'][0:1]+commands['train'][6:],
+    train = commands['train']
+    check(train[-4::2] == ['--formal-authorization','--formal-authorization-sha256'],
+          'expected training authorization placeholders')
+    cmd('direct train CLI missing authorization', train[:1]+train[6:-4],
         1, 'new G3 formal launch authorization required', env=train_env)
     budget_test = budget_checks(control,plan,fixture,read,durable_write)
     after = snapshot(plan, control.EXPERIMENT_REGISTRY, identity, digest, read)
