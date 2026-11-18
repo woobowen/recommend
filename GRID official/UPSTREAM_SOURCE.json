@@ -1,0 +1,661 @@
+{
+  "repository": "https://github.com/snap-research/GRID",
+  "commit": "2fe3475b2d369580234093f35d52b1a2f54d0472",
+  "tree": "91adaa09204791fe6eed7ca3379d1e125c507fa3",
+  "commit_date_utc": "2025-10-15T21:37:17Z",
+  "imported_on": "2026-11-18",
+  "upstream_file_count": 92,
+  "upstream_files_modified": false,
+  "added_support_files": [
+    ".project-root",
+    "REPRODUCTION_NOTES.md",
+    "UPSTREAM_SOURCE.json"
+  ],
+  "experiment_executed_for_import": false,
+  "files": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "bytes": 4319,
+      "git_blob_sha1": "7b004e51045ae62398e7e48ebb556ab5c9a7d319",
+      "sha256": "7e9f95a1fc3ac6b1c07bfdaa087a2296db7e4c5d771c239c6cd8f483f03bc972"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "bytes": 1202,
+      "git_blob_sha1": "d78fdfdc8c3852fdff39d3b982f16656665967ae",
+      "sha256": "7805eedcc666e1526b4ad3dffb211a9f30b4d56c90ad979329003ed688c053bf"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "bytes": 6516,
+      "git_blob_sha1": "93929341c79f3fe69784eede3363794fe597e955",
+      "sha256": "38526be8ec8921fea6ca52d5388f00d4475ec0b373ba0543aae58e31b5095ef6"
+    },
+    {
+      "path": "__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "configs/__init__.py",
+      "mode": "100755",
+      "bytes": 81,
+      "git_blob_sha1": "56bf7f4aa4906bc0f997132708cc0826c198e4aa",
+      "sha256": "40afe33e9461a043b773aa939b3ec32715d0031bc64114839ffc1607af407fa8"
+    },
+    {
+      "path": "configs/callbacks/default.yaml",
+      "mode": "100755",
+      "bytes": 458,
+      "git_blob_sha1": "1b7ef086a0cc4c7e75466cad996ce56fce266a95",
+      "sha256": "5b172dacc4e48781310c7f78895b23a0d9d6d8904bdfcf7be2f17497556ad7bd"
+    },
+    {
+      "path": "configs/callbacks/early_stopping.yaml",
+      "mode": "100755",
+      "bytes": 1232,
+      "git_blob_sha1": "b58ddba75e90df92d341421952af60957de03d7b",
+      "sha256": "a30fe6f24261597147fdd9e6d64c536d8fa23cca14a00cf3090a1387b895d17e"
+    },
+    {
+      "path": "configs/callbacks/local_pickle_writer.yaml",
+      "mode": "100644",
+      "bytes": 259,
+      "git_blob_sha1": "a55f7044268f2d46f5db45754030f69533f7bfaa",
+      "sha256": "2e3ba713430bbab497e61bff211031f0acfb0b75ba53e850c5ac2c3c99d5e36f"
+    },
+    {
+      "path": "configs/callbacks/model_checkpoint.yaml",
+      "mode": "100755",
+      "bytes": 1230,
+      "git_blob_sha1": "3cfb4a66292b954e1ac7e3c7b467844d26578c7e",
+      "sha256": "6db81f9260af09a455677ceb41e03f5d4dfe7b568470adca448e3e8d77a5d66b"
+    },
+    {
+      "path": "configs/callbacks/model_summary.yaml",
+      "mode": "100755",
+      "bytes": 341,
+      "git_blob_sha1": "7cd3c6d2c49a97573e1bc4019ede5bd7402899a4",
+      "sha256": "4a9cba32da611920bb7e1a4429f47810e0e3840db83ff351f83bdcd72f9d55c3"
+    },
+    {
+      "path": "configs/callbacks/rich_progress_bar.yaml",
+      "mode": "100755",
+      "bytes": 399,
+      "git_blob_sha1": "95c025e5632052729895d083b0388b2bedca93b3",
+      "sha256": "f7979106008cd2b061bc46e9091bca5deea7508dd05abcf0777fb1159f9fedb3"
+    },
+    {
+      "path": "configs/experiment/rkmeans_inference_flat.yaml",
+      "mode": "100644",
+      "bytes": 5587,
+      "git_blob_sha1": "31cc7f763ca83ce0102dedfe48330bf875d07864",
+      "sha256": "344d2e4dad207cdb74d6ec184797850ab546b3a3aef17b7d1fc9271ec170a64c"
+    },
+    {
+      "path": "configs/experiment/rkmeans_train_flat.yaml",
+      "mode": "100644",
+      "bytes": 7700,
+      "git_blob_sha1": "7c71a534916ae2a4e6c4b598ee0a20341da12084",
+      "sha256": "38d4c7d892ec7b3a4deb3616426c6e6467a4b980013fdf20cf506b2d35d1a1ec"
+    },
+    {
+      "path": "configs/experiment/rqvae_train_flat.yaml",
+      "mode": "100644",
+      "bytes": 9709,
+      "git_blob_sha1": "3dd02d08c8bcf9ba88451930498748af88a44ea2",
+      "sha256": "802518ff96bc42401ba3de35e083d96dadd187b3825025ed22ad9417152a67e7"
+    },
+    {
+      "path": "configs/experiment/rvq_train_flat.yaml",
+      "mode": "100644",
+      "bytes": 7958,
+      "git_blob_sha1": "153c7ff7fcecf4e737a8c67b7e182285e2a88fb2",
+      "sha256": "2405b15f39036ed7c0aa37133d7785569e4fb79e1529d2b4eb8449919ea3d79c"
+    },
+    {
+      "path": "configs/experiment/sem_embeds_inference_flat.yaml",
+      "mode": "100644",
+      "bytes": 5509,
+      "git_blob_sha1": "3c2881897c1f77ec3540b418474a79ffbda657ca",
+      "sha256": "7d2f34f88539ea8d5882f6635a2a8455c2cf3004dce92a716b307d454d802685"
+    },
+    {
+      "path": "configs/experiment/tiger_inference_flat.yaml",
+      "mode": "100644",
+      "bytes": 7593,
+      "git_blob_sha1": "d1924e052db3dd3f2d6b435cec4cc692897e379f",
+      "sha256": "056d19d96dfd92e85ccb7ee937b29661bf4cf8e0b8c2f1c5ca8d5281c0d18015"
+    },
+    {
+      "path": "configs/experiment/tiger_train_flat.yaml",
+      "mode": "100644",
+      "bytes": 12054,
+      "git_blob_sha1": "6a4d9e16ecec20b77d6a8c99f4c2a0f79ed1eafa",
+      "sha256": "2061239a96f92b93ab0271fcc6e4996be198290f330b1cbf3195efd55528fc1e"
+    },
+    {
+      "path": "configs/extras/default.yaml",
+      "mode": "100755",
+      "bytes": 298,
+      "git_blob_sha1": "8b5b47bb9582e2de58b4b2bd1d9385630f9cf166",
+      "sha256": "29bce8a0bf644c1a1ab72d9eb1decbab31c575694a2e9a936842307a990a9aa6"
+    },
+    {
+      "path": "configs/hydra/default.yaml",
+      "mode": "100755",
+      "bytes": 527,
+      "git_blob_sha1": "468e1d56c0c4d4f1f47356276c401adff2ef446f",
+      "sha256": "55bed674fc423879add8e36729cd3cc13931a174b02e513329c02408ba25f0a8"
+    },
+    {
+      "path": "configs/inference.yaml",
+      "mode": "100755",
+      "bytes": 601,
+      "git_blob_sha1": "ddcb97787e7b4748ff1d4f13c35e3e430c999e7c",
+      "sha256": "d731bd7a4544d4253ac5d3f4228ba1dbdb1de19bd439cf142f14ce0d71fe7f85"
+    },
+    {
+      "path": "configs/local/.gitkeep",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "configs/logger/csv.yaml",
+      "mode": "100644",
+      "bytes": 158,
+      "git_blob_sha1": "46a255e99060d7bbe1e906ab1941078d20b36261",
+      "sha256": "710aff41ddf0915d2e3bf913fd17316d9a8145f5f9f70cf06a5c392e67556f10"
+    },
+    {
+      "path": "configs/paths/default.yaml",
+      "mode": "100755",
+      "bytes": 906,
+      "git_blob_sha1": "061a1bf8181dce59a189cd18e6156481be483d87",
+      "sha256": "ce2e58cb8648eb11b7e27558b35b6ec306ebee0ed7b4a9682a49ee3a32944189"
+    },
+    {
+      "path": "configs/train.yaml",
+      "mode": "100755",
+      "bytes": 1302,
+      "git_blob_sha1": "4c7a827de81478ecb3ce29f5ffac3f836fb1f718",
+      "sha256": "358c400a26a9bf8cbb231470200e06f0e5b9e15dba3a301bbe48ad73c1ed19e7"
+    },
+    {
+      "path": "configs/trainer/ddp.yaml",
+      "mode": "100755",
+      "bytes": 435,
+      "git_blob_sha1": "7f460d7723566e60adff1ee8c58941c401874fea",
+      "sha256": "01036b37b3b52013a3c283d88a36554f3b7dea5b9ab4ff8b06093cbd315f3ef5"
+    },
+    {
+      "path": "configs/trainer/default.yaml",
+      "mode": "100755",
+      "bytes": 720,
+      "git_blob_sha1": "4d4874d24818dd1dacddfbed24fd56b8d474c050",
+      "sha256": "b9a532af4c352c9e334d961d534e2fcae2b21280d8c02eb1936411d51d0fc45e"
+    },
+    {
+      "path": "logs/.gitkeep",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "notices.txt",
+      "mode": "100644",
+      "bytes": 27047918,
+      "git_blob_sha1": "92a0e9c345f4d92b76f2d7a76feac2265e19df6a",
+      "sha256": "dfe5a200babee2459c42f2fafe232d7d6a0c0637b8c413d4d1bc5aa79a7ca35e"
+    },
+    {
+      "path": "outputs/.gitkeep",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "requirements.txt",
+      "mode": "100644",
+      "bytes": 17914,
+      "git_blob_sha1": "35f68da27118718a51b89f439a52c51e91b5aa32",
+      "sha256": "658abae8128132dbe284aacee2bd39829e4525443fb25111bde7a17c74243651"
+    },
+    {
+      "path": "src/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/components/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/components/clustering_initializers.py",
+      "mode": "100644",
+      "bytes": 9117,
+      "git_blob_sha1": "b7d8e92c4faa58687ef899927039bb3efe5eafb1",
+      "sha256": "ef2530a78de24b878c2d5a1705e9a0c1ad18b43a2cf3101db5167a642679acde"
+    },
+    {
+      "path": "src/components/distance_functions.py",
+      "mode": "100644",
+      "bytes": 5118,
+      "git_blob_sha1": "f66a12c995663d2375094d014361ab36d51eed3b",
+      "sha256": "9ffdf67160455d4abf9c1f7b1cf75112a4aa0c02497062893e2375264e46f71c"
+    },
+    {
+      "path": "src/components/eval_metrics.py",
+      "mode": "100755",
+      "bytes": 10749,
+      "git_blob_sha1": "41db2d061e37f3dc6064b47afb1d0a00ca31e820",
+      "sha256": "f770652153a37ee331702fc3e426a61142bdc10bf55bec900c4043b7a2790610"
+    },
+    {
+      "path": "src/components/loss_functions.py",
+      "mode": "100755",
+      "bytes": 4412,
+      "git_blob_sha1": "48f47530cce2005719e698b8fc059884e45952ed",
+      "sha256": "d0072bdff77527fa09226b3122217aff11050f4e01440d386ead53d4cf88ceb9"
+    },
+    {
+      "path": "src/components/network_blocks/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/components/network_blocks/hf_language_model.py",
+      "mode": "100755",
+      "bytes": 2434,
+      "git_blob_sha1": "cbc4ee9751fd25e77790f5573e9a92e6f58dc4e1",
+      "sha256": "782093cdba4a18ac86d05dd3ad8b8510ec0236a5e884bf4c51a83cffcd4bbf65"
+    },
+    {
+      "path": "src/components/optimizer.py",
+      "mode": "100644",
+      "bytes": 1016,
+      "git_blob_sha1": "841bcf1d7308e6a31978510b08f9b2cae89911a7",
+      "sha256": "d641316bf995f824b10d2499143b73333ae9bb4dfab1587c7c13c25d8ea46050"
+    },
+    {
+      "path": "src/components/quantization_strategies.py",
+      "mode": "100644",
+      "bytes": 8796,
+      "git_blob_sha1": "2b120bd87c0db7004521cfe8c93764f979171b70",
+      "sha256": "441a17ca2388557ef65c3b449310ad196b0f526ee7d08746c3723e06e638cda7"
+    },
+    {
+      "path": "src/components/scheduler.py",
+      "mode": "100755",
+      "bytes": 2523,
+      "git_blob_sha1": "ecfbd0f51d9ff099c831ccae87c929dadf5a9b4a",
+      "sha256": "541814232e418886219bd885ade969af6a350dfbc88efc5fd4034c8797a96832"
+    },
+    {
+      "path": "src/components/training_loop_functions.py",
+      "mode": "100644",
+      "bytes": 3754,
+      "git_blob_sha1": "69020306c9b483e3a411673cd4f6ef2b998b1512",
+      "sha256": "ea79330140e1fabf7a44ac22c4462df415972d59ce75de798bd2418e7bc1a820"
+    },
+    {
+      "path": "src/data/loading/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/data/loading/components/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/data/loading/components/collate_functions.py",
+      "mode": "100755",
+      "bytes": 13757,
+      "git_blob_sha1": "a73d67e4eb1fb00d80f14d1dbc83868446ca98eb",
+      "sha256": "b0f1680d19aa8c3c2f9e8143778f50234f7067e3b4728fecad4cb82627c34a69"
+    },
+    {
+      "path": "src/data/loading/components/custom_dataloader.py",
+      "mode": "100755",
+      "bytes": 2266,
+      "git_blob_sha1": "9b9da7a0d04f3b37aa2781b661b28313992e6eec",
+      "sha256": "f2b4fbbe3a8fe4f1a8bcd510784565563f74a9cd1095fc837d7985a1a3463d28"
+    },
+    {
+      "path": "src/data/loading/components/dataloading.py",
+      "mode": "100755",
+      "bytes": 7194,
+      "git_blob_sha1": "90ffa88ec5a33d1ed2f32a3e323efd6a47bf7f4f",
+      "sha256": "b01e09751878fefeb276092897ce69c2a4e89540284fc765bcb82e839ecf1282"
+    },
+    {
+      "path": "src/data/loading/components/interfaces.py",
+      "mode": "100755",
+      "bytes": 12625,
+      "git_blob_sha1": "e9166a056525b6e56dcfc03b58c74bf3fe13e604",
+      "sha256": "00c824f0261590e7f2c34209f601ec5a49f7a42a183ec962f8c5c06fb0a579c4"
+    },
+    {
+      "path": "src/data/loading/components/iterators.py",
+      "mode": "100755",
+      "bytes": 8557,
+      "git_blob_sha1": "f713b3297aad52a9a082babcdb2c7447d234c24b",
+      "sha256": "8b59b319ea9c05da504e483f4e20b9ea464ff723b9cc00c3c2b78e8d4203295f"
+    },
+    {
+      "path": "src/data/loading/components/label_function.py",
+      "mode": "100755",
+      "bytes": 9035,
+      "git_blob_sha1": "22f64c2ac665d82426cb1564f10544aa1db58be7",
+      "sha256": "1cf9968416723a87bb77f54e53cc0d3143e2e4bd4f7ebde103e0878ef9f020c7"
+    },
+    {
+      "path": "src/data/loading/components/pre_processing.py",
+      "mode": "100755",
+      "bytes": 12898,
+      "git_blob_sha1": "721ecb8b650929670618e4f1654918bb6acc6f93",
+      "sha256": "a168e2fbe99b6d85dc5d1189d9cdc7202dbdd1cf97f2052b087276738c47819c"
+    },
+    {
+      "path": "src/data/loading/datamodules/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/data/loading/datamodules/sequence_datamodule.py",
+      "mode": "100755",
+      "bytes": 16142,
+      "git_blob_sha1": "b9141c244ae178f6beb43ad94446146d8a6a9ae8",
+      "sha256": "fdc81fe1dabf871f7286bf5c07aab73da706b4b47b2a1d199cf148fc884086c5"
+    },
+    {
+      "path": "src/data/loading/utils.py",
+      "mode": "100755",
+      "bytes": 5860,
+      "git_blob_sha1": "412bb8033dddf82fa14da2560a8f67cea4a19e33",
+      "sha256": "b3d0c8f9f77d5218e1cac3ee7caa3ef735d0eac0f6422485daf87420f3b5d7a9"
+    },
+    {
+      "path": "src/inference.py",
+      "mode": "100755",
+      "bytes": 1585,
+      "git_blob_sha1": "359b37b32ada986c0b85b214ca3c926d28304218",
+      "sha256": "8ac855a2846c4b2a92dd7cf36dadd8e8289c570446d705cc96dcc4f64f53068a"
+    },
+    {
+      "path": "src/models/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/models/components/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/models/components/interfaces.py",
+      "mode": "100755",
+      "bytes": 2785,
+      "git_blob_sha1": "61dfef8fa26d1bbae273d0cf46b02808b27d7f95",
+      "sha256": "f93b1fa92039a89e00c43f3f06cc4a2b1b8bda834a3bf877b75c7a3adabe5231"
+    },
+    {
+      "path": "src/models/components/network_blocks/aggregation_strategy.py",
+      "mode": "100755",
+      "bytes": 3465,
+      "git_blob_sha1": "12337c6b10efe2c02e1ba515daa228854c8dddce",
+      "sha256": "243f0bec138a1cb1e0f57dbed7dc060330e0d8050a2ee68a76e30201a5a794c1"
+    },
+    {
+      "path": "src/models/components/network_blocks/embedding_aggregator.py",
+      "mode": "100755",
+      "bytes": 1735,
+      "git_blob_sha1": "794fd0d67b05c978ca08aa7634478f358452e049",
+      "sha256": "51aa0200c54c0622d3a74d315bf55a7754c3b5db48904d2a6d8cea66a8a9fb0c"
+    },
+    {
+      "path": "src/models/components/network_blocks/mlp.py",
+      "mode": "100755",
+      "bytes": 1720,
+      "git_blob_sha1": "986a770f09d22c553817f025e7683b5bb4f92df6",
+      "sha256": "3a1c0618b2ed3a488c35947667d5ecde1c80b2a78242ed64121125f4d1def79a"
+    },
+    {
+      "path": "src/models/components/network_blocks/normalize_layer.py",
+      "mode": "100644",
+      "bytes": 655,
+      "git_blob_sha1": "7dddd9f49fe8e017f41ef0c29725e1bd08f8c22c",
+      "sha256": "01b78da67e6934e7d8dfcb1f01d40bacb6e0f7e1e67a846cbcd44efb4ff1f10e"
+    },
+    {
+      "path": "src/models/modules/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/models/modules/base_module.py",
+      "mode": "100755",
+      "bytes": 7758,
+      "git_blob_sha1": "3745f31a22bb403a5e4d096f110cfd76ec2280b7",
+      "sha256": "029dc55aa499147c55a915c9523291c6b331076afb5cd7a18459968aaff16b73"
+    },
+    {
+      "path": "src/models/modules/clustering/base_clustering_module.py",
+      "mode": "100644",
+      "bytes": 11490,
+      "git_blob_sha1": "b7ce99d1238f4bd49589ec23890c95868f31d518",
+      "sha256": "27add2ad06f3e83e0d64926563755a9c2f5429c70ed9f446671c6b78b35b8bf9"
+    },
+    {
+      "path": "src/models/modules/clustering/mini_batch_kmeans.py",
+      "mode": "100644",
+      "bytes": 6013,
+      "git_blob_sha1": "f4203865f9dcd7032497681666dea399be9d1035",
+      "sha256": "0a3292fe0e23fcf75b130671b133eb7c9eff4560c6999f91daa7a1f11b592659"
+    },
+    {
+      "path": "src/models/modules/huggingface/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/models/modules/huggingface/transformer_base_module.py",
+      "mode": "100755",
+      "bytes": 6665,
+      "git_blob_sha1": "4b6baa24b53dde89bae5e3b86aba67cb466650be",
+      "sha256": "2135503c66efb71e16a57578b39359dfd668c5c84b57146f68aac5e264d863a5"
+    },
+    {
+      "path": "src/models/modules/semantic_id/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/models/modules/semantic_id/tiger_generation_model.py",
+      "mode": "100755",
+      "bytes": 44598,
+      "git_blob_sha1": "ef8f83febb3998cb0f4fd3ccffb6ecb7f88e6bac",
+      "sha256": "35a48318078782f4f5727ca2f6b31e36a964e379241f3c38a34ab0f4e2e8c0bd"
+    },
+    {
+      "path": "src/modules/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/modules/clustering/__init__.py",
+      "mode": "100755",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/modules/clustering/residual_quantization.py",
+      "mode": "100644",
+      "bytes": 32525,
+      "git_blob_sha1": "20e477cbb6227c05a036406be9ae842d298fc71c",
+      "sha256": "ccdb9a56197e83282a0d7ff1b0dcfe3e0e92c3a7acc3e225d341b57554f9a307"
+    },
+    {
+      "path": "src/modules/clustering/vector_quantization.py",
+      "mode": "100644",
+      "bytes": 4939,
+      "git_blob_sha1": "adea12bb28eb1e45d0e7e2848017734a3e8f84b3",
+      "sha256": "2d47be919c530a74b82b52e30f6b873e9c3553fd02d3a16dd70b577051e7ce23"
+    },
+    {
+      "path": "src/modules/semantic_embedding_inference_module.py",
+      "mode": "100644",
+      "bytes": 3497,
+      "git_blob_sha1": "da50c6d29c535fb7f2f718059364d9311a6880b4",
+      "sha256": "7515505f1b152396eace22d1816970ad2a3ae2e98c965072c9a12c4a646ae03d"
+    },
+    {
+      "path": "src/train.py",
+      "mode": "100755",
+      "bytes": 4422,
+      "git_blob_sha1": "1516649d7870dbf037f45ed78d062daacb721cbe",
+      "sha256": "ba707d697585bccf57b9d559c414c54845a58d9651919e73420a003ff141853f"
+    },
+    {
+      "path": "src/utils/__init__.py",
+      "mode": "100755",
+      "bytes": 297,
+      "git_blob_sha1": "8429592371bd687803778c54be00573ccf627536",
+      "sha256": "d2fdda89ba6ae6ab57f77efd317c78ba6cd3fc1da3cec3d2b612b3a59bf262ff"
+    },
+    {
+      "path": "src/utils/custom_hydra_resolvers.py",
+      "mode": "100755",
+      "bytes": 5867,
+      "git_blob_sha1": "77a5eee884217fce446ef85875fa90e9fe2015c5",
+      "sha256": "d26096e30efdfff7425ab1bb146f0277b1efd933356610b8223be5d5715bf72a"
+    },
+    {
+      "path": "src/utils/decorators.py",
+      "mode": "100755",
+      "bytes": 6611,
+      "git_blob_sha1": "3d5433a8e63392823629e8c84d30bda0ed9b4e0d",
+      "sha256": "293c370c340c359eaf9b497f4f311354e6862d7fef126ec2895f0eeeb755f1c6"
+    },
+    {
+      "path": "src/utils/file_utils.py",
+      "mode": "100755",
+      "bytes": 6281,
+      "git_blob_sha1": "8d520788f6c8629eaf2d398103adc88c866433f0",
+      "sha256": "eabe5b1300431136a07e1935e9626070b10fa51dd2f8db84d09c5dc89a332c16"
+    },
+    {
+      "path": "src/utils/inference_utils.py",
+      "mode": "100755",
+      "bytes": 11844,
+      "git_blob_sha1": "cbde1c3d8fddad42e3009f0513002d1bb32b0051",
+      "sha256": "a3fa7e388713e38c5d67824b0a51eb9a9395695df46571c645845efbf183d7bf"
+    },
+    {
+      "path": "src/utils/instantiators.py",
+      "mode": "100755",
+      "bytes": 1908,
+      "git_blob_sha1": "49cf9f68a8207ff07d642d87b9e872009dcbbf80",
+      "sha256": "8b5e4053c0f8fb4129a82f93ca4ac9f1bb058b3c9999a5b36ef8496cabbfc78e"
+    },
+    {
+      "path": "src/utils/launcher_utils.py",
+      "mode": "100755",
+      "bytes": 7789,
+      "git_blob_sha1": "0a9322f3cd931a782a1857e267b853749adfb19b",
+      "sha256": "49cb7af22596e6215848708cba4ef06a1032e3051ae38681524eb7fc45399837"
+    },
+    {
+      "path": "src/utils/logging_utils.py",
+      "mode": "100755",
+      "bytes": 3052,
+      "git_blob_sha1": "15825155df9e5438066c41a1308f9c214c378428",
+      "sha256": "592af9694a38a65cf37f76db0d6de6507e70e8bc94effdaab0337b8628c83b8d"
+    },
+    {
+      "path": "src/utils/masking_utils.py",
+      "mode": "100755",
+      "bytes": 1564,
+      "git_blob_sha1": "87b25e25811c7c4f9d0022bd9778da4e137436ec",
+      "sha256": "cfb0b03cd3978723dc99075b69737b8f22a7eeef0d48c71177034698b8a2aef5"
+    },
+    {
+      "path": "src/utils/pylogger.py",
+      "mode": "100755",
+      "bytes": 2468,
+      "git_blob_sha1": "31a76c376b8da6212f37b148bdd7182f5b0ce553",
+      "sha256": "6b9b477e91056ec773c34be1431b78049e827d35dac72bb0ce80c5872372e0a2"
+    },
+    {
+      "path": "src/utils/restart_job.py",
+      "mode": "100755",
+      "bytes": 13321,
+      "git_blob_sha1": "7fba0cb4726067f6e13411f6a408397add7a21d1",
+      "sha256": "697e997acc6a381caf58fda671e9f1308581fc8b5ef242542aca888989b3c83c"
+    },
+    {
+      "path": "src/utils/restart_job_utils.py",
+      "mode": "100755",
+      "bytes": 8199,
+      "git_blob_sha1": "c4b5470e3cff7933129af4a88aa27c13d456f484",
+      "sha256": "a9250a1e4ed8a7d1917590bdfb8c95d378b9c3c9b69007dd2aedbe874b4546ad"
+    },
+    {
+      "path": "src/utils/rich_utils.py",
+      "mode": "100755",
+      "bytes": 3382,
+      "git_blob_sha1": "16e06e71dd024ce56fc9b1e0e96669ecaa6329a6",
+      "sha256": "40bf705ac9b9374a16857fb0770c0135e9fcfbe30f58ae224e0a0a50ad0bc7ac"
+    },
+    {
+      "path": "src/utils/tensor_utils.py",
+      "mode": "100644",
+      "bytes": 7767,
+      "git_blob_sha1": "1df8e4c27a3aba4edbb43d1018c75a4ab6b570fc",
+      "sha256": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d"
+    },
+    {
+      "path": "src/utils/utils.py",
+      "mode": "100755",
+      "bytes": 8252,
+      "git_blob_sha1": "a17e6c039b1e9ce1333dc37aa79c3b1d2c82abc5",
+      "sha256": "7c2de769644a4e6176ec8f10bd1154f813f8069ec3cb6b6d4cadd804f81ad27e"
+    }
+  ]
+}

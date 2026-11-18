@@ -1,15 +1,30 @@
-# GRID 基线入口
+# GRID 基线：官方流程与 Qwen 流程
 
-`yjc-grid` 保留早期 GRID 通用源码供参考。当前研究采用的基线是 **Qwen2.5-7B-Instruct → 三层 RQ-KMeans（每层 256 个码字）→ 一位去重码 → 普通 TIGER**，完整 SID 为四位。
+本分支 `yjc-grid` 分别保存作者官方 GRID 代码包和我们已经完成的 Qwen 基线实验。
 
-请统一使用以下固定版本：
+| 目录 | 内容 | 实验状态 |
+|---|---|---|
+| [GRID official](GRID%20official/REPRODUCTION_NOTES.md) | 作者 `snap-research/GRID` 官方代码与配置；默认文本编码器为 Flan-T5-XL | 本次仅导入官方代码，未运行官方配置实验 |
+| [GRID baseline](GRID%20baseline/README.md) | Qwen2.5-7B-Instruct → 三层 RQ-KMeans → 一位去重码 → 四位 SID → 普通 TIGER | Beauty、Sports、Toys 已完成训练及最佳 checkpoint 测试 |
+| [Baseline Results](Baseline%20Results/README.md) | 我们的 Qwen 基线测试指标、论文参照和 checkpoint 记录 | 只对应 Qwen 流程 |
 
-- [当前基线代码、数据与实验产物](https://github.com/woobowen/recommend/tree/563dc50b1c7e9e2e05cdfddd13e91a3d1888001e/GRID%20baseline)
-- [Beauty、Sports、Toys 最终测试指标](https://github.com/woobowen/recommend/tree/563dc50b1c7e9e2e05cdfddd13e91a3d1888001e/Baseline%20Results)
-- [当前基线运行与下载说明](https://github.com/woobowen/recommend/blob/563dc50b1c7e9e2e05cdfddd13e91a3d1888001e/GRID%20baseline/README.md)
+## Qwen 基线来源与下载
 
-## 已清理的早期材料
+`GRID baseline/` 和 `Baseline Results/` 从 `main` 的固定提交 `563dc50b1c7e9e2e05cdfddd13e91a3d1888001e` 完整迁入，包含代码、完整数据、Qwen 权重传输分片、商品向量、四位 SID、量化器和推荐模型 checkpoint、配置、日志及指标。这两个目录与来源提交保持相同内容。
 
-2026-11-18 清理了与当前基线不一致的预计算五位 SID、配套 768 维商品向量、相关单卡短测和三卡训练/推理记录，以及旧复现命令。上述早期材料不应作为当前研究的 SID、checkpoint 或指标来源。
+大文件通过 Git LFS 保存。浏览器 ZIP 或普通 Raw 链接可能只有 LFS 指针：
 
-本分支的 `GRID/src/` 和 `GRID/configs/` 仅作历史通用实现参考；当前基线使用固定链接中的代码和实际运行配置，具体入口见上方说明。
+```bash
+git lfs install
+GIT_LFS_SKIP_SMUDGE=1 git clone --branch yjc-grid https://github.com/woobowen/recommend.git
+cd recommend
+git lfs pull --include="GRID baseline/**"
+```
+
+运行细节见 [Qwen 基线说明](GRID%20baseline/README.md)。复用 SID 或测试已保存推荐 checkpoint 时，无需加载 Qwen。重新生成商品向量前，按该说明合并 Qwen 权重分片。
+
+## 官方代码来源
+
+`GRID official/` 固定到作者仓库提交 `2fe3475b2d369580234093f35d52b1a2f54d0472`；92 个上游文件保持原内容。附加的来源清单、运行说明和项目根目录标记见 [官方流程说明](GRID%20official/REPRODUCTION_NOTES.md)。作者代码包不包含预计算 SID、训练 checkpoint 或本次官方配置测试结果。
+
+原 `yjc-grid` 的早期五位 SID、768 维商品向量和旧训练记录已从分支当前内容移除。后续 Qwen 实验统一使用 `GRID baseline/experiments/` 下各数据集的四位 SID。
