@@ -1,0 +1,44 @@
+{
+  "scope": "FORMAL_BUDGET_PROPOSAL_ONLY",
+  "status": "NOT_AUTHORIZED",
+  "formal_launch_authorized": false,
+  "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+  "execution_topology": "SINGLE_GPU",
+  "basis": {
+    "reference_normal_report": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-generation-20261118-r3/model_evidence/generation_reload_normal/rank0.json",
+    "report_sha256": "714e449f9bb73b6bc7e2763507d9cf0f4b5190706c59b2624784196588a6b9df",
+    "users": 32,
+    "elapsed_generation_seconds": 25.03081945795566,
+    "seconds_per_user": 0.7822131080611143,
+    "linear_22363_user_estimate_seconds": 17492.6317355707,
+    "limitations": "Boundary-selected32 users, not a throughput benchmark or completion guarantee; loading and full-run variability require margin."
+  },
+  "existing_immutable_draft": {
+    "bytes": 214758,
+    "path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/preparation-plan.json",
+    "sha256": "44e6cc1a03f232f1d62a81ae0bde8fa1162ffd18830497bea369390c285efcbe"
+  },
+  "existing_s3_s4_stage_seconds": 16200,
+  "recommendation": "After external review and explicit user budget/launch approval, use6h each for S3/S4; preserve all model/data/beam/metric settings. This file does not modify the existing immutable dry-run draft.",
+  "stage_seconds": {
+    "collect": 600,
+    "normal": 43200,
+    "normal_eval": 900,
+    "paired": 1200,
+    "s3": 21600,
+    "s3_eval": 900,
+    "s4": 21600,
+    "s4_eval": 900,
+    "train": 108000,
+    "verify_best_adapter": 900
+  },
+  "budget": {
+    "cleanup_reserve": 120,
+    "cpu": 5400,
+    "s3": 21600,
+    "s4": 21600,
+    "total": 199800,
+    "train_normal": 151200
+  },
+  "future_use": "Can be supplied to prepare_production_plan.py --budget only after the separate user confirms the formal budget."
+}

@@ -1,0 +1,91 @@
+{
+  "status": "PASS",
+  "case": "internal_non_author_review_cannot_replace_web_second_review",
+  "guard": "ValueError",
+  "message": "G3 web second review evidence required",
+  "synthetic_fixture": true,
+  "negative_checks": [
+    {
+      "case": "internal_non_author_review_cannot_replace_web_second_review",
+      "guard": "ValueError",
+      "message": "G3 web second review evidence required",
+      "synthetic_fixture": true
+    },
+    {
+      "case": "direct_training_internal_review_is_not_web_second_review",
+      "guard": "ValueError",
+      "message": "external webpage second review required before formal training",
+      "synthetic_fixture": true
+    },
+    {
+      "case": "direct_training_web_kind_wrong_evidence_hash",
+      "guard": "ValueError",
+      "message": "web review evidence member identity mismatch: /home/addaswsw/recommend-worktrees/lc-rec/lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/web-review-gate-local-r3-direct/SYNTHETIC_CPU_INTEGRATION_ONLY/synthetic-evidence.json",
+      "synthetic_fixture": true
+    }
+  ],
+  "direct_training_guard_source": {
+    "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/a0_beauty/formal_train.py",
+    "bytes": 59253,
+    "sha256": "d47c536d1d2a79a7c7841d444345125753ab403ab33c08a80b8207f94ba694ef"
+  },
+  "direct_training_guard_method_sha256": "4a0c7bde5b39362c74b14620652dcac3ff11b2a591955c7be90eb60f1f800add",
+  "scope": "SYNTHETIC_CPU_INTEGRATION_ONLY",
+  "run_commit": "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b",
+  "config_sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+  "formal_train_sha256": "d47c536d1d2a79a7c7841d444345125753ab403ab33c08a80b8207f94ba694ef",
+  "required_review_kind": "EXTERNAL_GPT_REVIEW",
+  "supplied_review_kind": "INDEPENDENT_NONAUTHOR",
+  "actual_guard_source": {
+    "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/a0_beauty/production_control.py",
+    "bytes": 23610,
+    "sha256": "d65783ec531431b2a070c6aef8beee9f6b643c3156359dc2dc04e08d4b7ddde3"
+  },
+  "guard_method_sha256": "192ccef1d378bfc5aed1e23e2f22bc386b592676697bc10b3306c80b8d14896b",
+  "fixture_files": [
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/web-review-gate-local-r3-direct/SYNTHETIC_CPU_INTEGRATION_ONLY/internal-review-negative-fixture.json",
+      "bytes": 886,
+      "sha256": "f236b4fcf74578a0b2da0ccd523106695bb31db914d03b1bacd0640e1b0b5fd7"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/web-review-gate-local-r3-direct/SYNTHETIC_CPU_INTEGRATION_ONLY/synthetic-evidence.json",
+      "bytes": 143,
+      "sha256": "9f68a267c6998e77b7fef06732ef76fd2c87f35b8a74c38abb3479a7b5df54b0"
+    },
+    {
+      "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/web-review-gate-local-r3-direct/SYNTHETIC_CPU_INTEGRATION_ONLY/synthetic-web-kind-corrupt-evidence.json",
+      "bytes": 905,
+      "sha256": "f59b4dd016228dde3f9f38b5f680a9316b417285730c819e5c427ac51a3fdc90"
+    }
+  ],
+  "actual_precision_approval": {
+    "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+    "bytes": 520,
+    "sha256": "b44e910f4fb9bf08aa0f2fb574dfedc475d1f3eed96e039c2808befdea2312f3"
+  },
+  "formal_experiment_started": false,
+  "formal_launch_authorized": false,
+  "real_web_review_created": false,
+  "user_launch_authorization_created": false,
+  "argv": [
+    "lc_rec/a0_beauty/web_review_gate_check.py",
+    "--release",
+    "/home/addaswsw/recommend-worktrees/lc-rec",
+    "--run-commit",
+    "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b",
+    "--config",
+    "lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
+    "--output",
+    "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/web-review-gate-local-r3-direct"
+  ],
+  "cwd": "/home/addaswsw/recommend-worktrees/lc-rec",
+  "python": "/usr/bin/python3",
+  "created_utc": "2026-11-18T14:34:30.821186+00:00",
+  "script": {
+    "path": "/home/addaswsw/recommend-worktrees/lc-rec/lc_rec/a0_beauty/web_review_gate_check.py",
+    "bytes": 6506,
+    "sha256": "9089081e6cf5e941bd30d04cd078a5ad3a87142bc3cb3286c8a4a3409bca49fc"
+  },
+  "exit_code": 0
+}

@@ -1,0 +1,117 @@
+{
+  "preparation_status": "INTERNAL_ACCEPTANCE_COMPLETE_DELIVERY_PENDING",
+  "execution_topology": "SINGLE_GPU",
+  "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+  "gpu_device_minutes": 76.85692361666666,
+  "correction_round": 3,
+  "dual_gpu_preflight_status": "NOT_APPLICABLE_THIS_RUN",
+  "formal_experiment_started": false,
+  "formal_launch_authorized": false,
+  "internal_non_author_review_status": "PASS",
+  "acceptance": [
+    {
+      "id": 1,
+      "status": "PASS",
+      "finding": "Fixed G3/bridge/index/inter/item hashes and axis",
+      "evidence": "jobs/g3-lcrec-single-cpu-20261118-r3-final/output/cpu/result.json"
+    },
+    {
+      "id": 2,
+      "status": "PASS",
+      "finding": "Inherited full conversion reused; real dataset item references and serial sample stream validated",
+      "evidence": "jobs/g3-lcrec-single-cpu-20261118-r3-final/output/cpu/result.json"
+    },
+    {
+      "id": 3,
+      "status": "PASS",
+      "finding": "Actual G3 training/loading/generation/evaluation/controller code paths adapted",
+      "evidence": "runtime_delivery_source_comparison.json"
+    },
+    {
+      "id": 4,
+      "status": "PASS",
+      "finding": "786new/vocab32786; actual embedding/head32786x4096;450trainables/288571392; frozen291 and optimizer exact",
+      "evidence": "jobs/g3-lcrec-single-train-20261118-r3/model_evidence/continuous/rank0.json"
+    },
+    {
+      "id": 5,
+      "status": "PASS",
+      "finding": "Real CPU45 negative guards/1148label positions/10callback invocations, original rows and loss weights",
+      "evidence": "jobs/g3-lcrec-single-cpu-20261118-r3-final/output/cpu/result.json"
+    },
+    {
+      "id": 6,
+      "status": "PASS",
+      "finding": "User-authorized SINGLE_GPU: one physicalGPU1/logical0; continuous10 vs early2+resumed8 updates. DualGPU NOT_APPLICABLE_THIS_RUN",
+      "evidence": "jobs/g3-lcrec-single-train-20261118-r3/output/g3_preflight.json"
+    },
+    {
+      "id": 7,
+      "status": "PASS",
+      "finding": "Complete checkpoint/tokenizer/adapter save, native best reload/export and two strict independent inference reloads",
+      "evidence": "model_asset_identity.json"
+    },
+    {
+      "id": 8,
+      "status": "PASS",
+      "finding": "Immediate pending4/8 restoration; scheduler/RNG/loader;60later microbatches and457state tensors exact",
+      "evidence": "jobs/g3-lcrec-single-compare-20261118-r3/output/boundary_compare.json"
+    },
+    {
+      "id": 9,
+      "status": "PASS",
+      "finding": "Same-process32Normal/OFF exact; independentNormal32/640scores exact under unchanged inherited criterion",
+      "evidence": "jobs/g3-lcrec-single-evaluation-20261118-r3/output/evaluation/summary.json"
+    },
+    {
+      "id": 10,
+      "status": "PASS",
+      "finding": "S3/S4 actual prefill/embedding lookup each32users/268history groups; fourth-position rules/targets/masks preserved",
+      "evidence": "review_training_agent.json"
+    },
+    {
+      "id": 11,
+      "status": "PASS",
+      "finding": "Original16metrics, invalid fullSIDs, zero collision catalog and paired/bootstrap logic consumed real outputs;32-user interface scope only",
+      "evidence": "jobs/g3-lcrec-single-evaluation-20261118-r3/output/evaluation/summary.json"
+    },
+    {
+      "id": 12,
+      "status": "PASS",
+      "finding": "Inherited research recipe preserved except explicit G3 and single-GPU authorization; source-derived sample/loss weighting and RNG differences disclosed",
+      "evidence": "research_recipe_comparison.json"
+    },
+    {
+      "id": 13,
+      "status": "PASS",
+      "finding": "Real complementary direct non-author reviews cover all required source and raw runtime evidence",
+      "evidence": "internal_review_final.json"
+    },
+    {
+      "id": 14,
+      "status": "PASS",
+      "finding": "SingleGPU formal no-submit dryrun, complete future dependencies, separate external review/userlaunch gates",
+      "evidence": "jobs/g3-lcrec-single-dryrun-20261118-r3-final/output/dry_run.json"
+    },
+    {
+      "id": 15,
+      "status": "NOT_RUN",
+      "finding": "Final evidence publication/readback and final audit package seal pending; runtime source already published/read back",
+      "evidence": "runtime_github_readback.json"
+    },
+    {
+      "id": 16,
+      "status": "PASS",
+      "finding": "All19owned jobs terminal/clean; no formal G3 plan sealed or submitted; no new formal launch authorization",
+      "evidence": "final_job_ledger.json"
+    }
+  ],
+  "limitations": [
+    "PREFLIGHT only:32fixed users;10updates per complete trajectory. All16 metrics are zero in every condition; not formal research results.",
+    "SingleGPU preserves original global sample groups and native microbatch loss weights; cross-topology prompt/dropout RNG and floating trajectories are not claimed equal.",
+    "External webpage second review and fresh explicit user budget/launch authorization remain required.",
+    "Formal S3/S4 resource proposal6h each is NOT_AUTHORIZED and not a changed/dry-run approved budget; actual immutable draft retains4.5h."
+  ],
+  "open_internal_blockers": [],
+  "recorded_utc": "2026-11-18T16:09:57.392605+00:00"
+}

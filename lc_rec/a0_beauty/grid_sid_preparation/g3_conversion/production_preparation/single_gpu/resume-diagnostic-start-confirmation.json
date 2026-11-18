@@ -1,0 +1,122 @@
+{
+  "exit_code": null,
+  "job_id": "g3-lcrec-single-resume-diagnostic-20261118-r2",
+  "received_at": "2026-11-18T14:31:23.402355+00:00",
+  "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-lcrec-single-resume-diagnostic-20261118-r2/output",
+  "started_at": "2026-11-18T14:31:23.559548+00:00",
+  "status": "RUNNING",
+  "supervisor": {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-398768a732bbfebd.py",
+      "supervise",
+      "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-lcrec-single-resume-diagnostic-20261118-r2"
+    ],
+    "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+    "pid": 3318942,
+    "start_ticks": "561762030",
+    "uid": 1005
+  },
+  "worker": {
+    "argv": [
+      "/data/bwwu/envs/letter-20261110/bin/python",
+      "-m",
+      "torch.distributed.run",
+      "--standalone",
+      "--nnodes=1",
+      "--nproc_per_node=1",
+      "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/formal_train.py",
+      "--source-root",
+      "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+      "--data-root",
+      "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+      "--model",
+      "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+      "--run-commit",
+      "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b",
+      "--output",
+      "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/recovery",
+      "--config",
+      "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
+      "--precision-approval",
+      "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+      "--boundary-preflight",
+      "--resume",
+      "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/recovery/checkpoint-2"
+    ],
+    "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+    "pid": 3318944,
+    "start_ticks": "561762045",
+    "uid": 1005
+  },
+  "worker_group": {
+    "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+    "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-lcrec-single-resume-diagnostic-20261118-r2",
+    "job_id": "g3-lcrec-single-resume-diagnostic-20261118-r2",
+    "known_members": [
+      {
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pgid": 3318944,
+        "pid": 3318944,
+        "session_id": 3318944,
+        "start_ticks": "561762045",
+        "uid": 1005
+      }
+    ],
+    "leader": {
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "pgid": 3318944,
+      "pid": 3318944,
+      "session_id": 3318944,
+      "start_ticks": "561762045",
+      "uid": 1005
+    },
+    "ownership_schema": 1,
+    "pgid": 3318944,
+    "session_id": 3318944,
+    "source": "captured_at_launch",
+    "uid": 1005
+  },
+  "request_sha256": "f315849bfb567d628942f0e933061123b55b01c5deeab5847f33facaaae1824d",
+  "supervisor_alive": true,
+  "worker_alive": true,
+  "workgroup_observation": {
+    "observed_at": "2026-11-18T14:31:36.540765+00:00",
+    "source": "captured_at_launch",
+    "boot_changed": false,
+    "owned_live": [
+      {
+        "pid": 3318944,
+        "start_ticks": "561762045",
+        "uid": 1005,
+        "pgid": 3318944,
+        "session_id": 3318944,
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "proof": "TASK_MARKERS"
+      }
+    ],
+    "unconfirmed_live": [],
+    "unsupported_live": [
+      {
+        "pid": 3318949,
+        "start_ticks": "561762225",
+        "uid": 1005,
+        "pgid": 3318949,
+        "session_id": 3318949,
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "reason": "TASK_LEFT_SUPPORTED_GROUP"
+      }
+    ],
+    "zombies": [],
+    "scan_errors": [],
+    "scan_complete": true,
+    "verified_empty": false
+  },
+  "workgroup_live": true,
+  "cleanup_verified": false,
+  "cleanup_evidence_level": "captured_at_launch",
+  "local_request_verified": true
+}

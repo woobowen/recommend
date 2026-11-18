@@ -1,0 +1,7 @@
+{
+  "path": "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/tuners/lora.py",
+  "sha256": "cbcab4d64b5254d0e1a0018f5e870f7bd93f0178ed1b14d2b750e033f871aa01",
+  "functions": {
+    "LoraLayer.reset_lora_parameters": "def reset_lora_parameters(self, adapter_name):\n        if adapter_name in self.lora_A.keys():\n            # initialize A the same way as the default for nn.Linear and B to zero\n            nn.init.kaiming_uniform_(self.lora_A[adapter_name].weight, a=math.sqrt(5))\n            nn.init.zeros_(self.lora_B[adapter_name].weight)\n        if adapter_name in self.lora_embedding_A.keys():\n            # initialize a the same way as the default for nn.linear and b to zero\n            nn.init.zeros_(self.lora_embedding_A[adapter_name])\n            nn.init.normal_(self.lora_embedding_B[adapter_name])"
+  }
+}

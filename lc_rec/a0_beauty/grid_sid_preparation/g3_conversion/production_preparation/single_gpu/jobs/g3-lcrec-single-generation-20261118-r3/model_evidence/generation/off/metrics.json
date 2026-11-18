@@ -1,0 +1,101 @@
+{
+  "status": "PASS",
+  "execution_topology": "SINGLE_GPU",
+  "execution_profile": {
+    "world_size": 1,
+    "per_device_train_batch_size": 8,
+    "gradient_accumulation_steps": 8,
+    "global_batch": 64
+  },
+  "dual_gpu_acceptance": "NOT_APPLICABLE_THIS_RUN",
+  "world_size": 1,
+  "scope": "PREFLIGHT",
+  "preflight_only": true,
+  "test_complete": false,
+  "actual_test_users": 32,
+  "valid_result_users": 32,
+  "failed_users": 0,
+  "skipped_users": 0,
+  "all_row_indices_exactly_once": true,
+  "expected_user_axis_sha256": "63499fe139d827da4b459a00132a1f206632af495a4bb4856e69a9882fb9a937",
+  "metric_sums": {
+    "hit@5": 0.0,
+    "hit@10": 0.0,
+    "ndcg@5": 0.0,
+    "ndcg@10": 0.0
+  },
+  "metrics": {
+    "hit@5": 0.0,
+    "hit@10": 0.0,
+    "ndcg@5": 0.0,
+    "ndcg@10": 0.0
+  },
+  "prediction_wall_seconds_max_rank": 96.17830980569124,
+  "anomalies": {
+    "candidate_count": 640,
+    "legal_complete_sid_candidates": 7,
+    "invalid_complete_sid_candidates": 633,
+    "duplicate_candidate_occurrences": 0,
+    "colliding_sid_candidate_occurrences": 0,
+    "users_with_invalid_sid": 32,
+    "users_with_duplicate_sid": 0,
+    "users_with_colliding_sid_candidate": 0,
+    "targets_with_colliding_sid": 0,
+    "complete_sid_legal_rate": 0.0109375
+  },
+  "prediction_files": [
+    {
+      "rank": 0,
+      "path": "/data/bwwu/lc-rec/g3-preparation-single-20261118/21d495b0be5b/generation/off/predictions.rank0.jsonl",
+      "users": 32,
+      "bytes": 727657,
+      "sha256": "703dece456cf46f35a278f9d31967be2e6551303ad0879d501b493946bbac0ad"
+    }
+  ],
+  "independent_standard_library_recomputation_matches_original_evaluator": true,
+  "evaluator_policy": {
+    "parsing": "split('Response:')[-1].strip().replace(' ', '')",
+    "sorting": "stable descending original sequences_scores",
+    "filter_items": false,
+    "deduplicate_candidates": false,
+    "collisions": "exact complete SID string match; original item identities are not disambiguated",
+    "ndcg": "sum all matching candidate discounts, including repeated matches, as original evaluator",
+    "hit": "at least one target SID in first k; one held-out item per user (HR/Recall terminology)"
+  },
+  "RUN_COMMIT": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+  "condition": "off",
+  "adapter_path": "/data/bwwu/lc-rec/g3-preparation-single-20261118/21d495b0be5b/continuous/preflight_adapter",
+  "adapter_model_sha256": "cf1550ce915b132c1f9ae089a7ac2f75d47ff756a7297cb94a22743bb329e1c8",
+  "model_identity_sha256": "1cd4bf7e66c3b9a6ab1fd98a6dd41b8a7b678020544622a362b5396eef838a4a",
+  "data_identity": {
+    "index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data/Beauty/Beauty.index.json",
+      "bytes": 553966,
+      "sha256": "420fc060caba3a22b0f03900dfe26abc67da8753f3bac2803f7f3c8703a05c22"
+    },
+    "inter": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3/Beauty/Beauty.inter.json",
+      "bytes": 3212008,
+      "sha256": "8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5"
+    },
+    "item": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3/Beauty/Beauty.item.json",
+      "bytes": 6855739,
+      "sha256": "74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330"
+    }
+  },
+  "generation": {
+    "prompt_id": 0,
+    "num_beams": 20,
+    "num_return_sequences": 20,
+    "max_new_tokens": 10,
+    "early_stopping": true,
+    "filter_items": false,
+    "prefix": "fixed original per-position callback; no catalog Trie",
+    "per_rank_batch_size": 1,
+    "oom_beam_reduction": false,
+    "base_dtype": "BF16, unquantized original author LoRA inference branch",
+    "sampler": "shuffle=True seed=0 epoch=0, complete single-rank randperm, no truncation or padding"
+  },
+  "original_evaluator_sha256": "6bcbf22965b59edebe2b37ff57c374cb6d3127d9c6254e0eba2b873459c6b357"
+}

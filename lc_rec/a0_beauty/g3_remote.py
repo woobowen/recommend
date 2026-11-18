@@ -125,7 +125,7 @@ if {model_root!r} is not None:roots.append((pathlib.Path({model_root!r}),'model_
 for root,prefix in roots:
  for f in root.rglob('*'):
   if not f.is_file() or f.is_symlink() or f.stat().st_size>16*1024**2:continue
-  if f.suffix not in ('.json','.jsonl','.log','.txt') and f.name not in ('stdout','stderr'):continue
+  if f.suffix not in ('.json','.jsonl','.log','.txt','.csv','.npy','.npz') and f.name not in ('stdout','stderr'):continue
   rows.append({{'path':str(f),'relative':prefix+str(f.relative_to(root)),'bytes':f.stat().st_size,'sha256':hashlib.sha256(f.read_bytes()).hexdigest()}})
 print(json.dumps(rows))
 """

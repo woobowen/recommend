@@ -1,0 +1,76 @@
+{
+  "status": "PASS_INTERNAL_PREPARATION_REVIEW",
+  "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+  "execution_topology": "SINGLE_GPU",
+  "scope": "Preparation internal review only",
+  "reviewers": [
+    {
+      "reviewer": "/root/training",
+      "report": {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/review_training_agent.json",
+        "bytes": 95466,
+        "sha256": "937247d5dea742292b2908742dd055dffebf60bde2c7c63be7b43b72aa9fdc6c"
+      },
+      "assigned_non_author_scope_pass": true,
+      "covered_areas": [
+        "CPU checks",
+        "generation",
+        "strict inference reload",
+        "Shuffle actual calls",
+        "metrics and pairing",
+        "control integration"
+      ],
+      "author_exclusions": [
+        "training",
+        "partial state",
+        "boundary comparison"
+      ]
+    },
+    {
+      "reviewer": "/root/generation",
+      "report": {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/review_generation_agent.json",
+        "bytes": 105212,
+        "sha256": "a672b4182ce685bf6722b370db534ceff6a741cabfab7826231c0d0506ca7d82"
+      },
+      "assigned_non_author_scope_pass": true,
+      "covered_areas": [
+        "training",
+        "parameter inventory and optimizer",
+        "strict checkpoint and resume",
+        "CPU and control",
+        "evaluation/statistics"
+      ],
+      "author_exclusions": [
+        "generation implementation"
+      ]
+    },
+    {
+      "reviewer": "/root/cpu_validation",
+      "report": {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/review_cpu_controls_agent.json",
+        "bytes": 88361,
+        "sha256": "a87c9b2e7032b70907bc95204d497228fbf5b81e7df9d94539309eaefb9432f0"
+      },
+      "assigned_non_author_scope_pass": true,
+      "covered_areas": [
+        "training",
+        "checkpoint/resume",
+        "actual generation calls",
+        "identity/control/runner",
+        "transfer/publication source correspondence"
+      ],
+      "author_exclusions": [
+        "CPU checker",
+        "metrics/evaluation consumer"
+      ]
+    }
+  ],
+  "complementary_coverage": "Training implementation reviewed by generation+CPU; generation implementation reviewed by training+CPU; CPU/metrics consumers reviewed by training+generation; main identity/control reviewed by generation+CPU. No reviewer self-signs authored implementation.",
+  "unresolved_internal_findings": [],
+  "direct_source_and_original_result_access_verified": true,
+  "external_web_second_review": "PENDING_NOT_REPLACED",
+  "formal_launch_authorized": false,
+  "formal_experiment_started": false,
+  "created_utc": "2026-11-18T16:05:56.810245+00:00"
+}

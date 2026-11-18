@@ -1,0 +1,25 @@
+{
+  "status": "FAILED",
+  "error": "AssertionError('an expected trainable parameter family never updated')",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/formal_train.py\", line 865, in <module>\n    try:main()\n  File \"/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/formal_train.py\", line 758, in main\n    result=trainer.train(resume_from_checkpoint=a.resume)\n  File \"/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/trainer.py\", line 1539, in train\n    return inner_training_loop(\n  File \"<beauty_trainer_inner_loop>\", line 395, in _inner_training_loop\n  File \"/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/formal_train.py\", line 467, in _beauty_capture_pre_best\n    verify_parameter_updates()\n  File \"/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/formal_train.py\", line 340, in verify_parameter_updates\n    assert all(groups.values()), 'an expected trainable parameter family never updated'\nAssertionError: an expected trainable parameter family never updated\n",
+  "argv": [
+    "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/formal_train.py",
+    "--source-root",
+    "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+    "--data-root",
+    "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+    "--model",
+    "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+    "--run-commit",
+    "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b",
+    "--output",
+    "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/recovery",
+    "--config",
+    "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
+    "--precision-approval",
+    "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+    "--boundary-preflight",
+    "--stop-after-epoch",
+    "1"
+  ]
+}

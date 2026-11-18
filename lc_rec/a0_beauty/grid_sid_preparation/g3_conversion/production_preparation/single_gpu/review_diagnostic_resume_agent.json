@@ -1,0 +1,195 @@
+{
+  "reviewer": "/root/cpu_validation",
+  "review_kind": "INDEPENDENT_NONAUTHOR_DIRECT_RAW_EVIDENCE_REVIEW",
+  "created_utc": "2026-11-18T14:56:24.403148+00:00",
+  "status": "PASS_DIAGNOSTIC_SCOPE_ONLY",
+  "scope": "DIAGNOSTIC_ONLY",
+  "comparison_program_commit": "d2db85465592550da9b59b1118d6ba5d113cce48",
+  "trajectory_source_commit": "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b",
+  "raw_files": [
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-resume-compare-diagnostic-20261118-r2/request.json",
+      "bytes": 147194,
+      "sha256": "1498a390237e014e25f63ddfed00cce02481a44336135a7afac450bc984b9d8c"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-resume-compare-diagnostic-20261118-r2/accepted.json",
+      "bytes": 310,
+      "sha256": "f33557756192178cd9acda5fec5095fe1c147b1d8b06358ab01a263eab47e43f"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-resume-compare-diagnostic-20261118-r2/status.json",
+      "bytes": 2830,
+      "sha256": "9235f5ce4f5c94a3887463fe09b0ca436cee07e98e0d897047ad6d27d4d6247a"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-resume-compare-diagnostic-20261118-r2/cleanup.json",
+      "bytes": 664,
+      "sha256": "90921c3ae9671d86635395cb91b70f1c27177366e3966727c4260d601f9ff692"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-resume-compare-diagnostic-20261118-r2/work.log",
+      "bytes": 777,
+      "sha256": "a3f0990c6c6cba141d29ee8d5997a48558d2ab2267df21f7134a274d9a2d5f06"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-resume-compare-diagnostic-20261118-r2/output/diagnostic_compare.json",
+      "bytes": 344207,
+      "sha256": "5688f35084f5ee8bef8c994672fcdbbaffb4999b123316effc432f83ccc65668"
+    }
+  ],
+  "request_digest_matches_accepted": true,
+  "fixed_git_input_sources_verified": 539,
+  "frozen_comparator_import_bytes_verified": true,
+  "runner_exit_zero_cleanup_empty": true,
+  "findings": {
+    "actual_trainable_tensors": 450,
+    "actual_trainable_elements": 288571392,
+    "optimizer_master_and_both_moments_elements_each": 288571392,
+    "visible_CUDA_RNG_streams": 1,
+    "tensor_leaves_exact": 457,
+    "scalar_leaves_exact": 1566,
+    "numpy_RNG_arrays_exact": true,
+    "maximum_tensor_absolute_difference": 0,
+    "floating_tolerance_violations": 0,
+    "complete_state_files_bytes_each": 4040238192,
+    "complete_state_files_same_sha256": "523fac9a448e0eb9ce79e8c7bc360eac45621ce43bd652fa57db0a52b48d7670",
+    "subsequent_input_label_loader_microbatches_exact": 60,
+    "four_epoch_sample_row_files_exact": true,
+    "scheduler_and_LR_exact": true,
+    "strict_new_process_checkpoint_step": 2,
+    "restored_micro_steps": 20,
+    "restored_optimizer_micro_step_id": 3,
+    "partial_gradient_position": "4 of8 microbatches pending",
+    "fixed_criterion": {
+      "atol": 1e-06,
+      "rtol": 0.001,
+      "exact": [
+        "scheduler",
+        "all RNG",
+        "input/label/order",
+        "all discrete state"
+      ],
+      "fixed_before_observation": true
+    }
+  },
+  "large_state_files": [
+    {
+      "path": "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/continuous/boundary_pre_best_rank0.pt",
+      "bytes": 4040238192,
+      "sha256": "523fac9a448e0eb9ce79e8c7bc360eac45621ce43bd652fa57db0a52b48d7670"
+    },
+    {
+      "path": "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/recovery/boundary_pre_best_rank0.pt",
+      "bytes": 4040238192,
+      "sha256": "523fac9a448e0eb9ce79e8c7bc360eac45621ce43bd652fa57db0a52b48d7670"
+    }
+  ],
+  "limitations": [
+    "Large tensors remain on server; this reviewer directly inspected original recursive-comparison records and producer/import bytes, without downloading or independently rerunning tensor loads.",
+    "The original early-stop report remains failed. This diagnostic does not replace the required fresh round3 production preflight."
+  ],
+  "formal_experiment_started": false,
+  "formal_launch_authorized": false,
+  "final_preparation_acceptance": false,
+  "fresh_round3_acceptance": "PENDING",
+  "light_raw_evidence_independently_rehashed": [
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/continuous/rank0.json",
+      "bytes": 839586,
+      "sha256": "f1cb2d456b60fa872f33517ea5b7294d81bd32f4cfd1e974199043f744a9470a"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/continuous/events.rank0.jsonl",
+      "bytes": 84918,
+      "sha256": "b01b1c42c733da7094d4e1234146edad56f7f3e44a3c3b18d15ca7eb43a04831"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/recovery/rank0.json",
+      "bytes": 838269,
+      "sha256": "ac898d6065c5558c626e5b5f403a948c6f59fadf9a4be954c626e4c23d167b15"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/recovery/events.rank0.jsonl",
+      "bytes": 96391,
+      "sha256": "ef208042e61d394829af8fa044a9881bb54c31a9477db0b06b3dc8f46f1453f2"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/continuous/epoch1_rows.json",
+      "bytes": 3162,
+      "sha256": "1a04d341c4d4417e96ecd5e379e1f9e424855bd844ce2e9cbae4ed035ea52206"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/recovery/epoch1_rows.json",
+      "bytes": 3162,
+      "sha256": "1a04d341c4d4417e96ecd5e379e1f9e424855bd844ce2e9cbae4ed035ea52206"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/continuous/epoch2_rows.json",
+      "bytes": 3169,
+      "sha256": "bff1fa963d7f4667883c7eefc6bad8b23e39614f345f9d4949576ec4226366d9"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/recovery/epoch2_rows.json",
+      "bytes": 3169,
+      "sha256": "bff1fa963d7f4667883c7eefc6bad8b23e39614f345f9d4949576ec4226366d9"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/continuous/epoch3_rows.json",
+      "bytes": 3170,
+      "sha256": "b03c7ed7db32050a82161978a23c48940237ace1d4c48c5f71cf4d1441852271"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/recovery/epoch3_rows.json",
+      "bytes": 3170,
+      "sha256": "b03c7ed7db32050a82161978a23c48940237ace1d4c48c5f71cf4d1441852271"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/continuous/epoch4_rows.json",
+      "bytes": 3169,
+      "sha256": "26386ce31f25e6bd6efa2fba7ff52954829424c962dbbf5f26a9feb53be5b357"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/recovery/epoch4_rows.json",
+      "bytes": 3169,
+      "sha256": "26386ce31f25e6bd6efa2fba7ff52954829424c962dbbf5f26a9feb53be5b357"
+    }
+  ],
+  "additional_raw_event_checks": {
+    "subsequent_batches": 60,
+    "input_label_loader_records_exact": true,
+    "micro_losses_exact": true,
+    "optimizer_steps": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "LR_and_gradient_norms_exact": true,
+    "post_resume_validation_losses_exact": [
+      6.9642462730407715,
+      6.337108612060547,
+      6.06690788269043
+    ],
+    "inventory_trainable_tensors": 450,
+    "inventory_trainable_elements": 288571392,
+    "optimizer_parameter_names_match_actual_inventory": true,
+    "frozen_tensors_hashes_unchanged": 291,
+    "embedding_head_shapes": [
+      32786,
+      4096
+    ],
+    "full_trajectory_changed_families": {
+      "lora_A": 224,
+      "lora_B": 224,
+      "embedding": 1,
+      "lm_head": 1
+    },
+    "original_early_report_still_FAILED": true,
+    "original_early_failure_reason_preserved": "an expected trainable parameter family never updated"
+  }
+}

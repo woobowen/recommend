@@ -1,0 +1,152 @@
+{
+  "reviewer": "/root/cpu_validation",
+  "review_kind": "INDEPENDENT_NONAUTHOR_SOURCE_AND_RAW_EVIDENCE_REVIEW",
+  "created_utc": "2026-11-18T14:48:19.040000+00:00",
+  "status": "PASS_OBSERVED_DIAGNOSTIC_RETIREMENT_ONLY",
+  "source": [
+    {
+      "path": "lc_rec/a0_beauty/g3_retire_diagnostic_checkpoints.py",
+      "bytes": 6962,
+      "sha256": "e7959b69643b93f94612a537aed47e4d3dba82237276478ed533a02521a7eb64"
+    },
+    {
+      "path": "lc_rec/a0_beauty/g3_remote.py",
+      "bytes": 16322,
+      "sha256": "ab222ed25483235b6a18c5e6f0494025e2aa3c091f25dedbbff2ba1c9b3ea13b"
+    }
+  ],
+  "scope": "Only the two complete old diagnostic recovery checkpoint directories selected by the script; no other cleanup.",
+  "fixed_old_commit": "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b",
+  "fixed_root": "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/recovery",
+  "direct_source_findings": [
+    {
+      "initial_issue": "PASS diagnostic comparison was not bound to actual source, attempt or preserved states.",
+      "rechecked_resolution": "Exact run/config/diagnostic attempt binding; actual comparison artifact SHA from completed comparison runner; hashes for both large states, raw and row evidence; failed early five files checked before deletion."
+    },
+    {
+      "initial_issue": "Old verifier bytes were imported before fixed-source verification.",
+      "rechecked_resolution": "Full old commit fixed; canonical recovery root fixed; formal_train, g3_identity and single_gpu_training compared with old RUN_VERSION hashes before import."
+    },
+    {
+      "initial_issue": "Deletion loop accepted generic checkpoint scope and interleaved validation/deletion.",
+      "rechecked_resolution": "Explicit PREFLIGHT/world1 plus old strict profile checks; checkpoint name/global step and complete actual member set verified; no symlinks; all two candidates archived before any rmtree, including selected best."
+    }
+  ],
+  "required_runtime_prerequisites": [
+    "diagnostic GPU runner SUCCEEDED/exit0/cleanup empty",
+    "diagnostic comparison CPU runner SUCCEEDED/exit0/cleanup empty and DIAGNOSTIC_ONLY PASS",
+    "all source/config/checkpoint/adapter/preserved-state guards succeed",
+    "existing runner request uses PYTHONOPTIMIZE=0 and the reviewed immutable script bytes"
+  ],
+  "retained_by_code": [
+    "failed early report, exception, events, epoch1 rows and checkpoint2 manifest",
+    "continuous and resumed complete pre-best comparison states and associated raw evidence",
+    "selected preflight adapter and its identity",
+    "both candidate complete manifests before removal"
+  ],
+  "runtime_retirement_status": "SUCCEEDED_EXIT_0_OWNED_WORKGROUP_EMPTY",
+  "deletion_observed": true,
+  "not_a_new_cleanup_authorization": true,
+  "formal_experiment_started": false,
+  "updated_utc": "2026-11-18T15:03:57.016251+00:00",
+  "actual_job_id": "g3-lcrec-single-retire-diagnostic-20261118-r2",
+  "comparison_program_and_retirement_commit": "d2db85465592550da9b59b1118d6ba5d113cce48",
+  "actual_request_digest_and_fixed_inputs_verified": {
+    "accepted_digest_exact": true,
+    "fixed_git_input_files": 539,
+    "pythonoptimize": "0",
+    "cuda_visible_devices": "",
+    "gpu_devices": 0
+  },
+  "direct_raw_files": [
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-retire-diagnostic-20261118-r2/request.json",
+      "bytes": 147591,
+      "sha256": "84a6e66cc774201061b6e92770dd309e0acca52d06c64c0a64003b77de7332dc"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-retire-diagnostic-20261118-r2/accepted.json",
+      "bytes": 310,
+      "sha256": "42e28ea7c06ade6348b011f0fc9ae47f7bdc47fc3bef8b55090c80fd36baf10e"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-retire-diagnostic-20261118-r2/status.json",
+      "bytes": 3325,
+      "sha256": "31da5757b7868d8a5675ad9110cde0182d9b9f6dea75f7bfce96427f3074680c"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-retire-diagnostic-20261118-r2/cleanup.json",
+      "bytes": 664,
+      "sha256": "6b85c6434f6a58740884196ba0cc543034937751874ffa99df89725e7800341e"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-retire-diagnostic-20261118-r2/work.log",
+      "bytes": 161,
+      "sha256": "3c9a1a37381f846744994ec29dbbfdb498f88a010d0910e8cfef9a5f7459d352"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-retire-diagnostic-20261118-r2/output/retirement.json",
+      "bytes": 14946,
+      "sha256": "4cd079f656baf65a25952ef09885a375a2816849d4f2bc15a1d74c6632dbcda6"
+    }
+  ],
+  "directly_rehashed_retained_evidence": [
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/early_evidence/rank0.json",
+      "bytes": 624418,
+      "sha256": "e3aa475e3c4e673c6d2d72ba61331ea00c4964f204925ab2c1975bf4791e9d87"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/early_evidence/events.rank0.jsonl",
+      "bytes": 24970,
+      "sha256": "861b2673217d07d43cccc8cf170b3cd4eb39e8a5f0c9f304a9f28ab97bb896a3"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/early_evidence/failure.rank0.json",
+      "bytes": 2362,
+      "sha256": "465cc0ac8207119da3c84575b58042edc01635f2bd78a25bc1ac07130a2bf73c"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/early_evidence/epoch1_rows.json",
+      "bytes": 3162,
+      "sha256": "1a04d341c4d4417e96ecd5e379e1f9e424855bd844ce2e9cbae4ed035ea52206"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/early_evidence/checkpoint-2.complete.json",
+      "bytes": 8588,
+      "sha256": "81255110c1e0b1e774ef9c09da554b0b972ebb8935e9ebaf5c4c7a42c554f0bf"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/recovery/verified_checkpoint_manifests/checkpoint-10.complete.json",
+      "bytes": 8588,
+      "sha256": "e5e63c233f2e02f563ebd6d6457c4fe480f6afca75bf879ea8cb50619f299f31"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/recovery/verified_checkpoint_manifests/checkpoint-7.complete.json",
+      "bytes": 8589,
+      "sha256": "b908b40bfdb4b6869ee7a22d9e11722de53b5190ffdd63d66d041c154e3d0e5c"
+    }
+  ],
+  "observed_scope": {
+    "removed_paths": [
+      "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/recovery/checkpoint-10",
+      "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/recovery/checkpoint-7"
+    ],
+    "all_removed_were_verified_prefight_world1_checkpoints": true,
+    "complete_manifests_archived_before_deletion": true,
+    "preserved_failed_early_status": "FAILED",
+    "selected_adapter_identity_sha256": "f79ea9953d55fc4fed067733e570a77de9bd4ca56b8ef2647bc41f8f14f20891",
+    "large_comparison_state_paths": [
+      "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/continuous/boundary_pre_best_rank0.pt",
+      "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/recovery/boundary_pre_best_rank0.pt"
+    ],
+    "large_states_verified_by_actual_script_sha_and_comp_receipt": true,
+    "allocated_file_blocks_removed_bytes": 37880590336,
+    "observed_filesystem_free_delta_bytes": 37880360960,
+    "free_space_note": "Filesystem free-space delta can include concurrent external writes; removed allocated file blocks are recorded separately."
+  },
+  "limitations": [
+    "Reviewer directly rehashed local lightweight originals and fixed source; large tensors remain on server and were hashed by actual retirement/check/comparison code, not independently downloaded or deserialized by this reviewer.",
+    "This is retirement of completed old diagnostic PREFLIGHT checkpoint copies only; no final fresh-model acceptance is implied."
+  ]
+}

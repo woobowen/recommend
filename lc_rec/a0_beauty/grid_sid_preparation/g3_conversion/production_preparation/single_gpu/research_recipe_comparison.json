@@ -1,0 +1,90 @@
+{
+  "scope": "ACTUAL_FIXED_CONFIG_COMPARISON",
+  "original_commit": "8f36720a024be671a3ba893370a98126bc0f3b4a",
+  "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+  "original_config_sha256": "24b568161f2d71d3c5962372a38683b2d33ee5d6d5064de0612215946a8106fd",
+  "G3_config_sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+  "differences": {
+    "execution_basis": {
+      "original": null,
+      "G3_single": "User single-GPU supplement: serial original global sample groups; floating point and RNG trajectory may differ from dual GPU."
+    },
+    "execution_topology": {
+      "original": null,
+      "G3_single": "SINGLE_GPU"
+    },
+    "experiment_id": {
+      "original": null,
+      "G3_single": "grid-g3-beauty-lcrec-seed42-20261118"
+    },
+    "gradient_accumulation_steps": {
+      "original": 4,
+      "G3_single": 8
+    },
+    "preacceptance_gpu_device_seconds": {
+      "original": 3600,
+      "G3_single": 14400
+    },
+    "recipe_identity": {
+      "original": "LETTER-LC-Rec A0 / LLaMA-7B LoRA / FA2 Deterministic Backward Adaptation",
+      "G3_single": "GRID fixed G3 Beauty / LETTER-LC-Rec LLaMA-7B / inherited formal recipe"
+    },
+    "sid_source": {
+      "original": null,
+      "G3_single": "GRID G3: three quantization positions plus original deduplication position"
+    },
+    "world_size": {
+      "original": 2,
+      "G3_single": 1
+    }
+  },
+  "unchanged_fields": [
+    "add_prefix",
+    "author_commit",
+    "bf16",
+    "dataset",
+    "epochs",
+    "eval_delay",
+    "filter_items",
+    "flash_backward_deterministic",
+    "formal_wall_limit_seconds",
+    "fp16",
+    "global_batch",
+    "greater_is_better",
+    "his_sep",
+    "index_file",
+    "learning_rate",
+    "logging_step",
+    "lora_alpha",
+    "lora_dropout",
+    "lora_modules_to_save",
+    "lora_r",
+    "lora_target_modules",
+    "lr_scheduler_type",
+    "max_his_len",
+    "metric_for_best_model",
+    "model_max_length",
+    "model_revision",
+    "only_train_response",
+    "optim",
+    "per_device_batch_size",
+    "sample_valid",
+    "save_and_eval_steps",
+    "save_and_eval_strategy",
+    "save_total_limit",
+    "seed",
+    "storage_save_total_limit",
+    "tasks",
+    "temperature",
+    "test_beams",
+    "test_prompt",
+    "train_data_sample_num",
+    "train_prompt_sample_num",
+    "valid_prompt_id",
+    "valid_prompt_sample_num",
+    "warmup_ratio",
+    "weight_decay"
+  ],
+  "basis": "Fixed SID source and user-authorized single GPU topology; all inherited research settings retained. Actual int8/BF16/attention/optimizer behavior is separately verified in runtime receipts.",
+  "formal_launch_authorized": false
+}

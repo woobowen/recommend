@@ -1,0 +1,2215 @@
+{
+  "schema": "g3_single_gpu_direct_non_author_review_v1",
+  "reviewer": "/root/training",
+  "reviewed_run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+  "status": "PASS_ASSIGNED_NON_AUTHOR_SCOPE",
+  "updated_utc": "2026-11-18T15:59:12.095991+00:00",
+  "review_scope": "Independent non-author review of main-controller identity/control/runner, CPU check implementations, and generation/evaluation implementations plus actual final21d CPU/dryrun/generation/evaluation evidence. The reviewer authored formal_train.py, boundary_compare.py, single_gpu_training.py, zero2_partial_state.py and g3_resume_diagnostic_compare.py; their implementation is excluded from this non-author signature and is reviewed by complementary agents.",
+  "authorization_revision": "User explicitly authorized single GPU preparation and future formal entry. Previous dual-GPU requirement is not applicable to this revision. Formal launch remains unauthorized.",
+  "direct_current_source_files": [
+    {
+      "path": "lc_rec/a0_beauty/g3_identity.py",
+      "bytes": 9338,
+      "sha256": "0068f928c95f8cd2314da752c252faaa91f14eda7e18fe959bc43e21247d4ce8",
+      "source_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+    },
+    {
+      "path": "lc_rec/a0_beauty/production_identity.py",
+      "bytes": 16207,
+      "sha256": "6b23c37a96ca15eb3b6e75b140eb8ab2d40821b852a864e508e73173b165a603",
+      "source_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+    },
+    {
+      "path": "lc_rec/a0_beauty/production_control.py",
+      "bytes": 23695,
+      "sha256": "83af6ec7f6077553ee8cff5fd074bdd6aed112c79b775ea05347cd24ae95b4fc",
+      "source_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+    },
+    {
+      "path": "lc_rec/a0_beauty/production_pipeline.py",
+      "bytes": 13085,
+      "sha256": "88884f9930254772e4f7d782a119310a7416ffbb918854603f91ae34d306fdb4",
+      "source_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+    },
+    {
+      "path": "lc_rec/a0_beauty/g3_preflight_driver.py",
+      "bytes": 11789,
+      "sha256": "7c97f5b23f28d330d50b82439f9e85ab979f7d8086fce0c130723c1fc9d39224",
+      "source_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+    },
+    {
+      "path": "lc_rec/a0_beauty/g3_remote.py",
+      "bytes": 16328,
+      "sha256": "8f3c4776c04acb2d66f1fc55cd97b2381cda96877d52ed676a9104550c3551ac",
+      "source_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+    },
+    {
+      "path": "lc_rec/a0_beauty/g3_dry_run.py",
+      "bytes": 8533,
+      "sha256": "af6bc74f84ab00fe24089f3b0b0a1fd6a85e1e7dc7a2d3f28320fc7213cb580f",
+      "source_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+    },
+    {
+      "path": "lc_rec/a0_beauty/checkpoint_receipt.py",
+      "bytes": 4749,
+      "sha256": "672f7962b6c1f38f5169de1b280dbf4d09ee2e6ee6ef83a025244e60e1bd9c6a",
+      "source_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+    },
+    {
+      "path": "lc_rec/a0_beauty/g3_evaluate_preflight.py",
+      "bytes": 15789,
+      "sha256": "09af0e96e7fde3f8cd5559c83eb2b2a1962a14312b5e581a7ed36bcbe9f231cb",
+      "source_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_cpu_check.py",
+      "bytes": 36660,
+      "sha256": "19f3dd4f9def60e039051833a44f4e53ae6a2ecd21a9b981d651ebde2ce07916",
+      "source_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+    }
+  ],
+  "direct_installed_source_files": [
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/g3-single-installed-loader-sources.json",
+      "bytes": 232974,
+      "sha256": "183338d9ea2c7c95a0385c485a44081dcb024c037787f96036df265fb9f736d7"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/g3-single-installed-loss-sources.json",
+      "bytes": 1430,
+      "sha256": "a028bb4755b88c5443c9b337d935dcbf50839a8d8e2774c7d8baffa4f7fa413b"
+    },
+    {
+      "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/installed_peft_initialization.json",
+      "bytes": 842,
+      "sha256": "eb7b17457a5314a7659b81252966a9fa381880c325a6268210561b93fdfd1ec9"
+    }
+  ],
+  "installed_loader_file_sha256_verified": "7741d477a6fb02f18f8e5871d348b963fc669a51821f43102215255f02c48cb8",
+  "installed_DS_loss_method_sha256_verified": "a37d9302e6283c1a81755c5670127aa3ccabbf7e3629dbdb3750753eac2b3ab3",
+  "completed_reviews": {
+    "g3-lcrec-single-cpu-20261118-r2": {
+      "status": "PASS",
+      "raw": [
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-cpu-20261118-r2/output/cpu/result.json",
+          "bytes": 27860,
+          "sha256": "6f33ab287a837cdfc5b557689467ae941bb455183f2829ab6db3354e6d459007"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-cpu-20261118-r2/request.json",
+          "bytes": 146451,
+          "sha256": "24556fe98568e9db754aaefc0569687ef0745f66e6d0730d8287016f3f7ff5f6"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-cpu-20261118-r2/status.json",
+          "bytes": 9723,
+          "sha256": "698b23416425e52c236ca1fd1688b598a64c1cc1e82eda394f741e5cd4a825da"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-cpu-20261118-r2/accepted.json",
+          "bytes": 310,
+          "sha256": "1b5949294a7c4621bf72491857628a1f4a86f41586fedf101de01b1843b163a3"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-cpu-20261118-r2/work.log",
+          "bytes": 1089,
+          "sha256": "ba3baa500a9e7d49f59432d13cdf2f504f64f0c22f14d49e487253c6b63be84d"
+        }
+      ],
+      "repository_source_bytes_verified": [
+        {
+          "path": "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/data.py",
+          "sha256": "cfd7733325670792c0da32393752c49116cd2b0ce097ffd629cda1c224bddecc",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/collator.py",
+          "sha256": "e1ec6dec9aadf3c123ea45656fe2c58dc102ac075ca78bf9dff7df47cb5c29b8",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/utils.py",
+          "sha256": "8c1139a496cd74479e862472a57dd5c5eccb3870e17fb64b2f4d02063fd252e5",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/g3_identity.py",
+          "sha256": "0068f928c95f8cd2314da752c252faaa91f14eda7e18fe959bc43e21247d4ce8",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/formal_train.py",
+          "sha256": "c8e21c5178ac74bf4bd9609cc306b33be1bdc35f4cfef5551e4366c457352d9a",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/formal_evaluate.py",
+          "sha256": "b16e5b2b34d0a353aff791fdc587652bcf25cda6c1e6bcb290b9e58f1eae33d6",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/offline_metrics.py",
+          "sha256": "2068f8d167f19189605f63d42067bd331738d137bb6ff5129dcad910b7eb6e21",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/paired_beauty.py",
+          "sha256": "a432d820c7326bdf6aeb94669428e78c2022a49b221aa668e081a172c5383f01",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/single_gpu_training.py",
+          "sha256": "41b3106f85e029dac7bd18380b4afded6fa9a4c6f92951db1cf72a0f0332d560",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/training_rows.py",
+          "sha256": "a6023c3a7bd0d17871a56ddf32bbf9679c6a5d40f9cb48354aea3e4f0a7c20a2",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/prompt.py",
+          "sha256": "2415f1a2bece1fd27f961efd5beb3a52e0e997ba39c1f3825fec1292bf84f7d7",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/evaluate.py",
+          "sha256": "6bcbf22965b59edebe2b37ff57c374cb6d3127d9c6254e0eba2b873459c6b357",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_cpu_check.py",
+          "sha256": "fe488cad0512fcbec8bb44bb5e30323053fd759e87655828b90c1cb18bda402e",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
+          "sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+          "matches_fixed_commit": true
+        }
+      ],
+      "installed_sources": [
+        {
+          "bytes": 189329,
+          "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py",
+          "sha256": "88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d"
+        },
+        {
+          "bytes": 40793,
+          "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/data_loader.py",
+          "sha256": "7741d477a6fb02f18f8e5871d348b963fc669a51821f43102215255f02c48cb8"
+        }
+      ],
+      "runner_cleanup_verified": true,
+      "request_accepted_hash_exact": true,
+      "observed": {
+        "elapsed_seconds": 23.39363255351782,
+        "peak_rss_bytes": 1458167808,
+        "execution_topology": "SINGLE_GPU",
+        "execution_profile": {
+          "global_batch": 64,
+          "gradient_accumulation_steps": 8,
+          "per_device_train_batch_size": 8,
+          "world_size": 1
+        },
+        "gpu_used": false,
+        "formal_experiment_started": null,
+        "formal_launch_authorized": null
+      },
+      "single_gpu_checks": {
+        "actual_DataLoaderShard_stream_exact": true,
+        "actual_historical_first160_rows_exact": true,
+        "full_schedule": {
+          "author_rows": 131413,
+          "epoch_steps": [
+            2053,
+            4107,
+            6160,
+            8214
+          ],
+          "epochs": 4,
+          "full_epoch_microbatches": 16428,
+          "full_epoch_serial_rows": 131424,
+          "global_batch": 64,
+          "gradient_accumulation_steps": 8,
+          "logical_historical_ranks": 2,
+          "loss_weighting": "Each unchanged eight-example native microbatch loss contributes 1/8; this equals its historical 1/4 accumulation times1/2 rank-average weight. Native response-token reduction inside each microbatch remains unchanged; no global-token-mean or floating-trajectory equivalence is claimed.",
+          "max_steps": 8214,
+          "micro_batch_size": 8,
+          "numerical_equivalence_to_two_gpus_claimed": false,
+          "per_epoch_microbatches": 16428,
+          "preflight_only": false,
+          "short_epoch_global_rows": null,
+          "tail_repeat_rows": 11,
+          "world_size": 1
+        },
+        "full_stream": {
+          "distinct_rows": 131413,
+          "duplicates": {
+            "109264": 1,
+            "11009": 1,
+            "115089": 1,
+            "18034": 1,
+            "43467": 1,
+            "60863": 1,
+            "61114": 1,
+            "77276": 1,
+            "77472": 1,
+            "84286": 1,
+            "98894": 1
+          },
+          "global64_groups_sha256": "6ced439409b316dc6d4b583c5f74a43cfb1abeda77902f8d941076768f859ea6",
+          "global_row_order_sha256": "a6b63c5917751c6c533b66fa83b594ac389bdc7781d7d18bdf91698d4de3222e",
+          "loss_weighting": "Each unchanged eight-example native microbatch loss contributes 1/8; this equals its historical 1/4 accumulation times1/2 rank-average weight. Native response-token reduction inside each microbatch remains unchanged; no global-token-mean or floating-trajectory equivalence is claimed.",
+          "numerical_equivalence_claimed": false,
+          "repeat_rows": 11,
+          "rows": 131424,
+          "scope": "full serialized historical two-rank epoch",
+          "tail_rows": [
+            81245,
+            98965,
+            15692,
+            41607,
+            126220,
+            11009,
+            77472,
+            84286,
+            43467,
+            61114,
+            77276,
+            109264,
+            115089,
+            60863,
+            18034,
+            98894
+          ]
+        },
+        "historical_default_generator_seed": 67280421310721,
+        "historical_interleaving_exact": true,
+        "historical_raw_evidence": {
+          "bytes": 1280,
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/evidence/e2e-20261116-r0/continuous/epoch1_rows.json",
+          "sha256": "a5453647ebf95c1726d400c5127b276687986b24caabdcaf09969c19f68b21a6"
+        },
+        "inference_assignment_sha256": "22ee58fe9f948f50e5cbc92160b6dc7df7e2f633cb9e8bf3121da5fb35bcb088",
+        "loss_scaling": {
+          "global_token_mean_equivalence_claimed": false,
+          "historical_divisor_per_rank": 4,
+          "historical_rank_average_divisor": 2,
+          "method_sha256": "a37d9302e6283c1a81755c5670127aa3ccabbf7e3629dbdb3750753eac2b3ab3",
+          "native_method": "(self, prescaled_loss, eval_micro_batches=None)",
+          "scope": "SYNTHETIC_MICROBATCH_WEIGHTING_ONLY",
+          "single_GPU_divisor": 8,
+          "single_dual_GPU_numerical_trajectory_equivalence_claimed": false,
+          "source": {
+            "bytes": 189329,
+            "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py",
+            "sha256": "88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d"
+          },
+          "synthetic_FP64_gradient_exact": true
+        },
+        "reconstruction_generator_unchanged": true,
+        "short_schedule": {
+          "author_rows": 131413,
+          "epoch_steps": [
+            2,
+            5,
+            7,
+            10
+          ],
+          "epochs": 4,
+          "full_epoch_microbatches": 16428,
+          "full_epoch_serial_rows": 131424,
+          "global_batch": 64,
+          "gradient_accumulation_steps": 8,
+          "logical_historical_ranks": 2,
+          "loss_weighting": "Each unchanged eight-example native microbatch loss contributes 1/8; this equals its historical 1/4 accumulation times1/2 rank-average weight. Native response-token reduction inside each microbatch remains unchanged; no global-token-mean or floating-trajectory equivalence is claimed.",
+          "max_steps": 10,
+          "micro_batch_size": 8,
+          "numerical_equivalence_to_two_gpus_claimed": false,
+          "per_epoch_microbatches": 20,
+          "preflight_only": true,
+          "short_epoch_global_rows": 160,
+          "tail_repeat_rows": 11,
+          "world_size": 1
+        },
+        "short_stream": {
+          "distinct_rows": 160,
+          "duplicates": {},
+          "global64_groups_sha256": "51a2500961237b58d5683806999afa895c2b79d040fac4f7688ec73aed0bb69c",
+          "global_row_order_sha256": "b656ef7692cd6bb8fa612cd563f856c6e2d7d06115591595268661aa9de67080",
+          "loss_weighting": "Each unchanged eight-example native microbatch loss contributes 1/8; this equals its historical 1/4 accumulation times1/2 rank-average weight. Native response-token reduction inside each microbatch remains unchanged; no global-token-mean or floating-trajectory equivalence is claimed.",
+          "numerical_equivalence_claimed": false,
+          "repeat_rows": 0,
+          "rows": 160,
+          "scope": "first20 serial microbatches",
+          "tail_rows": [
+            89059,
+            89247,
+            45489,
+            5169,
+            32396,
+            20956,
+            45733,
+            130485,
+            78452,
+            86431,
+            110188,
+            2152,
+            85369,
+            76886,
+            66253,
+            108536
+          ]
+        },
+        "single_rank_inference_users": 22363
+      },
+      "negative_guards": [
+        {
+          "case": "single_GPU_wrong_world",
+          "guard": "ValueError",
+          "message": "single GPU execution profile mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "single_GPU_wrong_accumulation",
+          "guard": "ValueError",
+          "message": "single GPU execution profile mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "serial_training_missing_row",
+          "guard": "ValueError",
+          "message": "serial global stream row count/range",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "serial_training_wrong_padding_or_duplicate",
+          "guard": "ValueError",
+          "message": "serial global stream missing rows or wrong tail repeat policy",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "short_training_duplicate_row",
+          "guard": "ValueError",
+          "message": "short serial epoch must cover160 distinct native sampled rows",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "inference_duplicate_user_padding",
+          "guard": "ValueError",
+          "message": "assignment has missing, duplicate, or out-of-range rows",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "same_count_wrong_token_to_ID",
+          "guard": "ValueError",
+          "message": "G3 token to ID mapping mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "old_base_tokenizer",
+          "guard": "ValueError",
+          "message": "G3 tokenizer vocabulary",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "old_or_wrong_index",
+          "guard": "ValueError",
+          "message": "G3 data asset identity",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "wrong_bridge_after_valid_data",
+          "guard": "ValueError",
+          "message": "G3 upstream bridge identity",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "same_revision_wrong_model_source",
+          "guard": "ValueError",
+          "message": "G3 base model content identity",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "saved_tokenizer_wrong_mapping",
+          "guard": "ValueError",
+          "message": "G3 token to ID mapping mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "adapter_wrong_source_commit",
+          "guard": "ValueError",
+          "message": "G3 adapter source commit",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "adapter_wrong_effective_config",
+          "guard": "ValueError",
+          "message": "G3 adapter effective config mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "wrong_checkpoint_source",
+          "guard": "AssertionError",
+          "message": "checkpoint source commit mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "wrong_checkpoint_config",
+          "guard": "AssertionError",
+          "message": "checkpoint effective config mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "missing_rank_member",
+          "guard": "AssertionError",
+          "message": "checkpoint missing required rank/member",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "missing_collective_rank",
+          "guard": "AssertionError",
+          "message": "checkpoint collective rank completion mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "checkpoint_wrong_world_size",
+          "guard": "AssertionError",
+          "message": "checkpoint world size mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "checkpoint_wrong_execution_topology",
+          "guard": "AssertionError",
+          "message": "checkpoint execution topology mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "checkpoint_old_accumulation_profile",
+          "guard": "ValueError",
+          "message": "single GPU execution profile mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "checkpoint_foreign_rank1_member",
+          "guard": "AssertionError",
+          "message": "checkpoint foreign rank member in single GPU execution",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "checkpoint_not_collectively_completed",
+          "guard": "FileNotFoundError",
+          "message": "[Errno 2] No such file or directory: '/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-lcrec-single-cpu-20261118-r2/output/cpu/SYNTHETIC_CPU_INTEGRATION_ONLY/checkpoint-2/complete.json'",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "old_adapter_tokenizer_mapping",
+          "guard": "ValueError",
+          "message": "G3 adapter token mapping",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "adapter_old_accumulation_profile",
+          "guard": "ValueError",
+          "message": "single GPU execution profile mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "same_shape_or_size_wrong_weights",
+          "guard": "ValueError",
+          "message": "G3 adapter member identity: adapter_model.bin",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "adapter_missing_tokenizer",
+          "guard": "ValueError",
+          "message": "G3 adapter member identity: tokenizer.model",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "preflight_adapter_as_formal",
+          "guard": "ValueError",
+          "message": "G3 adapter scope mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "no_formal_authorization",
+          "guard": "ValueError",
+          "message": "new G3 formal launch authorization required",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "old_experiment_authorization",
+          "guard": "ValueError",
+          "message": "authorization belongs to a different experiment",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_old_dual_world",
+          "guard": "AssertionError",
+          "message": "Single-GPU prediction topology mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_old_accumulation_profile",
+          "guard": "ValueError",
+          "message": "single GPU execution profile mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_extra_rank_shard",
+          "guard": "AssertionError",
+          "message": "Single-GPU production evaluation requires exactly one rank shard",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_missing_user",
+          "guard": "AssertionError",
+          "message": "Prediction shard length disagrees with rank completion evidence",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_duplicate_user",
+          "guard": "AssertionError",
+          "message": "Duplicate/out-of-range test row; no deduplication or skipping permitted",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_wrong_target",
+          "guard": "AssertionError",
+          "message": "Prediction identity/target mismatch: target",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_wrong_model",
+          "guard": "AssertionError",
+          "message": "Prediction row model/scope/Shuffle binding mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_wrong_shuffle",
+          "guard": "AssertionError",
+          "message": "Prediction row model/scope/Shuffle binding mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_preflight_as_formal",
+          "guard": "AssertionError",
+          "message": "Prediction row model/scope/Shuffle binding mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "formal_subset_population",
+          "guard": "AssertionError",
+          "message": "Formal evaluation requires the full fixed 22363-user axis",
+          "synthetic_fixture": true
+        }
+      ],
+      "labels": 1148
+    },
+    "g3-lcrec-single-dryrun-20261118-r2": {
+      "status": "PASS",
+      "raw": [
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-dryrun-20261118-r2/output/dry_run.json",
+          "bytes": 12051,
+          "sha256": "1a27843280a15c8396f4603c66e595b77ea9300ee1d21135707736bcf8db738b"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-dryrun-20261118-r2/request.json",
+          "bytes": 146331,
+          "sha256": "32e0ebb0083a496bec5d9581739769e6dba5f27364a9b24fa52eeee5575694f3"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-dryrun-20261118-r2/status.json",
+          "bytes": 2979,
+          "sha256": "5db56e709e0c2175951252a29abc0040ad42f8d036b4073769719bae73bf5d0b"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-dryrun-20261118-r2/accepted.json",
+          "bytes": 310,
+          "sha256": "31a87573bc34a996b18847bcb41fdfce5867980b13e3a9d8472274e61c68d4cd"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-dryrun-20261118-r2/work.log",
+          "bytes": 123,
+          "sha256": "695f2a04aacdaae536aead4b4f7091d55f4119a8fb2f228b708e4f0ff8196568"
+        }
+      ],
+      "repository_source_bytes_verified": [
+        {
+          "path": "lc_rec/a0_beauty/g3_identity.py",
+          "sha256": "0068f928c95f8cd2314da752c252faaa91f14eda7e18fe959bc43e21247d4ce8",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/formal_control.py",
+          "sha256": "1988c16e881f1a7e79d3d8d5a4737bedc8c0d5e41273fbc617db397bc58ed2e2",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_identity.py",
+          "sha256": "113867f9b3e1a986d9b81d6f47219d9c779b70530c98089704b2106a6b31af11",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/formal_train.py",
+          "sha256": "c8e21c5178ac74bf4bd9609cc306b33be1bdc35f4cfef5551e4366c457352d9a",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/offline_metrics.py",
+          "sha256": "2068f8d167f19189605f63d42067bd331738d137bb6ff5129dcad910b7eb6e21",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_control.py",
+          "sha256": "b5b0ab8a24ed6c5618bcf9e054a0edc682f9d33b0e796c6b96db91cdcb60876b",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_pipeline.py",
+          "sha256": "8dfce87380b99591cf49cd14f8bba2d135e6ab3326cc0268126f9dc559172907",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/g3_dry_run.py",
+          "sha256": "cbfe0d29a8b49004072169363f0f841d79dc19e600b4ed017abd9d833e09df0c",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_control.py",
+          "sha256": "b5b0ab8a24ed6c5618bcf9e054a0edc682f9d33b0e796c6b96db91cdcb60876b",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_pipeline.py",
+          "sha256": "8dfce87380b99591cf49cd14f8bba2d135e6ab3326cc0268126f9dc559172907",
+          "matches_fixed_commit": true
+        }
+      ],
+      "installed_sources": [],
+      "runner_cleanup_verified": true,
+      "request_accepted_hash_exact": true,
+      "observed": {
+        "elapsed_seconds": null,
+        "peak_rss_bytes": null,
+        "execution_topology": "SINGLE_GPU",
+        "execution_profile": {
+          "global_batch": 64,
+          "gradient_accumulation_steps": 8,
+          "per_device_train_batch_size": 8,
+          "world_size": 1
+        },
+        "gpu_used": null,
+        "formal_experiment_started": false,
+        "formal_launch_authorized": false
+      },
+      "authorization_negatives": [
+        {
+          "error": "FORMAL_PREPARE never submits",
+          "expected": "FORMAL_PREPARE never submits",
+          "name": "prepare never submits",
+          "passed": true
+        },
+        {
+          "error": "separate user launch authorization and user-pinned digest required",
+          "expected": "separate user launch authorization",
+          "name": "missing new launch authorization",
+          "passed": true
+        },
+        {
+          "error": "authorization belongs to a different experiment",
+          "expected": "different experiment",
+          "name": "old experiment authorization",
+          "passed": true
+        }
+      ],
+      "actual_constructed_argv": {
+        "normal": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=1",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/formal_evaluate.py",
+          "--condition",
+          "normal",
+          "--verify-normal-off",
+          "--source-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--adapter",
+          "/data/bwwu/lc-rec/g3-formal-20261118/9adaad4ca217/training/best_adapter",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/9adaad4ca217/attempts/normal/a0/test",
+          "--run-commit",
+          "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b"
+        ],
+        "s3": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=1",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/formal_evaluate.py",
+          "--condition",
+          "s3",
+          "--source-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--adapter",
+          "/data/bwwu/lc-rec/g3-formal-20261118/9adaad4ca217/training/best_adapter",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/9adaad4ca217/attempts/s3/a0/test",
+          "--run-commit",
+          "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b"
+        ],
+        "s4": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=1",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/formal_evaluate.py",
+          "--condition",
+          "s4",
+          "--source-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--adapter",
+          "/data/bwwu/lc-rec/g3-formal-20261118/9adaad4ca217/training/best_adapter",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/9adaad4ca217/attempts/s4/a0/test",
+          "--run-commit",
+          "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b"
+        ],
+        "train": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=1",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/formal_train.py",
+          "--source-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/9adaad4ca217/training",
+          "--config",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
+          "--run-commit",
+          "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b",
+          "--precision-approval",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/9adaad4ca217/release/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+          "--prelaunch-review",
+          "/data/bwwu/lc-rec/g3-formal-20261118/9adaad4ca217/WEB_SECOND_REVIEW_REQUIRED.json",
+          "--precision-approval-sha256",
+          "b44e910f4fb9bf08aa0f2fb574dfedc475d1f3eed96e039c2808befdea2312f3",
+          "--prelaunch-review-sha256",
+          "WEB_REVIEW_CONTENT_SHA256_REQUIRED",
+          "--formal-authorization",
+          "/data/bwwu/lc-rec/g3-formal-20261118/9adaad4ca217/USER_AUTHORIZATION_REQUIRED.json",
+          "--formal-authorization-sha256",
+          "USER_PINNED_SHA256_REQUIRED"
+        ]
+      },
+      "output_isolation": {
+        "formal": "/data/bwwu/lc-rec/g3-formal-20261118/9adaad4ca217",
+        "preflight": "/data/bwwu/lc-rec/g3-preparation-20261118"
+      }
+    },
+    "g3-lcrec-single-cpu-20261118-r3-final": {
+      "status": "PASS",
+      "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+      "raw": [
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-cpu-20261118-r3-final/output/cpu/result.json",
+          "bytes": 36463,
+          "sha256": "a8f11f53835746c342a2e374546bede03a9eab743e5f8e77c1726d6345365fd9"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-cpu-20261118-r3-final/request.json",
+          "bytes": 147355,
+          "sha256": "ee8a9667c4bc1d52d7d166a5f6bd8534fd72e81743ab43971b1f1927eee8478f"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-cpu-20261118-r3-final/accepted.json",
+          "bytes": 310,
+          "sha256": "ffa90abf76745b1b9f6b52c6833b0d8744cc7b9ecb11ae7b1096026817b0e1e4"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-cpu-20261118-r3-final/status.json",
+          "bytes": 10333,
+          "sha256": "b254940ba2777d2ad4a6599109cc96058faf479784196cb9b055319f1218c98f"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-cpu-20261118-r3-final/work.log",
+          "bytes": 1095,
+          "sha256": "169f6063ba21c5fb0a1eb4999ebc262998b7939f1af52b43e785b1452b213d4d"
+        }
+      ],
+      "repository_sources_verified": [
+        {
+          "path": "lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
+          "sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/formal_control.py",
+          "sha256": "1988c16e881f1a7e79d3d8d5a4737bedc8c0d5e41273fbc617db397bc58ed2e2",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/formal_evaluate.py",
+          "sha256": "9c7748ce7659a085d15128e060a1b72f6ac92b62a8642056810d0fa6df6a14e7",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/formal_train.py",
+          "sha256": "d47c536d1d2a79a7c7841d444345125753ab403ab33c08a80b8207f94ba694ef",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/g3_evaluate_preflight.py",
+          "sha256": "09af0e96e7fde3f8cd5559c83eb2b2a1962a14312b5e581a7ed36bcbe9f231cb",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/g3_identity.py",
+          "sha256": "0068f928c95f8cd2314da752c252faaa91f14eda7e18fe959bc43e21247d4ce8",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_cpu_check.py",
+          "sha256": "19f3dd4f9def60e039051833a44f4e53ae6a2ecd21a9b981d651ebde2ce07916",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/offline_metrics.py",
+          "sha256": "2068f8d167f19189605f63d42067bd331738d137bb6ff5129dcad910b7eb6e21",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/paired_beauty.py",
+          "sha256": "a432d820c7326bdf6aeb94669428e78c2022a49b221aa668e081a172c5383f01",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/preflight_users.py",
+          "sha256": "1b32ec90b2adb8b83e07b887cb6d565c36aa3413efb820f810d5c5fb09d8718a",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_control.py",
+          "sha256": "83af6ec7f6077553ee8cff5fd074bdd6aed112c79b775ea05347cd24ae95b4fc",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_identity.py",
+          "sha256": "6b23c37a96ca15eb3b6e75b140eb8ab2d40821b852a864e508e73173b165a603",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/single_gpu_training.py",
+          "sha256": "41b3106f85e029dac7bd18380b4afded6fa9a4c6f92951db1cf72a0f0332d560",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/training_rows.py",
+          "sha256": "a6023c3a7bd0d17871a56ddf32bbf9679c6a5d40f9cb48354aea3e4f0a7c20a2",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/uneven_sampler.py",
+          "sha256": "1f358c8c887b12acb06518fe89cf206a7be8eae595bb25501699874fc355e5da",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/web_review_gate_check.py",
+          "sha256": "9089081e6cf5e941bd30d04cd078a5ad3a87142bc3cb3286c8a4a3409bca49fc",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/collator.py",
+          "sha256": "e1ec6dec9aadf3c123ea45656fe2c58dc102ac075ca78bf9dff7df47cb5c29b8",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/data.py",
+          "sha256": "cfd7733325670792c0da32393752c49116cd2b0ce097ffd629cda1c224bddecc",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/evaluate.py",
+          "sha256": "6bcbf22965b59edebe2b37ff57c374cb6d3127d9c6254e0eba2b873459c6b357",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/prompt.py",
+          "sha256": "2415f1a2bece1fd27f961efd5beb3a52e0e997ba39c1f3825fec1292bf84f7d7",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/utils.py",
+          "sha256": "8c1139a496cd74479e862472a57dd5c5eccb3870e17fb64b2f4d02063fd252e5",
+          "matches_fixed_commit": true
+        }
+      ],
+      "external_import_identities": [
+        {
+          "bytes": 77162,
+          "path": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/utils/data/dataloader.py",
+          "sha256": "f08b241c088e66361a4c7a526a55ee4e9eafd3b08beeedbfc90896ec06fcb3d3"
+        },
+        {
+          "bytes": 12847,
+          "path": "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/utils/data/sampler.py",
+          "sha256": "5e358667c9d38f298af375b95925d89270545c652b64f13049d50e53df8f4e06"
+        },
+        {
+          "bytes": 129438,
+          "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/accelerator.py",
+          "sha256": "933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a"
+        },
+        {
+          "bytes": 40793,
+          "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/data_loader.py",
+          "sha256": "7741d477a6fb02f18f8e5871d348b963fc669a51821f43102215255f02c48cb8"
+        },
+        {
+          "bytes": 189329,
+          "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py",
+          "sha256": "88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d"
+        },
+        {
+          "bytes": 16516,
+          "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/models/llama/tokenization_llama.py",
+          "sha256": "de46002a33c79c253816aa04fde2975408d3c179af5ecf616620a00467d1a3f8"
+        }
+      ],
+      "transport_receipt_and_runner_artifact_SHA_verified": true,
+      "accepted_request_canonical_SHA_verified": true,
+      "terminal": "SUCCEEDED/0/cleanup_verified/no_live_worker",
+      "execution_profile": {
+        "global_batch": 64,
+        "gradient_accumulation_steps": 8,
+        "per_device_train_batch_size": 8,
+        "world_size": 1
+      },
+      "scope": "PREFLIGHT_CPU_VALIDATION",
+      "negative_cases": [
+        {
+          "case": "single_GPU_wrong_world",
+          "guard": "ValueError",
+          "message": "single GPU execution profile mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "single_GPU_wrong_accumulation",
+          "guard": "ValueError",
+          "message": "single GPU execution profile mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "serial_training_missing_row",
+          "guard": "ValueError",
+          "message": "serial global stream row count/range",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "serial_training_wrong_padding_or_duplicate",
+          "guard": "ValueError",
+          "message": "serial global stream missing rows or wrong tail repeat policy",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "short_training_duplicate_row",
+          "guard": "ValueError",
+          "message": "short serial epoch must cover160 distinct native sampled rows",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "inference_duplicate_user_padding",
+          "guard": "ValueError",
+          "message": "assignment has missing, duplicate, or out-of-range rows",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "same_count_wrong_token_to_ID",
+          "guard": "ValueError",
+          "message": "G3 token to ID mapping mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "old_base_tokenizer",
+          "guard": "ValueError",
+          "message": "G3 tokenizer vocabulary",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "internal_non_author_review_cannot_replace_web_second_review",
+          "guard": "ValueError",
+          "message": "G3 web second review evidence required",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "direct_training_internal_review_is_not_web_second_review",
+          "guard": "ValueError",
+          "message": "external webpage second review required before formal training",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "direct_training_web_kind_wrong_evidence_hash",
+          "guard": "ValueError",
+          "message": "web review evidence member identity mismatch: /home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-lcrec-single-cpu-20261118-r3-final/output/cpu/SYNTHETIC_CPU_INTEGRATION_ONLY/web-review-gate/synthetic-evidence.json",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "old_or_wrong_index",
+          "guard": "ValueError",
+          "message": "G3 data asset identity",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "wrong_bridge_after_valid_data",
+          "guard": "ValueError",
+          "message": "G3 upstream bridge identity",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "same_revision_wrong_model_source",
+          "guard": "ValueError",
+          "message": "G3 base model content identity",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "saved_tokenizer_wrong_mapping",
+          "guard": "ValueError",
+          "message": "G3 token to ID mapping mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "adapter_wrong_source_commit",
+          "guard": "ValueError",
+          "message": "G3 adapter source commit",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "adapter_wrong_effective_config",
+          "guard": "ValueError",
+          "message": "G3 adapter effective config mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "wrong_checkpoint_source",
+          "guard": "AssertionError",
+          "message": "checkpoint source commit mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "wrong_checkpoint_config",
+          "guard": "AssertionError",
+          "message": "checkpoint effective config mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "missing_rank_member",
+          "guard": "AssertionError",
+          "message": "checkpoint missing required rank/member",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "missing_collective_rank",
+          "guard": "AssertionError",
+          "message": "checkpoint collective rank completion mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "checkpoint_wrong_world_size",
+          "guard": "AssertionError",
+          "message": "checkpoint world size mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "checkpoint_wrong_execution_topology",
+          "guard": "AssertionError",
+          "message": "checkpoint execution topology mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "checkpoint_old_accumulation_profile",
+          "guard": "ValueError",
+          "message": "single GPU execution profile mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "checkpoint_foreign_rank1_member",
+          "guard": "AssertionError",
+          "message": "checkpoint foreign rank member in single GPU execution",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "checkpoint_not_collectively_completed",
+          "guard": "FileNotFoundError",
+          "message": "[Errno 2] No such file or directory: '/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-lcrec-single-cpu-20261118-r3-final/output/cpu/SYNTHETIC_CPU_INTEGRATION_ONLY/checkpoint-2/complete.json'",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "old_adapter_tokenizer_mapping",
+          "guard": "ValueError",
+          "message": "G3 adapter token mapping",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "adapter_old_accumulation_profile",
+          "guard": "ValueError",
+          "message": "single GPU execution profile mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "same_shape_or_size_wrong_weights",
+          "guard": "ValueError",
+          "message": "G3 adapter member identity: adapter_model.bin",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "adapter_missing_tokenizer",
+          "guard": "ValueError",
+          "message": "G3 adapter member identity: tokenizer.model",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "preflight_adapter_as_formal",
+          "guard": "ValueError",
+          "message": "G3 adapter scope mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "no_formal_authorization",
+          "guard": "ValueError",
+          "message": "new G3 formal launch authorization required",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "old_experiment_authorization",
+          "guard": "ValueError",
+          "message": "authorization belongs to a different experiment",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_old_dual_world",
+          "guard": "AssertionError",
+          "message": "Single-GPU prediction topology mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_old_accumulation_profile",
+          "guard": "ValueError",
+          "message": "single GPU execution profile mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_extra_rank_shard",
+          "guard": "AssertionError",
+          "message": "Single-GPU production evaluation requires exactly one rank shard",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "cross_process_score_beyond_fixed_legacy_tolerance",
+          "guard": "ValueError",
+          "message": "cross-process Normal score exceeds inherited fixed tolerance",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "cross_process_same_identity_wrong_generated_suffix",
+          "guard": "ValueError",
+          "message": "cross-process Normal generated SID suffix/order mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_missing_user",
+          "guard": "AssertionError",
+          "message": "Prediction shard length disagrees with rank completion evidence",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_duplicate_user",
+          "guard": "AssertionError",
+          "message": "Duplicate/out-of-range test row; no deduplication or skipping permitted",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_wrong_target",
+          "guard": "AssertionError",
+          "message": "Prediction identity/target mismatch: target",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_wrong_model",
+          "guard": "AssertionError",
+          "message": "Prediction row model/scope/Shuffle binding mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_wrong_shuffle",
+          "guard": "AssertionError",
+          "message": "Prediction row model/scope/Shuffle binding mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "prediction_preflight_as_formal",
+          "guard": "AssertionError",
+          "message": "Prediction row model/scope/Shuffle binding mismatch",
+          "synthetic_fixture": true
+        },
+        {
+          "case": "formal_subset_population",
+          "guard": "AssertionError",
+          "message": "Formal evaluation requires the full fixed 22363-user axis",
+          "synthetic_fixture": true
+        }
+      ],
+      "label_positions_checked": 1148,
+      "all_train_rows_verified": 131413,
+      "all_validation_test_targets_verified": 22363,
+      "single_gpu_checks": {
+        "actual_DataLoaderShard_stream_exact": true,
+        "actual_historical_first160_rows_exact": true,
+        "full_schedule": {
+          "author_rows": 131413,
+          "epoch_steps": [
+            2053,
+            4107,
+            6160,
+            8214
+          ],
+          "epochs": 4,
+          "full_epoch_microbatches": 16428,
+          "full_epoch_serial_rows": 131424,
+          "global_batch": 64,
+          "gradient_accumulation_steps": 8,
+          "logical_historical_ranks": 2,
+          "loss_weighting": "Each unchanged eight-example native microbatch loss contributes 1/8; this equals its historical 1/4 accumulation times1/2 rank-average weight. Native response-token reduction inside each microbatch remains unchanged; no global-token-mean or floating-trajectory equivalence is claimed.",
+          "max_steps": 8214,
+          "micro_batch_size": 8,
+          "numerical_equivalence_to_two_gpus_claimed": false,
+          "per_epoch_microbatches": 16428,
+          "preflight_only": false,
+          "short_epoch_global_rows": null,
+          "tail_repeat_rows": 11,
+          "world_size": 1
+        },
+        "full_stream": {
+          "distinct_rows": 131413,
+          "duplicates": {
+            "109264": 1,
+            "11009": 1,
+            "115089": 1,
+            "18034": 1,
+            "43467": 1,
+            "60863": 1,
+            "61114": 1,
+            "77276": 1,
+            "77472": 1,
+            "84286": 1,
+            "98894": 1
+          },
+          "global64_groups_sha256": "6ced439409b316dc6d4b583c5f74a43cfb1abeda77902f8d941076768f859ea6",
+          "global_row_order_sha256": "a6b63c5917751c6c533b66fa83b594ac389bdc7781d7d18bdf91698d4de3222e",
+          "loss_weighting": "Each unchanged eight-example native microbatch loss contributes 1/8; this equals its historical 1/4 accumulation times1/2 rank-average weight. Native response-token reduction inside each microbatch remains unchanged; no global-token-mean or floating-trajectory equivalence is claimed.",
+          "numerical_equivalence_claimed": false,
+          "repeat_rows": 11,
+          "rows": 131424,
+          "scope": "full serialized historical two-rank epoch",
+          "tail_rows": [
+            81245,
+            98965,
+            15692,
+            41607,
+            126220,
+            11009,
+            77472,
+            84286,
+            43467,
+            61114,
+            77276,
+            109264,
+            115089,
+            60863,
+            18034,
+            98894
+          ]
+        },
+        "historical_default_generator_seed": 67280421310721,
+        "historical_interleaving_exact": true,
+        "historical_raw_evidence": {
+          "bytes": 1280,
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/evidence/e2e-20261116-r0/continuous/epoch1_rows.json",
+          "sha256": "a5453647ebf95c1726d400c5127b276687986b24caabdcaf09969c19f68b21a6"
+        },
+        "inference_assignment_sha256": "22ee58fe9f948f50e5cbc92160b6dc7df7e2f633cb9e8bf3121da5fb35bcb088",
+        "loss_scaling": {
+          "global_token_mean_equivalence_claimed": false,
+          "historical_divisor_per_rank": 4,
+          "historical_rank_average_divisor": 2,
+          "method_sha256": "a37d9302e6283c1a81755c5670127aa3ccabbf7e3629dbdb3750753eac2b3ab3",
+          "native_method": "(self, prescaled_loss, eval_micro_batches=None)",
+          "scope": "SYNTHETIC_MICROBATCH_WEIGHTING_ONLY",
+          "single_GPU_divisor": 8,
+          "single_dual_GPU_numerical_trajectory_equivalence_claimed": false,
+          "source": {
+            "bytes": 189329,
+            "path": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/deepspeed/runtime/engine.py",
+            "sha256": "88db49f4970ad38101946467c69abc07b67f4454d4411eea1dbc13ed9c2f460d"
+          },
+          "synthetic_FP64_gradient_exact": true
+        },
+        "reconstruction_generator_unchanged": true,
+        "short_schedule": {
+          "author_rows": 131413,
+          "epoch_steps": [
+            2,
+            5,
+            7,
+            10
+          ],
+          "epochs": 4,
+          "full_epoch_microbatches": 16428,
+          "full_epoch_serial_rows": 131424,
+          "global_batch": 64,
+          "gradient_accumulation_steps": 8,
+          "logical_historical_ranks": 2,
+          "loss_weighting": "Each unchanged eight-example native microbatch loss contributes 1/8; this equals its historical 1/4 accumulation times1/2 rank-average weight. Native response-token reduction inside each microbatch remains unchanged; no global-token-mean or floating-trajectory equivalence is claimed.",
+          "max_steps": 10,
+          "micro_batch_size": 8,
+          "numerical_equivalence_to_two_gpus_claimed": false,
+          "per_epoch_microbatches": 20,
+          "preflight_only": true,
+          "short_epoch_global_rows": 160,
+          "tail_repeat_rows": 11,
+          "world_size": 1
+        },
+        "short_stream": {
+          "distinct_rows": 160,
+          "duplicates": {},
+          "global64_groups_sha256": "51a2500961237b58d5683806999afa895c2b79d040fac4f7688ec73aed0bb69c",
+          "global_row_order_sha256": "b656ef7692cd6bb8fa612cd563f856c6e2d7d06115591595268661aa9de67080",
+          "loss_weighting": "Each unchanged eight-example native microbatch loss contributes 1/8; this equals its historical 1/4 accumulation times1/2 rank-average weight. Native response-token reduction inside each microbatch remains unchanged; no global-token-mean or floating-trajectory equivalence is claimed.",
+          "numerical_equivalence_claimed": false,
+          "repeat_rows": 0,
+          "rows": 160,
+          "scope": "first20 serial microbatches",
+          "tail_rows": [
+            89059,
+            89247,
+            45489,
+            5169,
+            32396,
+            20956,
+            45733,
+            130485,
+            78452,
+            86431,
+            110188,
+            2152,
+            85369,
+            76886,
+            66253,
+            108536
+          ]
+        },
+        "single_rank_inference_users": 22363
+      },
+      "web_second_review_gate": {
+        "actual_guard_source": {
+          "bytes": 23695,
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_control.py",
+          "sha256": "83af6ec7f6077553ee8cff5fd074bdd6aed112c79b775ea05347cd24ae95b4fc"
+        },
+        "actual_precision_approval": {
+          "bytes": 520,
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+          "sha256": "b44e910f4fb9bf08aa0f2fb574dfedc475d1f3eed96e039c2808befdea2312f3"
+        },
+        "case": "internal_non_author_review_cannot_replace_web_second_review",
+        "config_sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+        "direct_training_guard_method_sha256": "4a0c7bde5b39362c74b14620652dcac3ff11b2a591955c7be90eb60f1f800add",
+        "direct_training_guard_source": {
+          "bytes": 59253,
+          "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_train.py",
+          "sha256": "d47c536d1d2a79a7c7841d444345125753ab403ab33c08a80b8207f94ba694ef"
+        },
+        "fixture_files": [
+          {
+            "bytes": 837,
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-lcrec-single-cpu-20261118-r3-final/output/cpu/SYNTHETIC_CPU_INTEGRATION_ONLY/web-review-gate/internal-review-negative-fixture.json",
+            "sha256": "7dee4222c0bc66d1ba997f4d2ab5e1fb525c51485da754d3b64207034eb7b38a"
+          },
+          {
+            "bytes": 143,
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-lcrec-single-cpu-20261118-r3-final/output/cpu/SYNTHETIC_CPU_INTEGRATION_ONLY/web-review-gate/synthetic-evidence.json",
+            "sha256": "9f68a267c6998e77b7fef06732ef76fd2c87f35b8a74c38abb3479a7b5df54b0"
+          },
+          {
+            "bytes": 856,
+            "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-lcrec-single-cpu-20261118-r3-final/output/cpu/SYNTHETIC_CPU_INTEGRATION_ONLY/web-review-gate/synthetic-web-kind-corrupt-evidence.json",
+            "sha256": "56dcc8f9e0e455307b03d251a76bfd132ae728d01ef760af1519fbc5a811997b"
+          }
+        ],
+        "formal_experiment_started": false,
+        "formal_launch_authorized": false,
+        "formal_train_sha256": "d47c536d1d2a79a7c7841d444345125753ab403ab33c08a80b8207f94ba694ef",
+        "guard": "ValueError",
+        "guard_method_sha256": "192ccef1d378bfc5aed1e23e2f22bc386b592676697bc10b3306c80b8d14896b",
+        "message": "G3 web second review evidence required",
+        "negative_checks": [
+          {
+            "case": "internal_non_author_review_cannot_replace_web_second_review",
+            "guard": "ValueError",
+            "message": "G3 web second review evidence required",
+            "synthetic_fixture": true
+          },
+          {
+            "case": "direct_training_internal_review_is_not_web_second_review",
+            "guard": "ValueError",
+            "message": "external webpage second review required before formal training",
+            "synthetic_fixture": true
+          },
+          {
+            "case": "direct_training_web_kind_wrong_evidence_hash",
+            "guard": "ValueError",
+            "message": "web review evidence member identity mismatch: /home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-lcrec-single-cpu-20261118-r3-final/output/cpu/SYNTHETIC_CPU_INTEGRATION_ONLY/web-review-gate/synthetic-evidence.json",
+            "synthetic_fixture": true
+          }
+        ],
+        "real_web_review_created": false,
+        "required_review_kind": "EXTERNAL_GPT_REVIEW",
+        "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+        "scope": "SYNTHETIC_CPU_INTEGRATION_ONLY",
+        "status": "PASS",
+        "supplied_review_kind": "INDEPENDENT_NONAUTHOR",
+        "synthetic_fixture": true,
+        "user_launch_authorization_created": false
+      },
+      "elapsed_seconds": 24.298616957850754,
+      "peak_rss_bytes": 1458593792,
+      "limits": "No model weights executed. Checkpoint/prediction errors and cross-process comparison cases are isolated synthetic fixtures."
+    },
+    "g3-lcrec-single-dryrun-20261118-r3-final": {
+      "status": "PASS",
+      "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+      "raw": [
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-dryrun-20261118-r3-final/output/dry_run.json",
+          "bytes": 12160,
+          "sha256": "42b8e5f7dd2df5fce49b7c20a0043a37f6c6031a1bcba44bb7f1dce8ae9a21d3"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-dryrun-20261118-r3-final/request.json",
+          "bytes": 147238,
+          "sha256": "6e4edbdcd6496b4e5cbba99ac9996e462f2a2af60a6e82478f658ff1b9ad3255"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-dryrun-20261118-r3-final/accepted.json",
+          "bytes": 310,
+          "sha256": "87d48e1a04a3f78fd2a5c8e361b64874689ffaf53ec36b1a613d5d9d6979bfcd"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-dryrun-20261118-r3-final/status.json",
+          "bytes": 3153,
+          "sha256": "62f1b887e6b773dde3f08d2d954f56bcea070bf9d537c5db9797fdf17ca79f64"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-dryrun-20261118-r3-final/work.log",
+          "bytes": 123,
+          "sha256": "cb050b3a8fcd1c0055dfff12b5a9c706d079eab5f224b884aab592cde9028d1f"
+        }
+      ],
+      "repository_sources_verified": [
+        {
+          "path": "lc_rec/a0_beauty/g3_identity.py",
+          "sha256": "0068f928c95f8cd2314da752c252faaa91f14eda7e18fe959bc43e21247d4ce8",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/formal_control.py",
+          "sha256": "1988c16e881f1a7e79d3d8d5a4737bedc8c0d5e41273fbc617db397bc58ed2e2",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_identity.py",
+          "sha256": "6b23c37a96ca15eb3b6e75b140eb8ab2d40821b852a864e508e73173b165a603",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/formal_train.py",
+          "sha256": "d47c536d1d2a79a7c7841d444345125753ab403ab33c08a80b8207f94ba694ef",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/offline_metrics.py",
+          "sha256": "2068f8d167f19189605f63d42067bd331738d137bb6ff5129dcad910b7eb6e21",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_control.py",
+          "sha256": "83af6ec7f6077553ee8cff5fd074bdd6aed112c79b775ea05347cd24ae95b4fc",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_pipeline.py",
+          "sha256": "88884f9930254772e4f7d782a119310a7416ffbb918854603f91ae34d306fdb4",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/g3_dry_run.py",
+          "sha256": "af6bc74f84ab00fe24089f3b0b0a1fd6a85e1e7dc7a2d3f28320fc7213cb580f",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_control.py",
+          "sha256": "83af6ec7f6077553ee8cff5fd074bdd6aed112c79b775ea05347cd24ae95b4fc",
+          "matches_fixed_commit": true
+        },
+        {
+          "path": "lc_rec/a0_beauty/production_pipeline.py",
+          "sha256": "88884f9930254772e4f7d782a119310a7416ffbb918854603f91ae34d306fdb4",
+          "matches_fixed_commit": true
+        }
+      ],
+      "external_import_identities": [],
+      "transport_receipt_and_runner_artifact_SHA_verified": true,
+      "accepted_request_canonical_SHA_verified": true,
+      "terminal": "SUCCEEDED/0/cleanup_verified/no_live_worker",
+      "execution_profile": {
+        "global_batch": 64,
+        "gradient_accumulation_steps": 8,
+        "per_device_train_batch_size": 8,
+        "world_size": 1
+      },
+      "scope": "FORMAL_ENTRY_DRY_RUN_ONLY",
+      "authorization_negatives": [
+        {
+          "error": "FORMAL_PREPARE never submits",
+          "expected": "FORMAL_PREPARE never submits",
+          "name": "prepare never submits",
+          "passed": true
+        },
+        {
+          "error": "separate user launch authorization and user-pinned digest required",
+          "expected": "separate user launch authorization",
+          "name": "missing new launch authorization",
+          "passed": true
+        },
+        {
+          "error": "authorization belongs to a different experiment",
+          "expected": "different experiment",
+          "name": "old experiment authorization",
+          "passed": true
+        }
+      ],
+      "actual_constructed_argv": {
+        "normal": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=1",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_evaluate.py",
+          "--condition",
+          "normal",
+          "--verify-normal-off",
+          "--source-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--adapter",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training/best_adapter",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/normal/a0/test",
+          "--run-commit",
+          "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+        ],
+        "s3": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=1",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_evaluate.py",
+          "--condition",
+          "s3",
+          "--source-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--adapter",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training/best_adapter",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/s3/a0/test",
+          "--run-commit",
+          "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+        ],
+        "s4": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=1",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_evaluate.py",
+          "--condition",
+          "s4",
+          "--source-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--adapter",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training/best_adapter",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/s4/a0/test",
+          "--run-commit",
+          "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+        ],
+        "train": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=1",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_train.py",
+          "--source-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training",
+          "--config",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
+          "--run-commit",
+          "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+          "--precision-approval",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+          "--prelaunch-review",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/WEB_SECOND_REVIEW_REQUIRED.json",
+          "--precision-approval-sha256",
+          "b44e910f4fb9bf08aa0f2fb574dfedc475d1f3eed96e039c2808befdea2312f3",
+          "--prelaunch-review-sha256",
+          "WEB_REVIEW_CONTENT_SHA256_REQUIRED",
+          "--formal-authorization",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/USER_AUTHORIZATION_REQUIRED.json",
+          "--formal-authorization-sha256",
+          "USER_PINNED_SHA256_REQUIRED"
+        ]
+      },
+      "state": {
+        "attempts": [],
+        "stages": {},
+        "status": "DRAFT_PREPARED_NOT_SEALED"
+      },
+      "formal_jobs_submitted": 0,
+      "formal_experiment_started": false,
+      "formal_launch_authorized": false,
+      "output_isolation": {
+        "formal": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b",
+        "historical_dual_preparation_retained": "/data/bwwu/lc-rec/g3-preparation-20261118",
+        "preflight": "/data/bwwu/lc-rec/g3-preparation-single-20261118/21d495b0be5b"
+      }
+    },
+    "g3-lcrec-single-generation-20261118-r3": {
+      "status": "PASS",
+      "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+      "scope": "PREFLIGHT",
+      "original_members_directly_verified": 76,
+      "same_process_normal_off_users_exact": 32,
+      "actual_model_prefill_s3_groups": 268,
+      "actual_model_prefill_s4_groups": 268,
+      "strict_reload_keys_each_process": 450,
+      "model_pid": 3327064,
+      "independent_normal_pid": 3327203,
+      "independent_normal_candidate_scores_exact_users": 32,
+      "independent_normal_maximum_absolute_score_difference": 0.0,
+      "raw": [
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-generation-20261118-r3/status.json",
+          "bytes": 3399,
+          "sha256": "18d65504ee1bb6152b1296a27f87b37e11bd959eb6b5a69f077d26b8c32c1042"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-generation-20261118-r3/request.json",
+          "bytes": 147467,
+          "sha256": "24ed6c87804a854d92a7b24cb5e5135cd78867ffca30151f4bc2fca104b6e9f2"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-generation-20261118-r3/accepted.json",
+          "bytes": 310,
+          "sha256": "0458378bd563e5a5e6da843439ed0b9bcd28c83fffb655f0db963e03508b739f"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-generation-20261118-r3/model_evidence/generation/rank0.json",
+          "bytes": 176355,
+          "sha256": "531b9c13bfba368fd92372abc740fe228291c46fddb9ad883535d4d40d0fdb86"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-generation-20261118-r3/model_evidence/generation_reload_normal/rank0.json",
+          "bytes": 175096,
+          "sha256": "714e449f9bb73b6bc7e2763507d9cf0f4b5190706c59b2624784196588a6b9df"
+        }
+      ]
+    },
+    "g3-lcrec-single-evaluation-20261118-r3": {
+      "status": "PASS",
+      "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+      "scope": "PREFLIGHT",
+      "original_members_directly_verified": 52,
+      "actual_users_per_condition": 32,
+      "metrics_per_user": 16,
+      "matrices_csv_original4_and_paired_bootstrap_independently_exact": true,
+      "normal_off_s3_s4_all_hit_metrics_zero": true,
+      "legal_catalog_candidates_at20": {
+        "normal": 7,
+        "off": 7,
+        "s3": 9,
+        "s4": 8
+      },
+      "invalid_combinations_preserved": true,
+      "zero_collision_groups": 0,
+      "coverage_denominator": 12101,
+      "paired_top1_changes": {
+        "s3": 23,
+        "s4": 22
+      },
+      "raw": [
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-evaluation-20261118-r3/status.json",
+          "bytes": 9426,
+          "sha256": "36d970d3bd18b6a6859c9f59a5408c4b11d5ea93e82d5d9d11ead1f877fae3ea"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-evaluation-20261118-r3/request.json",
+          "bytes": 147382,
+          "sha256": "51ab9e8174db677148f8bcac1b6db671a62b07ce78790542402cb1bc6eb8dcc2"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-evaluation-20261118-r3/accepted.json",
+          "bytes": 310,
+          "sha256": "09dcbef118cd201df568586c1f0bb0f5dc5ae504365579e202230095a9a14525"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-evaluation-20261118-r3/output/evaluation/summary.json",
+          "bytes": 21321,
+          "sha256": "5d889a91cebee31054516ec1bb2385c389fd8f771425462a33e76759a447a09a"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-evaluation-20261118-r3/output/evaluation/paired/s3/paired_comparison.json",
+          "bytes": 9357,
+          "sha256": "aa05613e53f75b77881baeceb33f60c80b130609d8dbfd15c38dc4cceac4867c"
+        },
+        {
+          "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-evaluation-20261118-r3/output/evaluation/paired/s4/paired_comparison.json",
+          "bytes": 9355,
+          "sha256": "d8dd899f5935548eb91094fc6a4bd63e3ff0ea6db9a4a775a823420d38bad849"
+        }
+      ]
+    }
+  },
+  "control_and_identity_observations": [
+    "Exact SINGLE_GPU world1/micro8/accum8/global64 profile enforced in plan/checkpoint/adapter/prediction/authorization; old profiles hit distinct CPU guards.",
+    "Independent runner uses only physicalGPU1/logicalCUDA0 and refreshes the selected GPU before each compute stage; other GPU tasks are preserved.",
+    "Accepted request reserves1 GPU and cumulative240 device-minutes across all attempts; no task-budget reset.",
+    "Formal one-process argv points all conditions at one future newly trained best_adapter; no formal launch authorization created.",
+    "Actual CPU test preserves unchanged8-example microbatch loss weights; no cross-topology numerical-trajectory or global-token-mean equivalence claim.",
+    "CPU/dryrun source bytes and accepted request hashes match fixed commit; actual CUDA-hidden CPU tests execute no model weights."
+  ],
+  "findings": [
+    {
+      "id": "S-TRAIN-1",
+      "area": "formal_train.py verify_parameter_updates",
+      "severity": "potential runtime probe false rejection",
+      "state": "R3_FRESH_RUNTIME_COUNTS_OBSERVED_AUTHOR_IMPLEMENTATION_EXCLUDED_FROM_SIGNATURE",
+      "observation": "Original r2 failure is preserved and cannot be described as measured A-only. Fresh21d actual early report records A0/B224/embed1/head1, all required early families updated. Full continuous/resumed reports each record A224/B224/embed1/head1. Reviewer authored the probe fix and training implementation; complementary reviewers independently verify those implementations.",
+      "minimal_fix_if_confirmed": "Only early_stop1 requires B/embed/head changes plus exact optimizer/frozen checks. Record A actual changes without requiring a change; complete10-step continuous/resume still require all4 families changed. No LR/init/seed changes. Running r2 snapshot remains unchanged.",
+      "actual_error": "AssertionError('an expected trainable parameter family never updated')"
+    }
+  ],
+  "runtime_evidence_pending": [],
+  "overall_non_author_pass": false,
+  "ready_for_review_signed": false,
+  "formal_experiment_started": false,
+  "formal_launch_authorized": false,
+  "limitations": "All assigned CPU/control/generation/evaluation checks pass on actual final21d evidence. Fixed32 users and ten training updates are preparation interface evidence only; all hit metrics are0. No full-population/dual-card numerical equivalence, webpage second-review, or formal launch conclusion. Final publication and audit ZIP are main-controller delivery checks. Own training/compare/partial-state implementation requires complementary reviewers.",
+  "old_r2_diagnostic_evidence_reconciliation": {
+    "status": "DIAGNOSTIC_EVIDENCE_RECONCILED",
+    "model_source_commit": "9adaad4ca217acd7bdcf5019c3c1eeac6c72db0b",
+    "comparison_script_commit": "d2db85465592550da9b59b1118d6ba5d113cce48",
+    "scope": "DIAGNOSTIC_ONLY",
+    "raw": [
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-resume-compare-diagnostic-20261118-r2/output/diagnostic_compare.json",
+        "bytes": 344207,
+        "sha256": "5688f35084f5ee8bef8c994672fcdbbaffb4999b123316effc432f83ccc65668"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-resume-compare-diagnostic-20261118-r2/status.json",
+        "bytes": 2830,
+        "sha256": "9235f5ce4f5c94a3887463fe09b0ca436cee07e98e0d897047ad6d27d4d6247a"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/continuous/rank0.json",
+        "bytes": 839586,
+        "sha256": "f1cb2d456b60fa872f33517ea5b7294d81bd32f4cfd1e974199043f744a9470a"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/early_evidence/rank0.json",
+        "bytes": 624418,
+        "sha256": "e3aa475e3c4e673c6d2d72ba61331ea00c4964f204925ab2c1975bf4791e9d87"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/early_evidence/failure.rank0.json",
+        "bytes": 2362,
+        "sha256": "465cc0ac8207119da3c84575b58042edc01635f2bd78a25bc1ac07130a2bf73c"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/jobs/g3-lcrec-single-train-20261118-r2/model_evidence/recovery/rank0.json",
+        "bytes": 838269,
+        "sha256": "ac898d6065c5558c626e5b5f403a948c6f59fadf9a4be954c626e4c23d167b15"
+      }
+    ],
+    "large_state_identity": [
+      {
+        "path": "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/continuous/boundary_pre_best_rank0.pt",
+        "bytes": 4040238192,
+        "sha256": "523fac9a448e0eb9ce79e8c7bc360eac45621ce43bd652fa57db0a52b48d7670"
+      },
+      {
+        "path": "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/recovery/boundary_pre_best_rank0.pt",
+        "bytes": 4040238192,
+        "sha256": "523fac9a448e0eb9ce79e8c7bc360eac45621ce43bd652fa57db0a52b48d7670"
+      }
+    ],
+    "tensor_comparisons": 457,
+    "all_tensor_rows_exact": true,
+    "state_failures": [],
+    "microbatches_independently_recomputed_from_local_original_logs_exact": 60,
+    "epoch_row_files_independently_compared_exact": 4,
+    "partial_restore": {
+      "utc": "2026-11-18T14:35:44.885321+00:00",
+      "elapsed_seconds": 259.42907959781587,
+      "event": "partial_restore_exact",
+      "attempt_job_id": "g3-lcrec-single-resume-diagnostic-20261118-r2",
+      "micro_steps": 20,
+      "global_steps": 2,
+      "optimizer_micro_step_id": 3
+    },
+    "native_strict_restore": {
+      "utc": "2026-11-18T14:35:43.703487+00:00",
+      "elapsed_seconds": 258.2472352683544,
+      "event": "strict_ds_restored",
+      "attempt_job_id": "g3-lcrec-single-resume-diagnostic-20261118-r2",
+      "path": "/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217/recovery/checkpoint-2",
+      "global_step": 2,
+      "scheduler": {
+        "base_lrs": [
+          0.0002,
+          0.0002
+        ],
+        "last_epoch": 2,
+        "verbose": false,
+        "_step_count": 3,
+        "_get_lr_called_within_step": false,
+        "_last_lr": [
+          0.00019396926207859084
+        ],
+        "lr_lambdas": [
+          {},
+          {}
+        ]
+      },
+      "client_keys": [
+        "buffer_names",
+        "ds_config",
+        "ds_version",
+        "frozen_param_fragments",
+        "frozen_param_shapes",
+        "global_samples",
+        "param_shapes",
+        "shared_params"
+      ]
+    },
+    "loader_replay": {
+      "utc": "2026-11-18T14:35:46.641202+00:00",
+      "elapsed_seconds": 261.1849470511079,
+      "event": "loader_replayed",
+      "attempt_job_id": "g3-lcrec-single-resume-diagnostic-20261118-r2",
+      "epoch": 1,
+      "replayed_batches": 0,
+      "checkpoint_step": 2
+    },
+    "old_training_job_status": "FAILED/1/cleanup_verified",
+    "failed_early_error": "AssertionError('an expected trainable parameter family never updated')",
+    "failed_early_family_counts_absent_not_reconstructed": true,
+    "does_not_replace_fresh_r3_final_acceptance": true,
+    "authorship_limit": "Reviewer authored the diagnostic comparator and training code. This section reconciles transferred raw evidence and original log sequences; it is not an independent implementation PASS for those files."
+  },
+  "generation_cross_process_normal_code_review": {
+    "status": "PASS_CODE_AND_ACTUAL_OUTPUT",
+    "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+    "criterion_source": {
+      "commit": "8f36720a024be671a3ba893370a98126bc0f3b4a",
+      "path": "lc_rec/a0_beauty/shuffle_runtime.py",
+      "source_fields": [
+        "historical_comparison_tolerance",
+        "torch.allclose(...)"
+      ]
+    },
+    "score_atol": 1e-05,
+    "score_rtol": 1e-05,
+    "suffixes_and_order": "exact",
+    "observations": [
+      "Actual original source declares the same1e-5absolute/relative criterion before inference; no result-dependent widening.",
+      "Independent Normal process requires completed same-commit reference, exact adapter sidecar/profile/config/user axis and original generation settings before loading weights.",
+      "Reference and independent Normal use the same explicit3-token left padding on the first fixed user.",
+      "Evaluation requires distinct process IDs/start times, matching model/tokenizer/installed source/config identities, exact suffixes/actual prefill/order and inherited score criterion."
+    ],
+    "limits": "32 fixed users validate interface and inherited strict reload/cross-process comparison only. No formal full-population inference or research conclusion.",
+    "actual_reference_pid": 3327064,
+    "actual_reload_pid": 3327203,
+    "actual_users": 32,
+    "actual_float32_scores_exact_users": 32,
+    "actual_maximum_score_difference": 0.0
+  },
+  "assigned_scope_pass": true,
+  "runtime_generation_evaluation_independent_recomputation": {
+    "status": "PASS",
+    "scope": "INDEPENDENT_NONAUTHOR_ARTIFACT_REVIEW_ONLY",
+    "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+    "formal_launch_authorized": false,
+    "script_sha256": "cf4034cdfa6e3447b7d87766bf9ee75d9b0ca9ead38b931ac2875f8601547fd4",
+    "argv": [
+      "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/review_generation_artifacts.py"
+    ],
+    "python": "/usr/bin/python3",
+    "cwd": "/home/addaswsw/recommend-worktrees/lc-rec",
+    "jobs": [
+      {
+        "job_id": "g3-lcrec-single-generation-20261118-r3",
+        "members_verified": 76,
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "request_sha256": "2c6383e2bee47d73b3fd28978808b6ea363dc2ad3f15250855cc9946e7892a90"
+      },
+      {
+        "job_id": "g3-lcrec-single-evaluation-20261118-r3",
+        "members_verified": 52,
+        "status": "SUCCEEDED",
+        "exit_code": 0,
+        "cleanup_verified": true,
+        "request_sha256": "7856e4c02649af3b9577f344639a0dcdb1a1d271d76669f19fb49dd15ab11b7b"
+      }
+    ],
+    "source_files_against_frozen_git": [
+      "lc_rec/a0_beauty/formal_evaluate.py",
+      "lc_rec/a0_beauty/g3_evaluate_preflight.py",
+      "lc_rec/a0_beauty/g3_identity.py",
+      "lc_rec/a0_beauty/offline_metrics.py",
+      "lc_rec/a0_beauty/paired_beauty.py",
+      "lc_rec/a0_beauty/preflight_users.py",
+      "lc_rec/a0_beauty/production_identity.py",
+      "lc_rec/a0_beauty/shuffle_runtime.py",
+      "lc_rec/a0_beauty/uneven_sampler.py",
+      "lc_rec/letter/review/final_audit_20261113/external/official_cce.py",
+      "lc_rec/letter/review/final_audit_20261113/statistics_verify.py",
+      "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/collator.py",
+      "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/data.py",
+      "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/evaluate.py",
+      "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/prompt.py",
+      "lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/test_ddp.py",
+      "lc_rec/shuffle/core.py"
+    ],
+    "normal_off_users_exact": 32,
+    "strict_reload_processes": 2,
+    "strict_reload_keys": 450,
+    "strict_reload_elements": 288571392,
+    "four_condition_pid": 3327064,
+    "independent_normal_pid": 3327203,
+    "independent_normal_exact_scores_users": 32,
+    "independent_normal_max_score_delta": 0.0,
+    "shuffle_actual_prefill": {
+      "s3": {
+        "groups": 268,
+        "users": 32
+      },
+      "s4": {
+        "groups": 268,
+        "users": 32
+      }
+    },
+    "metrics": {
+      "normal": {
+        "users": 32,
+        "metrics": 16,
+        "independent_matrix_exact": true,
+        "prefix_diagnostics": {
+          "5": {
+            "valid": 2,
+            "invalid": 158,
+            "duplicates": 0
+          },
+          "10": {
+            "valid": 3,
+            "invalid": 317,
+            "duplicates": 0
+          },
+          "20": {
+            "valid": 7,
+            "invalid": 633,
+            "duplicates": 0
+          }
+        },
+        "bootstrap_draws_exact": true
+      },
+      "off": {
+        "users": 32,
+        "metrics": 16,
+        "independent_matrix_exact": true,
+        "prefix_diagnostics": {
+          "5": {
+            "valid": 2,
+            "invalid": 158,
+            "duplicates": 0
+          },
+          "10": {
+            "valid": 3,
+            "invalid": 317,
+            "duplicates": 0
+          },
+          "20": {
+            "valid": 7,
+            "invalid": 633,
+            "duplicates": 0
+          }
+        },
+        "bootstrap_draws_exact": true
+      },
+      "s3": {
+        "users": 32,
+        "metrics": 16,
+        "independent_matrix_exact": true,
+        "prefix_diagnostics": {
+          "5": {
+            "valid": 3,
+            "invalid": 157,
+            "duplicates": 0
+          },
+          "10": {
+            "valid": 3,
+            "invalid": 317,
+            "duplicates": 0
+          },
+          "20": {
+            "valid": 9,
+            "invalid": 631,
+            "duplicates": 0
+          }
+        },
+        "bootstrap_draws_exact": true
+      },
+      "s4": {
+        "users": 32,
+        "metrics": 16,
+        "independent_matrix_exact": true,
+        "prefix_diagnostics": {
+          "5": {
+            "valid": 2,
+            "invalid": 158,
+            "duplicates": 0
+          },
+          "10": {
+            "valid": 2,
+            "invalid": 318,
+            "duplicates": 0
+          },
+          "20": {
+            "valid": 8,
+            "invalid": 632,
+            "duplicates": 0
+          }
+        },
+        "bootstrap_draws_exact": true
+      }
+    },
+    "pairings": {
+      "s3": {
+        "top1_changed": 23,
+        "paired_users": 32,
+        "difference_matrix_and_bootstrap_exact": true
+      },
+      "s4": {
+        "top1_changed": 22,
+        "paired_users": 32,
+        "difference_matrix_and_bootstrap_exact": true
+      }
+    },
+    "synthetic_repeat_excluded_from_metrics": true,
+    "synthetic_repeat_four_model_call_conditions_verified": true,
+    "limitations": "32 fixed users validate interfaces only. No full-population result, webpage second review, or user launch authorization. Reviewer authored training and boundary comparison, which are excluded from independent implementation scope."
+  },
+  "fresh_training_support_integrity_only": {
+    "scope": "AUTHOR_SUPPORT_CHECK_NOT_NONAUTHOR_IMPLEMENTATION_REVIEW",
+    "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+    "train_job": "g3-lcrec-single-train-20261118-r3",
+    "compare_job": "g3-lcrec-single-compare-20261118-r3",
+    "original_train_collection_members_verified": 60,
+    "original_comparison_collection_members_verified": 8,
+    "both_jobs_terminal": "SUCCEEDED/0, cleanup verified",
+    "observed_final_boundary_comparison": "457 tensors exact; 60 resumed input/labels records exact; original stateSHA523fac9a448e0eb9ce79e8c7bc360eac45621ce43bd652fa57db0a52b48d7670 equal",
+    "independent_signature": "Explicitly excluded; generation and CPU agents review training/compare."
+  },
+  "final_transport_only_diff_review": {
+    "status": "PASS",
+    "file": {
+      "path": "lc_rec/a0_beauty/g3_remote.py",
+      "bytes": 16349,
+      "sha256": "94e1982fdd7401b57752ffe2d64c40e1cbdfba42f5dc863080d451ad246dc216"
+    },
+    "difference_from_model_run_commit": "collection suffix allowlist adds .csv/.npy/.npz only; regular-file/non-symlink/16MiB bound and terminal cleanup gate retained. No model, CPU check, identity, config, or evaluator execution bytes changed. All collected binary members independently matched SHA and length.",
+    "actual_collection_verified_members": 128
+  },
+  "overall_non_author_pass_scope_note": "This assigned scope passes. Overall internal acceptance is aggregated by main controller from complementary independent reviews; this reviewer excludes authored training/compare code and does not sign publication/ZIP or webpage second review.",
+  "verification_script": {
+    "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/single_gpu/review_generation_artifacts.py",
+    "bytes": 20150,
+    "sha256": "cf4034cdfa6e3447b7d87766bf9ee75d9b0ca9ead38b931ac2875f8601547fd4"
+  }
+}
