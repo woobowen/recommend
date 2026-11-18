@@ -48,9 +48,10 @@ def main():
              'unexpected CPU import location')
         need(sha(imported)==row['sha256'],'CPU validation dependency changed: '+str(imported))
     inputs=verify_assets(a.data_root);base=verify_base_model(a.model)
-    gpu=subprocess.check_output(['nvidia-smi','--query-gpu=uuid,memory.used','--format=csv,noheader,nounits'],text=True)
-    expected=['GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae','GPU-59cac3bd-3645-668b-79c8-839e0d878893']
-    need([line.split(',')[0] for line in gpu.strip().splitlines()]==expected,'physical GPU identity')
+    expected='GPU-59cac3bd-3645-668b-79c8-839e0d878893'
+    gpu=subprocess.check_output(['nvidia-smi','--id=1','--query-gpu=uuid,memory.free','--format=csv,noheader,nounits'],text=True)
+    device=gpu.strip().split(',')
+    need(len(device)==2 and device[0]==expected and int(device[1])>=20*1024,'authorized GPU1 identity/free memory')
     need(os.environ['CUDA_VISIBLE_DEVICES']=='1','single physical GPU1 to logical device0 mapping')
     need(not subprocess.check_output(['nvidia-smi','--id=1','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip(),'authorized GPU1 occupied; never evict other tasks')
     a.large_root.mkdir(parents=True,exist_ok=True)
@@ -97,7 +98,8 @@ def main():
     launcher=[sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=1']
     common=['--source-root',str(source),'--data-root',str(a.data_root),'--model',str(a.model),'--run-commit',a.run_commit]
     def refresh_devices():
-        need(subprocess.check_output(['nvidia-smi','--query-gpu=uuid','--format=csv,noheader'],text=True).splitlines()==expected,'physical GPU mapping changed')
+        device=subprocess.check_output(['nvidia-smi','--id=1','--query-gpu=uuid,memory.free','--format=csv,noheader,nounits'],text=True).strip().split(',')
+        need(len(device)==2 and device[0]==expected and int(device[1])>=20*1024,'authorized GPU1 identity/free memory changed')
         need(not subprocess.check_output(['nvidia-smi','--id=1','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip(),'authorized GPU1 occupied before new substage')
     try:
         if a.mode=='train':

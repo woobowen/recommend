@@ -171,7 +171,13 @@ def verify_predictions(test, commit, best, condition, scope='FORMAL'):
         need(r['adapter_files']==best['adapter_files'], 'prediction is not selected Adapter/Tokenizer')
         if condition!='normal':
             need(r['shuffle']['n']=={'off':0,'s3':3,'s4':4}[condition] and r['shuffle']['protocol']=='GRID-LETTER-SHUFFLE-V1' and r['shuffle']['seed']==42, 'Shuffle condition mismatch')
-        else:need('shuffle' not in r,'Normal contains Shuffle intervention')
+        else:
+            need('shuffle' not in r,'Normal contains Shuffle intervention')
+            if scope=='FORMAL':
+                checks=r.get('normal_off_same_process_exact',[])
+                need(len(checks)==22363 and {row['row_idx'] for row in checks}==set(range(22363)) and
+                     all(row.get('same_process_exact') is True for row in checks),
+                     'formal Normal/OFF full-user same-process evidence missing')
         identities.append(identity(test/f'predictions.rank{rank}.jsonl'))
     return {'verified':True,'scope':scope,'prediction_run_commit':commit,'prediction_files':identities,'adapter_files':best['adapter_files']}
 

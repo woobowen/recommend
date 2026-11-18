@@ -95,7 +95,7 @@ def main():
     p.add_argument('mode',choices=['deploy','submit','query','probe','collect'])
     p.add_argument('--stage',choices=['cpu','train','resume-diagnostic','diagnostic-compare','retire-diagnostic','generate','compare','evaluate','dryrun'])
     p.add_argument('--job-id')
-    p.add_argument('--cpu-job-id',default='g3-lcrec-single-cpu-20261118-r2',help='Passed necessary CPU runner job for this fixed source')
+    p.add_argument('--cpu-job-id',default='g3-lcrec-single-cpu-20261118-r3-final',help='Passed necessary CPU runner job for this fixed source')
     p.add_argument('--parent-job-id',help='Previous attempt identity, retained without resetting budget')
     p.add_argument('--output',type=Path)
     p.add_argument('--include-model-evidence',action='store_true',help='Collect small terminal-run model receipts and predictions, never tensors')
