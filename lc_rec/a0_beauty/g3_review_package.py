@@ -29,6 +29,7 @@ def main():
         if len(value)>8*1024**2:raise ValueError('large review member '+name)
         files[name]=value
     for name in ('lc_rec/letter/evidence/formal_20261111/model_identity_preflight.json',
+                 'lc_rec/a0_beauty/evidence/e2e-20261116-r0/continuous/epoch1_rows.json',
                  'lc_rec/letter/evidence/formal_20261111/precision_approval.json',
                  'lc_rec/letter/review/final_audit_20261113/external/official_cce.py',
                  'lc_rec/letter/review/final_audit_20261113/statistics_verify.py'):

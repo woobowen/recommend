@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import sys
 from formal_control import durable_write, digest
-from g3_identity import EXPERIMENT_ID, ASSETS, source_identity, verify_assets, verify_base_model, need, sha
+from g3_identity import EXECUTION_TOPOLOGY, EXECUTION_PROFILE, EXPERIMENT_ID, ASSETS, source_identity, verify_assets, verify_base_model, need, sha
 from production_control import validate_plan, authorize, Control, STAGES
 from production_pipeline import compute_argv
 
@@ -29,13 +29,13 @@ def main():
     config=release/'lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json'
     precision=release/'lc_rec/letter/evidence/formal_20261111/precision_approval.json'
     root=Path('/data/bwwu/lc-rec/g3-formal-20261118')/a.run_commit[:12]
-    env={'CUDA_VISIBLE_DEVICES':'0,1','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
+    env={'CUDA_VISIBLE_DEVICES':'1','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
          'LD_LIBRARY_PATH':os.environ.get('LD_LIBRARY_PATH',''),'OMP_NUM_THREADS':'4','OPENBLAS_NUM_THREADS':'2',
          'HF_HUB_OFFLINE':'1','TRANSFORMERS_OFFLINE':'1','PYTHONOPTIMIZE':'0','PYTHONDONTWRITEBYTECODE':'1',
          'PYTHONUNBUFFERED':'1','TOKENIZERS_PARALLELISM':'false'}
     seconds={'train':108000,'verify_best_adapter':900,'normal':43200,'normal_eval':900,
              's3':16200,'s3_eval':900,'s4':16200,'s4_eval':900,'paired':1200,'collect':600}
-    plan={'scope':'FORMAL_PREPARE','evidence_scope':'FORMAL','experiment_id':EXPERIMENT_ID,
+    plan={'scope':'FORMAL_PREPARE','evidence_scope':'FORMAL','execution_topology':EXECUTION_TOPOLOGY,'execution_profile':EXECUTION_PROFILE,'experiment_id':EXPERIMENT_ID,
         'experiment_series':EXPERIMENT_ID,'task_id':'g3-beauty-seed42','root':str(root),
         'run_commit':a.run_commit,'prediction_run_commit':a.run_commit,'release':str(release),
         'config':str(config),'config_sha256':sha(config),'asset_sha256':ASSETS,'inputs':dep['files'],
@@ -46,7 +46,7 @@ def main():
         'precision_approval':str(precision),'prelaunch_review':None,
         'approval_files':{'precision_approval':source_identity([precision])[0]},
         'export_manifest':source_identity([release/'RUN_VERSION.json'])[0],
-        'gpu_uuids':['GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae','GPU-59cac3bd-3645-668b-79c8-839e0d878893'],
+        'gpu_uuids':['GPU-59cac3bd-3645-668b-79c8-839e0d878893'],
         'stage_seconds':seconds,'budget':{'train_normal':151200,'s3':16200,'s4':16200,'cpu':5400,'total':189000,'cleanup_reserve':120},
         'env':env,'formal_budget_status':'PLANNING_ONLY_REQUIRES_SEPARATE_USER_LAUNCH_AUTHORIZATION'}
     validate_plan(plan)
@@ -75,6 +75,7 @@ def main():
     argv_plan['prelaunch_review']=str(root/'WEB_SECOND_REVIEW_REQUIRED.json')
     argv_plan['approval_files']['prelaunch_review']={'sha256':'WEB_REVIEW_CONTENT_SHA256_REQUIRED'}
     commands={s:compute_argv(argv_plan,s,root/'attempts'/s/'a0') for s in ('train','normal','s3','s4')}
+    need(all('--nproc_per_node=1' in v for v in commands.values()),'single process launcher')
     need('--boundary-preflight' not in commands['train'] and '--resume' not in commands['train'],'formal argv not preflight')
     need('--verify-normal-off' in commands['normal'],'formal same-process OFF check')
     for s in ('normal','s3','s4'):
@@ -87,7 +88,7 @@ def main():
     for s in STAGES:
         need(s in plan['stage_seconds'],'missing stage dependency')
     record={'status':'PASS','scope':'FORMAL_ENTRY_DRY_RUN_ONLY','experiment_id':EXPERIMENT_ID,
-        'formal_experiment_started':False,'formal_launch_authorized':False,'argv':sys.argv,'cwd':os.getcwd(),
+        'execution_topology':EXECUTION_TOPOLOGY,'execution_profile':EXECUTION_PROFILE,'dual_gpu_preflight_status':'NOT_APPLICABLE_THIS_RUN','formal_experiment_started':False,'formal_launch_authorized':False,'argv':sys.argv,'cwd':os.getcwd(),
         'interpreter':sys.executable,'run_commit':a.run_commit,'plan':source_identity([plan_path])[0],
         'plan_sha256':digest(plan),'asset_identity':assets,'base_model_identity':base,'compute_argv':commands,
         'stage_order':list(STAGES),'future_stage_outputs':['training/checkpoint-*','training/best_adapter','attempts/*/test/predictions.rank*.jsonl'],

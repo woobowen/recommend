@@ -6,7 +6,8 @@ from pathlib import Path
 
 
 def validate(manifest, users, shards):
-    from g3_identity import ASSETS, EXPERIMENT_ID, INDEX_SHA, BRIDGE_SHA, G3_SHA
+    from g3_identity import (ASSETS, EXPERIMENT_ID, INDEX_SHA, BRIDGE_SHA, G3_SHA,
+                             EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile)
     old_path=Path(__file__).with_name('config')/'preflight_users_seed42.json'
     fixed_sha='714450a0e9479ed272266a5b4d3c2150d83742e4b70c38f80da888d4fa0aaa39'
     if hashlib.sha256(old_path.read_bytes()).hexdigest()!=fixed_sha:
@@ -16,15 +17,18 @@ def validate(manifest, users, shards):
         manifest.get('asset_sha256')!=ASSETS or manifest.get('prior_manifest_sha256')!=fixed_sha or
         manifest.get('upstream_sha256')!={'g3':G3_SHA,'bridge':BRIDGE_SHA,'index':INDEX_SHA}):
         raise ValueError('G3 preflight manifest experiment/asset/upstream identity mismatch')
+    if manifest.get('execution_topology')!=EXECUTION_TOPOLOGY or manifest.get('world_size')!=1:
+        raise ValueError('Single-GPU preflight manifest topology mismatch')
+    verify_execution_profile(manifest.get('execution_profile'))
     ranks=manifest['ranks']
-    if set(ranks)!={'0','1'} or len(users)!=22363 or len(shards)!=2:
+    if set(ranks)!={'0'} or len(users)!=22363 or len(shards)!=1:
         raise ValueError('bad user axis or ranks')
     selected=[]
-    for rank in (0,1):
+    for rank in (0,):
         records=ranks[str(rank)]
-        if [r['row_idx'] for r in records]!=[r['row_idx'] for r in old['ranks'][str(rank)]]:
+        if [r['row_idx'] for r in records]!=[r['row_idx'] for old_rank in ('0','1') for r in old['ranks'][old_rank]]:
             raise ValueError('Preflight user selection differs from the prior fixed 32 users')
-        if len(records)!=16: raise ValueError('expected 16 users per rank')
+        if len(records)!=32: raise ValueError('expected 32 users on the only rank')
         eligible=set(shards[rank])
         for record in records:
             index=record['row_idx']
@@ -34,17 +38,19 @@ def validate(manifest, users, shards):
                 raise ValueError('user identity or target differs')
             selected.append(index)
     if len(set(selected))!=32: raise ValueError('duplicate or missing rows')
-    return [[r['row_idx'] for r in ranks[str(rank)]] for rank in (0,1)]
+    return [[r['row_idx'] for r in ranks[str(rank)]] for rank in (0,)]
 
 
 
 def frozen_g3_manifest(index, inters, lengths=None):
     """Reuse the previously fixed user IDs; derive G3 fields before model outputs."""
-    from g3_identity import ASSETS, EXPERIMENT_ID, INDEX_SHA, BRIDGE_SHA, G3_SHA
+    from g3_identity import (ASSETS, EXPERIMENT_ID, INDEX_SHA, BRIDGE_SHA, G3_SHA,
+                             EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile)
     old_path = Path(__file__).with_name('config')/'preflight_users_seed42.json'
     old = json.loads(old_path.read_text())
     ranks = {}
-    for rank, records in old['ranks'].items():
+    combined = [record for old_rank in ('0','1') for record in old['ranks'][old_rank]]
+    for rank, records in [('0',combined)]:
         chosen = []
         for prior in records:
             uid = prior['user_id']
@@ -65,8 +71,10 @@ def frozen_g3_manifest(index, inters, lengths=None):
     fourth_zero_nonzero=any(r['fourth_position_zero_history_items'] for r in chosen) and any(r['fourth_position_nonzero_history_items'] for r in chosen)
     if not long_and_short or not fourth_zero_nonzero:
         raise ValueError('Frozen 32 G3 users do not cover required actual history/fourth-position boundaries')
-    return {'schema':'beauty_g3_preflight_users_v1','scope':'PREFLIGHT','experiment_id':EXPERIMENT_ID,
-        'selection':'Reuse exact prior 32 user IDs, fixed before any G3 model outputs; derive G3 targets',
+    return {'schema':'beauty_g3_preflight_single_gpu_users_v2','scope':'PREFLIGHT','experiment_id':EXPERIMENT_ID,
+        'execution_topology':EXECUTION_TOPOLOGY,'execution_profile':EXECUTION_PROFILE,
+        'world_size':1,'dual_gpu_acceptance':'NOT_APPLICABLE_THIS_RUN',
+        'selection':'Reuse exact prior 32 user IDs in old rank0 then old rank1 order; merge into one rank before model outputs',
         'prior_manifest_sha256':hashlib.sha256(old_path.read_bytes()).hexdigest(),
         'asset_sha256':ASSETS,'upstream_sha256':{'g3':G3_SHA,'bridge':BRIDGE_SHA,'index':INDEX_SHA},
         'ranks':ranks,'boundary_coverage':{'long_and_short_history':long_and_short,
@@ -97,7 +105,7 @@ def main():
     index,_,users,identities=catalog_and_users(a.data_root)
     axis=list(data.inters)
     if axis!=[u['user_id'] for u in users]:raise ValueError('User axis mismatch')
-    shards=[assignment(len(data),rank,2) for rank in (0,1)];validate_assignments(shards,len(data))
+    shards=[assignment(len(data),0,1)];validate_assignments(shards,len(data))
     wanted={r['row_idx'] for rows in json.loads((Path(__file__).with_name('config')/'preflight_users_seed42.json').read_text())['ranks'].values() for r in rows}
     lengths={i:len(tok(data[i]['input_ids'])['input_ids']) for i in wanted}
     manifest=frozen_g3_manifest(index,data.inters,lengths)

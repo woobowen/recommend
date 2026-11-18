@@ -6,9 +6,11 @@ import os
 from pathlib import Path
 from formal_control import durable_write
 from formal_train import checkpoint_required_files, verify_checkpoint
-from g3_identity import ASSETS, VOCAB_SIZE, EXPERIMENT_ID, verify_adapter_identity
+from g3_identity import ASSETS, VOCAB_SIZE, EXPERIMENT_ID, verify_adapter_identity, EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile
 
-STEPS = (2053, 4107, 6160, 8214)
+from single_gpu_training import execution_schedule
+STEPS = tuple(execution_schedule(131413)['epoch_steps'])
+PREFLIGHT_STEPS = tuple(execution_schedule(131413, preflight=True)['epoch_steps'])
 AXIS = '7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f'
 SYNTHETIC = 'SYNTHETIC_CPU_INTEGRATION_ONLY'
 
@@ -62,11 +64,13 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
     root = Path(root); scope_guard(root, scope)
     if scope=='PREFLIGHT':return verify_preflight_training(root,commit,config_sha)
     events=[]
-    for rank in (0,1):
+    for rank in range(EXECUTION_PROFILE['world_size']):
         report=load(root/f'rank{rank}.json');scope_guard(root,scope,report)
+        need(report.get('execution_topology')==EXECUTION_TOPOLOGY,'training execution topology')
+        verify_execution_profile(report.get('execution_profile'))
         need(report['status']=='TRAINING_COMPLETE' and report['rank']==rank and not report['probe'], 'training incomplete/probe')
         need(report['run_commit']==commit and report['config_sha256']==config_sha, 'training RUN/config mismatch')
-        need(report['global_step']==8214 and report['epoch']==4.0, 'formal epoch/update count')
+        need(report['global_step']==STEPS[-1] and report['epoch']==4.0, 'formal epoch/update count')
         need(report['data']['train_rows']==131413 and report['data']['valid_rows']==44726 and
              not report['data']['validation_subset_preflight_only'] and report['data']['tokenizer_vocab']==VOCAB_SIZE, 'full training/validation scope')
         need({k:v['sha256'] for k,v in report['data_identity'].items()}==ASSETS, 'training data identity')
@@ -78,7 +82,6 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
         need(all(math.isfinite(x['values']['eval_loss']) for x in validation), 'nonfinite validation loss')
         events.append((ev,validation))
     losses=[x['values']['eval_loss'] for x in events[0][1]]
-    need(losses==[x['values']['eval_loss'] for x in events[1][1]], 'rank validation disagreement')
     receipts={}
     for p in sorted((root/'checkpoint_receipts').glob('*.json')):
         r=load(p);step=r['global_step'];need(step in STEPS, 'unexpected checkpoint receipt')
@@ -93,7 +96,7 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
         m=r['manifest'];raw=r['manifest_json'].encode('utf-8')
         need(json.loads(raw)==m,'receipt raw manifest content')
         need(hashlib.sha256(raw).hexdigest()==r['manifest_sha256'], 'receipt manifest hash')
-        need(m['collective_ranks']==2 and m['global_step']==step and m['run_commit']==commit and m['config_sha256']==config_sha, 'collective completion identity')
+        need(m['collective_ranks']==EXECUTION_PROFILE['world_size'] and m['global_step']==step and m['run_commit']==commit and m['config_sha256']==config_sha, 'collective completion identity')
         rows=m['files'];need(len(rows)==len({x['path'] for x in rows}), 'duplicate checkpoint member')
         need(checkpoint_required_files(step)<={x['path'] for x in rows}, 'incomplete checkpoint manifest')
         need(all(x['bytes']>0 and len(x['sha256'])==64 for x in rows), 'invalid checkpoint member identity')
@@ -106,9 +109,9 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
     best_index=min(range(4),key=lambda i:losses[i]);best_step=STEPS[best_index]
     selected=load(root/'best_selection.json');best=root/f'checkpoint-{best_step}'
     need(selected['run_commit']==commit and Path(selected['checkpoint'])==best and selected['value']==losses[best_index], 'best selection mismatch')
-    need(selected['metric']=='eval_loss' and selected['greater_is_better'] is False and selected['completed_training_step']==8214 and selected['loaded_best_checkpoint_step']==best_step, 'best restoration identity')
-    kept=list(root.glob('checkpoint-*'));need(len(kept)==2 and best in kept and root/'checkpoint-8214' in kept, 'best/latest retention policy')
-    for cp in set((best,root/'checkpoint-8214')):
+    need(selected['metric']=='eval_loss' and selected['greater_is_better'] is False and selected['completed_training_step']==STEPS[-1] and selected['loaded_best_checkpoint_step']==best_step, 'best restoration identity')
+    kept=list(root.glob('checkpoint-*'));need(len(kept)==2 and best in kept and root/('checkpoint-'+str(STEPS[-1])) in kept, 'best/latest retention policy')
+    for cp in set((best,root/('checkpoint-'+str(STEPS[-1])))):
         verify_checkpoint(cp,commit,config_sha)
         need(sha(cp/'complete.json')==receipts[int(cp.name.split('-')[-1])]['manifest_sha256'], 'retained manifest differs from receipt')
     for ev,_ in events:
@@ -157,10 +160,12 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
 def verify_predictions(test, commit, best, condition, scope='FORMAL'):
     test=Path(test);scope_guard(test,scope);need(best['scope']==scope, 'model evidence scope mismatch')
     identities=[]
-    for rank in (0,1):
+    for rank in range(EXECUTION_PROFILE['world_size']):
         r=load(test/f'rank{rank}.json');scope_guard(test,scope,r)
+        need(r.get('execution_topology')==EXECUTION_TOPOLOGY and r.get('world_size')==1,'prediction execution topology')
+        verify_execution_profile(r.get('execution_profile'))
         need(r['status']==('PREFLIGHT_INTERFACE_PASS' if scope=='PREFLIGHT' else 'PASS') and r['rank']==rank and r['preflight_only']==(scope=='PREFLIGHT') and r['RUN_COMMIT']==commit, 'prediction completion/RUN')
-        need(r['completed_users']==(16 if scope=='PREFLIGHT' else (11182 if rank==0 else 11181)), 'prediction user count')
+        need(r['completed_users']==(32 if scope=='PREFLIGHT' else 22363), 'prediction user count')
         need(r['condition']==condition,'prediction condition identity')
         need({k:v['sha256'] for k,v in r['data_identity'].items()}==ASSETS, 'prediction data mismatch')
         need(r['adapter_files']==best['adapter_files'], 'prediction is not selected Adapter/Tokenizer')
@@ -174,23 +179,24 @@ def verify_predictions(test, commit, best, condition, scope='FORMAL'):
 def verify_preflight_training(root, commit, config_sha):
     """Strict finite trajectory evidence; never satisfies formal acceptance."""
     validations=[]
-    for rank in (0,1):
+    for rank in range(EXECUTION_PROFILE['world_size']):
         report=load(root/f'rank{rank}.json')
+        need(report.get('execution_topology')==EXECUTION_TOPOLOGY,'preflight training execution topology')
+        verify_execution_profile(report.get('execution_profile'))
         need(report['scope']=='PREFLIGHT' and report['experiment_id']==EXPERIMENT_ID,'preflight experiment')
         need(report['status']=='BOUNDARY_PREFLIGHT_COMPLETE' and report['probe'] is True and
-             report['global_step']==10 and report['epoch']==4.,'four short preflight epochs')
+             report['global_step']==PREFLIGHT_STEPS[-1] and report['epoch']==4.,'four short preflight epochs')
         need(report['run_commit']==commit and report['config_sha256']==config_sha,'preflight training source/config')
         need({k:v['sha256'] for k,v in report['data_identity'].items()}==ASSETS,'preflight data')
         need(report['optimizer_membership_exact'] and report['optimizer_parameter_count']==288571392,'preflight optimizer set')
         need(report['parameter_update_validation']['status']=='PASS','preflight update/freeze inventory')
         events=[json.loads(x) for x in (root/f'events.rank{rank}.jsonl').read_text().splitlines()]
         losses={e['step']:e['values']['eval_loss'] for e in events if e['event']=='log' and 'eval_loss' in e.get('values',{})}
-        need(set(losses)=={2,5,7,10} and all(math.isfinite(x) for x in losses.values()),'preflight validation boundaries')
+        need(set(losses)==set(PREFLIGHT_STEPS) and all(math.isfinite(x) for x in losses.values()),'preflight validation boundaries')
         validations.append(losses)
-    need(validations[0]==validations[1],'preflight rank validation disagreement')
-    selected=load(root/'best_selection.json');best_step=min((2,5,7,10),key=lambda s:validations[0][s])
+    selected=load(root/'best_selection.json');best_step=min(PREFLIGHT_STEPS,key=lambda s:validations[0][s])
     need(selected['scope']=='PREFLIGHT' and selected['loaded_best_checkpoint_step']==best_step and
-         selected['completed_training_step']==10 and selected['export_matches_selected_checkpoint_tensors'],'preflight native best restoration')
+         selected['completed_training_step']==PREFLIGHT_STEPS[-1] and selected['export_matches_selected_checkpoint_tensors'],'preflight native best restoration')
     adapter=root/'preflight_adapter'
     provenance=verify_adapter_identity(adapter,scope='PREFLIGHT',run_commit=commit)
     need(provenance['config_sha256']==config_sha and selected['run_commit']==commit and

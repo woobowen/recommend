@@ -14,10 +14,8 @@ import sys
 import time
 
 N = 22363
-# CPU-verified torch 2.6 seed-0 randperm, rank-strided, without padding.
-RANK_ASSIGNMENT_SHA = ('8eb669c968e313c79df1bba3f16b16bd94ce1e0d6697728ff528c1da3de01363',
-                       'ea9c57674be765e0424ac991e986823a5b8587cfee3d162c3b38a46deaf4f173')
-from g3_identity import ASSETS, EXPERIMENT_ID
+from g3_identity import ASSETS, EXPERIMENT_ID, EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile
+from uneven_sampler import assignment as sampler_assignment
 CATALOG_SIDS = 12101
 CATALOG_COLLISION_GROUPS = 0
 
@@ -140,12 +138,16 @@ def evaluate(args):
     if preflight:
         selection = load(selection_path)
         require(selection['asset_sha256'] == ASSETS, 'Preflight selection asset identity')
-        rank_indices = [[row['row_idx'] for row in selection['ranks'][str(rank)]] for rank in (0, 1)]
+        require(selection['execution_topology'] == EXECUTION_TOPOLOGY and set(selection['ranks']) == {'0'}, 'Single-GPU preflight selection topology')
+        verify_execution_profile(selection['execution_profile'])
+        rank_indices = [[row['row_idx'] for row in selection['ranks'][str(rank)]] for rank in range(1)]
         selected_indices = sorted(i for shard in rank_indices for i in shard)
         require(len(selected_indices) == len(set(selected_indices)) == 32 and
                 all(type(i) is int and 0 <= i < N for i in selected_indices), 'Fixed 32-user preflight population')
     else:
         selected_indices = list(range(N))
+    expected_formal_assignment = sampler_assignment(N, 0, 1)
+    require(len(expected_formal_assignment) == N and len(set(expected_formal_assignment)) == N, 'Single-rank inference assignment has no padding or omissions')
     population = len(selected_indices)
     dense_index = {row: i for i, row in enumerate(selected_indices)}
     output = args.output
@@ -154,6 +156,8 @@ def evaluate(args):
     output.mkdir(parents=True)
     cfg = load(args.config)
     verify_bootstrap_config(cfg['bootstrap'])
+    require(cfg['execution_topology'] == EXECUTION_TOPOLOGY, 'Single-GPU evaluation config topology')
+    verify_execution_profile(cfg['execution_profile'])
     require(cfg['protocol_version'] == 'letter_beauty_beam20_v1' and cfg['original_run_commit'] == args.run_commit, 'Protocol identity')
     require(len(args.run_commit) == len(args.evaluation_commit) == 40 and all(c in '0123456789abcdef' for c in args.run_commit + args.evaluation_commit), 'Commit identity')
     require(cfg['dataset'] == 'Beauty' and cfg['users'] == population and cfg['asset_sha256'] == ASSETS and cfg['sid_coverage_denominator'] == CATALOG_SIDS, 'Beauty configuration identity')
@@ -163,6 +167,9 @@ def evaluate(args):
     stage = load(args.stage_a_report)
     require(stage['status'] == 'PASS' and stage.get('run_commit', stage.get('RUN_COMMIT')) == args.run_commit and stage['actual_test_users'] == population, 'Original audit population gate')
     require(stage.get('scope', 'FORMAL') == scope, 'Stage evaluation scope mismatch')
+    require(stage.get('world_size') == 1 and stage.get('execution_topology') == EXECUTION_TOPOLOGY, 'Single-GPU stage topology')
+    verify_execution_profile(stage['execution_profile'])
+    require(len(stage['prediction_files']) == 1, 'Single-GPU prediction file count')
     require(not preflight or stage.get('preflight_only') is True, 'PREFLIGHT stage must be explicitly labeled')
     data, assets = {}, {}
     for kind, expected in ASSETS.items():
@@ -192,13 +199,15 @@ def evaluate(args):
     coverage = {k: set() for k in diag}
     examples = {'invalid': [], 'target_collision': [], 'prefix_collision_changes_cce': []}
     manifests, generation = [], np.zeros(population, dtype=np.float64)
-    for rank in (0, 1):
+    for rank in range(1):
         path = args.test_dir/f'predictions.rank{rank}.jsonl'
         before = path.stat()
         inherited = stage['prediction_files'][rank]
         require(inherited['bytes'] == before.st_size and inherited['sha256'] == sha(path), 'Frozen prediction identity')
         rank_report = load(args.test_dir/f'rank{rank}.json')
         require(rank_report.get('run_commit', rank_report.get('RUN_COMMIT')) == args.run_commit, 'Rank RUN identity')
+        require(rank_report['rank'] == 0 and rank_report['world_size'] == 1 and rank_report['execution_topology'] == EXECUTION_TOPOLOGY, 'Single-GPU rank topology')
+        verify_execution_profile(rank_report['execution_profile'])
         require(rank_report.get('scope', 'FORMAL') == scope and
                 rank_report.get('preflight_only', False) == preflight, 'Rank evaluation scope mismatch')
         require(rank_report['data_identity'].keys() == ASSETS.keys() and
@@ -268,8 +277,8 @@ def evaluate(args):
         after = path.stat()
         require((before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_size,after.st_mtime_ns,after.st_ctime_ns), 'Original prediction changed')
         assignment_sha = hashlib.sha256(json.dumps(assignments,separators=(',',':')).encode()).hexdigest()
-        require(assignment_sha == rank_report['assignment_sha256'] and len(assignments)==(len(rank_indices[rank]) if preflight else (N+1-rank)//2), 'Original rank assignment identity')
-        require(assignments == rank_indices[rank] if preflight else assignment_sha == RANK_ASSIGNMENT_SHA[rank], 'Frozen rank sampler order mismatch')
+        require(assignment_sha == rank_report['assignment_sha256'] and len(assignments)==(len(rank_indices[rank]) if preflight else N), 'Original rank assignment identity')
+        require(assignments == (rank_indices[rank] if preflight else expected_formal_assignment), 'Frozen rank sampler order mismatch')
         manifests.append({**inherited, 'mtime_ns': after.st_mtime_ns, 'ctime_ns': after.st_ctime_ns, 'assignment_sha256': assignment_sha, 'hash_recomputed': True})
     require(seen == set(selected_indices) and sum(first_counts.values()) == population, 'Complete population')
     means = {key: math.fsum(matrix[:,j])/population for j,key in enumerate(KEYS)}
@@ -328,6 +337,7 @@ def evaluate(args):
          'elapsed_seconds':time.monotonic()-started,'cpu_peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
          'python':sys.executable,'argv':sys.argv,'created_utc':dt.datetime.now(dt.timezone.utc).isoformat(),
          'gpu_used':False,'scope':scope,'preflight_only':preflight,'experiment_id':EXPERIMENT_ID,
+         'world_size':1,'execution_topology':EXECUTION_TOPOLOGY,'execution_profile':EXECUTION_PROFILE,
          'row_indices':selected_indices,'evidence_scope':'Frozen predictions only. No tokenizer/model reload; recorded token callback evidence inherited.'})
     return output/'metrics.json'
 

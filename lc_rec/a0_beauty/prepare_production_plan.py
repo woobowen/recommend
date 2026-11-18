@@ -8,7 +8,7 @@ from pathlib import Path
 from formal_control import durable_write
 from production_control import validate_plan, STAGES, INITIAL_SERIES
 from production_identity import load, sha, identity, ASSETS, need
-from g3_identity import EXPERIMENT_ID
+from g3_identity import EXECUTION_TOPOLOGY, EXECUTION_PROFILE, EXPERIMENT_ID
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
     p.add_argument('--submission-plan',action='store_true',help='Prepare a submittable plan after web review; never authorizes it')
     p.add_argument('--prelaunch-review',help='Pending web review may be omitted for non-submitting prepare')
     p.add_argument('--experiment-series',default=INITIAL_SERIES)
-    p.add_argument('--gpu-uuids',nargs=2,required=True)
+    p.add_argument('--gpu-uuids',nargs=1,required=True)
     a=p.parse_args();dep=load(a.deployment);release=dep['release'];budget=load(a.budget)
     side=load(a.runner+'.deployment.json')
     need(sha(a.runner)=='cc1a1e277faa9bc713a4d0d1b620248d47c398e8ed17d4ed3d7ab52805cc657e','tested Beauty Runner bytes')
@@ -26,7 +26,7 @@ def main():
     root=Path(a.root);path=root/('plan.json' if a.submission_plan else 'preparation-plan.json')
     config=str(Path(release)/'lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json')
     need(not a.submission_plan or a.prelaunch_review,'submission plan requires web review')
-    plan={'scope':'FORMAL_SUBMIT' if a.submission_plan else 'FORMAL_PREPARE','evidence_scope':'FORMAL','task_id':a.task_id,'root':str(root),
+    plan={'scope':'FORMAL_SUBMIT' if a.submission_plan else 'FORMAL_PREPARE','evidence_scope':'FORMAL','execution_topology':EXECUTION_TOPOLOGY,'execution_profile':EXECUTION_PROFILE,'task_id':a.task_id,'root':str(root),
           'experiment_series':a.experiment_series,'experiment_id':EXPERIMENT_ID,
           'run_commit':dep['run_commit'],'prediction_run_commit':dep['run_commit'],'release':release,
           'config':config,'config_sha256':sha(config),'asset_sha256':ASSETS,'inputs':dep['files'],
@@ -39,7 +39,7 @@ def main():
                             **({'prelaunch_review':identity(a.prelaunch_review)} if a.prelaunch_review else {})},
           'export_manifest':identity(Path(release)/'RUN_VERSION.json'),
           'gpu_uuids':a.gpu_uuids,'stage_seconds':budget['stage_seconds'],'budget':budget['budget'],
-          'env':{'CUDA_VISIBLE_DEVICES':'0,1','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
+          'env':{'CUDA_VISIBLE_DEVICES':'1','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
                  'LD_LIBRARY_PATH':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib',
                  'OMP_NUM_THREADS':'4','OPENBLAS_NUM_THREADS':'2','PYTHONDONTWRITEBYTECODE':'1','PYTHONUNBUFFERED':'1',
                  'PYTHONOPTIMIZE':'0','TOKENIZERS_PARALLELISM':'false','HF_HUB_OFFLINE':'1','TRANSFORMERS_OFFLINE':'1'}}

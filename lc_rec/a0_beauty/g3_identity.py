@@ -4,6 +4,9 @@ import json
 from pathlib import Path
 
 EXPERIMENT_ID = 'grid-g3-beauty-lcrec-seed42-20261118'
+EXECUTION_TOPOLOGY = 'SINGLE_GPU'
+EXECUTION_PROFILE = {'world_size': 1, 'per_device_train_batch_size': 8,
+                     'gradient_accumulation_steps': 8, 'global_batch': 64}
 INDEX_SHA = '420fc060caba3a22b0f03900dfe26abc67da8753f3bac2803f7f3c8703a05c22'
 BRIDGE_SHA = '10a7ca66dba43b69232a7c96b48d3287df9314a70a9ec9083ff00acfcf2a8c4f'
 G3_SHA = 'd41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18'
@@ -29,6 +32,11 @@ MODEL_FILES = {
 def need(ok, reason):
     if not ok:
         raise ValueError(reason)
+
+
+def verify_execution_profile(profile):
+    need(profile == EXECUTION_PROFILE, 'single GPU execution profile mismatch')
+    return dict(EXECUTION_PROFILE)
 
 
 def sha(path):
@@ -97,6 +105,7 @@ def write_adapter_identity(adapter, *, scope, run_commit, config_sha256, tokeniz
     root = Path(adapter)
     need(scope in ('FORMAL', 'PREFLIGHT'), 'adapter scope')
     value = {'experiment_id': EXPERIMENT_ID, 'scope': scope, 'assets': ASSETS,
+             'execution_topology': EXECUTION_TOPOLOGY, 'execution_profile': dict(EXECUTION_PROFILE),
              'upstream': {'g3': G3_SHA, 'bridge': BRIDGE_SHA}, 'data_identity': verify_assets(data_root),
              'run_commit': run_commit, 'config_sha256': config_sha256,
              'tokenizer_identity': tokenizer_identity(tokenizer), 'base_model_identity': verify_base_model(model),
@@ -111,6 +120,8 @@ def verify_adapter_identity(adapter, *, scope, run_commit=None, config_sha256=No
     value = json.loads((root/'g3_identity.json').read_text())
     need(value['experiment_id'] == EXPERIMENT_ID and value['assets'] == ASSETS, 'G3 adapter experiment/assets')
     need(value['scope'] == scope and scope in ('FORMAL', 'PREFLIGHT'), 'G3 adapter scope mismatch')
+    need(value.get('execution_topology') == EXECUTION_TOPOLOGY, 'G3 adapter execution topology')
+    verify_execution_profile(value.get('execution_profile'))
     need(value['upstream'] == {'g3': G3_SHA, 'bridge': BRIDGE_SHA}, 'G3 adapter upstream identity')
     base = value['base_model_identity']
     need(base.get('revision') == MODEL_REVISION and
@@ -146,4 +157,6 @@ def verify_launch_authorization(path, expected_sha, run_commit, config_sha256):
          r.get('run_commit') == run_commit and r.get('config_sha256') == config_sha256 and
          r.get('scope') == 'FORMAL' and r.get('authorization_kind') == 'USER_LAUNCH_AUTHORIZATION',
          'explicit new G3 user formal launch authorization required')
+    need(r.get('execution_topology') == EXECUTION_TOPOLOGY, 'formal authorization execution topology')
+    verify_execution_profile(r.get('execution_profile'))
     return r

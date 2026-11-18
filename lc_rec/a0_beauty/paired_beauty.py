@@ -8,6 +8,7 @@ import math
 from pathlib import Path
 import time
 from offline_metrics import ASSETS, KEYS
+from g3_identity import EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile
 
 if not __debug__:
     raise RuntimeError('Pairing identity checks require Python assertions enabled')
@@ -27,6 +28,8 @@ def validate_provenance(primary, test, source_context=None):
     assert scope in ('FORMAL','PREFLIGHT')
     assert metrics.get('scope','FORMAL')==scope
     assert metrics['status']=='PASS' and metrics['users']==population
+    assert metrics['world_size']==1 and metrics['execution_topology']==EXECUTION_TOPOLOGY
+    verify_execution_profile(metrics['execution_profile'])
     run=metrics['run_commit']
     assert isinstance(run,str) and len(run)==40 and all(c in '0123456789abcdef' for c in run)
     assert {k:v['sha256'] for k,v in metrics['assets'].items()}==ASSETS
@@ -38,7 +41,7 @@ def validate_provenance(primary, test, source_context=None):
         path=primary/name
         assert saved['bytes']==path.stat().st_size and saved['sha256']==hashlib.sha256(path.read_bytes()).hexdigest()
     prediction_files=metrics['prediction_files']
-    assert len(prediction_files)==2
+    assert len(prediction_files)==1
     identities=[]
     if source_context is not None:
         from production_identity import verify_predictions, verify_training
@@ -50,15 +53,17 @@ def validate_provenance(primary, test, source_context=None):
         if scope=='PREFLIGHT':condition=first['condition']
         elif 'shuffle' in first:condition='s'+str(first['shuffle']['n'])
         verify_predictions(test,run,source_context['best'],condition,source_context['scope'])
-    for rank in (0,1):
+    for rank in range(1):
         report=json.loads((test/f'rank{rank}.json').read_text())
         assert report['status'] in ('PASS','PREFLIGHT_INTERFACE_PASS') and report['rank']==rank and report['preflight_only'] == (scope=='PREFLIGHT') and report.get('scope','FORMAL')==scope
-        assert report['RUN_COMMIT']==run and report['completed_users']==(16 if scope=='PREFLIGHT' else (11182 if rank==0 else 11181))
+        assert report['RUN_COMMIT']==run and report['completed_users']==population
+        assert report['world_size']==1 and report['execution_topology']==EXECUTION_TOPOLOGY
+        verify_execution_profile(report['execution_profile'])
         assert {k:v['sha256'] for k,v in report['data_identity'].items()}==ASSETS
         pred=test/f'predictions.rank{rank}.jsonl'; saved=prediction_files[rank]
         assert saved['bytes']==pred.stat().st_size and saved['sha256']==hashlib.sha256(pred.read_bytes()).hexdigest()
         identities.append(report['adapter_files'])
-    assert identities[0]==identities[1]
+    assert len(identities)==1
     assert identities[0]['adapter_model.bin']['sha256']!='e56abd90bd3cc55d3786df04971a670bc12c54578110d255b5e7f3f4ec76af07'
     return {'run_commit':run,'adapter_files':identities[0]}
 
@@ -134,7 +139,7 @@ def process(a, source_context=None):
                       'relative_difference':delta/normal if normal else None,
                       'difference_CI95_low':float(low[j]),'difference_CI95_high':float(high[j])}
     normal_candidates={}
-    for rank in [0,1]:
+    for rank in range(1):
         with (Path(a.normal_test)/('predictions.rank%d.jsonl'%rank)).open() as stream:
             for line in stream:
                 row=json.loads(line);cs=row['candidates'];assert row['row_idx'] not in normal_candidates
@@ -144,7 +149,7 @@ def process(a, source_context=None):
     for key in [k for k in keys if k.startswith('hit@')]:
         j=keys.index(key);changed['hit_transitions'][key]={f'{left}->{right}':int(np.sum((matrices[0][:,j]==left)&(matrices[1][:,j]==right))) for left in [0,1] for right in [0,1]}
     seen=set()
-    for rank in [0,1]:
+    for rank in range(1):
         with (Path(a.shuffle_test)/('predictions.rank%d.jsonl'%rank)).open() as stream:
             for line in stream:
                 row=json.loads(line);i=row['row_idx'];assert i not in seen;seen.add(i)
@@ -154,7 +159,7 @@ def process(a, source_context=None):
                 changed['top20_set_changed']+=set(old)!=set(now)
     assert seen==set(expected_rows)
     for key in ['top1_changed','top20_ordered_changed','top20_set_changed']:changed[key+'_fraction']=changed[key]/population
-    result={'scope':source_context['scope'] if source_context else 'LEGACY_PROVENANCE_ONLY','status':'PASS','users':population,'preflight_only':scope=='PREFLIGHT','row_indices':expected_rows,'identity_fields_exact':fields,'metrics':metrics,
+    result={'scope':source_context['scope'] if source_context else 'LEGACY_PROVENANCE_ONLY','status':'PASS','users':population,'world_size':1,'execution_topology':EXECUTION_TOPOLOGY,'execution_profile':EXECUTION_PROFILE,'preflight_only':scope=='PREFLIGHT','row_indices':expected_rows,'identity_fields_exact':fields,'metrics':metrics,
       'bootstrap':{'repetitions':5000,'seed':20261113,'rng':'PCG64','replacement':True,'percentile':'95% linear',
        'scope':'User uncertainty conditional on fixed trained model and fixed shuffle realization; not training-seed or permutation variance.'},
       'independent_verification':{'source':str(independent_path),'source_sha256':hashlib.sha256(independent_path.read_bytes()).hexdigest(),

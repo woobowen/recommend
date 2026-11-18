@@ -15,7 +15,7 @@ import sys
 import time
 from formal_control import durable_write, locked, read, digest, Runner
 from production_identity import need, sha, check_file, scope_guard, ASSETS, SYNTHETIC
-from g3_identity import EXPERIMENT_ID, verify_assets, verify_base_model, verify_launch_authorization
+from g3_identity import EXPERIMENT_ID, verify_assets, verify_base_model, verify_launch_authorization, EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile
 
 STAGES=('train','verify_best_adapter','normal','normal_eval','s3','s3_eval','s4','s4_eval','paired','collect')
 ACTIVE={'ACCEPTED','RUNNING','UNCONFIRMED','CONTROL_LOST'}
@@ -91,7 +91,9 @@ def validate_plan(p):
     need(sha(p['config'])==p['config_sha256'],'configuration SHA')
     cfg=read(p['config'])
     need(cfg['dataset']=='Beauty' and cfg['epochs']==4 and cfg['storage_save_total_limit']==2 and
-         (cfg['seed'],cfg['per_device_batch_size'],cfg['gradient_accumulation_steps'],cfg['world_size'])==(42,8,4,2),'frozen training configuration')
+         (cfg['seed'],cfg['per_device_batch_size'],cfg['gradient_accumulation_steps'],cfg['world_size'])==(42,8,8,1),'frozen training configuration')
+    need(p.get('execution_topology')==EXECUTION_TOPOLOGY,'plan execution topology')
+    verify_execution_profile(p.get('execution_profile'))
     need(p['asset_sha256']==ASSETS,'frozen data identities')
     need(p.get('experiment_id')==EXPERIMENT_ID and p.get('experiment_series')==EXPERIMENT_ID,'G3 experiment identity')
     for key in ('root','release','python','data_root','source_root','model','config','runner','job_root'):
@@ -134,9 +136,9 @@ def validate_plan(p):
         need(Path(p['model']).name=='4782ad278652c7c71b72204d462d6d01eaaf7549','model revision')
         need(sha(Path(p['model'])/'config.json')=='e4c3dea29aefc16c0e63825f9ae097dbf5cb5d7c320843a84257e11be3b452c8','base model config')
         need(p['env'].get('CUDA_VISIBLE_DEVICES') and p['env'].get('PYTHONOPTIMIZE','0')=='0','formal environment')
-        need(len(p['gpu_uuids'])==2 and len(set(p['gpu_uuids']))==2 and
+        need(len(p['gpu_uuids'])==1 and len(set(p['gpu_uuids']))==1 and
              all(re.fullmatch('GPU-[0-9a-f-]{36}',x) for x in p['gpu_uuids']) and
-             p['env']['CUDA_VISIBLE_DEVICES']=='0,1','two fixed physical GPU mappings required')
+             p['env']['CUDA_VISIBLE_DEVICES']=='1' and p['gpu_uuids']==['GPU-59cac3bd-3645-668b-79c8-839e0d878893'],'one authorized physical GPU mapping required')
         need('cpu-only' not in p['namespace']['namespace'],'CPU deployment is not formal deployment')
     else:need(p['env'].get('CUDA_VISIBLE_DEVICES')=='','CPU test visibility')
     return p
@@ -275,9 +277,9 @@ class Control:
             remaining=min(p['stage_seconds'][stage]-stage_used,p['budget'][group(stage)]-used[group(stage)],p['budget']['total']-sum(used.values()))-p['budget']['cleanup_reserve']
             need(remaining>=1,'cumulative budget exhausted')
             if p['evidence_scope']=='FORMAL' and stage in ('train','normal','s3','s4'):
-                gpu=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],text=True)
+                gpu=subprocess.check_output(['nvidia-smi','--id=1','--query-compute-apps=pid','--format=csv,noheader'],text=True)
                 need(not gpu.strip(),'runtime GPU resource check: existing compute process')
-                actual=subprocess.check_output(['nvidia-smi','--query-gpu=uuid','--format=csv,noheader'],text=True).splitlines()
+                actual=subprocess.check_output(['nvidia-smi','--id=1','--query-gpu=uuid','--format=csv,noheader'],text=True).splitlines()
                 need(actual==p['gpu_uuids'],'runtime physical GPU identities changed')
             n=sum(a['stage']==stage for a in state['attempts'])
             req,out=self.factory(p,stage,n,min(345600,int(remaining)),self.path,authorization,authorization_sha256,resume)

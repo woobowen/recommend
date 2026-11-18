@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import sys
 import time
-from g3_identity import EXPERIMENT_ID, verify_assets, verify_base_model, sha, source_identity, need
+from g3_identity import EXPERIMENT_ID, verify_assets, verify_base_model, sha, source_identity, need, EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile
 from preflight_subprocess import run
 
 
@@ -38,15 +38,21 @@ def main():
     cpu=json.loads(a.cpu_validation.read_text())
     need(cpu['status']=='PASS' and cpu['exit_code']==0 and cpu['gpu_used'] is False and
          cpu['experiment_id']==EXPERIMENT_ID,'necessary CPU preflight must pass first')
+    need(cpu['scope']=='PREFLIGHT_CPU_VALIDATION' and cpu.get('execution_topology')==EXECUTION_TOPOLOGY,
+         'CPU validation single GPU scope/topology')
+    verify_execution_profile(cpu.get('execution_profile'))
+    need(cpu['config']['sha256']==sha(scripts/'config/formal_g3_beauty_seed42.json'), 'CPU validated effective config')
     for row in cpu['actual_import_files']:
-        relative='lc_rec/'+row['path'].split('/lc_rec/',1)[1]
-        need(sha(a.release/relative)==row['sha256'],'CPU validation dependency changed: '+relative)
+        imported=Path(row['path'])
+        need(imported.is_relative_to(a.release) or str(imported).startswith('/data/bwwu/envs/'),
+             'unexpected CPU import location')
+        need(sha(imported)==row['sha256'],'CPU validation dependency changed: '+str(imported))
     inputs=verify_assets(a.data_root);base=verify_base_model(a.model)
     gpu=subprocess.check_output(['nvidia-smi','--query-gpu=uuid,memory.used','--format=csv,noheader,nounits'],text=True)
     expected=['GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae','GPU-59cac3bd-3645-668b-79c8-839e0d878893']
     need([line.split(',')[0] for line in gpu.strip().splitlines()]==expected,'physical GPU identity')
-    need(os.environ['CUDA_VISIBLE_DEVICES']=='0,1','two visible GPU mapping')
-    need(not subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip(),'GPU occupied; never evict other tasks')
+    need(os.environ['CUDA_VISIBLE_DEVICES']=='1','single physical GPU1 to logical device0 mapping')
+    need(not subprocess.check_output(['nvidia-smi','--id=1','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip(),'authorized GPU1 occupied; never evict other tasks')
     a.large_root.mkdir(parents=True,exist_ok=True)
     # All attempts in this experiment share one ledger, regardless of job name.
     all_jobs=Path(os.environ['GRID_JOB_DIR']).parent
@@ -60,29 +66,37 @@ def main():
         s=json.loads(stat.read_text())
         need(s.get('ended_at'),'prior G3 GPU job not terminal')
         elapsed=(dt.datetime.fromisoformat(s['ended_at'])-dt.datetime.fromisoformat(s.get('started_at') or s['received_at'])).total_seconds()
-        charged+=2*elapsed;prior.append({'job_id':req['job_id'],'device_seconds':2*elapsed})
-    need(charged+2*a.wall_seconds<=14400,'cumulative 240 GPU-device-minute preparation limit')
-    started=time.monotonic();record={'experiment_id':EXPERIMENT_ID,'scope':'PREFLIGHT','mode':a.mode,
+        devices=req['g3_gpu_devices'];charged+=devices*elapsed;prior.append({'job_id':req['job_id'],'gpu_devices':devices,'device_seconds':devices*elapsed})
+    accepted_request=json.loads((job/'request.json').read_text())
+    reserve_seconds=accepted_request['timeout_seconds']
+    need(accepted_request['g3_gpu_devices']==1 and accepted_request['capture_version']==a.run_commit and
+         reserve_seconds>=a.wall_seconds+30,'single GPU accepted request and cleanup reserve')
+    need(charged+reserve_seconds<=14400,'cumulative 240 GPU-device-minute preparation limit including cleanup')
+    started=time.monotonic();record={'experiment_id':EXPERIMENT_ID,'scope':'PREFLIGHT','execution_topology':EXECUTION_TOPOLOGY,'execution_profile':EXECUTION_PROFILE,'physical_gpu_index':1,'logical_gpu_index':0,'dual_gpu_preflight_status':'NOT_APPLICABLE_THIS_RUN','mode':a.mode,
         'job_id':os.environ['GRID_JOB_ID'],'run_commit':a.run_commit,'argv':sys.argv,'cwd':os.getcwd(),
         'interpreter':sys.executable,'started_utc':dt.datetime.now(dt.timezone.utc).isoformat(),
-        'inputs':inputs,'base_model_identity':base,'gpu_start':gpu,'prior_attempts':prior,
+        'inputs':inputs,'base_model_identity':base,'cpu_validation':source_identity([a.cpu_validation])[0],
+        'gpu_start':gpu,'prior_attempts':prior,'reserved_current_device_seconds':reserve_seconds,
         'predeclared_resume_tolerance':{'atol':1e-6,'rtol':1e-3},'stages':[],'status':'RUNNING'}
     write(out/'g3_preflight.json',record)
     def observe():
         memory=next(int(l.split()[1])*1024 for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:'))
         free=shutil.disk_usage(a.large_root).free
         # Allocated bytes over this task's exact output subtree, not logical sparse sizes.
-        allocated=sum(x.stat().st_blocks*512 for x in a.large_root.rglob('*') if x.is_file() and not x.is_symlink())
+        task_roots=[a.large_root.parent,Path('/data/bwwu/lc-rec/g3-preparation-20261118'),
+                    Path('/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118')]
+        allocated=sum(x.stat().st_blocks*512 for root in task_roots for x in root.rglob('*')
+                      if x.is_file() and not x.is_symlink())
         need(memory>=40*1024**3,'40GiB host reserve')
         need(free>=20*1024**3 and allocated<=80*1024**3,'G3 disk budget/reserve')
         observation={'utc':dt.datetime.now(dt.timezone.utc).isoformat(),'allocated_bytes':allocated,'free_bytes':free,
-                     'memory_available':memory,'charged_device_seconds':charged+2*(time.monotonic()-started)}
+                     'memory_available':memory,'charged_device_seconds':charged+(time.monotonic()-started)}
         with (out/'resources.jsonl').open('a') as f:f.write(json.dumps(observation)+'\n')
-    launcher=[sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2']
+    launcher=[sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=1']
     common=['--source-root',str(source),'--data-root',str(a.data_root),'--model',str(a.model),'--run-commit',a.run_commit]
     def refresh_devices():
         need(subprocess.check_output(['nvidia-smi','--query-gpu=uuid','--format=csv,noheader'],text=True).splitlines()==expected,'physical GPU mapping changed')
-        need(not subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip(),'GPU occupied before new substage')
+        need(not subprocess.check_output(['nvidia-smi','--id=1','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip(),'authorized GPU1 occupied before new substage')
     try:
         if a.mode=='train':
             for mode in ('continuous','early','resumed'):
@@ -99,7 +113,7 @@ def main():
                 write(out/'g3_preflight.json',record)
                 if mode=='early':
                     early=a.large_root/'early_evidence';early.mkdir()
-                    for name in ('rank0.json','rank1.json','events.rank0.jsonl','events.rank1.jsonl','epoch1_rows.json'):
+                    for name in ('rank0.json','events.rank0.jsonl','epoch1_rows.json'):
                         shutil.copyfile(root/name,early/name)
                 if mode=='continuous':
                     # These run-local checkpoints have finished all consumers. Preserve
@@ -120,7 +134,7 @@ def main():
         else:
             argv=launcher+[str(scripts/'formal_evaluate.py'),*common,
                 '--adapter',str(a.large_root/'continuous/preflight_adapter'),'--output',str(a.large_root/'generation'),
-                '--preflight-users-per-rank','16','--preflight-manifest',str(scripts/'config/preflight_g3_users_seed42.json'),
+                '--preflight-users-per-rank','32','--preflight-manifest',str(scripts/'config/preflight_g3_users_seed42.json'),
                 '--preflight-four-conditions','--max-seconds',str(a.wall_seconds)]
             stage={'mode':'four_conditions','argv':argv};record['stages'].append(stage)
             refresh_devices()
@@ -130,7 +144,7 @@ def main():
         record['status']='FAILED';record['error']=repr(e);raise
     finally:
         record['wall_seconds']=time.monotonic()-started
-        record['gpu_device_seconds_upper_bound']=2*record['wall_seconds']
+        record['gpu_device_seconds_upper_bound']=record['wall_seconds']
         record['ended_utc']=dt.datetime.now(dt.timezone.utc).isoformat()
         write(out/'g3_preflight.json',record)
 

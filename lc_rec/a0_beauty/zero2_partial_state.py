@@ -6,6 +6,7 @@ Trainer's actual sample cursor, and verified across process restarts before use.
 import os
 from pathlib import Path
 import random
+from g3_identity import EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile
 
 
 def _map(value, fn):
@@ -21,19 +22,23 @@ def snapshot(engine, scheduler, accelerator, loader_state, *, run_commit, config
     import numpy as np
     import torch
     rank = torch.distributed.get_rank()
-    assert torch.distributed.get_world_size() == 2
-    assert engine.zero_optimization_stage() == 2 and engine.gradient_accumulation_steps() == 4
+    verify_execution_profile(EXECUTION_PROFILE)
+    gas=EXECUTION_PROFILE['gradient_accumulation_steps'];world=EXECUTION_PROFILE['world_size']
+    assert torch.distributed.get_world_size() == world
+    assert engine.zero_optimization_stage() == 2 and engine.gradient_accumulation_steps() == gas
     assert type(engine.optimizer).__name__ == 'DeepSpeedZeroOptimizer'
     assert not accelerator.gradient_state.sync_with_dataloader
     assert len(run_commit) == 40 and len(config_sha256) == 64
     consumed = int(loader_state['consumed_total'])
-    assert engine.micro_steps == consumed and engine.global_steps == consumed // 4
-    assert engine.optimizer.micro_step_id == ((consumed % 4) - 1 if consumed % 4 else -1)
+    assert engine.micro_steps == consumed and engine.global_steps == consumed // gas
+    assert engine.optimizer.micro_step_id == ((consumed % gas) - 1 if consumed % gas else -1)
     device = torch.cuda.current_device()
     torch.cuda.synchronize(device)
     clone = lambda t: t.detach().cpu().clone()
     params = {name: clone(p.grad) for name, p in engine.module.named_parameters() if p.grad is not None}
-    return {'schema': 1, 'rank': rank, 'world_size': 2, 'run_commit': run_commit,
+    return {'schema': 2, 'rank': rank, 'world_size': world,
+            'execution_topology':EXECUTION_TOPOLOGY,'execution_profile':EXECUTION_PROFILE,
+            'run_commit': run_commit,
             'config_sha256': config_sha256, 'micro_steps': int(engine.micro_steps),
             'global_steps': int(engine.global_steps),
             'optimizer_micro_step_id': int(engine.optimizer.micro_step_id),
@@ -61,12 +66,15 @@ def restore(engine, scheduler, accelerator, state, *, run_commit, config_sha256)
     import numpy as np
     import torch
     rank = torch.distributed.get_rank()
-    assert state['schema'] == 1 and state['rank'] == rank and state['world_size'] == 2
+    verify_execution_profile(state['execution_profile'])
+    gas=EXECUTION_PROFILE['gradient_accumulation_steps'];world=EXECUTION_PROFILE['world_size']
+    assert state['schema'] == 2 and state['rank'] == rank and state['world_size'] == world
+    assert state['execution_topology']==EXECUTION_TOPOLOGY
     assert state['run_commit'] == run_commit and state['config_sha256'] == config_sha256
-    assert engine.zero_optimization_stage() == 2 and engine.gradient_accumulation_steps() == 4
+    assert engine.zero_optimization_stage() == 2 and engine.gradient_accumulation_steps() == gas
     assert type(engine.optimizer).__name__ == 'DeepSpeedZeroOptimizer'
     assert not accelerator.gradient_state.sync_with_dataloader
-    assert engine.global_steps == state['global_steps'] == state['micro_steps'] // 4
+    assert engine.global_steps == state['global_steps'] == state['micro_steps'] // gas
     assert state['loader_state']['consumed_total'] == state['micro_steps']
     device = torch.device('cuda', torch.cuda.current_device())
     engine.micro_steps = state['micro_steps']

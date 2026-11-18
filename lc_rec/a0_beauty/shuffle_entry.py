@@ -8,9 +8,10 @@ import hashlib
 import json
 from pathlib import Path
 import sys
-from g3_identity import ASSETS, TOKEN_MAPPING_SHA, digest
+from g3_identity import (ASSETS, TOKEN_MAPPING_SHA, digest, EXECUTION_TOPOLOGY,
+                         EXECUTION_PROFILE, verify_execution_profile)
 
-FROZEN = {'a0': ('a0_beauty/formal_evaluate.py', '595b26ec36f52c46ad99f4d44e4a048e89d38dfdc7355efeaeed50d0697708c8')}
+FROZEN = {'a0': ('a0_beauty/formal_evaluate.py', 'b16e5b2b34d0a353aff791fdc587652bcf25cda6c1e6bcb290b9e58f1eae33d6')}
 
 
 def main():
@@ -29,6 +30,9 @@ def main():
         raise ValueError('G3 Shuffle CPU binding is incomplete')
     if audit['asset_sha256']!=ASSETS or digest(audit['token_ids'])!=TOKEN_MAPPING_SHA:
         raise ValueError('G3 Shuffle CPU assets or token mapping differ')
+    if audit.get('world_size')!=1 or audit.get('execution_topology')!=EXECUTION_TOPOLOGY:
+        raise ValueError('Single-GPU Shuffle CPU audit topology mismatch')
+    verify_execution_profile(audit.get('execution_profile'))
     condition={0:'off',3:'s3',4:'s4'}[a.shuffle_n]
     if '--condition' in remainder:
         raise ValueError('Condition is set exactly once by the checked wrapper')
@@ -44,7 +48,8 @@ def main():
     rank=__import__('os').environ.get('RANK','0')
     record={'entry':str(original),'sha256':FROZEN[a.model_key][1],
             'cpu_audit_sha256':hashlib.sha256(Path(a.cpu_audit).read_bytes()).hexdigest(),
-            'condition':condition,'forwarded_argv':forwarded,'source_mutation':False}
+            'execution_topology':EXECUTION_TOPOLOGY,'execution_profile':EXECUTION_PROFILE,
+        'world_size':1,'condition':condition,'forwarded_argv':forwarded,'source_mutation':False}
     (output/('entry_binding.rank'+rank+'.json')).write_text(json.dumps(record,indent=2)+'\n')
     if a.derived_only:return 0
     from formal_evaluate import main as production_main

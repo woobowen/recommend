@@ -1,0 +1,31 @@
+{
+  "scope": "PREPARATION_ONLY",
+  "source": "User supplemental reply in current conversation, 2026-11-18",
+  "experiment_id": "grid-g3-beauty-lcrec-seed42-20261118",
+  "execution_topology": "SINGLE_GPU",
+  "physical_gpu_to_refresh": 1,
+  "preferred_profile": {
+    "world_size": 1,
+    "per_device_train_batch_size": 8,
+    "gradient_accumulation_steps": 8,
+    "global_batch": 64
+  },
+  "conditional_oom_fallbacks": [
+    [
+      4,
+      16
+    ],
+    [
+      2,
+      32
+    ]
+  ],
+  "fallback_requirements": "Only after actual OOM and residency diagnosis; preserve global sample groups and original native loss weighting. New fixed config and validation required.",
+  "cumulative_gpu_device_minutes_limit": 240,
+  "prior_gpu_device_minutes": 0,
+  "correction_round_carried_forward": 2,
+  "dual_gpu_preflight_status": "NOT_APPLICABLE_THIS_RUN",
+  "formal_entry_topology": "SINGLE_GPU",
+  "formal_experiment_started": false,
+  "formal_launch_authorized": false
+}

@@ -8,7 +8,8 @@ import sys
 from types import SimpleNamespace
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'shuffle'))
 from core import transform, permutation
-from g3_identity import ASSETS, NEW_TOKEN_COUNT, VOCAB_SIZE, verify_assets, tokenizer_identity
+from g3_identity import (ASSETS, NEW_TOKEN_COUNT, VOCAB_SIZE, verify_assets, tokenizer_identity,
+                         EXECUTION_TOPOLOGY, EXECUTION_PROFILE)
 from uneven_sampler import assignment, validate_assignments, assignment_sha256
 
 
@@ -87,31 +88,22 @@ def main():
                                   groups, set(lookup.values()), 4, i)
             assert padded[3:] == changed and padded[:3] == [tok.pad_token_id]*3
             stream.write(json.dumps(record, separators=(',', ':')) + '\n')
-    # Fixed, outcome-blind sample: strata/extremes plus each sampler shard.
-    # Row parity is not sampler rank: derive the actual torch sampler below.
-    rank_shards = [assignment(len(data), rank, 2) for rank in (0, 1)]
-    validate_assignments(rank_shards, len(data))
-    assert [len(shard) for shard in rank_shards] == [11182, 11181]
-    assignments = {}
-    for rank in [0, 1]:
-        assigned = rank_shards[rank]
-        chosen = []
-        def add(i):
-            if i not in chosen:
-                chosen.append(i)
-        for group in [(0, 5), (6, 10), (11, 20)]:
-            eligible = [i for i in assigned if group[0] <= history_lengths[i] <= group[1]]
-            for i in eligible[:2]: add(i)
-        ordered = sorted(assigned, key=lambda i: (lengths[i], i))
-        for i in [ordered[0], ordered[-1], ordered[-2], assigned[0], assigned[-1]]: add(i)
-        repeated = [i for i in assigned if len(set(data.inters[axis[i]][:-1][-20:])) < history_lengths[i]]
-        if repeated: add(repeated[0])
-        for i in assigned:
-            if len(chosen) >= 16: break
-            add(i)
-        assert len(chosen) == 16
-        assignments[str(rank)] = chosen
-    result = {'status': 'PASS_CPU_FULL_INPUTS', 'model_key': a.model_key, 'users': len(data),
+    # Preserve the old fixed 32 IDs, merged into the sole rank before outputs.
+    from preflight_users import validate
+    from formal_evaluate import catalog_and_users
+    fixed_path=Path(__file__).with_name('config')/'preflight_g3_users_seed42.json'
+    fixed=json.loads(fixed_path.read_text())
+    rank_shards=[assignment(len(data),0,1)]
+    validate_assignments(rank_shards,len(data))
+    assert [len(shard) for shard in rank_shards]==[22363]
+    _,_,users,_=catalog_and_users(a.data_root)
+    selected=validate(fixed,users,rank_shards)
+    assignments={'0':selected[0]}
+    for record in fixed['ranks']['0']:
+        assert lengths[record['row_idx']]==record['input_tokens'], 'fixed G3 preflight token length'
+    result = {'status': 'PASS_CPU_FULL_INPUTS', 'execution_topology':EXECUTION_TOPOLOGY,
+              'execution_profile':EXECUTION_PROFILE, 'world_size':1,
+              'dual_gpu_acceptance':'NOT_APPLICABLE_THIS_RUN', 'model_key': a.model_key, 'users': len(data),
               'user_axis_sha256': digest(axis), 'visible_history_groups': sum(history_lengths),
               'history_lengths': history_lengths, 'token_lengths': lengths,
               'preflight_assignments': assignments, 'permutation_distributions': distributions,

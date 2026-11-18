@@ -15,6 +15,7 @@ import math
 import os
 from pathlib import Path
 import random
+import re
 import sys
 import time
 from types import SimpleNamespace
@@ -22,7 +23,10 @@ sys.path.append(str(Path(__file__).resolve().parents[1] / 'letter' / 'scripts'))
 from g3_identity import (ASSETS, EXPERIMENT_ID, NEW_TOKEN_COUNT, VOCAB_SIZE,
                          TRAINABLE_PARAMETERS, verify_assets, tokenizer_identity,
                          verify_base_model, source_identity, write_adapter_identity,
-                         verify_adapter_identity, verify_launch_authorization)
+                         verify_adapter_identity, verify_launch_authorization,
+                         EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile)
+from single_gpu_training import (execution_schedule, build_serial_sampler,
+                                  reconstruct_serial_epoch, audit_serial_epoch)
 
 
 def write(path, obj):
@@ -59,11 +63,9 @@ def checkpoint_required_files(step):
     return {'adapter_model.bin','adapter_config.json','trainer_state.json','training_args.bin',
             'g3_identity.json','external_scheduler.pth','latest','tokenizer.model','tokenizer_config.json',
             'added_tokens.json','special_tokens_map.json',
-            'loader_state_0.pth','loader_state_1.pth','rng_state_0.pth','rng_state_1.pth',
-            'partial_rank0.pt','partial_rank1.pt',
+            'loader_state_0.pth','rng_state.pth','partial_rank0.pt',
             prefix+'mp_rank_00_model_states.pt',
-            prefix+'bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt',
-            prefix+'bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt'}
+            prefix+'bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt'}
 
 
 def verify_checkpoint(path, run_commit, config_sha256):
@@ -74,9 +76,16 @@ def verify_checkpoint(path, run_commit, config_sha256):
     assert meta['experiment_id']==EXPERIMENT_ID, 'checkpoint G3 experiment mismatch'
     assert meta['scope'] in ('PREFLIGHT','FORMAL'), 'checkpoint evidence scope mismatch'
     assert meta['assets']==ASSETS, 'checkpoint G3 assets mismatch'
-    assert meta['collective_ranks']==2, 'checkpoint collective rank completion mismatch'
+    assert meta['collective_ranks']==1, 'checkpoint collective rank completion mismatch'
+    assert meta['world_size']==1, 'checkpoint world size mismatch'
+    assert meta['execution_topology']==EXECUTION_TOPOLOGY, 'checkpoint execution topology mismatch'
+    verify_execution_profile(meta['execution_profile'])
     assert len(meta['files'])==len({r['path'] for r in meta['files']}), 'duplicate checkpoint member'
     assert checkpoint_required_files(meta['global_step']) <= {r['path'] for r in meta['files']}, 'checkpoint missing required rank/member'
+    for row in meta['files']:
+        member=row['path']
+        ranks=re.findall(r'(?:loader_state_|partial_rank|zero_pp_rank_)([0-9]+)',member)
+        assert all(int(value)==0 for value in ranks) and not re.search(r'rng_state_[0-9]+\.pth$',member), 'checkpoint foreign rank member in single GPU execution'
     for row in meta['files']:
         relative=Path(row['path'])
         assert not relative.is_absolute() and '..' not in relative.parts
@@ -112,7 +121,7 @@ def main():
     p.add_argument('--precision-approval-sha256')
     p.add_argument('--diagnosis', help='Opt-in observational probe; never used by formal pipeline')
     p.add_argument('--preflight-interfaces', action='store_true', help='Bounded validation/best reload interfaces; never a formal result')
-    p.add_argument('--boundary-preflight', action='store_true', help='Four short 10-microbatch epochs for boundary acceptance only')
+    p.add_argument('--boundary-preflight', action='store_true', help='Four short20-serial-microbatch epochs; single-GPU acceptance only')
     p.add_argument('--stop-after-epoch', type=int, default=0, choices=[0,1,3], help='Preflight-only early stop at a completed epoch')
     p.add_argument('--prelaunch-review', help='Required for formal training after completed preflight')
     p.add_argument('--prelaunch-review-sha256')
@@ -120,7 +129,7 @@ def main():
     p.add_argument('--formal-authorization-sha256')
     a = p.parse_args()
     rank = int(os.environ['RANK']); local = int(os.environ['LOCAL_RANK'])
-    assert int(os.environ['WORLD_SIZE']) == 2
+    assert int(os.environ['WORLD_SIZE']) == 1
     cfg = json.loads(Path(a.config).read_text())
     assert cfg['experiment_id']==EXPERIMENT_ID
     assert cfg['index_file']=='.index.json'
@@ -140,7 +149,12 @@ def main():
         if k not in ['base_model','output_dir','resume_from_checkpoint','deepspeed','data_path','gradient_accumulation_steps','dataset']:
             assert cfg[k]==v, 'unapproved author setting drift: '+k
     assert cfg['dataset']=='Beauty'
-    assert (cfg['gradient_accumulation_steps'],cfg['global_batch'],cfg['world_size'])==(4,64,2)
+    verify_execution_profile({'world_size':cfg['world_size'],
+        'per_device_train_batch_size':cfg['per_device_batch_size'],
+        'gradient_accumulation_steps':cfg['gradient_accumulation_steps'],'global_batch':cfg['global_batch']})
+    assert cfg['per_device_batch_size']==8 and cfg['gradient_accumulation_steps']==8
+    schedule=execution_schedule(131413,preflight=a.boundary_preflight)
+    gas=EXECUTION_PROFILE['gradient_accumulation_steps']
     approval = (json.loads(Path(a.precision_approval).read_text()) if a.boundary_preflight
                 else approval_json(a.precision_approval,a.precision_approval_sha256))
     assert approval['formal_a_only_bf16_authorized'] is True
@@ -164,8 +178,7 @@ def main():
                         install_peft05_out_of_place, install_peft05_lora_a_bf16_autocast)
     from utils import load_datasets, set_seed
     from collator import Collator
-    from training_rows import (IndexedDataset, IndexedCollator, take_indices,
-                               audit_two_rank_epoch, reconstruct_native_shards)
+    from training_rows import IndexedDataset, IndexedCollator, take_indices
     from zero2_partial_state import snapshot as partial_snapshot, save_exclusive, restore as restore_partial
     from trainer_loop_patch import build as build_trainer_loop
     set_seed(42)
@@ -177,7 +190,9 @@ def main():
               'versions': {x: importlib.metadata.version(x) for x in
                            ['torch','transformers','accelerate','deepspeed','peft','bitsandbytes','fschat','flash-attn']},
               'unpad_compat': adapt_fastchat_unpad_arity(), 'probe': bool(a.probe_stop or a.boundary_preflight)}
-    report.update(scope=evidence_scope,experiment_id=EXPERIMENT_ID)
+    report.update(scope=evidence_scope,experiment_id=EXPERIMENT_ID,world_size=1,
+        execution_topology=EXECUTION_TOPOLOGY,execution_profile=dict(EXECUTION_PROFILE),
+        sample_flow=schedule,gpu_memory_stages=[])
     report['data_identity']=data_identity
     report['base_model_identity']=verify_base_model(a.model)
     actual_imports=[Path(__file__),Path(__file__).with_name('g3_identity.py'),
@@ -187,7 +202,8 @@ def main():
                    inspect.getsourcefile(Trainer),inspect.getsourcefile(peft),
                    inspect.getsourcefile(get_peft_model),inspect.getsourcefile(LoraConfig),
                    inspect.getsourcefile(peft.prepare_model_for_int8_training),
-                   Path(inspect.getsourcefile(peft)).parent/'tuners/lora.py']
+                   Path(inspect.getsourcefile(peft)).parent/'tuners/lora.py',
+                   inspect.getsourcefile(build_serial_sampler)]
     rp = out / ('rank%d.json' % rank)
     if rp.exists() and not a.probe_stop:
         assert a.resume, 'existing formal training output requires explicit full resume'
@@ -204,6 +220,23 @@ def main():
                   'attempt_job_id':os.environ.get('GRID_JOB_ID'), **kw}
         events.write(json.dumps(record, ensure_ascii=False) + '\n')
         if kind != 'batch': print(json.dumps({'rank': rank, **record}), flush=True)
+
+    def gpu_memory(stage):
+        torch.cuda.synchronize(local)
+        free,total=torch.cuda.mem_get_info(local)
+        row={'stage':stage,'local_rank':local,'visible_devices':os.environ.get('CUDA_VISIBLE_DEVICES'),
+             'allocated_bytes':torch.cuda.memory_allocated(local),
+             'reserved_bytes':torch.cuda.memory_reserved(local),
+             'lifecycle_peak_allocated_bytes':torch.cuda.max_memory_allocated(local),
+             'lifecycle_peak_reserved_bytes':torch.cuda.max_memory_reserved(local),
+             'device_free_bytes':free,'device_total_bytes':total,
+             'scope':'torch allocator current/peak is this process; device free includes other use'}
+        report['gpu_memory_stages'].append(row)
+        event('gpu_memory',**row)
+        write(rp,report)
+
+    torch.cuda.reset_peak_memory_stats(local)
+    gpu_memory('before_model_load')
 
     from formal_attention import install as install_formal_attention, assert_active
     report['formal_attention'] = install_formal_attention(cfg, event)
@@ -240,6 +273,7 @@ def main():
     collator = Collator(da, tok)
     model = LETTER.from_pretrained(a.model, load_in_8bit=True, device_map={'':local}, local_files_only=True)
     model.set_hyper(.8); model.resize_token_embeddings(len(tok))
+    gpu_memory('base_model_loaded_and_resized')
     model = peft.prepare_model_for_int8_training(model)
     report['bnb_compat'] = restore_legacy_bnb_state_field(model)
     model = get_peft_model(model, LoraConfig(r=8,lora_alpha=16,lora_dropout=.05,
@@ -260,6 +294,7 @@ def main():
         if ('embed_tokens' in name or 'lm_head' in name) and ('original_module' in name or 'modules_to_save.default' in name):
             assert tuple(value.shape)==(VOCAB_SIZE,4096), 'G3 embedding/head shape: '+name
     report['parameter_inventory'] = inventory
+    gpu_memory('adapter_initialized_inventory_verified')
     report['data']={'train_rows':len(train),'valid_rows':len(valid),'author_valid_rows':44726,
                     'validation_subset_preflight_only':bool(a.boundary_preflight),'tokenizer_vocab':len(tok)}
     ds=json.loads((Path(a.source_root)/'config/ds_z2_bf16.json').read_text())
@@ -267,8 +302,8 @@ def main():
     ds['zero_allow_untested_optimizer']=True
     # Resolve the same auto fields through the native HF integration.
     ta=TrainingArguments(output_dir=str(out),seed=42,per_device_train_batch_size=8,
-         per_device_eval_batch_size=8,gradient_accumulation_steps=4,warmup_ratio=.01,
-         num_train_epochs=4,max_steps=10 if a.boundary_preflight else 8214,learning_rate=2e-4,weight_decay=.01,lr_scheduler_type='cosine',
+         per_device_eval_batch_size=8,gradient_accumulation_steps=gas,warmup_ratio=.01,
+         num_train_epochs=4,max_steps=schedule['max_steps'],learning_rate=2e-4,weight_decay=.01,lr_scheduler_type='cosine',
          report_to=[],fp16=False,bf16=True,logging_steps=10,optim='adamw_torch',
          gradient_checkpointing=True,evaluation_strategy='epoch',save_strategy='epoch',
          eval_steps=1309,save_steps=1309,save_total_limit=cfg['storage_save_total_limit'],load_best_model_at_end=True,
@@ -342,7 +377,7 @@ def main():
             self.consumed_total=saved['consumed_total'] if saved else 0
             self.epoch_start=None;self.epoch_index=-1
         def __getattr__(self,key): return getattr(self.loader,key)
-        def __len__(self): return min(len(self.loader),10) if a.boundary_preflight else len(self.loader)
+        def __len__(self): return min(len(self.loader),schedule['per_epoch_microbatches']) if a.boundary_preflight else len(self.loader)
         def __iter__(self):
             epoch=self.counter;self.counter+=1;self.epoch_index=epoch;self.yielded=0;self.rows=[]
             saved=self.saved
@@ -390,6 +425,7 @@ def main():
 
     # Make the native HF/DS strict module load explicit and verify its step.
     def strict_ds_load(engine, path):
+        gpu_memory('before_strict_checkpoint_reload')
         cp_identity=verify_checkpoint(path,a.run_commit,sha(a.config))
         assert cp_identity['scope']==evidence_scope, 'checkpoint scope mismatch'
         assert cp_identity['tokenizer_identity']==report['tokenizer_identity'], 'checkpoint tokenizer mismatch'
@@ -408,6 +444,7 @@ def main():
         trainer.lr_scheduler.load_state_dict(torch.load(scheduler_path,weights_only=False,map_location='cpu'))
         event('strict_ds_restored',path=str(path),global_step=engine.global_steps,
               scheduler=trainer.lr_scheduler.state_dict(),client_keys=sorted(client))
+        gpu_memory('after_strict_checkpoint_reload')
     trainer_module.deepspeed_load_checkpoint=strict_ds_load
 
     saved_loader=None;saved_partial=None
@@ -431,7 +468,7 @@ def main():
             event('before_best_restore',global_step=self.state.global_step,
                   micro_steps=engine.micro_steps,epoch=self.state.epoch)
             if a.boundary_preflight and not a.stop_after_epoch:
-                assert self.state.global_step==10 and engine.micro_steps==40
+                assert self.state.global_step==schedule['max_steps'] and engine.micro_steps==4*schedule['per_epoch_microbatches']
                 state={'trainable':{n:v.detach().cpu().clone() for n,v in model.named_parameters() if v.requires_grad},
                        'optimizer':engine.optimizer.state_dict(),'scheduler':self.lr_scheduler.state_dict(),
                        'global_step':self.state.global_step,'micro_steps':engine.micro_steps,
@@ -460,10 +497,29 @@ def main():
             if self._writing_checkpoint:
                 return
             return super()._rotate_checkpoints(use_mtime=use_mtime,output_dir=output_dir)
+        def _get_train_sampler(self):
+            assert not self.args.group_by_length
+            self.serial_sampler=build_serial_sampler(self.train_dataset)
+            return self.serial_sampler
         def get_train_dataloader(self):
-            result=ReplayLoader(super().get_train_dataloader(), saved_loader)
+            native=super().get_train_dataloader()
+            from accelerate.data_loader import DataLoaderShard
+            assert isinstance(native,DataLoaderShard)
+            assert self.accelerator.num_processes==1 and dist.get_world_size()==1
+            assert native.batch_sampler.sampler is self.serial_sampler
+            assert native.synchronized_generator is None, 'unexpected native single-process generator handling'
+            native.synchronized_generator=self.serial_sampler.generator
+            native.rng_types=[kind for kind in (native.rng_types or []) if kind!='generator']+['generator']
+            report['single_gpu_loader_binding']={
+                'native_loader_class':'accelerate.data_loader.DataLoaderShard',
+                'native_source':source_identity([inspect.getsourcefile(DataLoaderShard)])[0],
+                'single_process_native_omits_sync_generator':True,
+                'sampler_generator_explicitly_bound':True,'rng_types':list(native.rng_types),
+                'sampling':'native historical two logical shards serialized by eight-row blocks',
+                'numerical_equivalence_claimed':False}
+            result=ReplayLoader(native, saved_loader)
             self.replay_loader=result
-            assert len(result)==(10 if a.boundary_preflight else 8214)
+            assert len(result)==schedule['per_epoch_microbatches']
             event('loader',length=len(result),batch_sampler=type(result.batch_sampler).__name__,
                   sampler_generator=type(result.synchronized_generator).__name__)
             return result
@@ -489,7 +545,7 @@ def main():
             assert self.accelerator.sync_gradients==current.is_gradient_accumulation_boundary()
             boundary=current.is_gradient_accumulation_boundary()
             if probe:probe.batch(step,self.replay_loader.yielded)
-            if a.probe_stop or a.boundary_preflight or step<3 or step%250==0 or (step+1)%2053==0:
+            if a.probe_stop or a.boundary_preflight or step<3 or step%250==0 or (step+1) in schedule['epoch_steps']:
                 event('batch',step=step,epoch_index=self.replay_loader.epoch_index,loader_yielded=self.replay_loader.yielded,
                       input_sha256=hashlib.sha256(inputs['input_ids'].cpu().numpy().tobytes()).hexdigest(),
                       label_sha256=hashlib.sha256(inputs['labels'].cpu().numpy().tobytes()).hexdigest(),
@@ -505,6 +561,8 @@ def main():
                           global_step=current.global_steps)
             assert current.micro_steps==self.replay_loader.consumed_total
             if not torch.isfinite(loss).all(): raise FloatingPointError('nonfinite training loss')
+            if self.replay_loader.consumed_total==1:
+                gpu_memory('after_first_real_forward_backward')
             if a.probe_stop or a.boundary_preflight:
                 assert current.global_steps==before+int(boundary)
                 event('micro_loss',step=step,epoch_index=self.replay_loader.epoch_index,loss=float(loss),ds_global_step_before=before,
@@ -512,6 +570,7 @@ def main():
                       scheduler_last_epoch=self.lr_scheduler.state_dict()['last_epoch'])
             return loss
         def _save_checkpoint(self,current,trial,metrics=None):
+            gpu_memory('before_checkpoint_save_step%d'%self.state.global_step)
             if metrics is not None and 'eval_loss' in metrics:
                 assert math.isfinite(float(metrics['eval_loss'])), 'nonfinite validation loss'
             if probe:probe.state('S0-before-save-step%d'%self.state.global_step,model,self.model_wrapped,self.lr_scheduler,rng_capture(self.replay_loader.loader))
@@ -554,7 +613,8 @@ def main():
                 complete={'run_commit':a.run_commit,'config_sha256':sha(a.config),
                      'scope':evidence_scope,'experiment_id':EXPERIMENT_ID,'assets':ASSETS,
                      'tokenizer_identity':report['tokenizer_identity'],'source_identity':report['source_identity'],
-                     'global_step':self.state.global_step,'files':rows,'collective_ranks':2}
+                     'execution_topology':EXECUTION_TOPOLOGY,'execution_profile':dict(EXECUTION_PROFILE),
+                     'world_size':1,'global_step':self.state.global_step,'files':rows,'collective_ranks':1}
                 write(cp/'complete.json',complete)
                 if not a.boundary_preflight:
                     from checkpoint_receipt import write_receipt
@@ -571,11 +631,12 @@ def main():
             event('checkpoint_complete',path=str(cp),step=self.state.global_step,
                   best=self.state.best_model_checkpoint,best_metric=self.state.best_metric,
                   elapsed_seconds_checkpoint=time.monotonic()-checkpoint_started)
+            gpu_memory('after_checkpoint_save_step%d'%self.state.global_step)
 
     class Callback(TrainerCallback):
         def on_train_begin(self,args,state,control,**kw):
             engine=trainer.model_wrapped
-            assert state.max_steps==(10 if a.boundary_preflight else 8214)
+            assert state.max_steps==schedule['max_steps']
             named=dict(model.named_parameters());ids={id(v) for v in named.values() if v.requires_grad}
             original=engine.optimizer.bit16_groups
             assert {id(v) for g in original for v in g}==ids
@@ -598,6 +659,7 @@ def main():
             event('train_begin',global_step=state.global_step,max_steps=state.max_steps,
                   optimizer=type(engine.optimizer).__name__,scheduler=trainer.lr_scheduler.state_dict(),
                   deepspeed_owns_scheduler=engine.lr_scheduler is not None)
+            gpu_memory('optimizer_initialized_training_begin')
             if probe:
                 probe.state('S2-train-begin',model,engine,trainer.lr_scheduler,rng_capture(trainer.replay_loader.loader))
                 probe.install(model,engine,trainer.lr_scheduler,lambda:rng_capture(trainer.replay_loader.loader))
@@ -609,6 +671,7 @@ def main():
                 if a.boundary_preflight:
                     assert parameter_digests(False)==update_probe['frozen_after_initial_forward'], 'first optimizer update changed frozen weights'
                     event('frozen_after_first_optimizer_update',all_frozen_tensor_bytes_unchanged=True)
+                gpu_memory('after_first_optimizer_update_this_process')
                 write(rp,report)
             norm=engine.get_global_grad_norm()
             if norm is not None and not math.isfinite(float(norm)):raise FloatingPointError('nonfinite gradient norm')
@@ -624,27 +687,19 @@ def main():
             if not a.probe_stop:
                 loader=trainer.replay_loader
                 assert loader.yielded==len(loader) and loader.epoch_index in range(4)
-                expected=([2,5,7,10] if a.boundary_preflight else [2053,4107,6160,8214])[loader.epoch_index]
+                expected=schedule['epoch_steps'][loader.epoch_index]
                 assert state.global_step==expected and trainer.model_wrapped.micro_steps==(loader.epoch_index+1)*len(loader)
                 trainer._before_epoch_validation=partial_snapshot(trainer.model_wrapped,trainer.lr_scheduler,
                     trainer.accelerator,loader.checkpoint(state.global_step),run_commit=a.run_commit,
                     config_sha256=sha(a.config))
-                gathered=[None,None]
+                gathered=[None]
                 dist.all_gather_object(gathered,loader.rows)
-                generator_states=[None,None]
+                generator_states=[None]
                 assert 'loader_generator' in loader.epoch_start
                 dist.all_gather_object(generator_states,loader.epoch_start['loader_generator'])
-                # DataLoaderShard broadcasts rank 0's generator before creating
-                # its iterator. Reconstruct with an independent cloned RNG;
-                # this check must never select or mutate training examples.
-                reconstructed=reconstruct_native_shards(len(train),generator_states[0],len(loader))
-                assert reconstructed==gathered, 'native sampler reconstruction mismatch'
-                if a.boundary_preflight:
-                    assert len(gathered[0])==len(gathered[1])==80
-                    assert len(set(gathered[0]+gathered[1]))==160
-                    identity={'scope':'first ten actual loader batches per rank; not a full epoch'}
-                else:
-                    identity=audit_two_rank_epoch(gathered,len(train),expected_repeats=11)
+                reconstructed=reconstruct_serial_epoch(len(train),generator_states[0],len(loader))
+                assert reconstructed==gathered[0], 'serialized historical sampler reconstruction mismatch'
+                identity=audit_serial_epoch(gathered[0],len(train),preflight=a.boundary_preflight)
                 identity['native_sampler_reconstruction']='exact'
                 if rank==0:
                     target=out/('epoch%d_rows.json'%(loader.epoch_index+1))
@@ -654,7 +709,10 @@ def main():
                         with target.open('x') as f:json.dump(payload,f)
                 if a.stop_after_epoch==loader.epoch_index+1:control.should_training_stop=True
             event('epoch_end',step=state.global_step,epoch=state.epoch)
+            gpu_memory('training_epoch%d_complete_before_validation'%(trainer.replay_loader.epoch_index+1))
             return control
+        def on_evaluate(self,args,state,control,metrics=None,**kw):
+            gpu_memory('validation_epoch%s_complete'%state.epoch)
         def on_log(self,args,state,control,logs=None,**kw):
             if logs: event('log',step=state.global_step,epoch=state.epoch,values=logs)
 
@@ -685,8 +743,8 @@ def main():
     def zero2_native_accumulation(current):
         if current is trainer.model_wrapped and type(current) is DeepSpeedEngine:
             assert trainer.accelerator.distributed_type==DistributedType.DEEPSPEED
-            assert current.zero_optimization_stage()==2 and current.gradient_accumulation_steps()==4
-            assert current.train_micro_batch_size_per_gpu()==8 and current.train_batch_size()==64 and dist.get_world_size()==2
+            assert current.zero_optimization_stage()==2 and current.gradient_accumulation_steps()==gas
+            assert current.train_micro_batch_size_per_gpu()==8 and current.train_batch_size()==64 and dist.get_world_size()==1
             assert not current.inside_no_sync_ctxt and current.enable_backward_allreduce
             assert current._is_gradient_accumulation_boundary is None
             report['zero2_no_sync_compat']['calls']+=1
@@ -700,7 +758,7 @@ def main():
         result=trainer.train(resume_from_checkpoint=a.resume)
         assert_active(report['formal_attention'])
         if a.boundary_preflight:
-            expected=([2,5,7,10][a.stop_after_epoch-1] if a.stop_after_epoch else 10)
+            expected=(schedule['epoch_steps'][a.stop_after_epoch-1] if a.stop_after_epoch else schedule['max_steps'])
             assert trainer.state.global_step==expected
             if not a.stop_after_epoch:
                 assert trainer.state.best_model_checkpoint and math.isfinite(float(trainer.state.best_metric))
@@ -730,6 +788,7 @@ def main():
                 dist.barrier()
                 event('preflight_adapter_saved',checkpoint=trainer.state.best_model_checkpoint,
                       adapter=str(adapter),selection_scope='bounded validation only')
+                gpu_memory('selected_preflight_adapter_exported')
             report.update(status='BOUNDARY_PREFLIGHT_COMPLETE',global_step=trainer.state.global_step,
                           epoch=trainer.state.epoch, best_checkpoint=trainer.state.best_model_checkpoint,
                           best_metric=trainer.state.best_metric, metrics=result.metrics,
@@ -760,7 +819,7 @@ def main():
                 event('preflight_best_restore',checkpoint=str(cp),adapter=str(out/'preflight_adapter'),
                       selection_scope='interface only; not formal best selection')
         else:
-            assert trainer.state.global_step==8214 and trainer.state.epoch==4.0
+            assert trainer.state.global_step==schedule['max_steps'] and trainer.state.epoch==4.0
             assert trainer.state.best_model_checkpoint and trainer.state.best_metric is not None
             assert math.isfinite(float(trainer.state.best_metric))
             # Native Trainer already restored strict best DS state on all ranks.
@@ -785,12 +844,14 @@ def main():
                       'completed_training_step':trainer.state.global_step,
                       'loaded_best_checkpoint_step':trainer.model_wrapped.global_steps})
             dist.barrier()
+            gpu_memory('selected_formal_adapter_exported')
         report.update(status=('BOUNDARY_PREFLIGHT_COMPLETE' if a.boundary_preflight else
                              'PROBE_COMPLETE' if a.probe_stop else 'TRAINING_COMPLETE'),
                       global_step=trainer.state.global_step,epoch=trainer.state.epoch,
                       best_checkpoint=trainer.state.best_model_checkpoint,best_metric=trainer.state.best_metric,
                       metrics=result.metrics,elapsed_seconds=time.monotonic()-started,
                       peak_allocated_bytes=torch.cuda.max_memory_allocated(),peak_reserved_bytes=torch.cuda.max_memory_reserved())
+        gpu_memory('training_process_complete')
         write(rp,report)
     except BaseException as e:
         import traceback

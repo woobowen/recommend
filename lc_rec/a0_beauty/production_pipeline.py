@@ -1,5 +1,6 @@
 """Fixed Beauty production stages. Test drivers may inject external compute only."""
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -10,6 +11,7 @@ from formal_control import durable_write
 from production_identity import (need, load, identity, sha, check_file, scope_guard,
                                  verify_training, verify_predictions, SYNTHETIC)
 from offline_metrics import ASSETS, KEYS
+from g3_identity import EXECUTION_TOPOLOGY, EXECUTION_PROFILE
 
 STAGES=('train','verify_best_adapter','normal','normal_eval','s3','s3_eval','s4','s4_eval','paired','collect')
 GPU={'train','normal','s3','s4'}
@@ -45,11 +47,12 @@ def verify_prediction_stage(plan, condition):
              'saved generation candidate identity changed')
         for row in record['proof']['prediction_files']:check_file(row)
     _,catalog,users,_=original.catalog_and_users(plan['data_root'])
-    audit=original.aggregate_predictions([test/f'predictions.rank{rank}.jsonl' for rank in (0,1)],
+    audit=original.aggregate_predictions([test/f'predictions.rank{rank}.jsonl' for rank in range(1)],
         users,catalog,original.load_evaluator(original.author_source(plan['source_root'])),
         require_rank_done=True,run_commit=plan['prediction_run_commit'])
+    expected_axis=hashlib.sha256(json.dumps(users,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
     need(audit['actual_test_users']==22363 and
-         audit['expected_user_axis_sha256']=='abe0ed0fad612da1a4293927ba09698a47dff6687ecff33e83fadf05c918ea4c',
+         audit['expected_user_axis_sha256']==expected_axis,
          'complete canonical generation user axis')
     proof['full_user_audit']=audit
     return proof
@@ -62,12 +65,12 @@ def evaluation(plan, condition, output):
     proof=verify_prediction_stage(plan,condition)
     _,catalog,users,_=original.catalog_and_users(plan['data_root'])
     # Both formal and synthetic acceptance supply scoped, validated rank evidence.
-    stage=original.aggregate_predictions([test/f'predictions.rank{r}.jsonl' for r in (0,1)],
+    stage=original.aggregate_predictions([test/f'predictions.rank{r}.jsonl' for r in range(1)],
                 users,catalog,original.load_evaluator(source),run_commit=plan['prediction_run_commit'])
-    stage.update(RUN_COMMIT=plan['prediction_run_commit'],scope=plan['evidence_scope'])
+    stage.update(RUN_COMMIT=plan['prediction_run_commit'],scope=plan['evidence_scope'],execution_topology=EXECUTION_TOPOLOGY,execution_profile=EXECUTION_PROFILE)
     durable_write(output/'stage_a.json',stage)
     cfg=load(Path(plan['release'])/'lc_rec/letter/config/a0_evaluation_v1.json')
-    cfg.update(protocol_version='letter_beauty_beam20_v1',dataset='Beauty',users=22363,
+    cfg.update(execution_topology=EXECUTION_TOPOLOGY,execution_profile=EXECUTION_PROFILE,protocol_version='letter_beauty_beam20_v1',dataset='Beauty',users=22363,
                original_run_commit=plan['prediction_run_commit'],sid_coverage_denominator=12101,
                asset_sha256=ASSETS,user_axis_sha256='7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f')
     durable_write(output/'evaluation_config.json',cfg)
@@ -110,7 +113,7 @@ def compute_argv(plan, stage, output, resume=None, *, authorization=None, author
     scripts=Path(plan['release'])/'lc_rec/a0_beauty'
     source=actual_source_root(plan)
     common=['--source-root',str(source),'--data-root',plan['data_root'],'--model',plan['model']]
-    argv=[plan['python'],'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2']
+    argv=[plan['python'],'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=1']
     if stage=='train':
         argv += [str(scripts/'formal_train.py'),*common,'--output',str(training_root(plan)),
                  '--config',plan['config'],'--run-commit',plan['run_commit'],

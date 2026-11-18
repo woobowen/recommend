@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Beauty adaptation of the frozen A0 prompt0/beam20 test.
 
-Run under two-rank torchrun after best-checkpoint adapter export. The author's
+Run under single-rank torchrun after best-checkpoint adapter export. The author's
 LoRA inference branch uses a full BF16 base, not the int8 training base. This
 entry keeps the original positional token callback and unfiltered evaluator,
 including its treatment of duplicate/colliding SIDs. It never reduces beams.
@@ -33,7 +33,8 @@ METRICS = ("hit@5", "hit@10", "ndcg@5", "ndcg@10")
 BEAMS = 20
 from g3_identity import (ASSETS, VOCAB_SIZE, NEW_TOKEN_COUNT, TRAINABLE_PARAMETERS,
                          EXPERIMENT_ID, verify_assets, tokenizer_identity,
-                         verify_adapter_identity, verify_base_model, source_identity)
+                         verify_adapter_identity, verify_base_model, source_identity,
+                         EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile)
 INPUT_SHA256 = ASSETS
 MODEL_REVISION = "4782ad278652c7c71b72204d462d6d01eaaf7549"
 
@@ -166,6 +167,8 @@ def audit_prediction(row, expected_user, catalog, evaluator):
 
 def aggregate_predictions(paths, users, catalog, evaluator, require_rank_done=True, run_commit=None,
                           *, scope="FORMAL", expected_indices=None, condition=None):
+    if require_rank_done and len(paths) != 1:
+        raise AssertionError("Single-GPU production evaluation requires exactly one rank shard")
     if scope not in ("FORMAL", "PREFLIGHT"):
         raise AssertionError("Unknown prediction scope")
     expected = set(range(len(users))) if expected_indices is None else set(expected_indices)
@@ -183,6 +186,9 @@ def aggregate_predictions(paths, users, catalog, evaluator, require_rank_done=Tr
             status = json.loads((path.parent / f"rank{rank}.json").read_text())
             if status["status"] not in {"PREDICTIONS_COMPLETE", "PASS", "PREFLIGHT_INTERFACE_PASS"}:
                 raise AssertionError(f"Rank {rank} did not finish its complete prediction shard")
+            if status.get('world_size') != 1 or status.get('execution_topology') != EXECUTION_TOPOLOGY:
+                raise AssertionError('Single-GPU prediction topology mismatch')
+            verify_execution_profile(status.get('execution_profile'))
             if status["rank"] != rank or (run_commit is not None and status["RUN_COMMIT"] != run_commit):
                 raise AssertionError("Rank completion identity differs from requested evaluation")
             if status.get("scope") != scope or bool(status.get("preflight_only")) != (scope == "PREFLIGHT"):
@@ -232,7 +238,8 @@ def aggregate_predictions(paths, users, catalog, evaluator, require_rank_done=Tr
     anomaly["complete_sid_legal_rate"] = anomaly["legal_complete_sid_candidates"] / anomaly["candidate_count"]
     user_identity = hashlib.sha256(json.dumps([users[i] for i in sorted(expected)], ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()
     return {
-        "status": "PASS", "scope": scope, "preflight_only": scope == "PREFLIGHT", "test_complete": scope == "FORMAL", "actual_test_users": denominator,
+        "status": "PASS", "execution_topology": EXECUTION_TOPOLOGY, "execution_profile": EXECUTION_PROFILE,
+        "dual_gpu_acceptance": "NOT_APPLICABLE_THIS_RUN", "world_size": 1, "scope": scope, "preflight_only": scope == "PREFLIGHT", "test_complete": scope == "FORMAL", "actual_test_users": denominator,
         "valid_result_users": denominator, "failed_users": 0, "skipped_users": 0,
         "all_row_indices_exactly_once": True, "expected_user_axis_sha256": user_identity,
         "metric_sums": metric_sums, "metrics": {key: value / denominator for key, value in metric_sums.items()},
@@ -443,7 +450,8 @@ def generate_one(model, tokenizer, inputs, allowed, user, target, rank, catalog,
         candidates.append({'generation_order': order, 'generated_token_ids': suffix, 'eos_position': 4,
                            'raw_decoded': text, 'sequence_score': score, 'sid': normalized_prediction(text)})
     order = sorted(range(BEAMS), key=lambda i: scores[i], reverse=True)
-    row = {**user, 'rank': rank, 'prompt_id': 0, 'scope': scope, 'condition': condition,
+    row = {**user, 'rank': rank, 'world_size':1, 'execution_topology':EXECUTION_TOPOLOGY,
+           'execution_profile':EXECUTION_PROFILE, 'prompt_id': 0, 'scope': scope, 'condition': condition,
            'model_identity_sha256': model_identity_sha256, 'input_token_ids': actual_ids,
            'original_input_token_ids': raw_ids, 'attention_mask': raw_mask,
            'input_nonpadding_tokens': sum(raw_mask), 'preflight_extra_left_padding': padding,
@@ -475,17 +483,17 @@ def main():
     parser.add_argument("--preflight-all-conditions", "--preflight-four-conditions", action="store_true",
                         help="One strict reload; same-process Normal/OFF/S3/S4 on the fixed preflight users")
     parser.add_argument("--verify-normal-off", action="store_true", help="Exact same-process OFF verification for every Normal prediction")
-    parser.add_argument("--aggregate-only", action="store_true", help="CPU recheck of already complete two-rank JSONL files")
+    parser.add_argument("--aggregate-only", action="store_true", help="CPU recheck of already complete single-rank JSONL file")
     parser.add_argument("--preflight-users-per-rank", type=int, default=0,
                         help="Explicit interface preflight only; does not emit formal metrics or full-test PASS")
-    parser.add_argument("--preflight-manifest", help="Frozen outcome-blind 16-user-per-rank manifest")
+    parser.add_argument("--preflight-manifest", help="Frozen outcome-blind 32-user single-rank manifest")
     parser.add_argument("--minimum-host-free-gib", type=float, default=40.)
     parser.add_argument("--minimum-disk-free-gib", type=float, default=20.)
     parser.add_argument("--max-seconds", type=int, default=96 * 3600,
                         help="Evaluation stage cap; the enclosing job enforces the cumulative 96-hour cap")
     args = parser.parse_args()
-    if args.preflight_users_per_rank not in (0, 16) or (args.preflight_users_per_rank and args.aggregate_only):
-        raise ValueError("Only a separate fixed sixteen-user/rank preflight is supported")
+    if args.preflight_users_per_rank not in (0, 32) or (args.preflight_users_per_rank and args.aggregate_only):
+        raise ValueError("Only a separate fixed thirty-two-user single-rank preflight is supported")
     if bool(args.preflight_users_per_rank) != bool(args.preflight_manifest):
         raise ValueError("Preflight requires a manifest; formal evaluation forbids it")
     if args.verify_normal_off and args.condition != "normal":
@@ -503,12 +511,12 @@ def main():
         verify_adapter_identity(args.adapter,scope='FORMAL',model=args.model,run_commit=args.run_commit,
             config_sha256=sha(Path(__file__).parent/'config/formal_g3_beauty_seed42.json'))
         requested_model_sha=sha(Path(args.adapter)/'g3_identity.json')
-        for rank in range(2):
+        for rank in range(1):
             completed=json.loads((output/f'rank{rank}.json').read_text())
             if completed.get('model_identity_sha256')!=requested_model_sha:
                 raise AssertionError('Aggregate request adapter differs from prediction model')
         _, catalog, users, _ = catalog_and_users(args.data_root)
-        result = aggregate_predictions([output / f"predictions.rank{rank}.jsonl" for rank in range(2)],
+        result = aggregate_predictions([output / f"predictions.rank{rank}.jsonl" for rank in range(1)],
                                        users, catalog, load_evaluator(source), run_commit=args.run_commit,
                                        condition=args.condition)
         result["RUN_COMMIT"] = args.run_commit
@@ -521,8 +529,10 @@ def main():
     if report_path.exists() or prediction_path.exists():
         raise FileExistsError("Evaluation attempt output already exists; preserve it and use a new attempt directory")
     started = time.monotonic()
-    report = {"schema": "letter_a0_formal_test_v1", "status": "RUNNING", "rank": rank,
-              "scope": scope, "experiment_id": EXPERIMENT_ID, "condition": args.condition,
+    report = {"schema": "letter_g3_single_gpu_test_v2", "status": "RUNNING", "rank": rank,
+              "scope": scope, "experiment_id": EXPERIMENT_ID,
+              "execution_topology": EXECUTION_TOPOLOGY, "execution_profile": EXECUTION_PROFILE,
+              "dual_gpu_acceptance": "NOT_APPLICABLE_THIS_RUN", "condition": args.condition,
               "preflight_only": bool(args.preflight_users_per_rank), "conditions": list(conditions),
               "world_size": world, "local_rank": local_rank, "RUN_COMMIT": args.run_commit,
               "host": socket.gethostname(), "pid": os.getpid(), "argv": sys.argv,
@@ -533,7 +543,7 @@ def main():
                              "prefix": "fixed original per-position callback; no catalog Trie",
                              "per_rank_batch_size": 1, "oom_beam_reduction": False,
                              "base_dtype": "BF16, unquantized original author LoRA inference branch",
-                             "sampler": "shuffle=True seed=0 epoch=0, rank-strided, no truncation or padding"}}
+                             "sampler": "shuffle=True seed=0 epoch=0, complete single-rank randperm, no truncation or padding"}}
     torch, dist = None, None
 
     def guard():
@@ -550,8 +560,8 @@ def main():
             raise OSError("Evaluation output disk reserve exhausted")
 
     try:
-        if world != 2 or not 0 <= rank < 2 or args.minimum_host_free_gib < 40 or args.minimum_disk_free_gib < 20:
-            raise ValueError("Requires two ranks, at least 40GiB host and 20GiB output-disk reserve")
+        if world != 1 or rank != 0 or local_rank != 0 or args.minimum_host_free_gib < 40 or args.minimum_disk_free_gib < 20:
+            raise ValueError("Requires exactly rank0/local0 on one visible GPU, at least 40GiB host and 20GiB output-disk reserve")
         if not 0 < args.max_seconds <= 96 * 3600:
             raise ValueError("Evaluation stage budget must be positive and no greater than 96 hours")
         write(report_path, report)
@@ -569,6 +579,8 @@ def main():
         import torch.distributed as dist
         from torch.utils.data import DataLoader, Dataset
         from uneven_sampler import assignment as shard_assignment, validate_assignments
+        if torch.cuda.device_count() != 1:
+            raise AssertionError('Single-GPU generation requires exactly one visible CUDA device')
         torch.cuda.set_device(local_rank)
         dist.init_process_group("nccl", timeout=dt.timedelta(minutes=30))
         sys.path.insert(0, str(source))
@@ -579,6 +591,7 @@ def main():
         torch.cuda.reset_peak_memory_stats()
         report["versions"] = {name: importlib.metadata.version(name) for name in ("torch", "transformers", "peft", "accelerate")}
         report["gpu"] = {"name": torch.cuda.get_device_name(local_rank),
+                         "logical_device_count":torch.cuda.device_count(), "logical_device":local_rank,
                          "visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
                          "total_memory_bytes": torch.cuda.get_device_properties(local_rank).total_memory}
         load_started = time.monotonic()
@@ -613,7 +626,7 @@ def main():
         assignments = [shard_assignment(len(data), r, world) for r in range(world)]
         validate_assignments(assignments, len(data))
         assignment = assignments[rank]
-        if len(assignment) != (11182 if rank == 0 else 11181):
+        if len(assignment) != 22363:
             raise AssertionError("Beauty sampler assignment has unexpected size")
         if args.preflight_users_per_rank:
             from preflight_users import validate

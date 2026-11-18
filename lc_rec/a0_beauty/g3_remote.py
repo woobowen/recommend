@@ -35,6 +35,7 @@ def selected():
         if p.suffix in ('.py','.json','.yaml','.yml','.csv'):
             keep.append(n)
     keep.extend(['lc_rec/letter/evidence/formal_20261111/precision_approval.json',
+        'lc_rec/a0_beauty/evidence/e2e-20261116-r0/continuous/epoch1_rows.json',
         'lc_rec/letter/review/final_audit_20261113/external/official_cce.py',
         'lc_rec/letter/review/final_audit_20261113/statistics_verify.py'])
     return sorted(set(keep))
@@ -121,19 +122,21 @@ print(json.dumps(rows))
         atomic(need_output/'collection.json',rows);print(json.dumps({'files':len(rows),'output':str(need_output)}));return
     if not a.stage or not a.job_id:raise ValueError('submit requires --stage and --job-id')
     dep=json.loads((SUPPORT/'packages/g3-current-deployment.json').read_text());rel=dep['release']
-    scripts=rel+'/lc_rec/a0_beauty';data=REMOTE+'/data';large='/data/bwwu/lc-rec/g3-preparation-20261118/'+dep['run_commit'][:12]
+    scripts=rel+'/lc_rec/a0_beauty';data=REMOTE+'/data';large='/data/bwwu/lc-rec/g3-preparation-single-20261118/'+dep['run_commit'][:12]
     out=t.profile['job_root']+'/'+a.job_id+'/output';gpu=a.stage in ('train','generate');cap=3300 if a.stage=='train' else 1500 if gpu else 3600
     if a.stage=='cpu':argv=[PYTHON,scripts+'/grid_sid_preparation/g3_conversion/production_cpu_check.py','--repo',rel,'--data-root',data,'--model',MODEL,'--config',scripts+'/config/formal_g3_beauty_seed42.json','--output',out+'/cpu']
-    elif gpu:argv=[PYTHON,scripts+'/g3_preflight_driver.py','--release',rel,'--data-root',data,'--model',MODEL,'--large-root',large,'--run-commit',dep['run_commit'],'--mode',a.stage,'--wall-seconds',str(cap-90),'--cpu-validation',t.profile['job_root']+'/g3-lcrec-cpu-20261118-r2/output/cpu/result.json']
+    elif gpu:argv=[PYTHON,scripts+'/g3_preflight_driver.py','--release',rel,'--data-root',data,'--model',MODEL,'--large-root',large,'--run-commit',dep['run_commit'],'--mode',a.stage,'--wall-seconds',str(cap-90),'--cpu-validation',t.profile['job_root']+'/g3-lcrec-single-cpu-20261118-r2/output/cpu/result.json']
     elif a.stage=='compare':argv=[PYTHON,scripts+'/boundary_compare.py','--continuous',large+'/continuous','--early',large+'/early_evidence','--resumed',large+'/recovery','--output',out+'/boundary_compare.json']
     elif a.stage=='evaluate':argv=[PYTHON,scripts+'/g3_evaluate_preflight.py','--release',rel,'--data-root',data,'--training-root',large+'/continuous','--generation-root',large+'/generation','--run-commit',dep['run_commit'],'--output',out+'/evaluation']
     else:argv=[PYTHON,scripts+'/g3_dry_run.py','--release',rel,'--data-root',data,'--model',MODEL,'--run-commit',dep['run_commit'],'--output',out+'/dry_run.json']
-    env=dict(ENV,CUDA_VISIBLE_DEVICES='0,1' if gpu else '',DS_ACCELERATOR='cuda' if gpu else 'cpu')
+    env=dict(ENV,CUDA_VISIBLE_DEVICES='1' if gpu else '',DS_ACCELERATOR='cuda' if gpu else 'cpu')
     req={'schema':1,'host':t.profile['hostname'],'user':t.profile['user'],'uid':t.profile['uid'],
          'namespace':t.profile['namespace'],'deployment_sha256':t.profile['deployment_sha256'],
          'job_id':a.job_id,'capture_version':dep['run_commit'],'cwd':rel,'argv':argv,'env':env,
          'timeout_seconds':cap,'inputs':[{'path':r['path'],'sha256':r['sha256']} for r in dep['files']],
-         'g3_preparation_experiment':'grid-g3-beauty-lcrec-seed42-20261118','g3_gpu_devices':2 if gpu else 0,
+         'g3_preparation_experiment':'grid-g3-beauty-lcrec-seed42-20261118','g3_gpu_devices':1 if gpu else 0,
+         'execution_topology':'SINGLE_GPU','execution_profile':{'world_size':1,'per_device_train_batch_size':8,'gradient_accumulation_steps':8,'global_batch':64},'physical_gpu_index':1 if gpu else None,
+         'single_gpu_supplement':'User explicitly authorized single-GPU topology; no formal launch authorization.',
          'g3_preparation_budget':{'gpu_device_seconds':14400,'cpu_seconds':14400,'correction_round':2}}
     local=SUPPORT/'requests'/(a.job_id+'.json');atomic(local,req)
     print(json.dumps(gridctl.submit(t,local),indent=2))

@@ -1,8 +1,17 @@
 {
-  "schema": "beauty_g3_preflight_users_v1",
+  "schema": "beauty_g3_preflight_single_gpu_users_v2",
   "scope": "PREFLIGHT",
   "experiment_id": "grid-g3-beauty-lcrec-seed42-20261118",
-  "selection": "Reuse exact prior 32 user IDs, fixed before any G3 model outputs; derive G3 targets",
+  "execution_topology": "SINGLE_GPU",
+  "execution_profile": {
+    "world_size": 1,
+    "per_device_train_batch_size": 8,
+    "gradient_accumulation_steps": 8,
+    "global_batch": 64
+  },
+  "world_size": 1,
+  "dual_gpu_acceptance": "NOT_APPLICABLE_THIS_RUN",
+  "selection": "Reuse exact prior 32 user IDs in old rank0 then old rank1 order; merge into one rank before model outputs",
   "prior_manifest_sha256": "714450a0e9479ed272266a5b4d3c2150d83742e4b70c38f80da888d4fa0aaa39",
   "asset_sha256": {
     "index": "420fc060caba3a22b0f03900dfe26abc67da8753f3bac2803f7f3c8703a05c22",
@@ -191,9 +200,7 @@
         "fourth_position_zero_history_items": 3,
         "fourth_position_nonzero_history_items": 1,
         "repeated_visible_history_item": false
-      }
-    ],
-    "1": [
+      },
       {
         "row_idx": 21472,
         "user_id": "21472",

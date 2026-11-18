@@ -10,6 +10,7 @@ import os
 from pathlib import Path, PurePosixPath
 import re
 import tempfile
+from g3_identity import EXECUTION_TOPOLOGY, EXECUTION_PROFILE, verify_execution_profile
 
 
 def write_receipt(checkpoint, output, *, run_commit, config_sha256, data_identity,
@@ -22,8 +23,10 @@ def write_receipt(checkpoint, output, *, run_commit, config_sha256, data_identit
         raise ValueError('checkpoint completion manifest changed')
     if (manifest.get('run_commit') != run_commit or
         manifest.get('config_sha256') != config_sha256 or
-        manifest.get('global_step') != step or manifest.get('collective_ranks') != 2):
+        manifest.get('global_step') != step or manifest.get('collective_ranks') != 1 or
+        manifest.get('execution_topology') != EXECUTION_TOPOLOGY):
         raise ValueError('checkpoint completion identity mismatch')
+    verify_execution_profile(manifest.get('execution_profile'))
     if not re.fullmatch(r'[0-9a-f]{40}', run_commit) or not re.fullmatch(r'[0-9a-f]{64}', config_sha256):
         raise ValueError('invalid run or config identity')
     if not isinstance(attempt, str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,90}', attempt):
@@ -55,6 +58,7 @@ def write_receipt(checkpoint, output, *, run_commit, config_sha256, data_identit
     if scope not in ('FORMAL','SYNTHETIC_CPU_INTEGRATION_ONLY') or validation_records != 44726:
         raise ValueError('receipt validation scope')
     receipt = {'scope':scope, 'validation_records':validation_records, 'schema': 'beauty_checkpoint_receipt_v1', 'run_commit': run_commit,
+               'execution_topology':EXECUTION_TOPOLOGY, 'execution_profile':EXECUTION_PROFILE,
                'config_sha256': config_sha256, 'data_identity': data_identity,
                'epoch': epoch, 'global_step': step, 'eval_loss': float(eval_loss),
                'best_checkpoint': best_checkpoint, 'best_metric': best_metric,
