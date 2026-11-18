@@ -14,6 +14,7 @@ def main():
     p.add_argument('--commit',required=True)
     p.add_argument('--output',required=True,type=Path)
     a=p.parse_args();repo=Path(__file__).resolve().parents[2]
+    a.commit=subprocess.check_output(['git','rev-parse','--verify',a.commit+'^{commit}'],cwd=repo,text=True).strip()
     names=subprocess.check_output(['git','ls-tree','-r','--name-only',a.commit,'--','lc_rec/a0_beauty','lc_rec/letter/config','lc_rec/letter/scripts','lc_rec/shuffle'],cwd=repo,text=True).splitlines()
     files={}
     for name in names:
