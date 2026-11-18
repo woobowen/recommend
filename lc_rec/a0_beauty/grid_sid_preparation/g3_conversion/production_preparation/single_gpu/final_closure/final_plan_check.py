@@ -242,7 +242,7 @@ def main():
         reject(name+' through controller', lambda: control.approval_documents(invalid,True),control_error)
         reject(name+' through direct training', lambda: training_review(bad),train_error)
 
-    output = Path(plan['root'])/'attempts'/'train'/'a0'
+    output = fixture/'worker-denial'
     cmd('production worker CLI missing authorization',
         [sys.executable,str(scripts/'production_pipeline.py'),'--plan',str(path),'--stage','train',
          '--output',str(output)],1,'separate user launch authorization and user-pinned digest required')
@@ -271,8 +271,14 @@ def main():
     train = commands['train']
     check(train[-4::2] == ['--formal-authorization','--formal-authorization-sha256'],
           'expected training authorization placeholders')
-    cmd('direct train CLI missing authorization', train[:1]+train[6:-4],
+    training_negative = train[:1]+train[6:-4]
+    # The CLI writes a diagnostic on failure, even when authorization is denied.
+    training_negative[training_negative.index('--output')+1] = str(fixture/'train-denial')
+    cmd('direct train CLI missing authorization', training_negative,
         1, 'new G3 formal launch authorization required', env=train_env)
+    diagnostic = read(fixture/'train-denial'/'failure.rank0.json')
+    check(diagnostic['status']=='FAILED' and diagnostic['argv']==training_negative[1:] and
+          not output.exists(), 'denied CLI diagnostic outside its synthetic scope')
     budget_test = budget_checks(control,plan,fixture,read,durable_write)
     after = snapshot(plan, control.EXPERIMENT_REGISTRY, identity, digest, read)
     check(after['root_children']==['plan.json','preparation-plan.json'] and

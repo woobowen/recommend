@@ -134,7 +134,7 @@ def main():
         if terminal['status']=='SUCCEEDED':
             files += ['output/SYNTHETIC_CPU_INTEGRATION_ONLY/'+n for n in
                       ('old-experiment-invalid.json','wrong-review-kind.json','wrong-evidence-SHA.json',
-                       'counter-test-state.json')]
+                       'counter-test-state.json','train-denial/failure.rank0.json')]
         paths = {name:job+'/'+name for name in files}
         if terminal['status']=='SUCCEEDED':
             paths['final_plan.json'] = old['root']+'/plan.json'
