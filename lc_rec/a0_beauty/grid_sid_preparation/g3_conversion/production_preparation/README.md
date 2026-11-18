@@ -1,5 +1,78 @@
 # Fixed G3 Beauty production preparation
 
+## 最终收口与网页增量审核
+
+本轮采用用户批准的单卡上限。训练 30 小时，Normal 含 OFF 对照 12 小时，
+S3/S4 各 6 小时，CPU 合计 5,400 秒，流水线累计 199,800 秒（55.5 小时）。
+阶段请求仍从剩余阶段、组、总量的最小值扣 120 秒清收预留。
+[批准依据](single_gpu/final_closure/budget_approval.json)、
+[有效预算](single_gpu/final_closure/approved_budget.json)与
+[上一轮技术二审及来源](single_gpu/final_closure/external_technical_review.json)
+分别记录。下文关于旧草案及当时待批准预算的文字为历史背景。
+
+[最终计划](single_gpu/final_closure/final_plan.json)、
+[计划身份与验收摘要](single_gpu/final_closure/final_plan_summary.json)、
+[真实 CPU dry-run](single_gpu/final_closure/jobs/g3-final-plan-cpu-20261118-r2/output/dry_run.json)、
+[非作者直接审查](single_gpu/final_closure/non_author_review.json)
+供当前网页增量复核。既有网页技术二审对应交付提交
+`6db8ab4ec98f5692014eeac02b03f3f55015d1eb` 与运行提交
+`21d495b0be5b606853ec7cec68a3eaa1b58acbd7`。当前增量仍待网页复核。
+正式训练、生成及控制器尚未启动。
+
+收口复核脚本固定于 `780040a4a3743d124004811495f9c45e6a3273ef`。
+[首次 CPU 作业](single_gpu/final_closure/jobs/g3-final-plan-cpu-20261118-r0/work.log)
+于成功生成计划后遇到检查脚本的 CPU 阶段加总错误。第一轮修正按批准值
+5,400 秒重新校验。直接训练 CLI 的拒绝路径会写诊断，首轮复核在正式根目录
+留下了一个 2,428 字节的拒绝回执。第二轮修正先
+[按原字节归档该诊断](single_gpu/final_closure/jobs/g3-final-plan-cpu-20261118-r1/diagnostic_relocation.json)，
+移除归档后空目录，再将 CLI 否定测试输出指向隔离目录。最终复核比较同一计划
+的前后字节，检查正式根目录、注册绑定、进程和 job。失败重试扣费通过使用
+模拟 runner 状态及停止于请求创建前的隔离函数调用验证。
+
+正式根目录为 `/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b`，
+计划位于其中的 `plan.json`，旧 `preparation-plan.json` 独立保留。
+最终计划原始 SHA-256 为
+`a56076cf07d67bc088442dc35f863134081b455f551fc45d2c6bfb2bfd246407`，
+生产 canonical digest 为
+`526987fa87f0feb565a7a9f42bc58f42e3121b9d9a13cea4613e47f842c394b6`。
+计划固定使用源导出
+`/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release`、
+解释器 `/data/bwwu/envs/letter-20261110/bin/python` 与 Beauty 隔离 runner
+`/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/runner-beauty.py`。
+物理卡 1 对应逻辑 CUDA 0，UUID
+`GPU-59cac3bd-3645-668b-79c8-839e0d878893`。
+
+正式流程为 train → verify_best_adapter → Normal/OFF → normal_eval →
+S3 → s3_eval → S4 → s4_eval → paired → collect。训练从原模型初始化，
+正式生成共享本实验的 `training/best_adapter` 并覆盖 22,363 用户。
+
+网页增量复核完成后，唯一新增的用户决定是明确启动这份固定计划。正式授权回执须
+如实绑定该用户指令，包含 canonical digest、运行提交、配置 SHA、预算、task
+`g3-beauty-seed42`、本实验资产、单卡 profile、有效期，以及对新独立 G3
+实验的明确授权和旧 series `beauty-a0-seed42-original`。正式启动入口要求用户
+确认的授权文件 SHA。启动时刷新 GPU UUID/占用、磁盘和主存。服务器执行入口如下，
+其中 `USER_RECEIPT` 和 `USER_PINNED_SHA` 由届时明确授权提供。
+
+```bash
+release=/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release
+python=/data/bwwu/envs/letter-20261110/bin/python
+plan=/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json
+cd "$release/lc_rec/a0_beauty" &&
+  PYTHONDONTWRITEBYTECODE=1 "$python" -c 'import sys; from production_control import authorize; from formal_control import read; authorize(read(sys.argv[1]), sys.argv[2], sys.argv[3])' "$plan" "$USER_RECEIPT" "$USER_PINNED_SHA" &&
+  PYTHONDONTWRITEBYTECODE=1 "$python" production_control.py start --plan "$plan" --authorization "$USER_RECEIPT" --authorization-sha256 "$USER_PINNED_SHA"
+```
+
+正式开始后以 `controller.log`、`state.json`、`requests/` 和 runner 下的原
+job 目录跟踪，在线每 15 分钟轻量观察。控制器的 `query --plan "$plan"` 仅在
+已经出现 `plan.identity.json` 和 `state.json` 后使用。断线先核对原状态、
+控制器进程及已登记 job 的请求 SHA，再用原 runner 的
+`query <job_root>/<job_id>` 检查终态和清收。未知提交结果时查原 ID。
+预算不足或阶段失败时保留原计划、attempt、日志和累计账本。后续符合条件的显式
+`--retry <stage>` 沿用该 plan 和原账本，train 恢复仅使用该实验最新完整
+checkpoint 并通过 `--resume` 明确指定。
+
+## 上一轮已验收的固定实现与预跑
+
 The user explicitly replaced the earlier two-GPU execution requirement with
 **one GPU, batch 8, gradient accumulation 8, global batch 64**, including the
 future formal run. Physical GPU1 is the authorized device and becomes logical
