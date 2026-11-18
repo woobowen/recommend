@@ -69,13 +69,14 @@ def checkpoint_required_files(step):
 def verify_checkpoint(path, run_commit, config_sha256):
     path=Path(path)
     meta=json.loads((path/'complete.json').read_text())
-    assert meta['run_commit']==run_commit and meta['config_sha256']==config_sha256
-    assert meta['experiment_id']==EXPERIMENT_ID
-    assert meta['scope'] in ('PREFLIGHT','FORMAL')
-    assert meta['assets']==ASSETS
-    assert meta['collective_ranks']==2
+    assert meta['run_commit']==run_commit, 'checkpoint source commit mismatch'
+    assert meta['config_sha256']==config_sha256, 'checkpoint effective config mismatch'
+    assert meta['experiment_id']==EXPERIMENT_ID, 'checkpoint G3 experiment mismatch'
+    assert meta['scope'] in ('PREFLIGHT','FORMAL'), 'checkpoint evidence scope mismatch'
+    assert meta['assets']==ASSETS, 'checkpoint G3 assets mismatch'
+    assert meta['collective_ranks']==2, 'checkpoint collective rank completion mismatch'
     assert len(meta['files'])==len({r['path'] for r in meta['files']}), 'duplicate checkpoint member'
-    assert checkpoint_required_files(meta['global_step']) <= {r['path'] for r in meta['files']}
+    assert checkpoint_required_files(meta['global_step']) <= {r['path'] for r in meta['files']}, 'checkpoint missing required rank/member'
     for row in meta['files']:
         relative=Path(row['path'])
         assert not relative.is_absolute() and '..' not in relative.parts

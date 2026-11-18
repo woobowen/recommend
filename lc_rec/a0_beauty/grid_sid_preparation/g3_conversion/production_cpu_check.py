@@ -176,7 +176,7 @@ def main():
         try:
             operation()
         except (AssertionError, ValueError, FileNotFoundError, KeyError) as error:
-            check(expected in str(error), name + ': wrong guard ' + repr(error))
+            check(any(value in str(error) for value in (expected if isinstance(expected,tuple) else (expected,))), name + ': wrong guard ' + repr(error))
             negative.append({'case': name, 'guard': type(error).__name__, 'message': str(error), 'synthetic_fixture': True})
         else:
             raise AssertionError(name + ': corruption accepted')
@@ -221,7 +221,7 @@ def main():
     save(wrong_tokenizer/'added_tokens.json',token_map)
     def wrong_saved_mapping():
         gi.tokenizer_identity(LlamaTokenizer.from_pretrained(wrong_tokenizer,local_files_only=True),index)
-    rejects('saved_tokenizer_wrong_mapping',wrong_saved_mapping,'')
+    rejects('saved_tokenizer_wrong_mapping',wrong_saved_mapping,('token to ID mapping mismatch','Non-consecutive added token','Wrong index found'))
     cp = fixture / 'checkpoint-2'; cp.mkdir()
     commit = 'a'*40; config_sha = 'b'*64
     for member in formal_train.checkpoint_required_files(2):
@@ -240,11 +240,14 @@ def main():
                 'files':[{'path':str(p.relative_to(cp)),'bytes':p.stat().st_size,'sha256':gi.sha(p)} for p in sorted(cp.rglob('*')) if p.is_file()]}
     save(cp/'complete.json', manifest)
     formal_train.verify_checkpoint(cp, commit, config_sha)
-    rejects('wrong_checkpoint_source', lambda: formal_train.verify_checkpoint(cp, 'c'*40, config_sha), '')
-    rejects('wrong_checkpoint_config', lambda: formal_train.verify_checkpoint(cp, commit, 'c'*64), '')
+    rejects('wrong_checkpoint_source', lambda: formal_train.verify_checkpoint(cp, 'c'*40, config_sha), 'checkpoint source commit mismatch')
+    rejects('wrong_checkpoint_config', lambda: formal_train.verify_checkpoint(cp, commit, 'c'*64), 'checkpoint effective config mismatch')
     incomplete = copy.deepcopy(manifest); incomplete['files'] = [r for r in incomplete['files'] if r['path']!='rng_state_1.pth']
     save(cp/'complete.json', incomplete)
-    rejects('missing_rank_member', lambda: formal_train.verify_checkpoint(cp, commit, config_sha), '')
+    rejects('missing_rank_member', lambda: formal_train.verify_checkpoint(cp, commit, config_sha), 'checkpoint missing required rank/member')
+    incomplete=copy.deepcopy(manifest);incomplete['collective_ranks']=1
+    save(cp/'complete.json',incomplete)
+    rejects('missing_collective_rank',lambda:formal_train.verify_checkpoint(cp,commit,config_sha),'checkpoint collective rank completion mismatch')
     save(cp/'complete.json', manifest)
     (cp/'complete.json').rename(cp/'complete.incomplete.json')
     rejects('checkpoint_not_collectively_completed', lambda: formal_train.verify_checkpoint(cp, commit, config_sha), 'complete.json')
