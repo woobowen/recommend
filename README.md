@@ -1,5 +1,7 @@
 # SID Order Invariance
 
+- [五种子实验与注意力归档](5seed%20Results/README.md)：Beauty、Toys，seed 42–46，含逐种子测试指标、汇总、原始结果记录及交互注意力压缩包。
+
 - [All SID Experiments](All%20SID%20Experiments/)：本地「学长基线实验」上传内容，包括基线代码、shuffle、MLP、parallel 文件、配置、Amazon 数据和 Qwen 权重。所有 `codex` 目录均已排除。
 - [GRID baseline](GRID%20baseline/)：已完成的 Qwen → RQ-KMeans → TIGER 基线归档，包含向量、SID、checkpoint 和历史输出。
 - [Baseline Results](Baseline%20Results/)：三个数据集的测试指标、论文比较和增减百分比。

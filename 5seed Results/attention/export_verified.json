@@ -1,0 +1,24 @@
+{
+  "cases": 1000,
+  "source_user_files": 4000,
+  "datasets": [
+    "beauty",
+    "toys"
+  ],
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "source_hashes_verified": true,
+  "all_four_layers_all_six_heads": true,
+  "all_padding_removed": true,
+  "valid_attention_row_sums_verified": true,
+  "display_quantization_max_error": 8e-06,
+  "canonical_alignment": "For each item, inverse of exported output-position -> original-SID permutation; SEP fixed. Encoder self aligns both axes; cross aligns key axis.",
+  "comparison_caveat": "Cross-attention recomputed along each condition final Top1 prefix; differing prefixes are flagged and are not a controlled same-prefix causal comparison.",
+  "aggregated_item_keys": "Sum SID and SEP key attention within each item; MLP already has one key per item.",
+  "interpretation": "Attention weights describe allocation, not causal importance or proof of invariance."
+}
