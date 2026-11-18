@@ -93,9 +93,12 @@ print(json.dumps({{'release':str(release),'files':len(manifest['files']),'run_co
 def main():
     p=argparse.ArgumentParser(allow_abbrev=False)
     p.add_argument('mode',choices=['deploy','submit','query','probe','collect'])
-    p.add_argument('--stage',choices=['cpu','train','generate','compare','evaluate','dryrun'])
+    p.add_argument('--stage',choices=['cpu','train','resume-diagnostic','generate','compare','evaluate','dryrun'])
     p.add_argument('--job-id')
+    p.add_argument('--cpu-job-id',default='g3-lcrec-single-cpu-20261118-r2',help='Passed necessary CPU runner job for this fixed source')
+    p.add_argument('--parent-job-id',help='Previous attempt identity, retained without resetting budget')
     p.add_argument('--output',type=Path)
+    p.add_argument('--include-model-evidence',action='store_true',help='Collect small terminal-run model receipts and predictions, never tensors')
     a=p.parse_args();t=Transport('new-server')
     if a.mode=='deploy':deploy(t);return
     if a.mode=='probe':
@@ -108,12 +111,22 @@ def main():
             raise RuntimeError('collect requires terminal job and verified empty workgroup; use query meanwhile')
         # Bounded lightweight evidence only. Each retrieved member is hash checked.
         remote=t.profile['job_root']+'/'+a.job_id
+        model_root=None
+        if a.include_model_evidence:
+            request=json.loads(t.python('from pathlib import Path\nprint(Path('+repr(remote+'/request.json')+').read_text())'))
+            if request.get('g3_preparation_experiment')!='grid-g3-beauty-lcrec-seed42-20261118' or request.get('g3_gpu_devices')!=1:
+                raise ValueError('model evidence requires this experiment single-GPU request')
+            argv=request['argv'];model_root=request.get('preflight_output_root') or argv[argv.index('--large-root')+1]
+            if not Path(model_root).is_relative_to('/data/bwwu/lc-rec/g3-preparation-single-20261118'):
+                raise ValueError('model evidence path isolation')
         code=f"""import pathlib,json,hashlib
-root=pathlib.Path({remote!r});rows=[]
-for f in root.rglob('*'):
- if not f.is_file() or f.is_symlink() or f.stat().st_size>16*1024**2:continue
- if f.suffix not in ('.json','.jsonl','.log','.txt') and f.name not in ('stdout','stderr'):continue
- rows.append({{'path':str(f),'relative':str(f.relative_to(root)),'bytes':f.stat().st_size,'sha256':hashlib.sha256(f.read_bytes()).hexdigest()}})
+roots=[(pathlib.Path({remote!r}),'')];rows=[]
+if {model_root!r} is not None:roots.append((pathlib.Path({model_root!r}),'model_evidence/'))
+for root,prefix in roots:
+ for f in root.rglob('*'):
+  if not f.is_file() or f.is_symlink() or f.stat().st_size>16*1024**2:continue
+  if f.suffix not in ('.json','.jsonl','.log','.txt') and f.name not in ('stdout','stderr'):continue
+  rows.append({{'path':str(f),'relative':prefix+str(f.relative_to(root)),'bytes':f.stat().st_size,'sha256':hashlib.sha256(f.read_bytes()).hexdigest()}})
 print(json.dumps(rows))
 """
         rows=json.loads(t.python(code));need_output=a.output
@@ -123,9 +136,52 @@ print(json.dumps(rows))
     if not a.stage or not a.job_id:raise ValueError('submit requires --stage and --job-id')
     dep=json.loads((SUPPORT/'packages/g3-current-deployment.json').read_text());rel=dep['release']
     scripts=rel+'/lc_rec/a0_beauty';data=REMOTE+'/data';large='/data/bwwu/lc-rec/g3-preparation-single-20261118/'+dep['run_commit'][:12]
-    out=t.profile['job_root']+'/'+a.job_id+'/output';gpu=a.stage in ('train','generate');cap=3300 if a.stage=='train' else 1500 if gpu else 3600
+    out=t.profile['job_root']+'/'+a.job_id+'/output';gpu=a.stage in ('train','resume-diagnostic','generate');cap=3300 if a.stage=='train' else 1500 if gpu else 3600
     if a.stage=='cpu':argv=[PYTHON,scripts+'/grid_sid_preparation/g3_conversion/production_cpu_check.py','--repo',rel,'--data-root',data,'--model',MODEL,'--config',scripts+'/config/formal_g3_beauty_seed42.json','--output',out+'/cpu']
-    elif gpu:argv=[PYTHON,scripts+'/g3_preflight_driver.py','--release',rel,'--data-root',data,'--model',MODEL,'--large-root',large,'--run-commit',dep['run_commit'],'--mode',a.stage,'--wall-seconds',str(cap-90),'--cpu-validation',t.profile['job_root']+'/g3-lcrec-single-cpu-20261118-r2/output/cpu/result.json']
+    elif a.stage=='resume-diagnostic':
+        if not a.parent_job_id:raise ValueError('resume diagnostic requires the original failed parent job')
+        gridctl.valid(a.parent_job_id);parent=gridctl.query(t,a.parent_job_id)
+        if parent['status']!='FAILED' or not parent.get('cleanup_verified') or parent.get('worker_alive') or parent.get('workgroup_live'):
+            raise ValueError('diagnostic only after parent failure and verified empty workgroup')
+        cpu=t.profile['job_root']+'/'+a.cpu_job_id+'/output/cpu/result.json'
+        proof_code=f"""import sys,pathlib,json,hashlib,datetime,shutil
+sys.path.insert(0,{scripts!r})
+from formal_train import verify_checkpoint
+from g3_identity import sha,EXPERIMENT_ID,verify_execution_profile
+cpu=json.loads(pathlib.Path({cpu!r}).read_text())
+assert cpu['status']=='PASS' and cpu['exit_code']==0 and cpu['gpu_used'] is False
+verify_execution_profile(cpu['execution_profile'])
+assert cpu['config']['sha256']==sha({scripts+'/config/formal_g3_beauty_seed42.json'!r})
+for row in cpu['actual_import_files']:assert sha(row['path'])==row['sha256']
+root=pathlib.Path({large!r});recovery=root/'recovery';cp=recovery/'checkpoint-2'
+verify_checkpoint(cp,{dep['run_commit']!r},sha({scripts+'/config/formal_g3_beauty_seed42.json'!r}))
+evidence=root/'early_evidence';evidence.mkdir(exist_ok=False);rows=[]
+for name in ('rank0.json','events.rank0.jsonl','failure.rank0.json','epoch1_rows.json'):
+ src=recovery/name
+ if src.is_file():
+  dst=evidence/name;shutil.copyfile(src,dst);rows.append({{'path':str(dst),'sha256':sha(dst),'bytes':dst.stat().st_size}})
+shutil.copyfile(cp/'complete.json',evidence/'checkpoint-2.complete.json')
+charged=0
+for p in pathlib.Path({t.profile['job_root']!r}).glob('*/request.json'):
+ req=json.loads(p.read_text())
+ if req.get('g3_preparation_experiment')!=EXPERIMENT_ID or not req.get('g3_gpu_devices'):continue
+ status=json.loads((p.parent/'status.json').read_text());assert status.get('ended_at')
+ charged+=req['g3_gpu_devices']*(datetime.datetime.fromisoformat(status['ended_at'])-datetime.datetime.fromisoformat(status.get('started_at') or status['received_at'])).total_seconds()
+assert charged+{cap}<=14400
+print(json.dumps({{'parent_job':{a.parent_job_id!r},'cpu_validation_sha256':sha({cpu!r}),'checkpoint_manifest_sha256':sha(cp/'complete.json'),'preserved_early':rows,'prior_device_seconds':charged,'reserved_device_seconds':{cap},'scope':'PREFLIGHT_RESUME_DIAGNOSTIC_ONLY_NOT_FINAL_ACCEPTANCE'}}))
+"""
+        proof=json.loads(t.python(proof_code,timeout=120));atomic(SUPPORT/'requests'/(a.job_id+'.precheck.json'),proof)
+        if t.ssh('nvidia-smi --id=1 --query-compute-apps=pid --format=csv,noheader').strip():raise ValueError('authorized GPU1 occupied')
+        device=t.ssh('nvidia-smi --id=1 --query-gpu=uuid,memory.free --format=csv,noheader,nounits').strip().split(',')
+        if device[0]!='GPU-59cac3bd-3645-668b-79c8-839e0d878893' or int(device[1])<20*1024:raise ValueError('GPU1 identity/free memory')
+        argv=[PYTHON,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=1',scripts+'/formal_train.py',
+            '--source-root',rel+'/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec','--data-root',data,'--model',MODEL,
+            '--run-commit',dep['run_commit'],'--output',large+'/recovery','--config',scripts+'/config/formal_g3_beauty_seed42.json',
+            '--precision-approval',rel+'/lc_rec/letter/evidence/formal_20261111/precision_approval.json',
+            '--boundary-preflight','--resume',large+'/recovery/checkpoint-2']
+    elif gpu:
+        gridctl.valid(a.cpu_job_id)
+        argv=[PYTHON,scripts+'/g3_preflight_driver.py','--release',rel,'--data-root',data,'--model',MODEL,'--large-root',large,'--run-commit',dep['run_commit'],'--mode',a.stage,'--wall-seconds',str(cap-90),'--cpu-validation',t.profile['job_root']+'/'+a.cpu_job_id+'/output/cpu/result.json']
     elif a.stage=='compare':argv=[PYTHON,scripts+'/boundary_compare.py','--continuous',large+'/continuous','--early',large+'/early_evidence','--resumed',large+'/recovery','--output',out+'/boundary_compare.json']
     elif a.stage=='evaluate':argv=[PYTHON,scripts+'/g3_evaluate_preflight.py','--release',rel,'--data-root',data,'--training-root',large+'/continuous','--generation-root',large+'/generation','--run-commit',dep['run_commit'],'--output',out+'/evaluation']
     else:argv=[PYTHON,scripts+'/g3_dry_run.py','--release',rel,'--data-root',data,'--model',MODEL,'--run-commit',dep['run_commit'],'--output',out+'/dry_run.json']
@@ -137,6 +193,10 @@ print(json.dumps(rows))
          'g3_preparation_experiment':'grid-g3-beauty-lcrec-seed42-20261118','g3_gpu_devices':1 if gpu else 0,
          'execution_topology':'SINGLE_GPU','execution_profile':{'world_size':1,'per_device_train_batch_size':8,'gradient_accumulation_steps':8,'global_batch':64},'physical_gpu_index':1 if gpu else None,
          'single_gpu_supplement':'User explicitly authorized single-GPU topology; no formal launch authorization.',
+         'parent_attempt_job_id':a.parent_job_id,
+         'g3_stage':a.stage,'preflight_output_root':large if gpu else None,
+         'client_source_sha256':sha(Path(__file__)),
+         'client_content_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),
          'g3_preparation_budget':{'gpu_device_seconds':14400,'cpu_seconds':14400,'correction_round':2}}
     local=SUPPORT/'requests'/(a.job_id+'.json');atomic(local,req)
     print(json.dumps(gridctl.submit(t,local),indent=2))
