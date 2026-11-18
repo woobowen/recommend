@@ -1,0 +1,59 @@
+# Effective inference config excerpts; full SHA-256 142f0cdb3dc8238ed1e133b428b905f435cf372af340336da9848ebfae7b3a92
+    _target_: lightning.pytorch.callbacks.RichModelSummary
+    max_depth: -1
+  bq_writer: null
+  pickle_writer:
+    _target_: src.utils.inference_utils.LocalPickleWriter
+    output_dir: ${paths.output_dir}/pickle
+    flush_frequency: 100000
+    write_interval: batch
+    should_merge_files_on_main: true
+    prediction_key_name: item_id
+    prediction_name: cluster_ids
+    post_processing_functions:
+    - function:
+        _target_: src.utils.tensor_utils.deduplicate_rows_in_tensor
+        _partial_: true
+      main_only: true
+    - function:
+        _target_: src.utils.tensor_utils.transpose_tensor_from_file
+        _partial_: true
+      main_only: true
+data_dir: /home/jcyin/GRID_wmh_Qwen_TIGER_20261009/original_assets/data/amazon_data/beauty
+embedding_path: /home/jcyin/GRID_wmh_Qwen_TIGER_20261009/experiments/beauty_rkmeans_qwen_20261010_012253/item_embeddings.pt
+codebook_width: 256
+num_hierarchies: 3
+embedding_dim: 3584
+model:
+  _target_: src.modules.clustering.residual_quantization.ResidualQuantization
+  track_residuals: true
+  verbose: true
+  train_layer_wise: true
+  normalize_residuals: true
+  input_dim: ${embedding_dim}
+  n_layers: ${num_hierarchies}
+  init_buffer_size: 3072
+  quantization_layer:
+    _target_: src.models.modules.clustering.mini_batch_kmeans.MiniBatchKMeans
+    n_clusters: ${codebook_width}
+    n_features: ${model.input_dim}
+    distance_function:
+      _target_: src.components.distance_functions.SquaredEuclideanDistance
+    initializer:
+      _target_: src.components.clustering_initializers.KMeansPlusPlusInitInitializer
+      n_clusters: ${model.quantization_layer.n_clusters}
+      distance_function: ${model.quantization_layer.distance_function}
+
+# Embedding metadata excerpt; full SHA-256 a87c346eb48687469f059351f4e125a13d6da18e036c66f66e7dce596ced72c8
+{
+  "dataset": "beauty",
+  "model": "/home/jcyin/GRID_wmh_Qwen_TIGER_20261009/models/Qwen2.5-7B-Instruct",
+  "architecture": "qwen2",
+  "shape": [
+    12101,
+    3584
+  ],
+  "pooling": "WMH MeanAggregation, right padding",
+  "max_length": 128,
+  "weight_dtype": "float16",
+  "stored_dtype": "float32",
