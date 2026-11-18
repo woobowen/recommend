@@ -257,7 +257,8 @@ def strict_reload(args, report, torch, local_rank, source, indices):
         raise RuntimeError("Strict loading is pinned to the already audited PEFT 0.5.0")
     adapter = Path(args.adapter).resolve()
     scope = "PREFLIGHT" if args.preflight_users_per_rank else "FORMAL"
-    provenance = verify_adapter_identity(adapter, scope=scope)
+    provenance = verify_adapter_identity(adapter, scope=scope, run_commit=args.run_commit,
+        config_sha256=sha(Path(__file__).parent/'config/formal_g3_beauty_seed42.json'))
     report["adapter_identity"] = provenance
     report["model_identity_sha256"] = sha(adapter / "g3_identity.json")
     required = ("adapter_config.json", "tokenizer_config.json", "tokenizer.model", "added_tokens.json")
@@ -283,7 +284,8 @@ def strict_reload(args, report, torch, local_rank, source, indices):
     if tokenizer.get_added_vocab() != reference.get_added_vocab():
         raise AssertionError("Best adapter SID added-token ID ordering changed")
     report["tokenizer_identity"] = tokenizer_identity(tokenizer, indices)
-    verify_adapter_identity(adapter, scope=scope, tokenizer=tokenizer, model=args.model)
+    verify_adapter_identity(adapter, scope=scope, run_commit=args.run_commit,
+        config_sha256=sha(Path(__file__).parent/'config/formal_g3_beauty_seed42.json'), tokenizer=tokenizer, model=args.model)
     report["tokenizer"] = {"vocab_size": len(tokenizer), "added_tokens": tokenizer.get_added_vocab(),
                            "matches_reconstructed_author_tokenizer": True, "padding_side": "left", "max_length": 2048}
     report["adapter_files"] = {path.name: {"bytes": path.stat().st_size, "sha256": sha(path)}
@@ -498,7 +500,8 @@ def main():
     if len(args.run_commit) != 40 or any(c not in "0123456789abcdef" for c in args.run_commit):
         raise ValueError("--run-commit must be a complete lowercase commit SHA")
     if args.aggregate_only:
-        verify_adapter_identity(args.adapter,scope='FORMAL',model=args.model)
+        verify_adapter_identity(args.adapter,scope='FORMAL',model=args.model,run_commit=args.run_commit,
+            config_sha256=sha(Path(__file__).parent/'config/formal_g3_beauty_seed42.json'))
         requested_model_sha=sha(Path(args.adapter)/'g3_identity.json')
         for rank in range(2):
             completed=json.loads((output/f'rank{rank}.json').read_text())

@@ -240,6 +240,9 @@ def main():
                 'files':[{'path':str(p.relative_to(cp)),'bytes':p.stat().st_size,'sha256':gi.sha(p)} for p in sorted(cp.rglob('*')) if p.is_file()]}
     save(cp/'complete.json', manifest)
     formal_train.verify_checkpoint(cp, commit, config_sha)
+    gi.verify_adapter_identity(cp,scope='PREFLIGHT',run_commit=commit,config_sha256=config_sha)
+    rejects('adapter_wrong_source_commit',lambda:gi.verify_adapter_identity(cp,scope='PREFLIGHT',run_commit='c'*40,config_sha256=config_sha),'G3 adapter source commit')
+    rejects('adapter_wrong_effective_config',lambda:gi.verify_adapter_identity(cp,scope='PREFLIGHT',run_commit=commit,config_sha256='c'*64),'G3 adapter effective config mismatch')
     rejects('wrong_checkpoint_source', lambda: formal_train.verify_checkpoint(cp, 'c'*40, config_sha), 'checkpoint source commit mismatch')
     rejects('wrong_checkpoint_config', lambda: formal_train.verify_checkpoint(cp, commit, 'c'*64), 'checkpoint effective config mismatch')
     incomplete = copy.deepcopy(manifest); incomplete['files'] = [r for r in incomplete['files'] if r['path']!='rng_state_1.pth']

@@ -10,7 +10,7 @@ from pathlib import Path
 import sys
 from g3_identity import ASSETS, TOKEN_MAPPING_SHA, digest
 
-FROZEN = {'a0': ('a0_beauty/formal_evaluate.py', '6914ef8b6489fbe76d37d2bc4ed6499d9965a969748b79ddfda6c6d607094b13')}
+FROZEN = {'a0': ('a0_beauty/formal_evaluate.py', '595b26ec36f52c46ad99f4d44e4a048e89d38dfdc7355efeaeed50d0697708c8')}
 
 
 def main():

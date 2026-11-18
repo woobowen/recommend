@@ -106,7 +106,7 @@ def write_adapter_identity(adapter, *, scope, run_commit, config_sha256, tokeniz
     return value
 
 
-def verify_adapter_identity(adapter, *, scope, run_commit=None, tokenizer=None, model=None):
+def verify_adapter_identity(adapter, *, scope, run_commit=None, config_sha256=None, tokenizer=None, model=None):
     root = Path(adapter)
     value = json.loads((root/'g3_identity.json').read_text())
     need(value['experiment_id'] == EXPERIMENT_ID and value['assets'] == ASSETS, 'G3 adapter experiment/assets')
@@ -118,6 +118,8 @@ def verify_adapter_identity(adapter, *, scope, run_commit=None, tokenizer=None, 
          'G3 adapter base model provenance')
     if run_commit is not None:
         need(value['run_commit'] == run_commit, 'G3 adapter source commit')
+    if config_sha256 is not None:
+        need(value['config_sha256']==config_sha256,'G3 adapter effective config mismatch')
     need(value['tokenizer_identity']['token_to_id_sha256'] == TOKEN_MAPPING_SHA, 'G3 adapter token mapping')
     names = set()
     for row in value['files']:

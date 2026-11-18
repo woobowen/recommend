@@ -95,7 +95,9 @@ def main():
         'authorization_negatives':negative,'cli_parsing':help_results,
         'output_isolation':{'formal':str(root),'preflight':'/data/bwwu/lc-rec/g3-preparation-20261118'},
         'space_plan':{'preparation_new_limit_bytes':80*1024**3,'formal_future_checkpoint_peak_gib':54,'free_bytes':shutil.disk_usage(root).free},
-        'state':state,'source_files':source_identity([__file__,release/'lc_rec/a0_beauty/production_control.py',release/'lc_rec/a0_beauty/production_pipeline.py'])}
+        'state':state,'actual_import_files':source_identity([sys.modules[n].__file__ for n in
+            ('g3_identity','formal_control','production_identity','formal_train','offline_metrics','production_control','production_pipeline')]),
+        'source_files':source_identity([__file__,release/'lc_rec/a0_beauty/production_control.py',release/'lc_rec/a0_beauty/production_pipeline.py'])}
     durable_write(out,record);print(json.dumps({'status':record['status'],'plan':str(plan_path),'jobs_submitted':0}))
 
 
