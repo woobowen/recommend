@@ -69,6 +69,7 @@ def main():
     p.add_argument('mode',choices=('submit-cpu-check','collect-cpu-check'))
     p.add_argument('--commit',required=True)
     p.add_argument('--job-id',required=True)
+    p.add_argument('--prior-cpu-job-id',help='Retry the check on an existing immutable plan')
     a = p.parse_args()
     assert subprocess.check_output(['git','rev-parse',a.commit+'^{commit}'],cwd=REPO,text=True).strip()==a.commit
     t = Transport('new-server')
@@ -76,7 +77,10 @@ def main():
     destination = HERE/'jobs'/a.job_id
     destination.mkdir(parents=True,exist_ok=True)
     if a.mode=='submit-cpu-check':
-        before = observation(t,old,False)
+        if a.prior_cpu_job_id:
+            prior = gridctl.query(t,a.prior_cpu_job_id)
+            assert prior['status']=='FAILED' and prior['cleanup_verified'] and not prior['workgroup_live']
+        before = observation(t,old,bool(a.prior_cpu_job_id))
         atomic(destination/'before.json',before)
         rows = []
         sources = {'approved_budget.json':HERE/'approved_budget.json',
@@ -113,6 +117,8 @@ def main():
                           [dict(path=DRAFT,sha256=sha(HERE.parent/'formal_preparation_plan.json')),
                            {'path':old['export_manifest']['path'],'sha256':old['export_manifest']['sha256']}],
                    task_scope='G3_FINAL_FORMAL_PLAN_CPU_DRY_RUN_ONLY')
+        if a.prior_cpu_job_id:
+            req['prior_cpu_job_id'] = a.prior_cpu_job_id
         atomic(destination/'request.json',req)
         accepted = gridctl.submit(t,destination/'request.json')
         atomic(destination/'submission.json',accepted)

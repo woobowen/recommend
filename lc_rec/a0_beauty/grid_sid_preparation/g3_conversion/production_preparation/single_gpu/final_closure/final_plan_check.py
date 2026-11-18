@@ -200,7 +200,7 @@ def main():
     check(plan['inputs']==deployment['files'] and plan['stage_seconds']==STAGE_CAPS and
           plan['budget']==GROUP_CAPS, 'actual approved budget and input bindings')
     cpu_caps = sum(v for k, v in STAGE_CAPS.items() if control.group(k)=='cpu')
-    check(cpu_caps==4500 and GROUP_CAPS['cpu']-cpu_caps==900 and
+    check(cpu_caps==GROUP_CAPS['cpu']==5400 and
           sum(GROUP_CAPS[g] for g in ('train_normal','s3','s4','cpu'))==199800, 'group arithmetic')
     docs = control.approval_documents(plan, require_pass=True)
     training_sha = identity(scripts/'formal_train.py')['sha256']
@@ -281,7 +281,7 @@ def main():
         argv=sys.argv, cwd=os.getcwd(), interpreter=sys.executable, run_commit=RUN,
         plan=plan_identity, canonical_digest=canonical, config=identity(plan['config']),
         plan_input_count=len(plan['inputs']), budget=plan['budget'], stage_seconds=plan['stage_seconds'],
-        cpu_stage_caps_total_seconds=cpu_caps, cpu_group_headroom_seconds=900,
+        cpu_stage_caps_total_seconds=cpu_caps, cpu_group_headroom_seconds=GROUP_CAPS['cpu']-cpu_caps,
         retry_fixture=budget_test, execution_profile=plan['execution_profile'],
         formal_epoch_steps=STEPS, users=len(users), catalog_size=len(catalog), beams=BEAMS,
         assets=assets, base_model=verify_base_model(plan['model']), review=identity(review_path),
