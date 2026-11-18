@@ -71,7 +71,8 @@ def snapshot(plan, registry, identity, digest, read):
           'unexpected formal files, registry, job or process')
     return dict(utc=datetime.now(timezone.utc).isoformat(), root_children=children,
                 scoped_job_ids=jobs, registry_key=key, registry_entries=binding,
-                prior_series=known_prior, formal_processes=formal_processes, old_draft=identity(old))
+                prior_series=known_prior, formal_processes=formal_processes, old_draft=identity(old),
+                current_plan=identity(root/'plan.json') if 'plan.json' in children else None)
 
 
 def budget_checks(control, plan, fixture, read, write):
@@ -275,7 +276,8 @@ def main():
     budget_test = budget_checks(control,plan,fixture,read,durable_write)
     after = snapshot(plan, control.EXPERIMENT_REGISTRY, identity, digest, read)
     check(after['root_children']==['plan.json','preparation-plan.json'] and
-          before['old_draft']==after['old_draft'] and identity(path)==plan_identity,
+          before['old_draft']==after['old_draft'] and after['current_plan']==plan_identity and
+          before['current_plan'] in (None,plan_identity),
           'plan isolation and immutability')
     result.update(status='PASS', scope='FORMAL_PLAN_CPU_DRY_RUN_ONLY', after=after,
         argv=sys.argv, cwd=os.getcwd(), interpreter=sys.executable, run_commit=RUN,
