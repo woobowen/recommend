@@ -1,0 +1,241 @@
+{
+  "source_commit": "84f200258ab66b33bcf1fe4104fa44ad43737e4a",
+  "started_at_utc": "2026-11-18T06:33:14.407414+00:00",
+  "script": {
+    "bytes": 17663,
+    "sha256": "db0ddc2906eb8a7ab6081256b300a288cedaab1d06fd5864f9134569f3a1c6a4"
+  },
+  "argv": [
+    "/tmp/beauty_g3_evidence_vyjws6sf/verify_g3.py",
+    "--repo",
+    "/tmp/beauty_g3_evidence_vyjws6sf/repo",
+    "--p5-dir",
+    "/tmp/beauty_g3_evidence_vyjws6sf/p5",
+    "--data-root",
+    "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/original_assets/data/amazon_data/beauty",
+    "--output",
+    "/tmp/beauty_g3_evidence_vyjws6sf/result"
+  ],
+  "environment": {
+    "python": "3.10.20",
+    "torch": "2.6.0+cu124",
+    "device": "cpu",
+    "gpu_used": false
+  },
+  "checks": {
+    "A1_fixed_asset_identity": "pass",
+    "A5_original_prediction_keys": "pass",
+    "A6_tensor_reconstruction": "pass",
+    "A2_complete_item_identity": "pass",
+    "A3_numbering_relationship": "pass",
+    "A4_recovered_mapping_binding": "pass",
+    "A7_config_and_representation": "pass",
+    "A8_remote_publication": "not_executed_by_this_script"
+  },
+  "anomalies": {},
+  "fixed_assets": {
+    "GRID baseline/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt": {
+      "bytes": 388405,
+      "sha256": "d41adcfb22a9a47d5e0424c068f4c74f33cc9fdbaf5db08540fbfa0e3d720e18"
+    },
+    "GRID baseline/experiments/beauty_rkmeans_qwen_20261010_012253/sid_generation/pickle/merged_predictions.pkl": {
+      "bytes": 253952,
+      "sha256": "dcbfb61369cde2627cea50cc42bb80be753e2d9854b85f1825460174486bd590"
+    },
+    "GRID baseline/experiments/beauty_rkmeans_qwen_20261010_012253/sid_generation/pickle/merged_predictions_tensor.pt": {
+      "bytes": 388534,
+      "sha256": "d5241c43708cb9e5ce0c1e812b965a0b5f92e38d94aead8246bcebeea62e385f"
+    },
+    "GRID baseline/experiments/beauty_rkmeans_qwen_20261010_012253/sid_generation/.hydra/config.yaml": {
+      "bytes": 6810,
+      "sha256": "142f0cdb3dc8238ed1e133b428b905f435cf372af340336da9848ebfae7b3a92"
+    },
+    "GRID baseline/experiments/beauty_rkmeans_qwen_20261010_012253/quantizer_train/.hydra/config.yaml": {
+      "bytes": 7914,
+      "sha256": "ad156efabaf2f5b444c19f776e45ab6dbfb71d30c77e11ad34c6a692cba91422"
+    },
+    "GRID baseline/experiments/beauty_rkmeans_qwen_20261010_012253/item_embeddings.json": {
+      "bytes": 1077,
+      "sha256": "a87c346eb48687469f059351f4e125a13d6da18e036c66f66e7dce596ced72c8"
+    }
+  },
+  "p5_original_members": {
+    "datamaps.json": {
+      "bytes": 1835527,
+      "sha256": "79bce2481b59b88362621dd07843661a308819f243a00c67540c69b348123d3a"
+    },
+    "sequential_data.txt": {
+      "bytes": 1090094,
+      "sha256": "226cce9c3105299ca0db9615d7d3fb32b3175e90da43100ae352599f0f0107b8"
+    }
+  },
+  "historical_input_files_verified": 549,
+  "item_inputs": {
+    "rows": 12101,
+    "id_type": "TFRecord int64 scalar",
+    "min_id": 0,
+    "max_id": 12100,
+    "duplicate_ids": [],
+    "feature_schemas": [
+      {
+        "fields": [
+          "embedding",
+          "id",
+          "text"
+        ],
+        "count": 12101
+      }
+    ],
+    "original_id_field_present": false
+  },
+  "p5_to_grid_full_sequence_binding": {
+    "training": {
+      "rows": 22363,
+      "missing_users": [],
+      "mismatched_sequences": 0,
+      "mismatch_records": [],
+      "truncation_rule": "(P5 history minus one)[:-2]; no length cap",
+      "sequences_differing_before_21_item_cap": 0,
+      "text_values_match_item_table": true
+    },
+    "evaluation": {
+      "rows": 22363,
+      "missing_users": [],
+      "mismatched_sequences": 0,
+      "mismatch_records": [],
+      "truncation_rule": "(P5 history minus one, trim last 1/0 items)[-21:]",
+      "sequences_differing_before_21_item_cap": 935,
+      "text_values_match_item_table": true
+    },
+    "testing": {
+      "rows": 22363,
+      "missing_users": [],
+      "mismatched_sequences": 0,
+      "mismatch_records": [],
+      "truncation_rule": "(P5 history minus one, trim last 1/0 items)[-21:]",
+      "sequences_differing_before_21_item_cap": 1019,
+      "text_values_match_item_table": true
+    }
+  },
+  "mapping_basis": "Current retrieval of the original public P5 numbered data. All numbered user histories in all three GRID splits equal P5 histories minus one with last-two/last-one/no-trim; training is uncapped, evaluation/testing retain the last 21 items. This is a newly recovered mapping, not an original mapping saved with training.",
+  "p5_to_grid_full_sequence_binding_item_coverage": {
+    "observed_items": 12101,
+    "unobserved_item_ids": []
+  },
+  "predictions": {
+    "raw_container_type": "list",
+    "records": 12101,
+    "record_schemas": [
+      {
+        "fields": [
+          "cluster_ids",
+          "item_id"
+        ],
+        "count": 12101
+      }
+    ],
+    "key_types": {
+      "int": 12101
+    },
+    "cluster_ids_container_types": {
+      "list": 12101
+    },
+    "min_key": 0,
+    "max_key": 12100,
+    "unique_keys": 12101,
+    "duplicate_keys": {},
+    "duplicate_extra_records": 0,
+    "missing_keys": [],
+    "negative_keys": [],
+    "out_of_range_keys": [],
+    "invalid_code_records": [],
+    "code_min": [
+      0,
+      0,
+      0
+    ],
+    "code_max": [
+      255,
+      255,
+      255
+    ]
+  },
+  "tensor_comparison": {
+    "shape": [
+      4,
+      12101
+    ],
+    "dtype": "torch.int64",
+    "fixed_functions_source": {
+      "bytes": 7767,
+      "sha256": "93b88bc47a6569f89453d90a7cb60fd690469762eaf1743d3a89b287deeaa26d"
+    },
+    "reconstructed_vs_g3_different_values": 0,
+    "generation_vs_g3_different_values": 0,
+    "reconstructed_vs_g3_different_columns": 0,
+    "unique_four_code_combinations": 12101,
+    "code_min": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "code_max": [
+      255,
+      255,
+      255,
+      17
+    ],
+    "original_files_modified": false,
+    "temporary_files_only": true
+  },
+  "mapping": {
+    "rows": 12101,
+    "min_column": 0,
+    "max_column": 12100,
+    "missing_columns": [],
+    "duplicate_columns": [],
+    "missing_grid_ids": [],
+    "duplicate_grid_ids": [],
+    "blank_original_ids": [],
+    "duplicate_original_ids": [],
+    "namespace": "amazon_asin",
+    "formula": "sid_column = grid_item_id = int(p5_item_id) - 1",
+    "original_id_normalization": "none; exact P5 id2item strings retained",
+    "csv_readback_verified": true,
+    "redundant_sid_values_different_from_g3": 0
+  },
+  "exports": {
+    "beauty_g3_input_manifest.json": {
+      "bytes": 123917,
+      "sha256": "43c53f9259cfe1255df04ba8859d9f92cc8c984a678dc0617dcb722b48db9739"
+    },
+    "beauty_g3_item_mapping.csv": {
+      "bytes": 616553,
+      "sha256": "2d5d1891b2fa6aadb3102e7991bb83452e011ca36d66f82e5c7d46c975007f19"
+    },
+    "beauty_g3_keyed_predictions.csv": {
+      "bytes": 190940,
+      "sha256": "848d8f7960a067fec870616cadb1924a195e458a21c970e7e884e5e82280171d"
+    },
+    "grid_item_text_fingerprints.csv": {
+      "bytes": 848091,
+      "sha256": "e57698e1f2e9ae6d7c325347439016c884800ea6f875c39a003a0a63aa5e3566"
+    },
+    "p5_beauty_item_identity.json": {
+      "bytes": 631496,
+      "sha256": "7efa007d9fc96f477a0e7ea89b067102bb94937d907bc8bb0bb5314de783c123"
+    },
+    "p5_grid_sequence_fingerprints.csv": {
+      "bytes": 1749651,
+      "sha256": "ece66cfdb94a043135c84ab9e04dd50b097b30d47b2d44addcd1d1d110595699"
+    }
+  },
+  "historical_unknowns": [
+    "Original GRID TFRecord conversion script and exact historical P5 archive version were not retained.",
+    "The original GRID-to-ASIN mapping file was not found. This is a deterministic recovery using the public P5 numbered corpus, checked against every historical input shard and full histories.",
+    "No claim that matching GRID/LETTER numeric IDs denote the same product; LETTER alignment remains downstream work."
+  ],
+  "finished_at_utc": "2026-11-18T06:33:40.547981+00:00",
+  "exit_status": 0
+}

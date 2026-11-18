@@ -28,3 +28,8 @@ git lfs pull --include="GRID baseline/**"
 `GRID official/` 固定到作者仓库提交 `2fe3475b2d369580234093f35d52b1a2f54d0472`；92 个上游文件保持原内容。附加的来源清单、运行说明和项目根目录标记见 [官方流程说明](GRID%20official/REPRODUCTION_NOTES.md)。作者代码包不包含预计算 SID、训练 checkpoint 或本次官方配置测试结果。
 
 原 `yjc-grid` 的早期五位 SID、768 维商品向量和旧训练记录已从分支当前内容移除。后续 Qwen 实验统一使用 `GRID baseline/experiments/` 下各数据集的四位 SID。
+
+
+## Beauty G3 商品身份资料
+
+[Beauty G3 补件入口](GRID%20baseline/codex/beauty_g3_identity/README.md)提供完整 12,101 列 SID→GRID ID→Amazon ASIN 映射、历史配置可读副本、原始预测 CSV、导出脚本与实际核验结果。固定原 G3 不变；本次仅补齐身份与来源信息，没有重新训练。

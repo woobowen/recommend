@@ -114,3 +114,8 @@ python _运行/run_pipeline.py --dataset beauty --method rkmeans --gpus 0,1
 数据文件未发现学长额外改写证据；已有官方对比确认 1,902 个分片的路径、大小及 CRC32 相同，但官方逐文件 SHA-256 核对尚未完成。数据中的原 embedding 字段保留，**本次新向量生成忽略该字段，只读取商品文本**。
 
 原作者代码许可证见 `LICENSE`，第三方声明见 `notices.txt`，Qwen 模型许可证位于模型目录。后续新生成的辅助脚本和记录请放入 `codex/`，实验输出放入新的 `experiments/<run>/`。
+
+
+## Beauty G3 商品身份补件
+
+固定到 `84f200258ab66b33bcf1fe4104fa44ad43737e4a` 的 Beauty 四位 SID 已补齐 [12,101 列到 Amazon ASIN 的映射、来源链和实际核验](codex/beauty_g3_identity/README.md)。本次恢复关系为 `sid_column = grid_item_id = P5 item_id - 1`，通过 549 个历史分片哈希和三个划分的全量编号序列核验。原始预测键无重复/遗漏；按原源码重建四位 SID 与固定 G3 逐值差异为 0。原 G3 未更换，完整配置及命令有普通 Git 可读副本。LETTER 侧仍需按 ASIN 独立核对。
