@@ -102,6 +102,9 @@ def main():
         return
     if a.mode=='query':print(json.dumps(gridctl.query(t,a.job_id),indent=2));return
     if a.mode=='collect':
+        terminal=gridctl.query(t,a.job_id)
+        if terminal['status'] not in ('SUCCEEDED','FAILED','TIMED_OUT','CANCELLED') or not terminal.get('cleanup_verified') or terminal.get('worker_alive') or terminal.get('workgroup_live'):
+            raise RuntimeError('collect requires terminal job and verified empty workgroup; use query meanwhile')
         # Bounded lightweight evidence only. Each retrieved member is hash checked.
         remote=t.profile['job_root']+'/'+a.job_id
         code=f"""import pathlib,json,hashlib

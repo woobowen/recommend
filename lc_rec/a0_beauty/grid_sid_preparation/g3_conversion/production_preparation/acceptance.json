@@ -1,0 +1,175 @@
+{
+  "preparation_status": "BLOCKED",
+  "reason": "DUAL_GPU_RESOURCE_UNAVAILABLE",
+  "run_commit": "9d93d01dd5fccf2e667a6a5c9486f2539a50390b",
+  "formal_experiment_started": false,
+  "formal_launch_authorized": false,
+  "gpu_device_minutes": 0,
+  "cpu_runner_wall_seconds": 166.682025,
+  "correction_round": 2,
+  "maximum_correction_round": 3,
+  "jobs": [
+    {
+      "job_id": "g3-lcrec-cpu-20261118-r0",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "worker_wall_seconds": 23.298611,
+      "gpu_devices": 0,
+      "capture_version": "14685f3950b10cd532598e46c487d39b3b0700b0",
+      "cleanup_verified": true,
+      "receipt": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/jobs/g3-lcrec-cpu-20261118-r0/status.json"
+    },
+    {
+      "job_id": "g3-lcrec-cpu-20261118-r2",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "worker_wall_seconds": 25.942083,
+      "gpu_devices": 0,
+      "capture_version": "9d93d01dd5fccf2e667a6a5c9486f2539a50390b",
+      "cleanup_verified": true,
+      "receipt": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/jobs/g3-lcrec-cpu-20261118-r2/status.json"
+    },
+    {
+      "job_id": "g3-lcrec-dryrun-20261118-r0",
+      "status": "FAILED",
+      "exit_code": 1,
+      "worker_wall_seconds": 38.415024,
+      "gpu_devices": 0,
+      "capture_version": "14685f3950b10cd532598e46c487d39b3b0700b0",
+      "cleanup_verified": true,
+      "receipt": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/jobs/g3-lcrec-dryrun-20261118-r0/status.json"
+    },
+    {
+      "job_id": "g3-lcrec-dryrun-20261118-r1",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "worker_wall_seconds": 38.95083,
+      "gpu_devices": 0,
+      "capture_version": "77a0eb2c2c624785ef5b237eae797f29fb5e8737",
+      "cleanup_verified": true,
+      "receipt": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/jobs/g3-lcrec-dryrun-20261118-r1/status.json"
+    },
+    {
+      "job_id": "g3-lcrec-dryrun-20261118-r2",
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "worker_wall_seconds": 40.075477,
+      "gpu_devices": 0,
+      "capture_version": "9d93d01dd5fccf2e667a6a5c9486f2539a50390b",
+      "cleanup_verified": true,
+      "receipt": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/jobs/g3-lcrec-dryrun-20261118-r2/status.json"
+    }
+  ],
+  "acceptance": [
+    {
+      "id": 1,
+      "status": "PASS",
+      "finding": "固定G3/bridge/index/inter/item身份",
+      "evidence": "jobs/g3-lcrec-cpu-20261118-r2/output/cpu/result.json"
+    },
+    {
+      "id": 2,
+      "status": "PASS",
+      "finding": "既有全量转换接入及商品引用",
+      "evidence": "jobs/g3-lcrec-cpu-20261118-r2/output/cpu/result.json"
+    },
+    {
+      "id": 3,
+      "status": "BLOCKED",
+      "finding": "生产链源码已实现并完成CPU检查；模型实测未运行",
+      "evidence": "../../../formal_train.py"
+    },
+    {
+      "id": 4,
+      "status": "NOT_RUN",
+      "finding": "tokenizer已CPU实测；embedding/head/450 tensors/288571392和optimizer需真实模型",
+      "evidence": "../../../formal_train.py"
+    },
+    {
+      "id": 5,
+      "status": "PASS",
+      "finding": "真实CPU正向及26负向",
+      "evidence": "jobs/g3-lcrec-cpu-20261118-r2/output/cpu/result.json"
+    },
+    {
+      "id": 6,
+      "status": "BLOCKED",
+      "finding": "他人GPU0持续占用，双卡预跑未启动",
+      "evidence": "resource_observations/gpu-20261118T1323Z.json"
+    },
+    {
+      "id": 7,
+      "status": "NOT_RUN",
+      "finding": "真实checkpoint保存/新进程严格重载未运行",
+      "evidence": "../../../formal_train.py"
+    },
+    {
+      "id": 8,
+      "status": "NOT_RUN",
+      "finding": "真实恢复/RNG/loader/scheduler/部分梯度比较未运行",
+      "evidence": "../../../boundary_compare.py"
+    },
+    {
+      "id": 9,
+      "status": "NOT_RUN",
+      "finding": "真实同模型Normal/OFF未运行",
+      "evidence": "../../../formal_evaluate.py"
+    },
+    {
+      "id": 10,
+      "status": "NOT_RUN",
+      "finding": "真实S3/S4模型调用未运行",
+      "evidence": "../../../formal_evaluate.py"
+    },
+    {
+      "id": 11,
+      "status": "BLOCKED",
+      "finding": "CPU指标/零碰撞已通过；真实生成输出及配对待运行",
+      "evidence": "jobs/g3-lcrec-cpu-20261118-r2/output/cpu/result.json"
+    },
+    {
+      "id": 12,
+      "status": "PASS",
+      "finding": "原研究配置和方法静态逐项核对；GPU有效执行配置尚未实测",
+      "evidence": "review_training_agent.json"
+    },
+    {
+      "id": 13,
+      "status": "BLOCKED",
+      "finding": "真实非作者直接审查已完成CPU/静态/dryrun；完整GPU证据缺失",
+      "evidence": "review_training_agent.json"
+    },
+    {
+      "id": 14,
+      "status": "PASS",
+      "finding": "真实正式入口dryrun，0正式提交，新旧授权隔离",
+      "evidence": "jobs/g3-lcrec-dryrun-20261118-r2/output/dry_run.json"
+    },
+    {
+      "id": 15,
+      "status": "PENDING_DELIVERY_VERIFICATION",
+      "finding": "发布回读和ZIP待实际完成，最终包外回执记录终态",
+      "evidence": "delivery_readback.json"
+    },
+    {
+      "id": 16,
+      "status": "PASS",
+      "finding": "正式实验未启动，未创建新正式授权",
+      "evidence": "jobs/g3-lcrec-dryrun-20261118-r2/output/dry_run.json"
+    }
+  ],
+  "independent_work_complete": [
+    "production adaptation",
+    "real CPU positive/negative",
+    "formal entry dry-run",
+    "direct non-author static and CPU/dryrun review"
+  ],
+  "pending_gpu_dependencies": [
+    "dual-rank training/update/inventory",
+    "checkpoint strict new-process reload and partial accumulation resume",
+    "same-model normal/off/s3/s4 generation",
+    "real prediction offline metrics and pairing",
+    "complete non-author review"
+  ],
+  "unblock_condition": "Both fixed RTX4090 devices must be available without impacting other users; rerun only bounded PREFLIGHT stages, not FORMAL."
+}

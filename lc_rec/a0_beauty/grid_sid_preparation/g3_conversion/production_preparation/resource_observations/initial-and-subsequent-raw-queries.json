@@ -1,0 +1,83 @@
+[
+  {
+    "started": "2026-11-18T21:01:03.918478+08:00",
+    "args": [
+      "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+      "-F",
+      "C:/Users/lenovo/.ssh/config",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=15",
+      "-o",
+      "ClearAllForwardings=yes",
+      "-o",
+      "PermitLocalCommand=no",
+      "-l",
+      "bwwu",
+      "-T",
+      "new-server",
+      "nvidia-smi --query-gpu=index,uuid,name,memory.total,memory.used,utilization.gpu --format=csv,noheader; nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_memory --format=csv,noheader; df -h /data/bwwu /home/bwwu; free -h; ls -la /home/bwwu/grid-audits/sid-extensions-p0/g3-lcrec-prep-20261118-r0"
+    ],
+    "returncode": 0,
+    "stdout": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564 MiB, 20638 MiB, 0 %\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564 MiB, 1 MiB, 0 %\nGPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 3304681, VLLM::EngineCore, 20628 MiB\nFilesystem                Size  Used Avail Use% Mounted on\n/dev/mapper/vg0-lv--data  7.3T  4.7T  2.6T  65% /data\n/dev/nvme0n1p3            851G  288G  520G  36% /\n               total        used        free      shared  buff/cache   available\nMem:           247Gi        11Gi        24Gi        53Mi       213Gi       236Gi\nSwap:           63Gi       136Mi        63Gi\ntotal 76\ndrwx------  4 bwwu bwwu 4096 Nov 18 10:24 .\ndrwxrwxr-x 21 bwwu bwwu 4096 Nov 18 10:20 ..\ndrwxrwxr-x  2 bwwu bwwu 4096 Nov 18 10:24 __pycache__\n-rw-------  1 bwwu bwwu 4383 Nov 18 10:20 convert.py\n-rw-rw-r--  1 bwwu bwwu 2041 Nov 18 10:21 cpu_dataset.log\n-rw-rw-r--  1 bwwu bwwu 4397 Nov 18 10:21 cpu_dataset_check.py\n-rw-rw-r--  1 bwwu bwwu  964 Nov 18 10:21 cpu_dataset_result.json\n-rw-rw-r--  1 bwwu bwwu 1110 Nov 18 10:23 cpu_shuffle.log\n-rw-rw-r--  1 bwwu bwwu 5084 Nov 18 10:22 cpu_shuffle_check.py\n-rw-rw-r--  1 bwwu bwwu  795 Nov 18 10:23 cpu_shuffle_result.json\n-rw-rw-r--  1 bwwu bwwu  296 Nov 18 10:24 negative.log\n-rw-rw-r--  1 bwwu bwwu 3114 Nov 18 10:24 negative_conversion_check.py\n-rw-rw-r--  1 bwwu bwwu  322 Nov 18 10:24 negative_result.json\ndrwxrwxr-x  2 bwwu bwwu 4096 Nov 18 10:20 output\n-rw-rw-r--  1 bwwu bwwu  538 Nov 18 10:20 run1.log\n-rw-rw-r--  1 bwwu bwwu  538 Nov 18 10:20 run2.log\n",
+    "stderr": "",
+    "original_transport_sha256": "666e63d5ce76e678cf46589c004a82e440de4e5fc7d8e959ced24cc5348f70ab"
+  },
+  {
+    "started": "2026-11-18T21:10:11.827727+08:00",
+    "args": [
+      "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+      "-F",
+      "C:/Users/lenovo/.ssh/config",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=15",
+      "-o",
+      "ClearAllForwardings=yes",
+      "-o",
+      "PermitLocalCommand=no",
+      "-l",
+      "bwwu",
+      "-T",
+      "new-server",
+      "nvidia-smi --query-gpu=index,uuid,name,memory.used,utilization.gpu --format=csv,noheader; nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_memory --format=csv,noheader; df -B1 /data/bwwu /home/bwwu; free -b"
+    ],
+    "returncode": 0,
+    "stdout": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 20638 MiB, 0 %\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 1 MiB, 0 %\nGPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 3304681, VLLM::EngineCore, 20628 MiB\nFilesystem                   1B-blocks          Used     Available Use% Mounted on\n/dev/mapper/vg0-lv--data 7937302376448 5058408607744 2798861373440  65% /data\n/dev/nvme0n1p3            913593581568  309025095680  558084956160  36% /\n               total        used        free      shared  buff/cache   available\nMem:     265490894848 12051570688 25993236480    55975936 229157232640 253439324160\nSwap:    68719472640   143024128 68576448512\n",
+    "stderr": "",
+    "original_transport_sha256": "f631b20f4494bf56f69cb53b8cd780c07071979c535caec611f0f90e3f94051e"
+  },
+  {
+    "started": "2026-11-18T21:15:36.121274+08:00",
+    "args": [
+      "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+      "-F",
+      "C:/Users/lenovo/.ssh/config",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=15",
+      "-o",
+      "ClearAllForwardings=yes",
+      "-o",
+      "PermitLocalCommand=no",
+      "-l",
+      "bwwu",
+      "-T",
+      "new-server",
+      "nvidia-smi --query-gpu=index,uuid,name,memory.used,utilization.gpu --format=csv,noheader; nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_memory --format=csv,noheader; df -B1 /data/bwwu /home/bwwu; free -b"
+    ],
+    "returncode": 0,
+    "stdout": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 20638 MiB, 0 %\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 1 MiB, 0 %\nGPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 3304681, VLLM::EngineCore, 20628 MiB\nFilesystem                   1B-blocks          Used     Available Use% Mounted on\n/dev/mapper/vg0-lv--data 7937302376448 5058408607744 2798861373440  65% /data\n/dev/nvme0n1p3            913593581568  309062004736  558048047104  36% /\n               total        used        free      shared  buff/cache   available\nMem:     265490894848 12099883008 25905459200    55975936 229196697600 253391011840\nSwap:    68719472640   143024128 68576448512\n",
+    "stderr": "",
+    "original_transport_sha256": "1c7c1af6f40774e12bdcdb9591d449e2d3253879aade338b077914ce9b0af933"
+  }
+]
