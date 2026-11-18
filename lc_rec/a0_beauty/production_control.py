@@ -203,6 +203,7 @@ def request(plan,stage,attempt,timeout,plan_path,authorization=None,authorizatio
 class Control:
     def __init__(self,plan_path,*,request_factory=request,validator=None,runner=None):
         self.path=Path(plan_path).resolve();self.plan=validate_plan(read(self.path))
+        need(self.plan['scope']!='FORMAL_PREPARE','draft plans must not be sealed by Control')
         experiment_binding(self.plan)
         self.root=Path(self.plan['root']);self.root.mkdir(parents=True,exist_ok=True)
         self.factory=request_factory;self.validator=validator
@@ -313,7 +314,7 @@ def main():
     p.add_argument('--retry',choices=STAGES);p.add_argument('--resume')
     a=p.parse_args();plan=read(a.plan)
     need(plan['evidence_scope']=='FORMAL','formal CLI does not expose test boundaries')
-    if a.mode=='prepare':
+    if a.mode=='prepare' or (a.mode=='query' and plan['scope']=='FORMAL_PREPARE'):
         validate_plan(plan)
         print(json.dumps({'status':'PREPARED_NOT_SUBMITTED','plan_sha256':digest(plan)}));return
     c=Control(a.plan)

@@ -32,7 +32,7 @@ def selected():
     for n in names:
         p=Path(n)
         if '/evidence/' in n or '/review/' in n:continue
-        if p.suffix in ('.py','.json','.yaml','.yml','.csv') and not p.name.startswith('test_'):
+        if p.suffix in ('.py','.json','.yaml','.yml','.csv'):
             keep.append(n)
     keep.extend(['lc_rec/letter/evidence/formal_20261111/precision_approval.json',
         'lc_rec/letter/review/final_audit_20261113/external/official_cce.py',
@@ -92,7 +92,7 @@ print(json.dumps({{'release':str(release),'files':len(manifest['files']),'run_co
 def main():
     p=argparse.ArgumentParser(allow_abbrev=False)
     p.add_argument('mode',choices=['deploy','submit','query','probe','collect'])
-    p.add_argument('--stage',choices=['cpu','train','generate','compare','dryrun'])
+    p.add_argument('--stage',choices=['cpu','train','generate','compare','evaluate','dryrun'])
     p.add_argument('--job-id')
     p.add_argument('--output',type=Path)
     a=p.parse_args();t=Transport('new-server')
@@ -121,8 +121,9 @@ print(json.dumps(rows))
     scripts=rel+'/lc_rec/a0_beauty';data=REMOTE+'/data';large='/data/bwwu/lc-rec/g3-preparation-20261118/'+dep['run_commit'][:12]
     out=t.profile['job_root']+'/'+a.job_id+'/output';gpu=a.stage in ('train','generate');cap=3300 if a.stage=='train' else 1500 if gpu else 3600
     if a.stage=='cpu':argv=[PYTHON,scripts+'/grid_sid_preparation/g3_conversion/production_cpu_check.py','--repo',rel,'--data-root',data,'--model',MODEL,'--config',scripts+'/config/formal_g3_beauty_seed42.json','--output',out+'/cpu']
-    elif gpu:argv=[PYTHON,scripts+'/g3_preflight_driver.py','--release',rel,'--data-root',data,'--model',MODEL,'--large-root',large,'--run-commit',dep['run_commit'],'--mode',a.stage,'--wall-seconds',str(cap-30)]
+    elif gpu:argv=[PYTHON,scripts+'/g3_preflight_driver.py','--release',rel,'--data-root',data,'--model',MODEL,'--large-root',large,'--run-commit',dep['run_commit'],'--mode',a.stage,'--wall-seconds',str(cap-90),'--cpu-validation',t.profile['job_root']+'/g3-lcrec-cpu-20261118-r0/output/cpu/result.json']
     elif a.stage=='compare':argv=[PYTHON,scripts+'/boundary_compare.py','--continuous',large+'/continuous','--early',large+'/early_evidence','--resumed',large+'/recovery','--output',out+'/boundary_compare.json']
+    elif a.stage=='evaluate':argv=[PYTHON,scripts+'/g3_evaluate_preflight.py','--release',rel,'--data-root',data,'--training-root',large+'/continuous','--generation-root',large+'/generation','--run-commit',dep['run_commit'],'--output',out+'/evaluation']
     else:argv=[PYTHON,scripts+'/g3_dry_run.py','--release',rel,'--data-root',data,'--model',MODEL,'--run-commit',dep['run_commit'],'--output',out+'/dry_run.json']
     env=dict(ENV,CUDA_VISIBLE_DEVICES='0,1' if gpu else '',DS_ACCELERATOR='cuda' if gpu else 'cpu')
     req={'schema':1,'host':t.profile['hostname'],'user':t.profile['user'],'uid':t.profile['uid'],
@@ -130,7 +131,7 @@ print(json.dumps(rows))
          'job_id':a.job_id,'capture_version':dep['run_commit'],'cwd':rel,'argv':argv,'env':env,
          'timeout_seconds':cap,'inputs':[{'path':r['path'],'sha256':r['sha256']} for r in dep['files']],
          'g3_preparation_experiment':'grid-g3-beauty-lcrec-seed42-20261118','g3_gpu_devices':2 if gpu else 0,
-         'g3_preparation_budget':{'gpu_device_seconds':14400,'cpu_seconds':14400,'correction_round':0}}
+         'g3_preparation_budget':{'gpu_device_seconds':14400,'cpu_seconds':14400,'correction_round':1}}
     local=SUPPORT/'requests'/(a.job_id+'.json');atomic(local,req)
     print(json.dumps(gridctl.submit(t,local),indent=2))
 

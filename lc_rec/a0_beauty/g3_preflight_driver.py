@@ -27,6 +27,7 @@ def main():
     p.add_argument('--run-commit',required=True)
     p.add_argument('--mode',required=True,choices=['train','generate'])
     p.add_argument('--wall-seconds',required=True,type=int)
+    p.add_argument('--cpu-validation',required=True,type=Path)
     a=p.parse_args();need(0<a.wall_seconds<=3600,'bounded preparation wall time')
     job=Path(os.environ['GRID_JOB_DIR']);out=job/'output';out.mkdir(exist_ok=True)
     scripts=a.release/'lc_rec/a0_beauty';source=a.release/'lc_rec/letter/vendor/LETTER/LETTER-LC-Rec'
@@ -34,6 +35,12 @@ def main():
     need(version['run_commit']==a.run_commit,'run snapshot commit')
     for row in version['files']:
         need(sha(row['path'])==row['sha256'],'changed run snapshot')
+    cpu=json.loads(a.cpu_validation.read_text())
+    need(cpu['status']=='PASS' and cpu['exit_code']==0 and cpu['gpu_used'] is False and
+         cpu['experiment_id']==EXPERIMENT_ID,'necessary CPU preflight must pass first')
+    for row in cpu['actual_import_files']:
+        relative='lc_rec/'+row['path'].split('/lc_rec/',1)[1]
+        need(sha(a.release/relative)==row['sha256'],'CPU validation dependency changed: '+relative)
     inputs=verify_assets(a.data_root);base=verify_base_model(a.model)
     gpu=subprocess.check_output(['nvidia-smi','--query-gpu=uuid,memory.used','--format=csv,noheader,nounits'],text=True)
     expected=['GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae','GPU-59cac3bd-3645-668b-79c8-839e0d878893']
@@ -73,6 +80,9 @@ def main():
         with (out/'resources.jsonl').open('a') as f:f.write(json.dumps(observation)+'\n')
     launcher=[sys.executable,'-m','torch.distributed.run','--standalone','--nnodes=1','--nproc_per_node=2']
     common=['--source-root',str(source),'--data-root',str(a.data_root),'--model',str(a.model),'--run-commit',a.run_commit]
+    def refresh_devices():
+        need(subprocess.check_output(['nvidia-smi','--query-gpu=uuid','--format=csv,noheader'],text=True).splitlines()==expected,'physical GPU mapping changed')
+        need(not subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip(),'GPU occupied before new substage')
     try:
         if a.mode=='train':
             for mode in ('continuous','early','resumed'):
@@ -84,6 +94,7 @@ def main():
                 if mode=='early':argv+=['--stop-after-epoch','1']
                 if mode=='resumed':argv+=['--resume',str(root/'checkpoint-2')]
                 stage={'mode':mode,'argv':argv,'started_utc':dt.datetime.now(dt.timezone.utc).isoformat()};record['stages'].append(stage)
+                refresh_devices()
                 run(argv,started+a.wall_seconds,stage,observe)
                 write(out/'g3_preflight.json',record)
                 if mode=='early':
@@ -112,6 +123,7 @@ def main():
                 '--preflight-users-per-rank','16','--preflight-manifest',str(scripts/'config/preflight_g3_users_seed42.json'),
                 '--preflight-four-conditions','--max-seconds',str(a.wall_seconds)]
             stage={'mode':'four_conditions','argv':argv};record['stages'].append(stage)
+            refresh_devices()
             run(argv,started+a.wall_seconds,stage,observe)
         record['status']='COMPUTE_EXITED_ZERO_PENDING_ARTIFACT_REVIEW'
     except BaseException as e:

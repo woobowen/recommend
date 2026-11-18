@@ -193,6 +193,10 @@ def verify_preflight_training(root, commit, config_sha):
          selected['completed_training_step']==10 and selected['export_matches_selected_checkpoint_tensors'],'preflight native best restoration')
     adapter=root/'preflight_adapter'
     provenance=verify_adapter_identity(adapter,scope='PREFLIGHT',run_commit=commit)
+    need(provenance['config_sha256']==config_sha and selected['run_commit']==commit and
+         selected['config_sha256']==config_sha and selected['value']==validations[0][best_step] and
+         Path(selected['checkpoint'])==root/f'checkpoint-{best_step}' and
+         selected['adapter_sha256']==provenance['adapter_sha256'],'preflight selection source/config/loss')
     source=provenance['checkpoint_source'];cp=Path(source['path'])
     if cp.is_dir():
         verify_checkpoint(cp,commit,config_sha);manifest=cp/'complete.json'
