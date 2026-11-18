@@ -1,0 +1,9 @@
+{
+  "DeepSpeedEngine._scale_loss_by_gas": {
+    "source": "    def _scale_loss_by_gas(self, prescaled_loss, eval_micro_batches=None):\n        # In pipeline evaluation, there is an option to use different micro-bs, which creates different number of\n        # micro batches, thus the training gas, is not valid in this case. need to use the number of eval_micro_batches\n        scaling_factor = self.gradient_accumulation_steps() if eval_micro_batches is None else eval_micro_batches\n        if isinstance(prescaled_loss, torch.Tensor):\n            scaled_loss = prescaled_loss / scaling_factor\n        elif isinstance(prescaled_loss, tuple) or isinstance(prescaled_loss, list):\n            scaled_loss = []\n            for l in prescaled_loss:\n                if isinstance(l, torch.Tensor):\n                    scaled_loss.append(l / scaling_factor)\n                else:\n                    scaled_loss.append(l)\n        else:\n            scaled_loss = prescaled_loss\n            if self.warn_unscaled_loss:\n                logger.warning(f\"DeepSpeed unable to scale loss because of type: {type(prescaled_loss)}\")\n                self.warn_unscaled_loss = False\n\n        return scaled_loss\n",
+    "signature": "(self, prescaled_loss, eval_micro_batches=None)"
+  },
+  "DataLoaderShard": {
+    "signature": "(dataset, device=None, rng_types=None, synchronized_generator=None, skip_batches=0, **kwargs)"
+  }
+}

@@ -85,6 +85,8 @@ def main():
         # Allocated bytes over this task's exact output subtree, not logical sparse sizes.
         task_roots=[a.large_root.parent,Path('/data/bwwu/lc-rec/g3-preparation-20261118'),
                     Path('/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118')]
+        resolved=set(root.resolve() for root in task_roots)
+        task_roots=[root for root in resolved if not any(other!=root and root.is_relative_to(other) for other in resolved)]
         allocated=sum(x.stat().st_blocks*512 for root in task_roots for x in root.rglob('*')
                       if x.is_file() and not x.is_symlink())
         need(memory>=40*1024**3,'40GiB host reserve')
