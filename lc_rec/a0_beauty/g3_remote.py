@@ -93,7 +93,7 @@ print(json.dumps({{'release':str(release),'files':len(manifest['files']),'run_co
 def main():
     p=argparse.ArgumentParser(allow_abbrev=False)
     p.add_argument('mode',choices=['deploy','submit','query','probe','collect'])
-    p.add_argument('--stage',choices=['cpu','train','resume-diagnostic','generate','compare','evaluate','dryrun'])
+    p.add_argument('--stage',choices=['cpu','train','resume-diagnostic','diagnostic-compare','retire-diagnostic','generate','compare','evaluate','dryrun'])
     p.add_argument('--job-id')
     p.add_argument('--cpu-job-id',default='g3-lcrec-single-cpu-20261118-r2',help='Passed necessary CPU runner job for this fixed source')
     p.add_argument('--parent-job-id',help='Previous attempt identity, retained without resetting budget')
@@ -137,7 +137,14 @@ print(json.dumps(rows))
     dep=json.loads((SUPPORT/'packages/g3-current-deployment.json').read_text());rel=dep['release']
     scripts=rel+'/lc_rec/a0_beauty';data=REMOTE+'/data';large='/data/bwwu/lc-rec/g3-preparation-single-20261118/'+dep['run_commit'][:12]
     out=t.profile['job_root']+'/'+a.job_id+'/output';gpu=a.stage in ('train','resume-diagnostic','generate');cap=3300 if a.stage=='train' else 1500 if gpu else 3600
+    diagnostic_release=REMOTE+'/9adaad4ca217/release'
+    diagnostic_large='/data/bwwu/lc-rec/g3-preparation-single-20261118/9adaad4ca217'
     if a.stage=='cpu':argv=[PYTHON,scripts+'/grid_sid_preparation/g3_conversion/production_cpu_check.py','--repo',rel,'--data-root',data,'--model',MODEL,'--config',scripts+'/config/formal_g3_beauty_seed42.json','--output',out+'/cpu']
+    elif a.stage=='diagnostic-compare':argv=[PYTHON,scripts+'/g3_resume_diagnostic_compare.py','--continuous',diagnostic_large+'/continuous','--resumed',diagnostic_large+'/recovery','--output',out+'/diagnostic_compare.json']
+    elif a.stage=='retire-diagnostic':argv=[PYTHON,scripts+'/g3_retire_diagnostic_checkpoints.py','--old-release',diagnostic_release,
+        '--training-root',diagnostic_large+'/recovery','--completed-job-id','g3-lcrec-single-resume-diagnostic-20261118-r2',
+        '--comparison-receipt',t.profile['job_root']+'/g3-lcrec-single-resume-compare-diagnostic-20261118-r2/output/diagnostic_compare.json',
+        '--runner',t.profile['runner'],'--runner-sha256',t.profile['runner_sha256'],'--output',out+'/retirement.json']
     elif a.stage=='resume-diagnostic':
         if not a.parent_job_id:raise ValueError('resume diagnostic requires the original failed parent job')
         gridctl.valid(a.parent_job_id);parent=gridctl.query(t,a.parent_job_id)
@@ -197,7 +204,8 @@ print(json.dumps({{'parent_job':{a.parent_job_id!r},'cpu_validation_sha256':sha(
          'g3_stage':a.stage,'preflight_output_root':large if gpu else None,
          'client_source_sha256':sha(Path(__file__)),
          'client_content_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),
-         'g3_preparation_budget':{'gpu_device_seconds':14400,'cpu_seconds':14400,'correction_round':2}}
+         'g3_preparation_budget':{'gpu_device_seconds':14400,'cpu_seconds':14400,
+            'correction_round':json.loads((REPO/'lc_rec/a0_beauty/config/g3_preparation_budget.json').read_text())['correction_round']}}
     local=SUPPORT/'requests'/(a.job_id+'.json');atomic(local,req)
     print(json.dumps(gridctl.submit(t,local),indent=2))
 

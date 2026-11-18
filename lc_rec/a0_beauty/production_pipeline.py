@@ -172,7 +172,16 @@ def execute_stage(plan, stage, output, *, compute=actual_compute, resume=None):
             results[c]={'metrics':m['metrics'],'file':identity(locations(plan,c+'_eval')/'primary/metrics.json')}
         paired=locations(plan,'paired')
         proof={'conditions':results,'paired':{c:identity(paired/c/'paired_comparison.json') for c in ('s3','s4')}}
-        durable_write(output/'summary.json',{'scope':plan['evidence_scope'],'formal_launch_authorized':False,**proof})
+        authorization=None
+        if plan['evidence_scope']=='FORMAL':
+            from production_control import authorize
+            path=os.environ.get('G3_FORMAL_AUTHORIZATION');pinned=os.environ.get('G3_FORMAL_AUTHORIZATION_SHA256')
+            authorize(plan,path,pinned)
+            authorization=identity(path)
+        durable_write(output/'summary.json',{'scope':plan['evidence_scope'],
+            'execution_topology':EXECUTION_TOPOLOGY,'execution_profile':EXECUTION_PROFILE,
+            'formal_launch_authorized':authorization is not None,'existing_launch_authorization':authorization,
+            'new_launch_authorization_granted_by_summary':False,**proof})
     result={'stage':stage,'verified':True,'scope':plan['evidence_scope'],'run_commit':plan['run_commit'],
             'proof':proof,'output':str(output),'files':[identity(p) for p in sorted(output.rglob('*'))
              if p.is_file() and p.suffix in ('.json','.npz','.npy','.csv') and not p.name.startswith('predictions')]}

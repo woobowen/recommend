@@ -58,6 +58,30 @@ def approval_json(path, expected_sha256):
     return json.loads(raw)
 
 
+def verify_web_review(path, expected_sha256, run_commit, config_sha256, entry_sha256):
+    """CPU-readable production gate for the required external second review."""
+    gate=approval_json(path,expected_sha256)
+    if (gate.get('status')!='PASS' or gate.get('RUN_COMMIT')!=run_commit or
+        gate.get('config_sha256')!=config_sha256 or gate.get('formal_train_sha256')!=entry_sha256):
+        raise ValueError('web review source/config/entry identity mismatch')
+    if gate.get('review_kind')!='EXTERNAL_GPT_REVIEW':
+        raise ValueError('external webpage second review required before formal training')
+    if not isinstance(gate.get('reviewer'),str) or not gate['reviewer'].strip():
+        raise ValueError('external webpage reviewer identity required')
+    evidence=gate.get('evidence_files')
+    if not isinstance(evidence,list) or not evidence:
+        raise ValueError('external webpage review evidence files required')
+    for row in evidence:
+        if not isinstance(row,dict) or not isinstance(row.get('path'),str):
+            raise ValueError('web review evidence member identity mismatch')
+        member=Path(row['path'])
+        if (not member.is_file() or member.is_symlink() or
+            member.stat().st_size!=row.get('bytes') or member.stat().st_size<=0 or
+            sha(member)!=row.get('sha256')):
+            raise ValueError('web review evidence member identity mismatch: '+str(member))
+    return gate
+
+
 def checkpoint_required_files(step):
     prefix='global_step%d/'%step
     return {'adapter_model.bin','adapter_config.json','trainer_state.json','training_args.bin',
@@ -138,9 +162,8 @@ def main():
         verify_launch_authorization(a.formal_authorization,a.formal_authorization_sha256,
                                     a.run_commit,sha(a.config))
         assert a.prelaunch_review, 'Formal training requires a completed non-author prelaunch review'
-        gate=approval_json(a.prelaunch_review,a.prelaunch_review_sha256)
-        assert gate['status']=='PASS' and gate['RUN_COMMIT']==a.run_commit
-        assert gate['config_sha256']==sha(a.config) and gate['formal_train_sha256']==sha(__file__)
+        verify_web_review(a.prelaunch_review,a.prelaunch_review_sha256,
+                          a.run_commit,sha(a.config),sha(__file__))
     assert not a.diagnosis, 'Formal FA adaptation is independent of diagnostic observers'
     assert not a.preflight_interfaces and a.probe_stop==0
     assert not a.stop_after_epoch or a.boundary_preflight
@@ -337,15 +360,28 @@ def main():
         changed=[name for name in names if before[name]!=after[name]]
         groups={group:[name for name in changed if group in name]
                 for group in ('lora_A','lora_B','embed_tokens.modules_to_save.default','lm_head.modules_to_save.default')}
-        assert all(groups.values()), 'an expected trainable parameter family never updated'
+        # With the original zero-initialized B and one warmup update at lr0,
+        # the two-update early checkpoint need not visibly move BF16 A yet.
+        # The complete ten-update continuous/resumed trajectories still must
+        # demonstrate all four trainable families changing.
+        deferred=['lora_A'] if a.stop_after_epoch==1 else []
+        required=[name for name in groups if name not in deferred]
         report['parameter_update_validation']={
-            'status':'PASS','scope':'actual boundary preflight optimizer trajectory before best reload',
+            'status':'CHECKING','scope':'actual boundary preflight optimizer trajectory before best reload',
             'trainable_tensors':len(names),'trainable_parameters':TRAINABLE_PARAMETERS,
             'optimizer_membership_exact':report['optimizer_membership_exact'],
             'frozen_tensors':len(frozen),'all_frozen_tensor_bytes_unchanged':True,
             'frozen_baseline':'after first real forward/backward microbatch, before first optimizer update',
             'changed_trainable_tensors':changed,'changed_families':{key:len(value) for key,value in groups.items()},
+            'required_changed_families':required,'deferred_changed_families':deferred,
+            'early_boundary_only':bool(deferred),
+            'A_defer_reason':('Original zero B and lr0 warmup can leave BF16 A unchanged after only two updates; full10-update continuous/resume must prove A changes.' if deferred else None),
             'before_sha256':before,'after_sha256':after,'frozen_sha256':frozen}
+        write(rp,report)
+        missing=[name for name in required if not groups[name]]
+        assert not missing, 'expected trainable parameter families never updated: '+','.join(missing)
+        report['parameter_update_validation']['status']='PASS'
+        write(rp,report)
 
     def rng_capture(loader=None):
         result={'python':random.getstate(),'numpy':np.random.get_state(),

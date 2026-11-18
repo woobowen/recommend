@@ -29,7 +29,7 @@ def main():
     config=release/'lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json'
     precision=release/'lc_rec/letter/evidence/formal_20261111/precision_approval.json'
     root=Path('/data/bwwu/lc-rec/g3-formal-20261118')/a.run_commit[:12]
-    env={'CUDA_VISIBLE_DEVICES':'1','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
+    env={'CUDA_VISIBLE_DEVICES':'1','DS_ACCELERATOR':'cuda','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
          'LD_LIBRARY_PATH':os.environ.get('LD_LIBRARY_PATH',''),'OMP_NUM_THREADS':'4','OPENBLAS_NUM_THREADS':'2',
          'HF_HUB_OFFLINE':'1','TRANSFORMERS_OFFLINE':'1','PYTHONOPTIMIZE':'0','PYTHONDONTWRITEBYTECODE':'1',
          'PYTHONUNBUFFERED':'1','TOKENIZERS_PARALLELISM':'false'}
@@ -94,7 +94,8 @@ def main():
         'stage_order':list(STAGES),'future_stage_outputs':['training/checkpoint-*','training/best_adapter','attempts/*/test/predictions.rank*.jsonl'],
         'pending_before_formal_submit':['web second review with source/config identity','new G3 user authorization and pinned SHA','explicit formal budget approval'],
         'authorization_negatives':negative,'cli_parsing':help_results,
-        'output_isolation':{'formal':str(root),'preflight':'/data/bwwu/lc-rec/g3-preparation-20261118'},
+        'output_isolation':{'formal':str(root),'preflight':'/data/bwwu/lc-rec/g3-preparation-single-20261118/'+a.run_commit[:12],
+                            'historical_dual_preparation_retained':'/data/bwwu/lc-rec/g3-preparation-20261118'},
         'space_plan':{'preparation_new_limit_bytes':80*1024**3,'formal_future_checkpoint_peak_gib':54,'free_bytes':shutil.disk_usage(root).free},
         'state':state,'actual_import_files':source_identity([sys.modules[n].__file__ for n in
             ('g3_identity','formal_control','production_identity','formal_train','offline_metrics','production_control','production_pipeline')]),

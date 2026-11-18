@@ -31,6 +31,8 @@ from types import SimpleNamespace
 
 METRICS = ("hit@5", "hit@10", "ndcg@5", "ndcg@10")
 BEAMS = 20
+CROSS_PROCESS_SCORE_ATOL = 1e-5
+CROSS_PROCESS_SCORE_RTOL = 1e-5
 from g3_identity import (ASSETS, VOCAB_SIZE, NEW_TOKEN_COUNT, TRAINABLE_PARAMETERS,
                          EXPERIMENT_ID, verify_assets, tokenizer_identity,
                          verify_adapter_identity, verify_base_model, source_identity,
@@ -262,6 +264,12 @@ def strict_reload(args, report, torch, local_rank, source, indices):
     from peft import PeftModel, get_peft_model_state_dict
     if importlib.metadata.version("peft") != "0.5.0":
         raise RuntimeError("Strict loading is pinned to the already audited PEFT 0.5.0")
+    report["installed_model_sources"] = {
+        name: {"symbol": value.__module__ + "." + value.__qualname__,
+               **source_identity([inspect.getsourcefile(value)])[0]}
+        for name, value in (("LlamaForCausalLM", LlamaForCausalLM), ("LlamaTokenizer", LlamaTokenizer),
+                            ("PeftModel", PeftModel), ("get_peft_model_state_dict", get_peft_model_state_dict))
+    }
     adapter = Path(args.adapter).resolve()
     scope = "PREFLIGHT" if args.preflight_users_per_rank else "FORMAL"
     provenance = verify_adapter_identity(adapter, scope=scope, run_commit=args.run_commit,
@@ -482,6 +490,8 @@ def main():
     parser.add_argument("--condition", choices=("normal", "off", "s3", "s4"), default="normal")
     parser.add_argument("--preflight-all-conditions", "--preflight-four-conditions", action="store_true",
                         help="One strict reload; same-process Normal/OFF/S3/S4 on the fixed preflight users")
+    parser.add_argument("--preflight-reference-normal",
+                        help="PREFLIGHT-only independent Normal reload; same fixed padding as the completed four-condition reference")
     parser.add_argument("--verify-normal-off", action="store_true", help="Exact same-process OFF verification for every Normal prediction")
     parser.add_argument("--aggregate-only", action="store_true", help="CPU recheck of already complete single-rank JSONL file")
     parser.add_argument("--preflight-users-per-rank", type=int, default=0,
@@ -496,6 +506,9 @@ def main():
         raise ValueError("Only a separate fixed thirty-two-user single-rank preflight is supported")
     if bool(args.preflight_users_per_rank) != bool(args.preflight_manifest):
         raise ValueError("Preflight requires a manifest; formal evaluation forbids it")
+    if args.preflight_reference_normal and (args.preflight_users_per_rank != 32 or args.condition != "normal" or
+                                           args.preflight_all_conditions or args.aggregate_only or args.verify_normal_off):
+        raise ValueError("Normal reload reference requires a separate Normal-only 32-user PREFLIGHT process")
     if args.verify_normal_off and args.condition != "normal":
         raise ValueError("OFF equivalence verification applies to Normal only")
     if args.preflight_all_conditions and not args.preflight_users_per_rank:
@@ -568,6 +581,35 @@ def main():
         guard()
         indices, catalog, users, identities = catalog_and_users(args.data_root)
         report["data_identity"] = identities
+        if args.preflight_reference_normal:
+            reference_root=Path(args.preflight_reference_normal).resolve(strict=True)
+            reference_report=json.loads((reference_root/'rank0.json').read_text())
+            if (reference_report['status']!='PREFLIGHT_INTERFACE_PASS' or reference_report['scope']!='PREFLIGHT' or
+                reference_report['condition']!='normal' or reference_report['completed_users']!=32 or
+                reference_report['world_size']!=1 or reference_report['execution_topology']!=EXECUTION_TOPOLOGY or
+                reference_report['RUN_COMMIT']!=args.run_commit or
+                reference_report['model_identity_sha256']!=sha(Path(args.adapter)/'g3_identity.json') or
+                reference_report['entry_sha256']!=sha(__file__) or reference_report['generation']!=report['generation']):
+                raise AssertionError('Independent Normal reload reference source/model/scope/config mismatch')
+            verify_execution_profile(reference_report['execution_profile'])
+            from preflight_users import validate as validate_reference_users
+            reference_manifest=json.loads(Path(args.preflight_manifest).read_text())
+            reference_selection=validate_reference_users(reference_manifest,users,[list(range(len(users)))])[0]
+            if reference_report['assigned_row_indices']!=reference_selection:
+                raise AssertionError('Independent Normal reload must reuse the exact fixed user order')
+            aggregate_predictions([reference_root/'predictions.rank0.jsonl'],users,catalog,
+                load_evaluator(source),run_commit=args.run_commit,scope='PREFLIGHT',
+                expected_indices=reference_selection,condition='normal')
+            report['cross_process_reference']={
+                'files':source_identity([reference_root/'rank0.json',reference_root/'predictions.rank0.jsonl']),
+                'source_scope_and_user_axis_verified_before_model_load':True,
+                'criterion':{'suffix_sequences_and_order':'exact',
+                             'score_comparison':'torch.float32 torch.allclose(actual, reference): abs(actual-reference) <= atol + rtol*abs(reference)',
+                             'score_atol':CROSS_PROCESS_SCORE_ATOL,
+                             'score_rtol':CROSS_PROCESS_SCORE_RTOL,'fixed_before_observation':True,
+                             'inherited_source_commit':'8f36720a024be671a3ba893370a98126bc0f3b4a',
+                             'inherited_source_path':'lc_rec/a0_beauty/shuffle_runtime.py',
+                             'inherited_source_field':'historical_comparison_tolerance'}}
         report["author_sources"] = {name: {"path": str(source / name), "sha256": sha(source / name)}
                                     for name in ("data.py", "collator.py", "evaluate.py", "test_ddp.py", "prompt.py")}
         report["entry_sha256"] = sha(__file__)
@@ -681,7 +723,7 @@ def main():
                         targets[0], rank, catalog, evaluator, condition=condition, scope=scope,
                         model_identity_sha256=report['model_identity_sha256'], groups=groups,
                         all_sid_ids=set(token_ids.values()),
-                        padding=3 if args.preflight_all_conditions and iteration == 0 else 0)
+                        padding=3 if (args.preflight_all_conditions or args.preflight_reference_normal) and iteration == 0 else 0)
                     stream = streams[condition]
                     stream.write(json.dumps(by_condition[condition], ensure_ascii=False, allow_nan=False)+"\n")
                     stream.flush()

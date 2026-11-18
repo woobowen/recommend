@@ -141,6 +141,16 @@ def main():
             stage={'mode':'four_conditions','argv':argv};record['stages'].append(stage)
             refresh_devices()
             run(argv,started+a.wall_seconds,stage,observe)
+            write(out/'g3_preflight.json',record)
+            reload_argv=launcher+[str(scripts/'formal_evaluate.py'),*common,
+                '--adapter',str(a.large_root/'continuous/preflight_adapter'),
+                '--output',str(a.large_root/'generation_reload_normal'),
+                '--preflight-users-per-rank','32','--preflight-manifest',str(scripts/'config/preflight_g3_users_seed42.json'),
+                '--condition','normal','--preflight-reference-normal',str(a.large_root/'generation/normal'),
+                '--max-seconds',str(a.wall_seconds)]
+            reloaded={'mode':'cross_process_normal_reload','argv':reload_argv};record['stages'].append(reloaded)
+            refresh_devices()
+            run(reload_argv,started+a.wall_seconds,reloaded,observe)
         record['status']='COMPUTE_EXITED_ZERO_PENDING_ARTIFACT_REVIEW'
     except BaseException as e:
         record['status']='FAILED';record['error']=repr(e);raise

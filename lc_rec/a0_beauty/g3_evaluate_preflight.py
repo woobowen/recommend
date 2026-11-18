@@ -20,6 +20,50 @@ import offline_metrics
 import paired_beauty
 
 
+# Inherited before observing G3 outputs: the existing BF16 cross-process rule.
+NORMAL_RELOAD_ATOL = 1e-5
+NORMAL_RELOAD_RTOL = 1e-5
+NORMAL_RELOAD_TOLERANCE_SOURCE = {
+    'commit':'8f36720a024be671a3ba893370a98126bc0f3b4a',
+    'path':'lc_rec/a0_beauty/shuffle_runtime.py',
+    'method':'torch.allclose(actual_float32_scores, reference_float32_scores, atol=1e-5, rtol=1e-5)',
+    'sequences_and_order':'exact'}
+
+
+def compare_normal_reload_rows(reference_rows, reloaded_rows):
+    """Apply the inherited score criterion with exact actual inputs/outputs."""
+    import torch
+    need(len(reference_rows)==len(reloaded_rows)==32, 'cross-process Normal fixed32 population')
+    exact=('row_idx','user_id','target_item_id','target','rank','prompt_id','scope','condition',
+           'model_identity_sha256','input_token_ids','original_input_token_ids','attention_mask',
+           'sorted_generation_order','relevance','actual_model_prefill')
+    maximum=0.;exact_scores=0;seen=set()
+    for reference,reloaded in zip(reference_rows,reloaded_rows):
+        need(reference['row_idx'] not in seen,'cross-process Normal duplicate user')
+        seen.add(reference['row_idx'])
+        need(all(reference[key]==reloaded[key] for key in exact),'cross-process Normal identity/input/order mismatch')
+        need(reference['condition']=='normal' and reference['scope']=='PREFLIGHT','cross-process Normal scope/condition')
+        left,right=reference['candidates'],reloaded['candidates']
+        need(len(left)==len(right)==20,'cross-process Normal beam20')
+        candidate_keys=('generation_order','generated_token_ids','eos_position','sid')
+        need(all(all(x[key]==y[key] for key in candidate_keys) for x,y in zip(left,right)),
+             'cross-process Normal generated SID suffix/order mismatch')
+        expected=torch.tensor([row['sequence_score'] for row in left],dtype=torch.float32)
+        actual=torch.tensor([row['sequence_score'] for row in right],dtype=torch.float32)
+        need(torch.isfinite(expected).all().item() and torch.isfinite(actual).all().item(),
+             'cross-process Normal nonfinite score')
+        need(torch.allclose(actual,expected,atol=NORMAL_RELOAD_ATOL,rtol=NORMAL_RELOAD_RTOL),
+             'cross-process Normal score exceeds inherited fixed tolerance')
+        maximum=max(maximum,float((actual-expected).abs().max()))
+        exact_scores+=int(torch.equal(actual,expected))
+    return {'status':'PASS','users':32,'candidate_suffixes_SIDs_order_and_actual_prefill_exact':True,
+            'scores_within_inherited_tolerance':True,'scores_exact_users':exact_scores,
+            'maximum_absolute_score_difference':maximum,'score_dtype':'torch.float32',
+            'atol':NORMAL_RELOAD_ATOL,'rtol':NORMAL_RELOAD_RTOL,
+            'criterion':'torch.allclose(actual, reference, atol=1e-5, rtol=1e-5)',
+            'fixed_before_observation':True,'tolerance_source':NORMAL_RELOAD_TOLERANCE_SOURCE}
+
+
 def load(path):
     return json.loads(Path(path).read_text())
 
@@ -114,6 +158,38 @@ def main():
             need(normal['actual_model_prefill'] == off['actual_model_prefill'], 'normal/OFF actual prefill equivalence')
             compared += 1
     need(metrics['normal'] == metrics['off'], 'normal/OFF all inherited metrics exact')
+    # A second independent inference process strictly loads the same saved adapter.
+    reload_root=generation.parent/'generation_reload_normal'
+    reload_proof=verify_predictions(reload_root,args.run_commit,best,'normal','PREFLIGHT')
+    reload_stage=original.aggregate_predictions([reload_root/'predictions.rank0.jsonl'],users,catalog,evaluator,
+        run_commit=args.run_commit,scope='PREFLIGHT',expected_indices=indices,condition='normal')
+    need(reload_stage['actual_test_users']==32,'cross-process Normal complete original evaluation')
+    first_report=load(generation/'normal/rank0.json');second_report=load(reload_root/'rank0.json')
+    report_fields=('RUN_COMMIT','scope','condition','adapter_files','data_identity','tokenizer_identity',
+        'model_identity_sha256','generation','allowed_callback_sha256','assigned_row_indices',
+        'assignment_sha256','execution_topology','execution_profile','world_size','installed_model_sources','model','author_sources','entry_sha256','runtime_sources')
+    need(all(first_report[key]==second_report[key] for key in report_fields),
+         'cross-process Normal model/tokenizer/generation/user identity mismatch')
+    need(first_report['host']==second_report['host'] and
+         first_report['pid']!=second_report['pid'] and first_report['started_utc']!=second_report['started_utc'],
+         'cross-process Normal requires a distinct actual inference process')
+    reference_binding=second_report['cross_process_reference']
+    need(reference_binding['files']==source_identity([generation/'normal/rank0.json',generation/'normal/predictions.rank0.jsonl']),
+         'cross-process Normal reference raw-file identity mismatch')
+    declared=reference_binding['criterion']
+    need(reference_binding['source_scope_and_user_axis_verified_before_model_load'] is True and
+         declared['score_atol']==NORMAL_RELOAD_ATOL and declared['score_rtol']==NORMAL_RELOAD_RTOL and
+         declared['fixed_before_observation'] is True and
+         declared['inherited_source_commit']==NORMAL_RELOAD_TOLERANCE_SOURCE['commit'] and
+         declared['inherited_source_path']==NORMAL_RELOAD_TOLERANCE_SOURCE['path'],
+         'cross-process Normal comparison criterion differs from predeclared legacy rule')
+    left=[json.loads(line) for line in (generation/'normal/predictions.rank0.jsonl').read_text().splitlines()]
+    right=[json.loads(line) for line in (reload_root/'predictions.rank0.jsonl').read_text().splitlines()]
+    cross_process=compare_normal_reload_rows(left,right)
+    cross_process.update(prediction_proof=reload_proof,original_evaluation=reload_stage,
+        reference_process={key:first_report[key] for key in ('host','pid','started_utc')},
+        reloaded_process={key:second_report[key] for key in ('host','pid','started_utc')})
+    raw.extend([reload_root/'predictions.rank0.jsonl',reload_root/'rank0.json'])
     pairings = {}
     for condition in ('s3','s4'):
         paired_output = output / 'paired' / condition
@@ -135,7 +211,7 @@ def main():
         'conditions':conditions,'metrics':metrics,'pairings':pairings,
         'normal_off':{'users_compared':compared,'same_process_model_generation_proof':model_process_proof,
                       'actual_prefill_and_twenty_candidates_exact':True,'all_metrics_exact':True},
-        'raw_generation_files':source_identity(raw),
+        'cross_process_normal_reload':cross_process,'raw_generation_files':source_identity(raw),
         'actual_import_files':source_identity([__file__,original.__file__,offline_metrics.__file__,paired_beauty.__file__,
             scripts/'production_identity.py',scripts/'g3_identity.py',official,
             release/'lc_rec/letter/review/final_audit_20261113/statistics_verify.py']),

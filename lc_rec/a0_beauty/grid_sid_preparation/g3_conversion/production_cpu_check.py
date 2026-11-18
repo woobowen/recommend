@@ -58,6 +58,11 @@ def main():
     import paired_beauty as pb
     import single_gpu_training as single_training
     import training_rows as historical_rows
+    import web_review_gate_check as web_review_check
+    import production_control as production_control_module
+    import production_identity as production_identity_module
+    import formal_control as formal_control_module
+    import g3_evaluate_preflight as preflight_evaluation
     from preflight_users import validate as validate_users
     from uneven_sampler import assignment, validate_assignments
     torch.set_num_threads(2)
@@ -275,6 +280,9 @@ def main():
     rejects('old_base_tokenizer', lambda: gi.tokenizer_identity(old, index), 'tokenizer vocabulary')
     fixture = args.output / 'SYNTHETIC_CPU_INTEGRATION_ONLY'
     fixture.mkdir()
+    run_commit=json.loads((args.repo/'RUN_VERSION.json').read_text())['run_commit']
+    web_review_gate=web_review_check.check_gate(fixture/'web-review-gate',args.repo,run_commit,gi.sha(args.config))
+    negative.extend(web_review_gate['negative_checks'])
     # Corrupt copied small assets only. Primary fixed data remain untouched.
     wrong_data = fixture / 'wrong-data' / 'Beauty'; wrong_data.mkdir(parents=True)
     for kind in gi.ASSETS:
@@ -377,7 +385,9 @@ def main():
         rows=[]
         for i in selected:
             candidate_sids=[users[i]['target']]+[s for s in catalog if s!=users[i]['target']][:19]
-            candidates=[{'generation_order':j,'raw_decoded':'Response: '+s,'sid':s,'sequence_score':float(-j)} for j,s in enumerate(candidate_sids)]
+            candidates=[{'generation_order':j,'raw_decoded':'Response: '+s,'sid':s,'sequence_score':float(-j),
+                         'generated_token_ids':tokenizer.encode(s,add_special_tokens=False)+[tokenizer.eos_token_id],
+                         'eos_position':4} for j,s in enumerate(candidate_sids)]
             raw_ids=tokenizer(test[i]['input_ids'])['input_ids']
             raw_mask=[1]*len(raw_ids)
             rows.append({'original_input_token_ids':raw_ids,'input_token_ids':raw_ids,'attention_mask':raw_mask,
@@ -402,6 +412,19 @@ def main():
     save(rank_path,rank_original)
     rejects('prediction_extra_rank_shard',lambda:fe.aggregate_predictions(paths+paths,users,catalog,evaluator,run_commit=commit,scope='PREFLIGHT',expected_indices=selected,condition='normal'),'exactly one rank shard')
     pristine=paths[0].read_text();rows=[json.loads(line) for line in pristine.splitlines()]
+    # Synthetic comparator fixtures exercise the inherited cross-process criterion;
+    # actual process/model reload still requires genuine GPU generation evidence.
+    reloaded_fixture=copy.deepcopy(rows)
+    for row in reloaded_fixture:
+        for candidate in row['candidates']:candidate['sequence_score']+=5e-6
+    cross_process_comparator_fixture=preflight_evaluation.compare_normal_reload_rows(rows,reloaded_fixture)
+    cross_process_comparator_fixture['scope']='SYNTHETIC_CPU_COMPARATOR_ONLY'
+    outside_tolerance=copy.deepcopy(rows);outside_tolerance[0]['candidates'][0]['sequence_score']+=.01
+    rejects('cross_process_score_beyond_fixed_legacy_tolerance',lambda:preflight_evaluation.compare_normal_reload_rows(rows,outside_tolerance),
+            'cross-process Normal score exceeds inherited fixed tolerance')
+    wrong_suffix=copy.deepcopy(rows);wrong_suffix[0]['candidates'][0]['generated_token_ids'][0]+=1
+    rejects('cross_process_same_identity_wrong_generated_suffix',lambda:preflight_evaluation.compare_normal_reload_rows(rows,wrong_suffix),
+            'cross-process Normal generated SID suffix/order mismatch')
     def corrupt_prediction(case, mutate, expected):
         changed=copy.deepcopy(rows);mutate(changed)
         paths[0].write_text(''.join(json.dumps(row)+'\n' for row in changed))
@@ -414,9 +437,13 @@ def main():
     corrupt_prediction('prediction_wrong_shuffle',lambda r:r[0].update(condition='s4'),'model/scope/Shuffle binding')
     corrupt_prediction('prediction_preflight_as_formal',lambda r:r[0].update(scope='FORMAL'),'model/scope/Shuffle binding')
     rejects('formal_subset_population',lambda:fe.aggregate_predictions(paths,users,catalog,evaluator,run_commit=commit,scope='FORMAL',expected_indices=selected),'full fixed 22363-user axis')
-    imported = [Path(m.__file__).resolve() for m in (data_module,collator_module,utils_module,gi,formal_train,fe,om,pb,single_training,historical_rows)]
+    imported = [Path(m.__file__).resolve() for m in (data_module,collator_module,utils_module,gi,formal_train,fe,om,pb,single_training,historical_rows,web_review_check,production_control_module,production_identity_module,formal_control_module,preflight_evaluation)]
     imported += [vendor/'prompt.py',vendor/'evaluate.py',Path(__file__).resolve(),args.config.resolve(),
-                 Path(inspect.getsourcefile(scale_method)),Path(inspect.getsourcefile(DataLoaderShard))]
+                 Path(inspect.getsourcefile(scale_method)),Path(inspect.getsourcefile(DataLoaderShard)),
+                 Path(inspect.getsourcefile(Accelerator)),Path(inspect.getsourcefile(LlamaTokenizer)),
+                 Path(inspect.getsourcefile(torch.utils.data.RandomSampler)),Path(inspect.getsourcefile(torch.utils.data.DataLoader)),
+                 Path(inspect.getsourcefile(assignment)),Path(inspect.getsourcefile(validate_users))]
+    imported=sorted({p.resolve() for p in imported},key=str)
     result={'status':'PASS','scope':'PREFLIGHT_CPU_VALIDATION','experiment_id':gi.EXPERIMENT_ID,
             'world_size':1,'execution_topology':gi.EXECUTION_TOPOLOGY,'execution_profile':gi.EXECUTION_PROFILE,
             'dual_gpu_requirement':'NOT_APPLICABLE_THIS_RUN',
@@ -432,7 +459,7 @@ def main():
             'collator_shapes':{k:list(v.shape) for k,v in batch.items()},'callback_invocations':callback_receipts,
             'metrics':{'inherited':metric_tests,'zero_collision_once_target_equal':True,'duplicate_target_ndcg_distinct':True,
                        'position_legal_invalid_sid':invalid,'preflight_pairing_equal_independent':True},
-            'single_gpu_checks':single_gpu_checks,'negative_cases':negative,'negative_fixture_scope':'SYNTHETIC_CPU_INTEGRATION_ONLY; no model weights executed',
+            'single_gpu_checks':single_gpu_checks,'web_second_review_gate':web_review_gate,'cross_process_comparator_fixture':cross_process_comparator_fixture,'negative_cases':negative,'negative_fixture_scope':'SYNTHETIC_CPU_INTEGRATION_ONLY; no model weights executed',
             'gpu_used':False,'exit_code':0,'elapsed_seconds':time.monotonic()-started,
             'peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024}
     save(args.output/'result.json',result)

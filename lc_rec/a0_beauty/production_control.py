@@ -50,8 +50,8 @@ def approval_documents(plan, require_pass=False):
              review['config_sha256']==plan['config_sha256'] and
              review['formal_train_sha256']==sha(Path(plan['release'])/'lc_rec/a0_beauty/formal_train.py'),
              'prelaunch review identity')
-        need(review.get('review_kind') in ('INDEPENDENT_NONAUTHOR','EXTERNAL_GPT_REVIEW') and
-             review.get('reviewer') and review.get('evidence_files'), 'independent review evidence required')
+        need(review.get('review_kind')=='EXTERNAL_GPT_REVIEW' and
+             review.get('reviewer') and review.get('evidence_files'), 'G3 web second review evidence required')
         for row in review['evidence_files']:check_file(row)
     return documents
 
@@ -113,7 +113,8 @@ def validate_plan(p):
     for row in p['inputs']:check_file(row)
     version=read(Path(p['release'])/'RUN_VERSION.json')
     need(version['run_commit']==p['run_commit'],'export is not the pinned code commit')
-    required=('g3_identity.py','production_control.py','production_pipeline.py','production_identity.py','formal_train.py','formal_evaluate.py','paired_beauty.py','offline_metrics.py','checkpoint_receipt.py','shuffle_entry.py','shuffle_runtime.py','shuffle_cpu_inputs.py')
+    required=('g3_identity.py','production_control.py','production_pipeline.py','production_identity.py','formal_train.py','formal_evaluate.py','paired_beauty.py','offline_metrics.py','checkpoint_receipt.py','shuffle_entry.py','shuffle_runtime.py','shuffle_cpu_inputs.py',
+              'single_gpu_training.py','training_rows.py','zero2_partial_state.py','trainer_loop_patch.py')
     supplied={x['path']:x['sha256'] for x in p['inputs']}
     version_rows={x['path']:x['sha256'] for x in version['files']}
     for name in required:
@@ -187,6 +188,7 @@ def request(plan,stage,attempt,timeout,plan_path,authorization=None,authorizatio
     if resume:argv+=['--resume',resume]
     ns=plan['namespace']
     env=dict(plan['env']);env['CUDA_VISIBLE_DEVICES']=env.get('CUDA_VISIBLE_DEVICES','') if stage in ('train','normal','s3','s4') else ''
+    env['DS_ACCELERATOR']='cuda' if stage in ('train','normal','s3','s4') else 'cpu'
     inputs=[{'path':x['path'],'sha256':x['sha256']} for x in plan['inputs']]+[{'path':str(plan_path),'sha256':sha(plan_path)}]
     if plan['evidence_scope']=='FORMAL':
         approval_documents(plan,require_pass=True)

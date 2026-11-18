@@ -11,7 +11,7 @@ import sys
 from g3_identity import (ASSETS, TOKEN_MAPPING_SHA, digest, EXECUTION_TOPOLOGY,
                          EXECUTION_PROFILE, verify_execution_profile)
 
-FROZEN = {'a0': ('a0_beauty/formal_evaluate.py', 'b16e5b2b34d0a353aff791fdc587652bcf25cda6c1e6bcb290b9e58f1eae33d6')}
+FROZEN = {'a0': ('a0_beauty/formal_evaluate.py', '9c7748ce7659a085d15128e060a1b72f6ac92b62a8642056810d0fa6df6a14e7')}
 
 
 def main():

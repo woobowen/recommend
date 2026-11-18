@@ -39,7 +39,7 @@ def main():
                             **({'prelaunch_review':identity(a.prelaunch_review)} if a.prelaunch_review else {})},
           'export_manifest':identity(Path(release)/'RUN_VERSION.json'),
           'gpu_uuids':a.gpu_uuids,'stage_seconds':budget['stage_seconds'],'budget':budget['budget'],
-          'env':{'CUDA_VISIBLE_DEVICES':'1','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
+          'env':{'CUDA_VISIBLE_DEVICES':'1','DS_ACCELERATOR':'cuda','CUDA_HOME':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4',
                  'LD_LIBRARY_PATH':'/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib',
                  'OMP_NUM_THREADS':'4','OPENBLAS_NUM_THREADS':'2','PYTHONDONTWRITEBYTECODE':'1','PYTHONUNBUFFERED':'1',
                  'PYTHONOPTIMIZE':'0','TOKENIZERS_PARALLELISM':'false','HF_HUB_OFFLINE':'1','TRANSFORMERS_OFFLINE':'1'}}
