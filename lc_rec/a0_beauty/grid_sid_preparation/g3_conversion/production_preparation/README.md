@@ -8,11 +8,15 @@ become available. The previous dual-GPU requirement is
 `NOT_APPLICABLE_THIS_RUN`; its historical receipts remain unchanged.
 
 The current acceptance authority is [single_gpu/acceptance.json](single_gpu/acceptance.json),
-which the main controller writes after checking the actual final artifacts.
+now sealed by the main controller as **`READY_FOR_REVIEW`** after actual
+runtime verification, complementary direct non-author reviews, fixed GitHub
+content readback and audit-package prechecks. The [delivery verification](single_gpu/delivery_verification.json)
+records the published content commit; the final sealed delivery commit and ZIP
+are independently read back and hashed outside Git to avoid self-reference.
 The older [acceptance.json](acceptance.json) records the earlier dual-GPU
-preparation delivery. This document does not declare overall `READY_FOR_REVIEW`, external GPT review
-approval or formal launch permission.
-No formal G3 experiment has been started or authorized.
+preparation delivery and remains unchanged. `READY_FOR_REVIEW` means ready for
+the pending webpage second review; it grants neither external GPT approval nor
+formal launch permission. No formal G3 experiment has been started or authorized.
 
 ## Fixed assets and research conditions
 
