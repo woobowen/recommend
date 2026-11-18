@@ -16,8 +16,9 @@ S3/S4 各 6 小时，CPU 合计 5,400 秒，流水线累计 199,800 秒（55.5 �
 [非作者直接审查](single_gpu/final_closure/non_author_review.json)
 供当前网页增量复核。既有网页技术二审对应交付提交
 `6db8ab4ec98f5692014eeac02b03f3f55015d1eb` 与运行提交
-`21d495b0be5b606853ec7cec68a3eaa1b58acbd7`。当前增量仍待网页复核。
-正式训练、生成及控制器尚未启动。
+`21d495b0be5b606853ec7cec68a3eaa1b58acbd7`。这一准备快照生成时，
+增量二审待确认，正式训练、生成及控制器尚未启动。
+后续网页审核、正式启动与初期监视见[运行回执](formal_launch/README.md)。
 
 收口复核脚本固定于 `780040a4a3743d124004811495f9c45e6a3273ef`。
 [首次 CPU 作业](single_gpu/final_closure/jobs/g3-final-plan-cpu-20261118-r0/work.log)

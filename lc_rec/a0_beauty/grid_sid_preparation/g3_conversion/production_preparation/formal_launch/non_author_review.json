@@ -1,0 +1,783 @@
+{
+  "status": "PASS",
+  "reviewer_task": "/root/launch_review",
+  "recorded_utc": "2026-11-18T18:31:57.285710+00:00",
+  "scope": [
+    "本轮授权、最终网页复核依据、固定正式计划、启动入口与真实调用。",
+    "用独立 Windows OpenSSH 连接读取 prelaunch 目标、登记、生产请求、接受回执及实际进程。",
+    "逐次核对运行原始快照、optimizer update、参数清单、账本、观察窗口和发布候选字节。"
+  ],
+  "method": [
+    "直接读取当前用户指令、Git 固定计划与可执行源文件，独立重算 canonical SHA-256、文件 SHA-256，核对服务器冻结源码和运行身份。",
+    "直接读取 new-server 启动前和重新连接后的真实记录、/proc 进程启动身份、argv、会话、描述符与精确允许的环境变量。",
+    "逐次解码快照原始字节并校验已记录 SHA-256、长度、字节范围和每文件时间。独立回读不可变文件和活动日志的相同字节范围。",
+    "独立实现并运行定向校验，另运行主控交付的验证脚本。用最后一次单独 SSH 的当前状态对照原进程和有效账本。"
+  ],
+  "fixed_plan": {
+    "preparation_commit": "4075cf138fcbc2fd2e115001fd9fb5e8b63f6409",
+    "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+    "config_sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+    "bytes": 215484,
+    "inputs": 541,
+    "raw_sha256": "a56076cf07d67bc088442dc35f863134081b455f551fc45d2c6bfb2bfd246407",
+    "canonical_sha256": "526987fa87f0feb565a7a9f42bc58f42e3121b9d9a13cea4613e47f842c394b6",
+    "initial_formal_plan_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json",
+    "precheck_observed_utc": "2026-11-18T17:57:41.151823+00:00",
+    "precheck_gpu": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+    "precheck_active_compute_pids": [],
+    "precheck_mem_available_bytes": 253416034304,
+    "precheck_storage_available_bytes": 2742493503488,
+    "precheck_storage_total_bytes": 7937302376448,
+    "precheck_same_registry_and_job_absent": true,
+    "precheck_root_contents": [
+      "plan.json",
+      "preparation-plan.json"
+    ],
+    "historical_dependencies_rehashed_unchanged_after_window": true,
+    "precheck_historical_dependency_sha256": {
+      "approved_budget.json": "33c31030c7cc4059bd2fbe332cddc34b1bef88a5c4364a7ea343caef8a36d2a7",
+      "budget_approval.json": "521a742f5c28f1daf6daf8760d6876153f32f7891a1b6eb21f4ab3d6fcbb78cb",
+      "external_technical_review.json": "638e6d101f36bd4849e87961e4f4e86538e8952e4d160ec14f3532d92aa296f9",
+      "web_technical_review_source.md": "fc8c474045bfb7e26fa4d37f2c6b056d4c9009e42c44febff54ee75932d9fd9d",
+      "prior_acceptance.json": "bd035268bc3a756914d2e51caf22c32fa064b8d262d72b5724c04894f5a1c072"
+    }
+  },
+  "authorization": {
+    "sha256": "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626",
+    "checked": "两段授权原文、Codex 序列化来源、生成至失效 96 小时 UTC、单卡 profile、固定 plan canonical SHA、run/config、三键资产身份、task、实验和旧 series、分组/阶段预算。",
+    "independent_authorize_preceded_production_start": true,
+    "web_final_incremental_review": "PASS",
+    "historical_bound_web_record_preserved": true
+  },
+  "launch": {
+    "direct_new_ssh_controller_first_observed_utc": "2026-11-18T17:59:33.332158+00:00",
+    "direct_new_ssh_original_runner_confirmed_utc": "2026-11-18T18:00:04.058501+00:00",
+    "runner_accepted_at": "2026-11-18T17:59:59.909053+00:00",
+    "runner_started_at": "2026-11-18T18:00:00.244213+00:00",
+    "actual_worker_proc_start_utc_estimate": "2026-11-18T18:00:00.284081+00:00",
+    "actual_rank_proc_start_utc_estimate": "2026-11-18T18:00:40.624081+00:00",
+    "direct_rank_observed_utc": "2026-11-18T18:01:49.685274+00:00",
+    "request_sha256": "0554ee1782b1462c51efb06cda1f07a6524bda7fdce97239997af543ec72e462",
+    "inputs": 550,
+    "timeout_seconds": 107880,
+    "actual_compute_argv_sha256": "2e383f55138f4de8b0c182cedfccb506ac7d64660849cb89348c01efae1908ee",
+    "live_process_identity": {
+      "controller": {
+        "pid": 3334030,
+        "start_ticks": "563009849",
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "session_id": 3334030,
+        "started_at_utc_from_proc": "2026-11-18T17:59:21.490000+00:00",
+        "fds": {
+          "0": "/dev/null",
+          "1": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/controller.log",
+          "2": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/controller.log"
+        },
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_control.py",
+          "run",
+          "--plan",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json",
+          "--authorization",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/authorization.json",
+          "--authorization-sha256",
+          "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+        ]
+      },
+      "supervisor": {
+        "pid": 3334066,
+        "start_ticks": "563013693",
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "session_id": 3334066,
+        "started_at_utc_from_proc": "2026-11-18T17:59:59.930000+00:00",
+        "fds": {
+          "0": "/dev/null",
+          "1": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/supervisor.log",
+          "2": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/supervisor.log"
+        },
+        "argv": [
+          "/usr/bin/python3",
+          "-I",
+          "-S",
+          "-B",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/runner-beauty.py",
+          "supervise",
+          "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0"
+        ]
+      },
+      "pipeline_worker": {
+        "pid": 3334067,
+        "start_ticks": "563013718",
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "session_id": 3334067,
+        "started_at_utc_from_proc": "2026-11-18T18:00:00.180000+00:00",
+        "fds": {
+          "0": "/dev/null",
+          "1": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/work.log",
+          "2": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/work.log"
+        },
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_pipeline.py",
+          "--plan",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json",
+          "--stage",
+          "train",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/train/a0",
+          "--authorization",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/authorization.json",
+          "--authorization-sha256",
+          "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+        ]
+      },
+      "torchrun": {
+        "pid": 3334151,
+        "start_ticks": "563017523",
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "session_id": 3334067,
+        "started_at_utc_from_proc": "2026-11-18T18:00:38.230000+00:00",
+        "fds": {
+          "0": "/dev/null",
+          "1": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/work.log",
+          "2": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/work.log"
+        },
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--standalone",
+          "--nnodes=1",
+          "--nproc_per_node=1",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_train.py",
+          "--source-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training",
+          "--config",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
+          "--run-commit",
+          "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+          "--precision-approval",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+          "--prelaunch-review",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/formal-closure-20261118/materials/external_technical_review.json",
+          "--precision-approval-sha256",
+          "b44e910f4fb9bf08aa0f2fb574dfedc475d1f3eed96e039c2808befdea2312f3",
+          "--prelaunch-review-sha256",
+          "638e6d101f36bd4849e87961e4f4e86538e8952e4d160ec14f3532d92aa296f9",
+          "--formal-authorization",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/authorization.json",
+          "--formal-authorization-sha256",
+          "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+        ]
+      },
+      "rank0": {
+        "pid": 3334156,
+        "start_ticks": "563017752",
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "session_id": 3334156,
+        "started_at_utc_from_proc": "2026-11-18T18:00:40.520000+00:00",
+        "fds": {
+          "0": "/dev/null",
+          "1": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/work.log",
+          "2": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/work.log"
+        },
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-u",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_train.py",
+          "--source-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+          "--data-root",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+          "--model",
+          "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training",
+          "--config",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
+          "--run-commit",
+          "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+          "--precision-approval",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/evidence/formal_20261111/precision_approval.json",
+          "--prelaunch-review",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/formal-closure-20261118/materials/external_technical_review.json",
+          "--precision-approval-sha256",
+          "b44e910f4fb9bf08aa0f2fb574dfedc475d1f3eed96e039c2808befdea2312f3",
+          "--prelaunch-review-sha256",
+          "638e6d101f36bd4849e87961e4f4e86538e8952e4d160ec14f3532d92aa296f9",
+          "--formal-authorization",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/authorization.json",
+          "--formal-authorization-sha256",
+          "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+        ]
+      }
+    },
+    "finding": "控制器和监督各有独立会话，原 stage worker 及实际 rank 已在提交连接退出后持续运行。关键进程 stdin 为 /dev/null，stdout 使用服务器日志且继承相同已绑定请求。"
+  },
+  "actual_training_profile": {
+    "direct_read_utc": "2026-11-18T18:03:13.053368+00:00",
+    "scope": "FORMAL",
+    "initial_optimizer_global_step": 0,
+    "profile": {
+      "world_size": 1,
+      "per_device_train_batch_size": 8,
+      "gradient_accumulation_steps": 8,
+      "global_batch": 64
+    },
+    "actual_training_data": {
+      "train_rows": 131413,
+      "valid_rows": 44726,
+      "author_valid_rows": 44726,
+      "validation_subset_preflight_only": false,
+      "tokenizer_vocab": 32786
+    },
+    "actual_sample_flow": {
+      "world_size": 1,
+      "logical_historical_ranks": 2,
+      "micro_batch_size": 8,
+      "gradient_accumulation_steps": 8,
+      "global_batch": 64,
+      "epochs": 4,
+      "author_rows": 131413,
+      "full_epoch_serial_rows": 131424,
+      "tail_repeat_rows": 11,
+      "full_epoch_microbatches": 16428,
+      "per_epoch_microbatches": 16428,
+      "epoch_steps": [
+        2053,
+        4107,
+        6160,
+        8214
+      ],
+      "max_steps": 8214,
+      "preflight_only": false,
+      "short_epoch_global_rows": null,
+      "loss_weighting": "Each unchanged eight-example native microbatch loss contributes 1/8; this equals its historical 1/4 accumulation times1/2 rank-average weight. Native response-token reduction inside each microbatch remains unchanged; no global-token-mean or floating-trajectory equivalence is claimed.",
+      "numerical_equivalence_to_two_gpus_claimed": false
+    },
+    "actual_trainable_tensors": 450,
+    "actual_trainable_elements": 288571392,
+    "lora_a_tensors": 224,
+    "lora_b_tensors": 224,
+    "optimizer_names_exactly_equal_trainable_inventory": true,
+    "embedding_and_head": {
+      "base_model.model.model.embed_tokens.original_module.weight": {
+        "shape": [
+          32786,
+          4096
+        ],
+        "dtype_before_ds": "torch.float32",
+        "requires_grad": false
+      },
+      "base_model.model.model.embed_tokens.modules_to_save.default.weight": {
+        "shape": [
+          32786,
+          4096
+        ],
+        "dtype_before_ds": "torch.float32",
+        "requires_grad": true
+      },
+      "base_model.model.lm_head.original_module.weight": {
+        "shape": [
+          32786,
+          4096
+        ],
+        "dtype_before_ds": "torch.float32",
+        "requires_grad": false
+      },
+      "base_model.model.lm_head.modules_to_save.default.weight": {
+        "shape": [
+          32786,
+          4096
+        ],
+        "dtype_before_ds": "torch.float32",
+        "requires_grad": true
+      }
+    },
+    "train_begin_utc": "2026-11-18T18:02:38.328448+00:00",
+    "first_optimizer_update_observed_utc": "2026-11-18T18:02:47.286901+00:00"
+  },
+  "monitoring": {
+    "window_start_utc_snapshot_proc": "2026-11-18T18:00:40.520000+00:00",
+    "window_end_utc": "2026-11-18T18:31:34.037696+00:00",
+    "elapsed_seconds": 1853.517696,
+    "basis": "/proc boot epoch 和 rank start ticks 换算，精度至亚秒。独立 BOOTTIME 换算用于交叉验证。",
+    "samples": [
+      {
+        "sample": "03-plus10.json",
+        "collection_started_utc": "2026-11-18T18:10:57.195415+00:00",
+        "step": 60,
+        "epoch": 0.029218407596785977,
+        "loss": 4.2094,
+        "learning_rate": 0.00014457831325301204,
+        "grad_norm": 10.908955574035645,
+        "optimizer_event_utc": "2026-11-18T18:10:04.821838+00:00",
+        "gpu": "1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 24564 MiB, 18816 MiB, 67 %",
+        "work_log_bytes": 13160,
+        "event_log_bytes": 19781,
+        "charge_seconds": 656.458107,
+        "charge_cutoff_utc": "2026-11-18T18:10:56.756131+00:00"
+      },
+      {
+        "sample": "04-plus20.json",
+        "collection_started_utc": "2026-11-18T18:20:56.854624+00:00",
+        "step": 150,
+        "epoch": 0.07304601899196493,
+        "loss": 3.2714,
+        "learning_rate": 0.00019996649518842265,
+        "grad_norm": 2.854848861694336,
+        "optimizer_event_utc": "2026-11-18T18:20:22.532239+00:00",
+        "gpu": "1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 24564 MiB, 18816 MiB, 76 %",
+        "work_log_bytes": 19256,
+        "event_log_bytes": 25022,
+        "charge_seconds": 1252.038135,
+        "charge_cutoff_utc": "2026-11-18T18:20:52.332653+00:00"
+      },
+      {
+        "sample": "05-plus30.json",
+        "collection_started_utc": "2026-11-18T18:31:34.037696+00:00",
+        "step": 240,
+        "epoch": 0.1168736303871439,
+        "loss": 2.9399,
+        "learning_rate": 0.00019981607195446947,
+        "grad_norm": 3.2134459018707275,
+        "optimizer_event_utc": "2026-11-18T18:31:09.154577+00:00",
+        "gpu": "1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 24564 MiB, 18816 MiB, 47 %",
+        "work_log_bytes": 25355,
+        "event_log_bytes": 30274,
+        "charge_seconds": 1893.588303,
+        "charge_cutoff_utc": "2026-11-18T18:31:33.888776+00:00"
+      }
+    ],
+    "budget_as_of_utc": "2026-11-18T18:31:33.888776+00:00",
+    "attempt_charge_seconds": 1893.588303,
+    "stage_nominal_remaining_seconds": 106106.411697,
+    "stage_budget_remaining_less_120_seconds_reserve": 105986.411697,
+    "remaining_group_and_total_seconds": {
+      "train_normal": 149306.411697,
+      "s3": 21600.0,
+      "s4": 21600.0,
+      "cpu": 5400.0,
+      "total": 197906.411697
+    },
+    "complete_checkpoints": [],
+    "formal_pipeline_completed": false,
+    "last_published_snapshot_controller_state": "WAITING_OR_UNKNOWN",
+    "last_published_snapshot_runner_status": "RUNNING",
+    "independent_current_observed_utc": "2026-11-18T18:31:59.517311+00:00",
+    "independent_current_status": "RUNNING",
+    "independent_current_last_logged_step": 240,
+    "independent_current_charge_seconds": 1908.870479,
+    "independent_current_exit_code": null
+  },
+  "snapshot_integrity": {
+    "independent_preceding_session_byte_ranges": {
+      "observed_utc": "2026-11-18T18:21:57.748529+00:00",
+      "matched_count": 49
+    },
+    "independent_final_session_byte_ranges": {
+      "observed_utc": "2026-11-18T18:31:49.413215+00:00",
+      "matched_count": 14,
+      "ranges": [
+        {
+          "sample": "05-plus30.json",
+          "file": "plan.identity.json",
+          "source_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.identity.json",
+          "offset": 0,
+          "bytes": 176,
+          "sha256": "ac5ce317bcd49b2e2e5db83c4e166e2588392b54642ba867802bdab53e9007df",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "controller.log",
+          "source_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/controller.log",
+          "offset": 0,
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "controller-request.json",
+          "source_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/requests/train-a0.json",
+          "offset": 0,
+          "bytes": 149006,
+          "sha256": "5c0cbf81bc689054f13d4a2fb017598595894da46c5bc3a3230944ff7d68f5f2",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "runner-request.json",
+          "source_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/request.json",
+          "offset": 0,
+          "bytes": 149006,
+          "sha256": "5c0cbf81bc689054f13d4a2fb017598595894da46c5bc3a3230944ff7d68f5f2",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "runner-accepted.json",
+          "source_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/accepted.json",
+          "offset": 0,
+          "bytes": 341,
+          "sha256": "9fdc8ac8f1c8c678963267866c3b4cb46a6116dcf420ca16ece5a0797a4a99af",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "work.log",
+          "source_path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-train-a0/work.log",
+          "offset": 0,
+          "bytes": 25355,
+          "sha256": "1538fe75fc1a1d4e655b53b7ba44b396dbc4d151ef1bcaa0faca4dce3c141630",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "compute_argv.json",
+          "source_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/train/a0/compute_argv.json",
+          "offset": 0,
+          "bytes": 1651,
+          "sha256": "2e383f55138f4de8b0c182cedfccb506ac7d64660849cb89348c01efae1908ee",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "rank0.json",
+          "source_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training/rank0.json",
+          "offset": 0,
+          "bytes": 621453,
+          "sha256": "087b80977f4420f41293dac7db27563c6ae74b15f7e04a87a023b81cfef97ed1",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "events.rank0.jsonl",
+          "source_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training/events.rank0.jsonl",
+          "offset": 0,
+          "bytes": 30274,
+          "sha256": "d33c2bd19417b5ce6c2ff78dccc8a4376ad432181a68384e19acdf999e011e87",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "launch.exit",
+          "source_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/launch.exit",
+          "offset": 0,
+          "bytes": 22,
+          "sha256": "dcc45aa6ec34a26e73f302531dc2abdba444502e3ab0a170c1443d8573d1bfd2",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "server-launch.stdout",
+          "source_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/launch.stdout",
+          "offset": 0,
+          "bytes": 2238,
+          "sha256": "350d57f35d60f09af0fbd855d833a5884f03c793848f8ebc79c369df4b082f8d",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "server-launch.stderr",
+          "source_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/launch.stderr",
+          "offset": 0,
+          "bytes": 772,
+          "sha256": "247f80906bacb20be85832cf8a4ec35cc62651648b3363c67f45db2c9fdb9263",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "server-authorization.json",
+          "source_path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/authorization.json",
+          "offset": 0,
+          "bytes": 2257,
+          "sha256": "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626",
+          "verified": true
+        },
+        {
+          "sample": "05-plus30.json",
+          "file": "experiment_registry.json",
+          "source_path": "/data/bwwu/lc-rec/a0-beauty-20261115/formal-experiment-registry/3aa649784aa154e1274b7ddc9ede10e6ccf3f47cee36b787e2361ce69b646726.json",
+          "offset": 0,
+          "bytes": 258,
+          "sha256": "1f64e38f1375e1aa9c7d709cc0967b52e9943164a317589b380a7c020de02989",
+          "verified": true
+        }
+      ]
+    },
+    "extracted_byte_identical_files": 17,
+    "note": "活动状态文件基于采集时点验证内部一致性和后来独立读取时的同 job 单调变化。SSH 回读只比较不可变文件和按偏移读取的活动日志字节范围，各项证据各自保留时间。"
+  },
+  "candidate_publication": {
+    "review_candidate_hashes": [
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/README.md",
+        "bytes": 26885,
+        "sha256": "0134c01bf6574fb6fe649516a76a5f47fcc4495e8a4500b1cb5435e69b3cff44"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/README.md",
+        "bytes": 6105,
+        "sha256": "1b03315f5725b6852d22bd3c09463513507f9820acd66a693958500c18492582"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/authorization.json",
+        "bytes": 2257,
+        "sha256": "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/authorization.sha256",
+        "bytes": 85,
+        "sha256": "e4ab8c9318be738b95f9ec24ef149c8c33408b7782c0aba3e230defec2951bf4"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/controller_query_invocation.json",
+        "bytes": 497,
+        "sha256": "05e0fe1cb04eb12be94f8b1c5d35849a6835489cdadb2c3abeb20ac31a769136"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/controller_query_result.json",
+        "bytes": 16868,
+        "sha256": "ffb1ecdd51ec1547d164ecdd823dbc940579020bb52197c9e07046450adb28aa"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/compute_argv.json",
+        "bytes": 1651,
+        "sha256": "2e383f55138f4de8b0c182cedfccb506ac7d64660849cb89348c01efae1908ee"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/controller.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/events.rank0.jsonl",
+        "bytes": 30274,
+        "sha256": "d33c2bd19417b5ce6c2ff78dccc8a4376ad432181a68384e19acdf999e011e87"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/experiment_registry.json",
+        "bytes": 258,
+        "sha256": "1f64e38f1375e1aa9c7d709cc0967b52e9943164a317589b380a7c020de02989"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/file_ranges.json",
+        "bytes": 7837,
+        "sha256": "6d767fb6844da699abc1ffcb6085d0ae69b51b19ce6a24acce318c66b8fad11d"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/launch.exit",
+        "bytes": 22,
+        "sha256": "dcc45aa6ec34a26e73f302531dc2abdba444502e3ab0a170c1443d8573d1bfd2"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/plan.identity.json",
+        "bytes": 176,
+        "sha256": "ac5ce317bcd49b2e2e5db83c4e166e2588392b54642ba867802bdab53e9007df"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/rank0.json",
+        "bytes": 621453,
+        "sha256": "087b80977f4420f41293dac7db27563c6ae74b15f7e04a87a023b81cfef97ed1"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/runner-accepted.json",
+        "bytes": 341,
+        "sha256": "9fdc8ac8f1c8c678963267866c3b4cb46a6116dcf420ca16ece5a0797a4a99af"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/runner-query.json",
+        "bytes": 19799,
+        "sha256": "d0bfd6219a742998fbeb7fdc69799d6ccb5ec61021882aad0f716ef5a4c5975e"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/runner-request.json",
+        "bytes": 149006,
+        "sha256": "5c0cbf81bc689054f13d4a2fb017598595894da46c5bc3a3230944ff7d68f5f2"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/runner-status.json",
+        "bytes": 6964,
+        "sha256": "90cf50630d20575bfc8d56dbbc7716d8847c416a8790cb8b2ce1cabe432e8985"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/server-authorization.json",
+        "bytes": 2257,
+        "sha256": "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/server-launch.stderr",
+        "bytes": 772,
+        "sha256": "247f80906bacb20be85832cf8a4ec35cc62651648b3363c67f45db2c9fdb9263"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/server-launch.stdout",
+        "bytes": 2238,
+        "sha256": "350d57f35d60f09af0fbd855d833a5884f03c793848f8ebc79c369df4b082f8d"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/state.json",
+        "bytes": 14156,
+        "sha256": "e8f806c1c2747852e986532e41d789cc5219743e7f799ce4b2602dfc4213fcb0"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/latest/work.log",
+        "bytes": 25355,
+        "sha256": "1538fe75fc1a1d4e655b53b7ba44b396dbc4d151ef1bcaa0faca4dce3c141630"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/launch.sh",
+        "bytes": 1203,
+        "sha256": "a632213ff9f269e1c1028bf05732d117cc27c0e2be36bdc2c3c0c6959e42a19d"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/launch_python_optimize.stdout",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/monitoring_summary.json",
+        "bytes": 7685,
+        "sha256": "7697b0f3dbb3b1f6be3fa6c85de0e38fc32baed200e36e645275a1df35c460b1"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/00-reconnect.json",
+        "bytes": 429769,
+        "sha256": "7af57057bbfa53e3fb77d364264650e7df00164823249f619940000ac2dcfb6a"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/00-reconnect.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/01-worker.json",
+        "bytes": 524083,
+        "sha256": "3eb3dad5167f3f41ceebdfdaeba28e799e4ef7468a2884e6cd4f55012c3e5383"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/01-worker.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/02-first-updates.json",
+        "bytes": 1387116,
+        "sha256": "e36f13c821585ec17e1f32e440d684d56abdc79424022318587d98b6f20a949b"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/02-first-updates.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/03-plus10.json",
+        "bytes": 1397202,
+        "sha256": "0847e1df30aa71065c061df6650a31828d04f207dadf06cb3e90d507f57f6b88"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/03-plus10.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/04-plus20.json",
+        "bytes": 1412321,
+        "sha256": "3a1f5e260b55d9f0d366798c7a06e2e899ce449431e162c68b7ddf87504bcc71"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/04-plus20.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/05-plus30.json",
+        "bytes": 1436802,
+        "sha256": "fda4bf8033b184903c4bb5f9c5b24f772e77cb35167cb061764e850735b1e205"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/05-plus30.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observe.sh",
+        "bytes": 528,
+        "sha256": "4d0196b79925952d0c32df80935b0f8551649dae9694b2a11fbc3b01cf5eae07"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observe_remote.py",
+        "bytes": 8377,
+        "sha256": "4ed45bd266ad3febdfdc03df590a62803af5026ab9c69088236317987d33d44f"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/package_launch.py",
+        "bytes": 7033,
+        "sha256": "08773848e6d918eb1b8e572de937fe113f6937cab98d1ee7ee49548a358439b5"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/precheck.py",
+        "bytes": 4540,
+        "sha256": "2813479916670d05eb50679503e52e0180f8d296191f7da75e8cece3d1359b67"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/production_prepare.json",
+        "bytes": 117,
+        "sha256": "8881637bca65ccdcf25b90e1cc395b435af214a6610c08c4dc54f88b04486b86"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/remote_launch_files.sha256",
+        "bytes": 508,
+        "sha256": "c04e9411d5798446f997b92d37b2f042a78ac4164b1bd7c8739f9d8a98972133"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/submission.json",
+        "bytes": 794,
+        "sha256": "552d0187ca617e22f33c106b48673473be72dbc6e97d754a091478ad7276275c"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/submission.stderr",
+        "bytes": 772,
+        "sha256": "247f80906bacb20be85832cf8a4ec35cc62651648b3363c67f45db2c9fdb9263"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/submission.stdout",
+        "bytes": 2238,
+        "sha256": "350d57f35d60f09af0fbd855d833a5884f03c793848f8ebc79c369df4b082f8d"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/submission_result.json",
+        "bytes": 136,
+        "sha256": "86abc18a899a82f63804bf0134c50fb856b88cdb5d9f1326c4cc8db389fe7cf0"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/transfer_readback.log",
+        "bytes": 136,
+        "sha256": "9b0a47e8d484b3f76ea95b818b02268d18b662e74d03d67f866f93a0811ef824"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/verify_observations.py",
+        "bytes": 8867,
+        "sha256": "5b69665125775715dd3285dfdd8cad994fb7899f96bcef8434135525d9464225"
+      },
+      {
+        "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/web_final_incremental_review.json",
+        "bytes": 412,
+        "sha256": "2014381a0b1a67ad6a982c9da90f7501ac428d7ca39443bc9020d873595c23d6"
+      }
+    ],
+    "base_preparation_commit": "4075cf138fcbc2fd2e115001fd9fb5e8b63f6409",
+    "runtime_source_diff_at_candidate": "NONE",
+    "scope_limit": "此回执在提交前完成，候选实际字节列于上方。固定 GitHub SHA、远端字节回读和 ZIP 的结果另行记录。"
+  },
+  "blocking_findings": []
+}
