@@ -17,9 +17,10 @@ N = 22363
 # CPU-verified torch 2.6 seed-0 randperm, rank-strided, without padding.
 RANK_ASSIGNMENT_SHA = ('8eb669c968e313c79df1bba3f16b16bd94ce1e0d6697728ff528c1da3de01363',
                        'ea9c57674be765e0424ac991e986823a5b8587cfee3d162c3b38a46deaf4f173')
-ASSETS = {'index': 'be3fb890e59b5443824cdebc560ef349191b97f20d3aecad4727de2d6b212c82',
-          'inter': '8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5',
-          'item': '74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330'}
+from g3_identity import ASSETS, EXPERIMENT_ID
+CATALOG_SIDS = 12101
+CATALOG_COLLISION_GROUPS = 0
+
 KEYS = ([f'hit@{k}' for k in (1, 5, 10, 20)] +
         [f'{m}@{k}' for m in ('ndcg', 'mrr') for k in (5, 10, 20)] +
         [f'{m}@{k}' for m in ('ItemHit', 'ItemNDCG') for k in (5, 10, 20)])
@@ -131,6 +132,22 @@ def verify_bootstrap_config(cfg):
 def evaluate(args):
     import numpy as np
     started = time.monotonic()
+    scope = getattr(args, 'scope', 'FORMAL')
+    require(scope in ('FORMAL', 'PREFLIGHT'), 'Unknown evaluation scope')
+    preflight = scope == 'PREFLIGHT'
+    selection_path = getattr(args, 'preflight_users', None)
+    require(preflight == (selection_path is not None), 'Explicit preflight user selection required only for PREFLIGHT')
+    if preflight:
+        selection = load(selection_path)
+        require(selection['asset_sha256'] == ASSETS, 'Preflight selection asset identity')
+        rank_indices = [[row['row_idx'] for row in selection['ranks'][str(rank)]] for rank in (0, 1)]
+        selected_indices = sorted(i for shard in rank_indices for i in shard)
+        require(len(selected_indices) == len(set(selected_indices)) == 32 and
+                all(type(i) is int and 0 <= i < N for i in selected_indices), 'Fixed 32-user preflight population')
+    else:
+        selected_indices = list(range(N))
+    population = len(selected_indices)
+    dense_index = {row: i for i, row in enumerate(selected_indices)}
     output = args.output
     require(not output.exists(), 'Preserve existing result directory')
     require(args.test_dir.resolve() not in output.resolve().parents and output.resolve() != args.test_dir.resolve(), 'Original results are read only')
@@ -139,12 +156,14 @@ def evaluate(args):
     verify_bootstrap_config(cfg['bootstrap'])
     require(cfg['protocol_version'] == 'letter_beauty_beam20_v1' and cfg['original_run_commit'] == args.run_commit, 'Protocol identity')
     require(len(args.run_commit) == len(args.evaluation_commit) == 40 and all(c in '0123456789abcdef' for c in args.run_commit + args.evaluation_commit), 'Commit identity')
-    require(cfg['dataset'] == 'Beauty' and cfg['users'] == N and cfg['asset_sha256'] == ASSETS and cfg['sid_coverage_denominator'] == 12088, 'Beauty configuration identity')
+    require(cfg['dataset'] == 'Beauty' and cfg['users'] == population and cfg['asset_sha256'] == ASSETS and cfg['sid_coverage_denominator'] == CATALOG_SIDS, 'Beauty configuration identity')
     require(sha(args.official_cce) == cfg['official_cce_sha256'], 'Official CCE identity')
     official = module(args.official_cce)
     write(output/'unit_tests.json', selftest(official))
     stage = load(args.stage_a_report)
-    require(stage['status'] == 'PASS' and stage.get('run_commit', stage.get('RUN_COMMIT')) == args.run_commit and stage['actual_test_users'] == N, 'Original full audit gate')
+    require(stage['status'] == 'PASS' and stage.get('run_commit', stage.get('RUN_COMMIT')) == args.run_commit and stage['actual_test_users'] == population, 'Original audit population gate')
+    require(stage.get('scope', 'FORMAL') == scope, 'Stage evaluation scope mismatch')
+    require(not preflight or stage.get('preflight_only') is True, 'PREFLIGHT stage must be explicitly labeled')
     data, assets = {}, {}
     for kind, expected in ASSETS.items():
         path = args.data_root/'Beauty'/f'Beauty.{kind}.json'
@@ -155,7 +174,7 @@ def evaluate(args):
     require(len(index) == 12101 and len(inter) == N and set(index) == set(data['item']), 'Frozen axes')
     sid_for = {item: ''.join(tokens) for item, tokens in index.items()}
     sizes = Counter(sid_for.values())
-    require(len(sizes) == 12088 and sum(g > 1 for g in sizes.values()) == 11, 'Beauty catalog identity')
+    require(len(sizes) == CATALOG_SIDS and sum(g > 1 for g in sizes.values()) == CATALOG_COLLISION_GROUPS, 'Beauty catalog identity')
     users = list(inter)
     user_axis_sha = hashlib.sha256(json.dumps(users, ensure_ascii=False, separators=(',', ':')).encode()).hexdigest()
     require(user_axis_sha == cfg['user_axis_sha256'], 'Beauty user axis identity')
@@ -166,13 +185,13 @@ def evaluate(args):
     q1, q2 = positive[math.ceil(len(positive)/3)-1], positive[math.ceil(2*len(positive)/3)-1]
     def popularity(f):
         return 'UNSEEN' if f == 0 else 'LONG_TAIL' if f <= q1 else 'MID' if f <= q2 else 'POPULAR'
-    matrix = np.zeros((N, len(KEYS)), dtype=np.float64)
-    seen, peruser = set(), [None]*N
+    matrix = np.zeros((population, len(KEYS)), dtype=np.float64)
+    seen, peruser = set(), [None]*population
     first_counts, target_collision = Counter(), 0
     diag = {k: Counter() for k in (5, 10, 20)}
     coverage = {k: set() for k in diag}
     examples = {'invalid': [], 'target_collision': [], 'prefix_collision_changes_cce': []}
-    manifests, generation = [], np.zeros(N, dtype=np.float64)
+    manifests, generation = [], np.zeros(population, dtype=np.float64)
     for rank in (0, 1):
         path = args.test_dir/f'predictions.rank{rank}.jsonl'
         before = path.stat()
@@ -180,15 +199,31 @@ def evaluate(args):
         require(inherited['bytes'] == before.st_size and inherited['sha256'] == sha(path), 'Frozen prediction identity')
         rank_report = load(args.test_dir/f'rank{rank}.json')
         require(rank_report.get('run_commit', rank_report.get('RUN_COMMIT')) == args.run_commit, 'Rank RUN identity')
+        require(rank_report.get('scope', 'FORMAL') == scope and
+                rank_report.get('preflight_only', False) == preflight, 'Rank evaluation scope mismatch')
+        require(rank_report['data_identity'].keys() == ASSETS.keys() and
+                {k: v['sha256'] for k, v in rank_report['data_identity'].items()} == ASSETS, 'Rank asset identity')
+        model_identity = {k: rank_report[k] for k in ('adapter_files', 'generation', 'allowed_callback_sha256')}
+        if rank == 0:
+            first_model_identity = model_identity
+        else:
+            require(model_identity == first_model_identity, 'Ranks used different model/tokenizer/generation identities')
+        if 'adapter_model_sha256' in stage:
+            require(rank_report['adapter_files']['adapter_model.bin']['sha256'] == stage['adapter_model_sha256'], 'Stage model binding')
+        if preflight:
+            require(rank_report.get('condition') == stage.get('condition'), 'Shuffle condition binding')
         assignments = []
         with path.open('rb') as stream:
             for raw in stream:
                 row = json.loads(raw)
                 i = row['row_idx']
-                require(type(i) is int and 0 <= i < N and i not in seen and row['rank'] == rank and row['prompt_id'] == 0, 'User coverage/rank/prompt')
+                require(type(i) is int and i in dense_index and i not in seen and row['rank'] == rank and row['prompt_id'] == 0, 'User coverage/rank/prompt')
                 seq = inter[users[i]]
                 item, target = str(seq[-1]), sid_for[str(seq[-1])]
                 require(row['user_id'] == users[i] and row['target_item_id'] == item and row['target'] == target, 'User/target pairing')
+                require(row.get('scope', scope) == scope, 'Prediction scope mismatch')
+                if preflight:
+                    require(row.get('condition') == stage.get('condition'), 'Prediction Shuffle condition mismatch')
                 candidates = row['candidates']
                 require(len(candidates) == 20, 'Beam20')
                 for j, candidate in enumerate(candidates):
@@ -201,7 +236,7 @@ def evaluate(args):
                 ref = official.compute_cce_metrics(sids, target, sizes, [5, 10, 20])
                 require(all(abs(corrected[k] - ref[k]) <= 1e-14 for k in ref), 'Full-user official CCE comparison')
                 values.update(corrected)
-                matrix[i] = [values[k] for k in KEYS]
+                matrix[dense_index[i]] = [values[k] for k in KEYS]
                 first_counts[str(first) if first else 'miss'] += 1
                 target_collision += sizes[target] > 1
                 for k in diag:
@@ -214,10 +249,10 @@ def evaluate(args):
                     coverage[k].update(s for s in subset if s in sizes)
                 elapsed = float(row['generation_seconds'])
                 require(math.isfinite(elapsed) and elapsed >= 0, 'Generation time')
-                generation[i] = elapsed
+                generation[dense_index[i]] = elapsed
                 hlen = min(20, len(seq)-1)
                 hgroup = '0-5' if hlen <= 5 else '6-10' if hlen <= 10 else '11-20'
-                peruser[i] = {'row_idx': i, 'user_id': users[i], 'user_axis_sha256': user_axis_sha,
+                peruser[dense_index[i]] = {'row_idx': i, 'user_id': users[i], 'user_axis_sha256': user_axis_sha,
                               'target_item_id': item, 'target_sid': target, 'target_group_size': sizes[target],
                               'original_interaction_length': len(seq), 'visible_history_length': hlen,
                               'history_group': hgroup, 'target_training_frequency': freq[item],
@@ -233,27 +268,27 @@ def evaluate(args):
         after = path.stat()
         require((before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_size,after.st_mtime_ns,after.st_ctime_ns), 'Original prediction changed')
         assignment_sha = hashlib.sha256(json.dumps(assignments,separators=(',',':')).encode()).hexdigest()
-        require(assignment_sha == rank_report['assignment_sha256'] and len(assignments)==(N+1-rank)//2, 'Original rank assignment identity')
-        require(assignment_sha == RANK_ASSIGNMENT_SHA[rank], 'Frozen rank sampler order mismatch')
+        require(assignment_sha == rank_report['assignment_sha256'] and len(assignments)==(len(rank_indices[rank]) if preflight else (N+1-rank)//2), 'Original rank assignment identity')
+        require(assignments == rank_indices[rank] if preflight else assignment_sha == RANK_ASSIGNMENT_SHA[rank], 'Frozen rank sampler order mismatch')
         manifests.append({**inherited, 'mtime_ns': after.st_mtime_ns, 'ctime_ns': after.st_ctime_ns, 'assignment_sha256': assignment_sha, 'hash_recomputed': True})
-    require(len(seen) == N and sum(first_counts.values()) == N, 'Complete population')
-    means = {key: math.fsum(matrix[:,j])/N for j,key in enumerate(KEYS)}
+    require(seen == set(selected_indices) and sum(first_counts.values()) == population, 'Complete population')
+    means = {key: math.fsum(matrix[:,j])/population for j,key in enumerate(KEYS)}
     deltas = {key: means[key]-stage['metrics'][key] for key in stage['metrics']}
     require(all(abs(d)<1e-13 for d in deltas.values()), 'Original metric regression')
     sid_stats = {}
     for k, counts in diag.items():
-        sid_stats[str(k)] = {**counts, 'valid_rate':counts['valid']/(N*k), 'invalid_rate':counts['invalid']/(N*k),
-            'duplicate_rate':counts['duplicates']/(N*k), 'collision_candidate_rate':counts['colliding']/(N*k),
-            'users_invalid_rate':counts['users_invalid']/N, 'users_duplicate_rate':counts['users_duplicate']/N,
-            'users_colliding_rate':counts['users_colliding']/N, 'unique_valid_sids':len(coverage[k]),
+        sid_stats[str(k)] = {**counts, 'valid_rate':counts['valid']/(population*k), 'invalid_rate':counts['invalid']/(population*k),
+            'duplicate_rate':counts['duplicates']/(population*k), 'collision_candidate_rate':counts['colliding']/(population*k),
+            'users_invalid_rate':counts['users_invalid']/population, 'users_duplicate_rate':counts['users_duplicate']/population,
+            'users_colliding_rate':counts['users_colliding']/population, 'unique_valid_sids':len(coverage[k]),
             'coverage_denominator':len(sizes), 'unique_valid_sid_coverage':len(coverage[k])/len(sizes)}
     require(diag[20]['invalid']==stage['anomalies']['invalid_complete_sid_candidates'] and diag[20]['colliding']==stage['anomalies']['colliding_sid_candidate_occurrences'], 'Historical anomalies')
     for k in (5,10,20):
-        require(sum(first_counts[str(r)] for r in range(1,k+1)) == round(means[f'hit@{k}']*N), 'Hit histogram')
+        require(sum(first_counts[str(r)] for r in range(1,k+1)) == round(means[f'hit@{k}']*population), 'Hit histogram')
     perpath=output/'per_user.csv'
     with perpath.open('x',newline='',encoding='utf-8') as stream:
         writer=csv.DictWriter(stream,fieldnames=list(peruser[0]));writer.writeheader();writer.writerows(peruser)
-    np.savez_compressed(output/'per_user_metrics.npz', values=matrix, keys=np.asarray(KEYS), row_idx=np.arange(N), user_axis_sha256=np.asarray(user_axis_sha))
+    np.savez_compressed(output/'per_user_metrics.npz', values=matrix, keys=np.asarray(KEYS), row_idx=np.asarray(selected_indices), user_axis_sha256=np.asarray(user_axis_sha))
     group_results={}
     for field in ('history_group','popularity_group'):
         group_results[field]={}
@@ -265,11 +300,11 @@ def evaluate(args):
     rng=np.random.Generator(np.random.PCG64(cfg['bootstrap']['seed']))
     draws=np.empty((5000,len(KEYS)),dtype=np.float64)
     for begin in range(0,5000,8):
-        selected=rng.integers(0,N,size=(min(8,5000-begin),N),dtype=np.int64)
+        selected=rng.integers(0,population,size=(min(8,5000-begin),population),dtype=np.int64)
         draws[begin:begin+len(selected)]=matrix[selected].mean(axis=1)
     intervals=np.percentile(draws,[2.5,97.5],axis=0,method='linear')
     np.save(output/'bootstrap_draw_means.npy',draws)
-    bootstrap={**cfg['bootstrap'],'users':N,'numpy_version':np.__version__,'elapsed_seconds':time.monotonic()-bootstrap_started,
+    bootstrap={**cfg['bootstrap'],'users':population,'numpy_version':np.__version__,'elapsed_seconds':time.monotonic()-bootstrap_started,
                'intervals':{key:{'estimate':means[key],'low':float(intervals[0,j]),'high':float(intervals[1,j])} for j,key in enumerate(KEYS)},
                'metric_array_sha256':sha(output/'per_user_metrics.npz')}
     write(output/'bootstrap.json',bootstrap)
@@ -282,17 +317,18 @@ def evaluate(args):
               'mean_seconds':float(generation.mean()),'sum_user_seconds':float(generation.sum()),
               'sum_user_seconds_is_not_end_to_end_wall':True}
     write(output/'metrics.json',{'status':'PASS','protocol_version':cfg['protocol_version'],'run_commit':args.run_commit,'evaluation_commit':args.evaluation_commit,
-         'users':N,'metrics':means,'original_metric_deltas':deltas,'sid_statistics':sid_stats,
+         'users':population,'metrics':means,'original_metric_deltas':deltas,'sid_statistics':sid_stats,
          'first_target_rank_users':{str(r):first_counts[str(r)] for r in range(1,21)}|{'miss':first_counts['miss']},
          'collision_catalog':{'items':len(index),'unique_sids':len(sizes),'groups':sum(g>1 for g in sizes.values()),
              'affected_items':sum(g for g in sizes.values() if g>1),'maximum_group_size':max(sizes.values()),
              'group_size_distribution':dict(Counter(g for g in sizes.values() if g>1)),'target_collision_users':target_collision},
          'generation_cost':genstats,'user_axis_sha256':user_axis_sha,'assets':assets,'prediction_files':manifests,
-         'official_cce_full_user_comparisons':N,'config':identity(args.config),'script':identity(__file__),
+         'official_cce_full_user_comparisons':population,'config':identity(args.config),'script':identity(__file__),
          'official_cce':identity(args.official_cce),'per_user_files':[identity(perpath),identity(output/'per_user_metrics.npz')],
          'elapsed_seconds':time.monotonic()-started,'cpu_peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
          'python':sys.executable,'argv':sys.argv,'created_utc':dt.datetime.now(dt.timezone.utc).isoformat(),
-         'gpu_used':False,'scope':'Frozen predictions only. No tokenizer/model reload; recorded token callback evidence inherited.'})
+         'gpu_used':False,'scope':scope,'preflight_only':preflight,'experiment_id':EXPERIMENT_ID,
+         'row_indices':selected_indices,'evidence_scope':'Frozen predictions only. No tokenizer/model reload; recorded token callback evidence inherited.'})
     return output/'metrics.json'
 
 
@@ -302,6 +338,8 @@ def main():
         p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--evaluation-commit',required=True)
     p.add_argument('--run-commit',required=True)
+    p.add_argument('--scope', choices=('FORMAL', 'PREFLIGHT'), default='FORMAL')
+    p.add_argument('--preflight-users', type=Path)
     args=p.parse_args()
     print(evaluate(args),flush=True)
 

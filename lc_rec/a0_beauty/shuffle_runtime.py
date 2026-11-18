@@ -5,6 +5,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'shuffle'))
 from core import transform
+from g3_identity import NEW_TOKEN_COUNT, ASSETS, tokenizer_identity
 
 OPTIONS = None
 CPU = None
@@ -17,6 +18,7 @@ def configure(options):
     OPTIONS = options
     CPU = json.loads(Path(options.cpu_audit).read_text())
     assert CPU['status'] in ('PASS_CPU_FULL_INPUTS','PASS_CPU_PREFLIGHT_BOUND') and CPU['model_key'] == options.model_key
+    assert CPU['asset_sha256'] == ASSETS, 'G3 runtime CPU asset binding'
     assert sys.flags.optimize == 0, 'All runtime assertions must remain active'
 
 
@@ -74,7 +76,7 @@ class ShuffleAllowed:
 def loaded(model, tokenizer, args, report):
     global TOKENIZER
     TOKENIZER = tokenizer
-    assert tokenizer.get_vocab() and len(set(CPU['token_ids'].values())) == 965
+    assert tokenizer.get_vocab() and len(set(CPU['token_ids'].values())) == NEW_TOKEN_COUNT
     for symbol, token_id in CPU['token_ids'].items():
         assert tokenizer.encode(symbol, add_special_tokens=False) == [token_id]
     for name, identity in CPU['saved_tokenizer_files'].items():
@@ -255,3 +257,14 @@ def install_acceptance(model, tok, args, report):
             kwargs['prefix_allowed_tokens_fn'].bind(raw, ctx['text'], ctx['record'])
         return returned
     model.generate = wrapped
+
+
+def transform_inputs(ids, mask, groups, all_sid_ids, n, row_idx):
+    """Production condition intervention; Normal bypasses token reconstruction."""
+    if n is None:
+        return list(ids), {'n': None, 'seed':42, 'protocol':'GRID-LETTER-SHUFFLE-V1',
+            'row_idx':row_idx, 'evidence':{'groups':[], 'path':'native collator input; no intervention'}}
+    changed,evidence = transform(ids,mask,groups,all_sid_ids,n,row_idx)
+    return changed, {'n':n, 'seed':42, 'protocol':'GRID-LETTER-SHUFFLE-V1',
+                     'row_idx':row_idx, 'original_input_token_ids':list(ids),
+                     'attention_mask':list(mask), 'evidence':evidence}

@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 from formal_control import durable_write
 from formal_train import checkpoint_required_files, verify_checkpoint
-from offline_metrics import ASSETS
+from g3_identity import ASSETS, VOCAB_SIZE, EXPERIMENT_ID, verify_adapter_identity
 
 STEPS = (2053, 4107, 6160, 8214)
 AXIS = '7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f'
@@ -64,7 +64,7 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
         need(report['run_commit']==commit and report['config_sha256']==config_sha, 'training RUN/config mismatch')
         need(report['global_step']==8214 and report['epoch']==4.0, 'formal epoch/update count')
         need(report['data']['train_rows']==131413 and report['data']['valid_rows']==44726 and
-             not report['data']['validation_subset_preflight_only'] and report['data']['tokenizer_vocab']==32965, 'full training/validation scope')
+             not report['data']['validation_subset_preflight_only'] and report['data']['tokenizer_vocab']==VOCAB_SIZE, 'full training/validation scope')
         need({k:v['sha256'] for k,v in report['data_identity'].items()}==ASSETS, 'training data identity')
         ev=[json.loads(x) for x in (root/f'events.rank{rank}.jsonl').read_text().splitlines()]
         validation=[x for x in ev if x['event']=='log' and 'eval_loss' in x.get('values',{})]
@@ -129,6 +129,7 @@ def verify_training(root, commit, config_sha, scope='FORMAL'):
             need(status['status']=='SUCCEEDED' and status['exit_code']==0 and status['cleanup_verified'] and
                  not status['worker_alive'] and not status['workgroup_live'],'formal training runner completion')
     adapter=root/'best_adapter'
+    if scope=='FORMAL':verify_adapter_identity(adapter,scope=scope,run_commit=commit)
     need(sha(adapter/'adapter_model.bin')==selected['adapter_sha256'], 'exported Adapter SHA')
     import torch
     checkpoint=torch.load(best/'adapter_model.bin',map_location='cpu',weights_only=False)

@@ -8,6 +8,7 @@ import sys
 from types import SimpleNamespace
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'shuffle'))
 from core import transform, permutation
+from g3_identity import ASSETS, NEW_TOKEN_COUNT, VOCAB_SIZE, verify_assets, tokenizer_identity
 from uneven_sampler import assignment, validate_assignments, assignment_sha256
 
 
@@ -36,18 +37,18 @@ def main():
                            his_sep=', ', index_file='.index.json', add_prefix=False)
     data = SeqRecDataset(args, mode='test', sample_num=-1)
     data.set_prompt(0)
-    asset_hashes = {'index': 'be3fb890e59b5443824cdebc560ef349191b97f20d3aecad4727de2d6b212c82',
-                    'inter': '8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5',
-                    'item': '74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330'}
+    asset_hashes = ASSETS
+    verify_assets(a.data_root)
     for kind, expected in asset_hashes.items():
         path = Path(a.data_root)/'Beauty'/('Beauty.'+kind+'.json')
         assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
     assert len(data) == 22363
     tokens = sorted({t for parts in data.indices.values() for t in parts})
     lookup = {t: tok.encode(t, add_special_tokens=False) for t in tokens}
-    assert len(tokens) == 965 and all(len(v) == 1 for v in lookup.values())
+    assert len(tokens) == NEW_TOKEN_COUNT and all(len(v) == 1 for v in lookup.values())
     lookup = {t: v[0] for t, v in lookup.items()}
-    assert len(set(lookup.values())) == 965 and len(tok) == 32965
+    assert len(set(lookup.values())) == NEW_TOKEN_COUNT and len(tok) == VOCAB_SIZE
+    tokenizer_identity(tok, data.indices)
     axis = list(data.inters)
     assert digest(axis) == '7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f'
     distributions = {n: Counter() for n in [3, 4]}

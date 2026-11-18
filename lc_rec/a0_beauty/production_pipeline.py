@@ -68,7 +68,7 @@ def evaluation(plan, condition, output):
     durable_write(output/'stage_a.json',stage)
     cfg=load(Path(plan['release'])/'lc_rec/letter/config/a0_evaluation_v1.json')
     cfg.update(protocol_version='letter_beauty_beam20_v1',dataset='Beauty',users=22363,
-               original_run_commit=plan['prediction_run_commit'],sid_coverage_denominator=12088,
+               original_run_commit=plan['prediction_run_commit'],sid_coverage_denominator=12101,
                asset_sha256=ASSETS,user_axis_sha256='7430079e2b917dfa5e4bb8ead2702fb6c622fb48ffb684dd2889780f9480af7f')
     durable_write(output/'evaluation_config.json',cfg)
     offline_metrics.evaluate(SimpleNamespace(output=output/'primary',test_dir=test,
@@ -104,7 +104,8 @@ def actual_source_root(plan):
     return source
 
 
-def actual_compute(plan, stage, output, resume=None):
+def compute_argv(plan, stage, output, resume=None, *, authorization=None, authorization_sha256=None):
+    """Build the actual production argv without requiring future stage outputs."""
     scope_guard(plan['root'],'FORMAL')
     scripts=Path(plan['release'])/'lc_rec/a0_beauty'
     source=actual_source_root(plan)
@@ -115,23 +116,23 @@ def actual_compute(plan, stage, output, resume=None):
                  '--config',plan['config'],'--run-commit',plan['run_commit'],
                  '--precision-approval',plan['precision_approval'],'--prelaunch-review',plan['prelaunch_review'],
                  '--precision-approval-sha256',plan['approval_files']['precision_approval']['sha256'],
-                 '--prelaunch-review-sha256',plan['approval_files']['prelaunch_review']['sha256']]
+                 '--prelaunch-review-sha256',plan['approval_files']['prelaunch_review']['sha256'],
+                 '--formal-authorization',authorization or str(Path(plan['root'])/'USER_AUTHORIZATION_REQUIRED.json'),
+                 '--formal-authorization-sha256',authorization_sha256 or 'USER_PINNED_SHA256_REQUIRED']
         if resume:argv+=['--resume',resume]
     else:
-        best_evidence(plan)
-        if stage=='normal':argv += [str(scripts/'formal_evaluate.py')]
-        else:
-            audit=Path(plan['root'])/'shuffle_inputs'
-            if not audit.exists():
-                subprocess.run([plan['python'],str(scripts/'shuffle_cpu_inputs.py'),'--model-key','a0',
-                    '--adapter',str(training_root(plan)/'best_adapter'),'--source-root',str(source),
-                    '--data-root',plan['data_root'],'--output',str(audit),
-                    '--normal-test-dir',str(locations(plan,'normal')/'test')],check=True)
-            proof=load(audit/'audit.json');need(proof['status']=='PASS_CPU_FULL_INPUTS' and proof['asset_sha256']==ASSETS,'CPU shuffle audit')
-            check_file(proof['manifest'])
-            argv += [str(scripts/'shuffle_entry.py'),'--model-key','a0','--shuffle-n',stage[-1],'--cpu-audit',str(audit/'audit.json')]
+        argv += [str(scripts/'formal_evaluate.py'),'--condition',stage]
+        if stage=='normal':argv+=['--verify-normal-off']
         argv += [*common,'--adapter',str(training_root(plan)/'best_adapter'),'--output',str(output/'test'),
                  '--run-commit',plan['prediction_run_commit']]
+    return argv
+
+
+def actual_compute(plan, stage, output, resume=None):
+    if stage!='train':best_evidence(plan)
+    argv=compute_argv(plan,stage,output,resume,
+        authorization=os.environ['G3_FORMAL_AUTHORIZATION'],
+        authorization_sha256=os.environ['G3_FORMAL_AUTHORIZATION_SHA256'])
     durable_write(output/'compute_argv.json',{'argv':argv,'python':plan['python'],'scope':'FORMAL'})
     # Same runner-owned markers and inherited process group; torchrun worker
     # sessions remain subject to the scoped runner's pidfd ownership checks.
@@ -197,6 +198,8 @@ def main():
     from production_control import validate_plan, authorize
     validate_plan(plan);need(plan['evidence_scope']=='FORMAL','production CLI refuses test scope')
     authorize(plan,a.authorization,a.authorization_sha256)
+    os.environ['G3_FORMAL_AUTHORIZATION']=a.authorization
+    os.environ['G3_FORMAL_AUTHORIZATION_SHA256']=a.authorization_sha256
     execute_stage(plan,a.stage,a.output,resume=a.resume)
 
 if __name__=='__main__':main()

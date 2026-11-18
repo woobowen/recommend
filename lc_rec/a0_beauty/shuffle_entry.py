@@ -1,84 +1,55 @@
-"""Apply a small, hash-checked intervention to the frozen Normal entry in memory.
+"""Hash-checked G3 Shuffle wrapper over the shared production generation loop.
 
-Original source stays untouched. The exact derived source and unified diff are
-saved before execution; model reload and generation arguments remain original.
+The earlier LETTER in-memory source patch is preserved in historical commits.
+G3 uses explicit production condition parameters; no textual source mutation.
 """
 import argparse
-import difflib
 import hashlib
 import json
 from pathlib import Path
 import sys
+from g3_identity import ASSETS, TOKEN_MAPPING_SHA, digest
 
-FROZEN = {
-    'a0': ('a0_beauty/formal_evaluate.py', '998c5b3201954d9c72fa71aeb5ba6e7473dc6ce6e5fcce342889f6fde4daf20f'),
-}
-
-
-def adapt(text, model):
-    def change(old, new):
-        nonlocal text
-        if text.count(old) != 1:
-            raise ValueError('Frozen source anchor is not unique: ' + old[:80])
-        text = text.replace(old, new)
-    if model == 'a1':
-        begin = text.index('        if args.preflight_users_per_rank:\n            # Fixed raw-text')
-        end = text.index('        loader = DataLoader', begin)
-        text = text[:begin] + '''        if args.preflight_users_per_rank:
-            assignment = runtime.preflight_assignment(rank)
-            report["preflight_assignment"] = assignment
-''' + text[end:]
-        change('from common import Allowed', 'from runtime import ShuffleAllowed as Allowed')
-        change('allowed.bind(input_ids, data[index]["input_ids"])',
-               'allowed.bind(input_ids, data[index]["input_ids"], shuffle_record)')
-    else:
-        change('        loader = DataLoader(indexed, batch_size=1, sampler=assignment, collate_fn=collate,',
-               '''        if args.preflight_users_per_rank:
-            assert assignment == runtime.preflight_assignment(rank)
-            report["preflight_assignment"] = assignment
-        loader = DataLoader(indexed, batch_size=1, sampler=assignment, collate_fn=collate,''')
-    change('                input_ids = inputs["input_ids"][0].tolist()',
-           '''                inputs, shuffle_record = runtime.intervene(inputs, index, data, tokenizer)
-                input_ids = inputs["input_ids"][0].tolist()''')
-    change('"input_token_ids": input_ids,',
-           '"input_token_ids": input_ids, "shuffle": shuffle_record,')
-    change('model, tokenizer = strict_reload(args, report, torch, local_rank, source, indices)',
-           '''model, tokenizer = strict_reload(args, report, torch, local_rank, source, indices)
-        runtime.loaded(model, tokenizer, args, report)''')
-    return text
+FROZEN = {'a0': ('a0_beauty/formal_evaluate.py', '9b83c196467af3d628ef03f7496b6de0d3eda53341a6acf83bfb167a2490f41b')}
 
 
 def main():
-    p = argparse.ArgumentParser(allow_abbrev=False)
-    p.add_argument('--model-key', choices=FROZEN, required=True)
-    p.add_argument('--shuffle-n', type=int, choices=[0, 3, 4], required=True)
-    p.add_argument('--acceptance', action='store_true')
-    p.add_argument('--cpu-audit', required=True)
-    p.add_argument('--derived-only', action='store_true')
-    a, remainder = p.parse_known_args()
-    root = Path(__file__).resolve().parents[1]
-    original = root / FROZEN[a.model_key][0]
-    raw = original.read_bytes()
-    assert hashlib.sha256(raw).hexdigest() == FROZEN[a.model_key][1]
-    text = raw.decode()
-    derived = adapt(text, a.model_key)
-    assert '--output' in remainder
-    out = Path(remainder[remainder.index('--output') + 1])
-    out.mkdir(parents=True, exist_ok=True)
-    rank = __import__('os').environ.get('RANK', '0')
-    (out / ('derived.rank' + rank + '.py')).write_text(derived)
-    (out / ('derived.rank' + rank + '.diff')).write_text(''.join(difflib.unified_diff(
-        text.splitlines(True), derived.splitlines(True), fromfile=str(original), tofile='derived')))
-    compile(derived, str(original), 'exec')
-    if a.derived_only:
-        return
-    import shuffle_runtime as runtime
-    runtime.configure(a)
-    namespace = {'__file__': str(original), '__name__': 'shuffle_frozen_entry', 'runtime': runtime}
-    exec(compile(derived, str(original), 'exec'), namespace)
-    sys.argv = [str(original), *remainder]
-    raise SystemExit(namespace['main']())
+    p=argparse.ArgumentParser(allow_abbrev=False)
+    p.add_argument('--model-key',choices=FROZEN,required=True)
+    p.add_argument('--shuffle-n',type=int,choices=(0,3,4),required=True)
+    p.add_argument('--acceptance',action='store_true')
+    p.add_argument('--cpu-audit',required=True)
+    p.add_argument('--derived-only',action='store_true')
+    a,remainder=p.parse_known_args()
+    original=Path(__file__).resolve().parents[1]/FROZEN[a.model_key][0]
+    if hashlib.sha256(original.read_bytes()).hexdigest()!=FROZEN[a.model_key][1]:
+        raise ValueError('Production generation source differs from the reviewed G3 source')
+    audit=json.loads(Path(a.cpu_audit).read_text())
+    if audit['status'] not in ('PASS_CPU_FULL_INPUTS','PASS_CPU_PREFLIGHT_BOUND') or audit['model_key']!='a0':
+        raise ValueError('G3 Shuffle CPU binding is incomplete')
+    if audit['asset_sha256']!=ASSETS or digest(audit['token_ids'])!=TOKEN_MAPPING_SHA:
+        raise ValueError('G3 Shuffle CPU assets or token mapping differ')
+    condition={0:'off',3:'s3',4:'s4'}[a.shuffle_n]
+    if '--condition' in remainder:
+        raise ValueError('Condition is set exactly once by the checked wrapper')
+    forwarded=[*remainder,'--condition',condition]
+    if a.acceptance:
+        if a.shuffle_n!=0 or '--preflight-users-per-rank' not in remainder:
+            raise ValueError('Four-condition acceptance is bounded PREFLIGHT OFF only')
+        # The common loop writes each condition separately from one strict load.
+        forwarded=[*remainder,'--preflight-four-conditions']
+    if '--output' not in remainder:
+        raise ValueError('Output path is required')
+    output=Path(remainder[remainder.index('--output')+1]);output.mkdir(parents=True,exist_ok=True)
+    rank=__import__('os').environ.get('RANK','0')
+    record={'entry':str(original),'sha256':FROZEN[a.model_key][1],
+            'cpu_audit_sha256':hashlib.sha256(Path(a.cpu_audit).read_bytes()).hexdigest(),
+            'condition':condition,'forwarded_argv':forwarded,'source_mutation':False}
+    (output/('entry_binding.rank'+rank+'.json')).write_text(json.dumps(record,indent=2)+'\n')
+    if a.derived_only:return 0
+    from formal_evaluate import main as production_main
+    sys.argv=[str(original),*forwarded]
+    return production_main()
 
 
-if __name__ == '__main__':
-    main()
+if __name__=='__main__':raise SystemExit(main())

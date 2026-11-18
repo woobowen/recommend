@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""DRAFT Beauty A0 Trainer adaptation: NOT APPROVED FOR FORMAL RUN.
+"""Fixed G3 Beauty production Trainer and isolated boundary preflight.
 
 The vendor tree is immutable. A bounded acceptance run uses the same four-epoch
 scheduler and loader, stopping by callback; it is not a formal seed.
@@ -19,6 +19,10 @@ import sys
 import time
 from types import SimpleNamespace
 sys.path.append(str(Path(__file__).resolve().parents[1] / 'letter' / 'scripts'))
+from g3_identity import (ASSETS, EXPERIMENT_ID, NEW_TOKEN_COUNT, VOCAB_SIZE,
+                         TRAINABLE_PARAMETERS, verify_assets, tokenizer_identity,
+                         verify_base_model, source_identity, write_adapter_identity,
+                         verify_adapter_identity, verify_launch_authorization)
 
 
 def write(path, obj):
@@ -53,7 +57,7 @@ def approval_json(path, expected_sha256):
 def checkpoint_required_files(step):
     prefix='global_step%d/'%step
     return {'adapter_model.bin','adapter_config.json','trainer_state.json','training_args.bin',
-            'external_scheduler.pth','latest','tokenizer.model','tokenizer_config.json',
+            'g3_identity.json','external_scheduler.pth','latest','tokenizer.model','tokenizer_config.json',
             'added_tokens.json','special_tokens_map.json',
             'loader_state_0.pth','loader_state_1.pth','rng_state_0.pth','rng_state_1.pth',
             'partial_rank0.pt','partial_rank1.pt',
@@ -66,7 +70,11 @@ def verify_checkpoint(path, run_commit, config_sha256):
     path=Path(path)
     meta=json.loads((path/'complete.json').read_text())
     assert meta['run_commit']==run_commit and meta['config_sha256']==config_sha256
+    assert meta['experiment_id']==EXPERIMENT_ID
+    assert meta['scope'] in ('PREFLIGHT','FORMAL')
+    assert meta['assets']==ASSETS
     assert meta['collective_ranks']==2
+    assert len(meta['files'])==len({r['path'] for r in meta['files']}), 'duplicate checkpoint member'
     assert checkpoint_required_files(meta['global_step']) <= {r['path'] for r in meta['files']}
     for row in meta['files']:
         relative=Path(row['path'])
@@ -77,6 +85,8 @@ def verify_checkpoint(path, run_commit, config_sha256):
         assert sha(f)==row['sha256'], 'checkpoint file identity mismatch: '+str(relative)
     assert (path/'latest').read_text().strip()=='global_step%d'%meta['global_step']
     assert json.loads((path/'trainer_state.json').read_text())['global_step']==meta['global_step']
+    adapter_identity=verify_adapter_identity(path,scope=meta['scope'],run_commit=run_commit)
+    assert adapter_identity['config_sha256']==config_sha256
     return meta
 
 
@@ -105,11 +115,18 @@ def main():
     p.add_argument('--stop-after-epoch', type=int, default=0, choices=[0,1,3], help='Preflight-only early stop at a completed epoch')
     p.add_argument('--prelaunch-review', help='Required for formal training after completed preflight')
     p.add_argument('--prelaunch-review-sha256')
+    p.add_argument('--formal-authorization')
+    p.add_argument('--formal-authorization-sha256')
     a = p.parse_args()
     rank = int(os.environ['RANK']); local = int(os.environ['LOCAL_RANK'])
     assert int(os.environ['WORLD_SIZE']) == 2
     cfg = json.loads(Path(a.config).read_text())
+    assert cfg['experiment_id']==EXPERIMENT_ID
+    assert cfg['index_file']=='.index.json'
+    evidence_scope='PREFLIGHT' if a.boundary_preflight else 'FORMAL'
     if not a.boundary_preflight:
+        verify_launch_authorization(a.formal_authorization,a.formal_authorization_sha256,
+                                    a.run_commit,sha(a.config))
         assert a.prelaunch_review, 'Formal training requires a completed non-author prelaunch review'
         gate=approval_json(a.prelaunch_review,a.prelaunch_review_sha256)
         assert gate['status']=='PASS' and gate['RUN_COMMIT']==a.run_commit
@@ -151,8 +168,7 @@ def main():
     from zero2_partial_state import snapshot as partial_snapshot, save_exclusive, restore as restore_partial
     from trainer_loop_patch import build as build_trainer_loop
     set_seed(42)
-    from formal_evaluate import catalog_and_users
-    _, _, _, data_identity = catalog_and_users(a.data_root)
+    data_identity = verify_assets(a.data_root)
     report = {'status': 'INITIALIZING', 'run_commit': a.run_commit, 'rank': rank,
               'argv': sys.argv, 'cwd': os.getcwd(), 'python': sys.executable,
               'started_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
@@ -160,18 +176,17 @@ def main():
               'versions': {x: importlib.metadata.version(x) for x in
                            ['torch','transformers','accelerate','deepspeed','peft','bitsandbytes','fschat','flash-attn']},
               'unpad_compat': adapt_fastchat_unpad_arity(), 'probe': bool(a.probe_stop or a.boundary_preflight)}
+    report.update(scope=evidence_scope,experiment_id=EXPERIMENT_ID)
     report['data_identity']=data_identity
-    report['base_model_identity']={'path':str(Path(a.model).resolve()),
-          'revision':'4782ad278652c7c71b72204d462d6d01eaaf7549',
-          'config_sha256':sha(Path(a.model)/'config.json'),
-          'source':'previous official LFS verification; current file sizes/receipt rechecked in preflight'}
-    assert Path(a.model).name==report['base_model_identity']['revision']
-    assert report['base_model_identity']['config_sha256']=='e4c3dea29aefc16c0e63825f9ae097dbf5cb5d7c320843a84257e11be3b452c8'
-    report['base_model_identity']['weight_files']={}
-    for name,size in [('model-00001-of-00002.safetensors',9976579217),('model-00002-of-00002.safetensors',3500297444)]:
-        f=Path(a.model)/name
-        assert f.stat().st_size==size
-        report['base_model_identity']['weight_files'][name]={'bytes':size,'mtime_ns':f.stat().st_mtime_ns}
+    report['base_model_identity']=verify_base_model(a.model)
+    actual_imports=[Path(__file__),Path(__file__).with_name('g3_identity.py'),
+                   inspect.getsourcefile(LETTER),inspect.getsourcefile(load_datasets),
+                   inspect.getsourcefile(Collator),inspect.getsourcefile(IndexedDataset),
+                   inspect.getsourcefile(partial_snapshot),inspect.getsourcefile(build_trainer_loop),
+                   inspect.getsourcefile(Trainer),inspect.getsourcefile(peft),
+                   inspect.getsourcefile(get_peft_model),inspect.getsourcefile(LoraConfig),
+                   inspect.getsourcefile(peft.prepare_model_for_int8_training),
+                   Path(inspect.getsourcefile(peft)).parent/'tuners/lora.py']
     rp = out / ('rank%d.json' % rank)
     if rp.exists() and not a.probe_stop:
         assert a.resume, 'existing formal training output requires explicit full resume'
@@ -203,14 +218,24 @@ def main():
     da.data_path = str(Path(a.data_root).resolve())
     train, valid = load_datasets(da)
     assert (len(train), len(valid)) == (131413, 44726)
+    actual_imports += [inspect.getsourcefile(type(train)),inspect.getsourcefile(type(train.datasets[0])),
+                       inspect.getsourcefile(adapt_fastchat_unpad_arity),
+                       inspect.getsourcefile(install_formal_attention),
+                       Path(__file__).resolve().parents[1]/'letter/scripts/formal_bnb_reload.py']
+    report['source_identity']=source_identity(sorted(set(map(str,actual_imports))))
     if a.boundary_preflight:
         from torch.utils.data import Subset
         valid=Subset(valid,list(range(32)))
     tok = LlamaTokenizer.from_pretrained(a.model, model_max_length=2048, padding_side='right', local_files_only=True)
     tok.pad_token_id = 0
     added = tok.add_tokens(train.datasets[0].get_new_tokens())
-    assert added == 965 and len(tok) == 32965
+    assert added == NEW_TOKEN_COUNT and len(tok) == VOCAB_SIZE
+    report['tokenizer_identity']=tokenizer_identity(tok)
     if rank == 0: tok.save_pretrained(out)
+    dist.barrier()
+    reloaded_tok=LlamaTokenizer.from_pretrained(out,model_max_length=2048,padding_side='right',local_files_only=True)
+    assert tokenizer_identity(reloaded_tok)==report['tokenizer_identity'], 'saved tokenizer mapping changed'
+    del reloaded_tok
     collator = Collator(da, tok)
     model = LETTER.from_pretrained(a.model, load_in_8bit=True, device_map={'':local}, local_files_only=True)
     model.set_hyper(.8); model.resize_token_embeddings(len(tok))
@@ -228,8 +253,11 @@ def main():
     inventory = {n:{'shape':list(v.shape),'dtype_before_ds':str(v.dtype),'requires_grad':v.requires_grad}
                  for n,v in model.named_parameters()}
     names = [n for n,v in model.named_parameters() if v.requires_grad]
-    assert len(names)==450 and sum(v.numel() for v in model.parameters() if v.requires_grad)==290037760
+    assert len(names)==450 and sum(v.numel() for v in model.parameters() if v.requires_grad)==TRAINABLE_PARAMETERS
     assert all(v.requires_grad == ('lora_' in n or 'modules_to_save.default' in n) for n,v in model.named_parameters())
+    for name,value in model.named_parameters():
+        if ('embed_tokens' in name or 'lm_head' in name) and ('original_module' in name or 'modules_to_save.default' in name):
+            assert tuple(value.shape)==(VOCAB_SIZE,4096), 'G3 embedding/head shape: '+name
     report['parameter_inventory'] = inventory
     report['data']={'train_rows':len(train),'valid_rows':len(valid),'author_valid_rows':44726,
                     'validation_subset_preflight_only':bool(a.boundary_preflight),'tokenizer_vocab':len(tok)}
@@ -251,6 +279,37 @@ def main():
           'reason':'retain best and latest complete recovery point; rotate only after collective complete marker'}
     assert ta.save_total_limit==2
     report['deepspeed_requested']=ds
+    update_probe={}
+
+    def parameter_digests(trainable):
+        """Hash one CPU tensor at a time; never clone an entire base model."""
+        torch.cuda.synchronize(local)
+        result={}
+        for name,value in model.named_parameters():
+            if value.requires_grad is trainable:
+                raw=value.detach().cpu().contiguous().view(torch.uint8).numpy()
+                result[name]=hashlib.sha256(memoryview(raw)).hexdigest()
+        return result
+
+    def verify_parameter_updates():
+        if not a.boundary_preflight:return
+        assert 'frozen_after_initial_forward' in update_probe
+        frozen=parameter_digests(False)
+        assert frozen==update_probe['frozen_after_initial_forward'], 'frozen parameter changed during optimizer updates'
+        before=update_probe['trainable_before_updates'];after=parameter_digests(True)
+        assert set(before)==set(after)==set(names)
+        changed=[name for name in names if before[name]!=after[name]]
+        groups={group:[name for name in changed if group in name]
+                for group in ('lora_A','lora_B','embed_tokens.modules_to_save.default','lm_head.modules_to_save.default')}
+        assert all(groups.values()), 'an expected trainable parameter family never updated'
+        report['parameter_update_validation']={
+            'status':'PASS','scope':'actual boundary preflight optimizer trajectory before best reload',
+            'trainable_tensors':len(names),'trainable_parameters':TRAINABLE_PARAMETERS,
+            'optimizer_membership_exact':report['optimizer_membership_exact'],
+            'frozen_tensors':len(frozen),'all_frozen_tensor_bytes_unchanged':True,
+            'frozen_baseline':'after first real forward/backward microbatch, before first optimizer update',
+            'changed_trainable_tensors':changed,'changed_families':{key:len(value) for key,value in groups.items()},
+            'before_sha256':before,'after_sha256':after,'frozen_sha256':frozen}
 
     def rng_capture(loader=None):
         result={'python':random.getstate(),'numpy':np.random.get_state(),
@@ -330,7 +389,10 @@ def main():
 
     # Make the native HF/DS strict module load explicit and verify its step.
     def strict_ds_load(engine, path):
-        verify_checkpoint(path,a.run_commit,sha(a.config))
+        cp_identity=verify_checkpoint(path,a.run_commit,sha(a.config))
+        assert cp_identity['scope']==evidence_scope, 'checkpoint scope mismatch'
+        assert cp_identity['tokenizer_identity']==report['tokenizer_identity'], 'checkpoint tokenizer mismatch'
+        assert cp_identity['source_identity']==report['source_identity'], 'checkpoint source mismatch'
         saved=json.loads((Path(path)/'trainer_state.json').read_text())
         from formal_bnb_reload import hot_scb_alias
         with hot_scb_alias(engine.module,event):
@@ -351,6 +413,9 @@ def main():
     if a.resume:
         cp=Path(a.resume)
         meta=verify_checkpoint(cp,a.run_commit,sha(a.config))
+        assert meta['scope']==evidence_scope, 'resume evidence scope mismatch'
+        assert meta['tokenizer_identity']==report['tokenizer_identity'], 'resume tokenizer mismatch'
+        assert meta['source_identity']==report['source_identity'], 'resume source mismatch'
         saved_loader=torch.load(cp/('loader_state_%d.pth'%rank),weights_only=False,map_location='cpu')
         saved_partial=torch.load(cp/('partial_rank%d.pt'%rank),weights_only=False,map_location='cpu')
         assert saved_partial['loader_state']['consumed_total']==saved_loader['consumed_total']
@@ -361,6 +426,7 @@ def main():
         _before_epoch_validation = None
         def _beauty_capture_pre_best(self):
             engine=self.model_wrapped
+            verify_parameter_updates()
             event('before_best_restore',global_step=self.state.global_step,
                   micro_steps=engine.micro_steps,epoch=self.state.epoch)
             if a.boundary_preflight and not a.stop_after_epoch:
@@ -428,6 +494,14 @@ def main():
                       label_sha256=hashlib.sha256(inputs['labels'].cpu().numpy().tobytes()).hexdigest(),
                       shape=list(inputs['input_ids'].shape))
             loss=super().training_step(current,inputs)
+            if a.boundary_preflight:
+                assert all(value.grad is None for value in model.parameters() if not value.requires_grad)
+                if 'frozen_after_initial_forward' not in update_probe:
+                    assert current.global_steps==report['initial_global_step'], 'frozen baseline must precede optimizer update'
+                    update_probe['frozen_after_initial_forward']=parameter_digests(False)
+                    event('frozen_baseline',tensors=len(update_probe['frozen_after_initial_forward']),
+                          consumed_microbatches=self.replay_loader.consumed_total,
+                          global_step=current.global_steps)
             assert current.micro_steps==self.replay_loader.consumed_total
             if not torch.isfinite(loss).all(): raise FloatingPointError('nonfinite training loss')
             if a.probe_stop or a.boundary_preflight:
@@ -467,6 +541,9 @@ def main():
             save_exclusive(cp/('partial_rank%d.pt'%rank),partial)
             dist.barrier()
             if rank==0:
+                write_adapter_identity(cp,scope=evidence_scope,run_commit=a.run_commit,
+                    config_sha256=sha(a.config),tokenizer=tok,data_root=a.data_root,model=a.model,
+                    source_identity=report['source_identity'],base_model_identity=report['base_model_identity'])
                 rows=[]
                 for f in sorted(cp.rglob('*')):
                     if f.is_file() and f.name!='complete.json':
@@ -474,6 +551,8 @@ def main():
                 assert checkpoint_required_files(self.state.global_step) <= {r['path'] for r in rows}
                 assert all(r['bytes']>0 for r in rows)
                 complete={'run_commit':a.run_commit,'config_sha256':sha(a.config),
+                     'scope':evidence_scope,'experiment_id':EXPERIMENT_ID,'assets':ASSETS,
+                     'tokenizer_identity':report['tokenizer_identity'],'source_identity':report['source_identity'],
                      'global_step':self.state.global_step,'files':rows,'collective_ranks':2}
                 write(cp/'complete.json',complete)
                 if not a.boundary_preflight:
@@ -511,6 +590,9 @@ def main():
             report['effective_ds']=engine._config._param_dict
             report['optimizer_membership_exact']=True
             report['initial_global_step']=state.global_step
+            report['optimizer_parameter_names']=sorted(names)
+            report['optimizer_parameter_count']=sum(v.numel() for v in named.values() if v.requires_grad)
+            if a.boundary_preflight:update_probe['trainable_before_updates']=parameter_digests(True)
             write(rp,report)
             event('train_begin',global_step=state.global_step,max_steps=state.max_steps,
                   optimizer=type(engine.optimizer).__name__,scheduler=trainer.lr_scheduler.state_dict(),
@@ -523,6 +605,9 @@ def main():
             assert engine.global_steps==state.global_step
             if state.global_step==report['initial_global_step']+1:
                 assert_active(report['formal_attention'])
+                if a.boundary_preflight:
+                    assert parameter_digests(False)==update_probe['frozen_after_initial_forward'], 'first optimizer update changed frozen weights'
+                    event('frozen_after_first_optimizer_update',all_frozen_tensor_bytes_unchanged=True)
                 write(rp,report)
             norm=engine.get_global_grad_norm()
             if norm is not None and not math.isfinite(float(norm)):raise FloatingPointError('nonfinite gradient norm')
@@ -625,6 +710,22 @@ def main():
                     active=get_peft_model_state_dict(model)
                     assert set(active)==set(weights) and len(weights)==450
                     assert all(torch.equal(v.detach().cpu(),weights[n]) for n,v in active.items())
+                    selected=Path(trainer.state.best_model_checkpoint)
+                    selected_weights=torch.load(selected/'adapter_model.bin',map_location='cpu',weights_only=False)
+                    assert set(selected_weights)==set(weights) and all(torch.equal(v,weights[n]) for n,v in selected_weights.items()), 'export differs from selected checkpoint'
+                    selection={'path':str(selected),'complete_sha256':sha(selected/'complete.json'),
+                               'global_step':int(selected.name.split('-')[-1])}
+                    write_adapter_identity(adapter,scope=evidence_scope,run_commit=a.run_commit,
+                        config_sha256=sha(a.config),tokenizer=tok,data_root=a.data_root,model=a.model,
+                        checkpoint_source=selection,source_identity=report['source_identity'],
+                        base_model_identity=report['base_model_identity'])
+                    write(out/'best_selection.json',{'scope':evidence_scope,'experiment_id':EXPERIMENT_ID,
+                          'checkpoint':str(selected),'metric':'eval_loss','greater_is_better':False,
+                          'value':trainer.state.best_metric,'adapter_sha256':sha(adapter/'adapter_model.bin'),
+                          'run_commit':a.run_commit,'config_sha256':sha(a.config),
+                          'completed_training_step':trainer.state.global_step,
+                          'loaded_best_checkpoint_step':trainer.model_wrapped.global_steps,
+                          'export_matches_selected_checkpoint_tensors':True})
                 dist.barrier()
                 event('preflight_adapter_saved',checkpoint=trainer.state.best_model_checkpoint,
                       adapter=str(adapter),selection_scope='bounded validation only')
@@ -669,13 +770,22 @@ def main():
                 active=get_peft_model_state_dict(model)
                 assert set(active)==set(weights) and len(weights)==450
                 for n,v in active.items():assert torch.equal(v.detach().cpu(),weights[n])
+                selected=Path(trainer.state.best_model_checkpoint)
+                selected_weights=torch.load(selected/'adapter_model.bin',map_location='cpu',weights_only=False)
+                assert set(selected_weights)==set(weights) and all(torch.equal(v,weights[n]) for n,v in selected_weights.items()), 'formal export differs from selected checkpoint'
+                write_adapter_identity(best,scope=evidence_scope,run_commit=a.run_commit,
+                    config_sha256=sha(a.config),tokenizer=tok,data_root=a.data_root,model=a.model,
+                    checkpoint_source={'path':str(selected),'complete_sha256':sha(selected/'complete.json'),
+                                       'global_step':int(selected.name.split('-')[-1])},
+                    source_identity=report['source_identity'],base_model_identity=report['base_model_identity'])
                 write(out/'best_selection.json',{'checkpoint':trainer.state.best_model_checkpoint,
                       'metric':'eval_loss','greater_is_better':False,'value':trainer.state.best_metric,
                       'adapter_sha256':sha(best/'adapter_model.bin'),'run_commit':a.run_commit,
                       'completed_training_step':trainer.state.global_step,
                       'loaded_best_checkpoint_step':trainer.model_wrapped.global_steps})
             dist.barrier()
-        report.update(status='PROBE_COMPLETE' if a.probe_stop else 'TRAINING_COMPLETE',
+        report.update(status=('BOUNDARY_PREFLIGHT_COMPLETE' if a.boundary_preflight else
+                             'PROBE_COMPLETE' if a.probe_stop else 'TRAINING_COMPLETE'),
                       global_step=trainer.state.global_step,epoch=trainer.state.epoch,
                       best_checkpoint=trainer.state.best_model_checkpoint,best_metric=trainer.state.best_metric,
                       metrics=result.metrics,elapsed_seconds=time.monotonic()-started,

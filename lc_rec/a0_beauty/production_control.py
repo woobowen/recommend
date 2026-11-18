@@ -15,13 +15,14 @@ import sys
 import time
 from formal_control import durable_write, locked, read, digest, Runner
 from production_identity import need, sha, check_file, scope_guard, ASSETS, SYNTHETIC
+from g3_identity import EXPERIMENT_ID, verify_assets, verify_base_model, verify_launch_authorization
 
 STAGES=('train','verify_best_adapter','normal','normal_eval','s3','s3_eval','s4','s4_eval','paired','collect')
 ACTIVE={'ACCEPTED','RUNNING','UNCONFIRMED','CONTROL_LOST'}
 # This is a server-owned Beauty registry, not a path supplied by the plan or
 # Runner sidecar. Moving a job root must never create another budget ledger.
 EXPERIMENT_REGISTRY=Path('/data/bwwu/lc-rec/a0-beauty-20261115/formal-experiment-registry')
-INITIAL_SERIES='beauty-a0-seed42-original'
+INITIAL_SERIES=EXPERIMENT_ID
 
 def group(stage):
     return 'train_normal' if stage in ('train','normal') else stage if stage in ('s3','s4') else 'cpu'
@@ -31,6 +32,9 @@ def approval_documents(plan, require_pass=False):
     """Approval bytes are part of the plan, never a mutable path-only input."""
     documents={}
     for key in ('prelaunch_review','precision_approval'):
+        if key=='prelaunch_review' and not plan.get(key):
+            need(not require_pass,'G3 web second review pending')
+            continue
         row=plan['approval_files'][key]
         need(row['path']==plan[key], 'approval path binding: '+key)
         check_file(row)
@@ -89,9 +93,11 @@ def validate_plan(p):
     need(cfg['dataset']=='Beauty' and cfg['epochs']==4 and cfg['storage_save_total_limit']==2 and
          (cfg['seed'],cfg['per_device_batch_size'],cfg['gradient_accumulation_steps'],cfg['world_size'])==(42,8,4,2),'frozen training configuration')
     need(p['asset_sha256']==ASSETS,'frozen data identities')
+    need(p.get('experiment_id')==EXPERIMENT_ID and p.get('experiment_series')==EXPERIMENT_ID,'G3 experiment identity')
     for key in ('root','release','python','data_root','source_root','model','config','runner','job_root'):
         need(Path(p[key]).is_absolute() and '..' not in Path(p[key]).parts,'absolute canonical path: '+key)
-    need(p['config_sha256']=='24b568161f2d71d3c5962372a38683b2d33ee5d6d5064de0612215946a8106fd','frozen effective recipe')
+    need(cfg==read(Path(__file__).parent/'config/formal_g3_beauty_seed42.json'),'frozen G3 effective recipe')
+    verify_assets(p['data_root'])
     for k,v in ASSETS.items():need(sha(Path(p['data_root'])/'Beauty'/f'Beauty.{k}.json')==v,'data asset hash')
     need(set(p['stage_seconds'])==set(STAGES) and all(type(x) is int and 0<x<=345600 for x in p['stage_seconds'].values()),'stage wall limits')
     need(set(p['budget'])=={'train_normal','s3','s4','cpu','total','cleanup_reserve'},'budget schema')
@@ -105,7 +111,7 @@ def validate_plan(p):
     for row in p['inputs']:check_file(row)
     version=read(Path(p['release'])/'RUN_VERSION.json')
     need(version['run_commit']==p['run_commit'],'export is not the pinned code commit')
-    required=('production_control.py','production_pipeline.py','production_identity.py','formal_train.py','formal_evaluate.py','paired_beauty.py','offline_metrics.py','checkpoint_receipt.py','shuffle_entry.py','shuffle_runtime.py','shuffle_cpu_inputs.py')
+    required=('g3_identity.py','production_control.py','production_pipeline.py','production_identity.py','formal_train.py','formal_evaluate.py','paired_beauty.py','offline_metrics.py','checkpoint_receipt.py','shuffle_entry.py','shuffle_runtime.py','shuffle_cpu_inputs.py')
     supplied={x['path']:x['sha256'] for x in p['inputs']}
     version_rows={x['path']:x['sha256'] for x in version['files']}
     for name in required:
@@ -124,6 +130,7 @@ def validate_plan(p):
         for row in version['files']:
             need(supplied.get(row['path'])==row['sha256'],'incomplete fixed export inputs')
         approval_documents(p)
+        verify_base_model(p['model'])
         need(Path(p['model']).name=='4782ad278652c7c71b72204d462d6d01eaaf7549','model revision')
         need(sha(Path(p['model'])/'config.json')=='e4c3dea29aefc16c0e63825f9ae097dbf5cb5d7c320843a84257e11be3b452c8','base model config')
         need(p['env'].get('CUDA_VISIBLE_DEVICES') and p['env'].get('PYTHONOPTIMIZE','0')=='0','formal environment')
@@ -139,7 +146,7 @@ def authorize(plan, receipt, expected_digest):
     need(plan['scope']=='FORMAL_SUBMIT','FORMAL_PREPARE never submits')
     if not receipt or not expected_digest:raise PermissionError('separate user launch authorization and user-pinned digest required')
     need(re.fullmatch('[0-9a-f]{64}',expected_digest) and sha(receipt)==expected_digest,'user authorization digest')
-    r=read(receipt)
+    r=verify_launch_authorization(receipt,expected_digest,plan['run_commit'],plan['config_sha256'])
     scope_guard(receipt,'FORMAL')
     need(r.get('scope')=='FORMAL' and r.get('authorization_kind')=='USER_LAUNCH_AUTHORIZATION',
          'formal user launch receipt required; test receipts are never accepted')
@@ -149,7 +156,7 @@ def authorize(plan, receipt, expected_digest):
          r.get('budget')==plan['budget'] and r.get('task_id')==plan['task_id'],'authorization version/config/budget/job')
     series=plan.get('experiment_series',INITIAL_SERIES)
     need(r.get('experiment_series')==series,'authorization experiment series')
-    if series!=INITIAL_SERIES:
+    if series==EXPERIMENT_ID:
         need(r.get('new_independent_experiment_authorized') is True and
              r.get('prior_experiment_series') and r['prior_experiment_series']!=series,
              'new series requires separate explicit user authorization and prior-series reference')
