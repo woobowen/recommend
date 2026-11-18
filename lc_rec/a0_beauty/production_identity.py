@@ -165,7 +165,7 @@ def verify_predictions(test, commit, best, condition, scope='FORMAL'):
         need({k:v['sha256'] for k,v in r['data_identity'].items()}==ASSETS, 'prediction data mismatch')
         need(r['adapter_files']==best['adapter_files'], 'prediction is not selected Adapter/Tokenizer')
         if condition!='normal':
-            need(r['shuffle']['n']==int(condition[-1]) and r['shuffle']['protocol']=='GRID-LETTER-SHUFFLE-V1' and r['shuffle']['seed']==42, 'Shuffle condition mismatch')
+            need(r['shuffle']['n']=={'off':0,'s3':3,'s4':4}[condition] and r['shuffle']['protocol']=='GRID-LETTER-SHUFFLE-V1' and r['shuffle']['seed']==42, 'Shuffle condition mismatch')
         else:need('shuffle' not in r,'Normal contains Shuffle intervention')
         identities.append(identity(test/f'predictions.rank{rank}.jsonl'))
     return {'verified':True,'scope':scope,'prediction_run_commit':commit,'prediction_files':identities,'adapter_files':best['adapter_files']}

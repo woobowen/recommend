@@ -6,12 +6,24 @@ from pathlib import Path
 
 
 def validate(manifest, users, shards):
+    from g3_identity import ASSETS, EXPERIMENT_ID, INDEX_SHA, BRIDGE_SHA, G3_SHA
+    old_path=Path(__file__).with_name('config')/'preflight_users_seed42.json'
+    fixed_sha='714450a0e9479ed272266a5b4d3c2150d83742e4b70c38f80da888d4fa0aaa39'
+    if hashlib.sha256(old_path.read_bytes()).hexdigest()!=fixed_sha:
+        raise ValueError('Original fixed preflight user manifest changed')
+    old=json.loads(old_path.read_text())
+    if (manifest.get('scope')!='PREFLIGHT' or manifest.get('experiment_id')!=EXPERIMENT_ID or
+        manifest.get('asset_sha256')!=ASSETS or manifest.get('prior_manifest_sha256')!=fixed_sha or
+        manifest.get('upstream_sha256')!={'g3':G3_SHA,'bridge':BRIDGE_SHA,'index':INDEX_SHA}):
+        raise ValueError('G3 preflight manifest experiment/asset/upstream identity mismatch')
     ranks=manifest['ranks']
     if set(ranks)!={'0','1'} or len(users)!=22363 or len(shards)!=2:
         raise ValueError('bad user axis or ranks')
     selected=[]
     for rank in (0,1):
         records=ranks[str(rank)]
+        if [r['row_idx'] for r in records]!=[r['row_idx'] for r in old['ranks'][str(rank)]]:
+            raise ValueError('Preflight user selection differs from the prior fixed 32 users')
         if len(records)!=16: raise ValueError('expected 16 users per rank')
         eligible=set(shards[rank])
         for record in records:
@@ -48,12 +60,17 @@ def frozen_g3_manifest(index, inters, lengths=None):
                 repeated_visible_history_item=len(set(visible))<len(visible))
         ranks[rank] = chosen
     repeated = sum(len(set(seq[:-1][-20:]))<len(seq[:-1][-20:]) for seq in inters.values())
+    chosen=[r for records in ranks.values() for r in records]
+    long_and_short=min(r['history_length'] for r in chosen)<=5 and max(r['history_length'] for r in chosen)==20
+    fourth_zero_nonzero=any(r['fourth_position_zero_history_items'] for r in chosen) and any(r['fourth_position_nonzero_history_items'] for r in chosen)
+    if not long_and_short or not fourth_zero_nonzero:
+        raise ValueError('Frozen 32 G3 users do not cover required actual history/fourth-position boundaries')
     return {'schema':'beauty_g3_preflight_users_v1','scope':'PREFLIGHT','experiment_id':EXPERIMENT_ID,
         'selection':'Reuse exact prior 32 user IDs, fixed before any G3 model outputs; derive G3 targets',
         'prior_manifest_sha256':hashlib.sha256(old_path.read_bytes()).hexdigest(),
         'asset_sha256':ASSETS,'upstream_sha256':{'g3':G3_SHA,'bridge':BRIDGE_SHA,'index':INDEX_SHA},
-        'ranks':ranks,'boundary_coverage':{'long_and_short_history':True,
-            'fourth_position_zero_and_nonzero':True,'extra_left_padding_tokens_on_first_user_per_rank':3,
+        'ranks':ranks,'boundary_coverage':{'long_and_short_history':long_and_short,
+            'fourth_position_zero_and_nonzero':fourth_zero_nonzero,'extra_left_padding_tokens_on_first_user_per_rank':3,
             'whole_fixed_corpus_repeated_visible_history_users':repeated,
             'repeated_history_note':'No real repeated visible-history item exists; isolated synthetic checks only'}}
 
