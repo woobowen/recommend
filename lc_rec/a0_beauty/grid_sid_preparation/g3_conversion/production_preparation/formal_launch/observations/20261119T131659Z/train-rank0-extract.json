@@ -1,0 +1,81 @@
+{
+  "status": "TRAINING_COMPLETE",
+  "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+  "config_sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+  "initial_global_step": 0,
+  "global_step": 8214,
+  "epoch": 4.0,
+  "best_checkpoint": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training/checkpoint-6160",
+  "best_metric": 1.6667720079421997,
+  "metrics": {
+    "train_runtime": 64558.4905,
+    "train_samples_per_second": 8.143,
+    "train_steps_per_second": 0.127,
+    "train_loss": 1.7075043605835094,
+    "epoch": 4.0
+  },
+  "execution_topology": "SINGLE_GPU",
+  "execution_profile": {
+    "world_size": 1,
+    "per_device_train_batch_size": 8,
+    "gradient_accumulation_steps": 8,
+    "global_batch": 64
+  },
+  "data": {
+    "train_rows": 131413,
+    "valid_rows": 44726,
+    "author_valid_rows": 44726,
+    "validation_subset_preflight_only": false,
+    "tokenizer_vocab": 32786
+  },
+  "data_identity": {
+    "index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data/Beauty/Beauty.index.json",
+      "bytes": 553966,
+      "sha256": "420fc060caba3a22b0f03900dfe26abc67da8753f3bac2803f7f3c8703a05c22"
+    },
+    "inter": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3/Beauty/Beauty.inter.json",
+      "bytes": 3212008,
+      "sha256": "8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5"
+    },
+    "item": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3/Beauty/Beauty.item.json",
+      "bytes": 6855739,
+      "sha256": "74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330"
+    }
+  },
+  "sample_flow": {
+    "world_size": 1,
+    "logical_historical_ranks": 2,
+    "micro_batch_size": 8,
+    "gradient_accumulation_steps": 8,
+    "global_batch": 64,
+    "epochs": 4,
+    "author_rows": 131413,
+    "full_epoch_serial_rows": 131424,
+    "tail_repeat_rows": 11,
+    "full_epoch_microbatches": 16428,
+    "per_epoch_microbatches": 16428,
+    "epoch_steps": [
+      2053,
+      4107,
+      6160,
+      8214
+    ],
+    "max_steps": 8214,
+    "preflight_only": false,
+    "short_epoch_global_rows": null,
+    "loss_weighting": "Each unchanged eight-example native microbatch loss contributes 1/8; this equals its historical 1/4 accumulation times1/2 rank-average weight. Native response-token reduction inside each microbatch remains unchanged; no global-token-mean or floating-trajectory equivalence is claimed.",
+    "numerical_equivalence_to_two_gpus_claimed": false
+  },
+  "tokenizer_identity": {
+    "vocab_size": 32786,
+    "new_token_count": 786,
+    "token_to_id_sha256": "dba960c3166b49d9098c713095273db3b6faa856ae2485ec8eda408ae66e82bc",
+    "full_vocab_sha256": "35a8f0b6fef3ce82887e6efa6f92a6d4f75eccf21b8f94064514548dade9e585"
+  },
+  "optimizer_membership_exact": true,
+  "started_utc": "2026-11-18T18:00:48.721991+00:00",
+  "elapsed_seconds": 64686.93552609626
+}

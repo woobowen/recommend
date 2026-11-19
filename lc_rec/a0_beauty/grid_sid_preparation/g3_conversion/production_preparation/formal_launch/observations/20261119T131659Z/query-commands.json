@@ -1,0 +1,59 @@
+{
+  "initial_state": {
+    "argv": [
+      "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+      "-T",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=12",
+      "new-server",
+      "root=/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b; date -u +%FT%TZ; cat \"$root/state.json\"; sha256sum \"$root/plan.json\"; cat \"$root/plan.identity.json\""
+    ],
+    "server_utc": "2026-11-19T13:13:43Z",
+    "file": "state-before-query.json"
+  },
+  "controller": {
+    "argv": [
+      "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+      "-T",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=12",
+      "new-server",
+      "set -eu; cd /home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty; PYTHONDONTWRITEBYTECODE=1 /data/bwwu/envs/letter-20261110/bin/python production_control.py query --plan /data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json"
+    ],
+    "exit_code": 0,
+    "stderr": "",
+    "file": "control-query.json",
+    "last_runner_scan_utc": "2026-11-19T13:15:21.699705+00:00"
+  },
+  "observation": {
+    "argv": [
+      "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+      "-T",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=12",
+      "new-server",
+      "/usr/bin/python3 -I -S -B -"
+    ],
+    "stdin_file": "collect_observation.py",
+    "runner": {
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-S",
+        "-B",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/runner-beauty.py",
+        "query",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-normal-a0"
+      ],
+      "sample_utc": "2026-11-19T13:16:59.321064+00:00",
+      "exit_code": 0,
+      "stderr": ""
+    }
+  }
+}
