@@ -1,0 +1,62 @@
+{
+  "initial_server_utc": "2026-11-19T16:18:26Z",
+  "initial_argv": [
+    "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+    "-T",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=12",
+    "new-server",
+    "set -eu; root=/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b; date -u +%FT%TZ; cat \"$root/state.json\"; sha256sum \"$root/plan.json\"; cat \"$root/plan.identity.json\"; ls -l \"$root/controller.log\" \"$root/requests\" \"$root/attempts\"; ps -p 3334030 -o pid,ppid,stat,lstart,args"
+  ],
+  "controller_argv": [
+    "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+    "-T",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=12",
+    "new-server",
+    "set -eu; cd /home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty; PYTHONDONTWRITEBYTECODE=1 /data/bwwu/envs/letter-20261110/bin/python production_control.py query --plan /data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json"
+  ],
+  "collector_argv": [
+    "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+    "-T",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=12",
+    "new-server",
+    "/usr/bin/python3 -I -S -B -"
+  ],
+  "collector_stdin": {
+    "git_commit": "48bb018996f5ef2d7dd0411cc9fd1f005145f757",
+    "path": "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/formal_launch/observations/20261119T131659Z/collect_observation.py",
+    "sha256": "570dc0a34a436d693fca3990823e75968d954f784a9c9e79a496765b23ec03bb"
+  },
+  "process_starts_argv": [
+    "/mnt/c/Windows/System32/OpenSSH/ssh.exe",
+    "-T",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=12",
+    "new-server",
+    "date -u +%FT%TZ; TZ=UTC LC_ALL=C ps -p 3334030,3339348,3339349,3339390 -o pid,ppid,uid,lstart,stat"
+  ],
+  "runner": {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/runner-beauty.py",
+      "query",
+      "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-normal-a0"
+    ],
+    "sample_utc": "2026-11-19T16:19:29.844885+00:00",
+    "exit_code": 0,
+    "stderr": ""
+  }
+}

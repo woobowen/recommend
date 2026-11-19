@@ -1,0 +1,645 @@
+{
+  "started_utc": "2026-11-19T16:19:29.700917+00:00",
+  "observation_utc": "2026-11-19T16:19:30.053996+00:00",
+  "host": "zwlab-01",
+  "previous_observation": {
+    "commit": "48bb018996f5ef2d7dd0411cc9fd1f005145f757",
+    "utc": "2026-11-19T13:16:59.534145+00:00",
+    "stage": "normal",
+    "confirmed_users": 3000
+  },
+  "plan": {
+    "task_id": "g3-beauty-seed42",
+    "experiment_id": "grid-g3-beauty-lcrec-seed42-20261118",
+    "experiment_series": "grid-g3-beauty-lcrec-seed42-20261118",
+    "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+    "config_sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+    "execution_topology": "SINGLE_GPU",
+    "execution_profile": {
+      "global_batch": 64,
+      "gradient_accumulation_steps": 8,
+      "per_device_train_batch_size": 8,
+      "world_size": 1
+    },
+    "budget": {
+      "cleanup_reserve": 120,
+      "cpu": 5400,
+      "s3": 21600,
+      "s4": 21600,
+      "total": 199800,
+      "train_normal": 151200
+    },
+    "stage_seconds": {
+      "collect": 600,
+      "normal": 43200,
+      "normal_eval": 900,
+      "paired": 1200,
+      "s3": 21600,
+      "s3_eval": 900,
+      "s4": 21600,
+      "s4_eval": 900,
+      "train": 108000,
+      "verify_best_adapter": 900
+    },
+    "asset_sha256": {
+      "index": "420fc060caba3a22b0f03900dfe26abc67da8753f3bac2803f7f3c8703a05c22",
+      "inter": "8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5",
+      "item": "74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330"
+    },
+    "release": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release",
+    "root": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b",
+    "python": "/data/bwwu/envs/letter-20261110/bin/python",
+    "gpu_uuids": [
+      "GPU-59cac3bd-3645-668b-79c8-839e0d878893"
+    ],
+    "runner_sha256": "cc1a1e277faa9bc713a4d0d1b620248d47c398e8ed17d4ed3d7ab52805cc657e"
+  },
+  "plan_sha256": "a56076cf07d67bc088442dc35f863134081b455f551fc45d2c6bfb2bfd246407",
+  "canonical_plan_sha256": "526987fa87f0feb565a7a9f42bc58f42e3121b9d9a13cea4613e47f842c394b6",
+  "seal": {
+    "path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json",
+    "sha256": "526987fa87f0feb565a7a9f42bc58f42e3121b9d9a13cea4613e47f842c394b6",
+    "task_id": "g3-beauty-seed42"
+  },
+  "source_files": {
+    "lc_rec/a0_beauty/production_control.py": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_control.py",
+      "bytes": 23695,
+      "sha256": "83af6ec7f6077553ee8cff5fd074bdd6aed112c79b775ea05347cd24ae95b4fc"
+    },
+    "lc_rec/a0_beauty/production_pipeline.py": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_pipeline.py",
+      "bytes": 13085,
+      "sha256": "88884f9930254772e4f7d782a119310a7416ffbb918854603f91ae34d306fdb4"
+    },
+    "lc_rec/a0_beauty/production_identity.py": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_identity.py",
+      "bytes": 16207,
+      "sha256": "6b23c37a96ca15eb3b6e75b140eb8ab2d40821b852a864e508e73173b165a603"
+    },
+    "lc_rec/a0_beauty/formal_train.py": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_train.py",
+      "bytes": 59253,
+      "sha256": "d47c536d1d2a79a7c7841d444345125753ab403ab33c08a80b8207f94ba694ef"
+    },
+    "lc_rec/a0_beauty/formal_evaluate.py": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_evaluate.py",
+      "bytes": 54673,
+      "sha256": "9c7748ce7659a085d15128e060a1b72f6ac92b62a8642056810d0fa6df6a14e7"
+    },
+    "lc_rec/a0_beauty/single_gpu_training.py": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/single_gpu_training.py",
+      "bytes": 6270,
+      "sha256": "41b3106f85e029dac7bd18380b4afded6fa9a4c6f92951db1cf72a0f0332d560"
+    },
+    "lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
+      "bytes": 1854,
+      "sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853"
+    }
+  },
+  "runner_file": {
+    "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/runner-beauty.py",
+    "bytes": 24814,
+    "sha256": "cc1a1e277faa9bc713a4d0d1b620248d47c398e8ed17d4ed3d7ab52805cc657e"
+  },
+  "data_files": {
+    "index": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data/Beauty/Beauty.index.json",
+      "bytes": 553966,
+      "sha256": "420fc060caba3a22b0f03900dfe26abc67da8753f3bac2803f7f3c8703a05c22"
+    },
+    "inter": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data/Beauty/Beauty.inter.json",
+      "bytes": 3212008,
+      "sha256": "8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5"
+    },
+    "item": {
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data/Beauty/Beauty.item.json",
+      "bytes": 6855739,
+      "sha256": "74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330"
+    }
+  },
+  "controller_status": "WAITING_OR_UNKNOWN",
+  "current_stage": "normal",
+  "stage_record_status": "SUBMITTING",
+  "state_mtime_utc": "2026-11-19T16:19:27.298607+00:00",
+  "request_checks": {
+    "train": {
+      "request_fields": {
+        "job_id": "letter-a0-beauty-formal-g3-beauty-seed42-train-a0",
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_pipeline.py",
+          "--plan",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json",
+          "--stage",
+          "train",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/train/a0",
+          "--authorization",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/authorization.json",
+          "--authorization-sha256",
+          "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+        ],
+        "beauty_stage": "train",
+        "capture_version": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+        "beauty_config_sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+        "beauty_input_identity": {
+          "index": "420fc060caba3a22b0f03900dfe26abc67da8753f3bac2803f7f3c8703a05c22",
+          "inter": "8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5",
+          "item": "74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330"
+        },
+        "timeout_seconds": 107880,
+        "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release"
+      },
+      "canonical_sha256": "0554ee1782b1462c51efb06cda1f07a6524bda7fdce97239997af543ec72e462",
+      "controller_copy_sha256": "0554ee1782b1462c51efb06cda1f07a6524bda7fdce97239997af543ec72e462",
+      "accepted_sha256": "0554ee1782b1462c51efb06cda1f07a6524bda7fdce97239997af543ec72e462",
+      "runner_status_sha256": "0554ee1782b1462c51efb06cda1f07a6524bda7fdce97239997af543ec72e462"
+    },
+    "verify_best_adapter": {
+      "request_fields": {
+        "job_id": "letter-a0-beauty-formal-g3-beauty-seed42-verify-best-adapter-a0",
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_pipeline.py",
+          "--plan",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json",
+          "--stage",
+          "verify_best_adapter",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/verify_best_adapter/a0",
+          "--authorization",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/authorization.json",
+          "--authorization-sha256",
+          "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+        ],
+        "beauty_stage": "verify_best_adapter",
+        "capture_version": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+        "beauty_config_sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+        "beauty_input_identity": {
+          "index": "420fc060caba3a22b0f03900dfe26abc67da8753f3bac2803f7f3c8703a05c22",
+          "inter": "8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5",
+          "item": "74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330"
+        },
+        "timeout_seconds": 780,
+        "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release"
+      },
+      "canonical_sha256": "acf024217e7b6e41c28cec2604242cbb23c199749307b3da26da4a38af4678b7",
+      "controller_copy_sha256": "acf024217e7b6e41c28cec2604242cbb23c199749307b3da26da4a38af4678b7",
+      "accepted_sha256": "acf024217e7b6e41c28cec2604242cbb23c199749307b3da26da4a38af4678b7",
+      "runner_status_sha256": "acf024217e7b6e41c28cec2604242cbb23c199749307b3da26da4a38af4678b7"
+    },
+    "normal": {
+      "request_fields": {
+        "job_id": "letter-a0-beauty-formal-g3-beauty-seed42-normal-a0",
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_pipeline.py",
+          "--plan",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json",
+          "--stage",
+          "normal",
+          "--output",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/normal/a0",
+          "--authorization",
+          "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/authorization.json",
+          "--authorization-sha256",
+          "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+        ],
+        "beauty_stage": "normal",
+        "capture_version": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+        "beauty_config_sha256": "8e4c68c45b200d81624f25dd1c9bc204b5324f5da98e46ede6c68bc82a834853",
+        "beauty_input_identity": {
+          "index": "420fc060caba3a22b0f03900dfe26abc67da8753f3bac2803f7f3c8703a05c22",
+          "inter": "8809584b8b78fa6561771c88911ed65bd716fc9926fca1e581e6a1ab578ccfd5",
+          "item": "74aeddf911548aadfcd1dab326c16678ed4ac74457e874da300d63a94bdb2330"
+        },
+        "timeout_seconds": 43080,
+        "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release"
+      },
+      "canonical_sha256": "e74b2fbcb1e0061e685d9a01aa90b7d2db65e62cee40968585dc1d9db306df38",
+      "controller_copy_sha256": "e74b2fbcb1e0061e685d9a01aa90b7d2db65e62cee40968585dc1d9db306df38",
+      "accepted_sha256": "e74b2fbcb1e0061e685d9a01aa90b7d2db65e62cee40968585dc1d9db306df38",
+      "runner_status_sha256": "e74b2fbcb1e0061e685d9a01aa90b7d2db65e62cee40968585dc1d9db306df38"
+    }
+  },
+  "runner_query": {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/runner-beauty.py",
+      "query",
+      "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-normal-a0"
+    ],
+    "sample_utc": "2026-11-19T16:19:29.844885+00:00",
+    "exit_code": 0,
+    "stderr": ""
+  },
+  "processes": {
+    "controller": {
+      "pid": 3334030,
+      "state": "S",
+      "ppid": 1,
+      "pgid": 3334030,
+      "session_id": 3334030,
+      "tty_nr": 0,
+      "start_ticks": "563009849",
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "uid": 1005,
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_control.py",
+        "run",
+        "--plan",
+        "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json",
+        "--authorization",
+        "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/authorization.json",
+        "--authorization-sha256",
+        "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+      ],
+      "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty",
+      "stdin": "/dev/null"
+    },
+    "runner_supervisor": {
+      "pid": 3339348,
+      "state": "S",
+      "ppid": 1,
+      "pgid": 3339348,
+      "session_id": 3339348,
+      "tty_nr": 0,
+      "start_ticks": "569543683",
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "uid": 1005,
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-S",
+        "-B",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/runner-beauty.py",
+        "supervise",
+        "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-normal-a0"
+      ],
+      "cwd": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-normal-a0",
+      "stdin": "/dev/null"
+    },
+    "pipeline_worker": {
+      "pid": 3339349,
+      "state": "S",
+      "ppid": 3339348,
+      "pgid": 3339349,
+      "session_id": 3339349,
+      "tty_nr": 0,
+      "start_ticks": "569543708",
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "uid": 1005,
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/production_pipeline.py",
+        "--plan",
+        "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.json",
+        "--stage",
+        "normal",
+        "--output",
+        "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/normal/a0",
+        "--authorization",
+        "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/launch-20261118/authorization.json",
+        "--authorization-sha256",
+        "e6c8dc188798ea5f7a095659bb0f822cf8c84f2b26b20860ef1c276a5df54626"
+      ],
+      "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release",
+      "stdin": "/dev/null"
+    },
+    "generation_rank": {
+      "pid": 3339390,
+      "state": "R",
+      "ppid": 3339385,
+      "pgid": 3339390,
+      "session_id": 3339390,
+      "tty_nr": 0,
+      "start_ticks": "569559938",
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "uid": 1005,
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-u",
+        "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_evaluate.py",
+        "--condition",
+        "normal",
+        "--verify-normal-off",
+        "--source-root",
+        "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+        "--data-root",
+        "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/data",
+        "--model",
+        "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+        "--adapter",
+        "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training/best_adapter",
+        "--output",
+        "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/normal/a0/test",
+        "--run-commit",
+        "21d495b0be5b606853ec7cec68a3eaa1b58acbd7"
+      ],
+      "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release",
+      "stdin": "/dev/null"
+    }
+  },
+  "training": {
+    "status": "TRAINING_COMPLETE",
+    "global_step": 8214,
+    "epoch": 4.0,
+    "validation": [
+      {
+        "utc": "2026-11-18T22:29:28.705421+00:00",
+        "elapsed_seconds": 16127.971469902433,
+        "event": "log",
+        "attempt_job_id": "letter-a0-beauty-formal-g3-beauty-seed42-train-a0",
+        "step": 2053,
+        "epoch": 1.0,
+        "values": {
+          "eval_loss": 1.9063153266906738,
+          "eval_runtime": 1453.8123,
+          "eval_samples_per_second": 30.765,
+          "eval_steps_per_second": 3.846,
+          "epoch": 1.0
+        }
+      },
+      {
+        "utc": "2026-11-19T03:00:06.381763+00:00",
+        "elapsed_seconds": 32365.647816737182,
+        "event": "log",
+        "attempt_job_id": "letter-a0-beauty-formal-g3-beauty-seed42-train-a0",
+        "step": 4107,
+        "epoch": 2.0,
+        "values": {
+          "eval_loss": 1.7372068166732788,
+          "eval_runtime": 1766.7434,
+          "eval_samples_per_second": 25.316,
+          "eval_steps_per_second": 3.165,
+          "epoch": 2.0
+        }
+      },
+      {
+        "utc": "2026-11-19T07:28:02.192841+00:00",
+        "elapsed_seconds": 48441.45888841618,
+        "event": "log",
+        "attempt_job_id": "letter-a0-beauty-formal-g3-beauty-seed42-train-a0",
+        "step": 6160,
+        "epoch": 3.0,
+        "values": {
+          "eval_loss": 1.6667720079421997,
+          "eval_runtime": 1457.4097,
+          "eval_samples_per_second": 30.689,
+          "eval_steps_per_second": 3.836,
+          "epoch": 3.0
+        }
+      },
+      {
+        "utc": "2026-11-19T11:55:42.984533+00:00",
+        "elapsed_seconds": 64502.250585496426,
+        "event": "log",
+        "attempt_job_id": "letter-a0-beauty-formal-g3-beauty-seed42-train-a0",
+        "step": 8214,
+        "epoch": 4.0,
+        "values": {
+          "eval_loss": 1.697638988494873,
+          "eval_runtime": 1446.57,
+          "eval_samples_per_second": 30.919,
+          "eval_steps_per_second": 3.865,
+          "epoch": 4.0
+        }
+      }
+    ],
+    "latest_complete_checkpoint": "checkpoint-8214",
+    "best_selection": {
+      "checkpoint": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/training/checkpoint-6160",
+      "metric": "eval_loss",
+      "greater_is_better": false,
+      "value": 1.6667720079421997,
+      "adapter_sha256": "d3a179b59ba7a7218d6e1767884fd1c5961fffb9b756ea5f8bc5522775db6a28",
+      "run_commit": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+      "completed_training_step": 8214,
+      "loaded_best_checkpoint_step": 6160
+    },
+    "latest_train_log": {
+      "utc": "2026-11-19T11:31:07.251925+00:00",
+      "elapsed_seconds": 63026.517964361235,
+      "event": "log",
+      "attempt_job_id": "letter-a0-beauty-formal-g3-beauty-seed42-train-a0",
+      "step": 8210,
+      "epoch": 3.9980521061602143,
+      "values": {
+        "loss": 1.3221,
+        "learning_rate": 1.1942678023180165e-10,
+        "epoch": 4.0
+      }
+    },
+    "final_train_mean_loss": 1.7075043605835094,
+    "retained_checkpoint_manifests": {
+      "checkpoint-6160": "6b3f2c13607b093d0b2aeefb36e83780f93d454690da5e5a52f72730e0ee074b",
+      "checkpoint-8214": "c0fbbf1d2decd06be8bff6edb37668c81f19cb6825d0b3e4a45e3983d06631df"
+    },
+    "terminal_receipts_match_previous_delivery_sha256": {
+      "train-stage_result.json": "e943730c78e94137d1a87d3e422e42376cf338193d595a6696a08fba24a1046c",
+      "verify_best_adapter-stage_result.json": "7dca3a3b9635360f778d9ea1d32917d042e9124ca9f156d7d70976dd00a2e06f"
+    }
+  },
+  "generation": {
+    "rank_report": {
+      "path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/normal/a0/test/rank0.json",
+      "source_mtime_utc": "2026-11-19T16:19:13.655867+00:00",
+      "source_size_at_open": 406912,
+      "offset_bytes": 0,
+      "copied_bytes": 406912,
+      "sha256": "b4641a07786e0732fc2ad0ceaa4d50e9b8e29bd0316d4c4b157783f4590277a7"
+    },
+    "last_log_progress": [
+      {
+        "stage": "generation",
+        "scope": "FORMAL",
+        "rank": 0,
+        "conditions": [
+          "normal"
+        ],
+        "completed_users": 11675,
+        "assigned_users": 22363,
+        "elapsed_seconds": 14593.689636423253,
+        "approx_utc_from_latest_rank_write": "2026-11-19T16:17:08+00:00"
+      },
+      {
+        "stage": "generation",
+        "scope": "FORMAL",
+        "rank": 0,
+        "conditions": [
+          "normal"
+        ],
+        "completed_users": 11700,
+        "assigned_users": 22363,
+        "elapsed_seconds": 14624.947468305007,
+        "approx_utc_from_latest_rank_write": "2026-11-19T16:17:39+00:00"
+      },
+      {
+        "stage": "generation",
+        "scope": "FORMAL",
+        "rank": 0,
+        "conditions": [
+          "normal"
+        ],
+        "completed_users": 11725,
+        "assigned_users": 22363,
+        "elapsed_seconds": 14656.228936272673,
+        "approx_utc_from_latest_rank_write": "2026-11-19T16:18:10+00:00"
+      },
+      {
+        "stage": "generation",
+        "scope": "FORMAL",
+        "rank": 0,
+        "conditions": [
+          "normal"
+        ],
+        "completed_users": 11750,
+        "assigned_users": 22363,
+        "elapsed_seconds": 14688.101425244473,
+        "approx_utc_from_latest_rank_write": "2026-11-19T16:18:42+00:00"
+      },
+      {
+        "stage": "generation",
+        "scope": "FORMAL",
+        "rank": 0,
+        "conditions": [
+          "normal"
+        ],
+        "completed_users": 11775,
+        "assigned_users": 22363,
+        "elapsed_seconds": 14718.96182863973,
+        "approx_utc_from_latest_rank_write": "2026-11-19T16:19:13+00:00"
+      }
+    ],
+    "confirmed_log_and_rank_progress": {
+      "stage": "generation",
+      "scope": "FORMAL",
+      "rank": 0,
+      "conditions": [
+        "normal"
+      ],
+      "completed_users": 11775,
+      "assigned_users": 22363,
+      "elapsed_seconds": 14718.96182863973
+    },
+    "predictions": {
+      "path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/normal/a0/test/predictions.rank0.jsonl",
+      "bytes": 210788173,
+      "mtime_utc": "2026-11-19T16:19:29.127707+00:00",
+      "last_complete_line_identity": {
+        "row_idx": 7236,
+        "condition": "normal",
+        "scope": "FORMAL",
+        "model_identity_sha256": "3315622866cd97833741608ca21d82b72a10184ab8bff4dc688892146d0bf915"
+      },
+      "last_complete_line_candidates": 20,
+      "last_complete_line_assignment_offset_zero_based": 11787,
+      "last_complete_line_sha256": "26a625a1ebc356e23c76377fa148fcaba4f042cb565d2329ea0fa00b2a57d0ff"
+    },
+    "normal_off_verification_requested": true,
+    "stage_result_present": false,
+    "normal_eval_submitted": false,
+    "rank_failure_in_report": false,
+    "confirmed_user_delta": 8775,
+    "progress_utc_basis": "latest rank report mtime minus monotonic elapsed differences; older log entries lack a UTC field"
+  },
+  "resources": {
+    "gpu": "1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, 24564 MiB, 21870 MiB, 88 %",
+    "gpu_compute": "3339390, 21860 MiB",
+    "host_memory_available_bytes": 250030620672,
+    "filesystem_available_bytes": 2703810211840,
+    "filesystem_total_bytes": 7937302376448
+  },
+  "budget": {
+    "charged_seconds": {
+      "train_normal": 79921.839989,
+      "s3": 0.0,
+      "s4": 0.0,
+      "cpu": 160.403786,
+      "total": 80082.243775
+    },
+    "remaining_seconds": {
+      "train_normal": 71278.160011,
+      "s3": 21600.0,
+      "s4": 21600.0,
+      "cpu": 5239.596214,
+      "total": 119717.756225
+    },
+    "runner_timeout_seconds_at_admission": 43080,
+    "normal_time_until_runner_timeout_from_ledger_seconds": 28012.883016,
+    "normal_stage_nominal_remaining_seconds": 28132.883016,
+    "cleanup_reserve_seconds": 120
+  },
+  "log_error_flags": {
+    "normal.work.tail.log": [],
+    "normal.supervisor.log": [],
+    "controller.log": [],
+    "train.work.tail.log": []
+  },
+  "raw_file_ranges": {
+    "state.json": {
+      "path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/state.json",
+      "source_mtime_utc": "2026-11-19T16:19:27.298607+00:00",
+      "source_size_at_open": 27447,
+      "offset_bytes": 0,
+      "copied_bytes": 27447,
+      "sha256": "2ce128db6c36e56689e854516bb12591444517fb50d2c0ea0369e6175cec8ef2"
+    },
+    "plan.identity.json": {
+      "path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/plan.identity.json",
+      "source_mtime_utc": "2026-11-18T17:59:21.494251+00:00",
+      "source_size_at_open": 176,
+      "offset_bytes": 0,
+      "copied_bytes": 176,
+      "sha256": "ac5ce317bcd49b2e2e5db83c4e166e2588392b54642ba867802bdab53e9007df"
+    },
+    "normal-compute-argv.json": {
+      "path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/attempts/normal/a0/compute_argv.json",
+      "source_mtime_utc": "2026-11-19T12:11:00.477808+00:00",
+      "source_size_at_open": 921,
+      "offset_bytes": 0,
+      "copied_bytes": 921,
+      "sha256": "924e62ab4729133a048c86861c30437a21c650ec2699e36c7eae8e272ba95d77"
+    },
+    "normal.work.tail.log": {
+      "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-normal-a0/work.log",
+      "source_mtime_utc": "2026-11-19T16:19:13.655867+00:00",
+      "source_size_at_open": 80775,
+      "offset_bytes": 74631,
+      "copied_bytes": 6144,
+      "sha256": "9db2bfe76e66aff064ca37bb2d717966487f70966828e1e06337b97bf5eb1f3b"
+    },
+    "normal.supervisor.log": {
+      "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-normal-a0/supervisor.log",
+      "source_mtime_utc": "2026-11-19T12:08:19.939084+00:00",
+      "source_size_at_open": 0,
+      "offset_bytes": 0,
+      "copied_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "controller.log": {
+      "path": "/data/bwwu/lc-rec/g3-formal-20261118/21d495b0be5b/controller.log",
+      "source_mtime_utc": "2026-11-18T17:59:21.594188+00:00",
+      "source_size_at_open": 0,
+      "offset_bytes": 0,
+      "copied_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "normal-accepted.json": {
+      "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/jobs/letter-a0-beauty-formal-g3-beauty-seed42-normal-a0/accepted.json",
+      "source_mtime_utc": "2026-11-19T12:08:19.839431+00:00",
+      "source_size_at_open": 341,
+      "offset_bytes": 0,
+      "copied_bytes": 341,
+      "sha256": "a77a04720ffd27e8efc6b6e405c58375f3466cbbc5623d0b19e08083fa7f52a0"
+    }
+  },
+  "status_snapshot_checks": "PASS"
+}
