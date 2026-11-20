@@ -47,7 +47,16 @@ def main():
             free.append(uuid)
     assert free, 'No approved GPU is idle'
     preferred = review['device_uuid']
-    device = preferred if preferred in free else free[0]
+    plan_local = control.SUPPORT / (job_id + '.plan.json')
+    prior_plan = json.loads(plan_local.read_text()) if plan_local.exists() else None
+    if prior_plan:
+        assert prior_plan['formal_run_commit'] == run and prior_plan['orchestrator_commit'] == ops
+        assert prior_plan['preflight_review'] == review
+        device = next(iter(prior_plan['modes'].values()))['gpu']['env']['CUDA_VISIBLE_DEVICES']
+        assert device in free, 'Preserved request device must be idle before resending'
+        snapshot = prior_plan['gpu_selection']
+    else:
+        device = preferred if preferred in free else free[0]
     profile = connection.profile
     state_root = control.SUPPORT
     def deployment(commit):
@@ -100,14 +109,19 @@ def main():
             'normal_job_id': control.PREFIX + normal, 'preflight_review': review, 'gpu_selection': snapshot,
             'prefix': control.PREFIX, 'runner': profile['runner'], 'runner_sha256': control.RUNNER_SHA,
             'job_root': profile['job_root'], 'requests_root': control.BASE + '/requests'}
-    plan_local = state_root / (job_id + '.plan.json')
-    control.transport.atomic(plan_local, plan)
+    if prior_plan:
+        assert plan == prior_plan, 'Prepared plan differs from the original'
+    else:
+        control.transport.atomic(plan_local, plan)
     sent = connection.put(plan_local, f'{control.BASE}/requests/{job_id}.plan.json')
     plan_input = {'path': sent['path'], 'sha256': sent['sha256']}
     parent = request('group-series-r0', 'series', formal_total + 5 * 900 + 1800,
                      orchestrator_release, ops, orchestrator_inputs + [plan_input], ['--plan', sent['path']])
     parent_path = state_root / (job_id + '.request.json')
-    control.transport.atomic(parent_path, parent)
+    if parent_path.exists():
+        assert json.loads(parent_path.read_text()) == parent, 'Prepared parent request differs'
+    else:
+        control.transport.atomic(parent_path, parent)
     print(json.dumps(control.gridctl.submit(connection, parent_path), indent=2))
 
 

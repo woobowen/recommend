@@ -65,6 +65,7 @@ def main():
         request_path = requests / (job_id + '.json')
         if (job / 'request.json').exists():
             assert json.loads((job / 'request.json').read_text()) == request, 'Immutable child request mismatch'
+        if (job / 'accepted.json').exists():
             state = check('query', job)
         else:
             kind = 'gpu-formal-' if category == 'gpu' else 'cpu-'
@@ -74,9 +75,12 @@ def main():
                 assert request['timeout_seconds'] + 15 <= config['budget']['formal_attempt_wall_seconds']
                 assert request['env']['CUDA_VISIBLE_DEVICES'] in config['gpus']
             assert elapsed(jobs, plan['prefix'] + kind) + request['timeout_seconds'] + 15 <= budget
-            with request_path.open('x') as stream:
-                json.dump(request, stream, indent=2)
-                stream.write('\n')
+            if request_path.exists():
+                assert json.loads(request_path.read_text()) == request, 'Staged child request differs'
+            else:
+                with request_path.open('x') as stream:
+                    json.dump(request, stream, indent=2)
+                    stream.write('\n')
             state = check('submit', jobs, request_path)
         stage = {'job_id': job_id, 'request_path': str(request_path), 'state': state}
         result['stages'].append(stage)
