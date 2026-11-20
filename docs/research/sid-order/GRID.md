@@ -40,3 +40,7 @@
 | GRID B | Sports | shuffle4 | 0.022725996 | 0.014738602 | 0.034383953 | 0.018502345 |
 
 完整 GRID Beauty 结果、原非法候选与 fixed32 观察见 [正式回执](https://github.com/woobowen/recommend/blob/9767729a5114e21b9c949892af3d759baca6a98e/manifests/grid-formal-20261015/FINAL_RECEIPT.md)；Toys/Sports 及 A 缺口见 [正式报告](https://github.com/woobowen/recommend/blob/9767729a5114e21b9c949892af3d759baca6a98e/manifests/grid-shuffle-20261017/FINAL_REPORT.md)。注意力为预定样本描述，不证明置换不变性。
+
+## 已发布 A 路线的补充入口
+
+上表对应原 21 条主题清单中的 GRID 12 条。Toys A-5300、Toys A-5000、Sports A1、Sports A2 各三条件另见[主题补证](ADDITIONAL_EVIDENCE_20261120.md)，其中列出完整 24 条 GRID 汇总、作业版本和复现起点。

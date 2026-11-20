@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "source_snapshot": "12eb8b176b156f3be7d7533ee8f443db02441303",
+  "correct_cases": 3,
+  "negative_cases": [
+    {
+      "fixture": "train request as generation",
+      "rejected": true,
+      "reason": "unarchived request claimed present normal"
+    },
+    {
+      "fixture": "normal/s3 stage job hash swapped",
+      "rejected": true,
+      "reason": "role/stage mismatch normal"
+    },
+    {
+      "fixture": "run altered",
+      "rejected": true,
+      "reason": "run commit mismatch"
+    },
+    {
+      "fixture": "config SHA altered",
+      "rejected": true,
+      "reason": "config SHA mismatch"
+    },
+    {
+      "fixture": "s4 uses s3 metrics and predictions",
+      "rejected": true,
+      "reason": "primary metrics mismatch"
+    },
+    {
+      "fixture": "unarchived request claimed verified",
+      "rejected": true,
+      "reason": "unarchived request falsely verified s4"
+    }
+  ]
+}

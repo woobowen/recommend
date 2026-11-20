@@ -55,3 +55,7 @@ FA2 deterministic backward 是已有共享适配；训练实际以 Int8 主干�
 | LETTER A0 | Beauty | s4 | 0.017886688 | 0.010823148 | 0.032151321 | 0.015404917 |
 
 Beauty 原 GPU 训练和生成完成；原 paired job `TIMED_OUT/-15`、原 collect 未运行。S4 由 `1934c01eee767b665ef1043995ffc741958e30e0` 独立 CPU job 补算，补充汇总完成；原失败未被回填。原审计写明真正非作者科研审核及网页最终二审待完成，用户转交的本轮方案外审不替代它。
+
+## 2026-11-20 原始请求补齐
+
+上文说明的是 2026-11-17 归档状态。原 LETTER Beauty 的六份生成／评价请求后来在原服务器路径找到。两套 Beauty 共 18 份原件和各自文件 SHA、规范化 JSON SHA、stage 与 job 对应由 `wbw-lc-rec` 本轮交付保存。读取[LC-Rec 分支实验入口](https://github.com/woobowen/recommend/blob/d2c7ed88f72c3870b1168940b38cb342d69ba614/docs/research/LC-REC.md)中的请求清单。原运行的 paired 超时、后续补算及执行 commit 继续按历史证据定位。
