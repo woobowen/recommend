@@ -64,7 +64,8 @@ def verify_windows(path):
 
 def safe_member(name):
     p = PurePosixPath(name)
-    return not p.is_absolute() and ".." not in p.parts and "\\" not in name and all(part not in ("", ".") for part in p.parts)
+    return (bool(p.parts) and p.as_posix() == name and not p.is_absolute() and ".." not in p.parts
+            and not any(c in name for c in ("\\", ":", "\x00")))
 
 
 def pack(output, files):
@@ -116,7 +117,9 @@ def main():
         (delivery, path): "delivery/" + path.removeprefix(prefix + "/")
         for path in git_bytes("ls-tree", "-r", "--name-only", delivery, "--", prefix).decode().splitlines()
     }
+    g3_index = "lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/Beauty.g3.index.json"
     frozen = {
+        g3_index,
         "lc_rec/a0_beauty/config/formal_g3_beauty_seed42.json",
         *("lc_rec/a0_beauty/" + name for name in ("formal_train.py", "production_pipeline.py", "production_control.py",
            "production_identity.py", "formal_evaluate.py", "offline_metrics.py", "paired_beauty.py",
@@ -137,6 +140,9 @@ def main():
             p = f"{prefix}/{name}"
             path_to_arc.setdefault((revision, p), f"executed/{revision}/{name}")
             deployed_expectations[revision, p] = expected
+    index_bytes = git_bytes("show", f"{run}:{g3_index}")
+    need(hashlib.sha256(index_bytes).hexdigest() == cfg["asset_sha256"]["index"], "frozen G3 index differs")
+    deployed_expectations[run, g3_index] = data_identity(index_bytes)
     origin_manifest = json.loads(git_bytes("show", f"{delivery}:{snapshot_root}/compute/input-verification.json"))
     for path in frozen:
         if path in origin_manifest["frozen_sources"]:
@@ -160,8 +166,11 @@ def main():
     files["FIXED_GITHUB_READBACK.json"] = json.dumps(receipt, ensure_ascii=False, indent=2).encode() + b"\n"
     files["REVIEW_NAVIGATION.md"] = (
         "# G3 Beauty final web review\n\n"
-        "In the ZIP, start with delivery/results/README.md, then delivery/non_author_review.md.\n\n"
-        f"[Fixed GitHub results]({link()}/{delivery}/{snapshot_root})\n").encode()
+        "开始阅读 [最终结果](delivery/results/README.md) 和 [非作者报告](delivery/non_author_review.md)。\n\n"
+        "ZIP 内的 [原超时证据](prior_timeout/) 与 [冻结源码](frozen/) 对应 GitHub 上的原正式执行。"
+        " [GitHub 回读及路径映射](FIXED_GITHUB_READBACK.json)\n\n"
+        f"[固定 GitHub 交付]({link()}/{delivery}/{snapshot_root}) · "
+        f"[原超时固定 GitHub 提交]({link()}/{cfg['status_commit']}/{old_base})\n").encode()
     member_manifest = pack(output, files)
     zip_hash = sha(output)
     windows = None

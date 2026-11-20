@@ -97,3 +97,9 @@ G3 第四位是去重位，S3 在第四位固定时已经出现下降。S4 在�
 每个 `compute/original/{normal,s3,s4}/primary/` 保存生产 metrics、CSV/NPZ、单条件
 bootstrap、groups、examples 和 evaluator 夹具结果的原件字节。完整预测、权重和 checkpoint
 留在服务器，由输入核验和直接非作者输出记录身份。 [Normal 原评价文件](compute/original/normal/primary/) · [S3 原评价文件](compute/original/s3/primary/) · [S4 原评价文件](compute/original/s4/primary/)
+
+## 交付状态
+
+内部非作者审核通过。审核者按三份完整服务器预测独立重建 1,073,424 个逐用户指标值，
+并在固定内容提交逐文件核对两份输出清单，直接读取 31 个关键 GitHub blob。
+网页最终二审待进行。 [非作者报告](../non_author_review.md) · [非作者 GitHub 回读回执](non-author-github-readback.json)
