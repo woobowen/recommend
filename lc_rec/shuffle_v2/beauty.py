@@ -38,9 +38,6 @@ def derive_letter(text, entry):
 
 
 def g3_transform(raw, mask, groups, vocab, mode, row_idx):
-    from shuffle_runtime import transform_inputs
-    if mode not in core.MODES:
-        return transform_inputs(raw, mask, groups, vocab, mode, row_idx)
     actual, evidence = core.transform(raw, mask, groups, vocab, mode, row_idx)
     return actual, {**core.mode_metadata(mode), 'row_idx': row_idx, 'original_input_token_ids': list(raw),
                     'attention_mask': list(mask), 'evidence': evidence}

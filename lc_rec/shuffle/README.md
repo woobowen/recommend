@@ -1,4 +1,40 @@
-# LETTER A0/A1 test-time SID Shuffle3/Shuffle4
+# LETTER 下游推荐的 SID Shuffle
+
+## 本轮实验使用 GRID-LETTER-SHUFFLE-V2
+
+用户在 2026-11-20 批准本轮任务，并将发布分支指定为 `wbw-lc-rec-shuffle-v2`，从 `7368d301d0d928f77d50551c3b53a5b30c23d63f` 建立。正式运行范围是 Instruments LETTER SID、既有 A0 LLaMA-7B adapter，依次执行 `shuffle2`、`shuffle3a`、`shuffle3b`、`shuffle4`。Normal 使用 `4c6a83d9ba42dc2fe737792759e410ef1874da76` 的冻结预测。其余三组依次为原 LETTER Beauty、GRID G3 Beauty、LETTER Instruments A1，须等第一组交付与网页二审后另行授权运行。
+
+### 置换与统计口径
+
+| 模式 | 活动位置（0-based） | 固定位置（0-based） | 排列数 | 理论恒等概率 |
+|---|---|---|---:|---:|
+| `shuffle2` | 2, 3 | 0, 1 | 2 | 1/2 |
+| `shuffle3a` | 0, 1, 2 | 3 | 6 | 1/6 |
+| `shuffle3b` | 1, 2, 3 | 0 | 6 | 1/6 |
+| `shuffle4` | 0, 1, 2, 3 | 无 | 24 | 1/24 |
+
+`identity_policy=allow_identity`。种子 42，紧凑 UTF-8 JSON `[protocol,42,m,row_idx,visible_item_idx,counter]`，`ensure_ascii=True, sort_keys=True, separators=(',', ':'), allow_nan=False`。SHA-256 完整摘要按无符号大端解释，以 `floor(2**256/m!)*m!` 为接收上界，按余数索引字典序全排列。计数器起始为 0。目标槽取值规则为 `new[A[j]] = old[A[perm[j]]]`。S3a 和 S3b 共享同一相对排列。只在数据集、用户轴与历史出现轴对应时，跨模型或上游共享相对排列。不同 `m` 的键不同，四种模式之间没有嵌套约束。
+
+全排列把自然恒等保留在数据中。对每次出现，移动槽数的理论期望为 `m−1`。即使完整 token ID 及对应 embedding 保持身份，所在序列位置、相对顺序、因果可见上下文和位置编码的配对也可能变化。S3a/S3b 的差值描述两种位置干预，无法单独识别一个 SID 层级的因果作用。去重位的解释只适用于 G3 对应方案。指标相对于 Normal 可能上升或下降，S4 和 S3 间没有预设顺序。
+
+冻结的 [评价协议](../letter/EVALUATION_PROTOCOL_V1.md) 保留 SID Hit、NDCG、MRR 和碰撞 CCE 的 ItemHit、ItemNDCG 共 16 项。主比较为四种模式各减 Normal，预声明次要比较为 S3b−S3a。用户有放回配对 bootstrap 5,000 次，PCG64，统计种子 20261113，95% 线性百分位区间。区间逐指标报告，分析条件为冻结模型、用户轴和单个固定 Shuffle 实例。
+
+### 实际接线与边界
+
+| 来源 | 冻结原入口与 V2 接线 | 模型边界与评价 |
+|---|---|---|
+| Instruments A0 | `letter/scripts/formal_evaluate.py` → `shuffle_v2.entry` 复用字节固定的派生锚点 → `Runtime.intervene` → `shuffle_v2.core.transform` | 原 `TestCollator`，`seq[:-1][-20:]`，原逐位回调，双 rank BF16 Base+LoRA。调用原 `generate`，实际 decoder prefill 对 token、mask、当前 position_ids 与空初始 cache 逐项检查。独立 CPU 评价读取保存分片。 |
+| Instruments A1 | `a1_qwen3_06b/scripts/evaluate.py` → 同一派生入口 → `Runtime.intervene` → V2 core | 原 Qwen Base、tied embedding/head 严格加载，并由 `Runtime.allowed` 先验证冻结回调对原 Prompt 的绑定，再绑定实际置换前缀。仅静态接线核验。 |
+| 原 LETTER Beauty | `6e1b211d…` 下冻结 `a0_beauty/formal_evaluate.py` → `shuffle_v2.beauty --variant letter` 使用同版本 `shuffle_entry.py` 派生锚点 → `Runtime.intervene` → V2 core | 原独立 sampler 保留 11,182/11,181 两分片及原回调。仅静态接线核验，后续须单独绑定该数据域 tokenizer 与 CPU 审计。 |
+| G3 Beauty | `21d495b0…` 下 `a0_beauty/formal_evaluate.py:generate_one` 经 `shuffle_v2.beauty --variant g3` 派生 → `g3_transform` → V2 core | 单卡冻结 `generate_one` 保留原 callback、实际 embedding/decoder hook 和生成后校验；同一模式用于聚合重放。原训练 commit 继续用于 adapter 身份校验，独立记录 V2 运行 commit。仅静态接线核验。 |
+
+[V2 固定资产和预算](../shuffle_v2/a0_instruments.json) 绑定既有 Base、step8240 adapter、SID、交互、tokenizer 与 Normal 预测。原 A0 生成配置为 Prompt0、每 rank batch=1、beam=return=20、`max_new_tokens=10`、`filter_items=False`。装载保持 PEFT 0.5.0 原路径并逐值核验全部 450 个 adapter tensor，包括 embedding/lm_head，未新增参数。正式前门槛依次为全量 CPU 重放、32 名固定真实用户的四个 V2 模型边界预跑、独立预审。预跑只运行上述四个模式。每模式独立 job，顺序由 [控制脚本](../shuffle_v2/control.py) 校验，生成、CPU 评价、配对统计分别保留终态。正常监控间隔为 15 分钟。到达第一整组交付后停止。
+
+### 历史 V1
+
+V1 的排除恒等注记发布在旧历史线文档提交 `94b79854a59f52208bc11f14fc6e3069594dab6a`。Instruments V1 交付 `3396d45a041424fe4af625bfc0b047467150c5c1` 由注释标签 `letter-shuffle-v1-exclude-identity` 归档。原 LETTER Beauty `6e1b211d9c37f358c43b1540b40b17f6703150d2`、G3 Beauty `21d495b0be5b606853ec7cec68a3eaa1b58acbd7` 和 Instruments `f0242b9f90ae23a4979d688a287734ca9f88cea1` 的 V1 core 字节相同。旧 S3 与新 S3a 位置相同，旧 S3/S4 分别从 5/23 个非恒等排列抽样。旧审核按原时间语义阅读。
+
+## 2026-11-14 历史 Instruments V1 实验
 
 四组正式全量测试及真实非作者方法/统计终审均已通过。请从[最终审核入口](FINAL_REVIEW_ENTRY.md)开始；[完整结果表](results/RESULTS.md)含全部16项、差值/相对差/95%区间、SID诊断、first-hit、分组、推荐变化及成本。GPU/CPU实际RUN均固定为`f0242b9f90ae23a4979d688a287734ca9f88cea1`，后续交付文件没有改变服务器冻结源码。
 
