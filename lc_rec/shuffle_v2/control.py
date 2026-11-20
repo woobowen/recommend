@@ -1,14 +1,19 @@
 """Deploy immutable V2 sources and submit requests through the accepted runner."""
 import argparse
+import fcntl
+from datetime import datetime
 import json
 from pathlib import Path
 import shlex
 import subprocess
 import sys
 
+from lc_rec.shuffle_v2.core import MODES
 from lc_rec.shuffle_v2.replay import CONFIG
 
 REPO = Path(__file__).resolve().parents[2]
+BRANCH = 'wbw-lc-rec-shuffle-v2'
+BASE_COMMIT = '7368d301d0d928f77d50551c3b53a5b30c23d63f'
 SUPPORT = Path('/home/addaswsw/recommend-support/letter-shuffle-v2-20261120')
 BASE = '/home/bwwu/grid-audits/sid-extensions-p0'
 ROOT = '/data/bwwu/lc-rec/letter-shuffle-v2-20261120'
@@ -82,37 +87,158 @@ print(json.dumps(result))''', timeout=90))
     return {'commit': commit, 'release': release, 'files': len(receipt['files']), 'runner_sha256': RUNNER_SHA}
 
 
-def submit(t, commit, job, stage, attempt, timeout):
+def readback(commit):
+    result = subprocess.check_output(['git', 'ls-remote', '--exit-code', '--heads', 'origin', f'refs/heads/{BRANCH}'],
+                                     cwd=REPO, text=True, timeout=45).strip().split()
+    assert result == [commit, f'refs/heads/{BRANCH}'], result
+    assert subprocess.run(['git', 'merge-base', '--is-ancestor', BASE_COMMIT, commit], cwd=REPO).returncode == 0
+    transport.atomic(SUPPORT / f'{commit}.publication.json', {'commit': commit, 'branch': BRANCH, 'base_commit': BASE_COMMIT})
+
+
+def job_states(t):
+    return json.loads(remote_python(t, f'''from pathlib import Path
+import json
+base=Path({BASE!r})/'jobs'; states={{}}
+for job in sorted(base.glob({(PREFIX+'*')!r})):
+ path=job/'status.json'
+ if path.is_file(): states[job.name]=json.loads(path.read_text())
+print(json.dumps(states))'''))
+
+
+def budget_seconds(states, kind, limit):
+    total = 0.0
+    for name, state in states.items():
+        if not name.startswith(PREFIX + kind):
+            continue
+        if not state.get('ended_at'):
+            raise RuntimeError(f'Budget is reserved by active attempt {name}')
+        started = state.get('started_at', state.get('received_at'))
+        total += (datetime.fromisoformat(state['ended_at']) - datetime.fromisoformat(started)).total_seconds()
+    return int(limit - total)
+
+
+def succeeded(states, name):
+    record = states[PREFIX + name]
+    assert record['status'] == 'SUCCEEDED' and record['exit_code'] == 0 and record['cleanup']['verified'], record
+
+
+def remote_hash(t, path):
+    return remote_python(t, f'from pathlib import Path; import hashlib; print(hashlib.sha256(Path({path!r}).read_bytes()).hexdigest())').strip()
+
+
+def request_parts(t, config, states, args, commit):
+    mode = args.mode
+    kind = args.action
+    out = lambda job: f'{ROOT}/{job}'
+    audit = out(args.replay + '/audit.json')
+    inputs = []
+    gpu = kind in ('preflight', 'generate')
+    limits = config['budget']
+    if gpu:
+        result = remote_python(t, "import subprocess; print(subprocess.check_output(['nvidia-smi','--query-compute-apps=gpu_uuid,pid','--format=csv,noheader'],text=True),end='')")
+        if result.strip():
+            raise RuntimeError('Both approved GPUs must be idle: ' + result.strip())
+        readback(commit)
+        succeeded(states, args.replay)
+        for filename in ('assets.json', 'audit.json', 'inputs.jsonl'):
+            path = out(args.replay + '/' + filename)
+            inputs.append({'path': path, 'sha256': remote_hash(t, path)})
+        if kind == 'preflight':
+            job = 'gpu-preflight'
+            remaining = budget_seconds(states, job, limits['preflight_device_seconds'] // 2)
+            timeout = min(1700, remaining - 30)
+            mode = 'preflight'
+        else:
+            assert mode in MODES
+            job = 'gpu-formal-' + mode
+            succeeded(states, args.preflight)
+            review = json.loads(Path(args.review).read_text())
+            assert review['status'] == 'PASS' and review['RUN_COMMIT'] == commit
+            assert review['preflight_job_id'] == PREFIX + args.preflight
+            receipt = out(args.preflight + '/summary.json')
+            assert remote_hash(t, receipt) == review['preflight_summary_sha256']
+            sent = t.put(args.review, f'{BASE}/requests/{PREFIX}{job}-{args.attempt}.review.json')
+            inputs.extend({'path': path, 'sha256': sha} for path, sha in ((sent['path'], sent['sha256']), (receipt, review['preflight_summary_sha256'])))
+            ordinal = list(MODES).index(mode)
+            for prior in list(MODES)[:ordinal]:
+                succeeded(states, f'gpu-formal-{prior}-{args.prior_attempt}')
+            remaining = budget_seconds(states, 'gpu-formal-', min(limits['formal_total_wall_seconds'], limits['formal_total_device_seconds'] // 2))
+            timeout = min(limits['formal_attempt_wall_seconds'] - 30, remaining - 30)
+            assert timeout >= args.minimum_seconds, 'Remaining formal budget below the verified time estimate'
+        assert timeout >= 90
+        extra = ['--cpu-audit', audit, '--run-commit', commit, '--mode', mode, '--seconds', str(timeout - 45)]
+        return job, 'generate', extra, gpu, timeout, inputs
+    timeout = min(900, budget_seconds(states, 'cpu-', limits['cpu_total_wall_seconds']) - 30)
+    assert 90 <= timeout <= limits['cpu_attempt_wall_seconds']
+    if kind == 'replay':
+        return 'cpu-replay', 'replay', [], gpu, min(timeout, 600), inputs
+    if kind == 'metrics':
+        assert mode in ('normal', *MODES)
+        run = config['baseline']['run-commit'] if mode == 'normal' else args.prediction_commit or commit
+        extra = ['--mode', mode, '--run-commit', run, '--evaluation-commit', commit]
+        if mode != 'normal':
+            assert args.prediction_job.startswith(f'gpu-formal-{mode}-')
+            succeeded(states, args.prediction_job)
+            extra.extend(['--cpu-audit', audit, '--test-dir', out(args.prediction_job + '/test')])
+        return 'cpu-eval-' + mode, 'evaluate', extra, gpu, timeout, inputs
+    assert kind == 'summarize'
+    stages = ['cpu-eval-' + mode for mode in ('normal', *MODES)]
+    for stage in stages:
+        succeeded(states, f'{stage}-{args.prior_attempt}')
+    mode_dirs = [f'{ROOT}/{stage}-{args.prior_attempt}' for stage in stages]
+    return 'cpu-summary', 'statistics', mode_dirs, gpu, timeout, inputs
+
+
+def submit(t, commit, args):
     profile = t.profile
-    job_id = PREFIX + job + '-' + attempt
     deployment = json.loads((SUPPORT / f'{commit}.deployment.json').read_text())
     release = deployment['release']
     config = json.loads(CONFIG.read_text())
     base = config['baseline']
-    request = {k: profile[k] for k in ('user', 'uid', 'namespace', 'deployment_sha256')}
-    env = {'CUDA_VISIBLE_DEVICES': '', 'HF_HUB_OFFLINE': '1', 'OMP_NUM_THREADS': '4',
-           'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONOPTIMIZE': '0', 'PYTHONUNBUFFERED': '1',
-           'TOKENIZERS_PARALLELISM': 'false', 'TORCHINDUCTOR_COMPILE_THREADS': '1', 'TRANSFORMERS_OFFLINE': '1', 'USE_FLAX': '0', 'USE_TF': '0'}
-    request.update(schema=1, host=profile['hostname'], job_id=job_id, capture_version=commit,
-                   cwd=release, env=env, timeout_seconds=timeout,
-                   inputs=[{'path': f"{release}/{item['path']}", 'sha256': item['sha256']} for item in deployment['files']],
-                   argv=[base['python'], '-B', '-m', stage, '--output', f'{ROOT}/{job}-{attempt}'])
-    path = SUPPORT / f'{job_id}.request.json'
-    if path.exists():
-        if json.loads(path.read_text()) != request:
-            raise ValueError('Existing request differs. Preserve its attempt and allocate a new ID.')
-        return gridctl.query(t, job_id)
-    transport.atomic(path, request)
-    return gridctl.submit(t, path)
+    with (SUPPORT / 'submit.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        states = job_states(t)
+        key = {'replay': 'cpu-replay', 'preflight': 'gpu-preflight', 'generate': 'gpu-formal-' + args.mode,
+               'metrics': 'cpu-eval-' + args.mode, 'summarize': 'cpu-summary'}[args.action]
+        job_id = PREFIX + key + '-' + args.attempt
+        path = SUPPORT / f'{job_id}.request.json'
+        if path.exists() or job_id in states:
+            return gridctl.query(t, job_id)
+        job, stage, extra, gpu, timeout, inputs = request_parts(t, config, states, args, commit)
+        assert job == key
+        request = {k: profile[k] for k in ('user', 'uid', 'namespace', 'deployment_sha256')}
+        env = {'CUDA_VISIBLE_DEVICES': '0,1' if gpu else '', 'HF_HUB_OFFLINE': '1', 'OMP_NUM_THREADS': '4',
+               'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONOPTIMIZE': '0', 'PYTHONUNBUFFERED': '1',
+               'TOKENIZERS_PARALLELISM': 'false', 'TORCHINDUCTOR_COMPILE_THREADS': '1',
+               'TRANSFORMERS_OFFLINE': '1', 'USE_FLAX': '0', 'USE_TF': '0'}
+        if gpu:
+            prior = json.loads((REPO / 'lc_rec/shuffle/results/letter-a0-20261112-shuffle3-instruments-seed42-20261114-r0/job/request.json').read_text())
+            for name in ('CUDA_HOME', 'LD_LIBRARY_PATH', 'TORCH_EXTENSIONS_DIR'):
+                env[name] = prior['env'][name]
+        request.update(schema=1, host=profile['hostname'], job_id=job_id, capture_version=commit,
+                       cwd=release, env=env, timeout_seconds=timeout,
+                       inputs=inputs + [{'path': f"{release}/{item['path']}", 'sha256': item['sha256']} for item in deployment['files']],
+                       argv=[base['python'], '-B', '-m', f'lc_rec.shuffle_v2.{stage}', '--output', f'{ROOT}/{job}-{args.attempt}', *extra])
+        transport.atomic(path, request)
+        return gridctl.submit(t, path)
+
 
 
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
-    parser.add_argument('action', choices=('deploy', 'replay', 'query', 'pull'))
+    parser.add_argument('action', choices=('deploy', 'replay', 'query', 'pull', 'preflight', 'generate', 'metrics', 'summarize'))
     parser.add_argument('--commit')
     parser.add_argument('--job', default='cpu-replay')
     parser.add_argument('--attempt', default='r0', choices=('r0','r1','r2','r3'))
     parser.add_argument('--relative')
+    parser.add_argument('--mode', default='normal', choices=('normal', *MODES))
+    parser.add_argument('--replay', default='cpu-replay-r1')
+    parser.add_argument('--preflight', default='gpu-preflight-r0')
+    parser.add_argument('--prior-attempt', default='r0', choices=('r0','r1','r2','r3'))
+    parser.add_argument('--prediction-job')
+    parser.add_argument('--prediction-commit')
+    parser.add_argument('--review', type=Path)
+    parser.add_argument('--minimum-seconds', type=int, default=10800)
     args = parser.parse_args()
     SUPPORT.mkdir(parents=True, exist_ok=True)
     t = connect()
@@ -136,7 +262,7 @@ print(json.dumps(dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p
         if args.action == 'deploy':
             result = deploy(t, commit)
         else:
-            result = submit(t, commit, 'cpu-replay', 'lc_rec.shuffle_v2.replay', args.attempt, 600)
+            result = submit(t, commit, args)
     print(json.dumps(result, indent=2))
 
 
