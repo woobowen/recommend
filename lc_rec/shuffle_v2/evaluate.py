@@ -1,5 +1,6 @@
 """Frozen A0 metrics with V2-specific full prediction and prefill verification."""
 import argparse
+import difflib
 import importlib.util
 import json
 import os
@@ -20,7 +21,7 @@ def module(name, path):
     return loaded
 
 
-def verify_predictions(test, mode, run, audit, config):
+def verify_predictions(test, mode, run, audit, single_shard, config):
     from torch.utils.data.distributed import DistributedSampler
     rows = [json.loads(line) for line in (audit.parent / 'inputs.jsonl').open()]
     receipt = json.loads(audit.read_text())
@@ -28,6 +29,8 @@ def verify_predictions(test, mode, run, audit, config):
     assert frozen.sha(audit.parent / 'inputs.jsonl') == receipt['manifest_sha256']
     index, catalog, users, _ = frozen.catalog_and_users(config['baseline']['data-root'])
     assert len(rows) == len(users) == config['users']
+    single = json.loads(single_shard.read_text())
+    assert single['status'] == 'PASS_SINGLE_SHARD_CPU' and single['manifest_sha256'] == receipt['manifest_sha256']
     evaluator = frozen.load_evaluator(config['baseline']['source-root'])
     symbol_ids = receipt['token_ids']
     allowed_by_position = [{symbol_ids[sid[pos]] for sid in index.values()} for pos in range(4)]
@@ -35,13 +38,13 @@ def verify_predictions(test, mode, run, audit, config):
     eos = json.loads(eos_path.read_text())['eos_token_id']
     documents, shards = [], []
     unchanged = histories = candidates = 0
-    for rank in range(2):
+    for rank in (0,):
         report = json.loads((test / f'rank{rank}.json').read_text())
-        assert report['status'] == 'PASS' and report['RUN_COMMIT'] == run and report['completed_users'] == 12386
+        assert report['status'] == 'PASS' and report['RUN_COMMIT'] == run and report['completed_users'] == config['users'] and report['world_size'] == 1
         assert report['adapter_files']['adapter_model.bin'] == config['baseline']['adapter_identity']
-        assert report['assignment_sha256'] == receipt['full_rank_assignment_sha256'][rank]
+        assert report['assignment_sha256'] == single['assignment_sha256']
         assert {k: report['shuffle'][k] for k in core.mode_metadata(mode)} == core.mode_metadata(mode)
-        assignment = list(DistributedSampler(range(len(users)), num_replicas=2, rank=rank,
+        assignment = list(DistributedSampler(range(len(users)), num_replicas=1, rank=rank,
                                              shuffle=True, seed=0, drop_last=True))
         assert report['assignment_sha256'] == core.canonical_sha256(assignment)
         path = test / f'predictions.rank{rank}.jsonl'
@@ -104,12 +107,56 @@ def normal_predictions(test, config):
     return manifests
 
 
+def derive_evaluator(text, role):
+    def replace(old, new, occurrences=1):
+        nonlocal text
+        assert text.count(old) == occurrences, (role, old)
+        text = text.replace(old, new)
+    if role == 'original':
+        replace('for rank in (0, 1):', 'for rank in (0,):', 2)
+        replace('N // 2', 'N', 3)
+        replace('and state.get("assigned_users") == N, "Rank formal completion")',
+                'and state.get("assigned_users") == N and state.get("world_size") == 1, "Rank formal completion")')
+        replace('key in states[0] and key in states[1]\n              and states[0][key] == states[1][key]', 'key in states[0]')
+        replace('all("generation" in state for state in states)\n              and states[0]["generation"] == states[1]["generation"]',
+                '"generation" in states[0]')
+        replace('len(claims) == 2', 'len(claims) == 1')
+        replace('set(claims) == {0, 1}', 'set(claims) == {0}')
+    elif role == 'primary':
+        replace('for rank in (0, 1):', 'for rank in (0,):')
+        replace('len(assignments)==N//2', 'len(assignments)==N')
+    elif role == 'extended':
+        replace('len(records) == 2, "Two frozen prediction shards"', 'len(records) == 1, "One frozen prediction shard"')
+        replace('and rank in (0, 1)', 'and rank == 0')
+        replace('set(predictions) == {0, 1}', 'set(predictions) == {0}')
+        replace('len(stage_records) == 2', 'len(stage_records) == 1')
+        replace('set(stage_manifests) == {0, 1}', 'set(stage_manifests) == {0}')
+        replace('for rank in (0, 1):', 'for rank in (0,):')
+        replace('N // 2', 'N', 2)
+    else:
+        raise ValueError(role)
+    return text
+
+
+def single_evaluator(out, path, role):
+    text = path.read_text()
+    derived = derive_evaluator(text, role)
+    actual = out / f'evaluator-{role}.py'
+    compile(derived, str(actual), 'exec')
+    actual.write_text(derived)
+    diff = out / f'evaluator-{role}.diff'
+    diff.write_text(''.join(difflib.unified_diff(text.splitlines(True), derived.splitlines(True),
+                                                 fromfile=str(path), tofile=actual.name)))
+    return actual
+
+
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument('--mode', choices=('normal', *core.MODES), required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--test-dir', type=Path)
     parser.add_argument('--cpu-audit', type=Path)
+    parser.add_argument('--single-shard-audit', type=Path)
     parser.add_argument('--run-commit', required=True, help='Commit of the predictions')
     parser.add_argument('--evaluation-commit', required=True)
     args = parser.parse_args()
@@ -124,7 +171,7 @@ def main():
         documents = normal_predictions(test, config)
     else:
         test = args.test_dir
-        documents, proof = verify_predictions(test, args.mode, args.run_commit, args.cpu_audit, config)
+        documents, proof = verify_predictions(test, args.mode, args.run_commit, args.cpu_audit, args.single_shard_audit, config)
         dump(out / 'prediction_checks.json', proof)
     manifest = {'schema': 'a1_frozen_prediction_manifest_v1', 'condition': args.mode, 'model_key': 'a0',
                 'gpu_run_commit': args.run_commit, 'test_dir': str(test), 'predictions': documents}
@@ -135,6 +182,11 @@ def main():
     official = LC / 'letter/review/final_audit_20261113/external/official_cce.py'
     independent = LC / 'a1_qwen3_06b/review/independent_extended.py'
     config_path = LC / 'letter/config/a0_evaluation_v1.json'
+    original_paths = (original, evaluator, independent, official, config_path)
+    if args.mode != 'normal':
+        original = single_evaluator(out, original, 'original')
+        evaluator = single_evaluator(out, evaluator, 'primary')
+        independent = single_evaluator(out, independent, 'extended')
     protocol = json.loads(config_path.read_text())
     protocol['original_run_commit'] = args.run_commit
     dump(out / 'effective_config.json', protocol)
@@ -163,7 +215,8 @@ def main():
     dump(out / 'summary.json', {'status': 'PASS_V2_EVALUATION', 'prediction_run_commit': args.run_commit,
                                'evaluation_run_commit': args.evaluation_commit, 'condition': args.mode,
                                'metrics': results, 'gpu_used': False,
-                               'evaluation_source_sha256': {p.name: frozen.sha(p) for p in (evaluator, original, independent, official, config_path)}})
+                               'evaluation_source_sha256': {p.name: frozen.sha(p) for p in (evaluator, original, independent, official, config_path)},
+                               'frozen_evaluation_source_sha256': {p.name: frozen.sha(p) for p in original_paths}})
 
 
 if __name__ == '__main__':

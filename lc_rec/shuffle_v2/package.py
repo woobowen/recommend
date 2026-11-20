@@ -43,7 +43,7 @@ def check_required(files, status):
         required = {'evidence/nonauthor-final.md', 'evidence/remote-run-index.json', 'evidence/github-readback.json'}
         needed = {'cpu-summary': ('summary.json', 'metrics.csv', 'paired.csv', 'arrays.npz'), 'gpu-preflight': ('summary.json',)}
         for mode in ('shuffle2', 'shuffle3a', 'shuffle3b', 'shuffle4'):
-            needed['gpu-formal-' + mode] = ('summary.json', 'test/rank0.json', 'test/rank1.json')
+            needed['gpu-formal-' + mode] = ('summary.json', 'test/rank0.json')
             needed['cpu-eval-' + mode] = ('summary.json', 'prediction_manifest.json', 'prediction_checks.json', 'primary/per_user_metrics.npz')
         for stage, leaves in needed.items():
             directories = {name.split('/')[1] for name in files if name.startswith(f'evidence/{stage}-')}

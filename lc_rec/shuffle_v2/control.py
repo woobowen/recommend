@@ -161,8 +161,9 @@ def request_parts(t, config, states, args, commit):
     if gpu:
         readback(commit)
         succeeded(states, args.replay)
-        succeeded(states, args.single_shard)
-        shard = out(args.single_shard + '/audit.json')
+        shard_job = args.single_shard or stage_success(states, 'cpu-single-shard')
+        succeeded(states, shard_job)
+        shard = out(shard_job + '/audit.json')
         inputs.append({'path': shard, 'sha256': remote_hash(t, shard)})
         for filename in ('assets.json', 'audit.json', 'inputs.jsonl'):
             path = out(args.replay + '/' + filename)
@@ -199,7 +200,7 @@ def request_parts(t, config, states, args, commit):
     if kind == 'single-shard':
         succeeded(states, args.replay)
         return 'cpu-single-shard', 'single_shard', ['--cpu-audit', audit], gpu, min(timeout, 300), inputs
-    if kind in ('fixtures', 'boundary-fixture', 'single-shard'):
+    if kind in ('fixtures', 'boundary-fixture'):
         return 'cpu-' + kind, kind.replace('-', '_'), [], gpu, min(timeout, 300), inputs
     if kind == 'metrics':
         assert mode in ('normal', *MODES)
@@ -208,7 +209,8 @@ def request_parts(t, config, states, args, commit):
         if mode != 'normal':
             assert args.prediction_job.startswith(f'gpu-formal-{mode}-')
             succeeded(states, args.prediction_job)
-            extra.extend(['--cpu-audit', audit, '--test-dir', out(args.prediction_job + '/test')])
+            shard_job = args.single_shard or stage_success(states, 'cpu-single-shard')
+            extra.extend(['--cpu-audit', audit, '--single-shard-audit', out(shard_job + '/audit.json'), '--test-dir', out(args.prediction_job + '/test')])
         return 'cpu-eval-' + mode, 'evaluate', extra, gpu, timeout, inputs
     assert kind == 'summarize'
     stages = ['cpu-eval-' + mode for mode in ('normal', *MODES)]
@@ -274,7 +276,7 @@ def main():
     parser.add_argument('--relative')
     parser.add_argument('--mode', default='normal', choices=('normal', *MODES))
     parser.add_argument('--replay', default='cpu-replay-r1')
-    parser.add_argument('--single-shard', default='cpu-single-shard-r0')
+    parser.add_argument('--single-shard')
     parser.add_argument('--preflight', default='gpu-preflight-r0')
     parser.add_argument('--prediction-job')
     parser.add_argument('--prediction-commit')

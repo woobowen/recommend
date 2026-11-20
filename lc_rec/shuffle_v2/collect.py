@@ -33,23 +33,25 @@ def collect(connection, output, complete):
     fixtures = control.stage_success(states, 'cpu-fixtures')
     boundary_fixture = control.stage_success(states, 'cpu-boundary-fixture')
     normal = control.stage_success(states, 'cpu-eval-normal')
-    paths = {cpu_replay: ('audit.json','assets.json','examples.json','samples.json'), fixtures: ('summary.json',),
+    single = control.stage_success(states, 'cpu-single-shard')
+    paths = {single: ('audit.json',), cpu_replay: ('audit.json','assets.json','examples.json','samples.json'), fixtures: ('summary.json',),
              boundary_fixture: ('summary.json',),
              normal: ('summary.json','prediction_manifest.json','effective_config.json','independent_original.json', 'independent_extended.json',
                       'primary/metrics.json','primary/per_user_metrics.npz', 'primary/bootstrap_draw_means.npy','primary/bootstrap.json')}
     if complete:
         preflight = control.stage_success(states, 'gpu-preflight')
-        paths[preflight] = ('summary.json', *(f'{mode}/predictions.rank{rank}.jsonl' for mode in core.MODES for rank in range(2)),
-                            *(f'{mode}/rank{rank}.json' for mode in core.MODES for rank in range(2)),
-                            *(f'{mode}/derived.rank{rank}.diff' for mode in core.MODES for rank in range(2)))
+        paths[preflight] = ('summary.json', *(f'{mode}/predictions.rank{rank}.jsonl' for mode in core.MODES for rank in (0,)),
+                            *(f'{mode}/rank{rank}.json' for mode in core.MODES for rank in (0,)),
+                            *(f'{mode}/derived.rank{rank}.diff' for mode in core.MODES for rank in (0,)))
         for mode in core.MODES:
             gpu = control.stage_success(states, 'gpu-formal-' + mode)
             cpu = control.stage_success(states, 'cpu-eval-' + mode)
             paths[gpu] = ('summary.json', f'{mode}.request.json', f'{mode}.exit.json',
-                          *(f'test/rank{rank}.json' for rank in range(2)),
-                          *(f'test/derived.rank{rank}.diff' for rank in range(2)))
+                          *(f'test/rank{rank}.json' for rank in (0,)),
+                          *(f'test/derived.rank{rank}.diff' for rank in (0,)))
             paths[cpu] = ('summary.json','prediction_manifest.json','prediction_checks.json','effective_config.json',
-                          'independent_original.json','independent_extended.json','primary/metrics.json','primary/per_user_metrics.npz')
+                          'independent_original.json','independent_extended.json','primary/metrics.json','primary/per_user_metrics.npz',
+                          *(f'evaluator-{r}.diff' for r in ('original','primary','extended')))
         paths[control.stage_success(states, 'cpu-summary')] = ('summary.json', 'metrics.csv', 'paired.csv', 'arrays.npz')
     for job, files in paths.items():
         for relative in files:
