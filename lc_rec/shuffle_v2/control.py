@@ -200,7 +200,7 @@ def request_parts(t, config, states, args, commit):
     if kind == 'single-shard':
         succeeded(states, args.replay)
         return 'cpu-single-shard', 'single_shard', ['--cpu-audit', audit], gpu, min(timeout, 300), inputs
-    if kind in ('fixtures', 'boundary-fixture'):
+    if kind in ('fixtures', 'boundary-fixture', 'evaluation-fixture'):
         return 'cpu-' + kind, kind.replace('-', '_'), [], gpu, min(timeout, 300), inputs
     if kind == 'metrics':
         assert mode in ('normal', *MODES)
@@ -228,7 +228,7 @@ def submit(t, commit, args):
     with (SUPPORT / 'submit.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         states = job_states(t)
-        key = {'replay': 'cpu-replay', 'fixtures': 'cpu-fixtures', 'single-shard': 'cpu-single-shard', 'boundary-fixture': 'cpu-boundary-fixture', 'preflight': 'gpu-preflight', 'generate': 'gpu-formal-' + args.mode,
+        key = {'replay': 'cpu-replay', 'fixtures': 'cpu-fixtures', 'evaluation-fixture': 'cpu-evaluation-fixture', 'single-shard': 'cpu-single-shard', 'boundary-fixture': 'cpu-boundary-fixture', 'preflight': 'gpu-preflight', 'generate': 'gpu-formal-' + args.mode,
                'metrics': 'cpu-eval-' + args.mode, 'summarize': 'cpu-summary'}[args.action]
         job_id = PREFIX + key + '-' + args.attempt
         path = SUPPORT / f'{job_id}.request.json'
@@ -269,7 +269,7 @@ def submit(t, commit, args):
 
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
-    parser.add_argument('action', choices=('deploy', 'replay', 'query', 'pull', 'preflight', 'generate', 'metrics', 'summarize', 'fixtures', 'boundary-fixture', 'single-shard'))
+    parser.add_argument('action', choices=('deploy', 'replay', 'query', 'pull', 'preflight', 'generate', 'metrics', 'summarize', 'fixtures', 'boundary-fixture', 'single-shard', 'evaluation-fixture'))
     parser.add_argument('--commit')
     parser.add_argument('--job', default='cpu-replay')
     parser.add_argument('--attempt', default='r0', choices=('r0','r1','r2','r3'))
