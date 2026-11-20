@@ -144,7 +144,12 @@ def main():
                 print(json.dumps(before, indent=2))
                 return
             runner_job = Path(cfg["cpu_job_root"]) / job
-            need(previous_attempt["status"] == "RESERVED_NO_CONFIRMED_RUNNER_REQUEST"
+            status = previous_attempt.get("runner", {})
+            unclaimed = (status.get("status") == "UNCONFIRMED"
+                         and status.get("observation") == "STATUS_MISSING_NO_AUTOMATIC_RESTART"
+                         and status["workgroup_observation"]["verified_empty"]
+                         and not any(status[k] for k in ("worker_alive", "supervisor_alive", "workgroup_live")))
+            need((previous_attempt["status"] == "RESERVED_NO_CONFIRMED_RUNNER_REQUEST" or unclaimed)
                  and not any((runner_job / name).exists() for name in ("accepted.json", "status.json", "attempt.json")),
                  "reconciliation requires evidence that the existing intent was never accepted")
             path = Path(previous_attempt["request_path"])
