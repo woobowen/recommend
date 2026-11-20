@@ -1,5 +1,7 @@
 # G3 Beauty 正式结果及补充 CPU 收尾
 
+> **历史协议注记（2026-11-20）**　G3 Beauty 正式生成版本 `21d495b0be5b606853ec7cec68a3eaa1b58acbd7` 的 `formal_evaluate.generate_one` 直接调用 `shuffle_runtime.transform_inputs`，共用与 Instruments、原 LETTER Beauty 字节相同的 V1 core。S3 固定第四位，从前三位的 5 种非恒等排列中抽取；S4 从四位的 23 种非恒等排列中抽取。G3 第四位为该 SID 方案的去重位。历史审核结论依原有回执。
+
 原正式训练、Normal/OFF、S3、S4 生成和三组离线评价已完成。补充 CPU 作业完成三份原始预测的
 独立复算、两组配对与最终收集。另一个 CPU 作业由非作者直接重读服务器三份全量预测、原始
 CSV/NPZ 和最终产物。原 `paired-a0` 保留 `TIMED_OUT/-15` 和清收记录，原 `collect`

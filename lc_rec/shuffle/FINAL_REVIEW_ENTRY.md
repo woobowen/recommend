@@ -1,5 +1,7 @@
 # A0/A1 LETTER-LC-Rec × test-time SID Shuffle3/Shuffle4 最终审核入口
 
+> **历史协议注记（2026-11-20）**　A0/A1 Instruments 的 S3/S4 实际运行于 `f0242b9f90ae23a4979d688a287734ca9f88cea1`。`lc_rec/shuffle/core.py` 的 `permutation_catalog` 排除恒等，`transform` 对开启模式断言非恒等。S3 在前三位抽 5 种排列，固定第四位；S4 在四位抽 23 种排列。S3 与 V2 `shuffle3a` 作用位置相同，抽样空间不同。历史交付归档为 `letter-shuffle-v1-exclude-identity`。本注记记录历史实际行为，历史代码、结果与审核结论保留原时间语义。
+
 **INTERNAL FINAL AUDIT: PASS**
 
 **IMPLEMENTATION PASS / RUN COMPLETE / METRICS PASS / NONAUTHOR REVIEW PASS**。四组全量正式测试已成功，内部科研验收通过。本文冻结的是实际运行、评价和非作者终审。对本固定提交随后完成的GitHub回读及由它构建的ZIP校验，作为外部交付回执随最终交付提供，避免提交/ZIP哈希自引用；本文不伪造尚未发生的发布后证明。最终完整交付状态以实际回执及用户收到的最终回复为准。

@@ -1,5 +1,7 @@
 # Beauty A0: supplemental S4 pairing and final audit
 
+> **历史协议注记（2026-11-20）**　原 LETTER Beauty 正式 S3/S4 的生成版本为 `6e1b211d9c37f358c43b1540b40b17f6703150d2`。`production_pipeline.py` 调用 `shuffle_entry.py`，派生入口导入 `shuffle_runtime.py`，再用与 Instruments 相同的 V1 core。S3 固定第四位，从前三位的 5 种非恒等排列中抽取；S4 从四位的 23 种非恒等排列中抽取。结果与历史审核状态照原记录。
+
 This is `SUPPLEMENTAL_CPU_POSTPROCESS`, explicitly authorized by the user's current task. It adds no GPU computation, training seed, permutation, model or dataset. The original pipeline remains `PAIRED_TIMED_OUT_COLLECT_NOT_RUN`. Results here must not be represented as the original controller's collect output.
 
 Original RUN: `6e1b211d9c37f358c43b1540b40b17f6703150d2`.
