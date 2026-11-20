@@ -34,7 +34,8 @@ def collect(connection, output, complete):
     boundary_fixture = control.stage_success(states, 'cpu-boundary-fixture')
     normal = control.stage_success(states, 'cpu-eval-normal')
     single = control.stage_success(states, 'cpu-single-shard')
-    paths = {single: ('audit.json',), cpu_replay: ('audit.json','assets.json','examples.json','samples.json'), fixtures: ('summary.json',),
+    eval_fixture = control.stage_success(states, 'cpu-evaluation-fixture')
+    paths = {eval_fixture: ('summary.json',), single: ('audit.json',), cpu_replay: ('audit.json','assets.json','examples.json','samples.json'), fixtures: ('summary.json',),
              boundary_fixture: ('summary.json',),
              normal: ('summary.json','prediction_manifest.json','effective_config.json','independent_original.json', 'independent_extended.json',
                       'primary/metrics.json','primary/per_user_metrics.npz', 'primary/bootstrap_draw_means.npy','primary/bootstrap.json')}
@@ -52,12 +53,16 @@ def collect(connection, output, complete):
             paths[cpu] = ('summary.json','prediction_manifest.json','prediction_checks.json','effective_config.json',
                           'independent_original.json','independent_extended.json','primary/metrics.json','primary/per_user_metrics.npz',
                           *(f'evaluator-{r}.diff' for r in ('original','primary','extended')))
+        paths[control.stage_success(states, 'group-series')] = ('summary.json',)
         paths[control.stage_success(states, 'cpu-summary')] = ('summary.json', 'metrics.csv', 'paired.csv', 'arrays.npz')
     for job, files in paths.items():
         for relative in files:
             evidence.append(receive(connection, f'{control.ROOT}/{job}/{relative}', output / job / relative))
-    for full_id in states:
-        for relative in ('request.json','accepted.json','status.json','cleanup.json'):
+    for full_id, state in states.items():
+        leaves = ('request.json', 'accepted.json', 'status.json')
+        if state.get('cleanup') is not None:
+            leaves += ('cleanup.json',)
+        for relative in leaves:
             evidence.append(receive(connection, f'{control.BASE}/jobs/{full_id}/{relative}', output / 'jobs' / full_id / relative))
     control.transport.atomic(output / 'collection.json', captured)
     return {'jobs': len(states), 'files': len(evidence), 'output': str(output)}

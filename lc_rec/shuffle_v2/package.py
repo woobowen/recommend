@@ -41,7 +41,13 @@ def check_required(files, status):
     assert 'source/lc_rec/shuffle/README.md' in files
     if status == 'FIRST_GROUP_COMPLETE_PENDING_WEB_REVIEW':
         required = {'evidence/nonauthor-final.md', 'evidence/remote-run-index.json', 'evidence/github-readback.json'}
-        needed = {'cpu-summary': ('summary.json', 'metrics.csv', 'paired.csv', 'arrays.npz'), 'gpu-preflight': ('summary.json',)}
+        needed = {
+            'cpu-summary': ('summary.json', 'metrics.csv', 'paired.csv', 'arrays.npz'),
+            'cpu-single-shard': ('audit.json',), 'cpu-evaluation-fixture': ('summary.json',),
+            'cpu-eval-normal': ('summary.json','prediction_manifest.json','primary/per_user_metrics.npz'),
+            'gpu-preflight': ('summary.json', *(f'{mode}/{leaf}' for mode in ('shuffle2','shuffle3a','shuffle3b','shuffle4')
+                            for leaf in ('rank0.json','predictions.rank0.jsonl','derived.rank0.diff'))),
+        }
         for mode in ('shuffle2', 'shuffle3a', 'shuffle3b', 'shuffle4'):
             needed['gpu-formal-' + mode] = ('summary.json', 'test/rank0.json')
             needed['cpu-eval-' + mode] = ('summary.json', 'prediction_manifest.json', 'prediction_checks.json', 'primary/per_user_metrics.npz')
