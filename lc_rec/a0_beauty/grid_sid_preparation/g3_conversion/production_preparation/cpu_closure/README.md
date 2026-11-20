@@ -18,3 +18,5 @@
 绑定到本次 CPU 进程，并在完成配对、结果收集前后检查原始输入。原训练、生成、评价源码
 位于冻结提交，CPU 配对仍调用固定版本的 bootstrap 与独立列式算法。
 [冻结调度](https://github.com/woobowen/recommend/blob/21d495b0be5b606853ec7cec68a3eaa1b58acbd7/lc_rec/a0_beauty/production_pipeline.py) · [冻结配对统计](https://github.com/woobowen/recommend/blob/21d495b0be5b606853ec7cec68a3eaa1b58acbd7/lc_rec/a0_beauty/paired_beauty.py)
+
+[正式结果及审核证据](results/README.md)
