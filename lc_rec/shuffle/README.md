@@ -31,6 +31,10 @@
 [V2 固定资产和预算](../shuffle_v2/a0_instruments.json) 绑定既有 Base、step8240 adapter、SID、交互、tokenizer 与 Normal 预测。原 A0 生成配置为 Prompt0、每 rank batch=1、beam=return=20、`max_new_tokens=10`、`filter_items=False`。用户随后将第一组资源修订为单张可用 RTX 4090，`WORLD_SIZE=1`、`rank=local_rank=0`、batch=1。单 rank 处理完整冻结 `DistributedSampler` 随机顺序，即历史两 rank 的交织。全局 `row_idx` 和置换保持一致，历史 Normal 仍读取原双 rank 预测，单卡与双卡的生成数值等价性未预设。预跑保留原 16+16 名单轴合并名单，单次正式作业最多 8 小时，正式累计不超过 36 小时墙钟和 36 GPU-device-hours，预跑累计不超过 60 GPU-device-minutes。装载保持 PEFT 0.5.0 原路径并逐值核验全部 450 个 adapter tensor，包括 embedding/lm_head，未新增参数。正式前门槛依次为全量 CPU 重放、32 名固定真实用户的四个 V2 模型边界预跑、独立预审。预跑只运行上述四个模式。每模式独立 job，顺序由 [控制脚本](../shuffle_v2/control.py) 校验，生成、CPU 评价、配对统计分别保留终态。正常监控间隔为 15 分钟。到达第一整组交付后停止。
 
 
+### 第一组单卡启动与运行观察
+
+[已发布的 30 分钟观察回执](results/v2-a0-instruments/launch-observation-20261120/README.md)记录本轮正式运行身份、单卡配置、服务器独立调度、预审及七次观察。各条件的正式全量结果和整组审核另在计算完成后交付。
+
 ### 第一组 CPU 准备证据
 
 [回放、Normal 重评与作业回执](results/v2-a0-instruments/)保存本轮实测，并附[非作者复核](results/v2-a0-instruments/nonauthor-cpu.md)。每个新模式覆盖 24,772 名用户、172,929 个历史组。校验固定位置、组外 token、mask 和长度，违例数均为 0。两份 Normal 原预测以原评价口径只读重算，逐用户矩阵与历史交付字节一致。

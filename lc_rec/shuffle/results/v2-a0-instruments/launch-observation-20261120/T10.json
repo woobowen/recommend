@@ -1,0 +1,295 @@
+{
+  "observed_utc": "2026-11-20T17:18:40.937529+00:00",
+  "host": "zwlab-01",
+  "gpus": [
+    [
+      "0",
+      "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+      "NVIDIA GeForce RTX 4090",
+      "20638",
+      "24564",
+      "0"
+    ],
+    [
+      "1",
+      "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "NVIDIA GeForce RTX 4090",
+      "19886",
+      "24564",
+      "41"
+    ]
+  ],
+  "compute_processes": [
+    {
+      "uuid": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+      "pid": 3304681,
+      "memory_mib": 20628,
+      "task_job": null
+    },
+    {
+      "uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "pid": 3367671,
+      "memory_mib": 19876,
+      "task_job": "letter-a0-20261112-v2-20261120-gpu-formal-shuffle2-r0",
+      "runtime_env": {
+        "CUDA_VISIBLE_DEVICES": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "WORLD_SIZE": "1",
+        "RANK": "0",
+        "LOCAL_RANK": "0",
+        "GRID_JOB_ID": "letter-a0-20261112-v2-20261120-gpu-formal-shuffle2-r0"
+      },
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-u",
+        "-m",
+        "lc_rec.shuffle_v2.entry",
+        "--model-key",
+        "a0",
+        "--shuffle-mode",
+        "shuffle2",
+        "--cpu-audit",
+        "/data/bwwu/lc-rec/letter-shuffle-v2-20261120/cpu-replay-r1/audit.json",
+        "--single-shard-audit",
+        "/data/bwwu/lc-rec/letter-shuffle-v2-20261120/cpu-single-shard-r1/audit.json",
+        "--output",
+        "/data/bwwu/lc-rec/letter-shuffle-v2-20261120/gpu-formal-shuffle2-r0/test",
+        "--run-commit",
+        "e2f54ebd2d7709821de1071693f91644f5ed9a30",
+        "--max-seconds",
+        "28709",
+        "--source-root",
+        "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec",
+        "--data-root",
+        "/home/bwwu/lc-rec/letter-a0-normal-det-20261112/releases/4c6a83d9ba42dc2fe737792759e410ef1874da76/lc_rec/letter/vendor/LETTER/data",
+        "--model",
+        "/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549",
+        "--adapter",
+        "/data/bwwu/lc-rec/a0-normal-20261111/formal_seed42/training/best_adapter"
+      ]
+    }
+  ],
+  "stages": {
+    "letter-a0-20261112-v2-20261120-gpu-formal-shuffle2-r0": {
+      "status": "RUNNING",
+      "start": "2026-11-20T16:48:44.027984+00:00",
+      "end": null,
+      "exit_code": null,
+      "worker": {
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-B",
+          "-m",
+          "lc_rec.shuffle_v2.generate",
+          "--output",
+          "/data/bwwu/lc-rec/letter-shuffle-v2-20261120/gpu-formal-shuffle2-r0",
+          "--mode",
+          "shuffle2",
+          "--run-commit",
+          "e2f54ebd2d7709821de1071693f91644f5ed9a30",
+          "--cpu-audit",
+          "/data/bwwu/lc-rec/letter-shuffle-v2-20261120/cpu-replay-r1/audit.json",
+          "--single-shard-audit",
+          "/data/bwwu/lc-rec/letter-shuffle-v2-20261120/cpu-single-shard-r1/audit.json",
+          "--seconds",
+          "28725"
+        ],
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pid": 3367657,
+        "start_ticks": "579866092",
+        "uid": 1005
+      },
+      "worker_alive": true,
+      "owned_live": [
+        {
+          "pid": 3367657,
+          "start_ticks": "579866092",
+          "uid": 1005,
+          "pgid": 3367657,
+          "session_id": 3367657,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "TASK_MARKERS"
+        },
+        {
+          "pid": 3367662,
+          "start_ticks": "579866112",
+          "uid": 1005,
+          "pgid": 3367657,
+          "session_id": 3367657,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "TASK_MARKERS"
+        },
+        {
+          "pid": 3367671,
+          "start_ticks": "579866306",
+          "uid": 1005,
+          "pgid": 3367671,
+          "session_id": 3367671,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "A0_MARKED_WORKER_SESSION"
+        },
+        {
+          "pid": 3367806,
+          "start_ticks": "579879334",
+          "uid": 1005,
+          "pgid": 3367671,
+          "session_id": 3367671,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "A0_MARKED_WORKER_SESSION"
+        },
+        {
+          "pid": 3367807,
+          "start_ticks": "579879337",
+          "uid": 1005,
+          "pgid": 3367671,
+          "session_id": 3367671,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "A0_MARKED_WORKER_SESSION"
+        }
+      ],
+      "cleanup_verified": false,
+      "accepted_request": {
+        "accepted_at": "2026-11-20T16:48:43.870343+00:00",
+        "request_sha256": "f0c6510c865ff98dbdcc652e39a6e2a872eef0736809f49622ebefb543ca89f1",
+        "runner_path": "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-a1-96h-1fefc09a15c1cb73.py",
+        "runner_sha256": "1fefc09a15c1cb73878417f9eb50d0fe9e8fa1b2f60cc70b27f7cc4ed9cb0947"
+      },
+      "mode": "shuffle2",
+      "request_env_cuda": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "timeout_seconds": 28770,
+      "request_run": "e2f54ebd2d7709821de1071693f91644f5ed9a30",
+      "report": {
+        "RUN_COMMIT": "e2f54ebd2d7709821de1071693f91644f5ed9a30",
+        "status": "RUNNING",
+        "completed_users": 2625,
+        "assigned_users": 24772,
+        "world_size": 1,
+        "rank": 0,
+        "local_rank": 0,
+        "model_load_and_strict_verification_seconds": 117.27815897297114,
+        "elapsed_generation_seconds": 1664.3537313798442,
+        "gpu_peak_reserved_bytes": 24595398656,
+        "error": null
+      },
+      "prediction": {
+        "path": "/data/bwwu/lc-rec/letter-shuffle-v2-20261120/gpu-formal-shuffle2-r0/test/predictions.rank0.jsonl",
+        "bytes": 42809222,
+        "mtime_utc": "2026-11-20T17:18:40.703863+00:00"
+      },
+      "unexpected_rank1": false,
+      "log": {
+        "path": "/data/bwwu/lc-rec/letter-shuffle-v2-20261120/gpu-formal-shuffle2-r0/shuffle2.log",
+        "bytes": 13741,
+        "mtime_utc": "2026-11-20T17:18:40.737348+00:00"
+      },
+      "log_tail": [
+        "{\"stage\": \"test\", \"rank\": 0, \"completed_users\": 2450, \"assigned_users\": 24772, \"elapsed_seconds\": 1554.2739130295813}",
+        "{\"stage\": \"test\", \"rank\": 0, \"completed_users\": 2475, \"assigned_users\": 24772, \"elapsed_seconds\": 1569.6115363426507}",
+        "{\"stage\": \"test\", \"rank\": 0, \"completed_users\": 2500, \"assigned_users\": 24772, \"elapsed_seconds\": 1586.040995914489}",
+        "{\"stage\": \"test\", \"rank\": 0, \"completed_users\": 2525, \"assigned_users\": 24772, \"elapsed_seconds\": 1601.7785081723705}",
+        "{\"stage\": \"test\", \"rank\": 0, \"completed_users\": 2550, \"assigned_users\": 24772, \"elapsed_seconds\": 1617.1327391993254}",
+        "{\"stage\": \"test\", \"rank\": 0, \"completed_users\": 2575, \"assigned_users\": 24772, \"elapsed_seconds\": 1632.5203677145764}",
+        "{\"stage\": \"test\", \"rank\": 0, \"completed_users\": 2600, \"assigned_users\": 24772, \"elapsed_seconds\": 1648.0831039976329}",
+        "{\"stage\": \"test\", \"rank\": 0, \"completed_users\": 2625, \"assigned_users\": 24772, \"elapsed_seconds\": 1664.3537313798442}"
+      ],
+      "rank_report": {
+        "path": "/data/bwwu/lc-rec/letter-shuffle-v2-20261120/gpu-formal-shuffle2-r0/test/rank0.json",
+        "bytes": 161846,
+        "mtime_utc": "2026-11-20T17:18:40.737348+00:00"
+      },
+      "error_patterns": []
+    },
+    "letter-a0-20261112-v2-20261120-group-series-r0": {
+      "status": "RUNNING",
+      "start": "2026-11-20T16:48:43.304566+00:00",
+      "end": null,
+      "exit_code": null,
+      "worker": {
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-B",
+          "-m",
+          "lc_rec.shuffle_v2.series",
+          "--output",
+          "/data/bwwu/lc-rec/letter-shuffle-v2-20261120/group-series-r0",
+          "--plan",
+          "/home/bwwu/grid-audits/sid-extensions-p0/requests/letter-a0-20261112-v2-20261120-group-series-r0.plan.json"
+        ],
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pid": 3367652,
+        "start_ticks": "579866020",
+        "uid": 1005
+      },
+      "worker_alive": true,
+      "owned_live": [
+        {
+          "pid": 3367652,
+          "start_ticks": "579866020",
+          "uid": 1005,
+          "pgid": 3367652,
+          "session_id": 3367652,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "TASK_MARKERS"
+        }
+      ],
+      "cleanup_verified": false,
+      "accepted_request": {
+        "accepted_at": "2026-11-20T16:48:43.211972+00:00",
+        "request_sha256": "244743cb9e347174441f082b088272fdc8814ec3e724a77734f1221162025c61",
+        "runner_path": "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-a1-96h-1fefc09a15c1cb73.py",
+        "runner_sha256": "1fefc09a15c1cb73878417f9eb50d0fe9e8fa1b2f60cc70b27f7cc4ed9cb0947"
+      }
+    }
+  },
+  "free_bytes": 2702127996928,
+  "preflight_job": {
+    "cleanup": {
+      "ended_at": "2026-11-20T16:47:17.054307+00:00",
+      "events": [],
+      "initial_observation": {
+        "boot_changed": false,
+        "observed_at": "2026-11-20T16:47:16.971157+00:00",
+        "owned_live": [],
+        "scan_complete": true,
+        "scan_errors": [],
+        "source": "captured_at_launch",
+        "unconfirmed_live": [],
+        "unsupported_live": [],
+        "verified_empty": true,
+        "zombies": []
+      },
+      "last_observation": {
+        "boot_changed": false,
+        "observed_at": "2026-11-20T16:47:17.012827+00:00",
+        "owned_live": [],
+        "scan_complete": true,
+        "scan_errors": [],
+        "source": "captured_at_launch",
+        "unconfirmed_live": [],
+        "unsupported_live": [],
+        "verified_empty": true,
+        "zombies": []
+      },
+      "reason": "NORMAL_EXIT_CHECK",
+      "started_at": "2026-11-20T16:47:16.971102+00:00",
+      "verified": true
+    },
+    "ended_at": "2026-11-20T16:47:17.056707+00:00",
+    "exit_code": 0,
+    "started_at": "2026-11-20T16:36:43.301113+00:00",
+    "status": "SUCCEEDED"
+  },
+  "task_job_ids": [
+    "letter-a0-20261112-v2-20261120-cpu-boundary-fixture-r0",
+    "letter-a0-20261112-v2-20261120-cpu-eval-normal-r0",
+    "letter-a0-20261112-v2-20261120-cpu-evaluation-fixture-r0",
+    "letter-a0-20261112-v2-20261120-cpu-fixtures-r0",
+    "letter-a0-20261112-v2-20261120-cpu-replay-r0",
+    "letter-a0-20261112-v2-20261120-cpu-replay-r1",
+    "letter-a0-20261112-v2-20261120-cpu-single-shard-r1",
+    "letter-a0-20261112-v2-20261120-gpu-formal-shuffle2-r0",
+    "letter-a0-20261112-v2-20261120-gpu-preflight-r0",
+    "letter-a0-20261112-v2-20261120-group-series-r0"
+  ],
+  "observation_label": "T10",
+  "observed_eastern": "2026-11-20T12:18:40.937529-05:00"
+}
