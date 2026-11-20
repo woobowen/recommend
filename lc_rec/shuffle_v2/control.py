@@ -21,6 +21,7 @@ PREFIX = 'letter-a0-20261112-v2-20261120-'
 RUNNER_SHA = '1fefc09a15c1cb73878417f9eb50d0fe9e8fa1b2f60cc70b27f7cc4ed9cb0947'
 PATHS = ('lc_rec/shuffle_v2', 'lc_rec/shuffle/core.py', 'lc_rec/shuffle/entry.py',
          'lc_rec/letter/scripts/formal_evaluate.py', 'lc_rec/a1_qwen3_06b/scripts/evaluate.py',
+         'lc_rec/qwen_preflight_20261110/scripts/common.py',
          'lc_rec/letter/config/a0_evaluation_v1.json', 'lc_rec/letter/EVALUATION_PROTOCOL_V1.md',
          'lc_rec/letter/review/formal_det_20261112/independent_metrics.py',
          'lc_rec/a1_qwen3_06b/scripts/offline_metrics.py', 'lc_rec/a1_qwen3_06b/review/independent_extended.py',
@@ -172,6 +173,8 @@ def request_parts(t, config, states, args, commit):
     assert 90 <= timeout <= limits['cpu_attempt_wall_seconds']
     if kind == 'replay':
         return 'cpu-replay', 'replay', [], gpu, min(timeout, 600), inputs
+    if kind == 'fixtures':
+        return 'cpu-fixtures', 'fixtures', [], gpu, min(timeout, 300), inputs
     if kind == 'metrics':
         assert mode in ('normal', *MODES)
         run = config['baseline']['run-commit'] if mode == 'normal' else args.prediction_commit or commit
@@ -198,7 +201,7 @@ def submit(t, commit, args):
     with (SUPPORT / 'submit.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         states = job_states(t)
-        key = {'replay': 'cpu-replay', 'preflight': 'gpu-preflight', 'generate': 'gpu-formal-' + args.mode,
+        key = {'replay': 'cpu-replay', 'fixtures': 'cpu-fixtures', 'preflight': 'gpu-preflight', 'generate': 'gpu-formal-' + args.mode,
                'metrics': 'cpu-eval-' + args.mode, 'summarize': 'cpu-summary'}[args.action]
         job_id = PREFIX + key + '-' + args.attempt
         path = SUPPORT / f'{job_id}.request.json'
@@ -226,7 +229,7 @@ def submit(t, commit, args):
 
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
-    parser.add_argument('action', choices=('deploy', 'replay', 'query', 'pull', 'preflight', 'generate', 'metrics', 'summarize'))
+    parser.add_argument('action', choices=('deploy', 'replay', 'query', 'pull', 'preflight', 'generate', 'metrics', 'summarize', 'fixtures'))
     parser.add_argument('--commit')
     parser.add_argument('--job', default='cpu-replay')
     parser.add_argument('--attempt', default='r0', choices=('r0','r1','r2','r3'))
