@@ -1,4 +1,5 @@
 """Bind the V2 CPU oracle to the frozen Instruments generation boundary."""
+from copy import deepcopy
 import json
 from pathlib import Path
 import sys
@@ -77,7 +78,7 @@ class Runtime:
             assert report['versions'] == {k: self.audit['versions'][k] for k in ('torch','transformers','peft','accelerate')}
         report['shuffle'] = {**core.mode_metadata(self.options.shuffle_mode), 'cpu_manifest_sha256': self.digest,
                              'mode_installation': 'frozen TestCollator then V2 transform then native generate',
-                             'effective_generation_config': model.generation_config.to_dict(),
+                             'loaded_generation_defaults': model.generation_config.to_dict(),
                              'actual_model_module': type(model.get_base_model().model).__name__,
                              'capture_lookup': bool(args.preflight_users_per_rank)}
         assert model.training is False
@@ -93,6 +94,13 @@ class Runtime:
             assert ids.tolist() == [actual] and mask_tensor.tolist() == [mask]
             assert kwargs['num_beams'] == kwargs['num_return_sequences'] == 20 and kwargs['max_new_tokens'] == 10
             assert all(k not in kwargs for k in ('position_ids', 'past_key_values', 'cache_position', 'inputs_embeds'))
+            if 'effective_generation_config' not in report['shuffle']:
+                overrides = {k: v for k, v in kwargs.items() if isinstance(v, (int, float, str, bool))}
+                effective = deepcopy(model.generation_config)
+                assert not effective.update(**overrides)
+                assert effective.do_sample is False and effective.num_beams == effective.num_return_sequences == 20
+                report['shuffle']['effective_generation_config'] = effective.to_dict()
+                report['shuffle']['generation_scalar_overrides'] = overrides
             expected_pos = mask_tensor.long().cumsum(-1) - 1
             expected_pos.masked_fill_(mask_tensor == 0, 1)
             boundary = {}

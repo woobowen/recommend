@@ -123,6 +123,16 @@ def succeeded(states, name):
     assert record['status'] == 'SUCCEEDED' and record['exit_code'] == 0 and record['cleanup']['verified'], record
 
 
+def stage_success(states, stage):
+    candidates = [name.removeprefix(PREFIX) for name, value in states.items()
+                  if name.startswith(PREFIX + stage + '-') and value['status'] == 'SUCCEEDED'
+                  and name.removeprefix(PREFIX + stage + '-') in ('r0', 'r1', 'r2', 'r3')]
+    if len(candidates) != 1:
+        raise RuntimeError(f'Expected one accepted successful attempt for {stage}, found {candidates}')
+    succeeded(states, candidates[0])
+    return candidates[0]
+
+
 def remote_hash(t, path):
     return remote_python(t, f'from pathlib import Path; import hashlib; print(hashlib.sha256(Path({path!r}).read_bytes()).hexdigest())').strip()
 
@@ -162,7 +172,7 @@ def request_parts(t, config, states, args, commit):
             inputs.extend({'path': path, 'sha256': sha} for path, sha in ((sent['path'], sent['sha256']), (receipt, review['preflight_summary_sha256'])))
             ordinal = list(MODES).index(mode)
             for prior in list(MODES)[:ordinal]:
-                succeeded(states, f'gpu-formal-{prior}-{args.prior_attempt}')
+                stage_success(states, 'gpu-formal-' + prior)
             remaining = budget_seconds(states, 'gpu-formal-', min(limits['formal_total_wall_seconds'], limits['formal_total_device_seconds'] // 2))
             timeout = min(limits['formal_attempt_wall_seconds'] - 30, remaining - 30)
             assert timeout >= args.minimum_seconds, 'Remaining formal budget below the verified time estimate'
@@ -173,8 +183,8 @@ def request_parts(t, config, states, args, commit):
     assert 90 <= timeout <= limits['cpu_attempt_wall_seconds']
     if kind == 'replay':
         return 'cpu-replay', 'replay', [], gpu, min(timeout, 600), inputs
-    if kind == 'fixtures':
-        return 'cpu-fixtures', 'fixtures', [], gpu, min(timeout, 300), inputs
+    if kind in ('fixtures', 'boundary-fixture'):
+        return 'cpu-' + kind, kind.replace('-', '_'), [], gpu, min(timeout, 300), inputs
     if kind == 'metrics':
         assert mode in ('normal', *MODES)
         run = config['baseline']['run-commit'] if mode == 'normal' else args.prediction_commit or commit
@@ -186,9 +196,8 @@ def request_parts(t, config, states, args, commit):
         return 'cpu-eval-' + mode, 'evaluate', extra, gpu, timeout, inputs
     assert kind == 'summarize'
     stages = ['cpu-eval-' + mode for mode in ('normal', *MODES)]
-    for stage in stages:
-        succeeded(states, f'{stage}-{args.prior_attempt}')
-    mode_dirs = [f'{ROOT}/{stage}-{args.prior_attempt}' for stage in stages]
+    completed = [stage_success(states, stage) for stage in stages]
+    mode_dirs = [f'{ROOT}/{stage}' for stage in completed]
     return 'cpu-summary', 'statistics', mode_dirs, gpu, timeout, inputs
 
 
@@ -201,12 +210,21 @@ def submit(t, commit, args):
     with (SUPPORT / 'submit.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         states = job_states(t)
-        key = {'replay': 'cpu-replay', 'fixtures': 'cpu-fixtures', 'preflight': 'gpu-preflight', 'generate': 'gpu-formal-' + args.mode,
+        key = {'replay': 'cpu-replay', 'fixtures': 'cpu-fixtures', 'boundary-fixture': 'cpu-boundary-fixture', 'preflight': 'gpu-preflight', 'generate': 'gpu-formal-' + args.mode,
                'metrics': 'cpu-eval-' + args.mode, 'summarize': 'cpu-summary'}[args.action]
         job_id = PREFIX + key + '-' + args.attempt
         path = SUPPORT / f'{job_id}.request.json'
-        if path.exists() or job_id in states:
+        if job_id in states:
             return gridctl.query(t, job_id)
+        if path.exists():
+            # A connection can fail before remote acceptance. Inspect the original
+            # ID and resend only its already persisted immutable request.
+            accepted = f"{profile['job_root']}/{job_id}/accepted.json"
+            exists = remote_python(t, f'from pathlib import Path; print(int(Path({accepted!r}).is_file()))').strip()
+            if exists == '1':
+                return gridctl.query(t, job_id)
+            assert exists == '0'
+            return gridctl.submit(t, path)
         job, stage, extra, gpu, timeout, inputs = request_parts(t, config, states, args, commit)
         assert job == key
         request = {k: profile[k] for k in ('user', 'uid', 'namespace', 'deployment_sha256')}
@@ -229,7 +247,7 @@ def submit(t, commit, args):
 
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
-    parser.add_argument('action', choices=('deploy', 'replay', 'query', 'pull', 'preflight', 'generate', 'metrics', 'summarize', 'fixtures'))
+    parser.add_argument('action', choices=('deploy', 'replay', 'query', 'pull', 'preflight', 'generate', 'metrics', 'summarize', 'fixtures', 'boundary-fixture'))
     parser.add_argument('--commit')
     parser.add_argument('--job', default='cpu-replay')
     parser.add_argument('--attempt', default='r0', choices=('r0','r1','r2','r3'))
@@ -237,7 +255,6 @@ def main():
     parser.add_argument('--mode', default='normal', choices=('normal', *MODES))
     parser.add_argument('--replay', default='cpu-replay-r1')
     parser.add_argument('--preflight', default='gpu-preflight-r0')
-    parser.add_argument('--prior-attempt', default='r0', choices=('r0','r1','r2','r3'))
     parser.add_argument('--prediction-job')
     parser.add_argument('--prediction-commit')
     parser.add_argument('--review', type=Path)
