@@ -30,6 +30,20 @@
 
 [V2 固定资产和预算](../shuffle_v2/a0_instruments.json) 绑定既有 Base、step8240 adapter、SID、交互、tokenizer 与 Normal 预测。原 A0 生成配置为 Prompt0、每 rank batch=1、beam=return=20、`max_new_tokens=10`、`filter_items=False`。装载保持 PEFT 0.5.0 原路径并逐值核验全部 450 个 adapter tensor，包括 embedding/lm_head，未新增参数。正式前门槛依次为全量 CPU 重放、32 名固定真实用户的四个 V2 模型边界预跑、独立预审。预跑只运行上述四个模式。每模式独立 job，顺序由 [控制脚本](../shuffle_v2/control.py) 校验，生成、CPU 评价、配对统计分别保留终态。正常监控间隔为 15 分钟。到达第一整组交付后停止。
 
+
+### 第一组 CPU 准备证据
+
+[回放、Normal 重评与作业回执](results/v2-a0-instruments/)保存本轮实测，并附[非作者复核](results/v2-a0-instruments/nonauthor-cpu.md)。每个新模式覆盖 24,772 名用户、172,929 个历史组。校验固定位置、组外 token、mask 和长度，违例数均为 0。两份 Normal 原预测以原评价口径只读重算，逐用户矩阵与历史交付字节一致。
+
+| 模式 | 恒等排列数 | 实际未变组 | 整条输入未变的用户 | 四个位置的 token 移动次数 |
+|---|---:|---:|---:|---|
+| shuffle2 | 86,483 | 86,483 | 714 | 0 / 0 / 86,446 / 86,446 |
+| shuffle3a | 28,935 | 28,935 | 6 | 115,138 / 114,894 / 115,397 / 0 |
+| shuffle3b | 28,935 | 28,935 | 6 | 0 / 115,138 / 114,894 / 115,397 |
+| shuffle4 | 7,147 | 7,147 | 0 | 129,629 / 129,582 / 130,026 / 129,989 |
+
+四种条件的 CPU token 流与非作者独立重建 SHA-256 一致。真实 Instruments 历史中未发现重复出现的同一商品。补充 CPU 夹具使用真实 tokenizer 和 Prompt0 构造同一历史 SID 重复、左 padding 的输入，核验按出现位置独立索引。独立合成小模型仅验证当前依赖下 hook 接线；A0 真实模型预跑是单独的正式前门槛。
+
 ### 历史 V1
 
 V1 的排除恒等注记发布在旧历史线文档提交 `94b79854a59f52208bc11f14fc6e3069594dab6a`。Instruments V1 交付 `3396d45a041424fe4af625bfc0b047467150c5c1` 由注释标签 `letter-shuffle-v1-exclude-identity` 归档。原 LETTER Beauty `6e1b211d9c37f358c43b1540b40b17f6703150d2`、G3 Beauty `21d495b0be5b606853ec7cec68a3eaa1b58acbd7` 和 Instruments `f0242b9f90ae23a4979d688a287734ca9f88cea1` 的 V1 core 字节相同。旧 S3 与新 S3a 位置相同，旧 S3/S4 分别从 5/23 个非恒等排列抽样。旧审核按原时间语义阅读。

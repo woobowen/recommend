@@ -40,9 +40,16 @@ def safe_name(name):
 def check_required(files, status):
     assert 'source/lc_rec/shuffle/README.md' in files
     if status == 'FIRST_GROUP_COMPLETE_PENDING_WEB_REVIEW':
-        required = {'evidence/paired/summary.json', 'evidence/paired/metrics.csv', 'evidence/paired/paired.csv',
-                    'evidence/paired/arrays.npz', 'evidence/nonauthor-final.md', 'evidence/remote-run-index.json',
-                    'evidence/github-readback.json', 'evidence/preflight/summary.json'}
+        required = {'evidence/nonauthor-final.md', 'evidence/remote-run-index.json', 'evidence/github-readback.json'}
+        needed = {'cpu-summary': ('summary.json', 'metrics.csv', 'paired.csv', 'arrays.npz'), 'gpu-preflight': ('summary.json',)}
+        for mode in ('shuffle2', 'shuffle3a', 'shuffle3b', 'shuffle4'):
+            needed['gpu-formal-' + mode] = ('summary.json', 'test/rank0.json', 'test/rank1.json')
+            needed['cpu-eval-' + mode] = ('summary.json', 'prediction_manifest.json', 'prediction_checks.json', 'primary/per_user_metrics.npz')
+        for stage, leaves in needed.items():
+            directories = {name.split('/')[1] for name in files if name.startswith(f'evidence/{stage}-')}
+            if len(directories) != 1:
+                raise ValueError(f'Final audit requires one verified output directory for {stage}')
+            required.update(f'evidence/{next(iter(directories))}/{name}' for name in leaves)
         missing = sorted(required - files.keys())
         if missing:
             raise FileNotFoundError(f'Final audit package is missing {missing}')

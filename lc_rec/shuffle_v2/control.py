@@ -224,6 +224,10 @@ def submit(t, commit, args):
             if exists == '1':
                 return gridctl.query(t, job_id)
             assert exists == '0'
+            stored = json.loads(path.read_text())
+            assert stored['capture_version'] == commit
+            _, _, _, _, available_timeout, _ = request_parts(t, config, states, args, commit)
+            assert stored['timeout_seconds'] <= available_timeout, 'Pending request exceeds the current allowance'
             return gridctl.submit(t, path)
         job, stage, extra, gpu, timeout, inputs = request_parts(t, config, states, args, commit)
         assert job == key

@@ -31,8 +31,10 @@ def collect(connection, output, complete):
     evidence = captured['collected']
     cpu_replay = control.stage_success(states, 'cpu-replay')
     fixtures = control.stage_success(states, 'cpu-fixtures')
+    boundary_fixture = control.stage_success(states, 'cpu-boundary-fixture')
     normal = control.stage_success(states, 'cpu-eval-normal')
     paths = {cpu_replay: ('audit.json','assets.json','examples.json','samples.json'), fixtures: ('summary.json',),
+             boundary_fixture: ('summary.json',),
              normal: ('summary.json','prediction_manifest.json','effective_config.json','independent_original.json', 'independent_extended.json',
                       'primary/metrics.json','primary/per_user_metrics.npz', 'primary/bootstrap_draw_means.npy','primary/bootstrap.json')}
     if complete:
