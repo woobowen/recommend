@@ -125,6 +125,7 @@ def main():
                                            shuffle=True, seed=0, drop_last=True)) for rank in range(2)]
     normal = read_normal(config, users, catalog, assignments)
     hist = Counter()
+    input_streams = {mode: hashlib.sha256() for mode in core.MODES}
     stream_path = args.output / 'inputs.jsonl'
     rows, examples = [], {}
     frequency = {mode: Counter() for mode in core.MODES}
@@ -153,6 +154,7 @@ def main():
             shared = [reference.relative(3, index, j) for j in range(len(groups))]
             for mode, active in core.MODES.items():
                 new, evidence = core.transform(raw, mask, groups, sid_ids, mode, index)
+                input_streams[mode].update(core.canonical_bytes([index, new]) + b'\n')
                 assert len(new) == len(raw) and evidence['attention_mask_sha256'] == row['attention_mask_sha256']
                 assert all(a == b for pos, (a, b) in enumerate(zip(raw, new, strict=True)) if pos not in group_set)
                 entries = evidence['groups']
@@ -223,6 +225,7 @@ def main():
                                 'permuted_slots_by_position': permuted_positions[mode], 'fixed_position_violations': 0,
                                 'outside_group_violations': 0, 'mask_or_length_violations': 0}
                          for mode, active in core.MODES.items()}}
+    summary['input_stream_sha256'] = {mode: value.hexdigest() for mode, value in input_streams.items()}
     dump(args.output / 'audit.json', summary)
     print(json.dumps({key: summary[key] for key in ('status','users','history_groups','modes')}))
 

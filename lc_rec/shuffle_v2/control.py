@@ -92,7 +92,7 @@ def submit(t, commit, job, stage, attempt, timeout):
     request = {k: profile[k] for k in ('user', 'uid', 'namespace', 'deployment_sha256')}
     env = {'CUDA_VISIBLE_DEVICES': '', 'HF_HUB_OFFLINE': '1', 'OMP_NUM_THREADS': '4',
            'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONOPTIMIZE': '0', 'PYTHONUNBUFFERED': '1',
-           'TOKENIZERS_PARALLELISM': 'false', 'TRANSFORMERS_OFFLINE': '1', 'USE_FLAX': '0', 'USE_TF': '0'}
+           'TOKENIZERS_PARALLELISM': 'false', 'TORCHINDUCTOR_COMPILE_THREADS': '1', 'TRANSFORMERS_OFFLINE': '1', 'USE_FLAX': '0', 'USE_TF': '0'}
     request.update(schema=1, host=profile['hostname'], job_id=job_id, capture_version=commit,
                    cwd=release, env=env, timeout_seconds=timeout,
                    inputs=[{'path': f"{release}/{item['path']}", 'sha256': item['sha256']} for item in deployment['files']],
