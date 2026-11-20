@@ -12,17 +12,26 @@ from lc_rec.shuffle_v2 import core
 from lc_rec.shuffle_v2.replay import CONFIG, dump, frozen
 
 
-def gpu_idle(config):
-    assert os.environ.get('CUDA_VISIBLE_DEVICES') == '0,1'
+def gpu_inventory(config):
     rows = subprocess.check_output(['nvidia-smi', '--query-gpu=index,uuid,memory.used',
                                     '--format=csv,noheader,nounits'], text=True).splitlines()
     observed = [list(map(str.strip, row.split(','))) for row in rows]
-    assert [(i, uuid) for i, uuid, _ in observed] == list(zip(('0','1'), config['gpus'], strict=True))
-    running = subprocess.check_output(['nvidia-smi', '--query-compute-apps=gpu_uuid,pid',
-                                       '--format=csv,noheader'], text=True)
-    if running.strip() or any(int(used) > 100 for _, _, used in observed):
-        raise RuntimeError(f'Both approved GPUs must be idle. Observed allocations: {running.strip()}')
-    return observed
+    assert [(i, uuid) for i, uuid, _ in observed] == list(zip(('0', '1'), config['gpus'], strict=True))
+    allocations = subprocess.check_output(['nvidia-smi', '--query-compute-apps=gpu_uuid,pid',
+                                          '--format=csv,noheader'], text=True)
+    occupied = {row.split(',')[0].strip() for row in allocations.splitlines() if row.strip()}
+    return [{'physical_index': int(i), 'uuid': uuid, 'memory_used_mib': int(used), 'has_compute_process': uuid in occupied}
+            for i, uuid, used in observed]
+
+
+def gpu_idle(config):
+    selected = os.environ['CUDA_VISIBLE_DEVICES']
+    matches = [card for card in gpu_inventory(config) if card['uuid'] == selected]
+    assert len(matches) == 1
+    card = matches[0]
+    if card['has_compute_process'] or card['memory_used_mib'] >= 100:
+        raise RuntimeError(f'Chosen GPU is occupied: {card}')
+    return {**card, 'visible_device': 0, 'world_size': 1}
 
 
 def bounded_resource_check(output):
@@ -34,20 +43,20 @@ def bounded_resource_check(output):
     return {'disk_free_bytes': free, 'host_mem_available_bytes': available}
 
 
-def argv_for(mode, out, audit, commit, seconds, preflight, base):
-    argv = [base['python'], '-B', '-m', 'torch.distributed.run', '--standalone', '--nproc_per_node=2',
+def argv_for(mode, out, audit, single, commit, seconds, preflight, base):
+    argv = [base['python'], '-B', '-m', 'torch.distributed.run', '--standalone', '--nproc_per_node=1',
             '--module', 'lc_rec.shuffle_v2.entry', '--model-key', 'a0', '--shuffle-mode', mode,
-            '--cpu-audit', str(audit), '--output', str(out), '--run-commit', commit,
+            '--cpu-audit', str(audit), '--single-shard-audit', str(single), '--output', str(out), '--run-commit', commit,
             '--max-seconds', str(seconds)]
     for key in ('source-root', 'data-root', 'model', 'adapter'):
         argv.extend(('--' + key, base[key]))
     if preflight:
-        argv.extend(('--preflight-users-per-rank', '16'))
+        argv.extend(('--preflight-users-per-rank', '32'))
     return argv
 
 
-def validate_preflight(config, output, audit):
-    wanted = {i for indices in audit['preflight_assignments'].values() for i in indices}
+def validate_preflight(config, output, single):
+    wanted = set(single['preflight_assignment'])
     normal = {}
     for rank in range(2):
         path = Path(config['baseline']['normal_test_dir']) / f'predictions.rank{rank}.jsonl'
@@ -60,25 +69,24 @@ def validate_preflight(config, output, audit):
     results = {}
     for mode in core.MODES:
         identity_users = []
-        for rank in range(2):
-            with (output / mode / f'predictions.rank{rank}.jsonl').open() as stream:
-                for index, line in zip(audit['preflight_assignments'][str(rank)], stream, strict=True):
-                    row = json.loads(line)
-                    intervention = row['shuffle']
-                    assert index == row['row_idx'] and intervention['actual_prefill']['lookup_exact']
-                    assert all(candidate['eos_position'] == 4 for candidate in row['candidates'])
-                    if intervention['input_changed']:
-                        continue
-                    old = normal[index]
-                    assert row['input_token_ids'] == old['input_token_ids']
-                    assert row['sorted_generation_order'] == old['sorted_generation_order']
-                    maximum = 0.0
-                    for left, right in zip(row['candidates'], old['candidates'], strict=True):
-                        assert left['sid'] == right['sid'] and left['generated_token_ids'] == right['generated_token_ids']
-                        a, b = left['sequence_score'], right['sequence_score']
-                        maximum = max(maximum, abs(a - b))
-                        assert abs(a - b) <= 1e-5 + 1e-5 * abs(b)
-                    identity_users.append({'row_idx': index, 'rank': rank, 'maximum_score_delta': maximum})
+        with (output / mode / 'predictions.rank0.jsonl').open() as stream:
+            for index, line in zip(single['preflight_assignment'], stream, strict=True):
+                row = json.loads(line)
+                intervention = row['shuffle']
+                assert index == row['row_idx'] and intervention['actual_prefill']['lookup_exact']
+                assert all(candidate['eos_position'] == 4 for candidate in row['candidates'])
+                if intervention['input_changed']:
+                    continue
+                old = normal[index]
+                assert row['input_token_ids'] == old['input_token_ids']
+                assert row['sorted_generation_order'] == old['sorted_generation_order']
+                maximum = 0.0
+                for left, right in zip(row['candidates'], old['candidates'], strict=True):
+                    assert left['sid'] == right['sid'] and left['generated_token_ids'] == right['generated_token_ids']
+                    a, b = left['sequence_score'], right['sequence_score']
+                    maximum = max(maximum, abs(a - b))
+                    assert abs(a - b) <= 1e-5 + 1e-5 * abs(b)
+                identity_users.append({'row_idx': index, 'rank': 0, 'maximum_score_delta': maximum})
         results[mode] = {'users': 32, 'natural_unchanged_vs_archived_normal': identity_users}
     return results
 
@@ -87,6 +95,7 @@ def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--cpu-audit', type=Path, required=True)
+    parser.add_argument('--single-shard-audit', type=Path, required=True)
     parser.add_argument('--run-commit', required=True)
     parser.add_argument('--seconds', type=int, required=True)
     parser.add_argument('--mode', choices=(*core.MODES, 'preflight'), required=True)
@@ -98,12 +107,14 @@ def main():
     assert job.name == job_id and request['capture_version'] == args.run_commit
     assert request['cwd'] == str(Path.cwd()) and args.seconds + 30 <= request['timeout_seconds']
     preflight = args.mode == 'preflight'
-    cap = config['budget']['preflight_device_seconds'] / 2 if preflight else config['budget']['formal_attempt_wall_seconds']
+    cap = config['budget']['preflight_device_seconds'] if preflight else config['budget']['formal_attempt_wall_seconds']
     assert request['timeout_seconds'] + 15 <= cap
     output = args.output
     output.mkdir(parents=True, exist_ok=False)
     cpu = json.loads(args.cpu_audit.read_text())
     assert cpu['status'] == 'PASS_CPU_V2_FULL'
+    single = json.loads(args.single_shard_audit.read_text())
+    assert single['status'] == 'PASS_SINGLE_SHARD_CPU' and single['manifest_sha256'] == cpu['manifest_sha256']
     assets_file = args.cpu_audit.with_name('assets.json')
     for asset in json.loads(assets_file.read_text()):
         p = Path(asset['path'])
@@ -119,7 +130,7 @@ def main():
             remaining = math.floor(args.seconds - (time.monotonic() - begin))
             assert remaining > 60
             out = output / mode if preflight else output / 'test'
-            argv = argv_for(mode, out, args.cpu_audit, args.run_commit, remaining - 15, preflight, config['baseline'])
+            argv = argv_for(mode, out, args.cpu_audit, args.single_shard_audit, args.run_commit, remaining - 15, preflight, config['baseline'])
             plan = {'status': 'READY', 'job_id': job_id, 'RUN_COMMIT': args.run_commit,
                     'mode': core.mode_metadata(mode), 'argv': argv, 'cuda_devices': devices,
                     'preflight': preflight, 'resources': bounded_resource_check(output)}
@@ -143,16 +154,16 @@ def main():
             result = {'exit_code': code, 'seconds': time.monotonic() - started, 'output': str(out), **plan}
             dump(output / f'{mode}.exit.json', result)
             assert code == 0, mode
-            reports = [json.loads((out / f'rank{rank}.json').read_text()) for rank in range(2)]
-            for rank, report in enumerate(reports):
-                assert report['status'] == ('PREFLIGHT_INTERFACE_PASS' if preflight else 'PASS')
-                assert report['completed_users'] == (16 if preflight else 12386)
-                assert report['assignment_sha256'] == cpu['full_rank_assignment_sha256'][rank]
-                assert report['shuffle']['mode'] == mode and report['shuffle']['protocol'] == core.PROTOCOL
-                assert report['RUN_COMMIT'] == args.run_commit
+            report = json.loads((out / 'rank0.json').read_text())
+            assert report['status'] == ('PREFLIGHT_INTERFACE_PASS' if preflight else 'PASS')
+            assert report['completed_users'] == (32 if preflight else 24772)
+            assert report['world_size'] == 1 and report['rank'] == report['local_rank'] == 0
+            assert report['assignment_sha256'] == single['assignment_sha256']
+            assert report['shuffle']['mode'] == mode and report['shuffle']['protocol'] == core.PROTOCOL
+            assert report['RUN_COMMIT'] == args.run_commit
             results.append(result)
             gpu_idle(config)
-    checks = validate_preflight(config, output, cpu) if preflight else {}
+    checks = validate_preflight(config, output, single) if preflight else {}
     dump(output / 'summary.json', {'status': 'PASS_V2_PREFLIGHT' if preflight else 'PASS_V2_GENERATION',
                                   'job_id': job_id, 'RUN_COMMIT': args.run_commit, 'stages': results,
                                   'preflight_checks': checks, 'seconds': time.monotonic() - begin})

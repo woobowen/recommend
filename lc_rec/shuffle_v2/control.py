@@ -143,21 +143,34 @@ def request_parts(t, config, states, args, commit):
     out = lambda job: f'{ROOT}/{job}'
     audit = out(args.replay + '/audit.json')
     inputs = []
-    gpu = kind in ('preflight', 'generate')
+    gpu = ''
+    if kind in ('preflight', 'generate'):
+        from lc_rec.shuffle_v2.collect import hardware
+        snapshot = hardware(t)
+        allocated = {r.split(',')[0].strip() for r in snapshot['processes'].splitlines()[1:]}
+        eligible = []
+        for line, expected in zip(snapshot['gpus'].splitlines()[1:], config['gpus'], strict=True):
+            _, uuid, model, used, total, _ = map(str.strip, line.split(','))
+            assert uuid == expected and model == 'NVIDIA GeForce RTX 4090' and int(total.split()[0]) >= 24000
+            if uuid not in allocated and int(used.split()[0]) < 100:
+                eligible.append(uuid)
+        if not eligible:
+            raise RuntimeError('No approved GPU is idle: ' + snapshot['processes'].strip())
+        gpu = eligible[0]
     limits = config['budget']
     if gpu:
-        result = remote_python(t, "import subprocess; print(subprocess.check_output(['nvidia-smi','--query-compute-apps=gpu_uuid,pid','--format=csv,noheader'],text=True),end='')")
-        if result.strip():
-            raise RuntimeError('Both approved GPUs must be idle: ' + result.strip())
         readback(commit)
         succeeded(states, args.replay)
+        succeeded(states, args.single_shard)
+        shard = out(args.single_shard + '/audit.json')
+        inputs.append({'path': shard, 'sha256': remote_hash(t, shard)})
         for filename in ('assets.json', 'audit.json', 'inputs.jsonl'):
             path = out(args.replay + '/' + filename)
             inputs.append({'path': path, 'sha256': remote_hash(t, path)})
         if kind == 'preflight':
             job = 'gpu-preflight'
-            remaining = budget_seconds(states, job, limits['preflight_device_seconds'] // 2)
-            timeout = min(1700, remaining - 30)
+            remaining = budget_seconds(states, job, limits['preflight_device_seconds'])
+            timeout = min(3500, remaining - 30)
             mode = 'preflight'
         else:
             assert mode in MODES
@@ -173,17 +186,20 @@ def request_parts(t, config, states, args, commit):
             ordinal = list(MODES).index(mode)
             for prior in list(MODES)[:ordinal]:
                 stage_success(states, 'gpu-formal-' + prior)
-            remaining = budget_seconds(states, 'gpu-formal-', min(limits['formal_total_wall_seconds'], limits['formal_total_device_seconds'] // 2))
+            remaining = budget_seconds(states, 'gpu-formal-', min(limits['formal_total_wall_seconds'], limits['formal_total_device_seconds']))
             timeout = min(limits['formal_attempt_wall_seconds'] - 30, remaining - 30)
             assert timeout >= args.minimum_seconds, 'Remaining formal budget below the verified time estimate'
         assert timeout >= 90
-        extra = ['--cpu-audit', audit, '--run-commit', commit, '--mode', mode, '--seconds', str(timeout - 45)]
+        extra = ['--cpu-audit', audit, '--single-shard-audit', shard, '--run-commit', commit, '--mode', mode, '--seconds', str(timeout - 45)]
         return job, 'generate', extra, gpu, timeout, inputs
     timeout = min(900, budget_seconds(states, 'cpu-', limits['cpu_total_wall_seconds']) - 30)
     assert 90 <= timeout <= limits['cpu_attempt_wall_seconds']
     if kind == 'replay':
         return 'cpu-replay', 'replay', [], gpu, min(timeout, 600), inputs
-    if kind in ('fixtures', 'boundary-fixture'):
+    if kind == 'single-shard':
+        succeeded(states, args.replay)
+        return 'cpu-single-shard', 'single_shard', ['--cpu-audit', audit], gpu, min(timeout, 300), inputs
+    if kind in ('fixtures', 'boundary-fixture', 'single-shard'):
         return 'cpu-' + kind, kind.replace('-', '_'), [], gpu, min(timeout, 300), inputs
     if kind == 'metrics':
         assert mode in ('normal', *MODES)
@@ -210,7 +226,7 @@ def submit(t, commit, args):
     with (SUPPORT / 'submit.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         states = job_states(t)
-        key = {'replay': 'cpu-replay', 'fixtures': 'cpu-fixtures', 'boundary-fixture': 'cpu-boundary-fixture', 'preflight': 'gpu-preflight', 'generate': 'gpu-formal-' + args.mode,
+        key = {'replay': 'cpu-replay', 'fixtures': 'cpu-fixtures', 'single-shard': 'cpu-single-shard', 'boundary-fixture': 'cpu-boundary-fixture', 'preflight': 'gpu-preflight', 'generate': 'gpu-formal-' + args.mode,
                'metrics': 'cpu-eval-' + args.mode, 'summarize': 'cpu-summary'}[args.action]
         job_id = PREFIX + key + '-' + args.attempt
         path = SUPPORT / f'{job_id}.request.json'
@@ -232,7 +248,7 @@ def submit(t, commit, args):
         job, stage, extra, gpu, timeout, inputs = request_parts(t, config, states, args, commit)
         assert job == key
         request = {k: profile[k] for k in ('user', 'uid', 'namespace', 'deployment_sha256')}
-        env = {'CUDA_VISIBLE_DEVICES': '0,1' if gpu else '', 'HF_HUB_OFFLINE': '1', 'OMP_NUM_THREADS': '4',
+        env = {'CUDA_VISIBLE_DEVICES': gpu, 'HF_HUB_OFFLINE': '1', 'OMP_NUM_THREADS': '4',
                'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONOPTIMIZE': '0', 'PYTHONUNBUFFERED': '1',
                'TOKENIZERS_PARALLELISM': 'false', 'TORCHINDUCTOR_COMPILE_THREADS': '1',
                'TRANSFORMERS_OFFLINE': '1', 'USE_FLAX': '0', 'USE_TF': '0'}
@@ -251,18 +267,19 @@ def submit(t, commit, args):
 
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
-    parser.add_argument('action', choices=('deploy', 'replay', 'query', 'pull', 'preflight', 'generate', 'metrics', 'summarize', 'fixtures', 'boundary-fixture'))
+    parser.add_argument('action', choices=('deploy', 'replay', 'query', 'pull', 'preflight', 'generate', 'metrics', 'summarize', 'fixtures', 'boundary-fixture', 'single-shard'))
     parser.add_argument('--commit')
     parser.add_argument('--job', default='cpu-replay')
     parser.add_argument('--attempt', default='r0', choices=('r0','r1','r2','r3'))
     parser.add_argument('--relative')
     parser.add_argument('--mode', default='normal', choices=('normal', *MODES))
     parser.add_argument('--replay', default='cpu-replay-r1')
+    parser.add_argument('--single-shard', default='cpu-single-shard-r0')
     parser.add_argument('--preflight', default='gpu-preflight-r0')
     parser.add_argument('--prediction-job')
     parser.add_argument('--prediction-commit')
     parser.add_argument('--review', type=Path)
-    parser.add_argument('--minimum-seconds', type=int, default=10800)
+    parser.add_argument('--minimum-seconds', type=int, default=21600)
     args = parser.parse_args()
     SUPPORT.mkdir(parents=True, exist_ok=True)
     t = connect()

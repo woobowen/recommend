@@ -17,6 +17,18 @@ def derive(text, model_key):
         before = 'from runtime import ShuffleAllowed as Allowed'
         assert derived.count(before) == 1
         derived = derived.replace(before, 'Allowed = runtime.allowed')
+    if model_key == 'a0':
+        replacements = (
+            ('args.preflight_users_per_rank not in (0, 16)', 'args.preflight_users_per_rank not in (0, 32)'),
+            ('separate fixed eight-user/rank preflight', 'separate fixed 32-user single-rank preflight'),
+            ('if world != 2 or not 0 <= rank < 2', 'if world != 1 or rank != 0 or local_rank != 0'),
+            ('Requires two ranks, at least', 'Requires rank0/local0, at least'),
+            ('len(assignment) != 12386', 'len(assignment) != 24772'),
+            ('range(2)],\n                                       users, catalog', 'range(1)],\n                                       users, catalog'),
+        )
+        for old, new in replacements:
+            assert derived.count(old) == 1, old
+            derived = derived.replace(old, new)
     return derived
 
 
@@ -25,8 +37,11 @@ def main():
     parser.add_argument('--model-key', choices=FROZEN, required=True)
     parser.add_argument('--shuffle-mode', choices=MODES, required=True)
     parser.add_argument('--cpu-audit', type=Path, required=True)
+    parser.add_argument('--single-shard-audit', type=Path)
     parser.add_argument('--derived-only', action='store_true')
     options, remainder = parser.parse_known_args()
+    if any(k.startswith('--aggregate') for k in remainder):
+        parser.error('Use the CPU evaluation entry for saved predictions')
     original, sha = FROZEN[options.model_key]
     source = Path(__file__).resolve().parents[1] / original
     raw = source.read_bytes()

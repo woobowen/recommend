@@ -22,8 +22,16 @@ class Runtime:
         assert len(self.rows) == self.audit['users']
         assert all(row['row_idx'] == i for i, row in enumerate(self.rows))
         self.sid_ids = set(self.audit['token_ids'].values())
+        self.single_shard = None
+        if options.model_key == 'a0':
+            self.single_shard = json.loads(options.single_shard_audit.read_text())
+            assert self.single_shard['status'] == 'PASS_SINGLE_SHARD_CPU'
+            assert self.single_shard['manifest_sha256'] == self.digest
 
     def preflight_assignment(self, rank):
+        if self.single_shard is not None:
+            assert rank == 0
+            return self.single_shard['preflight_assignment']
         return self.audit['preflight_assignments'][str(rank)]
 
     def intervene(self, inputs, index, data, tokenizer):
