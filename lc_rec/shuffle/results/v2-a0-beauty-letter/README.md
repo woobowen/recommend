@@ -1,6 +1,10 @@
 # LETTER Beauty Shuffle V2 第二组
 
-**正式前准备已通过，等待网页 GPT 二审及独立正式启动授权。** 真实预跑作业 `letter-beauty-v2-gpu-preflight-r1` 以退出码 0 结束并核验清收。服务器 jobs、requests 和输出目录的只读核查均显示，本轮正式父子请求提交数和正式 GPU 新增量为 0。 [预跑终态](prep/preflight-r1-status.json) · [正式路径核查](prep/formal-inventory.json)
+**正式启动观察已完成，运行中快照见独立阶段报告。** 用户于 2026-11-21 确认正式前准备通过网页 GPT 二审，并授权服务器独立执行完整正式串行链。 [本轮正式启动、七次观察和接续](launch-observation-r0/README.md)
+
+## 上一轮正式前准备记录
+
+真实预跑作业 `letter-beauty-v2-gpu-preflight-r1` 以退出码 0 结束并核验清收。服务器 jobs、requests 和输出目录的只读核查均显示，准备阶段当时的正式父子请求提交数和正式 GPU 新增量为 0。 [预跑终态](prep/preflight-r1-status.json) · [正式路径核查](prep/formal-inventory.json)
 
 ## 条件与接续点
 

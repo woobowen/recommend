@@ -21,7 +21,7 @@
 
 ## 执行与复算
 
-固定 checkpoint 重评使用配置声明的服务器资产、依赖环境与受审导出。使用已有 runner 依次执行 S2、S3a、S3b、S4，每次生成完整退出并通过单分片全量评价之后进入下一条件。首次提交与恢复按已持久化请求和原 job ID 核对；独立工作证据见 `beauty_control` 和 `beauty_observe`。正式 GPU 单次尝试最多 8 小时，累计 36 GPU-device-hours，四条件预跑累计 60 GPU-device-minutes。CPU 限额按 runner 作业 wall time 单列。 [提交和恢复](beauty_control.py) · [现场观察](beauty_observe.py)
+固定 checkpoint 重评使用配置声明的服务器资产、依赖环境与受审导出。使用已有 runner 依次执行 S2、S3a、S3b、S4，每次生成完整退出并通过单分片全量评价之后进入下一条件。首次提交与恢复按已持久化请求和原 job ID 核对；独立工作证据见 `beauty_control` 和 `beauty_observe`。正式 GPU 单次尝试最多 8 小时，累计 36 GPU-device-hours，四条件预跑累计 180 GPU-device-minutes，单次最多 60 分钟。CPU 限额按 runner 作业 wall time 单列。 [提交和恢复](beauty_control.py) · [现场观察](beauty_observe.py)
 
 在解压审核包后运行根目录的 `offline_review.sh`，给出独立审核 JSON 的输出路径。脚本用包内冻结原始候选、原精度分数、用户及目标轴、SID 目录、逐用户矩阵和统计数组复算，依赖 Python 和 NumPy。该入口与 checkpoint 重评是两个复现起点。
 
@@ -39,7 +39,7 @@ Beauty 和 Instruments 共用 V2 排列核心、独立参考、模型边界与 P
 
 新的预跑请求累计上限为 180 GPU-device-minutes，单次上限为 60 分钟。准备 CPU 累计上限 8 小时，单次上限 1 小时。账本接续 `letter-beauty-v2-` 原身份，失败和装载耗时均记录。预跑首次请求遇到两张卡均占用时，以 60 秒间隔、最多两小时等待。同一作业持续使用一张物理卡映射为逻辑 GPU 0。
 
-`beauty_control plan` 只构建并保存本地正式计划，不上传 review/request，也不提交父子任务。网页二审和独立启动授权到位后，由 WSL 上述研究分支使用指定快照并再次核对资源，才可执行下列入口。参数值来自最终计划及审核回执。
+`beauty_control plan` 只构建并保存本地正式计划，不上传 review/request，也不提交父子任务。2026-11-21，用户报告网页二审已通过并独立授权正式启动。以下命令记录已执行的启动入口，后续查询先按原父作业 ID 接续。参数值来自审定计划和审核门槛。
 
 ```bash
 python3 -B -m lc_rec.shuffle_v2.beauty_control series \

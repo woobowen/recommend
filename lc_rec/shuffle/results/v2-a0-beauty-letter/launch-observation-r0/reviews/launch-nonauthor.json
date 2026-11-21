@@ -1,0 +1,121 @@
+{
+  "status": "PASS_NONAUTHOR_FORMAL_LAUNCH",
+  "reviewer": "/root/formal_review",
+  "observed_utc": "2026-11-21T18:00:18.113290+00:00",
+  "scope": "Fresh strict SSH connection read stored requests, runner-query identity and active DAG. No children submitted by reviewer.",
+  "run_commit": "1182dfd914c20bd3dc11786587eae6879fba6b9d",
+  "runner_sha256": "cbb963fab68c34cc977653afc46f260e7ede962cb4a8f105458331a0e0e19a75",
+  "live_plan_sha256": "0a8eda1c447146026eeb674370941346744b6acd09b5e56c9a8f545116e230c1",
+  "reviewed_construct_only_plan_sha256": "231aa2a6528970762b0bc47e50ec5c1254f9b9e5ae497d2c9b68c9b05dbaee4e",
+  "consistent_live_and_reviewed_plan_except_gpu_selection_observation": true,
+  "gpu_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+  "planned_gpu_conditions": [
+    "shuffle2",
+    "shuffle3a",
+    "shuffle3b",
+    "shuffle4"
+  ],
+  "material_deployed_hashes": {
+    "generate.py": "28f0e4ae4add1665c158e29ad6f4894243f12861ff2dd81ef225f4ac954ba5f2",
+    "series.py": "8315ab64362405e95c911d6b6e4f8dcb8764a5ca499bff270d2d0d5eea8680a1",
+    "runtime.py": "6426402f888433f18f6debb70b4734a08edca4f6aea5c71739ba7fd463f854f8",
+    "beauty.py": "8071a9d667e5a4cd62fcd6f2d622c2081ee23f670092ed10d328b4ae04a5421b",
+    "beauty_evaluate.py": "5110e772ef8bf74d4e4bcdf886ebaed388b3569e4ad7ba0eb2e9a9c714f548e3",
+    "statistics.py": "d4e939d39f940b015637a038795b7fb0137aaf11abd91c76ed678aac23560ee2",
+    "a0_beauty_letter.json": "528004c5eae97d158037d8046578acb0ffbe0a3df3b58e5c275057694b791dba"
+  },
+  "receipts": {
+    "parent": {
+      "job_id": "letter-beauty-v2-group-series-r0",
+      "acceptance": {
+        "accepted_at": "2026-11-21T17:58:22.514137+00:00",
+        "request_sha256": "806272cf65a41be4912180670faffe6fd6eb9b15be0fb5ef72faf47f61594123",
+        "runner_path": "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-beauty-cbb963fab68c34cc.py",
+        "runner_sha256": "cbb963fab68c34cc977653afc46f260e7ede962cb4a8f105458331a0e0e19a75"
+      },
+      "worker": {
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-B",
+          "-m",
+          "lc_rec.shuffle_v2.series",
+          "--output",
+          "/data/bwwu/lc-rec/letter-shuffle-v2-beauty/group-series-r0",
+          "--plan",
+          "/home/bwwu/grid-audits/sid-extensions-p0/requests/letter-beauty-v2-group-series-r0.plan.json"
+        ],
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pid": 3399848,
+        "start_ticks": "588923950",
+        "uid": 1005
+      },
+      "supervisor": {
+        "argv": [
+          "/usr/bin/python3",
+          "-I",
+          "-S",
+          "-B",
+          "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-beauty-cbb963fab68c34cc.py",
+          "supervise",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-beauty-v2-group-series-r0"
+        ],
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pid": 3399846,
+        "start_ticks": "588923941",
+        "uid": 1005
+      },
+      "started_at": "2026-11-21T17:58:22.606795+00:00"
+    },
+    "child": {
+      "job_id": "letter-beauty-v2-gpu-formal-shuffle2-r0",
+      "acceptance": {
+        "accepted_at": "2026-11-21T17:58:23.191407+00:00",
+        "request_sha256": "50a8ce26ee7c68a7615d3cf9da2319c7c9067777b154f3d0dbd6b0aeb461ee42",
+        "runner_path": "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-beauty-cbb963fab68c34cc.py",
+        "runner_sha256": "cbb963fab68c34cc977653afc46f260e7ede962cb4a8f105458331a0e0e19a75"
+      },
+      "worker": {
+        "argv": [
+          "/data/bwwu/envs/letter-20261110/bin/python",
+          "-B",
+          "-m",
+          "lc_rec.shuffle_v2.generate",
+          "--output",
+          "/data/bwwu/lc-rec/letter-shuffle-v2-beauty/gpu-formal-shuffle2-r0",
+          "--config",
+          "/home/bwwu/grid-audits/sid-extensions-p0/releases/letter-shuffle-v2-beauty/1182dfd914c20bd3dc11786587eae6879fba6b9d/lc_rec/shuffle_v2/a0_beauty_letter.json",
+          "--cpu-audit",
+          "/data/bwwu/lc-rec/letter-shuffle-v2-beauty/cpu-replay-r3/audit.json",
+          "--single-shard-audit",
+          "/data/bwwu/lc-rec/letter-shuffle-v2-beauty/cpu-replay-r3/single-shard.json",
+          "--mode",
+          "shuffle2",
+          "--run-commit",
+          "1182dfd914c20bd3dc11786587eae6879fba6b9d",
+          "--seconds",
+          "28715"
+        ],
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pid": 3399853,
+        "start_ticks": "588924024",
+        "uid": 1005
+      },
+      "supervisor": {
+        "argv": [
+          "/usr/bin/python3",
+          "-I",
+          "-S",
+          "-B",
+          "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-beauty-cbb963fab68c34cc.py",
+          "supervise",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-beauty-v2-gpu-formal-shuffle2-r0"
+        ],
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pid": 3399852,
+        "start_ticks": "588924009",
+        "uid": 1005
+      },
+      "started_at": "2026-11-21T17:58:23.343514+00:00"
+    }
+  }
+}

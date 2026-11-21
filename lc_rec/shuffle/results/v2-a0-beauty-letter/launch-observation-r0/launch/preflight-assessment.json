@@ -1,0 +1,78 @@
+{
+  "status": "BEAUTY_PREFLIGHT_TIMING_ESTIMATE",
+  "scope": "Engineering projection from the same frozen 32 users per mode; no formal submission or result",
+  "run_commit": "1182dfd914c20bd3dc11786587eae6879fba6b9d",
+  "basis": "Mode wall generation time / 32 \u00d7 22363, plus measured loading and other stage overhead",
+  "uncertainty": "Fixed input-feature-selected sample, transient server load/cache, serialization and fsync variability; estimate is not an upper bound or a statistical interval.",
+  "modes": {
+    "shuffle2": {
+      "users_sampled": 32,
+      "raw_candidates": 640,
+      "measured_attempt_wall_seconds": 161.07370838243514,
+      "measured_model_load_seconds": 116.45734940376133,
+      "measured_generation_seconds": 25.25290027540177,
+      "other_measured_seconds": 19.363458703272045,
+      "per_user_generate_median_seconds": 0.633894466329366,
+      "per_user_generate_max_seconds": 1.479137229733169,
+      "formal_generation_extrapolated_seconds": 17647.831526837806,
+      "formal_wall_projection_seconds": 17783.65233494484,
+      "output_bytes_sample": 705264,
+      "raw_jsonl_formal_bytes_projection": 492869339
+    },
+    "shuffle3a": {
+      "users_sampled": 32,
+      "raw_candidates": 640,
+      "measured_attempt_wall_seconds": 157.5482480879873,
+      "measured_model_load_seconds": 116.49911882635206,
+      "measured_generation_seconds": 22.066532771103084,
+      "other_measured_seconds": 18.98259649053216,
+      "per_user_generate_median_seconds": 0.5397449540905654,
+      "per_user_generate_max_seconds": 1.3118252670392394,
+      "formal_generation_extrapolated_seconds": 15421.058511255571,
+      "formal_wall_projection_seconds": 15556.540226572455,
+      "output_bytes_sample": 706191,
+      "raw_jsonl_formal_bytes_projection": 493517167
+    },
+    "shuffle3b": {
+      "users_sampled": 32,
+      "raw_candidates": 640,
+      "measured_attempt_wall_seconds": 158.0500079439953,
+      "measured_model_load_seconds": 116.7699526976794,
+      "measured_generation_seconds": 22.03546706493944,
+      "other_measured_seconds": 19.244588181376457,
+      "per_user_generate_median_seconds": 0.5388865107670426,
+      "per_user_generate_max_seconds": 1.2932916963472962,
+      "formal_generation_extrapolated_seconds": 15399.348436663771,
+      "formal_wall_projection_seconds": 15535.362977542827,
+      "output_bytes_sample": 706116,
+      "raw_jsonl_formal_bytes_projection": 493464754
+    },
+    "shuffle4": {
+      "users_sampled": 32,
+      "raw_candidates": 640,
+      "measured_attempt_wall_seconds": 160.81907668802887,
+      "measured_model_load_seconds": 116.57414782699198,
+      "measured_generation_seconds": 25.265742614865303,
+      "other_measured_seconds": 18.979186246171594,
+      "per_user_generate_median_seconds": 0.631281029433012,
+      "per_user_generate_max_seconds": 1.5647821929305792,
+      "formal_generation_extrapolated_seconds": 17656.806315507274,
+      "formal_wall_projection_seconds": 17792.359649580438,
+      "output_bytes_sample": 707224,
+      "raw_jsonl_formal_bytes_projection": 494239073
+    }
+  },
+  "projected_single_gpu_total_seconds": 66667.91518864056,
+  "sensitivity_multiplier": 1.25,
+  "sensitivity_max_mode_seconds": 22240.449561975547,
+  "sensitivity_total_seconds": 83334.8939858007,
+  "fits_formal_attempt_under_sensitivity": true,
+  "fits_formal_total_under_sensitivity": true,
+  "projected_raw_formal_jsonl_bytes": 1974090333,
+  "cpu_reservation_seconds": {
+    "each_evaluation": 600,
+    "joint_bootstrap": 2100
+  },
+  "cpu_projection_basis": "Use archived full Normal evaluation time as a size-matched baseline, plus single-shard boundary checks; bootstrap reservation covers shared 5000 draws and independent checks.",
+  "review_timing": "Separate after computation, not projected as GPU time"
+}

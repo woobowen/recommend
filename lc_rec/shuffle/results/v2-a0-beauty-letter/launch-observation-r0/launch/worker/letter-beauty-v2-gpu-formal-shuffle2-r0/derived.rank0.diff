@@ -1,0 +1,89 @@
+--- /data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/releases/6e1b211d9c37f358c43b1540b40b17f6703150d2/lc_rec/a0_beauty/formal_evaluate.py
++++ V2-derived
+@@ -325,8 +325,8 @@
+     parser.add_argument("--max-seconds", type=int, default=96 * 3600,
+                         help="Evaluation stage cap; the enclosing job enforces the cumulative 96-hour cap")
+     args = parser.parse_args()
+-    if args.preflight_users_per_rank not in (0, 16) or (args.preflight_users_per_rank and args.aggregate_only):
+-        raise ValueError("Only a separate fixed sixteen-user/rank preflight is supported")
++    if args.preflight_users_per_rank not in (0, 32) or (args.preflight_users_per_rank and args.aggregate_only):
++        raise ValueError("Only the frozen 32-user single-rank preflight is supported")
+     if bool(args.preflight_users_per_rank) != bool(args.preflight_manifest):
+         raise ValueError("Preflight requires a manifest; formal evaluation forbids it")
+     output = Path(args.output).resolve()
+@@ -336,7 +336,7 @@
+         raise ValueError("--run-commit must be a complete lowercase commit SHA")
+     if args.aggregate_only:
+         _, catalog, users, _ = catalog_and_users(args.data_root)
+-        result = aggregate_predictions([output / f"predictions.rank{rank}.jsonl" for rank in range(2)],
++        result = aggregate_predictions([output / "predictions.rank0.jsonl"],
+                                        users, catalog, load_evaluator(source), run_commit=args.run_commit)
+         result["RUN_COMMIT"] = args.run_commit
+         write(output / "metrics.recomputed.json", result)
+@@ -375,8 +375,8 @@
+             raise OSError("Evaluation output disk reserve exhausted")
+ 
+     try:
+-        if world != 2 or not 0 <= rank < 2 or args.minimum_host_free_gib < 40 or args.minimum_disk_free_gib < 20:
+-            raise ValueError("Requires two ranks, at least 40GiB host and 20GiB output-disk reserve")
++        if world != 1 or rank != 0 or local_rank != 0 or args.minimum_host_free_gib < 40 or args.minimum_disk_free_gib < 20:
++            raise ValueError("Requires one rank, at least 40GiB host and 20GiB output-disk reserve")
+         if not 0 < args.max_seconds <= 96 * 3600:
+             raise ValueError("Evaluation stage budget must be positive and no greater than 96 hours")
+         write(report_path, report)
+@@ -405,6 +405,7 @@
+                          "total_memory_bytes": torch.cuda.get_device_properties(local_rank).total_memory}
+         load_started = time.monotonic()
+         model, tokenizer = strict_reload(args, report, torch, local_rank, source, indices)
++        runtime.loaded(model, tokenizer, args, report)
+         torch.cuda.synchronize()
+         report["model_load_and_strict_verification_seconds"] = time.monotonic() - load_started
+         guard()
+@@ -435,20 +436,20 @@
+         assignments = [shard_assignment(len(data), r, world) for r in range(world)]
+         validate_assignments(assignments, len(data))
+         assignment = assignments[rank]
+-        if len(assignment) != (11182 if rank == 0 else 11181):
++        if len(assignment) != len(users):
+             raise AssertionError("Beauty sampler assignment has unexpected size")
+         if args.preflight_users_per_rank:
+-            from preflight_users import validate
+-            manifest_path=Path(args.preflight_manifest).resolve(strict=True)
+-            manifest=json.loads(manifest_path.read_text())
+-            if manifest.get('asset_sha256')!={k:v['sha256'] for k,v in identities.items()}:
+-                raise AssertionError('Preflight manifest uses different Beauty assets')
+-            selection=validate(manifest,users,assignments)
+-            assignment=selection[rank]
+-            report["preflight_manifest"]={"path":str(manifest_path),"sha256":sha(manifest_path),
+-                                           "assignments":selection}
++            assert Path(args.preflight_manifest).resolve() == Path(runtime.config['frozen_preflight']).resolve()
++            assignment = runtime.preflight_assignment(rank)
++            report["preflight_assignment"] = assignment
++            report["preflight_manifest"] = {"path": args.preflight_manifest, "sha256": sha(args.preflight_manifest)}
++        else:
++            assert runtime.single_shard['assignment_sha256'] == runtime.assignment_hash(assignment)
+         report["assigned_users"] = len(assignment)
+         report["assignment_sha256"] = hashlib.sha256(json.dumps(assignment, separators=(",", ":")).encode()).hexdigest()
++        if args.preflight_users_per_rank:
++            assert assignment == runtime.preflight_assignment(rank)
++            report["preflight_assignment"] = assignment
+         loader = DataLoader(indexed, batch_size=1, sampler=assignment, collate_fn=collate,
+                             num_workers=2, pin_memory=True)
+         write(report_path, report)
+@@ -462,6 +463,7 @@
+                 if row_indices != [assignment[iteration]]:
+                     raise AssertionError("DataLoader order differs from original sampler assignment")
+                 index = row_indices[0]
++                inputs, shuffle_record = runtime.intervene(inputs, index, data, tokenizer)
+                 input_ids = inputs["input_ids"][0].tolist()
+                 inputs = inputs.to(torch.device("cuda", local_rank))
+                 tick = time.monotonic()
+@@ -494,7 +496,7 @@
+                                        "eos_position": eos, "raw_decoded": text,
+                                        "sequence_score": score, "sid": normalized_prediction(text)})
+                 order = sorted(range(BEAMS), key=lambda i: scores[i], reverse=True)
+-                row = {**users[index], "rank": rank, "prompt_id": 0, "input_token_ids": input_ids,
++                row = {**users[index], "rank": rank, "prompt_id": 0, "input_token_ids": input_ids, "shuffle": shuffle_record,
+                        "input_nonpadding_tokens": int(inputs["attention_mask"].sum()),
+                        "candidates": candidates, "sorted_generation_order": order,
+                        "relevance": [int(candidates[i]["sid"] == targets[0]) for i in order],

@@ -1,6 +1,6 @@
 # Instruments A0 允许恒等排列的 Shuffle V2
 
-`wbw-lc-rec-shuffle-v2` 将历史 LETTER V1 的干预扩展为包含恒等项的组内排列，研究同一固定模型及完整测试用户轴上不同码位扰动的结果。GitHub activity 在 2026-11-20T16:15:35Z 记录 `woobowen` 创建该研究分支，研究交付 `692cd94d6acd17292c2bdef7fabc6bb50ec9ba5d` 含启动和七次初始观察。整理前远端版本 `50507089981cb0b9d36e8977bd1d94cd9085f031` 属于之前的规范发布。分支继承 G3 Beauty 结束时的 V1 历史。当前正式系列仅 Instruments A0；Beauty 的两个入口与 A1 在准备阶段只核静态接线。[仓库活动](https://github.com/woobowen/recommend/activity)
+`wbw-lc-rec-shuffle-v2` 将历史 LETTER V1 的干预扩展为包含恒等项的组内排列，研究同一固定模型及完整测试用户轴上不同码位扰动的结果。GitHub activity 在 2026-11-20T16:15:35Z 记录 `woobowen` 创建该研究分支，研究交付 `692cd94d6acd17292c2bdef7fabc6bb50ec9ba5d` 含启动和七次初始观察。整理前远端版本 `50507089981cb0b9d36e8977bd1d94cd9085f031` 属于之前的规范发布。分支继承 G3 Beauty 结束时的 V1 历史。Instruments A0 的正式系列已完成，原 LETTER Beauty 已进入正式系列。[仓库活动](https://github.com/woobowen/recommend/activity)
 
 ## 第一组正式结果
 
@@ -8,7 +8,7 @@
 
 ## 第二组 LETTER Beauty
 
-单卡适配、全量 CPU 重放、冻结 Normal 独立复算、四模式真实 GPU 预跑和统计接口均已核验。正式前准备等待网页二审。本轮正式作业提交数为 0。 [第二组准备及证据入口](../shuffle/results/v2-a0-beauty-letter/README.md)
+正式前准备已通过用户确认的网页二审。2026-11-21 的正式启动观察覆盖 30 分钟，窗口结束时 S2 原作业仍运行。 [第二组总入口](../shuffle/results/v2-a0-beauty-letter/README.md) · [正式启动观察记录](../shuffle/results/v2-a0-beauty-letter/launch-observation-r0/README.md)
 
 ## 历史只读观测
 
