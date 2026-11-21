@@ -10,6 +10,7 @@ import zipfile
 SECRET = re.compile(rb'(?i)(-----BEGIN [A-Z ]*PRIVATE KEY-----|gh[pousr]_[0-9a-z]{30,}|github_pat_[0-9a-z_]{60,}|'
                     rb'hf_[A-Za-z0-9]{30,}|Bearer [A-Za-z0-9._-]{25,}|AKIA[A-Z0-9]{16})')
 BLOCK = 2**20
+PREFLIGHT_READY = 'SECOND_GROUP_PREFLIGHT_COMPLETE_PENDING_WEB_REVIEW'
 
 
 def safe_name(name):
@@ -33,6 +34,24 @@ def stream_identity(source, destination=None, scan=False):
     return {'bytes': size, 'sha256': digest.hexdigest()}
 
 
+def check_navigation(archive):
+    """Validate offline Markdown link targets against the actual ZIP inventory."""
+    import posixpath
+    from urllib.parse import unquote, urlsplit
+
+    members = set(archive.namelist())
+    for document in sorted(name for name in members if name.endswith('.md')):
+        body = archive.read(document).decode('utf-8')
+        for target in re.findall(r'\]\(([^)]+)\)', body):
+            url = urlsplit(target.strip().strip('<>'))
+            if url.scheme or not url.path:
+                continue
+            assert not url.netloc, (document, target)
+            raw = unquote(url.path)
+            relative = posixpath.normpath(posixpath.join(posixpath.dirname(document), raw))
+            assert safe_name(relative) and (relative in members or any(name.startswith(relative + '/') for name in members)), (document, target)
+
+
 def verify(path, extract=None):
     with zipfile.ZipFile(path) as archive:
         members = archive.infolist()
@@ -40,6 +59,8 @@ def verify(path, extract=None):
         assert all(safe_name(member.filename) and not member.is_dir()
                    and not stat.S_ISLNK(member.external_attr >> 16) for member in members)
         manifest = json.loads(archive.read('MANIFEST.json'))
+        if manifest['status'] == PREFLIGHT_READY:
+            check_navigation(archive)
         assert set(manifest['members']) == set(archive.namelist()) - {'MANIFEST.json'}
         for member, expected in manifest['members'].items():
             with archive.open(member) as source:
@@ -66,6 +87,21 @@ def create(spec, output):
     assert len({name.casefold() for name in files}) == len(files)
     assert all(safe_name(name) for name in files)
     manifest = {'status': spec['status'], 'members': {}}
+    if spec['status'] == PREFLIGHT_READY:
+        required = {'offline_review.sh', 'research/status.md', 'research/beauty_reproduction.md',
+                    'publication/readback.json', 'execution/formal-plan.json', 'execution/lifecycle.json',
+                    'execution/runner.py', 'execution/runner-beauty.diff', 'reviews/prelaunch.json',
+                    'reviews/research-review.json', 'reviews/execution-review.md',
+                    'source/lc_rec/shuffle_v2/collect.py', 'source/lc_rec/shuffle_v2/beauty_runner.py',
+                    'source/lc_rec/shuffle_v2/beauty_preflight_eval.py', 'source/support/gridctl.py',
+                    'source/support/transport.py', 'preflight-evaluation/summary.json',
+                    'preflight-evaluation/arrays.npz', 'preflight/summary.json',
+                    'replay/inputs.jsonl', 'conditions/normal/test/predictions.rank0.jsonl',
+                    'conditions/normal/test/predictions.rank1.jsonl', 'data/Beauty.index.json'}
+        for mode in ('shuffle2', 'shuffle3a', 'shuffle3b', 'shuffle4'):
+            required.update(f'preflight/{mode}/{leaf}' for leaf in ('rank0.json', 'predictions.rank0.jsonl',
+                            'v2-binding.rank0.json', f'{mode}.request.json', f'{mode}.exit.json'))
+        assert required <= files.keys(), sorted(required - files.keys())
     if spec['status'] == 'SECOND_GROUP_COMPLETE_PENDING_WEB_REVIEW':
         required = {'README.md', 'offline_review.sh', 'paired/summary.json', 'paired/arrays.npz',
                     'reviews/prelaunch.json', 'reviews/final.json', 'publication/readback.json',

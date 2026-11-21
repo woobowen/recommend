@@ -62,7 +62,7 @@ print(json.dumps(dict(raw=raw.decode(), sha256=hashlib.sha256(raw).hexdigest()))
     actual = connection.put(staged / 'runner.py', runner)
     assert metadata['sha256'] == connection.profile['deployment_sha256']
     assert actual['sha256'] == connection.profile['runner_sha256']
-    control.transport.atomic(staged / 'deployment-receipt.json',
+    control.transport.atomic(staged / f'deployment-{commit}.json',
         {'previous_runner': legacy.profile['runner'], 'previous_runner_sha256': legacy.profile['runner_sha256'],
          'runner': actual, 'deployment': metadata, 'source_commit': commit, 'scope': PREFIX})
 
@@ -170,6 +170,7 @@ def series(connection, config, commit, states, args, *, build_only=False):
     require_success(states, args.normal)
     review = json.loads(args.review.read_text())
     assert review['status'] == 'PASS' and review['RUN_COMMIT'] == commit
+    assert review['runner_sha256'] == connection.profile['runner_sha256']
     assert review['preflight_job_id'] == PREFIX + args.preflight
     preflight_summary = f'{ROOT}/{args.preflight}/summary.json'
     preflight_sha = control.remote_hash(connection, preflight_summary)
@@ -182,7 +183,18 @@ def series(connection, config, commit, states, args, *, build_only=False):
     if local.is_file() and not build_only:
         plan = json.loads(local.read_text())
         assert plan['formal_run_commit'] == commit and plan['preflight_review'] == review
-        assert plan['runner'] == profile['runner']
+        assert plan['runner'] == profile['runner'] and plan['runner_sha256'] == profile['runner_sha256']
+        gate_path = f'{control.BASE}/requests/{PREFIX}{parent}.review.json'
+        assert control.remote_hash(connection, gate_path) == hashlib.sha256(args.review.read_bytes()).hexdigest()
+        caps = config['budget']
+        timeout_by_stage = {
+            stage: sum(item['timeout_seconds'] for phase in plan['modes'].values()
+                       for key, item in phase.items() if key == stage and item['job_id'] not in states)
+            for stage in ('gpu', 'cpu')}
+        if plan['paired']['job_id'] not in states:
+            timeout_by_stage['cpu'] += plan['paired']['timeout_seconds']
+        assert control.budget_seconds(states, 'gpu-formal-', caps['formal_total_device_seconds'], prefix=PREFIX) >= timeout_by_stage['gpu'] + 15
+        assert control.budget_seconds(states, 'cpu-', caps['cpu_total_wall_seconds'], prefix=PREFIX) >= timeout_by_stage['cpu'] + 15
         pending_gpus = {phase['gpu']['env']['CUDA_VISIBLE_DEVICES'] for phase in plan['modes'].values()
                         if phase['gpu']['job_id'] not in states}
         if pending_gpus:
@@ -266,6 +278,7 @@ def series(connection, config, commit, states, args, *, build_only=False):
         result = {'status': 'FORMAL_PLAN_VALIDATED_NOT_SUBMITTED', 'formal_submitted': False,
                   'formal_gpu_device_seconds_delta': 0, 'plan': plan, 'parent_request': parent_request,
                   'launch_gate_upload': review_input, 'canonical_plan_sha256': plan_sha,
+                  'plan_builder_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                   'future_requires_authorization_and_resource_recheck': True}
         immutable(args.plan_output, result)
         return result
@@ -335,6 +348,8 @@ print(json.dumps(dict(path=str(p),bytes=p.stat().st_size,sha256=digest)))''', ti
                     result = series(connection, config, commit, states, args, build_only=True)
                 elif PREFIX + name in states:
                     result = control.gridctl.query(connection, PREFIX + name)
+                elif args.action == 'series':
+                    result = series(connection, config, commit, states, args)
                 elif (SUPPORT / (PREFIX + name + '.request.json')).exists():
                     pending = json.loads((SUPPORT / (PREFIX + name + '.request.json')).read_text())
                     assert pending['capture_version'] == commit
@@ -352,8 +367,6 @@ print(json.dumps(dict(path=str(p),bytes=p.stat().st_size,sha256=digest)))''', ti
                         _, inputs = audit_gates(connection, refreshed, args.replay)
                         assert all(item in pending['inputs'] for item in inputs)
                     result = submit(connection, pending)
-                elif args.action == 'series':
-                    result = series(connection, config, commit, states, args)
                 elif args.action == 'preflight':
                     gpu, _ = wait_for_device(connection, config)
                     states = control.job_states(connection, PREFIX)

@@ -26,3 +26,26 @@
 在解压审核包后运行根目录的 `offline_review.sh`，给出独立审核 JSON 的输出路径。脚本用包内冻结原始候选、原精度分数、用户及目标轴、SID 目录、逐用户矩阵和统计数组复算，依赖 Python 和 NumPy。该入口与 checkpoint 重评是两个复现起点。
 
 结论只覆盖此固定权重、冻结 Beauty 用户轴及 seed 42 的置换实例。
+
+## 正式前恢复与操作接口
+
+Beauty 和 Instruments 共用 V2 排列核心、独立参考、模型边界与 PCG64 配对逻辑。Beauty 的原 Normal 来自 11,182／11,181 两个不等长分片。Beauty 由冻结 `uneven_sampler` 还原全轴，并用冻结的 Beauty 16 项评价和 CCE 实现。两组各自绑定数据、adapter、GPU 请求、预算和结果。
+
+上一轮的导入异常直接证明 `CUDA_HOME` 缺失；对照冻结请求还查实 `LD_LIBRARY_PATH` 同时缺失。Beauty 的公共 GPU request 构造器恢复原值，生成包装器对比 request 与实际环境，rank 在 LLaMA 真实导入和严格装载通过后记录同一环境。继续使用原 Python、PyTorch、Transformers、PEFT、CUDA 12.4.131 和原 dtype。工作进程继续使用已验证的 `TORCHINDUCTOR_COMPILE_THREADS=1`。
+
+旧 runner 的清收范围未覆盖 Beauty 前缀。此次使用单独部署的 Beauty runner，观察和发信号的路径均采用同一个 Beauty 前缀，并和原身份保护绑定。实际生命周期证据覆盖正常退出、跨 session 残留、超时 TERM→KILL、同时运行的隔离对照。旧 runner 及其历史回执独立保留。 [Beauty runner](beauty_runner.py) · [CPU 隔离验证](beauty_lifecycle.py)
+
+`beauty_preflight_eval` 仅使用冻结顺序的 32 人样本，逐条核对真实 GPU 候选、输入边界、原 CCE 及归档 Normal 子集。它以同一统计程序生成 5×16 小样本工程检查，并保持正式入口的 22,363 人覆盖检查。整组正式档案的 Offline Normal 复算仍从原双分片读取全量数据。 [预跑评价入口](beauty_preflight_eval.py) · [独立 Normal 复算](independent_beauty_review.py)
+
+新的预跑请求累计上限为 180 GPU-device-minutes，单次上限为 60 分钟。准备 CPU 累计上限 8 小时，单次上限 1 小时。账本接续 `letter-beauty-v2-` 原身份，失败和装载耗时均记录。两张卡均占用时，以 60 秒间隔、最多两小时等待。同一作业持续使用一张物理卡映射为逻辑 GPU 0。
+
+`beauty_control plan` 只构建并保存本地正式计划，不上传 review/request，也不提交父子任务。网页二审和独立启动授权到位后，由 WSL 上述研究分支使用指定快照并再次核对资源，才可执行下列入口。参数值来自最终计划及审核回执。
+
+```bash
+python3 -B -m lc_rec.shuffle_v2.beauty_control series \
+  --commit <GPU_RUN_COMMIT> --review <LOCAL_PRELAUNCH_GATE_JSON> \
+  --replay cpu-replay-r3 --normal cpu-eval-normal-r0 \
+  --preflight gpu-preflight-r1 --attempt r0 --confirm-formal-launch
+```
+
+运行恢复以原 job ID、不可变请求和 cleanup 核对为基础。正式父控制器按四模式串行生成并评价，每个子作业完整成功后才推进，最后运行 80 项配对结果。预跑包内 `offline_review.sh` 会验证冻结 Normal 全量和 32 人预跑工程指标。包内 `source/support/` 保存实际 WSL transport 与 gridctl 源码。在线操作仍依赖既有 `new-server` 连接、项目 support profile 和冷冻资产路径及访问权。离线评价仅需 Python 和 NumPy，使用包内的数据及 Python 源码。 [正式控制器](series.py)
