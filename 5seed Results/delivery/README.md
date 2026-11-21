@@ -40,3 +40,11 @@ python "5seed Results/delivery/fetch_assets.py" --manifest "5seed Results/delive
 ## 验收与限制
 
 [verify_order_delivery.py](verify_order_delivery.py)检查20次run、源码签名、checkpoint SHA配对、4000原张量清单、原40测试JSON与源码入口。服务器无Git导出：snapshot+每文件SHA是历史内容身份。原始full_test_reference只记录固定用户，不可冒称全测试逐用户预测。本轮没有新的训练或独立非作者PASS；本次执行方检查与清单作者的旧只读核查分开。
+
+## 2026-11-22 收尾补证（O1–O5主体沿用已通过证据）
+
+本轮没有改变五种子模型、随机化、指标、checkpoint或4000份原注意力。上轮网页二审已确认主体补件与固定样本统计，来源为本轮任务文件转述，不改称本轮重新做的全量验证。
+
+本轮只读CPU实际打开40份`full_test_reference_*.pt`：每份仅100个固定用户，含10×4候选SID及10个分数，是注意力固定样本参考；不是全测试逐用户预测，也没有保存的全测试目标表。保存40份test JSON→汇总CSV一致，只支持保存指标汇总，不能称为全测试候选级评价重算。检索范围、各文件SHA/用户键/结构及未取得字段见[历史检索回执](historical_search_closeout.json)。没有新模型重评来冒充历史候选。
+
+新增恢复原件和历史程序audit位于yjc-grid分支`GRID baseline/codex/delivery_20261121/historical_additions/`；本轮交付报告给最终固定提交和可直接取得的完整审核ZIP。历史audit不证明独立审读身份。当前独立审读及报告会明确记录实际范围和时点。
