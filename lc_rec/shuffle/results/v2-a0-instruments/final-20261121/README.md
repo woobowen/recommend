@@ -1,6 +1,6 @@
 # Instruments A0 Shuffle V2 第一组正式结果
 
-原系列于 2026 年 11-21 05:43:14 EST 退出 0。四个新条件的正式生成与 CPU 评价、五项配对统计均已完成。每条件覆盖 24,772 名用户，保留 495,440 条候选。Normal 复用冻结双分片预测。内部终审通过，待网页二审。
+原系列于 2026 年 11-21 05:43:14 EST 退出 0。四个新条件的正式生成与 CPU 评价、五项配对统计均已完成。每条件覆盖 24,772 名用户，保留 495,440 条候选。Normal 复用冻结双分片预测。内部终审与网页二审均通过，见[审后补记](#网页二审补记)。
 
 [V2 方案、固定资产、有效配置与调用链](../../../../shuffle_v2/README.md) · [启动观察和预审](../launch-observation-20261120/README.md)
 
@@ -56,7 +56,7 @@ S2 的 Hit@5 配对区间跨 0。S3a、S3b、S4 的 Hit@5 低于 Normal，S3b �
 - 实际 runner 的仓库源码是 [lc_rec/a1_qwen3_06b/scripts/runner.py](../../../../a1_qwen3_06b/scripts/runner.py)，SHA-256 `1fefc09a15c1cb73878417f9eb50d0fe9e8fa1b2f60cc70b27f7cc4ed9cb0947`。对应 `runner-a1-96h-1fefc09a15c1cb73.py` 部署。原客户端的 [gridctl](../../../../evidence/execution_source/gridctl.py)、[transport](../../../../evidence/execution_source/transport.py) 的既有仓库副本与实际导入文件逐字节一致。 [客户端来源与 SHA-256](execution-client/source-identity.json)
 - 父作业 `letter-a0-20261112-v2-20261120-group-series-r0`。每个正式生成与评价均为 r0，无 GPU 重试。原 CPU replay r0 退出码 0 后因残存子进程被 runner 标为 `WORKERS_TERMINATED` 并清收，r1 复核通过。原件保留在 [jobs/](jobs/)。
 
-此前 15 分钟为普通监控间隔。用户在同一会话随后明确授权一次 30 分钟观察，原话为“对已经实际启动的正式任务，从本次查询时刻 T0 起，观察30分钟，在以下七个时间点检查”，并要求交付后停主动监视。执行的是 T0 到 T0＋30 分钟的七个时点。 [当时七点原始回执](../launch-observation-20261120/README.md)
+本次审后回执确认，原要求为观察 15 分钟、每 5 分钟检查。后续用户消息《现在调整本轮 Codex 在线工作的返回时点》第二节改为从 T0 起观察 30 分钟，每 5 分钟检查一次，含首尾共七次。原消息位于本地 Codex 会话 `01a1f9b2-a7d9-7ba2-90d0-5fdccc23578e` 的 `~/.codex/sessions/2026/11/20/rollout-2026-11-20T11-03-17-01a1f9b2-a7d9-7ba2-90d0-5fdccc23578e.jsonl` 第 812 行，时间为 `2026-11-20T17:07:45.063Z`。网页二审验证了七次观察的执行记录，原授权消息定位为本次审后补查所得。 [七点原始回执](../launch-observation-20261120/README.md)
 
 ## 从保存输出复核
 
@@ -72,4 +72,10 @@ S2 的 Hit@5 配对区间跨 0。S3a、S3b、S4 的 Hit@5 低于 Normal，S3b �
 
 - [运行终审](final-run-review.md)独立读取 99,088 条正式记录及 Normal 两个全量分片，复核实际输入、逐行模型边界回执、候选约束、清收与部署字节映射。S2/S3a/S3b/S4 恒等组数为 86,483/28,935/28,935/7,147，整用户自然恒等计数为 714/6/6/0。每条件的所有用户均纳入最终统计。
 - [统计终审](final-stats-review.md)独立复算五条件 1,981,760 个逐用户指标值、400,000 个配对 bootstrap 均值及 160 个区间端点。逐用户及组均值完全一致，配对数值差异在 `1e-13` 核验阈值内。
-- 审核以保存的输入、预测和模型边界记录为依据。终审未重新运行 GPU 生成，最终网页二审待进行。
+- 审核以保存的输入、预测和模型边界记录为依据。内部终审未重新运行 GPU 生成。原交付时网页二审尚待进行。
+
+## 网页二审补记
+
+据用户回执，网页 GPT 审核了固定交付 `457c1c60853582693633cdae741e883f2bf2d643` 和 `Instruments_A0_Shuffle_V2_FIRST_GROUP_FINAL_REVIEW_457c1c6.zip`，独立复算了全量输入、候选、指标及配对统计。第一组实验与结果交付通过网页二审，无需重跑。
+
+原 ZIP 必审材料齐全。部分离线相对链接需在包内通过 `source-map.json` 的部署源码映射或 `MANIFEST.json` 的 `aliases` 查找实际成员。上述观察授权的原消息定位和本节为审后说明，原固定交付和 ZIP 保留。
