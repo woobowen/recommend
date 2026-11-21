@@ -11,6 +11,8 @@
 
 这里是 21 个逻辑条件，不代表 21 次训练：各 Shuffle 使用对应 Normal 模型。GRID A/B 和 LETTER A0/A1 是独立编号；GRID 上游文本编码器 Qwen 与 LETTER A1 下游推荐器 Qwen3 不是同一模型。同属主题不意味着数据、SID、训练、模型、扰动分布或评价已经公平对齐，也不能据此将结果差异归因于单一因素。
 
+上述 21 条为此导航归档时的 GRID 与 LETTER V1 历史条件。允许恒等排列的 Instruments A0 Shuffle V2 第一组后续单独发布。 [V2 方案、第一组结果与复现](../../../lc_rec/shuffle_v2/README.md)
+
 ## 仓库角色与其他研究
 
 - `experiments/` 是 GRID 桥接及实验入口；`manifests/` 保存 job、配置、结果与审核索引；`references/wmh-original/GRID/` 为历史作者原件；`GRID baseline/` 是另一条工作基线及其资产入口。

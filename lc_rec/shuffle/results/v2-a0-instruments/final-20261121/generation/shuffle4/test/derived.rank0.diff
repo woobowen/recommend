@@ -1,0 +1,75 @@
+--- /home/bwwu/grid-audits/sid-extensions-p0/releases/letter-shuffle-v2/e2f54ebd2d7709821de1071693f91644f5ed9a30/lc_rec/letter/scripts/formal_evaluate.py
++++ V2-derived
+@@ -324,8 +324,8 @@
+     parser.add_argument("--max-seconds", type=int, default=96 * 3600,
+                         help="Evaluation stage cap; the enclosing job enforces the cumulative 96-hour cap")
+     args = parser.parse_args()
+-    if args.preflight_users_per_rank not in (0, 8) or (args.preflight_users_per_rank and args.aggregate_only):
+-        raise ValueError("Only a separate fixed eight-user/rank preflight is supported")
++    if args.preflight_users_per_rank not in (0, 32) or (args.preflight_users_per_rank and args.aggregate_only):
++        raise ValueError("Only a separate fixed 32-user single-rank preflight is supported")
+     output = Path(args.output).resolve()
+     output.mkdir(parents=True, exist_ok=True)
+     source = author_source(args.source_root)
+@@ -333,7 +333,7 @@
+         raise ValueError("--run-commit must be a complete lowercase commit SHA")
+     if args.aggregate_only:
+         _, catalog, users, _ = catalog_and_users(args.data_root)
+-        result = aggregate_predictions([output / f"predictions.rank{rank}.jsonl" for rank in range(2)],
++        result = aggregate_predictions([output / f"predictions.rank{rank}.jsonl" for rank in range(1)],
+                                        users, catalog, load_evaluator(source), run_commit=args.run_commit)
+         result["RUN_COMMIT"] = args.run_commit
+         write(output / "metrics.recomputed.json", result)
+@@ -372,8 +372,8 @@
+             raise OSError("Evaluation output disk reserve exhausted")
+ 
+     try:
+-        if world != 2 or not 0 <= rank < 2 or args.minimum_host_free_gib < 40 or args.minimum_disk_free_gib < 20:
+-            raise ValueError("Requires two ranks, at least 40GiB host and 20GiB output-disk reserve")
++        if world != 1 or rank != 0 or local_rank != 0 or args.minimum_host_free_gib < 40 or args.minimum_disk_free_gib < 20:
++            raise ValueError("Requires rank0/local0, at least 40GiB host and 20GiB output-disk reserve")
+         if not 0 < args.max_seconds <= 96 * 3600:
+             raise ValueError("Evaluation stage budget must be positive and no greater than 96 hours")
+         write(report_path, report)
+@@ -402,6 +402,7 @@
+                          "total_memory_bytes": torch.cuda.get_device_properties(local_rank).total_memory}
+         load_started = time.monotonic()
+         model, tokenizer = strict_reload(args, report, torch, local_rank, source, indices)
++        runtime.loaded(model, tokenizer, args, report)
+         torch.cuda.synchronize()
+         report["model_load_and_strict_verification_seconds"] = time.monotonic() - load_started
+         guard()
+@@ -431,11 +432,14 @@
+         indexed = IndexedDataset()
+         sampler = DistributedSampler(indexed, num_replicas=world, rank=rank, shuffle=True, seed=0, drop_last=True)
+         assignment = list(sampler)
+-        if len(data) % world or len(assignment) != 12386 or len(set(assignment)) != len(assignment):
++        if len(data) % world or len(assignment) != 24772 or len(set(assignment)) != len(assignment):
+             raise AssertionError("Original sampler would lose or duplicate test users")
+         report["assigned_users"] = len(assignment)
+         report["assignment_sha256"] = hashlib.sha256(json.dumps(assignment, separators=(",", ":")).encode()).hexdigest()
+-        loader = DataLoader(indexed, batch_size=1, sampler=sampler, collate_fn=collate,
++        if args.preflight_users_per_rank:
++            assignment = runtime.preflight_assignment(rank)
++            report["preflight_assignment"] = assignment
++        loader = DataLoader(indexed, batch_size=1, sampler=assignment, collate_fn=collate,
+                             num_workers=2, pin_memory=True)
+         write(report_path, report)
+         dist.barrier()
+@@ -448,6 +452,7 @@
+                 if row_indices != [assignment[iteration]]:
+                     raise AssertionError("DataLoader order differs from original sampler assignment")
+                 index = row_indices[0]
++                inputs, shuffle_record = runtime.intervene(inputs, index, data, tokenizer)
+                 input_ids = inputs["input_ids"][0].tolist()
+                 inputs = inputs.to(torch.device("cuda", local_rank))
+                 tick = time.monotonic()
+@@ -480,7 +485,7 @@
+                                        "eos_position": eos, "raw_decoded": text,
+                                        "sequence_score": score, "sid": normalized_prediction(text)})
+                 order = sorted(range(BEAMS), key=lambda i: scores[i], reverse=True)
+-                row = {**users[index], "rank": rank, "prompt_id": 0, "input_token_ids": input_ids,
++                row = {**users[index], "rank": rank, "prompt_id": 0, "input_token_ids": input_ids, "shuffle": shuffle_record,
+                        "input_nonpadding_tokens": int(inputs["attention_mask"].sum()),
+                        "candidates": candidates, "sorted_generation_order": order,
+                        "relevance": [int(candidates[i]["sid"] == targets[0]) for i in order],
