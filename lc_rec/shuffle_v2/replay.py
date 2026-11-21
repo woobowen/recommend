@@ -47,13 +47,18 @@ def frozen_data(config):
     sys.path.insert(0, base['source-root'])
     from data import SeqRecDataset
     from collator import TestCollator
-    args = SimpleNamespace(dataset='Instruments', data_path=base['data-root'], max_his_len=20,
+    args = SimpleNamespace(dataset=config.get('dataset', 'Instruments'), data_path=base['data-root'], max_his_len=20,
                            his_sep=', ', index_file='.index.json', add_prefix=False)
     data = SeqRecDataset(args, mode='test', sample_num=-1)
     data.set_prompt(0)
     tokenizer = LlamaTokenizer.from_pretrained(base['adapter'], local_files_only=True)
     tokenizer.pad_token_id, tokenizer.padding_side, tokenizer.model_max_length = 0, 'left', 2048
     assert semantic_hash(tokenizer.get_vocab()) == config['vocab_sha256']
+    if config.get('dataset') == 'Beauty':
+        reference_tokenizer = LlamaTokenizer.from_pretrained(base['model'], local_files_only=True)
+        reference_tokenizer.pad_token_id = 0
+        reference_tokenizer.add_tokens(sorted({token for sid in data.indices.values() for token in sid}))
+        assert tokenizer.get_vocab() == reference_tokenizer.get_vocab() and len(tokenizer) == 32965
     tokens = sorted({token for sid in data.indices.values() for token in sid})
     lookup = {token: tokenizer.encode(token, add_special_tokens=False) for token in tokens}
     assert len(lookup) == config['sid_tokens'] and all(len(ids) == 1 for ids in lookup.values())
@@ -62,9 +67,9 @@ def frozen_data(config):
     return data, tokenizer, TestCollator(args, tokenizer), token_ids
 
 
-def read_normal(config, users, catalog, assignments):
+def read_normal(config, users, catalog, assignments, source=frozen):
     base = config['baseline']
-    evaluator = frozen.load_evaluator(base['source-root'])
+    evaluator = source.load_evaluator(base['source-root'])
     raw_by_index = {}
     for rank, assignment in enumerate(assignments):
         folder = Path(base['normal_test_dir'])
@@ -73,12 +78,18 @@ def read_normal(config, users, catalog, assignments):
         assert report['completed_users'] == len(assignment) and report['rank'] == rank
         assert report['world_size'] == 2 and report['adapter_files']['adapter_model.bin'] == base['adapter_identity']
         assert report['assignment_sha256'] == core.canonical_sha256(assignment)
+        if config.get('dataset') == 'Beauty':
+            assert report['adapter_files'] == base['adapter_files']
+            assert report['model'] == base['model_identity']
+            assert report['author_sources'] == base['author_sources']
+            assert report['versions'] == base['versions']
+            assert report['allowed_callback_sha256'] == base['allowed_callback_sha256']
         with (folder / f'predictions.rank{rank}.jsonl').open() as stream:
             for index, line in zip(assignment, stream, strict=True):
                 row = json.loads(line)
                 assert row['row_idx'] == index and row['rank'] == rank and row['prompt_id'] == 0
                 assert len(row['candidates']) == 20 and all(c['eos_position'] == 4 for c in row['candidates'])
-                frozen.audit_prediction(row, users[index], catalog, evaluator)
+                source.audit_prediction(row, users[index], catalog, evaluator)
                 assert index not in raw_by_index
                 raw_by_index[index] = core.canonical_sha256(row['input_token_ids'])
     assert len(raw_by_index) == config['users']
@@ -106,27 +117,41 @@ def sample_rows(assignment, rows):
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--config', type=Path, default=CONFIG)
     args = parser.parse_args()
+    config = json.loads(args.config.read_text())
+    replay(args.output, config)
+
+
+def replay(output, config):
     assert sys.flags.optimize == 0 and os.environ.get('CUDA_VISIBLE_DEVICES') == ''
-    args.output.mkdir(parents=True, exist_ok=False)
-    config = json.loads(CONFIG.read_text())
+    output.mkdir(parents=True, exist_ok=False)
     assert config['modes'] == {mode: list(active) for mode, active in core.MODES.items()}
     assets = asset_check(config)
-    dump(args.output / 'assets.json', assets)
+    dump(output / 'assets.json', assets)
     from torch.utils.data.distributed import DistributedSampler
-    indices, catalog, users, _ = frozen.catalog_and_users(config['baseline']['data-root'])
-    assert len(indices) == config['items'] and len(catalog) == config['sids']
+    is_beauty = config.get('dataset') == 'Beauty'
+    if is_beauty:
+        from lc_rec.shuffle_v2 import beauty
+        source = beauty.frozen_module(Path(config['baseline']['entry']))
+    else:
+        source = frozen
+    indices, catalog, users, identities = source.catalog_and_users(config['baseline']['data-root'])
+    assert len(indices) == config['items'] and len(catalog) == config['sids'] and len(users) == config['users']
     data, tokenizer, collate, token_ids = frozen_data(config)
     sid_ids = set(token_ids.values())
-    user_ids = list(data.inters)
+    user_ids = list(data.remapped_inters if is_beauty else data.inters)
     assert user_ids == [user['user_id'] for user in users]
     assert semantic_hash(user_ids) == config['user_axis_sha256']
-    assignments = [list(DistributedSampler(range(len(users)), num_replicas=2, rank=rank,
-                                           shuffle=True, seed=0, drop_last=True)) for rank in range(2)]
-    normal = read_normal(config, users, catalog, assignments)
+    if is_beauty:
+        single, assignments, selections = beauty.frozen_assignments(config, users, identities)
+    else:
+        assignments = [list(DistributedSampler(range(len(users)), num_replicas=2, rank=rank,
+                                               shuffle=True, seed=0, drop_last=True)) for rank in range(2)]
+    normal = read_normal(config, users, catalog, assignments, source)
     hist = Counter()
     input_streams = {mode: hashlib.sha256() for mode in core.MODES}
-    stream_path = args.output / 'inputs.jsonl'
+    stream_path = output / 'inputs.jsonl'
     rows, examples = [], {}
     frequency = {mode: Counter() for mode in core.MODES}
     positions = {mode: [0] * 4 for mode in core.MODES}
@@ -181,13 +206,13 @@ def main():
                 unchanged_users[mode] += raw == new
                 row['conditions'][mode] = {'input_sha256': evidence['shuffled_sha256'],
                                            'input_changed': raw != new, 'permutation_ids': permutation_ids}
-                if index in (0, 1233, 24771):
+                if index in (0, 1233, len(users) - 1):
                     examples.setdefault(str(index), {})[mode] = {'ids': new, 'mask': mask, **evidence}
             assert row['conditions']['shuffle3a']['permutation_ids'] == row['conditions']['shuffle3b']['permutation_ids']
             rows.append(row)
             stream.write(json.dumps(row, separators=(',', ':'), ensure_ascii=False) + '\n')
     total = sum(n * count for n, count in hist.items())
-    assert total == config['groups'] and min(hist) == 4 and max(hist) == 20
+    assert total == config['groups'] and max(hist) == 20
     first = collate([data[0], data[max(range(len(rows)), key=lambda i: rows[i]['encoded_length'])]])[0]
     for seq, mask in zip(first['input_ids'].tolist(), first['attention_mask'].tolist(), strict=True):
         encoded = [token for token, active in zip(seq, mask, strict=True) if active]
@@ -204,20 +229,33 @@ def main():
         pass
     else:
         raise AssertionError('Truncation lost valid SID groups without a failure')
-    samples = {rank: sample_rows(assignment, rows) for rank, assignment in enumerate(assignments)}
-    for rank, selected in samples.items():
-        for mode in core.MODES:
-            assert any(0 in rows[i]['conditions'][mode]['permutation_ids'] for i in selected), (rank, mode)
-    dump(args.output / 'samples.json', {rank: [rows[i] for i in selected] for rank, selected in samples.items()})
-    dump(args.output / 'examples.json', examples)
+    if is_beauty:
+        samples = selections
+        selection_rule = 'Frozen outcome-blind Beauty preflight, original rank 0 then original rank 1'
+        selected = samples[0] + samples[1]
+        dump(output / 'single-shard.json',
+             {'status': 'PASS_SINGLE_SHARD_CPU', 'users': len(rows), 'history_groups': total,
+              'manifest_sha256': source.sha(stream_path), 'world_size': 1, 'rank': 0,
+              'assignment_sha256': core.canonical_sha256(single),
+              'normal_rank_assignment_sha256': [core.canonical_sha256(a) for a in assignments],
+              'exact_interleave_of_frozen_normal_shards': True, 'permutation_ids_independently_verified': True,
+              'preflight_assignment': selected, 'preflight_assignment_sha256': core.canonical_sha256(selected)})
+    else:
+        samples = {rank: sample_rows(assignment, rows) for rank, assignment in enumerate(assignments)}
+        for rank, selected in samples.items():
+            for mode in core.MODES:
+                assert any(0 in rows[i]['conditions'][mode]['permutation_ids'] for i in selected), (rank, mode)
+        selection_rule = 'Per frozen rank: natural unchanged user and identity groups, then history length and sampler-order fill'
+    dump(output / 'samples.json', {rank: [rows[i] for i in selected] for rank, selected in samples.items()})
+    dump(output / 'examples.json', examples)
     summary = {'status': 'PASS_CPU_V2_FULL', 'protocol': core.PROTOCOL, 'identity_policy': core.IDENTITY_POLICY,
                'shuffle_seed': core.SEED, 'serialization': core.SERIALIZATION,
                'users': len(rows), 'items': len(indices), 'unique_sids': len(catalog), 'history_groups': total,
                'history_length_counts': hist, 'token_ids': token_ids,
                'tokenizer_vocab_sha256': config['vocab_sha256'], 'user_axis_sha256': config['user_axis_sha256'],
-               'preflight_selection': 'Per rank in frozen sampler order: first natural unchanged user and first identity group per mode where present, up to two per history-length bin, encoded length extrema then sampler-order fill',
+               'preflight_selection': selection_rule,
                'preflight_assignments': samples, 'full_rank_assignment_sha256': [core.canonical_sha256(a) for a in assignments],
-               'normal_inputs_exact': True, 'manifest_sha256': frozen.sha(stream_path),
+               'normal_inputs_exact': True, 'dataset': config.get('dataset', 'Instruments'), 'manifest_sha256': frozen.sha(stream_path),
                'versions': {name: importlib.metadata.version(name) for name in ('torch','transformers','peft','accelerate','numpy','sentencepiece')},
                'modes': {mode: {**core.mode_metadata(mode), 'permutation_counts': [frequency[mode][i] for i in range(len(core.catalog(len(active))))],
                                 'identity_permutations': frequency[mode][0], 'token_unchanged_groups': unchanged_groups[mode],
@@ -226,7 +264,7 @@ def main():
                                 'outside_group_violations': 0, 'mask_or_length_violations': 0}
                          for mode, active in core.MODES.items()}}
     summary['input_stream_sha256'] = {mode: value.hexdigest() for mode, value in input_streams.items()}
-    dump(args.output / 'audit.json', summary)
+    dump(output / 'audit.json', summary)
     print(json.dumps({key: summary[key] for key in ('status','users','history_groups','modes')}))
 
 

@@ -43,11 +43,11 @@ def remote_python(t, code, timeout=45):
     return t.ssh(shlex.join(['python3', '-I', '-S', '-B', '-c', code]), timeout=timeout)
 
 
-def deploy(t, commit):
-    release = f'{BASE}/releases/letter-shuffle-v2/{commit}'
-    archive = SUPPORT / f'{commit}.tar.gz'
-    subprocess.run(['git', 'archive', '--format=tar.gz', '-o', str(archive), commit, *PATHS], cwd=REPO, check=True)
-    upload = f'{BASE}/transfers/letter-shuffle-v2/{commit}.tar.gz'
+def deploy(t, commit, *, namespace='letter-shuffle-v2', support=SUPPORT, paths=PATHS):
+    release = f'{BASE}/releases/{namespace}/{commit}'
+    archive = support / f'{commit}.tar.gz'
+    subprocess.run(['git', 'archive', '--format=tar.gz', '-o', str(archive), commit, *paths], cwd=REPO, check=True)
+    upload = f'{BASE}/transfers/{namespace}/{commit}.tar.gz'
     sent = t.put(archive, upload)
     actual_runner = t.profile['runner']
     deployment_sha = t.profile['deployment_sha256']
@@ -84,7 +84,7 @@ manifest=release/'RUN_VERSION.json'
 if manifest.exists(): assert json.loads(manifest.read_text())==result
 else: manifest.write_text(json.dumps(result,indent=2)+'\\n')
 print(json.dumps(result))''', timeout=90))
-    transport.atomic(SUPPORT / f'{commit}.deployment.json', receipt)
+    transport.atomic(support / f'{commit}.deployment.json', receipt)
     return {'commit': commit, 'release': release, 'files': len(receipt['files']), 'runner_sha256': RUNNER_SHA}
 
 
@@ -96,11 +96,11 @@ def readback(commit):
     transport.atomic(SUPPORT / f'{commit}.publication.json', {'commit': commit, 'branch': BRANCH, 'base_commit': BASE_COMMIT})
 
 
-def job_states(t):
+def job_states(t, prefix=PREFIX):
     return json.loads(remote_python(t, f'''from pathlib import Path
 import json
 base=Path({BASE!r})/'jobs'; states={{}}
-for job in sorted(base.glob({(PREFIX+'*')!r})):
+for job in sorted(base.glob({(prefix+'*')!r})):
  path=job/'status.json'
  if path.is_file(): states[job.name]=json.loads(path.read_text())
 print(json.dumps(states))'''))

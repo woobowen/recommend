@@ -43,15 +43,22 @@ def bounded_resource_check(output):
     return {'disk_free_bytes': free, 'host_mem_available_bytes': available}
 
 
-def argv_for(mode, out, audit, single, commit, seconds, preflight, base):
+def argv_for(mode, out, audit, single, commit, seconds, preflight, base, config_path=CONFIG, beauty_config=None):
     argv = [base['python'], '-B', '-m', 'torch.distributed.run', '--standalone', '--nproc_per_node=1',
             '--module', 'lc_rec.shuffle_v2.entry', '--model-key', 'a0', '--shuffle-mode', mode,
             '--cpu-audit', str(audit), '--single-shard-audit', str(single), '--output', str(out), '--run-commit', commit,
             '--max-seconds', str(seconds)]
+    if beauty_config:
+        argv = [*argv[:7], 'lc_rec.shuffle_v2.beauty', '--variant', 'letter', '--source', base['entry'],
+                '--config', str(config_path), '--shuffle-mode', mode,
+                '--cpu-audit', str(audit), '--single-shard-audit', str(single),
+                '--output', str(out), '--v2-run-commit', commit, '--max-seconds', str(seconds)]
     for key in ('source-root', 'data-root', 'model', 'adapter'):
         argv.extend(('--' + key, base[key]))
     if preflight:
         argv.extend(('--preflight-users-per-rank', '32'))
+        if beauty_config:
+            argv.extend(('--preflight-manifest', beauty_config['frozen_preflight']))
     return argv
 
 
@@ -99,8 +106,10 @@ def main():
     parser.add_argument('--run-commit', required=True)
     parser.add_argument('--seconds', type=int, required=True)
     parser.add_argument('--mode', choices=(*core.MODES, 'preflight'), required=True)
+    parser.add_argument('--config', type=Path, default=CONFIG)
     args = parser.parse_args()
-    config = json.loads(CONFIG.read_text())
+    config = json.loads(args.config.read_text())
+    is_beauty = config.get('dataset') == 'Beauty'
     job_id = os.environ['GRID_JOB_ID']
     job = Path(os.environ['GRID_JOB_DIR'])
     request = json.loads((job / 'request.json').read_text())
@@ -130,7 +139,7 @@ def main():
             remaining = math.floor(args.seconds - (time.monotonic() - begin))
             assert remaining > 60
             out = output / mode if preflight else output / 'test'
-            argv = argv_for(mode, out, args.cpu_audit, args.single_shard_audit, args.run_commit, remaining - 15, preflight, config['baseline'])
+            argv = argv_for(mode, out, args.cpu_audit, args.single_shard_audit, args.run_commit, remaining - 15, preflight, config['baseline'], args.config, config if is_beauty else None)
             plan = {'status': 'READY', 'job_id': job_id, 'RUN_COMMIT': args.run_commit,
                     'mode': core.mode_metadata(mode), 'argv': argv, 'cuda_devices': devices,
                     'preflight': preflight, 'resources': bounded_resource_check(output)}
@@ -156,14 +165,21 @@ def main():
             assert code == 0, mode
             report = json.loads((out / 'rank0.json').read_text())
             assert report['status'] == ('PREFLIGHT_INTERFACE_PASS' if preflight else 'PASS')
-            assert report['completed_users'] == (32 if preflight else 24772)
+            assert report['completed_users'] == (32 if preflight else config['users'])
             assert report['world_size'] == 1 and report['rank'] == report['local_rank'] == 0
-            assert report['assignment_sha256'] == single['assignment_sha256']
+            assert report['assignment_sha256'] == single['preflight_assignment_sha256' if preflight and is_beauty else 'assignment_sha256']
             assert report['shuffle']['mode'] == mode and report['shuffle']['protocol'] == core.PROTOCOL
             assert report['RUN_COMMIT'] == args.run_commit
             results.append(result)
             gpu_idle(config)
     checks = validate_preflight(config, output, single) if preflight else {}
+    if is_beauty and preflight:
+        reports = {mode: json.loads((output / mode / 'rank0.json').read_text()) for mode in core.MODES}
+        for mode, report in reports.items():
+            per_user = report['elapsed_generation_seconds'] / 32
+            checks[mode]['estimate_seconds'] = report['model_load_and_strict_verification_seconds'] + per_user * config['users']
+            checks[mode]['preflight_elapsed_generation_seconds'] = report['elapsed_generation_seconds']
+        checks['total_estimate_seconds'] = sum(checks[mode]['estimate_seconds'] for mode in core.MODES)
     dump(output / 'summary.json', {'status': 'PASS_V2_PREFLIGHT' if preflight else 'PASS_V2_GENERATION',
                                   'job_id': job_id, 'RUN_COMMIT': args.run_commit, 'stages': results,
                                   'preflight_checks': checks, 'seconds': time.monotonic() - begin})

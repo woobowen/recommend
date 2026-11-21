@@ -1,4 +1,4 @@
-"""Bind the V2 CPU oracle to the frozen Instruments generation boundary."""
+"""Bind the V2 CPU oracle to the frozen LETTER generation boundary."""
 from copy import deepcopy
 import json
 from pathlib import Path
@@ -9,9 +9,11 @@ from lc_rec.shuffle_v2.replay import CONFIG, frozen, semantic_hash
 
 
 class Runtime:
-    def __init__(self, options):
+    def __init__(self, options, config=None):
         assert sys.flags.optimize == 0
         self.options = options
+        self.config = config
+        self.assignment_hash = core.canonical_sha256
         self.audit = json.loads(options.cpu_audit.read_text())
         assert self.audit['status'] == 'PASS_CPU_V2_FULL' and self.audit['protocol'] == core.PROTOCOL
         self.digest = self.audit['manifest_sha256']
@@ -23,7 +25,7 @@ class Runtime:
         assert all(row['row_idx'] == i for i, row in enumerate(self.rows))
         self.sid_ids = set(self.audit['token_ids'].values())
         self.single_shard = None
-        if options.model_key == 'a0':
+        if options.model_key in ('a0', 'beauty_letter'):
             self.single_shard = json.loads(options.single_shard_audit.read_text())
             assert self.single_shard['status'] == 'PASS_SINGLE_SHARD_CPU'
             assert self.single_shard['manifest_sha256'] == self.digest
@@ -84,6 +86,26 @@ class Runtime:
             baseline = json.loads(CONFIG.read_text())['baseline']
             assert report['adapter_files']['adapter_model.bin'] == baseline['adapter_identity']
             assert report['versions'] == {k: self.audit['versions'][k] for k in ('torch','transformers','peft','accelerate')}
+        if self.options.model_key == 'beauty_letter':
+            baseline = self.config['baseline']
+            assert torch.cuda.device_count() == 1 and torch.cuda.current_device() == 0
+            assert self.audit['dataset'] == self.config['dataset'] and self.audit['users'] == self.config['users']
+            assert report['adapter_files'] == baseline['adapter_files']
+            assert report['model'] == baseline['model_identity'] and report['versions'] == baseline['versions']
+            assert report['author_sources'] == baseline['author_sources']
+            assert report['tokenizer']['vocab_size'] == 32965 and len(report['tokenizer']['added_tokens']) == 965
+            assert report['tokenizer']['added_tokens'] == self.audit['token_ids']
+            assert report['strict_adapter_reload']['keys'] == 450 and report['strict_adapter_reload']['elements'] == 290037760
+            weights = model.get_base_model()
+            assert not getattr(weights, 'is_loaded_in_4bit', False) and not getattr(weights, 'is_loaded_in_8bit', False)
+            # PEFT 0.5 marks modules_to_save trainable even on its inference load path.
+            model.requires_grad_(False)
+            assert all(parameter.device.type == 'cuda' and parameter.device.index == 0 and not parameter.requires_grad
+                       for parameter in model.parameters())
+            assert weights.model.layers[0].self_attn.q_proj.weight.dtype == torch.bfloat16
+            historical_rank = json.loads((Path(baseline['normal_test_dir']) / 'rank0.json').read_text())
+            assert report['strict_adapter_reload'] == historical_rank['strict_adapter_reload']
+            report['beauty_normal_binding'] = baseline['run-commit']
         report['shuffle'] = {**core.mode_metadata(self.options.shuffle_mode), 'cpu_manifest_sha256': self.digest,
                              'mode_installation': 'frozen TestCollator then V2 transform then native generate',
                              'loaded_generation_defaults': model.generation_config.to_dict(),
@@ -102,11 +124,18 @@ class Runtime:
             assert ids.tolist() == [actual] and mask_tensor.tolist() == [mask]
             assert kwargs['num_beams'] == kwargs['num_return_sequences'] == 20 and kwargs['max_new_tokens'] == 10
             assert all(k not in kwargs for k in ('position_ids', 'past_key_values', 'cache_position', 'inputs_embeds'))
+            if self.options.model_key == 'beauty_letter':
+                assert report['allowed_callback_sha256'] == self.config['baseline']['allowed_callback_sha256']
+                assert callable(kwargs.get('prefix_allowed_tokens_fn'))
             if 'effective_generation_config' not in report['shuffle']:
                 overrides = {k: v for k, v in kwargs.items() if isinstance(v, (int, float, str, bool))}
                 effective = deepcopy(model.generation_config)
                 assert not effective.update(**overrides)
                 assert effective.do_sample is False and effective.num_beams == effective.num_return_sequences == 20
+                if self.options.model_key == 'beauty_letter':
+                    assert getattr(effective, 'use_cache', True) is True
+                    assert (effective.bos_token_id, effective.eos_token_id, effective.pad_token_id) == (1, 2, 0)
+                    assert effective.early_stopping is True and effective.max_new_tokens == 10
                 report['shuffle']['effective_generation_config'] = effective.to_dict()
                 report['shuffle']['generation_scalar_overrides'] = overrides
             expected_pos = mask_tensor.long().cumsum(-1) - 1

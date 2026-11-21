@@ -42,7 +42,7 @@ def main():
     p.add_argument('--plan', type=Path, required=True)
     a = p.parse_args()
     plan = json.loads(a.plan.read_text())
-    config = json.loads(CONFIG.read_text())
+    config = json.loads(Path(plan.get('config', CONFIG)).read_text())
     jobs = Path(plan['job_root'])
     requests = Path(plan['requests_root'])
     runner = Path(plan['runner'])
@@ -70,6 +70,8 @@ def main():
         else:
             kind = 'gpu-formal-' if category == 'gpu' else 'cpu-'
             budget = config['budget']['formal_total_wall_seconds' if category == 'gpu' else 'cpu_total_wall_seconds']
+            if category == 'cpu':
+                assert request['timeout_seconds'] <= config['budget']['cpu_attempt_wall_seconds']
             if category == 'gpu':
                 budget = min(budget, config['budget']['formal_total_device_seconds'])
                 assert request['timeout_seconds'] + 15 <= config['budget']['formal_attempt_wall_seconds']

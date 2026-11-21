@@ -11,6 +11,7 @@ from lc_rec.shuffle_v2 import core
 from lc_rec.shuffle_v2.replay import dump
 from lc_rec.shuffle_v2.runtime import Runtime
 
+CONFIG = Path(__file__).with_name('a0_beauty_letter.json')
 LETTER_RUN = '6e1b211d9c37f358c43b1540b40b17f6703150d2'
 G3_RUN = '21d495b0be5b606853ec7cec68a3eaa1b58acbd7'
 SHA = {
@@ -26,14 +27,65 @@ def read_frozen(path, key):
     return raw.decode('utf-8')
 
 
+def frozen_module(path, expected=None):
+    if expected is None:
+        read_frozen(path, 'letter')
+    else:
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == expected, path
+    spec = importlib.util.spec_from_file_location('frozen_beauty_' + path.stem, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def frozen_dependency(config, path):
+    path = Path(path)
+    identity = next(entry for entry in config['files'] if entry['path'] == str(path))
+    return frozen_module(path, identity['sha256'])
+
+
+def frozen_assignments(config, users, identities):
+    source = Path(config['baseline']['entry']).parent
+    n = len(users)
+    sampler = frozen_dependency(config, source / 'uneven_sampler.py')
+    double = [sampler.assignment(n, rank, 2) for rank in range(2)]
+    single = sampler.assignment(n, 0, 1)
+    sampler.validate_assignments(double, n)
+    sampler.validate_assignments([single], n)
+    assert [len(rows) for rows in double] == [11182, 11181]
+    assert [single[::2], single[1::2]] == double
+    manifest_path = Path(config['frozen_preflight'])
+    manifest = json.loads(manifest_path.read_text())
+    assert manifest['asset_sha256'] == {k: v['sha256'] for k, v in identities.items()}
+    selector = frozen_dependency(config, source / 'preflight_users.py')
+    return single, double, selector.validate(manifest, users, double)
+
+
 def derive_letter(text, entry):
-    read_frozen(entry, 'letter_shuffle_entry')
-    spec = importlib.util.spec_from_file_location('frozen_letter_beauty_v1_adapter', entry)
-    frozen_adapter = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(frozen_adapter)
-    anchor = '            assert assignment == runtime.preflight_assignment(rank)'
+    frozen_adapter = frozen_module(entry, SHA['letter_shuffle_entry'])
     derived = frozen_adapter.adapt(text, 'a0')
-    assert derived.count(anchor) == 1
+
+    def change(old, new):
+        nonlocal derived
+        assert derived.count(old) == 1, old
+        derived = derived.replace(old, new)
+
+    change('if args.preflight_users_per_rank not in (0, 16)', 'if args.preflight_users_per_rank not in (0, 32)')
+    change('Only a separate fixed sixteen-user/rank preflight is supported', 'Only the frozen 32-user single-rank preflight is supported')
+    change('world != 2 or not 0 <= rank < 2', 'world != 1 or rank != 0 or local_rank != 0')
+    change('Requires two ranks,', 'Requires one rank,')
+    change('f"predictions.rank{rank}.jsonl" for rank in range(2)', '"predictions.rank0.jsonl"')
+    change('if len(assignment) != (11182 if rank == 0 else 11181):', 'if len(assignment) != len(users):')
+    start = derived.index('        if args.preflight_users_per_rank:\n            from preflight_users import validate')
+    stop = derived.index('        report["assigned_users"]', start)
+    derived = derived[:start] + """        if args.preflight_users_per_rank:
+            assert Path(args.preflight_manifest).resolve() == Path(runtime.config['frozen_preflight']).resolve()
+            assignment = runtime.preflight_assignment(rank)
+            report["preflight_assignment"] = assignment
+            report["preflight_manifest"] = {"path": args.preflight_manifest, "sha256": sha(args.preflight_manifest)}
+        else:
+            assert runtime.single_shard['assignment_sha256'] == runtime.assignment_hash(assignment)
+""" + derived[stop:]
     return derived
 
 
@@ -66,6 +118,8 @@ def main():
     parser.add_argument('--shuffle-mode', choices=core.MODES, required=True)
     parser.add_argument('--v2-run-commit', required=True)
     parser.add_argument('--cpu-audit', type=Path)
+    parser.add_argument('--single-shard-audit', type=Path)
+    parser.add_argument('--config', type=Path, default=CONFIG)
     parser.add_argument('--derived-only', action='store_true')
     options, remainder = parser.parse_known_args()
     allowed = {'--source-root', '--data-root', '--model', '--adapter', '--output', '--max-seconds',
@@ -82,11 +136,18 @@ def main():
                'frozen_source': str(source), 'frozen_source_sha256': SHA[options.variant]}
     namespace = {'__name__': 'shuffle_v2_beauty_frozen_entry', '__file__': str(source)}
     if options.variant == 'letter':
+        config = json.loads(options.config.read_text())
+        assert config['dataset'] == 'Beauty'
+        base = config['baseline']
+        assert source == Path(base['entry']).resolve()
+        for key in ('source-root', 'data-root', 'model', 'adapter'):
+            flag = '--' + key
+            assert flag in remainder and remainder[remainder.index(flag) + 1] == base[key], flag
         derived = derive_letter(text, source.with_name('shuffle_entry.py'))
         argv = [*remainder, '--run-commit', options.v2_run_commit]
         if not options.derived_only:
             options.model_key = 'beauty_letter'
-            namespace['runtime'] = Runtime(options)
+            namespace['runtime'] = Runtime(options, config)
     else:
         # G3 loader's run-commit parameter validates the existing training adapter's
         # provenance. The binding above separately identifies the V2 code deployed.

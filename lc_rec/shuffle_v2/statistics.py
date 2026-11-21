@@ -56,9 +56,11 @@ def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('condition_roots', type=Path, nargs=len(CONDITIONS), metavar='EVALUATION_DIR')
+    parser.add_argument('--config', type=Path, default=CONFIG)
     args = parser.parse_args()
     assert os.environ.get('CUDA_VISIBLE_DEVICES') == ''
-    users, axis = (json.loads(CONFIG.read_text())[k] for k in ('users', 'user_axis_sha256'))
+    config = json.loads(args.config.read_text())
+    users, axis = (config[k] for k in ('users', 'user_axis_sha256'))
     args.output.mkdir(parents=True, exist_ok=False)
     rows = [read_metrics(root, mode, users, axis) for root, mode in zip(args.condition_roots, CONDITIONS, strict=True)]
     keys, identities, _, _ = rows[0]
@@ -82,9 +84,13 @@ def main():
         for j, key in enumerate(keys):
             left, right = main_table[a][key], main_table[b][key]
             delta = right - left
-            comparisons[name].append({'metric': key, 'left': left, 'right': right, 'absolute_difference': delta,
+            point = {'metric': key, 'left': left, 'right': right, 'absolute_difference': delta,
                                       'relative_decrease_fraction': -delta / left if left else None,
-                                      'difference_CI95_low': float(limits[0, i, j]), 'difference_CI95_high': float(limits[1, i, j])})
+                                      'difference_CI95_low': float(limits[0, i, j]), 'difference_CI95_high': float(limits[1, i, j])}
+            if config.get('dataset') == 'Beauty':
+                point.update(relative_change_fraction=delta / left if left else None,
+                             percentage_point_difference=100 * delta)
+            comparisons[name].append(point)
     paired = {'status': 'PASS_V2_PAIRED', 'users': users, 'user_axis_sha256': axis, 'protocol': core.PROTOCOL,
               'identity_policy': core.IDENTITY_POLICY, 'shuffle_seed': core.SEED,
               'comparisons': comparisons, 'metrics': main_table,
@@ -95,6 +101,20 @@ def main():
                             'bounds': [2.5, 97.5], 'multiple_comparison_adjustment': False,
                             'scope': 'Fixed verified user axis, model and one seed-42 intervention instance',
                             'nonauthor_reference_source_sha256': frozen.sha(independent_path), 'numeric_checks': checks}}
+    if config.get('dataset') == 'Beauty':
+        normal = main_table['normal']
+        normal_changes = []
+        for mode, values in main_table.items():
+            for key, value in values.items():
+                delta = value - normal[key]
+                normal_changes.append({'condition': mode, 'metric': key, 'value': value, 'normal': normal[key],
+                                       'delta': delta, 'percentage_point_difference': 100 * delta,
+                                       'relative_change_fraction': delta / normal[key] if normal[key] else None})
+        paired['changes_from_normal'] = normal_changes
+        with (args.output / 'changes_from_normal.csv').open('x', newline='') as stream:
+            writer = csv.DictWriter(stream, fieldnames=list(normal_changes[0]))
+            writer.writeheader()
+            writer.writerows(normal_changes)
     dump(args.output / 'summary.json', paired)
     with (args.output / 'metrics.csv').open('x', newline='') as stream:
         writer = csv.DictWriter(stream, fieldnames=('condition', *keys))
