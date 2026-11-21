@@ -4,7 +4,7 @@
 
 ## 第一组正式结果
 
-[整组结果、五项配对、原作业与复现入口](../shuffle/results/v2-a0-instruments/final-20261121/README.md)
+第一组研究及原结果交付已通过网页二审，状态为 `FIRST_GROUP_COMPLETE_WEB_REVIEW_PASS`。本轮说明和新审核包待网页差异复核。 [整组结果、五项配对、原作业与复现入口](../shuffle/results/v2-a0-instruments/final-20261121/README.md) · [本轮收尾记录](../shuffle/results/v2-a0-instruments/final-20261121/closeout/README.md)
 
 ## 历史只读观测
 
