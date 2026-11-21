@@ -163,7 +163,7 @@ semantic-hierarchy/
 └── requirements-llm2vec.txt            # 独立编码环境
 ```
 
-这里只上传实验专用代码、配置与统计；LLM2Vec/Llama 权重和全量连续向量不包含在本次新增文件中。Beauty/Toys 已发布 SID、商品 TFRecord 和上游权重的路径见依赖文档；Instruments SID 可由上游脚本生成。详见复现指南对“已保存统计复核”和“重新编码”的区分。
+首次发布（e8f4603）仅附实验代码、配置与统计，当时未附全量连续向量。现行交付已在[Release资产清单](semantic-hierarchy/delivery/assets.json)发布六组完整LLM2Vec向量、同序ID和norms；SID按item_id关联，见[复现指南第2节](semantic-hierarchy/docs/reproduction.md)。普通Git保存源码、标签、SID/文本输入、收据和统计；LLM2Vec/Llama模型权重仍需按[来源与许可](semantic-hierarchy/docs/shared-code.md)自行获授权取得，不在此次Release中。Beauty/Toys原TFRecord及Qwen资产沿固定GRID入口，Instruments固定SID见delivery/encoding_inputs和results/llm2vec_instruments/inputs。
 
 ## 原有基线归档入口
 
@@ -175,3 +175,5 @@ semantic-hierarchy/
 ## 完整向量、标签与过程补件
 
 维护负责人：Jingchen Yin（Justin-hub-coder）。[2026-11-21 H1–H4补件](semantic-hierarchy/delivery/README.md)补齐六组原向量/ID的下载、全量最终标签、readiness与原始请求/重试记录；CPU从原向量重算全部合格节点，与发布统计一致。未重新分类、编码或训练。
+
+2026-11-22收尾：验证器分类/SID分组实算与向量回执检查已明确分开，详见[覆盖说明](semantic-hierarchy/delivery/README.md)。本轮未重新编码或计算六组向量余弦。

@@ -4,7 +4,7 @@
 
 | 条目 | 已补内容与实查 |
 |---|---|
-| H1 | [六组vector_index](vector_index.json)、[资产清单](assets.json)、同序ID/SID/输入文本、编码完成收据。原float32 N×4096向量全量核归一化和唯一ID，从原向量重算全部合格节点，最大余弦误差约1.4e-14。 |
+| H1 | [六组vector_index](vector_index.json)、[资产清单](assets.json)、同序ID/SID/输入文本、编码完成收据。2026-11-21上轮原float32 N×4096向量全量核归一化和唯一ID，从原向量重算全部合格节点，最大余弦误差约1.4e-14。 |
 | H2 | results/classification/beauty与toys补入原final JSONL、taxonomy和manifest。逐标签复算12行主要weighted-purity/pair-agreement与原统计一致，UNKNOWN为405/219；全部现存原始请求与失败重试在metadata.zip。 |
 | H3 | [classification_preparation](classification_preparation/)保存真实readiness/schema/版本/数据审计；[classification_control](classification_control/)保存阶段控制器和失败修正记录。完整启动/原始请求/阶段产物在metadata.zip。 |
 | H4 | 原模型来源、tokenizer和文件SHA256收据，编码器MNTP/supervised固定revision，历史源码/launch和环境一一对应。公开Meta权重受访问/许可限制，不能把仅名称可见说成获准下载。 |
@@ -28,11 +28,17 @@ Beauty固定入口archive/classification_beauty_v1，Toys最终分类入口archi
 
 ## 四种起点
 
-| 起点 | 材料和本轮实际执行 |
+| 起点 | 材料与2026-11-21上轮执行；2026-11-22执行另见末节 |
 |---|---|
-| 保存统计复算 | 原节点/边/路径/Gap/置换明细与标准校验器；本轮再次运行 |
-| 原向量/逐标签复算 | 原连续向量与ID/SID、逐商品final、冻结taxonomy均可取得；本轮全节点余弦和12行主要分类指标实际复算 |
+| 保存统计复算 | 原节点/边/路径/Gap/置换明细与标准校验器；2026-11-21执行，2026-11-22定向回归亦执行 |
+| 原向量/逐标签复算 | 原连续向量与ID/SID、逐商品final、冻结taxonomy均可取得；2026-11-21上轮全节点余弦和12行主要分类指标实际复算；本轮未重复向量计算 |
 | 固定模型重新编码/分类 | 原输入、配置、来源权重/适配器身份、真实readiness和阶段代码已定位；本轮不重新推理，Meta访问取决于复现者授权 |
 | 重建上游 | Instruments原下载/ID映射及Qwen量化程序可复核；Beauty/Toys沿固定GRID资产，最早转换限制见yjc-grid |
 
-[cpu_verification.json](cpu_verification.json)记录逐组形状、ID、norm误差、全部合格节点比较、UNKNOWN与主要指标；[verify_hierarchy_delivery.py](verify_hierarchy_delivery.py)可从本次原件重验。条件置换与bootstrap未另跑一遍，仍使用原11988条置换记录；不得把节点余弦复算说成重新编码或重跑完整统计。未声称新的非作者审核或网页GPT终审已通过。
+[cpu_verification.json](cpu_verification.json)记录逐组形状、ID、norm误差、全部合格节点比较、UNKNOWN与主要指标；[verify_hierarchy_delivery.py](verify_hierarchy_delivery.py)从标签重算12行分类指标、按SID重建并核对前缀组；向量部分只检查vector_index既有回执，不打开.npy，也不重新计算余弦。条件置换与bootstrap未另跑一遍，仍使用原11988条置换记录；不得把节点余弦复算说成重新编码或重跑完整统计。未声称新的非作者审核或网页GPT终审已通过。
+
+## 2026-11-22 命令覆盖修正（H1/H2／当前问题B）
+
+在仓库根目录执行`python semantic-hierarchy/delivery/verify_hierarchy_delivery.py`：读取final标签、冻结taxonomy、classification_inputs中的SID和三层分组，从标签重算纯度/pair-agreement，核对SID精确分组；随后只断言六条向量回执。JSON按检查类型分别输出状态，`direct_vector_cosines=not_run`不能被其他检查成功掩盖。新输出见[local_verification_closeout.json](local_verification_closeout.json)，旧local_verification.json保留其历史身份。
+
+真正打开原向量的既有入口是`semantic-hierarchy/scripts/evaluate_embeddings.py`，工作目录、依赖、六组输入映射、全新输出和比较对象见[复现指南第2节](../docs/reproduction.md)。本轮只修正文档并定向检查分类/SID分组，没有再次跑六组向量计算或置换/bootstrap。上轮服务器CPU回执与任务文件转述的网页二审（20,012个合格节点）属于既有证据，不能当作本次脚本调用的结果。

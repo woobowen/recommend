@@ -45,6 +45,46 @@ python semantic-hierarchy/scripts/evaluate_embeddings.py \
 
 初次发布未附完整向量；2026-11-21已在[补件资产清单](../delivery/assets.json)发布六组原始向量、同序ID和norms原件，实际bytes经SHA256验证，取得方法见[主说明](../delivery/README.md)。已有Beauty/Toys SID和商品TFRecord、Qwen上游代码仅引用[共用路径](shared-code.md)，无需重复上传。
 
+### 2.1 六组已发布原向量的实际路径与检查范围
+
+工作目录是本分支仓库根目录。只运行标签核查与回执检查时，Python标准库即可：
+
+```bash
+python semantic-hierarchy/delivery/verify_hierarchy_delivery.py
+```
+
+该命令从完整标签重算12行分类主指标，并逐层由SID重建分组核对成员/count；向量检查只读vector_index.json回执，明确输出direct_vector_cosines=not_run。旧服务器cpu_verification.json、网页二审结论和本次命令执行是三种不同证据。
+
+直接向量重算使用既有evaluate_embeddings.py及NumPy；本轮不重新安装环境，不执行下面的完整六组分析。依赖见requirements-metrics.txt；核心计算只导入NumPy和归档semantic_metrics.py，不加载Llama或GPU。按第1节的requirements-metrics.txt命令安装依赖，应在独立环境操作。
+
+先用delivery/fetch_assets.py按assets.json取得hierarchy-embeddings-originals.zip，设`ASSET_ROOT`为展开后的hierarchy-embeddings-originals目录，`OUTPUT_ROOT`为你选择的新输出父目录。两者为可配置绝对或相对路径，不能指向冻结历史输出。下表每行替换命令变量，分别运行：
+
+| dataset / variant | VECTOR_DIR（相对ASSET_ROOT） | SID_JSONL（相对仓库根） | 原结果比较目录 |
+|---|---|---|---|
+| beauty / title | beauty_toys/beauty/title | semantic-hierarchy/delivery/encoding_inputs/llm2vec_sid_hierarchy_20261113/beauty/item_sids.jsonl | semantic-hierarchy/results/llm2vec_beauty_toys/beauty/title/evaluation |
+| beauty / title_brand | beauty_toys/beauty/title_brand | 同上beauty SID | semantic-hierarchy/results/llm2vec_beauty_toys/beauty/title_brand/evaluation |
+| toys / title | beauty_toys/toys/title | semantic-hierarchy/delivery/encoding_inputs/llm2vec_sid_hierarchy_20261113/toys/item_sids.jsonl | semantic-hierarchy/results/llm2vec_beauty_toys/toys/title/evaluation |
+| toys / title_brand | beauty_toys/toys/title_brand | 同上toys SID | semantic-hierarchy/results/llm2vec_beauty_toys/toys/title_brand/evaluation |
+| instrument / title | instruments/instrument/title | semantic-hierarchy/delivery/encoding_inputs/instrument_semantic_hierarchy_20261115/instrument/item_sids.jsonl | semantic-hierarchy/results/llm2vec_instruments/instrument/title/evaluation |
+| instrument / title_brand | instruments/instrument/title_brand | 同上instrument SID | semantic-hierarchy/results/llm2vec_instruments/instrument/title_brand/evaluation |
+
+```bash
+# 示例变量：填写本机已解包目录和全新输出位置；其他五组按上表替换。
+ASSET_ROOT=/your/retrieved/hierarchy-embeddings-originals
+OUTPUT_ROOT=/your/new-cpu-output
+VECTOR_DIR=beauty_toys/beauty/title
+SID_JSONL=semantic-hierarchy/delivery/encoding_inputs/llm2vec_sid_hierarchy_20261113/beauty/item_sids.jsonl
+python semantic-hierarchy/scripts/evaluate_embeddings.py \
+  --embeddings "$ASSET_ROOT/$VECTOR_DIR/embeddings_normalized.npy" \
+  --item-ids "$ASSET_ROOT/$VECTOR_DIR/item_ids.npy" --sids "$SID_JSONL" \
+  --dataset beauty --variant title --seed 20261113 --permutations 999 --bootstrap 2000 \
+  --output "$OUTPUT_ROOT/beauty-title"
+```
+
+入口检查ID唯一、SID与ID集合精确相等、向量有限且单位范数，再按item_ids中的顺序从SID映射取前三位，使用归档TreeMetrics/ConditionalControls计算全部节点、边、路径、Gap及置换/bootstrap。输出新prefix_nodes.jsonl等明细和summary.json；比较节点时用prefix键而非行序，余弦允许浮点误差（旧CPU核验阈值1e-9）。统计observed/coverage对比原summary；随机统计还需核原analysis_config中的seed/重复数，不能以重跑值覆盖历史回执，也不能只比较p值就宣称全结果一致。原结果字段结构由历史脚本决定，跨入口应按语义字段对照。
+
+本轮仅实际执行更新后的分类/SID组验证器和原保存统计校验器；未调用以上原向量入口，未重新运行置换或bootstrap。此前六组全节点CPU核验及网页二审通过是沿用证据。
+
 ## 3. 重新编码商品（Linux，两张2080Ti/一个模型）
 
 历史入口位于 `archive/`，保留原服务器路径，**不是开箱即可在任意路径直接启动的可移植调度器**。重新运行前需准备输入、模型、运行配置和GPU锁目录，并修改本地副本的路径；归档源码用于追溯，不要直接覆盖冻结版本。
