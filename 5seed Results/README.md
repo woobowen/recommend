@@ -30,3 +30,7 @@ python "5seed Results/attention/reassemble_archive.py"
 ```
 
 脚本会在 `attention/` 生成 `Beauty_Toys_attention_5seed.zip` 并核对原包 SHA-256。
+
+## 实验实现、权重与原始注意力补件
+
+[O1–O5主说明](delivery/README.md)与[20次运行索引](delivery/run_index.json)给出逐manifest核验的实际源码、启动/失败/进度/终态和模型配对。模型checkpoint与原始.pt.gz已补充到[可下载资产清单](delivery/assets.json)，原40组测试指标保持不变。原文“未纳入checkpoint”是首次归档状态，不再代表本次交付。

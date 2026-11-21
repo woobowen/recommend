@@ -1,14 +1,14 @@
 # All SID Experiments
 
-本目录保存本地「学长基线实验」的代码、配置、shuffle/MLP/parallel 文件、Amazon 数据和 Qwen 权重。所有 `codex` 目录均按要求排除。
+本目录是较早工程快照；当前保留普通基线、shuffle、配置和资产。五种子实际运行所需codex源码现已在[补件目录](../5seed%20Results/delivery/README.md)完整归档。
 原有 [GRID baseline](../GRID%20baseline/) 和 [Baseline Results](../Baseline%20Results/) 保留，提供已完成的 Qwen → RQ-KMeans → TIGER 基线及论文对比。
 
 ## 实验状态
 
 - 本目录的 `src/` 和 `configs/` 是已修复的普通 TIGER 基线代码。
 - `shuffle/`：原始测试时 SID 嵌入顺序打乱模型及依赖。
-- `mlp/`：原始 SID 嵌入拼接后通过 MLP 聚合的模型及依赖。
-- `parallel/`：服务器中名为 parallel 的源文件。它与 shuffle 文件逐字节相同，仍使用自回归解码；不能据此认定真正并行 SID 实验已经实现。共用文件来自父目录或 `shuffle/`，本目录不是独立可运行项目。
+- `mlp/`：已从当前树删除；五种子实际MLP实现见 `5seed Results/delivery/source_snapshots/`，由run_index指定版本。
+- `parallel/`：已从当前树删除；删除前固定历史见[提交800b5a4](https://github.com/woobowen/recommend/tree/800b5a49e97b96aa4d7ca64bcdf83a7f91e81f1c)。该命名文件仍是自回归快照，不代表并行SID解码已实现。
 - 新变体入口、模型路由与运行兼容性尚未全部修复或验证。配置模板默认目标可能仍为普通 TIGER；上传不代表各变体已经跑通。
 
 ## 下载数据和权重
@@ -37,7 +37,7 @@ done
 ```
 
 仅复用已有 SID 训练/测试 TIGER，无需加载 Qwen。已完成基线的向量、SID、checkpoint 和历史输出保存在 `../GRID baseline/experiments/`。
-历史配置中的服务器绝对路径需要按目标机器调整。`codex` 中的辅助入口、说明和配置不在此分支中。
+历史配置中的服务器绝对路径需要按目标机器调整。早期此目录排除了codex；本批实际运行源码现位于 `../5seed Results/delivery/source_snapshots/`。
 
 ---
 
