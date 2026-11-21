@@ -106,10 +106,10 @@ for job in sorted(base.glob({(prefix+'*')!r})):
 print(json.dumps(states))'''))
 
 
-def budget_seconds(states, kind, limit):
+def budget_seconds(states, kind, limit, prefix=PREFIX):
     total = 0.0
     for name, state in states.items():
-        if not name.startswith(PREFIX + kind):
+        if not name.startswith(prefix + kind):
             continue
         if not state.get('ended_at'):
             raise RuntimeError(f'Budget is reserved by active attempt {name}')

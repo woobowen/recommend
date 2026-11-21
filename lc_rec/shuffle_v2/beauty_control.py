@@ -163,8 +163,8 @@ def series(connection, config, commit, states, args):
             conditions[kind] = payload
         completion += sum(1 for payload in conditions.values() if payload['job_id'] in states)
         phases[mode] = conditions
-    assert control.budget_seconds(states, 'gpu-formal-', aggregate) >= gpu_planned + 15
-    assert control.budget_seconds(states, 'cpu-', caps['cpu_total_wall_seconds']) >= cpu_planned + 15
+    assert control.budget_seconds(states, 'gpu-formal-', aggregate, prefix=PREFIX) >= gpu_planned + 15
+    assert control.budget_seconds(states, 'cpu-', caps['cpu_total_wall_seconds'], prefix=PREFIX) >= cpu_planned + 15
     folders = [f'{ROOT}/{args.normal}'] + [p['cpu']['argv'][p['cpu']['argv'].index('--output') + 1] for p in phases.values()]
     paired = request(connection, config, commit, f'cpu-summary-{args.attempt}', 'statistics', CPU_LIMITS['statistics'],
                      ['--config', config_path, *folders])
@@ -237,7 +237,7 @@ print(json.dumps(dict(path=str(p),bytes=p.stat().st_size,sha256=digest)))''', ti
                 elif args.action == 'preflight':
                     gpu, _ = device(connection, config)
                     gate_args, inputs = audit_gates(connection, states, args.replay)
-                    timeout = control.budget_seconds(states, 'gpu-preflight-', caps['preflight_device_seconds']) - 30
+                    timeout = control.budget_seconds(states, 'gpu-preflight-', caps['preflight_device_seconds'], prefix=PREFIX) - 30
                     assert timeout > 90
                     result = submit(connection, request(connection, config, commit, name, 'generate', timeout,
                                     ['--config', config_path, *gate_args, '--mode', 'preflight',
@@ -246,7 +246,7 @@ print(json.dumps(dict(path=str(p),bytes=p.stat().st_size,sha256=digest)))''', ti
                     evaluate = args.action == 'normal'
                     module = 'beauty_evaluate' if evaluate else 'replay'
                     timeout = CPU_LIMITS['evaluate' if evaluate else 'replay']
-                    assert control.budget_seconds(states, 'cpu-', caps['cpu_total_wall_seconds']) >= timeout + 15
+                    assert control.budget_seconds(states, 'cpu-', caps['cpu_total_wall_seconds'], prefix=PREFIX) >= timeout + 15
                     argv = ['--config', config_path]
                     if evaluate:
                         argv += ['--mode', 'normal', '--run-commit', config['baseline']['run-commit'], '--evaluation-commit', commit]

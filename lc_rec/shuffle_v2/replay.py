@@ -230,7 +230,7 @@ def replay(output, config):
     else:
         raise AssertionError('Truncation lost valid SID groups without a failure')
     if is_beauty:
-        samples = selections
+        samples = dict(enumerate(selections))
         selection_rule = 'Frozen outcome-blind Beauty preflight, original rank 0 then original rank 1'
         selected = samples[0] + samples[1]
         dump(output / 'single-shard.json',

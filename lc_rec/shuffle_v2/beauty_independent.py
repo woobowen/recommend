@@ -23,7 +23,7 @@ def launch(connection, config, control_commit, mode, attempt, run_commit):
     job = f'cpu-independent-{mode}-{attempt}'
     if beauty_control.PREFIX + job in states:
         return control.gridctl.query(connection, beauty_control.PREFIX + job)
-    assert control.budget_seconds(states, 'cpu-', config['budget']['cpu_total_wall_seconds']) >= TIMEOUT[mode] + 15
+    assert control.budget_seconds(states, 'cpu-', config['budget']['cpu_total_wall_seconds'], prefix=beauty_control.PREFIX) >= TIMEOUT[mode] + 15
     base = config['baseline']
     normal_primary = config['normal_primary']
     if mode == 'final':
