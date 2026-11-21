@@ -1,0 +1,30 @@
+2080 服务器 home 目录备份说明
+
+备份位置：本地隔离目录 quarantine_do_not_execute
+来源：ECNU-Server:/home/jcyin
+备份日期：2026-10-17
+
+备份内容
+- 01_历史实验产物与独有模型_已剔除训练checkpoint.tar.gz：旧实验输出、独有模型、研究笔记/论文、GRID 历史日志和一份历史训练脚本。所有 .ckpt 训练检查点均已剔除，以免误用于续训；其余记录保留。
+- 02_当前项目私有记录与配置_已剔除训练checkpoint.tar.gz：当前项目的 codex、reconfigurations、launches。无关的 Beauty 基线 checkpoint 已剔除；对应配置与日志保留。
+- 03_用户设置与SSH公钥记录.tar.gz：shell/conda/keras 设置、用户配置、SSH 目录及 VS Code 用户设置。配置可能包含敏感信息，请限制访问。
+- 04_归档运行环境/grid_env.tar.gz：服务器上原有环境归档的原样副本；旁边的 grid_parts_SHA256SUMS.txt 是其校验记录。
+- 05_用户工具环境与缓存.tar.gz：~/.codex、~/.cache、ENTER Conda 环境及 Miniforge 安装器。
+- 传输校验.json：来源路径、字节数、传输 SHA-256；重建过的归档另记录本地 SHA-256。
+- 已剔除的训练checkpoint清单.json：从旧归档移除的 checkpoint 路径与大小。
+- 文件清单.csv：当前归档的逐条路径、条目类型与大小。
+- 服务器home全量清单.tsv：备份前生成的 home 全路径、文件类型与字节数清单，不含文件内容。
+
+GitHub 对照后未重复备份
+- GitHub 仓库中已保存的项目源码、数据和实验结果不重复保存。
+- 旧 Amazon 数据与当前项目数据逐文件核对后内容一致，因此跳过。
+- Qwen 权重在 GitHub 中以分片保存，可按仓库说明重建，因此跳过。
+- GitHub 未保存的私有记录、历史实验产物/日志、独有模型、用户工具环境和配置已另行备份。
+
+校验结果
+- 五个 tar.gz 均可完整读取；过滤后的两个 tar.gz 已重建并重新计算 SHA-256。
+- 已从归档剔除所有 .ckpt 文件；日志和配置仍可用于查看历史进度，但这些旧实验归档不包含可续训的 checkpoint。
+- 所有 tar 归档均未发现绝对路径或 .. 路径项。
+- 归档尚未进行病毒扫描；没有解压或执行任何备份内容。请先用可信杀毒软件扫描隔离目录，再决定是否恢复。
+- 本次范围仅为 /home/jcyin；不包括 /data、其他用户 home 或服务器系统目录。
+- VS Code Server 程序及扩展安装目录未复制；用户设置已备份，程序和扩展可重新安装。
