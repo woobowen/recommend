@@ -1,0 +1,30 @@
+--- frozen/offline_metrics.py
++++ V2/offline_metrics.py
+@@ -173,7 +173,7 @@
+     coverage = {k: set() for k in diag}
+     examples = {'invalid': [], 'target_collision': [], 'prefix_collision_changes_cce': []}
+     manifests, generation = [], np.zeros(N, dtype=np.float64)
+-    for rank in (0, 1):
++    for rank, (expected_count, expected_assignment) in enumerate(args.assignments):
+         path = args.test_dir/f'predictions.rank{rank}.jsonl'
+         before = path.stat()
+         inherited = stage['prediction_files'][rank]
+@@ -189,6 +189,7 @@
+                 seq = inter[users[i]]
+                 item, target = str(seq[-1]), sid_for[str(seq[-1])]
+                 require(row['user_id'] == users[i] and row['target_item_id'] == item and row['target'] == target, 'User/target pairing')
++                args.check_row(row)
+                 candidates = row['candidates']
+                 require(len(candidates) == 20, 'Beam20')
+                 for j, candidate in enumerate(candidates):
+@@ -233,8 +234,8 @@
+         after = path.stat()
+         require((before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_size,after.st_mtime_ns,after.st_ctime_ns), 'Original prediction changed')
+         assignment_sha = hashlib.sha256(json.dumps(assignments,separators=(',',':')).encode()).hexdigest()
+-        require(assignment_sha == rank_report['assignment_sha256'] and len(assignments)==(N+1-rank)//2, 'Original rank assignment identity')
+-        require(assignment_sha == RANK_ASSIGNMENT_SHA[rank], 'Frozen rank sampler order mismatch')
++        require(assignment_sha == rank_report['assignment_sha256'] and len(assignments)==expected_count, 'Original rank assignment identity')
++        require(assignment_sha == expected_assignment, 'Frozen rank sampler order mismatch')
+         manifests.append({**inherited, 'mtime_ns': after.st_mtime_ns, 'ctime_ns': after.st_ctime_ns, 'assignment_sha256': assignment_sha, 'hash_recomputed': True})
+     require(len(seen) == N and sum(first_counts.values()) == N, 'Complete population')
+     means = {key: math.fsum(matrix[:,j])/N for j,key in enumerate(KEYS)}

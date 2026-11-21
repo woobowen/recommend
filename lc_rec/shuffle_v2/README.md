@@ -6,6 +6,10 @@
 
 第一组研究及原结果交付已通过网页二审，状态为 `FIRST_GROUP_COMPLETE_WEB_REVIEW_PASS`。本轮说明和新审核包待网页差异复核。 [整组结果、五项配对、原作业与复现入口](../shuffle/results/v2-a0-instruments/final-20261121/README.md) · [本轮收尾记录](../shuffle/results/v2-a0-instruments/final-20261121/closeout/README.md)
 
+## 第二组 LETTER Beauty
+
+单卡适配、全量 CPU 重放和冻结 Normal 独立复算已核验。GPU 预跑在装载权重前因请求缺少原 CUDA 环境退出，状态为 `PARTIAL_BLOCKED`。 [第二组结果入口与接续证据](../shuffle/results/v2-a0-beauty-letter/README.md)
+
 ## 历史只读观测
 
 截至 `2026-11-21T07:22:39.422045+00:00`，服务器保存的父 job `letter-a0-20261112-v2-20261120-group-series-r0` 仍为 `RUNNING`，正式运行源 `e2f54ebd2d7709821de1071693f91644f5ed9a30`。S2、S3a、S3b 各完成 24,772 人，三组 GPU 生成和对应的 CPU 评价均退出 0 并完成清收；S4 仍运行，rank0 实际记录 5,725／24,772 人。四条件全量评价和配对未见终态。此处是带时间的观测，文末历史观测及原运行提交保留各自时点。[只读观察依据](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/FINAL_CLOSEOUT_OBSERVATION.json)

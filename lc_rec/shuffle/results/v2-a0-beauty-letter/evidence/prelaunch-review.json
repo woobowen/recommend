@@ -1,0 +1,40 @@
+{
+  "status": "BLOCKED_GPU_PREFLIGHT",
+  "reviewer": "/root/review_execution",
+  "RUN_COMMIT": "d9fbfadd92864e5432c55c998cf23ffbd24a68b3",
+  "preflight_job_id": "letter-beauty-v2-gpu-preflight-r0",
+  "preflight_summary_sha256": null,
+  "replay_audit_sha256": "f5802e83be477126eccde54a1945ffacd900c9f4a9fa30999ac0e2543569a57a",
+  "replay_manifest_sha256": "2e69ea72e47eb978e3d7375c47aa62cd3d3588fa633bdf7b6d1cf7000adc23b2",
+  "cpu_runner_launch_gate_pass": true,
+  "gpu_runner": {
+    "job_id": "letter-beauty-v2-gpu-preflight-r0",
+    "status": "FAILED",
+    "exit_code": 1,
+    "worker_may_be_live": false,
+    "started_at": "2026-11-21T16:31:05.760364+00:00",
+    "ended_at": "2026-11-21T16:31:14.215341+00:00"
+  },
+  "cleanup": {
+    "reason": "NORMAL_EXIT_CHECK",
+    "verified": true
+  },
+  "observed_error": "DeepSpeed installed_cuda_version raised MissingCUDAException after original TestCollator imported transformers.models.llama.modeling_llama",
+  "frozen_compatible_gpu_env": {
+    "CUDA_HOME": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4",
+    "LD_LIBRARY_PATH": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib"
+  },
+  "historical_normal_request": {
+    "path": "/data/bwwu/lc-rec/a0-beauty-20261115/production-closure-20261115/formal-candidate-5b2917d/formal-run/requests/normal-a0.json",
+    "sha256": "963b69b0d19746b736a7d5859d348aae2081169bfba70f17643f8f1d4c47aeb3",
+    "bytes": 30346
+  },
+  "candidate_artifact_exists": false,
+  "checks": [
+    "actual frozen original Normal request plus first-group GPU env",
+    "current toolkit and dynamic library paths",
+    "failed job request, logs, rank report and cleanup",
+    "r3 independent full CPU manifest replay and terminal status"
+  ],
+  "scope": "GPU preflight reaches original vendor import and stops before weight load and real generate. No GPU launch gate, formal-run estimate, or model boundary result exists."
+}

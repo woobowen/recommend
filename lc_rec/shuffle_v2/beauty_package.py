@@ -49,7 +49,7 @@ def verify(path, extract=None):
                     destination = extract / member
                     destination.parent.mkdir(parents=True, exist_ok=True)
                     with destination.open('xb') as target:
-                        actual = stream_identity(source, destination)
+                        actual = stream_identity(source, target)
                 assert actual == expected, member
         if extract:
             (extract / 'MANIFEST.json').write_bytes(archive.read('MANIFEST.json'))
