@@ -26,9 +26,6 @@ def launch(connection, config, control_commit, mode, attempt, run_commit):
     assert control.budget_seconds(states, 'cpu-', config['budget']['cpu_total_wall_seconds'], prefix=beauty_control.PREFIX) >= TIMEOUT[mode] + 15
     base = config['baseline']
     normal_primary = config['normal_primary']
-    if mode == 'final':
-        normal_job = accepted_stage(states, 'cpu-eval-normal')
-        normal_primary = f'{root}/{normal_job}/primary'
     options = ['--data-dir', base['data-root'] + '/Beauty',
                '--condition', 'normal', base['normal_test_dir'], normal_primary]
     if mode == 'final':

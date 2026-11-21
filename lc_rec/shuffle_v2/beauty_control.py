@@ -53,7 +53,7 @@ def request(connection, config, commit, name, module, timeout, extra, inputs=(),
     env = {'CUDA_VISIBLE_DEVICES': card, 'HF_HUB_OFFLINE': '1', 'OMP_NUM_THREADS': '4', 'MKL_NUM_THREADS': '4',
            'OPENBLAS_NUM_THREADS': '4', 'PYTHONOPTIMIZE': '0', 'PYTHONDONTWRITEBYTECODE': '1',
            'PYTHONUNBUFFERED': '1', 'TOKENIZERS_PARALLELISM': 'false',
-           'TRANSFORMERS_OFFLINE': '1', 'USE_FLAX': '0', 'USE_TF': '0'}
+           'TORCHINDUCTOR_COMPILE_THREADS': '1', 'TRANSFORMERS_OFFLINE': '1', 'USE_FLAX': '0', 'USE_TF': '0'}
     return {**identity, 'schema': 1, 'host': profile['hostname'], 'job_id': PREFIX + name,
             'capture_version': commit, 'cwd': release, 'env': env, 'timeout_seconds': timeout, 'inputs': files + list(inputs),
             'argv': [config['baseline']['python'], '-B', '-m', 'lc_rec.shuffle_v2.' + module,
