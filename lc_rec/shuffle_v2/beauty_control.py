@@ -96,10 +96,25 @@ def series(connection, config, commit, states, args):
     preflight_summary = f'{ROOT}/{args.preflight}/summary.json'
     preflight_sha = control.remote_hash(connection, preflight_summary)
     assert preflight_sha == review['preflight_summary_sha256']
+    parent = f'group-series-{args.attempt}'
+    assert not any(name.startswith(PREFIX + 'group-series-') and row.get('ended_at') is None
+                   for name, row in states.items()), 'An existing Beauty series still owns this task'
+    local = SUPPORT / (PREFIX + parent + '.plan.json')
+    profile = connection.profile
+    if local.is_file():
+        plan = json.loads(local.read_text())
+        assert plan['formal_run_commit'] == commit and plan['preflight_review'] == review
+        assert plan['runner'] == profile['runner']
+        pending_gpus = {phase['gpu']['env']['CUDA_VISIBLE_DEVICES'] for phase in plan['modes'].values()
+                        if phase['gpu']['job_id'] not in states}
+        if pending_gpus:
+            assert len(pending_gpus) == 1
+            expected_gpu = next(iter(pending_gpus))
+            assert device(connection, config, expected_gpu)[0] == expected_gpu
+        return submit_plan(connection, config, commit, parent, local, plan['controller_timeout_seconds'])
     selected, snapshot = device(connection, config, review['device_uuid'])
     gates, files = audit_gates(connection, states, args.replay)
     files.append({'path': preflight_summary, 'sha256': preflight_sha})
-    parent = f'group-series-{args.attempt}'
     receipt = connection.put(args.review, f'{control.BASE}/requests/{PREFIX}{parent}.review.json')
     files.append({'path': receipt['path'], 'sha256': receipt['sha256']})
     release, _ = deployment(commit)
@@ -135,7 +150,7 @@ def series(connection, config, commit, states, args):
                 name = f'{stem}-{attempt}'
                 common = ['--config', config_path, *gates, '--mode', mode, '--run-commit', commit]
                 if kind == 'gpu':
-                    limit = min(caps['formal_attempt_wall_seconds'] - 30, int(estimated[mode] * 1.35) + 600)
+                    limit = caps['formal_attempt_wall_seconds'] - 30
                     gpu_planned += limit
                     payload = request(connection, config, commit, name, category, limit,
                                       [*common, '--seconds', str(limit - 55)], files, selected)
@@ -153,16 +168,18 @@ def series(connection, config, commit, states, args):
     folders = [f'{ROOT}/{args.normal}'] + [p['cpu']['argv'][p['cpu']['argv'].index('--output') + 1] for p in phases.values()]
     paired = request(connection, config, commit, f'cpu-summary-{args.attempt}', 'statistics', CPU_LIMITS['statistics'],
                      ['--config', config_path, *folders])
-    profile = connection.profile
+    deadline = gpu_planned + cpu_planned + 1800
     plan = {'formal_run_commit': commit, 'orchestrator_commit': commit, 'modes': phases, 'paired': paired,
             'normal_job_id': PREFIX + args.normal, 'preflight_review': review, 'gpu_selection': snapshot,
             'prefix': PREFIX, 'runner': profile['runner'], 'runner_sha256': control.RUNNER_SHA,
             'job_root': profile['job_root'], 'requests_root': control.BASE + '/requests', 'config': config_path,
-            'adopted_completed_attempts': completion}
-    local = SUPPORT / (PREFIX + parent + '.plan.json')
+            'adopted_completed_attempts': completion, 'controller_timeout_seconds': deadline}
     immutable(local, plan)
+    return submit_plan(connection, config, commit, parent, local, deadline)
+
+
+def submit_plan(connection, config, commit, parent, local, deadline):
     sent = connection.put(local, f'{control.BASE}/requests/{local.name}')
-    deadline = gpu_planned + cpu_planned + 1800
     payload = request(connection, config, commit, parent, 'series', deadline,
                       ['--plan', sent['path']], [{'path': sent['path'], 'sha256': sent['sha256']}])
     return submit(connection, payload)
