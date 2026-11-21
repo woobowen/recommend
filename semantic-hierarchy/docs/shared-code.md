@@ -53,3 +53,7 @@ SID原张量是 `[4,N]`，转置后按显式商品ID对应，不根据商品文�
 - [Amazon Reviews 2018官方页面](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/)。Instruments下载文件名为 `Musical_Instruments_5.json.gz` 和 `meta_Musical_Instruments.json.gz`，来源和传输SHA256见[下载清单](../results/llm2vec_instruments/download_manifest.json)。
 
 LLM2Vec/Llama权重不在本次新增文件内；[模型核验清单](../provenance/llm2vec/model_download_verified.json)提供各文件SHA256。已下载但未运行的unsup-SimCSE不作为完成实验。
+
+## 模型角色与历史部署补件
+
+[模型、tokenizer与readiness原始收据](../delivery/README.md)区分分类用Meta-Llama-3.1-8B-Instruct与独立编码用Meta-Llama-3-8B-Instruct+MNTP+supervised。本轮补齐完整文件hash和部署收据，未将Llama3.1替换为Llama3，未重新下载/运行大模型。Meta原站受其许可及访问授权限制；原清单中的ModelScope镜像应按其可用权限取得，并按全文件SHA256核对，不能只匹配模型名。

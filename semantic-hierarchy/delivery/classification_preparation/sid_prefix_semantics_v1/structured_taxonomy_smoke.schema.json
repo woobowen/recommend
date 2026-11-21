@@ -1,0 +1,52 @@
+{
+  "type": "object",
+  "properties": {
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "properties": {
+          "coarse_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "definition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "include": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "exclude": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "coarse_name",
+          "name",
+          "definition",
+          "include",
+          "exclude"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "categories"
+  ],
+  "additionalProperties": false
+}

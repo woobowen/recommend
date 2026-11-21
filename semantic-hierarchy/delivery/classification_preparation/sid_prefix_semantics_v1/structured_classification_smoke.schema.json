@@ -1,0 +1,43 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "integer",
+            "enum": [
+              1,
+              2
+            ]
+          },
+          "category_id": {
+            "type": "string",
+            "enum": [
+              "F001",
+              "F002",
+              "UNKNOWN"
+            ]
+          },
+          "needs_review": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item_id",
+          "category_id",
+          "needs_review"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "items"
+  ],
+  "additionalProperties": false
+}

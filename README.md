@@ -171,3 +171,7 @@ semantic-hierarchy/
 - [Baseline Results](Baseline%20Results/README.md)：三个数据集的最终测试指标，以及与 TIGER 原论文、GRID 默认配置和 GRID 各项最高指标的数值及相对百分比对比。
 
 大文件通过 Git LFS 保存。使用前请运行 `git lfs pull`。Qwen 原始权重超过 GitHub 的单文件上限，下载后执行 `python "GRID baseline/codex/restore_qwen_weights.py"` 合并并校验。复用已生成 SID 或测试推荐模型时无需重新加载 Qwen。
+
+## 完整向量、标签与过程补件
+
+维护负责人：Jingchen Yin（Justin-hub-coder）。[2026-11-21 H1–H4补件](semantic-hierarchy/delivery/README.md)补齐六组原向量/ID的下载、全量最终标签、readiness与原始请求/重试记录；CPU从原向量重算全部合格节点，与发布统计一致。未重新分类、编码或训练。

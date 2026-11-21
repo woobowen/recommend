@@ -1,0 +1,108 @@
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.64s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.90s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:05<00:02,  2.04s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:06<00:00,  1.28s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:06<00:00,  1.51s/it]
+Traceback (most recent call last):
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/codex/llm2vec_sid_hierarchy_20261113/smoke_check.py", line 46, in <module>
+    model = PeftModel.from_pretrained(model, MNTP, local_files_only=True,
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/llm2vec_sid_eval/lib/python3.10/site-packages/peft/peft_model.py", line 539, in from_pretrained
+    model = cls(model, config, adapter_name, autocast_adapter_dtype=autocast_adapter_dtype)
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/llm2vec_sid_eval/lib/python3.10/site-packages/peft/peft_model.py", line 155, in __init__
+    self.base_model = cls(model, {adapter_name: peft_config}, adapter_name)
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/llm2vec_sid_eval/lib/python3.10/site-packages/peft/tuners/lora/model.py", line 139, in __init__
+    super().__init__(model, config, adapter_name)
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/llm2vec_sid_eval/lib/python3.10/site-packages/peft/tuners/tuners_utils.py", line 175, in __init__
+    self.inject_adapter(self.model, adapter_name)
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/llm2vec_sid_eval/lib/python3.10/site-packages/peft/tuners/tuners_utils.py", line 431, in inject_adapter
+    self._create_and_replace(peft_config, adapter_name, target, target_name, parent, current_key=key)
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/llm2vec_sid_eval/lib/python3.10/site-packages/peft/tuners/lora/model.py", line 224, in _create_and_replace
+    new_module = self._create_new_module(lora_config, adapter_name, target, **kwargs)
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/llm2vec_sid_eval/lib/python3.10/site-packages/peft/tuners/lora/model.py", line 317, in _create_new_module
+    from .bnb import dispatch_bnb_8bit
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/llm2vec_sid_eval/lib/python3.10/site-packages/peft/tuners/lora/bnb.py", line 19, in <module>
+    import bitsandbytes as bnb
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/bitsandbytes/__init__.py", line 19, in <module>
+    from .nn import modules
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/bitsandbytes/nn/__init__.py", line 21, in <module>
+    from .triton_based_modules import (
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/bitsandbytes/nn/triton_based_modules.py", line 6, in <module>
+    from bitsandbytes.triton.dequantize_rowwise import dequantize_rowwise
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/bitsandbytes/triton/dequantize_rowwise.py", line 36, in <module>
+    def _dequantize_rowwise(
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/triton/runtime/autotuner.py", line 368, in decorator
+    return Autotuner(fn, fn.arg_names, configs, key, reset_to_zero, restore_value, pre_hook=pre_hook,
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/triton/runtime/autotuner.py", line 130, in __init__
+    self.do_bench = driver.active.get_benchmarker()
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/triton/runtime/driver.py", line 23, in __getattr__
+    self._initialize_obj()
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/triton/runtime/driver.py", line 20, in _initialize_obj
+    self._obj = self._init_fn()
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/triton/runtime/driver.py", line 9, in _create_driver
+    return actives[0]()
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/triton/backends/nvidia/driver.py", line 450, in __init__
+    self.utils = CudaUtils()  # TODO: make static
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/triton/backends/nvidia/driver.py", line 80, in __init__
+    mod = compile_module_from_src(Path(os.path.join(dirname, "driver.c")).read_text(), "cuda_utils")
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/triton/backends/nvidia/driver.py", line 57, in compile_module_from_src
+    so = _build(name, src_path, tmpdir, library_dirs(), include_dir, libraries)
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/triton/runtime/build.py", line 32, in _build
+    raise RuntimeError("Failed to find C compiler. Please specify via CC environment variable.")
+RuntimeError: Failed to find C compiler. Please specify via CC environment variable.
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:05,  1.82s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.89s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:05<00:01,  1.89s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.18s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.43s/it]
+{
+  "complete": true,
+  "full_experiment_started": false,
+  "optional_bitsandbytes_dispatch_disabled": true,
+  "load_seconds": 8.228734425036237,
+  "synthetic_items": 8,
+  "encoding_seconds": 0.35646544699557126,
+  "synthetic_items_per_second": 22.442567905044083,
+  "batch_invariance_cosine": 0.9999994039535522,
+  "attention_is_causal_flags": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "all_attention_modules_noncausal": true,
+  "shape": [
+    8,
+    4096
+  ],
+  "dtype": "torch.float32",
+  "norm_min": 0.9999997615814209,
+  "norm_max": 0.9999999403953552,
+  "gpu_peak_allocated_bytes": [
+    8314757632,
+    7264092160
+  ],
+  "gpu_names": [
+    "NVIDIA GeForce RTX 2080 Ti",
+    "NVIDIA GeForce RTX 2080 Ti"
+  ]
+}

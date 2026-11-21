@@ -43,7 +43,7 @@ python semantic-hierarchy/scripts/evaluate_embeddings.py \
 
 默认seed=20261113、n≥2、epsilon=1e-6、每种条件置换999次、bootstrap2000次，与正式统计一致。返回节点/边/路径/Gap、随机明细和summary；不自动作跨数据集Holm校正，也不产生历史编码完成收据。若改置换次数/样本数，需要报告为新运行，不能当作原结果。
 
-这次新增文件没有上传完整LLM2Vec向量；原始服务器运行目录或重新编码输出才能作为这个入口的实际输入。已有Beauty/Toys SID和商品TFRecord、Qwen上游代码仅引用[共用路径](shared-code.md)，无需重复上传。
+初次发布未附完整向量；2026-11-21已在[补件资产清单](../delivery/assets.json)发布六组原始向量、同序ID和norms原件，实际bytes经SHA256验证，取得方法见[主说明](../delivery/README.md)。已有Beauty/Toys SID和商品TFRecord、Qwen上游代码仅引用[共用路径](shared-code.md)，无需重复上传。
 
 ## 3. 重新编码商品（Linux，两张2080Ti/一个模型）
 
@@ -99,10 +99,14 @@ worker会读取编码配置中的两种文本视图、生成归一化向量/ID/�
 - 阶段顺序为 discover → draft → revise → pilot → final → evaluate，`run_stage.py --help`列出单阶段参数。Toys候选归一逻辑见 `compact_taxonomy.py`。
 - 原完整控制器还依赖服务器preparation/readiness收据及已经完成的Beauty产物，不应把它当作从空目录复现全部阶段的一条命令。重新执行前需要生成对应准备收据，不能复制旧哈希绕过核验。
 
-最终自动标签不是人工真值；重生成可能受硬件/库影响，不能保证逐token相同。已保存taxonomy、计数和历史评估可复核；未上传服务器逐商品最终标签及全部prompt/response日志，不能声称本分支包含完整逐请求推理轨迹。
+最终自动标签不是人工真值；重生成可能受硬件/库影响，不能保证逐token相同。初次发布仅有taxonomy与汇总。2026-11-21已补全逐商品final标签及readiness，所有现存prompt/response、失败重试和控制器日志在metadata.zip；[补件说明](../delivery/README.md)给出阶段路径和真实验证范围。未保存的更早记录仍不补造。
 
 ## 5. Instruments数据与SID
 
 `archive/llm2vec_instruments/download_prepare.py`包含官方来源URL、读取校验、元数据匹配、固定ASIN→item_id映射及文本视图生成。运行前改ROOT/HERE和数据目录。原文件/选择指纹见 `results/llm2vec_instruments/download_manifest.json`、`input_audit.json`。
 
 Qwen编码worker调用原GRID均值池化，量化仍调用原 `grid_stage.py` 和 `run_pipeline.py`；仓库路径见[共用代码](shared-code.md)。`run_instrument.py`中的 `qwen_config.json`生成和quantize步骤记录实际覆盖参数：3层×256、30步、seed42、residual normalization、32位量化训练。它同时承担服务器调度，重跑时需要完整GRID环境和路径映射，不是独立于GRID的新量化实现。
+
+## 2026-11-21 四种起点验收
+
+详见[H1–H4主说明](../delivery/README.md)：从原向量CPU复算节点余弦、从全量final标签复算纯度与pair-agreement均已执行；固定模型重新编码、重新分类和从头训练均未执行。现存模型权重的公开访问条件与原manifest身份分开记录。
