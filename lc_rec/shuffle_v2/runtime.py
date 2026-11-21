@@ -1,6 +1,7 @@
 """Bind the V2 CPU oracle to the frozen LETTER generation boundary."""
 from copy import deepcopy
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -105,6 +106,11 @@ class Runtime:
             assert weights.model.layers[0].self_attn.q_proj.weight.dtype == torch.bfloat16
             historical_rank = json.loads((Path(baseline['normal_test_dir']) / 'rank0.json').read_text())
             assert report['strict_adapter_reload'] == historical_rank['strict_adapter_reload']
+            if 'gpu_environment' in self.config:
+                actual_env = {key: os.environ.get(key) for key in self.config['gpu_environment']}
+                assert actual_env == self.config['gpu_environment']
+                report['cuda_environment'] = {'actual_rank_environment': actual_env,
+                                              'llama_import_and_strict_reload': 'PASS'}
             report['beauty_normal_binding'] = baseline['run-commit']
         report['shuffle'] = {**core.mode_metadata(self.options.shuffle_mode), 'cpu_manifest_sha256': self.digest,
                              'mode_installation': 'frozen TestCollator then V2 transform then native generate',

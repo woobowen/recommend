@@ -116,8 +116,14 @@ def main():
     assert job.name == job_id and request['capture_version'] == args.run_commit
     assert request['cwd'] == str(Path.cwd()) and args.seconds + 30 <= request['timeout_seconds']
     preflight = args.mode == 'preflight'
-    cap = config['budget']['preflight_device_seconds'] if preflight else config['budget']['formal_attempt_wall_seconds']
-    assert request['timeout_seconds'] + 15 <= cap
+    if preflight and 'gpu_validation_attempt_seconds' in config['budget']:
+        assert request['timeout_seconds'] <= config['budget']['gpu_validation_attempt_seconds']
+    else:
+        cap = config['budget']['preflight_device_seconds'] if preflight else config['budget']['formal_attempt_wall_seconds']
+        assert request['timeout_seconds'] + 15 <= cap
+    if is_beauty and 'gpu_environment' in config:
+        assert all(os.environ.get(key) == request['env'][key] == value
+                   for key, value in config['gpu_environment'].items())
     output = args.output
     output.mkdir(parents=True, exist_ok=False)
     cpu = json.loads(args.cpu_audit.read_text())

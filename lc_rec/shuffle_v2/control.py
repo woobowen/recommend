@@ -50,6 +50,7 @@ def deploy(t, commit, *, namespace='letter-shuffle-v2', support=SUPPORT, paths=P
     upload = f'{BASE}/transfers/{namespace}/{commit}.tar.gz'
     sent = t.put(archive, upload)
     actual_runner = t.profile['runner']
+    runner_sha = t.profile['runner_sha256']
     deployment_sha = t.profile['deployment_sha256']
     receipt = json.loads(remote_python(t, f'''from pathlib import Path, PurePosixPath
 import hashlib,json,tarfile
@@ -57,7 +58,7 @@ from tempfile import TemporaryDirectory
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
 archive=Path({upload!r}); release=Path({release!r}); runner=Path({actual_runner!r}); rows=[]
 assert sha(archive)=={sent['sha256']!r}
-assert sha(runner)=={RUNNER_SHA!r}
+assert sha(runner)=={runner_sha!r}
 assert sha(Path(str(runner)+'.deployment.json'))=={deployment_sha!r}
 release.parent.mkdir(parents=True,exist_ok=True)
 with tarfile.open(archive) as tf:
@@ -85,7 +86,7 @@ if manifest.exists(): assert json.loads(manifest.read_text())==result
 else: manifest.write_text(json.dumps(result,indent=2)+'\\n')
 print(json.dumps(result))''', timeout=90))
     transport.atomic(support / f'{commit}.deployment.json', receipt)
-    return {'commit': commit, 'release': release, 'files': len(receipt['files']), 'runner_sha256': RUNNER_SHA}
+    return {'commit': commit, 'release': release, 'files': len(receipt['files']), 'runner_sha256': runner_sha}
 
 
 def readback(commit):
