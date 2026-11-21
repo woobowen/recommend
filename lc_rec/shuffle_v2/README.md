@@ -8,7 +8,7 @@
 
 ## 第二组 LETTER Beauty
 
-单卡适配、全量 CPU 重放和冻结 Normal 独立复算已核验。GPU 预跑在装载权重前因请求缺少原 CUDA 环境退出，状态为 `PARTIAL_BLOCKED`。 [第二组结果入口与接续证据](../shuffle/results/v2-a0-beauty-letter/README.md)
+单卡适配、全量 CPU 重放、冻结 Normal 独立复算、四模式真实 GPU 预跑和统计接口均已核验。正式前准备等待网页二审。本轮正式作业提交数为 0。 [第二组准备及证据入口](../shuffle/results/v2-a0-beauty-letter/README.md)
 
 ## 历史只读观测
 

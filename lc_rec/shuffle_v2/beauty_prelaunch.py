@@ -32,6 +32,7 @@ def main():
     p.add_argument('--lifecycle', type=Path, required=True)
     p.add_argument('--assessment', type=Path, required=True)
     p.add_argument('--execution-review', type=Path, required=True)
+    p.add_argument('--statistics-review', type=Path, required=True)
     args = p.parse_args()
     connection = beauty_control.connect(beauty_control.runner_sha_at(args.commit))
     config = json.loads(beauty.CONFIG.read_text())
@@ -53,6 +54,11 @@ def main():
     interface = receive(connection, args.interface, 'summary.json')
     assert interface['content']['status'] == 'PASS_BEAUTY_PREFLIGHT_EVALUATION_INTERFACE'
     assert interface['content']['RUN_COMMIT'] == args.commit and not interface['content']['formal_results']
+    stats = json.loads(args.statistics_review.read_text())
+    assert stats['status'] == 'PASS_INDEPENDENT_PREFLIGHT_STATISTICS' and stats['RUN_COMMIT'] == args.commit
+    assert stats['users'] == 32 and stats['comparison_metric_rows'] == 80 and not stats['formal_results']
+    assert stats['files']['summary.json']['sha256'] == interface['sha256']
+    assert stats['raw_review_identity']['sha256'] == hashlib.sha256(args.reviewer_receipt.read_bytes()).hexdigest()
     lifecycle = json.loads(args.lifecycle.read_text())
     assert lifecycle['status'] == 'PASS_BEAUTY_RUNNER_LIFECYCLE'
     assert lifecycle['runner_sha256'] == connection.profile['runner_sha256']
@@ -72,6 +78,7 @@ def main():
               'nonauthor': review, 'nonauthor_receipt_sha256': hashlib.sha256(args.reviewer_receipt.read_bytes()).hexdigest(),
               'runner_sha256': connection.profile['runner_sha256'],
               'interface_sha256': interface['sha256'],
+              'statistics_review_sha256': hashlib.sha256(args.statistics_review.read_bytes()).hexdigest(),
               'lifecycle_sha256': hashlib.sha256(args.lifecycle.read_bytes()).hexdigest(),
               'assessment_sha256': hashlib.sha256(args.assessment.read_bytes()).hexdigest(),
               'execution_review_sha256': hashlib.sha256(args.execution_review.read_bytes()).hexdigest(),

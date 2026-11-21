@@ -137,6 +137,8 @@ def add_research_documents(build, commit):
         'preflight-summary.json': 'preflight/summary.json',
         'preflight-evaluation.json': 'preflight-evaluation/summary.json',
         'assessment.json': 'execution/assessment.json',
+        'inherited-evidence.json': 'execution/inherited-evidence.json',
+        'runner-readback.json': 'execution/runner-readback.json',
         'formal-plan.json': 'execution/formal-plan.json',
         'lifecycle.json': 'execution/lifecycle.json',
         'nonauthor-research.json': 'reviews/research-review.json',

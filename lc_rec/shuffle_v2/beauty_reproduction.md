@@ -37,7 +37,7 @@ Beauty 和 Instruments 共用 V2 排列核心、独立参考、模型边界与 P
 
 `beauty_preflight_eval` 仅使用冻结顺序的 32 人样本，逐条核对真实 GPU 候选、输入边界、原 CCE 及归档 Normal 子集。它以同一统计程序生成 5×16 小样本工程检查，并保持正式入口的 22,363 人覆盖检查。整组正式档案的 Offline Normal 复算仍从原双分片读取全量数据。 [预跑评价入口](beauty_preflight_eval.py) · [独立 Normal 复算](independent_beauty_review.py)
 
-新的预跑请求累计上限为 180 GPU-device-minutes，单次上限为 60 分钟。准备 CPU 累计上限 8 小时，单次上限 1 小时。账本接续 `letter-beauty-v2-` 原身份，失败和装载耗时均记录。两张卡均占用时，以 60 秒间隔、最多两小时等待。同一作业持续使用一张物理卡映射为逻辑 GPU 0。
+新的预跑请求累计上限为 180 GPU-device-minutes，单次上限为 60 分钟。准备 CPU 累计上限 8 小时，单次上限 1 小时。账本接续 `letter-beauty-v2-` 原身份，失败和装载耗时均记录。预跑首次请求遇到两张卡均占用时，以 60 秒间隔、最多两小时等待。同一作业持续使用一张物理卡映射为逻辑 GPU 0。
 
 `beauty_control plan` 只构建并保存本地正式计划，不上传 review/request，也不提交父子任务。网页二审和独立启动授权到位后，由 WSL 上述研究分支使用指定快照并再次核对资源，才可执行下列入口。参数值来自最终计划及审核回执。
 

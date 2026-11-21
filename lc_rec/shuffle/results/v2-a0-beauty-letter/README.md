@@ -1,26 +1,30 @@
 # LETTER Beauty Shuffle V2 第二组
 
-**状态 `PARTIAL_BLOCKED`。** Beauty 单卡适配、22,363 个用户的四模式 CPU 输入重放和历史 Normal 复算已核验。2026-11-21 11:31（America/New_York），真实预跑启动时，S2 的单 rank 在导入 LLaMA 的依赖链发现 GPU 请求没有传入原 Beauty 的 `CUDA_HOME`。该尝试在装载权重前退出，记录为 0 用户、0 候选，全部任务进程已清收。四模式 GPU 预跑、正式四条件、配对统计及终审仍缺。 [GPU 原日志](evidence/failed-preflight-shuffle2.log) · [rank 回执](evidence/failed-preflight-rank0.json) · [runner 作业记录](evidence/jobs.json)
+**正式前准备已通过，等待网页 GPT 二审及独立正式启动授权。** 真实预跑作业 `letter-beauty-v2-gpu-preflight-r1` 以退出码 0 结束并核验清收。服务器 jobs、requests 和输出目录的只读核查均显示，本轮正式父子请求提交数和正式 GPU 新增量为 0。 [预跑终态](prep/preflight-r1-status.json) · [正式路径核查](prep/formal-inventory.json)
 
-## 方案与资产
+## 条件与接续点
 
-本轮固定 `GRID-LETTER-SHUFFLE-V2`、`allow_identity`、Shuffle seed 42，沿用 LETTER Beauty 的 Prompt0、`seq[:-1][-20:]`、四位 SID、未量化 BF16 LLaMA-7B、原 step 6160 best adapter，以及 batch 1、20 beam、20 return、最多 10 个新 token 和原 canonical 逐码位回调。原权重 SHA-256 为 `dd9f3d2983af7ce85ace99534bd23df9362d9cd91ac39d0b356b219cb790b1c1`。运行入口从 `6e1b211d9c37f358c43b1540b40b17f6703150d2` 的原 LETTER Beauty 版本派生。新入口核对单 rank 完整 assignment，写出原始候选以及每条真实 prefill 的输入、mask、位置和 cache 回执。模型边界在本次 GPU 失败中未执行。 [完整方法、配置和复现入口](../../../shuffle_v2/beauty_reproduction.md) · [实际派生源码](evidence/generation-derived.py) · [生成 diff](evidence/generation.diff) · [评价 diff](evidence/evaluation.diff)
+冻结原 LETTER Beauty 的 22,363 名用户、12,101 件商品、12,088 个 SID、11 个碰撞组和总词表 32,965。沿用原 LLaMA-7B、step 6160 best adapter 和两个不等长的 Normal 分片。实际 GPU adapter 严格核对的 450 项张量中，448 项 LoRA 为 FP32，embedding 和 lm_head 为 BF16，基座为 BF16。原 Beauty 运行来源为 `6e1b211d9c37f358c43b1540b40b17f6703150d2`，V2 预跑快照为 `1182dfd914c20bd3dc11786587eae6879fba6b9d`，真实预跑 CPU 评价快照为 `95cc10dd2411cd9567f89e4a5952fc8ed9131385`。 [方法和复现](../../../shuffle_v2/beauty_reproduction.md) · [上一轮 PARTIAL_BLOCKED 历史](https://github.com/woobowen/recommend/blob/25b3c341e4fe6114d8bf899e76f3d36021601d7a/lc_rec/shuffle/results/v2-a0-beauty-letter/README.md)
 
-## 已验证结果
+原 `cpu-replay-r3` 的每模式 22,363 行和 159,966 个历史组，以及旧 Normal 原双片 447,260 候选和 357,808 个逐用户指标值，复用原快照与已验结果。此次核对 replay 输入清单、原 Normal 复评和正式评价源码身份。V2 保留 seed 42、四模式中包括恒等的字典序排列，S3a 和 S3b 共享同一相对排列。Prompt0、最近 20 个历史、batch 1、beam/return 20、最大 10 个新 token 和原逐码位回调沿用冻结合同。 [继承证据与原路径](prep/inherited-evidence.json)
 
-原双片分别包含 11,182 和 11,181 条，按 seed 0、epoch 0 的原排列奇偶位置恢复完整单卡 assignment。全量 CPU 对照验证了 159,966 个可见历史组，原始编码逐行与归档 Normal 一致。固定槽、组外 token、长度和 mask 检查无违规。两个非作者独立核对了全量排列及归档状态。 [重放证据](evidence/cpu-replay.json) · [分片证据](evidence/single-shard.json) · [非作者核验](evidence/replay-independent.json)
+## 恢复及真实预跑
 
-| 模式 | 恒等历史组 | 整条输入恒等用户 | 实际变化 token |
-| --- | ---: | ---: | ---: |
-| S2 | 79,937 | 640 | 160,058 |
-| S3a | 26,744 | 6 | 319,567 |
-| S3b | 26,744 | 6 | 319,567 |
-| S4 | 6,630 | 0 | 479,920 |
+准备工作接续此前三轮，修正记录从第 4 轮起。原 GPU r0 异常直接归因为缺失 `CUDA_HOME`。对照原冻结请求还查实 `LD_LIBRARY_PATH` 缺失。恢复两值后，GPU 请求、主包装器和真实 rank 的有效环境一致。新 Beauty runner 用同一个 Beauty 前缀约束发现和发信号，保留 UID、启动时间、boot、双任务标记、PGID/session 和 pidfd。隔离的实际生命周期测试覆盖普通退出、跨 session 残留 TERM、超时 TERM→KILL 和同时运行的对照进程。 [生命周期](prep/lifecycle.json) · [执行非作者核验](prep/nonauthor-execution.md) · [真实回执读回](prep/runner-readback.json)
 
-Normal 继续使用原双分片的 447,260 条候选。复评的 16 项指标、逐用户矩阵和逐用户 CSV 与历史归档一致。独立实现从原候选复算后，逐用户值及均值最大偏差均为 0。目录共 12,101 件商品、12,088 个完整 SID，其中 11 个 SID 碰撞组。S2、S3a、S3b、S4 的正式推荐指标、相对变化和 80 项配对比较尚无结果。 [Normal 全精度 16 项](evidence/normal-summary.json) · [Normal 非作者逐用户复核](evidence/normal-independent.json)
+| 条件 | 用户数 | 原始候选 | 自然整条恒等 | 严格装载秒 | 样本生成秒 |
+| --- | ---: | ---: | --- | ---: | ---: |
+| S2 | 32 | 640 | 行 20014，分数最大差 0.0 | 116.457 | 25.253 |
+| S3a | 32 | 640 | 0 | 116.499 | 22.067 |
+| S3b | 32 | 640 | 0 | 116.770 | 22.035 |
+| S4 | 32 | 640 | 0 | 116.574 | 25.266 |
 
-## 修正与接续
+每个模式通过实际 20 beam 的首次 prefill、mask、原生位置、空初始 cache、移动后 embedding 查表及 canonical 生成约束检查。S2 的自然恒等样本与归档 Normal 的输入、候选、顺序及原精度分数一致，覆盖限于该用户。共计 128 个模式–用户样本和 2,560 条候选。 [预跑原汇总](prep/preflight-summary.json) · [研究非作者核验](prep/nonauthor-research.json)
 
-三次集中修正对应缺少 `json` 导入、样本回执容器类型与预算前缀、以及 TorchInductor 退出时的残留进程。第三次重放用第一组已验证的 `TORCHINDUCTOR_COMPILE_THREADS=1`，正常退出。累计 runner CPU 作业时间为 490.863291 秒。GPU 预跑失败请求的 wall time 为 8.454977 秒，按一张卡全额计入预跑预算。正式 GPU 用量为 0。未做新 Normal／OFF GPU 推理。
+实际 CPU 接口读取四个单片预跑输出和冻结 Normal 的同一 32 人，检查原 16 项及 CCE。样本级五项比较运行了 5,000 次共享 PCG64 抽样。独立实现复核了全部 80 项工程输出，区间端点最大绝对差 `1.39e-17`。正式入口仍要求 22,363 人，正式指标和配对结果待实际计算。 [评价工程回执](prep/preflight-evaluation.json) · [统计非作者核验](prep/nonauthor-statistics.json)
 
-待重新授权时，首选从原不可变 Normal 请求恢复 GPU 作业的 `CUDA_HOME` 与 `LD_LIBRARY_PATH`，先在新身份四模式预跑中验证模型、候选和 GPU 用时，再由非作者审查并判定正式启动。现场确认的 CUDA 工具链是原实验使用的 12.4.131。本次 GPU 尝试入口 `/home/bwwu/grid-audits/sid-extensions-p0/jobs/letter-beauty-v2-gpu-preflight-r0`，累计跑数及输出入口 `/data/bwwu/lc-rec/letter-shuffle-v2-beauty/`。实际运行和控制源码快照 `d9fbfadd92864e5432c55c998cf23ffbd24a68b3`。历史 Instruments 第一组已通过网页二审。 [V2 总入口与第一组](../../../shuffle_v2/README.md)
+## 未提交的正式计划
+
+草案包含同一张卡依次 S2→S3a→S3b→S4，每项生成成功后 CPU 评价，再运行五项 16 指标配对。草案在 WSL 构建，服务器复查无正式父子请求。未来提示词须明确授权启动，复查卡可用性、代码和资产身份、预算及运行依赖后才可走正式提交路径。 [预跑门槛](prep/prelaunch-gate.json) · [正式计划](prep/formal-plan.json)
+
+按实测 32 人生成 wall time 外推，加测得的装载和其他开销，四模式分别约 4.94、4.32、4.32、4.94 小时，整组约 18.52 GPU 小时。增加 25% 敏感性系数后最慢条件约 6.18 小时、整组约 23.15 小时，符合参考的 8 小时单次和 36 GPU 小时累计上限。固定样本的平均输入略长，长期 IO、缓存及资源竞争仍会影响外推。正式 raw JSONL 投影约 1.97 GB；计划核查时输出盘约有 2.70 TB 可用。正式评价每项和最终配对分别预留 600 秒、2,100 秒 CPU 时限，审核时间单列。累计预跑实际 648.991733 device-seconds；审阅导出前累计 CPU worker wall time 538.158041 秒，包含上一轮并保留失败记录。 [估时及容量](prep/assessment.json)
