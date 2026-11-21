@@ -2,6 +2,10 @@
 
 `wbw-lc-rec-shuffle-v2` 将历史 LETTER V1 的干预扩展为包含恒等项的组内排列，研究同一固定模型及完整测试用户轴上不同码位扰动的结果。GitHub activity 在 2026-11-20T16:15:35Z 记录 `woobowen` 创建该研究分支，研究交付 `692cd94d6acd17292c2bdef7fabc6bb50ec9ba5d` 含启动和七次初始观察。整理前远端版本 `50507089981cb0b9d36e8977bd1d94cd9085f031` 属于之前的规范发布。分支继承 G3 Beauty 结束时的 V1 历史。当前正式系列仅 Instruments A0；Beauty 的两个入口与 A1 在准备阶段只核静态接线。[仓库活动](https://github.com/woobowen/recommend/activity)
 
+## 最近一次只读观测
+
+截至 `2026-11-21T07:22:39.422045+00:00`，服务器保存的父 job `letter-a0-20261112-v2-20261120-group-series-r0` 仍为 `RUNNING`，正式运行源 `e2f54ebd2d7709821de1071693f91644f5ed9a30`。S2、S3a、S3b 各完成 24,772 人，三组 GPU 生成和对应的 CPU 评价均退出 0 并完成清收；S4 仍运行，rank0 实际记录 5,725／24,772 人。四条件全量评价和配对未见终态。此处是带时间的观测，文末历史观测及原运行提交保留各自时点。[只读观察依据](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/FINAL_CLOSEOUT_OBSERVATION.json)
+
 ## 实际生效方法
 
 `core.transform` 先沿用冻结 V1 OFF 的组、词表、padding 与 mask 验证，随后独立置换每次 history item occurrence 的完整 token IDs。键为 `[协议, 42, 活动槽数量, 全局用户 row_idx, 可见物品出现下标, 拒绝计数]`，使用规范紧凑 JSON 的 UTF-8 SHA-256，拒绝超出均匀取模界的 digest。Shuffle3a 和 Shuffle3b 采用同一相对排列，映射到不同槽位。全输入和每组的 `nonidentity` 与 `tokens_changed` 有各自证据。S2 活动槽为 2、3，S3a 为 0、1、2，S3b 为 1、2、3，S4 为 0、1、2、3，槽位均从 0 起数。理论恒等抽取概率依次为 1/2、1/6、1/6、1/24。
@@ -23,9 +27,9 @@
 
 ## 三阶段证据和复现范围
 
-- 前置。完整 24,772 用户、每模式 172,929 组历史在原 tokenizer 上 CPU replay，模式数与恒等计数可查 [CPU 结果](../shuffle/results/v2-a0-instruments/cpu-replay-r1/audit.json)。两份冻结 Normal 原预测各 12,386 用户，已有 CPU 重评的 24,772×16 NPZ 与冻结 Normal 同字节。四模式各 32 用户的独立 GPU 预跑与 prefill 边界审查保留在 [启动记录](../shuffle/results/v2-a0-instruments/launch-observation-20261120/README.md)。本轮再次执行 `python3 -B -m unittest lc_rec.shuffle.test_core lc_rec.shuffle_v2.test_protocol`，7 项通过。[实际复核输出](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/verification.txt)
-- 过程。原父作业 `letter-a0-20261112-v2-20261120-group-series-r0` 已脱离 SSH。首次 30 分钟记录后，本轮通过原 SSH alias 读取 [过程快照](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/observation.json)，时间为 `2026-11-20T20:34:09Z`，S2 同一 GPU worker `3367671` 已记录 21,200/24,772，状态为 RUNNING，输出文件观测大小 345,033,673 bytes。快照含原父子 status、rank 回执、有限日志尾、首条完整预测。文件读取发生在该报告的起止时刻之间，运行中输出可继续变化。
-- 后置。此快照尚无单条件终态、四条件配对或研究结论。后续只用原 ID 查询，位置为 `/home/bwwu/grid-audits/sid-extensions-p0/jobs/<job_id>/`。保留现场 controller 与其阶段原件。编排依赖的 [实际 runner 原件](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/runner-a1-96h-1fefc09a15c1cb73.py) 已按计划 SHA 恢复。父作业的计划、CPU、GPU 与收尾状态参照 [启动记录](../shuffle/results/v2-a0-instruments/launch-observation-20261120/README.md)。
+- 前置。完整 24,772 用户、每模式 172,929 组历史在原 tokenizer 上 CPU replay，模式数与恒等计数可查 [CPU 结果](../shuffle/results/v2-a0-instruments/cpu-replay-r1/audit.json)。两份冻结 Normal 原预测各 12,386 用户，已有 CPU 重评的 24,772×16 NPZ 与冻结 Normal 同字节。四模式各 32 用户的独立 GPU 预跑与 prefill 边界审查保留在 [启动记录](../shuffle/results/v2-a0-instruments/launch-observation-20261120/README.md)。2026-11-20 仓库整理时再次执行 `python3 -B -m unittest lc_rec.shuffle.test_core lc_rec.shuffle_v2.test_protocol`，7 项通过。[实际复核输出](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/verification.txt)
+- 历史过程快照。原父作业 `letter-a0-20261112-v2-20261120-group-series-r0` 已脱离 SSH。首次 30 分钟记录后，2026-11-20 通过原 SSH alias 读取 [过程快照](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/observation.json)，时间为 `2026-11-20T20:34:09Z`，S2 同一 GPU worker `3367671` 已记录 21,200/24,772，状态为 RUNNING，输出文件观测大小 345,033,673 bytes。快照含原父子 status、rank 回执、有限日志尾、首条完整预测。文件读取发生在该报告的起止时刻之间，运行中输出可继续变化。
+- 后置。2026-11-20 的早期过程快照当时尚无单条件终态。当前已记录的阶段见上方收尾快照，系列配对和研究结论依原作业后续终态。后续只用原 ID 查询，位置为 `/home/bwwu/grid-audits/sid-extensions-p0/jobs/<job_id>/`。保留现场 controller 与其阶段原件。编排依赖的 [实际 runner 原件](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/runner-a1-96h-1fefc09a15c1cb73.py) 已按计划 SHA 恢复。父作业的计划、CPU、GPU 与收尾状态参照 [启动记录](../shuffle/results/v2-a0-instruments/launch-observation-20261120/README.md)。
 
 保存输出复查当前可从 CPU 原件、完整 Normal 和 32 用户每模式预跑开始。新四条件的全量原预测、评价与配对需等待其实际终态。固定 checkpoint 复评需原 LETTER 资产、冻结 base 与 adapter、上述导出、配套 evaluator 和 interpreter，资产取得需要相应授权。重跑本实验从同一 checkpoint 产生四种干预测试，不包含重训；本轮整理未启动重复运行。上游数据和 SID 采用固定 LETTER 发布资产，未执行 Qwen embedding 或量化重建。
 
