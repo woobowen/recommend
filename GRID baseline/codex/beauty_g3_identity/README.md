@@ -108,8 +108,8 @@ ASIN 保留原始字符串，不转换数值、不改变大小写、不去掉前
 ```bash
 GIT_LFS_SKIP_SMUDGE=1 git clone --branch yjc-grid https://github.com/woobowen/recommend.git
 cd recommend
-# 将下面的提交占位符换成交付回复中的完整 SHA，以固定本次补件。
-git checkout <DELIVERY_COMMIT_SHA>
+# 固定已发布的 G3 身份补件；后续交付说明不改变该原件。
+git checkout abfe7827e9c586a10edcb47c1f4a0c2a6ae62f67
 git lfs pull --include="GRID baseline/experiments/beauty_rkmeans_qwen_20261010_012253/semantic_ids.pt,GRID baseline/experiments/beauty_rkmeans_qwen_20261010_012253/sid_generation/pickle/**"
 ```
 

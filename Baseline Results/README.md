@@ -41,3 +41,7 @@ Beauty 在最佳 checkpoint（12,500 步）上恢复全训练状态继续训练�
 原始阶段结果、CSV、Hydra 配置和 checkpoint 均保存在相邻的 `GRID baseline/experiments` 中。`GRID baseline/reconfigurations` 保存重启前后配置和 Beauty 保护备份。历史记录中的绝对路径保留作为证据，不应在其他机器直接执行原 job.json。
 
 JSON 提供完整精度结果及对应 checkpoint 路径，CSV 包含三组参照的全部相对增减。
+
+## 原记录与复现入口补充
+
+[逐域运行、选模、分母和四种复现起点](../GRID%20baseline/codex/delivery_20261121/README.md)。历史数值保持原样，本次只补追溯。

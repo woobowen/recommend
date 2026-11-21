@@ -10,7 +10,7 @@
 
 ## Qwen 基线来源与下载
 
-`GRID baseline/` 和 `Baseline Results/` 从 `main` 的固定提交 `563dc50b1c7e9e2e05cdfddd13e91a3d1888001e` 完整迁入，包含代码、完整数据、Qwen 权重传输分片、商品向量、四位 SID、量化器和推荐模型 checkpoint、配置、日志及指标。这两个目录与来源提交保持相同内容。
+`GRID baseline/` 和 `Baseline Results/` 从 `main` 的固定提交 `563dc50b1c7e9e2e05cdfddd13e91a3d1888001e` 完整迁入，包含代码、完整数据、Qwen 权重传输分片、商品向量、四位 SID、量化器和推荐模型 checkpoint、配置、日志及指标。这句话仅描述 `84f200258ab66b33bcf1fe4104fa44ad43737e4a` 导入时的内容身份；此后 `abfe7827e9c586a10edcb47c1f4a0c2a6ae62f67` 增加 Beauty G3 身份资料并更新说明。当前树已包含这些补件，不再与原 main 整树相同。
 
 大文件通过 Git LFS 保存。浏览器 ZIP 或普通 Raw 链接可能只有 LFS 指针：
 
@@ -33,3 +33,7 @@ git lfs pull --include="GRID baseline/**"
 ## Beauty G3 商品身份资料
 
 [Beauty G3 补件入口](GRID%20baseline/codex/beauty_g3_identity/README.md)提供完整 12,101 列 SID→GRID ID→Amazon ASIN 映射、历史配置可读副本、原始预测 CSV、导出脚本与实际核验结果。固定原 G3 不变；本次仅补齐身份与来源信息，没有重新训练。
+
+## 交付核查与逐域追溯
+
+维护负责人：Jingchen Yin（Justin-hub-coder）。[2026-11-21 补全与核查](GRID%20baseline/codex/delivery_20261121/README.md)对应清单 Y1–Y3，定位三域运行、有效配置、checkpoint、结果、分母与身份范围。原实验、导入、G3补件与本次说明各有独立版本；本次未重新训练或重评。

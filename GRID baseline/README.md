@@ -10,7 +10,7 @@
 
 ```bash
 git lfs install
-GIT_LFS_SKIP_SMUDGE=1 git clone --branch main https://github.com/woobowen/recommend.git
+GIT_LFS_SKIP_SMUDGE=1 git clone --branch yjc-grid https://github.com/woobowen/recommend.git
 cd recommend
 git lfs pull --include="GRID baseline/**"
 cd "GRID baseline"
@@ -119,3 +119,7 @@ python _运行/run_pipeline.py --dataset beauty --method rkmeans --gpus 0,1
 ## Beauty G3 商品身份补件
 
 固定到 `84f200258ab66b33bcf1fe4104fa44ad43737e4a` 的 Beauty 四位 SID 已补齐 [12,101 列到 Amazon ASIN 的映射、来源链和实际核验](codex/beauty_g3_identity/README.md)。本次恢复关系为 `sid_column = grid_item_id = P5 item_id - 1`，通过 549 个历史分片哈希和三个划分的全量编号序列核验。原始预测键无重复/遗漏；按原源码重建四位 SID 与固定 G3 逐值差异为 0。原 G3 未更换，完整配置及命令有普通 Git 可读副本。LETTER 侧仍需按 ASIN 独立核对。
+
+## 逐域实验、资产与三阶段追溯
+
+[本次补件主说明](codex/delivery_20261121/README.md)与[机器索引](codex/delivery_20261121/baseline_index.json)关联 Beauty/Sports/Toys 的原启动、恢复、完整配置、checkpoint、结果和测试分片。Sports/Toys 的外部 ASIN 身份原件仍未知，复现从固定 TFRecord/SID 开始；内部 item ID→embedding 行→SID 列核查覆盖全部商品，不据标题猜测跨项目映射。
