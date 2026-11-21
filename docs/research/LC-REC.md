@@ -28,13 +28,41 @@ A0 Instruments 与 Beauty 沿 LoRA 训练，A0/LLaMA base revision `4782ad278652
 - 从服务器取回原 LETTER Beauty 和 G3 Beauty 两套各 9 份 stage request 原字节。[清单](../../lc_rec/evidence/repository-delivery-20261120/restored-requests.json)记录原路径、文件 SHA-256、JSON 规范化 SHA-256、当时 stage 状态和版本关系。原 LETTER Beauty 的 `normal`、`normal_eval`、`s3`、`s3_eval`、`s4`、`s4_eval` 六份原件补齐先前仅有账本和 worker argv 的缺口。包括 train、verify、paired 的剩余原件便于和旧记录互校。结果仍采用原先的失败和实际成功尝试。从两个正式 plan 的同一 `runner_sha256` 恢复并保存了 [两套 Beauty 共享的实际 runner 源码](../../lc_rec/evidence/repository-delivery-20261120/execution-source/runner-beauty.py)。
 - Instruments A0/A1 的两个 Normal 原逐用户 CSV/NPZ 已按历史 paired 的原始摘要核对并补入 [原件清单](../../lc_rec/evidence/repository-delivery-20261120/normal-output-origin.json)。A0/A1 Shuffle treatment 矩阵、Beauty 三条件合并矩阵、G3 三条件的原 CSV/NPZ 继续各归其原结果入口。四路线的研究数据提供逐用户点估计和配对不确定性复核。
 - 用 [复核程序](../../lc_rec/evidence/repository-delivery-20261120/verify_saved_metrics.py) 重算 12 个条件的 16 项点估计、8 个同轴配对的均差，并从已保存的各 5,000×16 抽样均差重新提取线性区间。[实际输出](../../lc_rec/evidence/repository-delivery-20261120/verified-saved-metrics.json)。此过程在 WSL 以 NumPy 1.26.4 读取保存结果，核 row_idx 连续、用户轴摘要、数值和维度，未重新抽样和生成。
-- 审核包的 LC-Rec 原预测卷按冻结 manifest 保存稳定预测；将对应 `.jsonl.gz` 解压为 evaluator 预期的 `predictions.rank0.jsonl`、`predictions.rank1.jsonl`，按每个原 manifest 所列 rank 安放。本轮的 [原预测复核程序](../../lc_rec/evidence/repository-delivery-20261120/verify_raw_predictions.py) 可直接读取 21 份 gzip 原件，以各域的固定 index/inter 核对 282,810 条预测的用户、目标、排序与候选相关性，复算 4,524,960 个逐用户指标值。另用冻结 evaluator 正式复算时按其原输出目录契约准备数据。原预测卷的入口由本轮发布回执补充。[本轮原预测复核输出](../../lc_rec/evidence/repository-delivery-20261120/verified-raw-predictions.json)
+- 归档的全候选历史预测用单包的 `compact/letter/` 审查，覆盖 12 个条件、282,810 条预测及 4,524,960 个逐用户指标值。NPZ 可恢复各分片解析后的全部 JSON 结构和值，包括原始解码文字、候选 token、排序分数与输入证据。原 JSONL 文件字节和 gzip 压缩字节的身份见该目录清单。原预测复核的代码与结果继续提供历史核对。[原预测复核程序](../../lc_rec/evidence/repository-delivery-20261120/verify_raw_predictions.py) · [原复核输出](../../lc_rec/evidence/repository-delivery-20261120/verified-raw-predictions.json)
+
+## 从已保存输出复算
+
+从现行 Release 下载单文件审核包 `GRID-Repository-Closeout-v1.5-20261121.zip`，核对同处的包外 SHA-256。旧公开审核卷已撤下，上一轮已清理本地 05/06/07 卷文件。原实验 JSONL 保存在各阶段服务器路径。需要原序列化文件时，从包内 `compact/letter/manifest.json` 查到条件、rank、`server_path` 和原字节 `sha256`，由有权限的账户只读取回并按原摘要核对。包内直接复算使用 NPZ。[现行下载入口](https://github.com/woobowen/recommend/releases/tag/grid-repository-closeout-2026-11-21)
+
+在已下载 ZIP 的目录执行以下命令。使用 Python 3.12.3 与 NumPy 1.26.4。工作目录和结果文件由 `mktemp` 单独创建。
+
+```bash
+work=$(mktemp -d)
+unzip -q GRID-Repository-Closeout-v1.5-20261121.zip -d "$work/input"
+cd "$work/input"
+python3 -B tools/restore_aliases.py . repository/wbw-lc-rec/
+python3 -B tools/restore_aliases.py . compact/letter/
+python3 -B compact/letter/audit_compact_predictions.py \
+  --repo repository/wbw-lc-rec --members compact/letter > "$work/letter-audit.json"
+```
+
+`letter-audit.json` 的 `status=PASS` 表示 12 条件的所有 16 项逐用户值、候选诊断、固定 V1 置换和 8 组相对 Normal 的配对在该范围内与冻结结果相符。审查某个具体用户的原候选、模型输入和顺序可直接用包内 `compact/letter/README.md` 的逐行示例。该复核从已保存输出开始。
+
+## 原 LC-Rec 六任务定向收尾
+
+2026-11-21 从原服务器目录核对作者 Instruments ZIP 和六个输入文件的 SHA-256，并从原始 interaction 和辅助数据逐用户核对两种历史配对。ItemSearch 直接使用 `user_vague_intention.train` 的 `item`、`inters`、`querys` 和相应 explicit preference。训练辅助 `item/inters` 与 `inter[-3]/inter[:-3]` 不配对 12,233／24,772，测试与 `inter[-1]/inter[:-1]` 不配对 7,473／24,772。训练辅助 target 有 3,608 条等于当前 validation target、1,623 条等于当前 test target，实际最近 20 个可见历史中 1,623 条出现当前 validation 物品。PreferenceObtain 的历史来自当前 `inter[:-3]`，监督文本取作者 `user_explicit_preference`。24,772 人的偏好条目存在，原提示、评论上下文、生成时间与取数分割尚需作者证明。观察只涉及给定数据配对，论文历史采用何种生成上下文仍未知。
+
+`item2id`、metadata、作者 LC-Rec `index` 及 interaction 的物品集合一致，覆盖 9,922 个 item 和 9,897 个 canonical SID，其中 23 个碰撞组。与 LETTER 同域的 `inter`／`item` 原字节相同，SID `index` 不同。原件和来源核对、全 24,772 人的内部数值 ID 投影、可独立运行的配对程序放在本轮证据目录。包内 `compact/workload/` 是 221,225 条声明字段的全行投影。逐样本随机选择和两个文本摘要可查冻结 `records.jsonl.gz`；实际文本及掩码沿保存的诊断样本、作者辅助原件核对，覆盖范围以各原记录为准。 [原资产、配对结果与证据](../../lc_rec/evidence/repository-final-closeout-20261121/SIX_TASK_HISTORY.md)
+
+原 full-parameter ZeRO-3 双卡无 offload 的两组 FP32 Adam moments 下限为每卡 25.1309 GiB，高于实际每卡 23.9883 GiB。该数字是由参数数目与两卡分片推导的静态下限。后续变更执行方式的 offload 和 LoRA 仅完成各自有界工程预跑。LoRA 的双卡 micro2、累积 32 的有界 path 经 GPU 计算与更新验证，micro4/micro8 长尾 OOM 记录完整保留；可信正式六任务训练仍需与当前 split 同源的逐用户辅助原件、辅助生成上下文证明以及经批准并核查的资源方案。 [原六任务技术审核](../../lc_rec/six_task_lora/REVIEW_ENTRY.md)
+
+六任务混合组 CE 权重的 14 个末位差归因于 Python 浮点 `sum` 实现的版本差异。原 Python 3.10.22 与本地 3.11.14 的内置 `sum` 逐字段与历史原值相同，Python 3.12.3 与上一轮整理值相同。两端使用完全相同的已保存浮点权重，未加载 NumPy；旧报告中的 NumPy 版本是环境记录。最大绝对差为 `2.220446049250313e-16`，两个值和原始报告均保留。 [因果核对、原值及命令](../../lc_rec/evidence/repository-final-closeout-20261121/CE_SUM_CORRECTION.md)
 
 ## 四种复现起点
 
 | 起点 | 本分支的起始材料及本次验证 |
 |---|---|
-| 保存输出 | 上表原结果、矩阵、抽样与 CPU 复核入口可核点估计和区间。逐候选重算用原预测结合相应冻结 evaluator，G3 的历史主作业从原预测复算，另有独立非作者读取原件复核。本轮矩阵复核覆盖如上。 |
+| 保存输出 | 上表原结果、矩阵、抽样与 CPU 复核入口可核点估计和区间。逐候选检查从单包 `compact/letter/` 以冻结数据和报告复核，G3 的历史主作业从原预测复算，另有独立非作者读取原件复核。 |
 | 固定 checkpoint 评价 | 按每个正式 RUN 的 manifest，模型取绑定的 Hugging Face revision 与许可范围，再由获准访问 `new-server` 的账号取评估输入和最佳 adapter。Instruments 冻结数据在 `lc_rec/letter/vendor/LETTER/data/Instruments/`，各阶段 source-root、python、data-root 和实际 `argv` 在该工序 request。Beauty 取 [固定作者资产](../../lc_rec/evidence/repository-delivery-20261120/letter-beauty-author/Beauty/)；G3 用同样的 inter/item 与 [转换 index](../../lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/Beauty.g3.index.json)。没有独立服务器访问的复核者可使用审核包内读取所需的结果材料；重新生成仍需权重与环境。 |
 | 重跑约定实验 | 取得固定 source export、工作资产、环境及阶段 plan，按各实际实验从训练、best adapter 复核到生成、评价、配对逐步使用保存脚本。Forensics 复核和预跑的 restore probes 与真实训练是不同任务。当前历史六任务辅助配对失败，原始全参范围未达到准备门槛；不以公开论文候选填实际运行记录。 |
 | 重建上游资产 | Instruments 原 LC-Rec 与 LETTER 发布资产来自固定作者版本，缺少可唯一绑定历史 embedding/量化和若干生成链，正式结论限定于给定发布资产。G3 有源上游 Qwen → RQ-KMeans 的身份和转换审计，但本轮未重建 embedding、SID、量化或任一训练。 |
