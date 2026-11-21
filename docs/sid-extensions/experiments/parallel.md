@@ -6,6 +6,8 @@
 
 真实非自回归算法状态：`NOT_RECOVERED`。后续设计状态：`RECONSTRUCTION_PENDING_USER_DISCUSSION`。本阶段没有创建 Parallel 类、空壳或论文移植，也没有将文件改名后冒充新实现。
 
+2026-11-21 复查了历史 Git 中曾删除的同名文件、A800 正式保全及 new-server 上两个独立位置。逐项证据、运行区分和需索取的原件见[历史来源复核](../../delivery/2026-11-20/HISTORICAL_SOURCES.md#parallel)。现有可读的推理源码都无法建立所需非自回归生产链。
+
 ## 已知链与缺失链
 
 `SOURCE_FACT`：已知普通 baseline 的入口/config/item→SID/offset/共享embedding/encoder/AR decoder/loss/beam/evaluator见 [总图](../CODE_READING_GUIDE.md)。现存 parallel 文件只能沿 shuffle 的双表、hook、encoder向量重排、AR生成和attention路径解释。其输入输出仍可按该文件的 `[B,L]`→encoder→逐码位生成 `[B,K,H]` 静态追踪，不能作为非AR流程图。

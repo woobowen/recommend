@@ -6,6 +6,8 @@
 
 `SOURCE_FACT`：baseline 的真实命令/配置入口、item→SID→offset→共享表→encoder/decoder→loss/generate→evaluator 见 [总图](../CODE_READING_GUIDE.md)。原件没有可确认的当前即用 MLP experiment 模板；已恢复 `logs/train/runs/2025-10-22/21-25-31/.hydra/` 作为历史配置上下文，不能按 hparams 或路径反推它唯一执行了当前 MLP Python。
 
+2026-11-21 复核了 Toys 正式任务的实际源码、配置、SID 与测试收据，以及历史 encoder 线索和来源边界。见[历史来源复核](../../delivery/2026-11-20/HISTORICAL_SOURCES.md#toys-mlp)。
+
 ## 逐段对照
 
 |正文位置|实际变化|性质|

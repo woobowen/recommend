@@ -28,13 +28,15 @@ Toys/Sports B 的旧报告将 A 列为当时受阻。后续独立作业已经完
 
 - 实验前从各 `manifests` 的 approvals／asset-audit／prelaunch 读学长或用户批准内容、配置与预跑。原技术准入由对应作业输出证明，说明中的旧日期保留。
 - 实验中沿原 job 的状态、工作日志、观察与 attempt 关联追踪。GRID 正式评测和 attention 的 job 保存于 `/home/bwwu/grid-audits/sid-extensions-p0/jobs/<job_id>/`。A2 的实际部署 commit 是 `85b77f5e2a5b497fdc1f620649ba488fc783a245`，快照 SHA-256 是 `22286966cd544773f21b96e4185d56c66afd7183fdc4e8888716d8ea1d77acb2`。
-- 实验后比对原 `RESULT.json`、保留的预测与注意力、终态和独立核查。以上报告给出实际运行范围、未提交模板、被替代尝试和结论限制。当前整理复核的输出见[本轮交付](../delivery/2026-11-20/)。
+- 实验后比对原 `RESULT.json`、保留的预测与注意力、终态和独立核查。以上报告给出实际运行范围、未提交模板、被替代尝试和结论限制。上一轮及收尾复核的输出见[仓库交付](../delivery/2026-11-20/)。
 
 | 起点 | 可取得材料与本轮验证 |
 |---|---|
-| 保存输出复算 | 审核包的 GRID 原始输出卷提供逐行预测、原始 attention record/NPZ 和对应汇总源码。报告中的候选覆盖、指标表和 fixed32 核对限定在记录明示的范围。以一次已验收 run 为汇总单位，失败历史单列。 |
+| 保存输出复算 | 从[单一审核 ZIP 与可运行命令](../delivery/2026-11-20/REPLAY.md)进入。ZIP 的 `compact/grid/` 可逐字节恢复 27 份对应原预测 JSONL，并用同包源码复算排名指标。`grid/attention/` 提供原 record/NPZ 和对应汇总输入，覆盖按 fixed32 指标范围解释。以一次已验收 run 为汇总单位，失败历史单列。 |
 | 固定 checkpoint 重评 | 每次运行中的 checkpoint、数据、SID、有效 Hydra 配置和 SHA 见上表。具备项目 SSH 权限的复现者可在作业目录内读取 request 与 status，从其实际 cwd 使用原 `argv` 和解释器重建独立复现环境。外置原件需要授权账号或由保管人交付。此轮未执行固定权重重评。 |
 | 重跑约定流程 | 从当次 snapshot 和 request 开始，按原 stage 顺序组织数据、训练、best 选择、评测和采集。共享环境、精度和 GPU 绑定见原记录。Sports A2 用新 11 阶段关系，旧量化失败与未运行模板保留；Toys 上游来源未决和历史环境边界仍有影响。 |
 | 重建上游 | 工作基线的 Qwen 权重、上游数据、embedding、SID 及其他大文件按原清单定位。Git LFS 应按清单 OID 从有权限的 endpoint 取得真实载荷，Qwen 分片按 README 校验合并。历史作者资产继续采用已保全原件；从源重建无法替代未确认的历史 producer。此轮实际执行保存输出复算，固定权重重评、训练流程重跑和上游重建均未执行。 |
+
+2026-11-21 收尾定向检查了[历史原件、范围与取得条件](../delivery/2026-11-20/HISTORICAL_SOURCES.md)。最早工作 baseline 的汇总 CSV 可复核，逐用户预测仍待原保管方提供。Toys MLP 的正式下游输入和结果已绑定，唯一历史上游 producer 仍待确认。
 
 SSH 获取前先确认授权和文件身份。仓库只需发布可共享材料。A800 完整原件继续在 `/data/bwwu/archives/wmh-a800-audit-20261010` 保存，工作资产在 `/data/bwwu/sid-extensions-assets/563dc50b1c7e`。在冻结 export 及活动作业之外检出和复查。

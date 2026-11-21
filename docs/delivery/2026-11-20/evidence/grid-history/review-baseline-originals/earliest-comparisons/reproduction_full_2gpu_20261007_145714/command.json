@@ -1,0 +1,21 @@
+[
+  "/data/bwwu/envs/tiger/bin/python",
+  "-m",
+  "src.train",
+  "experiment=tiger_train_flat",
+  "data_dir=/data/bwwu/amazon_data/beauty",
+  "semantic_id_path=artifacts/beauty/semantic_ids.pt",
+  "num_hierarchies=5",
+  "seed=42",
+  "train=true",
+  "test=false",
+  "trainer.accelerator=gpu",
+  "trainer.devices=2",
+  "trainer.accumulate_grad_batches=24",
+  "trainer.val_check_interval=2400",
+  "data_loading.train_dataloader_config.dataloader.batch_size_per_device=32",
+  "paths.root_dir=/home/bwwu/recommend/GRID",
+  "paths.data_dir=/data/bwwu/amazon_data/beauty",
+  "hydra.run.dir=/home/bwwu/recommend/GRID/experiments/reproduction_full_2gpu_20261007_145714",
+  "++should_skip_retry=True"
+]

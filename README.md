@@ -1,6 +1,6 @@
 # recommend
 
-本分支维护 GRID/TIGER 实验及对应历史产物。阅读[实验、执行证据与复现入口](docs/sid-extensions/EXPERIMENTS_AND_REPRODUCTION.md)，或查阅[本轮仓库交付](docs/delivery/2026-11-20/)与[现行协作规范](AGENTS.md)。
+本分支维护 GRID/TIGER 实验及对应历史产物。阅读[实验、执行证据与复现入口](docs/sid-extensions/EXPERIMENTS_AND_REPRODUCTION.md)，或查阅[仓库收尾、审核 ZIP 与复算](docs/delivery/2026-11-20/)与[现行协作规范](AGENTS.md)。
 
 
 - [GRID baseline](GRID%20baseline/README.md)：本次 Qwen → RQ-KMeans → 学长 TIGER 基线的代码、完整数据、模型权重传输分片、向量、SID、checkpoint 和历史输出。
