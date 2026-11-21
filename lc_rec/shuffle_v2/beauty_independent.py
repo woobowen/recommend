@@ -44,7 +44,7 @@ def launch(connection, config, control_commit, mode, attempt, run_commit):
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument('mode', choices=tuple(TIMEOUT))
-    parser.add_argument('--attempt', default='r0', choices=('r0', 'r1', 'r2', 'r3'))
+    parser.add_argument('--attempt', default='r0', type=beauty_control.attempt_id)
     parser.add_argument('--control-commit', default='HEAD')
     parser.add_argument('--run-commit')
     args = parser.parse_args()
@@ -53,7 +53,7 @@ def main():
         assert args.run_commit and beauty_control.commit_ref(args.run_commit) == args.run_commit
         subprocess.run(['git', 'merge-base', '--is-ancestor', args.run_commit, commit], cwd=control.REPO, check=True)
     config = json.loads(beauty.CONFIG.read_text())
-    print(json.dumps(launch(control.connect(), config, commit, args.mode, args.attempt, args.run_commit), indent=2))
+    print(json.dumps(launch(beauty_control.connect(beauty_control.runner_sha_at(commit)), config, commit, args.mode, args.attempt, args.run_commit), indent=2))
 
 
 if __name__ == '__main__':
