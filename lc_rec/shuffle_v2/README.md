@@ -28,3 +28,6 @@
 - 后置。此快照尚无单条件终态、四条件配对或研究结论。后续只用原 ID 查询，位置为 `/home/bwwu/grid-audits/sid-extensions-p0/jobs/<job_id>/`。保留现场 controller 与其阶段原件。编排依赖的 [实际 runner 原件](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/runner-a1-96h-1fefc09a15c1cb73.py) 已按计划 SHA 恢复。父作业的计划、CPU、GPU 与收尾状态参照 [启动记录](../shuffle/results/v2-a0-instruments/launch-observation-20261120/README.md)。
 
 保存输出复查当前可从 CPU 原件、完整 Normal 和 32 用户每模式预跑开始。新四条件的全量原预测、评价与配对需等待其实际终态。固定 checkpoint 复评需原 LETTER 资产、冻结 base 与 adapter、上述导出、配套 evaluator 和 interpreter，资产取得需要相应授权。重跑本实验从同一 checkpoint 产生四种干预测试，不包含重训；本轮整理未启动重复运行。上游数据和 SID 采用固定 LETTER 发布资产，未执行 Qwen embedding 或量化重建。
+
+
+2026-11-21T06:12:43Z 的[原作业回查](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/observation-20261121.json)记录 S2 与 S3a 的生成和评价子作业 exit 0，父作业和 S3b 生成仍在运行。该次按实际状态归档，完整系列指标及配对结论仍以原作业终态为准。
