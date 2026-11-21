@@ -16,7 +16,7 @@ LETTER Shuffle V1 排除恒等排列。V2 有单独研究分支和运行记录�
 
 ## 四种复现起点
 
-1. **保存输出复算。** `checks/validate.py` 对照旧 21 条固定结果和表值。GRID 额外 12 条有原始预测和汇总依据，收录于 GRID 审核卷。LETTER 依对应分支的原评价矩阵及脚本复查，当前条件覆盖见其交付记录。
+1. **保存输出复算。** `checks/validate.py` 对照旧 21 条固定结果和表值。GRID 额外 12 条有原始预测和汇总依据，随[现行单一审核 ZIP 和复算命令](https://github.com/woobowen/recommend/blob/wbw-grid/docs/delivery/2026-11-20/REPLAY.md)提供。GRID 可恢复原 JSONL 字节，LETTER/G3 可恢复全部已解析字段和值，二者的原始序列化身份和原件取得方法见同一入口。
 2. **固定 checkpoint 重评。** 以各场运行的固定请求、权重、数据、SID 和 tokenizer 重建执行环境，推理和评价沿各自书面协议。外置载荷由获授权的项目参与者按原记录取得，本轮未运行。
 3. **重跑约定流程。** 按真实 commit、有效配置、解释器和命令恢复原流程。沿已获验收的 attempt 追溯，失败及独立补算保留各自身份，本轮未训练。
 4. **重建上游。** GRID 的 Qwen 工作资产、历史作者 T5／SID 和 LETTER 作者 index／交互及模型来源各自保存。未知的历史 producer、真正非自回归 Parallel 实现及外置访问条件仍有复现影响。

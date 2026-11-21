@@ -1,11 +1,11 @@
 # SID 顺序扰动：研究导航
 
-这里组织同一个问题：在固定一条路线的模型和输入资产下，改变每个历史物品内部 Semantic ID（SID）码位的顺序，观察推荐输出。先读 [GRID 实现与结果](GRID.md) 或 [LETTER-LC-Rec 实现与结果](LETTER.md)，需要追踪具体运行时读 [21 条条件来源映射](sources.json)。这些链接是阅读入口；历史训练/生成仍由固定 commit 与原 request 定位。
+这里组织同一个问题：在固定一条路线的模型和输入资产下，改变每个历史物品内部 Semantic ID（SID）码位的顺序，观察推荐输出。先读 [GRID 实现与结果](GRID.md) 或 [LETTER-LC-Rec 实现与结果](LETTER.md)，需要追踪具体运行时读 [21 条条件来源映射](sources.json)。历史训练和生成由固定 commit 与原 request 定位。保存结果、整包下载和 CPU 命令见[现行交付入口](https://github.com/woobowen/recommend/tree/wbw-grid/docs/delivery/2026-11-20)。
 
 | 实现 | 数据域 | 条件 | 状态 |
 |---|---|---|---|
 | GRID A、GRID B | Beauty | 各 Normal、S3、S4 | 六组正式测试 |
-| GRID B | Toys、Sports | 各 Normal、S3、S4 | 六组正式测试；Toys A 来源未决、Sports A 配套缺失 |
+| GRID B | Toys、Sports | 各 Normal、S3、S4 | B 路线六组正式测试；A 路线的后续正式结果见下方主题补证 |
 | LETTER A0（LLaMA-7B）、A1（Qwen3-0.6B） | Instruments | 各 Normal、S3、S4 | 六组正式生成与评价 |
 | LETTER A0 | Beauty | Normal、S3、S4 | 正式生成；原 paired 超时，S4 独立补充统计完成 |
 
