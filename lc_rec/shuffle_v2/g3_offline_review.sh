@@ -27,11 +27,12 @@ mkdir -- "$output"
 "$python" -m lc_rec.shuffle_v2.g3_evaluate normal \
     --data-root "$data_root" --test-dir "$normal_test" --output "$output/normal"
 
+derived_source="$1/derived.rank0.py"
 eval_roots=()
 for mode in shuffle2 shuffle3a shuffle3b shuffle4; do
     "$python" -m lc_rec.shuffle_v2.g3_evaluate condition \
         --data-root "$data_root" --test-dir "$1" --cpu-audit "$cpu_audit" \
-        --mode "$mode" --scope PREFLIGHT --run-commit "$run_commit" --output "$output/$mode"
+        --derived-source "$derived_source" --mode "$mode" --scope PREFLIGHT --run-commit "$run_commit" --output "$output/$mode"
     eval_roots+=("$output/$mode")
     shift
 done

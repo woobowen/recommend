@@ -223,7 +223,7 @@ def assess(target, config, commit, gpu_commit, attempt, replay, normal):
         require_success(target, gpu)
         test = f'{ROOT}/{gpu}'
         inputs = [{'path': f'{test}/{file}', 'sha256': control.remote_hash(target, f'{test}/{file}')}
-                  for file in ('rank0.json', 'v2-binding.rank0.json', 'metrics.json', 'predictions.rank0.jsonl')]
+                  for file in ('rank0.json', 'v2-binding.rank0.json', 'derived.rank0.py', 'metrics.json', 'predictions.rank0.jsonl')]
         payload = evaluation_request(target, config, commit, 'PREFLIGHT', mode, attempt, files, inputs)
         payload['argv'][payload['argv'].index('--run-commit') + 1] = gpu_commit
         launch(target, payload)
@@ -231,7 +231,14 @@ def assess(target, config, commit, gpu_commit, attempt, replay, normal):
         name = f'cpu-eval-{mode}-{attempt}'
         wait_terminal(target, name)
         require_success(target, name)
-    payload = paired_request(target, config, commit, 'PREFLIGHT', attempt, normal)
+    paired_inputs = []
+    sources = [(normal, 'normal_preflight.jsonl')]
+    sources += [(f'cpu-eval-{mode}-{attempt}', 'natural_identity.jsonl') for mode in core.MODES]
+    for name, raw in sources:
+        for member in ('summary.json', 'primary/per_user.csv', 'primary/per_user_metrics.npz', raw):
+            path = f'{ROOT}/{name}/{member}'
+            paired_inputs.append({'path': path, 'sha256': control.remote_hash(target, path)})
+    payload = paired_request(target, config, commit, 'PREFLIGHT', attempt, normal, paired_inputs)
     launch(target, payload)
     name = payload['job_id'].removeprefix(PREFIX)
     wait_terminal(target, name)

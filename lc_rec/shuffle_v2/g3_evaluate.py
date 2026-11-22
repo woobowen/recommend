@@ -296,7 +296,7 @@ def rank_and_stage(args, fixed, assignment):
                 and binding['frozen_source_sha256'] == original['entry_sha256']
                 and binding['cpu_audit_sha256'] == hashlib.sha256(args.cpu_audit.read_bytes()).hexdigest()
                 and binding['cpu_manifest_sha256'] == rank['v2_cpu']['manifest_sha256']
-                and hashlib.sha256((args.test_dir / 'derived.rank0.py').read_bytes()).hexdigest() == binding['derived_sha256'],
+                and hashlib.sha256((args.derived_source or (args.test_dir / 'derived.rank0.py')).read_bytes()).hexdigest() == binding['derived_sha256'],
                 'V2 immutable source / asset / CPU manifest binding')
         require(rank['MODEL_TRAINING_COMMIT'] == TRAINING_COMMIT and rank['conditions'] == [args.mode]
                 and rank['normal_off_same_process_exact'] == [], 'V2 rank training identity or condition set')
@@ -645,6 +645,7 @@ def main():
     condition = commands.add_parser('condition', parents=[common], allow_abbrev=False)
     for field in ('data-root', 'test-dir', 'cpu-audit'):
         condition.add_argument('--' + field, type=Path, required=True)
+    condition.add_argument('--derived-source', type=Path)
     condition.add_argument('--scope', choices=('PREFLIGHT', 'FORMAL'), required=True)
     condition.add_argument('--mode', choices=tuple(core.MODES), required=True)
     condition.add_argument('--run-commit', required=True)

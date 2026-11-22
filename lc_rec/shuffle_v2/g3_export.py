@@ -58,7 +58,7 @@ def export(args):
                 if path.name in ('derived.rank0.py', 'derived.rank0.diff') and step.startswith('gpu-preflight-'):
                     first = DATA_ROOT / f'gpu-preflight-shuffle2-{args.preflight_attempt}' / path.name
                     assert g3_assets.sha(first) == g3_assets.sha(path)
-                    if root != first.parent and path.suffix == '.diff':
+                    if root != first.parent:
                         continue
                 add(path, f'remote/{step}/{path.relative_to(root)}')
     add(DATA_ROOT / 'cpu-lifecycle-review-r0.json', 'remote/cpu-lifecycle-review-r0.json')
