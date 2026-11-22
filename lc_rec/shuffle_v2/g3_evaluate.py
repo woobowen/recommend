@@ -135,8 +135,8 @@ def verify_v2_input(row, cpu_row, mode, manifest_digest, history, item_tokens):
     positions = list(range(len(actual)))
     beams = independent.BEAMS
     require((prefill['input_ids'], prefill['attention_mask'], prefill['position_ids'],
-             prefill['initial_cache_length'], prefill['beam_expansion']) ==
-            (actual, mask, positions, 0, beams), 'Native decoder prefill boundary')
+             prefill['initial_cache_length'], prefill['beam_expansion'], prefill['effective_use_cache']) ==
+            (actual, mask, positions, 0, beams, True), 'Native decoder prefill boundary')
     for key, values in (('input', actual), ('mask', mask), ('position', positions)):
         require(prefill[f'all_beam_{key}_sha256'] == core.canonical_sha256([values] * beams),
                 f'Native decoder {key} differs across beams')
@@ -148,7 +148,8 @@ def verify_v2_input(row, cpu_row, mode, manifest_digest, history, item_tokens):
     expected_kwargs = {'max_new_tokens': 10, 'num_beams': beams, 'num_return_sequences': beams,
                        'output_scores': True, 'return_dict_in_generate': True, 'early_stopping': True}
     defaults = {'do_sample': False, 'use_cache': True, 'pad_token_id': 0, 'eos_token_id': 2}
-    require(generation['kwargs'] == expected_kwargs and generation['effective'] == {**expected_kwargs, **defaults}
+    require(generation['native_score_dtype'] == 'torch.float32'
+            and generation['kwargs'] == expected_kwargs and generation['effective'] == {**expected_kwargs, **defaults}
             and all(generation['generation_config'][key] == value for key, value in defaults.items()),
             'Actual generation kwargs / native config')
     shuffle = row['shuffle']
@@ -184,6 +185,98 @@ def verify_v2_input(row, cpu_row, mode, manifest_digest, history, item_tokens):
     return original == actual
 
 
+def offline_replay(args):
+    """Verify every saved V2 history occurrence against its frozen raw input."""
+    started = time.monotonic()
+    meta = metadata(args.data_root)
+    audit, rows = bind_cpu(args.cpu_audit, meta)
+    selection = set(preflight_selection(args.preflight_users, meta))
+    fixed = normal_pins()['prediction_files']['normal']
+    normal_path = args.test_dir / 'predictions.rank0.jsonl'
+    before = independent.signature(normal_path.stat())
+    require(before[2] == fixed['bytes'], 'Original Normal payload size')
+    normal_hash, normal = hashlib.sha256(), {}
+    with normal_path.open('rb', buffering=1024 ** 2) as stream:
+        require(independent.signature(os.fstat(stream.fileno())) == before, 'Normal payload was replaced')
+        for raw in stream:
+            normal_hash.update(raw)
+            row = json.loads(raw)
+            idx = row['row_idx']
+            require(type(idx) is int and 0 <= idx < len(rows) and idx not in normal, 'Normal row coverage')
+            require(all(row[k] == rows[idx][k] for k in ('user_id', 'target', 'target_item_id')),
+                    'Original Normal row target pairing')
+            original, mask = row['original_input_token_ids'], row['attention_mask']
+            require(original == row['input_token_ids'] and row['condition'] == 'normal', 'Frozen Normal input')
+            normal[idx] = original, mask
+        require(independent.signature(os.fstat(stream.fileno())) == before, 'Normal payload changed during read')
+    require(len(normal) == len(rows) and independent.signature(normal_path.stat()) == before
+            and normal_hash.hexdigest() == fixed['sha256'] == audit['normal_sha256'], 'Original Normal content identity')
+
+    group_lengths = Counter()
+    streams = {mode: hashlib.sha256() for mode in core.MODES}
+    moves = {mode: [0] * 4 for mode in core.MODES}
+    frequencies = {mode: [0] * math.factorial(len(active)) for mode, active in core.MODES.items()}
+    unchanged_groups, unchanged_users = Counter(), Counter()
+    selected_identities = {mode: [] for mode in core.MODES}
+    for idx, cpu in enumerate(rows):
+        raw, mask = normal[idx]
+        require(len(raw) == len(mask) == cpu['encoded_length'] <= 2048 and all(value == 1 for value in mask)
+                and core.canonical_sha256(raw) == cpu['original_sha256']
+                and core.canonical_sha256(mask) == cpu['attention_mask_sha256'], f'Original Prompt0 input {idx}')
+        uid = meta['users'][idx]
+        history = [str(item) for item in meta['interactions'][uid][:-1][-20:]]
+        offsets = [i for i, token in enumerate(raw) if token in meta['symbol_by_id']]
+        require(len(offsets) == len(history) * 4 == len(cpu['groups']) * 4, f'SID history coverage {idx}')
+        group_lengths[len(history)] += 1
+        spans = [offsets[j:j + 4] for j in range(0, len(offsets), 4)]
+        for item, span, group in zip(history, spans, cpu['groups'], strict=True):
+            tokens = meta['item_tokens'][item]
+            require(span == list(range(span[0], span[0] + 4)) and group == [item, span, tokens]
+                    and [raw[i] for i in span] == tokens, f'Frozen SID history boundary {idx}')
+        for mode, active in core.MODES.items():
+            expected = raw.copy()
+            ids = []
+            for occurrence, (_, span, old_tokens) in enumerate(cpu['groups']):
+                pick, permutation, _ = reference.relative(len(active), idx, occurrence)
+                new_tokens = reference.remap(old_tokens, active, permutation)
+                for slot, (pos, old, new) in enumerate(zip(span, old_tokens, new_tokens, strict=True)):
+                    expected[pos] = new
+                    moves[mode][slot] += old != new
+                ids.append(pick)
+                frequencies[mode][pick] += 1
+                unchanged_groups[mode] += old_tokens == new_tokens
+            identity = expected == raw
+            if identity:
+                unchanged_users[mode] += 1
+                if idx in selection:
+                    selected_identities[mode].append(idx)
+            wanted = cpu['conditions'][mode]
+            require(wanted == {'input_sha256': core.canonical_sha256(expected),
+                               'input_changed': not identity, 'permutation_ids': ids},
+                    f'Independent offline V2 input differs: {mode} row {idx}')
+            streams[mode].update(core.canonical_bytes([idx, expected]) + b'\n')
+        require(cpu['conditions']['shuffle3a']['permutation_ids'] == cpu['conditions']['shuffle3b']['permutation_ids'],
+                f'S3a and S3b relative permutations differ at row {idx}')
+
+    groups = sum(length * count for length, count in group_lengths.items())
+    require(groups == audit['groups'] and {str(k): v for k, v in group_lengths.items()} == audit['history_lengths'],
+            'Full CPU history counts')
+    modes = {}
+    for mode in core.MODES:
+        modes[mode] = {'permutation_counts': frequencies[mode], 'identity_groups': unchanged_groups[mode],
+                       'identity_users': unchanged_users[mode], 'preflight_identity_rows': selected_identities[mode],
+                       'moved_ids_by_slot': moves[mode], 'inputs_sha256': streams[mode].hexdigest()}
+        require(all(audit['modes'][mode][key] == value for key, value in modes[mode].items()),
+                f'Independent offline aggregate differs: {mode}')
+    args.output.mkdir(parents=True)
+    JSON(args.output / 'summary.json', {
+        'status': 'PASS_G3_OFFLINE_INPUT_REPLAY', 'users': len(rows), 'groups_per_mode': groups,
+        'normal_prediction_sha256': fixed['sha256'], 'cpu_manifest_sha256': audit['manifest_sha256'],
+        'user_axis_sha256': audit['user_axis_sha256'], 'modes': modes, 'elapsed_seconds': time.monotonic() - started,
+        'source': 'Archived Normal Prompt0 token IDs and masks, frozen G3 data, independent V2 sampler',
+    })
+
+
 def rank_and_stage(args, fixed, assignment):
     normal = args.command == 'normal'
     archive_rank = args.archive / 'test/rank0.json' if normal else ARCHIVE / 'test/rank0.json'
@@ -201,6 +294,7 @@ def rank_and_stage(args, fixed, assignment):
                 and binding['scope'] == args.scope and binding['adapter_scope'] == 'FORMAL'
                 and binding['MODEL_TRAINING_COMMIT'] == TRAINING_COMMIT
                 and binding['frozen_source_sha256'] == original['entry_sha256']
+                and binding['cpu_audit_sha256'] == hashlib.sha256(args.cpu_audit.read_bytes()).hexdigest()
                 and binding['cpu_manifest_sha256'] == rank['v2_cpu']['manifest_sha256']
                 and hashlib.sha256((args.test_dir / 'derived.rank0.py').read_bytes()).hexdigest() == binding['derived_sha256'],
                 'V2 immutable source / asset / CPU manifest binding')
@@ -226,6 +320,7 @@ def rank_and_stage(args, fixed, assignment):
     require({k: v['sha256'] for k, v in rank['data_identity'].items()} == g3_identity.ASSETS, 'G3 rank data identity')
     require((stage['status'], stage['scope'], stage['world_size'], stage['actual_test_users'], stage['RUN_COMMIT'])
             == ('PASS', scope, 1, count, args.run_commit) and len(stage['prediction_files']) == 1
+            and stage['test_complete'] == (scope == 'FORMAL') and stage['preflight_only'] == (scope == 'PREFLIGHT')
             and stage['all_row_indices_exactly_once'] is True, 'Single-rank stage coverage and source')
     if normal:
         receipt = stage['prediction_files'][0]
@@ -371,15 +466,12 @@ def evaluate(args):
                'collision_groups': sum(v > 1 for v in meta['sizes'].values()), 'official_cce_rows': count,
                'metrics': means, 'sid_statistics': sid_stats, 'first_target_rank_users': histogram,
                'independent_metric_max_abs_difference': checks,
+               'per_user_files': {name: hashlib.sha256((primary / name).read_bytes()).hexdigest()
+                                  for name in ('per_user.csv', 'per_user_metrics.npz')},
                'generation_seconds': {'sum': math.fsum(records[i]['generation_seconds'] for i in axis),
                                       'mean': math.fsum(records[i]['generation_seconds'] for i in axis) / count},
                'natural_identity_rows': natural}
     if normal:
-        result = {'matrix': matrix, 'per_user_fields': [tuple(str(records[i][k]) for k in independent.PAIR_FIELDS)
-                                                        for i in axis],
-                  'first_ranks': [records[i]['first_target_rank'] for i in axis],
-                  'generation_seconds': [records[i]['generation_seconds'] for i in axis],
-                  'sid_statistics': sid_stats, 'histogram': histogram}
         archive_primary = args.archive / 'primary'
         metrics_info = next(r for r in fixed['prior_metric_files']['normal'] if Path(r['path']).name == 'metrics.json')
         original = json.loads(pinned(archive_primary / 'metrics.json', metrics_info['sha256']))
@@ -387,7 +479,7 @@ def evaluate(args):
         # the fixed artifact names under the caller's verified archive root.
         original['per_user_files'] = [{**row, 'path': str(archive_primary / Path(row['path']).name)}
                                       for row in original['per_user_files']]
-        compare_frozen_archive(archive_primary, original, result, primary, means)
+        compare_frozen_archive(archive_primary, original, primary, means, sid_stats, histogram)
         require(set(saved) == set(preflight), 'Missing current preflight row in frozen Normal')
         summary['frozen_archive_csv_npz_and_means_exact'] = True
     else:
@@ -403,9 +495,9 @@ def evaluate(args):
           flush=True)
 
 
-def compare_frozen_archive(archive, original, result, primary, means):
-    require(means == original['metrics'] and result['sid_statistics'] == original['sid_statistics']
-            and result['histogram'] == original['first_target_rank_users'], 'Archived full Normal means/diagnostics')
+def compare_frozen_archive(archive, original, primary, means, sid_stats, histogram):
+    require(means == original['metrics'] and sid_stats == original['sid_statistics']
+            and histogram == original['first_target_rank_users'], 'Archived full Normal means/diagnostics')
     receipts = {Path(r['path']).name: r['sha256'] for r in original['per_user_files']}
     require(pinned(archive / 'per_user.csv', receipts['per_user.csv']) == (primary / 'per_user.csv').read_bytes(),
             'Archived full Normal CSV differs')
@@ -422,6 +514,12 @@ def verified_matrix(root, expected_mode, scope, axis):
              summary['user_axis_sha256']) ==
             ('PASS_G3_V2_EVALUATION', expected_mode, scope, MODEL_SHA, independent.AXIS_SHA256), 'Evaluation result identity')
     primary = root / 'primary'
+    if expected_mode == 'normal':
+        pins = {Path(record['path']).name: record['sha256'] for record in normal_pins()['prior_metric_files']['normal']}
+        pinned(primary / 'per_user.csv', pins['per_user.csv'])
+    else:
+        for name in ('per_user.csv', 'per_user_metrics.npz'):
+            pinned(primary / name, summary['per_user_files'][name])
     with np.load(primary / 'per_user_metrics.npz', allow_pickle=False) as archive:
         values = archive['values']
         full_axis = list(range(independent.USERS)) if scope == 'FORMAL' else axis
@@ -494,7 +592,8 @@ def paired(args):
                'cpu_manifest_sha256': next(iter(cpu_hashes)), 'normal_prediction_sha256': normal_summary['prediction_sha256'],
                'bootstrap': {'rng': 'numpy Generator PCG64', 'seed': 20261113, 'replicates': 5000,
                              'replacement': True, 'shared_draws': True, 'percentiles': [2.5, 97.5],
-                             'method': 'linear', 'adjustment': None, 'draw_indices_sha256_little_endian': sample_hash},
+                             'method': 'linear', 'multiple_comparison_adjustment': False,
+                             'draw_indices_sha256_little_endian': sample_hash},
                'identity_vs_frozen_normal': identities_vs_normal}
     metric_table = {mode: {key: math.fsum(matrix[:, j]) / len(axis) for j, key in enumerate(KEYS)}
                     for mode, matrix in matrices.items()}
@@ -540,6 +639,9 @@ def main():
     normal.add_argument('--test-dir', type=Path, default=NORMAL_TEST)
     normal.add_argument('--archive', type=Path, default=ARCHIVE)
     normal.set_defaults(scope='FORMAL', mode='normal', run_commit=TRAINING_COMMIT)
+    offline = commands.add_parser('replay-verify', parents=[common], allow_abbrev=False)
+    for field in ('data-root', 'test-dir', 'cpu-audit'):
+        offline.add_argument('--' + field, type=Path, required=True)
     condition = commands.add_parser('condition', parents=[common], allow_abbrev=False)
     for field in ('data-root', 'test-dir', 'cpu-audit'):
         condition.add_argument('--' + field, type=Path, required=True)
@@ -555,6 +657,8 @@ def main():
     require(os.environ.get('CUDA_VISIBLE_DEVICES') == '', 'The CPU request must hide every CUDA device')
     if args.command == 'paired':
         paired(args)
+    elif args.command == 'replay-verify':
+        offline_replay(args)
     else:
         require(len(args.run_commit) == 40 and all(c in '0123456789abcdef' for c in args.run_commit),
                 'Full commit identity')

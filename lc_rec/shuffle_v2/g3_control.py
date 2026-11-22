@@ -195,7 +195,13 @@ def paired_request(target, config, commit, scope, attempt, normal, dependency_fi
 
 def preflight(target, config, commit, attempt, replay):
     files = cpu_gates(target, replay)
-    card, _ = beauty_control.device(target, config)
+    existing = sorted(SUPPORT.glob(f'{PREFIX}gpu-preflight-*-{attempt}.request.json'))
+    if existing:
+        cards = {g3_assets.read(path)['env']['CUDA_VISIBLE_DEVICES'] for path in existing}
+        card, = cards
+        assert card in config['gpus']
+    else:
+        card, _ = beauty_control.device(target, config)
     results = {}
     for mode in core.MODES:
         payload = generation_request(target, config, commit, 'PREFLIGHT', mode, attempt, card, files)

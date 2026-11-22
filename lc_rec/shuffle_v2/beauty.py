@@ -123,6 +123,8 @@ def main():
     parser.add_argument('--config', type=Path, default=CONFIG)
     parser.add_argument('--derived-only', action='store_true')
     options, remainder = parser.parse_known_args()
+    if options.variant == 'g3' and not options.derived_only:
+        parser.error('Use lc_rec.shuffle_v2.g3_generate for CPU-bound G3 inference')
     allowed = {'--source-root', '--data-root', '--model', '--adapter', '--output', '--max-seconds',
                '--minimum-disk-free-gib', '--minimum-host-free-gib', '--preflight-users-per-rank', '--preflight-manifest'}
     assert len(remainder) % 2 == 0 and set(remainder[::2]) <= allowed
