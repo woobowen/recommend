@@ -33,7 +33,7 @@ def child(output, ignore_term):
 
 def worker(args):
     assert os.environ.get('CUDA_VISIBLE_DEVICES') == ''
-    assert os.environ['GRID_JOB_ID'].startswith('letter-beauty-v2-cpu-lifecycle-')
+    assert os.environ['GRID_JOB_ID'].startswith(args.job_prefix + 'cpu-lifecycle-')
     args.output.mkdir(parents=True, exist_ok=False)
     parent = process_identity(os.getpid())
     write(args.output / 'worker.json', parent)
@@ -58,12 +58,12 @@ def worker(args):
     time.sleep(0.5)
 
 
-def review(job_root, output_root, attempt, runner_sha):
+def review(job_root, output_root, attempt, runner_sha, job_prefix='letter-beauty-v2-'):
     reports = {}
     for case, terminal in {'normal': 'SUCCEEDED', 'orphan': 'WORKERS_TERMINATED', 'timeout': 'TIMED_OUT',
                            'decoy': 'SUCCEEDED'}.items():
         name = f'cpu-lifecycle-{case}-{attempt}'
-        job = job_root / ('letter-beauty-v2-' + name)
+        job = job_root / (job_prefix + name)
         output = output_root / name
         status = json.loads((job / 'status.json').read_text())
         accepted = json.loads((job / 'accepted.json').read_text())
@@ -107,13 +107,14 @@ def main():
     parser.add_argument('--output-root', type=Path)
     parser.add_argument('--attempt')
     parser.add_argument('--runner-sha')
+    parser.add_argument('--job-prefix', choices=('letter-beauty-v2-', 'g3-beauty-v2-'), default='letter-beauty-v2-')
     args = parser.parse_args()
     if args.case == 'child':
         child(args.output, args.ignore_term)
     elif args.case:
         worker(args)
     else:
-        write(args.output, review(args.job_root, args.output_root, args.attempt, args.runner_sha))
+        write(args.output, review(args.job_root, args.output_root, args.attempt, args.runner_sha, args.job_prefix))
 
 
 if __name__ == '__main__':
