@@ -1,6 +1,6 @@
 # LETTER Beauty Shuffle V2 第二组
 
-**正式结果已完整验收，内部终审通过，待网页 GPT 二审。** 原作业依次完成 S2、S3a、S3b、S4 的全量生成和 16 项评价，并产出 80 项配对区间。 [第二组正式结果、终审与复现](final-r0/README.md) · [正式启动和七次观察历史](launch-observation-r0/README.md)
+**正式结果已通过网页 GPT 二审，状态为 `SECOND_GROUP_COMPLETE_WEB_REVIEW_PASS`。** 原作业依次完成 S2、S3a、S3b、S4 的全量生成和 16 项评价，并产出 80 项配对区间。 [第二组正式结果、终审与复现](final-r0/README.md) · [正式启动和七次观察历史](launch-observation-r0/README.md)
 
 ## 正式前准备历史
 

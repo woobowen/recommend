@@ -1,6 +1,8 @@
 # LETTER Beauty Shuffle V2 第二组正式结果
 
-**四项正式生成、四项 CPU 评价及五项配对全部完成，结果内部终审通过，待网页 GPT 二审。** 2026-11-22 现场查询确认原父作业 `letter-beauty-v2-group-series-r0`、四项 GPU 生成、四项评价和最终统计均退出 0，清收验证无存活 worker、监督进程或任务进程组。本次终审直接读取保存的原件。正式链全程使用 r0，无正式失败或重新提交，本轮新增 GPU 用量为 0。
+**网页 GPT 二审通过，状态为 `SECOND_GROUP_COMPLETE_WEB_REVIEW_PASS`。** 网页二审核对了已上传的完整 ZIP、全量输入、原始候选、评价、配对统计及 GitHub。[原正式结果提交 `6212bb302ff4f8db87232ca1e7993f411961eac9`](https://github.com/woobowen/recommend/blob/6212bb302ff4f8db87232ca1e7993f411961eac9/lc_rec/shuffle/results/v2-a0-beauty-letter/final-r0/README.md)
+
+四项正式生成、四项 CPU 评价及五项配对均已完成，内部终审通过。2026-11-22 现场查询确认原父作业 `letter-beauty-v2-group-series-r0`、四项 GPU 生成、四项评价和最终统计均退出 0，清收验证无存活 worker、监督进程或任务进程组。内部终审直接读取保存的原件。正式链全程使用 r0，无正式失败或重新提交，终审阶段新增 GPU 用量为 0。
 
 ## 冻结方案
 
@@ -12,7 +14,9 @@ V2 协议 `GRID-LETTER-SHUFFLE-V2`，`allow_identity`，Shuffle seed 42。用紧
 
 ## 正式执行和覆盖
 
-时间为 America/New_York。CPU 累计只计 worker，父监督时间单列。单卡为 RTX 4090 物理 1、逻辑 0，UUID `GPU-59cac3bd-3645-668b-79c8-839e0d878893`。每模式 PyTorch peak reserved 为 22,275,948,544 字节，实际 CUDA 环境与已审请求相同。正式 GPU 总计 58,842.743057 device-seconds（16.3452 小时），余 70,757.256943 秒（19.6548 小时），单项均在 8 小时内。正式四项 CPU 评价与配对共 178.763229 秒。含历史尝试和新独立统计复算，导出前 runner CPU 累计 797.137051 秒，预跑累计 648.991733 GPU-device-seconds。研究非作者全量读取服务器 wall time 31.692892 秒单列。最终归档导出实际用量随交付核算。
+时间为 America/New_York。CPU 累计只计 worker，父监督时间单列。单卡为 RTX 4090 物理 1、逻辑 0，UUID `GPU-59cac3bd-3645-668b-79c8-839e0d878893`。每模式 PyTorch peak reserved 为 22,275,948,544 字节，实际 CUDA 环境与已审请求相同。正式 GPU 总计 58,842.743057 device-seconds（16.3452 小时），余 70,757.256943 秒（19.6548 小时），单项均在 8 小时内。正式四项 CPU 评价与配对共 178.763229 秒。含历史尝试和独立统计复算，导出前 runner CPU 累计 797.137051 秒，预跑累计 648.991733 GPU-device-seconds。研究非作者全量读取服务器 wall time 31.692892 秒单列。
+
+原 `letter-beauty-v2-cpu-review-export-r1` 退出码为 0，清收通过。由服务器终态原件的起止时间核对，最终导出用时 181.413958 秒。导出后账本与服务器 19 个 CPU 作业逐项一致，累计 978.551009 秒。[导出后账本原件](final-ledger-after-export.json) · [退出回执原件](cpu-review-export-r1-status.json) · [清收回执原件](cpu-review-export-r1-cleanup.json)
 
 | 任务（均为 r0） | 开始 | 结束 | worker 秒 | 退出 |
 | --- | --- | --- | ---: | ---: |

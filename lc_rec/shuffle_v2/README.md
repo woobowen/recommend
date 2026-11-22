@@ -1,6 +1,6 @@
 # Instruments A0 允许恒等排列的 Shuffle V2
 
-`wbw-lc-rec-shuffle-v2` 将历史 LETTER V1 的干预扩展为包含恒等项的组内排列，研究同一固定模型及完整测试用户轴上不同码位扰动的结果。GitHub activity 在 2026-11-20T16:15:35Z 记录 `woobowen` 创建该研究分支，研究交付 `692cd94d6acd17292c2bdef7fabc6bb50ec9ba5d` 含启动和七次初始观察。整理前远端版本 `50507089981cb0b9d36e8977bd1d94cd9085f031` 属于之前的规范发布。分支继承 G3 Beauty 结束时的 V1 历史。Instruments A0 的正式系列已完成，原 LETTER Beauty 已进入正式系列。[仓库活动](https://github.com/woobowen/recommend/activity)
+`wbw-lc-rec-shuffle-v2` 将历史 LETTER V1 的干预扩展为包含恒等项的组内排列，研究同一固定模型及完整测试用户轴上不同码位扰动的结果。GitHub activity 在 2026-11-20T16:15:35Z 记录 `woobowen` 创建该研究分支，研究交付 `692cd94d6acd17292c2bdef7fabc6bb50ec9ba5d` 含启动和七次初始观察。整理前远端版本 `50507089981cb0b9d36e8977bd1d94cd9085f031` 属于之前的规范发布。分支继承 G3 Beauty 结束时的 V1 历史。Instruments A0 和原 LETTER Beauty 的正式系列均已完成。[仓库活动](https://github.com/woobowen/recommend/activity)
 
 ## 第一组正式结果
 
@@ -8,7 +8,7 @@
 
 ## 第二组 LETTER Beauty
 
-原 LETTER Beauty 的四项正式生成、四项 CPU 评价和五项配对已完成，内部终审通过，待网页 GPT 二审。每个条件覆盖 22,363 名用户。 [正式结果](../shuffle/results/v2-a0-beauty-letter/final-r0/README.md) · [第二组总入口](../shuffle/results/v2-a0-beauty-letter/README.md) · [正式启动观察历史](../shuffle/results/v2-a0-beauty-letter/launch-observation-r0/README.md)
+原 LETTER Beauty 的四项正式生成、四项 CPU 评价和五项配对已通过网页 GPT 二审，状态为 `SECOND_GROUP_COMPLETE_WEB_REVIEW_PASS`。每个条件覆盖 22,363 名用户。 [正式结果](../shuffle/results/v2-a0-beauty-letter/final-r0/README.md) · [第二组总入口](../shuffle/results/v2-a0-beauty-letter/README.md) · [正式启动观察历史](../shuffle/results/v2-a0-beauty-letter/launch-observation-r0/README.md)
 
 ## 历史只读观测
 
