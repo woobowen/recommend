@@ -138,9 +138,99 @@ def wait_terminal(target, name, timeout=1800):
         row = states.get(PREFIX + name, {})
         if row.get('ended_at'):
             return row
-        time.sleep(2)
+        time.sleep(5)
     raise TimeoutError('Query the existing job after a status timeout: ' + PREFIX + name)
 
+
+
+def require_success(target, name):
+    state = control.gridctl.query(target, PREFIX + name)
+    assert state['status'] == 'SUCCEEDED' and state['exit_code'] == 0, state
+    assert state['cleanup_verified'] and not state['workgroup_live'] and not state['worker_alive'], state
+    return state
+
+
+def cpu_gates(target, replay):
+    require_success(target, replay)
+    folder = f'{ROOT}/{replay}'
+    files = [{'path': f'{folder}/{name}', 'sha256': control.remote_hash(target, f'{folder}/{name}')}
+             for name in ('audit.json', 'inputs.jsonl')]
+    return files
+
+
+def generation_request(target, config, commit, scope, mode, attempt, card, cpu_files, authorization=None):
+    assert scope in ('PREFLIGHT', 'FORMAL') and mode in core.MODES
+    timeout = PREFLIGHT_MODE_TIMEOUT if scope == 'PREFLIGHT' else config['budget']['formal_condition_seconds'] - 15
+    name = f'gpu-{scope.lower()}-{mode}-{attempt}'
+    argv = ['--output', f'{ROOT}/{name}', '--cpu-audit', cpu_files[0]['path'], '--cpu-audit-sha256',
+            cpu_files[0]['sha256'], '--run-commit', commit, '--mode', mode, '--scope', scope,
+            '--max-seconds', str(timeout - 10)]
+    files = list(cpu_files)
+    if scope == 'FORMAL':
+        assert authorization
+        argv += ['--authorization', authorization['path'], '--authorization-sha256', authorization['sha256']]
+        files.append(authorization)
+    return request(target, config, commit, name, timeout, 'g3_generate', argv, card=card, inputs=files)
+
+
+def evaluation_request(target, config, commit, scope, mode, attempt, cpu_files, dependency_files=()):
+    phase = 'formal-' if scope == 'FORMAL' else ''
+    name = f'cpu-{phase}eval-{mode}-{attempt}'
+    test = f'{ROOT}/gpu-{scope.lower()}-{mode}-{attempt}'
+    args = ['condition', '--data-root', config['data_root'], '--test-dir', test,
+            '--cpu-audit', cpu_files[0]['path'], '--mode', mode, '--scope', scope,
+            '--run-commit', commit, '--output', f'{ROOT}/{name}']
+    return request(target, config, commit, name, 1200, 'g3_evaluate', args,
+                   inputs=[*cpu_files, *dependency_files])
+
+
+def paired_request(target, config, commit, scope, attempt, normal, dependency_files=()):
+    phase = 'formal-' if scope == 'FORMAL' else ''
+    name = f'cpu-{phase}paired-{attempt}'
+    args = ['paired', '--scope', scope, '--normal', f'{ROOT}/{normal}', '--condition-roots',
+            *(f'{ROOT}/cpu-{phase}eval-{mode}-{attempt}' for mode in core.MODES),
+            '--output', f'{ROOT}/{name}']
+    return request(target, config, commit, name, 2400, 'g3_evaluate', args, inputs=dependency_files)
+
+
+def preflight(target, config, commit, attempt, replay):
+    files = cpu_gates(target, replay)
+    card, _ = beauty_control.device(target, config)
+    results = {}
+    for mode in core.MODES:
+        payload = generation_request(target, config, commit, 'PREFLIGHT', mode, attempt, card, files)
+        name = payload['job_id'].removeprefix(PREFIX)
+        launch(target, payload)
+        state = wait_terminal(target, name)
+        print(json.dumps({'job_id': state['job_id'], 'status': state['status'],
+                          'exit_code': state['exit_code']}), flush=True)
+        require_success(target, name)
+        results[mode] = state['job_id']
+    return results
+
+
+def assess(target, config, commit, gpu_commit, attempt, replay, normal):
+    files = cpu_gates(target, replay)
+    require_success(target, normal)
+    for mode in core.MODES:
+        gpu = f'gpu-preflight-{mode}-{attempt}'
+        require_success(target, gpu)
+        test = f'{ROOT}/{gpu}'
+        inputs = [{'path': f'{test}/{file}', 'sha256': control.remote_hash(target, f'{test}/{file}')}
+                  for file in ('rank0.json', 'v2-binding.rank0.json', 'metrics.json', 'predictions.rank0.jsonl')]
+        payload = evaluation_request(target, config, commit, 'PREFLIGHT', mode, attempt, files, inputs)
+        payload['argv'][payload['argv'].index('--run-commit') + 1] = gpu_commit
+        launch(target, payload)
+    for mode in core.MODES:
+        name = f'cpu-eval-{mode}-{attempt}'
+        wait_terminal(target, name)
+        require_success(target, name)
+    payload = paired_request(target, config, commit, 'PREFLIGHT', attempt, normal)
+    launch(target, payload)
+    name = payload['job_id'].removeprefix(PREFIX)
+    wait_terminal(target, name)
+    require_success(target, name)
+    return f'{ROOT}/{name}'
 
 def boot(target, config, commit, action, attempt):
     if action == 'replay':
@@ -172,9 +262,12 @@ def boot(target, config, commit, action, attempt):
 
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
-    parser.add_argument('action', choices=('deploy', 'replay', 'normal', 'lifecycle', 'states'))
+    parser.add_argument('action', choices=('deploy', 'replay', 'normal', 'lifecycle', 'preflight', 'assess', 'states'))
     parser.add_argument('--commit', default='HEAD')
     parser.add_argument('--attempt', default='r0', type=beauty_control.attempt_id)
+    parser.add_argument('--replay', default='cpu-replay-r1')
+    parser.add_argument('--normal', default='cpu-normal-r0')
+    parser.add_argument('--gpu-commit')
     options = parser.parse_args()
     SUPPORT.mkdir(parents=True, exist_ok=True)
     target, inherited, raw = connection()
@@ -184,6 +277,10 @@ def main():
         result = deploy(target, inherited, raw, commit)
     elif options.action == 'states':
         result = control.job_states(target, PREFIX)
+    elif options.action == 'preflight':
+        result = preflight(target, config, commit, options.attempt, options.replay)
+    elif options.action == 'assess':
+        result = assess(target, config, commit, options.gpu_commit or commit, options.attempt, options.replay, options.normal)
     else:
         result = boot(target, config, commit, options.action, options.attempt)
     print(json.dumps(result, indent=2))

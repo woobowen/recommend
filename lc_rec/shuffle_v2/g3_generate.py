@@ -76,7 +76,11 @@ def generation_kwargs(model, **kwargs):
     expected = {**selected, 'do_sample': False, 'use_cache': True, 'pad_token_id': 0, 'eos_token_id': 2}
     assert {key: getattr(effective, key) for key in expected} == expected
     result = model.generate(**kwargs)
-    return result, {'kwargs': selected, 'generation_config': defaults, 'effective': expected}
+    actual_defaults = model.generation_config.to_dict()
+    assert actual_defaults == defaults
+    assert result.sequences_scores.dtype == torch.float32
+    return result, {'kwargs': selected, 'generation_config': actual_defaults, 'effective': expected,
+                    'native_score_dtype': 'torch.float32'}
 
 
 def observe_lookup(calls, expected, actual_ids, torch, output):
@@ -136,8 +140,10 @@ def derive(text):
            'seen_mask is None or tuple(seen_mask.shape) != tuple(seen.shape) or any(x != raw_mask for x in seen_mask.tolist())')
     change('positions is None or any(x != expected_positions[0].tolist() for x in positions.tolist())',
            'positions is None or tuple(positions.shape) != tuple(seen.shape) or any(x != expected_positions[0].tolist() for x in positions.tolist())')
+    change("        past = named.get('past_key_values')", '''        assert named.get('use_cache') is True
+        past = named.get('past_key_values')''')
     change("'beam_expansion': seen.shape[0]})", """'beam_expansion': seen.shape[0],
-                      'all_beam_input_sha256': v2_hash(seen.tolist()),
+                      'effective_use_cache': named['use_cache'], 'all_beam_input_sha256': v2_hash(seen.tolist()),
                       'all_beam_mask_sha256': v2_hash(seen_mask.tolist()),
                       'all_beam_position_sha256': v2_hash(positions.tolist())})""")
     change('    handle = model.get_base_model().model.register_forward_pre_hook(before_forward, with_kwargs=True)',

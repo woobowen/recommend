@@ -126,11 +126,31 @@ def verify_v2_input(row, cpu_row, mode, manifest_digest, history, item_tokens):
     oracle = cpu_row['conditions'][mode]
     require((cpu_row['original_sha256'], oracle['input_sha256'], cpu_row['attention_mask_sha256'])
             == (original_sha, actual_sha, mask_sha), 'Actual GPU input differs from full CPU oracle')
-    require(row['v2_cpu_binding']['manifest_sha256'] == manifest_digest, 'Row CPU manifest hash')
+    require(row['v2_cpu_binding'] == {
+        'manifest_sha256': manifest_digest, 'row_sha256': core.canonical_sha256(cpu_row),
+        'original_sha256': original_sha, 'attention_mask_sha256': mask_sha, 'input_sha256': actual_sha,
+        'row_idx': index, 'mode': mode,
+    }, 'Exact model-to-CPU row binding')
     prefill = row['actual_model_prefill']
+    positions = list(range(len(actual)))
+    beams = independent.BEAMS
     require((prefill['input_ids'], prefill['attention_mask'], prefill['position_ids'],
              prefill['initial_cache_length'], prefill['beam_expansion']) ==
-            (actual, mask, list(range(len(actual))), 0, independent.BEAMS), 'Native decoder prefill boundary')
+            (actual, mask, positions, 0, beams), 'Native decoder prefill boundary')
+    for key, values in (('input', actual), ('mask', mask), ('position', positions)):
+        require(prefill[f'all_beam_{key}_sha256'] == core.canonical_sha256([values] * beams),
+                f'Native decoder {key} differs across beams')
+    lookup = prefill['embedding_lookup']
+    require(lookup['all_beams_exact'] is True and lookup['dtype'] == 'torch.bfloat16'
+            and lookup['shape'] == [beams, len(actual), 4096] and lookup['input_sha256'] == actual_sha
+            and len(lookup['first_beam_bf16_sha256']) == 64, 'Real BF16 embedding lookup receipt')
+    generation = row['effective_generation']
+    expected_kwargs = {'max_new_tokens': 10, 'num_beams': beams, 'num_return_sequences': beams,
+                       'output_scores': True, 'return_dict_in_generate': True, 'early_stopping': True}
+    defaults = {'do_sample': False, 'use_cache': True, 'pad_token_id': 0, 'eos_token_id': 2}
+    require(generation['kwargs'] == expected_kwargs and generation['effective'] == {**expected_kwargs, **defaults}
+            and all(generation['generation_config'][key] == value for key, value in defaults.items()),
+            'Actual generation kwargs / native config')
     shuffle = row['shuffle']
     require(all(shuffle[k] == v for k, v in core.mode_metadata(mode).items()) and
             (shuffle['row_idx'], shuffle['original_input_token_ids'], shuffle['attention_mask']) == (index, original, mask),
@@ -178,9 +198,18 @@ def rank_and_stage(args, fixed, assignment):
         stage = json.loads((args.test_dir / 'metrics.json').read_bytes())
         binding = json.loads((args.test_dir / 'v2-binding.rank0.json').read_bytes())
         require(binding['V2_RUN_COMMIT'] == args.run_commit and binding['mode'] == args.mode
-                and binding['frozen_source_sha256'] == original['entry_sha256'], 'V2 immutable source binding')
+                and binding['scope'] == args.scope and binding['adapter_scope'] == 'FORMAL'
+                and binding['MODEL_TRAINING_COMMIT'] == TRAINING_COMMIT
+                and binding['frozen_source_sha256'] == original['entry_sha256']
+                and binding['cpu_manifest_sha256'] == rank['v2_cpu']['manifest_sha256']
+                and hashlib.sha256((args.test_dir / 'derived.rank0.py').read_bytes()).hexdigest() == binding['derived_sha256'],
+                'V2 immutable source / asset / CPU manifest binding')
         require(rank['MODEL_TRAINING_COMMIT'] == TRAINING_COMMIT and rank['conditions'] == [args.mode]
                 and rank['normal_off_same_process_exact'] == [], 'V2 rank training identity or condition set')
+        model = rank['v2_model']
+        require(all(model[key] is True for key in ('all_parameters_on_logical_cuda_0', 'eval_mode', 'requires_grad_false',
+                                                  'parameter_identity_storage_and_versions_unchanged_each_row'))
+                and model['actual_parameter_tensor_counts']['LoRA'] == 448, 'Frozen parameters during rank generation')
     scope, mode = args.scope, args.mode
     count = len(assignment)
     expected_status = 'PREFLIGHT_INTERFACE_PASS' if scope == 'PREFLIGHT' else 'PASS'
