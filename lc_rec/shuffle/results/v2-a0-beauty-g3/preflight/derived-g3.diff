@@ -1,0 +1,196 @@
+--- /home/bwwu/grid-audits/sid-extensions-p0/g3-production-20261118/21d495b0be5b/release/lc_rec/a0_beauty/formal_evaluate.py
++++ V2-derived
+@@ -271,8 +271,8 @@
+                             ("PeftModel", PeftModel), ("get_peft_model_state_dict", get_peft_model_state_dict))
+     }
+     adapter = Path(args.adapter).resolve()
+-    scope = "PREFLIGHT" if args.preflight_users_per_rank else "FORMAL"
+-    provenance = verify_adapter_identity(adapter, scope=scope, run_commit=args.run_commit,
++    scope = "FORMAL"
++    provenance = verify_adapter_identity(adapter, scope=scope, run_commit=v2_training_commit,
+         config_sha256=sha(Path(__file__).parent/'config/formal_g3_beauty_seed42.json'))
+     report["adapter_identity"] = provenance
+     report["model_identity_sha256"] = sha(adapter / "g3_identity.json")
+@@ -299,7 +299,7 @@
+     if tokenizer.get_added_vocab() != reference.get_added_vocab():
+         raise AssertionError("Best adapter SID added-token ID ordering changed")
+     report["tokenizer_identity"] = tokenizer_identity(tokenizer, indices)
+-    verify_adapter_identity(adapter, scope=scope, run_commit=args.run_commit,
++    verify_adapter_identity(adapter, scope=scope, run_commit=v2_training_commit,
+         config_sha256=sha(Path(__file__).parent/'config/formal_g3_beauty_seed42.json'), tokenizer=tokenizer, model=args.model)
+     report["tokenizer"] = {"vocab_size": len(tokenizer), "added_tokens": tokenizer.get_added_vocab(),
+                            "matches_reconstructed_author_tokenizer": True, "padding_side": "left", "max_length": 2048}
+@@ -360,10 +360,10 @@
+         if 'shuffle' in row or row['input_token_ids'] != row['original_input_token_ids']:
+             raise AssertionError('Normal prediction has an intervention')
+     else:
+-        from shuffle_runtime import transform_inputs
++        transform_inputs = v2_transform_inputs
+         record = row['shuffle']
+-        n = {'off':0,'s3':3,'s4':4}[condition]
+-        if record['n'] != n or record['seed'] != 42 or record['protocol'] != 'GRID-LETTER-SHUFFLE-V1':
++        n = condition
++        if any(record.get(k) != v for k, v in v2_mode_metadata(n).items()):
+             raise AssertionError('Prediction Shuffle protocol or condition differs')
+         groups = [g['original_ids'] for g in record['evidence']['groups']]
+         actual, expected = transform_inputs(row['original_input_token_ids'],row['attention_mask'],
+@@ -378,15 +378,16 @@
+                  *, condition, scope, model_identity_sha256, groups, all_sid_ids, padding=0):
+     """One production beam20 call, with evidence from the actual LLaMA prefill."""
+     import torch
+-    from shuffle_runtime import transform_inputs
++    transform_inputs = v2_transform_inputs
+     raw_ids = inputs['input_ids'][0].tolist()
+     raw_mask = inputs['attention_mask'][0].tolist()
+     if padding:
+         raw_ids = [tokenizer.pad_token_id] * padding + raw_ids
+         raw_mask = [0] * padding + raw_mask
+-    n = {'normal': None, 'off': 0, 's3': 3, 's4': 4}[condition]
++    n = condition
+     actual_ids, intervention = transform_inputs(raw_ids, raw_mask, groups, all_sid_ids,
+                                                n, user['row_idx'])
++    v2_binding = v2_oracle.validate_inputs(user, raw_ids, raw_mask, groups, actual_ids, intervention)
+     device = next(model.parameters()).device
+     actual = torch.tensor([actual_ids], dtype=inputs['input_ids'].dtype, device=device)
+     mask = torch.tensor([raw_mask], dtype=inputs['attention_mask'].dtype, device=device)
+@@ -396,11 +397,12 @@
+         if calls:
+             return
+         seen = named.get('input_ids', positional[0] if positional else None)
+-        if seen is None or any(x != actual_ids for x in seen.tolist()):
++        if seen is None or tuple(seen.shape) != (BEAMS, len(actual_ids)) or any(x != actual_ids for x in seen.tolist()):
+             raise AssertionError('Actual model prefill input differs from declared condition')
+         seen_mask = named.get('attention_mask')
+-        if seen_mask is None or any(x != raw_mask for x in seen_mask.tolist()):
++        if seen_mask is None or tuple(seen_mask.shape) != tuple(seen.shape) or any(x != raw_mask for x in seen_mask.tolist()):
+             raise AssertionError('Actual model prefill changed the attention mask')
++        assert named.get('use_cache') is True
+         past = named.get('past_key_values')
+         past_length = 0 if past is None else int(past[0][0].shape[-2])
+         if past_length != 0:
+@@ -408,11 +410,14 @@
+         positions = named.get('position_ids')
+         expected_positions = mask.long().cumsum(-1) - 1
+         expected_positions.masked_fill_(mask == 0, 1)
+-        if positions is None or any(x != expected_positions[0].tolist() for x in positions.tolist()):
++        if positions is None or tuple(positions.shape) != tuple(seen.shape) or any(x != expected_positions[0].tolist() for x in positions.tolist()):
+             raise AssertionError('Actual prefill position IDs differ from original generation policy')
+         calls.append({'input_ids': seen[0].tolist(), 'attention_mask': seen_mask[0].tolist(),
+                       'position_ids': positions[0].tolist(), 'initial_cache_length': past_length,
+-                      'beam_expansion': seen.shape[0]})
++                      'beam_expansion': seen.shape[0],
++                      'effective_use_cache': named['use_cache'], 'all_beam_input_sha256': v2_hash(seen.tolist()),
++                      'all_beam_mask_sha256': v2_hash(seen_mask.tolist()),
++                      'all_beam_position_sha256': v2_hash(positions.tolist())})
+     with torch.no_grad():
+         embedding = model.get_input_embeddings()
+         old_lookup = embedding(torch.tensor([raw_ids], dtype=actual.dtype, device=device))
+@@ -424,17 +429,25 @@
+         if not torch.equal(new_lookup, expected_lookup):
+             raise AssertionError('Actual SID embedding lookup is not the declared within-item permutation')
+     handle = model.get_base_model().model.register_forward_pre_hook(before_forward, with_kwargs=True)
++    lookups = []
++    def after_embedding(module, args, result):
++        if not lookups:
++            if not args or args[0].tolist() != [actual_ids] * BEAMS:
++                raise AssertionError('Actual embedding input does not match all prefill beams')
++            lookups.append(v2_observe_lookup(calls, expected_lookup, actual_ids, torch, result))
++    lookup_handle = embedding.register_forward_hook(after_embedding)
+     tick = time.monotonic()
+     try:
+         # Keep the original production generation arguments and native callback.
+-        generated = model.generate(input_ids=actual, attention_mask=mask,
+-                                   max_new_tokens=10, prefix_allowed_tokens_fn=allowed,
+-                                   num_beams=BEAMS, num_return_sequences=BEAMS, output_scores=True,
+-                                   return_dict_in_generate=True, early_stopping=True)
++        with torch.no_grad():
++            generated, effective_generation = v2_generate(model, input_ids=actual, attention_mask=mask,
++                max_new_tokens=10, prefix_allowed_tokens_fn=allowed, num_beams=BEAMS,
++                num_return_sequences=BEAMS, output_scores=True, return_dict_in_generate=True, early_stopping=True)
+         torch.cuda.synchronize()
+     finally:
+         handle.remove()
+-    if not calls:
++        lookup_handle.remove()
++    if not calls or not lookups:
+         raise AssertionError('No actual model prefill was observed')
+     elapsed = time.monotonic() - tick
+     sequences = generated.sequences.cpu().tolist()
+@@ -466,7 +479,9 @@
+            'candidates': candidates, 'sorted_generation_order': order,
+            'relevance': [int(candidates[i]['sid'] == target) for i in order],
+            'generation_seconds': elapsed, 'original_callback_verified_all_tokens': True,
+-           'actual_model_prefill': calls[0], 'lookup_equivalence_exact': True}
++           'actual_model_prefill': {**calls[0], 'embedding_lookup': lookups[0]},
++           'lookup_equivalence_exact': True, 'V2_RUN_COMMIT': v2_run_commit,
++           'v2_cpu_binding': v2_binding, 'effective_generation': effective_generation}
+     if condition != 'normal':
+         row['shuffle'] = intervention
+     audit_prediction(row, user, catalog, evaluator)
+@@ -487,7 +502,7 @@
+     parser = argparse.ArgumentParser(description=__doc__)
+     for name in ("source-root", "data-root", "model", "adapter", "output", "run-commit"):
+         parser.add_argument("--" + name, required=True)
+-    parser.add_argument("--condition", choices=("normal", "off", "s3", "s4"), default="normal")
++    parser.add_argument("--condition", choices=v2_modes, required=True)
+     parser.add_argument("--preflight-all-conditions", "--preflight-four-conditions", action="store_true",
+                         help="One strict reload; same-process Normal/OFF/S3/S4 on the fixed preflight users")
+     parser.add_argument("--preflight-reference-normal",
+@@ -638,6 +653,10 @@
+                          "total_memory_bytes": torch.cuda.get_device_properties(local_rank).total_memory}
+         load_started = time.monotonic()
+         model, tokenizer = strict_reload(args, report, torch, local_rank, source, indices)
++        report["v2_model"] = v2_parameter_evidence(model, report)
++        report["MODEL_TRAINING_COMMIT"] = v2_training_commit
++        report["v2_cpu"] = {key: v2_oracle.audit[key] for key in
++                            ("manifest_sha256", "user_axis_sha256", "tokenizer_identity", "preflight_manifest_sha256")}
+         torch.cuda.synchronize()
+         report["model_load_and_strict_verification_seconds"] = time.monotonic() - load_started
+         guard()
+@@ -651,6 +670,7 @@
+             raise AssertionError("Actual author response differs from frozen held-out target")
+         allowed = data.get_prefix_allowed_tokens_fn(tokenizer)
+         report["allowed_callback_sha256"] = hashlib.sha256(inspect.getsource(data.get_prefix_allowed_tokens_fn).encode()).hexdigest()
++        assert report["allowed_callback_sha256"] == v2_callback_sha
+         original_collator = TestCollator(data_args, tokenizer)
+ 
+         class IndexedDataset(Dataset):
+@@ -680,6 +700,9 @@
+             assignment=selection[rank]
+             report["preflight_manifest"]={"path":str(manifest_path),"sha256":sha(manifest_path),
+                                            "assignments":selection}
++            assert assignment == v2_oracle.audit["preflight_assignment"]
++        else:
++            assert v2_hash(assignment) == v2_oracle.audit["assignment_sha256"]
+         report["assigned_users"] = len(assignment)
+         report["assigned_row_indices"] = assignment
+         report["assignment_sha256"] = hashlib.sha256(json.dumps(assignment, separators=(",", ":")).encode()).hexdigest()
+@@ -695,16 +718,14 @@
+                           for condition in conditions}
+         condition_reports = {}
+         if args.condition != 'normal':
+-            report['shuffle'] = {'n':{'off':0,'s3':3,'s4':4}[args.condition],
+-                                 'seed':42,'protocol':'GRID-LETTER-SHUFFLE-V1'}
++            report['shuffle'] = v2_mode_metadata(args.condition)
+         for condition, directory in condition_dirs.items():
+             directory.mkdir(parents=True, exist_ok=True)
+             if (directory/f"predictions.rank{rank}.jsonl").exists():
+                 raise FileExistsError("Condition prediction output exists")
+             condition_reports[condition] = dict(report, condition=condition, completed_users=0)
+             if condition != "normal":
+-                condition_reports[condition]["shuffle"] = {"n": {"off":0,"s3":3,"s4":4}[condition],
+-                       "seed":42,"protocol":"GRID-LETTER-SHUFFLE-V1"}
++                condition_reports[condition]["shuffle"] = v2_mode_metadata(condition)
+         normal_off_checks = []
+         parameter_versions = {name: (id(p), p.data_ptr(), p._version) for name,p in model.named_parameters()}
+         with ExitStack() as stack, torch.no_grad():
+@@ -782,6 +803,9 @@
+             raise AssertionError('Prediction shard did not complete')
+         report['normal_off_same_process_exact'] = normal_off_checks
+         report['elapsed_generation_seconds'] = time.monotonic()-generation_started
++        report['v2_model']['parameter_identity_storage_and_versions_unchanged_each_row'] = True
++        for condition in conditions:
++            condition_reports[condition]['v2_model'] = report['v2_model']
+         report['status'] = 'PREDICTIONS_COMPLETE'
+         for condition,directory in condition_dirs.items():
+             condition_reports[condition].update(status='PREDICTIONS_COMPLETE',
