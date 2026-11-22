@@ -1,0 +1,172 @@
+--- verify_formal_research.py
++++ verify_formal_research_archive.py
+@@ -1,5 +1,6 @@
+ """Independent, bounded, read-only audit of the original LETTER Beauty formal run."""
+ 
++from argparse import ArgumentParser
+ from collections import Counter
+ from contextlib import ExitStack
+ from datetime import datetime, timezone
+@@ -43,6 +44,49 @@
+ }
+ 
+ 
++ARCHIVE = None
++RELEASE = BASE / 'releases' / 'letter-shuffle-v2-beauty' / RUN
++BOUND_PATHS = {}
++SOURCE_CLOSURE = (
++    'lc_rec/letter/review/final_audit_20261113/statistics_verify.py',
++    'lc_rec/letter/scripts/formal_evaluate.py',
++    'lc_rec/shuffle/core.py',
++    *('lc_rec/shuffle_v2/' + item for item in (
++        'a0_beauty_letter.json', 'beauty.py', 'beauty_evaluate.py', 'beauty_runner.py',
++        'core.py', 'evaluate.py', 'generate.py', 'replay.py', 'runtime.py', 'series.py', 'statistics.py',
++    )),
++)
++
++
++def physical(path):
++    """Resolve retained members while leaving the original receipt paths intact."""
++    if ARCHIVE is None:
++        return path
++    path = Path(path)
++    if path in BOUND_PATHS:
++        return ARCHIVE / BOUND_PATHS[path]
++    if path == RELEASE / 'RUN_VERSION.json':
++        return ARCHIVE / 'publication/run.json'
++    if path.is_relative_to(RELEASE):
++        return ARCHIVE / 'source' / path.relative_to(RELEASE)
++    if path.is_relative_to(BASE / 'jobs'):
++        return ARCHIVE / 'jobs' / path.relative_to(BASE / 'jobs')
++    if path.is_relative_to(ROOT / 'cpu-replay-r3'):
++        return ARCHIVE / 'replay' / path.relative_to(ROOT / 'cpu-replay-r3')
++    for mode in MODES:
++        generation = ROOT / f'gpu-formal-{mode}-r0'
++        evaluation = ROOT / f'cpu-eval-{mode}-r0'
++        if path == generation / 'test/derived.rank0.py':
++            return ARCHIVE / 'execution/derived/derived.rank0.py'
++        if path.is_relative_to(generation / 'test'):
++            return ARCHIVE / 'conditions' / mode / 'test' / path.relative_to(generation / 'test')
++        if path.is_relative_to(generation):
++            return ARCHIVE / 'conditions' / mode / 'execution' / path.relative_to(generation)
++        if path.is_relative_to(evaluation):
++            return ARCHIVE / 'conditions' / mode / 'evaluation' / path.relative_to(evaluation)
++    raise ValueError(f'No archive member bound for original path {path}')
++
++
+ def canonical(x):
+     return json.dumps(x, separators=(',', ':'), sort_keys=True, ensure_ascii=True, allow_nan=False).encode()
+ 
+@@ -52,17 +96,17 @@
+ 
+ 
+ def hashfile(path):
+-    with path.open('rb') as stream:
++    with physical(path).open('rb') as stream:
+         return file_digest(stream, 'sha256').hexdigest()
+ 
+ 
+ def file_state(path):
+-    metadata = path.stat()
++    metadata = physical(path).stat()
+     return metadata.st_dev, metadata.st_ino, metadata.st_size, metadata.st_mtime_ns, metadata.st_ctime_ns
+ 
+ 
+ def read(path):
+-    return json.loads(path.read_bytes())
++    return json.loads(physical(path).read_bytes())
+ 
+ 
+ def receipt(name, expected_request, runner_path):
+@@ -227,20 +271,30 @@
+     parent_name = PREFIX + 'group-series-r0'
+     parent = read(BASE / 'jobs' / parent_name / 'request.json')
+     planpath = Path(parent['argv'][parent['argv'].index('--plan') + 1])
++    BOUND_PATHS[planpath] = 'execution/formal-plan.json'
+     plan = read(planpath)
+     assert plan['formal_run_commit'] == plan['orchestrator_commit'] == RUN
+     assert list(plan['modes']) == list(MODES)
+     assert any(entry['path'] == str(planpath) and entry['sha256'] == hashfile(planpath) for entry in parent['inputs'])
+     runner_path = Path(plan['runner'])
++    BOUND_PATHS[runner_path] = 'source/lc_rec/shuffle_v2/beauty_runner.py'
++    BOUND_PATHS[ROOT / 'group-series-r0/summary.json'] = 'execution/summary.json'
++    BOUND_PATHS[ROOT / 'cpu-summary-r0/summary.json'] = 'paired/summary.json'
+     assert hashfile(runner_path) == plan['runner_sha256'] == RUNNER
+     config_path = Path(plan['config'])
+     config = read(config_path)
+     assert config['users'] == AXIS and config['dataset'] == 'Beauty'
+     release = read(Path(parent['cwd']) / 'RUN_VERSION.json')
+     assert release['RUN_COMMIT'] == RUN and release['runner_sha256'] == RUNNER
++    required = set(SOURCE_CLOSURE)
++    checked_sources = []
+     for item in release['files']:
+         path = Path(parent['cwd']) / item['path']
+-        assert hashfile(path) == item['sha256']
++        if ARCHIVE is not None and item['path'] not in required:
++            continue
++        assert hashfile(path) == item['sha256'], item['path']
++        checked_sources.append(item['path'])
++    assert required.issubset(checked_sources)
+     parent_receipt = receipt(parent_name, parent, runner_path)
+     order = [plan['modes'][mode][stage] for mode in MODES for stage in ('gpu', 'cpu')] + [plan['paired']]
+     children = [receipt(req['job_id'], req, runner_path) for req in order]
+@@ -255,6 +309,12 @@
+     baseline = config['baseline']
+     normaldir = Path(baseline['normal_test_dir'])
+     datadir = Path(baseline['data-root']) / 'Beauty'
++    BOUND_PATHS[Path(baseline['entry'])] = 'archive/source/lc_rec/a0_beauty/formal_evaluate.py'
++    for rank in (0, 1):
++        for leaf in (f'rank{rank}.json', f'predictions.rank{rank}.jsonl'):
++            BOUND_PATHS[normaldir / leaf] = 'conditions/normal/test/' + leaf
++    for tag in RAW_DATA:
++        BOUND_PATHS[datadir / f'Beauty.{tag}.json'] = f'data/Beauty.{tag}.json'
+     replaydir = ROOT / 'cpu-replay-r3'
+     audit = read(replaydir / 'audit.json')
+     single = read(replaydir / 'single-shard.json')
+@@ -264,7 +324,7 @@
+     data = {}
+     for tag, sha in RAW_DATA.items():
+         path = datadir / f'Beauty.{tag}.json'
+-        raw = path.read_bytes()
++        raw = physical(path).read_bytes()
+         assert sha256(raw).hexdigest() == sha
+         data[tag] = json.loads(raw)
+     catalog, inter = data['index'], data['inter']
+@@ -284,7 +344,7 @@
+ 
+     manifest = []
+     mhash = sha256()
+-    with (replaydir / 'inputs.jsonl').open('rb') as stream:
++    with physical(replaydir / 'inputs.jsonl').open('rb') as stream:
+         for i, line in enumerate(stream):
+             assert line.endswith(b'\n')
+             mhash.update(line)
+@@ -309,7 +369,7 @@
+     grouped_vocab = {item: tuple(vocab[s] for s in sid) for item, sid in catalog.items()}
+     mask_and_positions = {}
+     with ExitStack() as stack:
+-        streams = {key: stack.enter_context(path.open('rb')) for key, path in raw_paths.items()}
++        streams = {key: stack.enter_context(physical(path).open('rb')) for key, path in raw_paths.items()}
+         for pos in range(AXIS):
+             old = row_reader(streams, hashes, f'normal{pos%2}')
+             j = old['row_idx']
+@@ -422,7 +482,8 @@
+     result = {'status': 'PASS_NONAUTHOR_FULL_FORMAL_RESEARCH_EVIDENCE', 'reviewer': '/root/formal_review',
+               'scope': 'All saved 4x22363 formal input rows in the original run, with original Normal record interleave, CPU manifest, candidate structural evidence, no inference rerun.',
+               'run_commit': RUN, 'runner_sha256': RUNNER, 'plan_sha256': hashfile(planpath),
+-              'parent': parent_receipt, 'children': children, 'checked_installed_source_files': len(release['files']),
++              'parent': parent_receipt, 'children': children, 'source_report_scope': 'installed release' if ARCHIVE is None else 'archived research-runtime closure',
++              'checked_source_files': checked_sources, 'checked_installed_source_files': len(checked_sources) if ARCHIVE is None else None,
+               'dataset_identity': RAW_DATA, 'replay_file_sha256': REPLAY, 'normal_file_sha256': NORMAL_FILES,
+               'formal_assignment_sha256': ASSIGNMENT, 'shared_s3a_s3b_relative_group_draws_checked': shared,
+               'complete_formal_users': len(MODES) * AXIS, 'complete_formal_candidates': len(MODES) * AXIS * BEAMS,
+@@ -436,4 +497,9 @@
+ 
+ 
+ if __name__ == '__main__':
++    parser = ArgumentParser(description=__doc__)
++    parser.add_argument('--archive-root', type=Path)
++    args = parser.parse_args()
++    if args.archive_root:
++        ARCHIVE = args.archive_root.resolve(strict=True)
+     main()

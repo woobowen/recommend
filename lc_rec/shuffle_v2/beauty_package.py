@@ -11,6 +11,7 @@ SECRET = re.compile(rb'(?i)(-----BEGIN [A-Z ]*PRIVATE KEY-----|gh[pousr]_[0-9a-z
                     rb'hf_[A-Za-z0-9]{30,}|Bearer [A-Za-z0-9._-]{25,}|AKIA[A-Z0-9]{16})')
 BLOCK = 2**20
 PREFLIGHT_READY = 'SECOND_GROUP_PREFLIGHT_COMPLETE_PENDING_WEB_REVIEW'
+FINAL_READY = 'SECOND_GROUP_COMPLETE_PENDING_WEB_REVIEW'
 
 
 def safe_name(name):
@@ -59,7 +60,7 @@ def verify(path, extract=None):
         assert all(safe_name(member.filename) and not member.is_dir()
                    and not stat.S_ISLNK(member.external_attr >> 16) for member in members)
         manifest = json.loads(archive.read('MANIFEST.json'))
-        if manifest['status'] == PREFLIGHT_READY:
+        if manifest['status'] in (PREFLIGHT_READY, FINAL_READY):
             check_navigation(archive)
         assert set(manifest['members']) == set(archive.namelist()) - {'MANIFEST.json'}
         for member, expected in manifest['members'].items():
@@ -102,14 +103,23 @@ def create(spec, output):
             required.update(f'preflight/{mode}/{leaf}' for leaf in ('rank0.json', 'predictions.rank0.jsonl',
                             'v2-binding.rank0.json', f'{mode}.request.json', f'{mode}.exit.json'))
         assert required <= files.keys(), sorted(required - files.keys())
-    if spec['status'] == 'SECOND_GROUP_COMPLETE_PENDING_WEB_REVIEW':
+    if spec['status'] == FINAL_READY:
         required = {'README.md', 'offline_review.sh', 'paired/summary.json', 'paired/arrays.npz',
+                    'paired/metrics.csv', 'paired/changes_from_normal.csv', 'paired/paired.csv',
                     'reviews/prelaunch.json', 'reviews/final.json', 'publication/readback.json',
+                    'reviews/nonauthor-research-final.json', 'reviews/independent-metrics.json',
+                    'reviews/statistics-nonauthor.md', 'execution/summary.json', 'execution/formal-plan.json',
+                    'execution/derived/derived.rank0.py', 'execution/derived/derived.rank0.diff',
                     'replay/inputs.jsonl', 'data/Beauty.inter.json', 'data/Beauty.index.json', 'data/Beauty.item.json'}
         for condition in ('normal', 'shuffle2', 'shuffle3a', 'shuffle3b', 'shuffle4'):
             required.update({f'conditions/{condition}/test/predictions.rank0.jsonl',
                              f'conditions/{condition}/primary/per_user_metrics.npz',
                              f'conditions/{condition}/primary/per_user.csv'})
+            if condition != 'normal':
+                required.update({f'conditions/{condition}/test/rank0.json',
+                                 f'conditions/{condition}/test/v2-binding.rank0.json',
+                                 f'conditions/{condition}/evaluation/summary.json',
+                                 f'conditions/{condition}/execution/{condition}.exit.json'})
         required.add('conditions/normal/test/predictions.rank1.jsonl')
         assert required <= files.keys(), sorted(required - files.keys())
     staged = output.with_suffix('.zip.partial')

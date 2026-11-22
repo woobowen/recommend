@@ -8,7 +8,7 @@
 
 ## 第二组 LETTER Beauty
 
-正式前准备已通过用户确认的网页二审。2026-11-21 的正式启动观察覆盖 30 分钟，窗口结束时 S2 原作业仍运行。 [第二组总入口](../shuffle/results/v2-a0-beauty-letter/README.md) · [正式启动观察记录](../shuffle/results/v2-a0-beauty-letter/launch-observation-r0/README.md)
+原 LETTER Beauty 的四项正式生成、四项 CPU 评价和五项配对已完成，内部终审通过，待网页 GPT 二审。每个条件覆盖 22,363 名用户。 [正式结果](../shuffle/results/v2-a0-beauty-letter/final-r0/README.md) · [第二组总入口](../shuffle/results/v2-a0-beauty-letter/README.md) · [正式启动观察历史](../shuffle/results/v2-a0-beauty-letter/launch-observation-r0/README.md)
 
 ## 历史只读观测
 
@@ -25,7 +25,7 @@
 | 模块 | 实际职责 |
 |---|---|
 | [core.py](core.py) 和 [reference.py](reference.py) | 前者生产排列与输入证据，后者独立实现抽样和 active-slots 映射，用于逐组验证。 |
-| [runtime.py](runtime.py)、[entry.py](entry.py)、[beauty.py](beauty.py) | 约束输入形状、原生 prefill 和词嵌入，校验冻结源入口，导出派生生成文件与 diff；Beauty 专用适配只在本分支做静态或 CPU 层检查。 |
+| [runtime.py](runtime.py)、[entry.py](entry.py)、[beauty.py](beauty.py) | 约束输入形状、原生 prefill 和词嵌入，校验冻结源入口，导出派生生成文件与 diff；Beauty 适配已通过真实 GPU 预跑、四模式正式运行和全量边界核验。 |
 | [replay.py](replay.py)、[single_shard.py](single_shard.py) | 读取冻结 LETTER data、tokenizer、Normal 原预测全轴，确定行索引和 raw/shuffled 流；单 shard 与冻结双 shard 在固定 sampler 的行顺序关系由 CPU 审核验证。 |
 | [generate.py](generate.py)、[evaluate.py](evaluate.py)、[statistics.py](statistics.py) | 生成使用冻结权重、词表及运行契约，评价独立核对预测覆盖、目标、目录与单/双 rank 入口，最后对完整矩阵做配对。 |
 | [control.py](control.py)、[series.py](series.py)、[series_control.py](series_control.py) | 固定 request、预算及依赖，服务器按 S2 → S3a → S3b → S4 推进。每条件先经过完整生成和 CPU 评价门槛，再继续下一个。 |

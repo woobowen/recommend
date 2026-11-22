@@ -80,7 +80,8 @@ def collect(config, states, replay, preflight, completed):
             take(f'preflight/{mode}', f'{folder}/{mode}', ('rank0.json', 'predictions.rank0.jsonl', 'v2-binding.rank0.json'))
             for name in (f'{mode}.request.json', f'{mode}.exit.json', f'{mode}.log', f'{mode}.resources.jsonl'):
                 paths[f'preflight/{mode}/{name}'] = f'{folder}/{name}'
-        take('preflight/derived', f'{bc.ROOT}/{preflight}/shuffle2', ('derived.rank0.diff', 'derived.rank0.py'))
+        if not completed:
+            take('preflight/derived', f'{bc.ROOT}/{preflight}/shuffle2', ('derived.rank0.diff', 'derived.rank0.py'))
     normal_jobs = [name for name in states if name.startswith(bc.PREFIX + 'cpu-eval-normal-') and states[name]['status'] == 'SUCCEEDED']
     if normal_jobs:
         assert len(normal_jobs) == 1
@@ -101,8 +102,7 @@ def collect(config, states, replay, preflight, completed):
             take(f'conditions/{mode}/execution', gpu, ('summary.json', f'{mode}.request.json', f'{mode}.exit.json',
                                                       f'{mode}.resources.jsonl', f'{mode}.log'))
         first_gpu = f"{bc.ROOT}/{accepted_stage(states, 'gpu-formal-shuffle2')}/test"
-        if not preflight:
-            take('execution/derived', first_gpu, ('derived.rank0.diff', 'derived.rank0.py'))
+        take('execution/derived', first_gpu, ('derived.rank0.diff', 'derived.rank0.py'))
     for name in terminal(states):
         take(f'jobs/{name}', f'{control.BASE}/jobs/{name}', JOB_RECORDS)
     for name in terminal(states):
@@ -213,7 +213,7 @@ def publication_inputs(args, config, states, build):
             materialize(build / name, path.read_bytes())
     for memo in args.memo:
         materialize(build / 'reviews' / memo.name, memo.read_bytes())
-    if args.status != PREFLIGHT_READY:
+    if args.status == 'PARTIAL_BLOCKED':
         for plan in bc.SUPPORT.glob('*.plan.json'):
             materialize(build / 'execution' / plan.name, plan.read_bytes())
     elapsed = {'preflight_device_seconds': 0.0, 'formal_device_seconds': 0.0, 'cpu_worker_wall_seconds': 0.0}
