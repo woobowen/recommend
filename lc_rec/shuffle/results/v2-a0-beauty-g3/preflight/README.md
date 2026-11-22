@@ -1,5 +1,13 @@
 # G3 Beauty Shuffle V2 准备回执
 
+## 网页二审
+
+用户确认第三组正式前验收通过，状态为 `THIRD_GROUP_PREFLIGHT_COMPLETE_WEB_REVIEW_PASS`。研究实现、全量 CPU 输入、四模式真实 GPU 预跑、评价统计和正式计划均通过。正式实验尚未启动。
+
+审核 ZIP 的 `reports/experiment.md` 和 `reports/preflight.md` 保留了 GitHub 目录结构下的相对路径，分别有 10 条和 14 条链接在 ZIP 中失效。根 README 导航与离线核验命令可用。此问题不影响二审结论，后续打包时按包内路径修正。本次沿用原 ZIP 和计算结果。
+
+## 准备交付时记录（历史）
+
 四模式真实预跑及独立工程核验已完成，待网页 GPT 二审。正式父作业和子作业均保持未提交。
 
 - 原训练 21d495b0be5b606853ec7cec68a3eaa1b58acbd7。GPU 运行 86660be5a62c8325caf74cf2810581850ca12803。CPU 评价、导出和正式计划源码 cb3b1f36d69ef0c1a7f554ef5455026523635f78。
