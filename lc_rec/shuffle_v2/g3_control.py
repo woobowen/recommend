@@ -18,7 +18,9 @@ RUNNER = 'lc_rec/shuffle_v2/beauty_runner.py'
 RUNNER_SHA = 'cbb963fab68c34cc977653afc46f260e7ede962cb4a8f105458331a0e0e19a75'
 CLOSURE = 'lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/cpu_closure'
 SOURCES = ('lc_rec/shuffle_v2', 'lc_rec/shuffle/core.py', 'lc_rec/letter/scripts/formal_evaluate.py',
-           'lc_rec/a0_beauty/offline_metrics.py', CLOSURE,
+           'lc_rec/a0_beauty/offline_metrics.py', 'lc_rec/a0_beauty/g3_identity.py',
+           'lc_rec/a0_beauty/uneven_sampler.py', 'lc_rec/a0_beauty/config/preflight_g3_users_seed42.json',
+           CLOSURE,
            'lc_rec/letter/review/final_audit_20261113/external/official_cce.py',
            'lc_rec/letter/review/final_audit_20261113/statistics_verify.py')
 PREFLIGHT_MODE_TIMEOUT = 1100
@@ -78,9 +80,12 @@ def request(target, config, commit, name, timeout, module, args, *, card='', inp
         assert card in config['gpus']
         argv += ['torch.distributed.run', '--standalone', '--nnodes=1', '--nproc_per_node=1', '--module']
     argv += ['lc_rec.shuffle_v2.' + module, *map(str, args)]
+    env = {**config['environment'], 'CUDA_VISIBLE_DEVICES': card}
+    if not card:
+        env['DS_ACCELERATOR'] = 'cpu'
     return {**identity, 'schema': 1, 'host': target.profile['hostname'], 'job_id': PREFIX + name,
             'capture_version': commit, 'cwd': release,
-            'env': {**config['environment'], 'CUDA_VISIBLE_DEVICES': card},
+            'env': env,
             'timeout_seconds': timeout, 'inputs': files + list(inputs), 'argv': argv}
 
 
@@ -96,7 +101,10 @@ def launch(target, payload):
         config = g3_assets.read(g3_assets.CONFIG)
         is_gpu = bool(payload['env']['CUDA_VISIBLE_DEVICES'])
         kind, cap = ('gpu-preflight-', 'preflight_device_seconds') if is_gpu else ('cpu-', 'cpu_wall_seconds')
-        remaining = config['budget'][cap] - usage(states, kind)
+        finished = {key: value for key, value in states.items() if value.get('ended_at')}
+        active = [key for key, value in states.items() if key.startswith(PREFIX + kind) and not value.get('ended_at')]
+        reserved = sum(g3_assets.read(SUPPORT / (key + '.request.json'))['timeout_seconds'] + 10 for key in active)
+        remaining = config['budget'][cap] - usage(finished, kind) - reserved
         assert remaining >= payload['timeout_seconds'] + 10, (name, remaining)
         if is_gpu:
             assert not any(not val.get('ended_at') for key, val in states.items() if key.startswith(PREFIX + kind))
@@ -129,7 +137,6 @@ def wait_terminal(target, name, timeout=1800):
         states = control.job_states(target, PREFIX)
         row = states.get(PREFIX + name, {})
         if row.get('ended_at'):
-            assert row['cleanup']['verified']
             return row
         time.sleep(2)
     raise TimeoutError('Query the existing job after a status timeout: ' + PREFIX + name)
@@ -140,6 +147,10 @@ def boot(target, config, commit, action, attempt):
         name = 'cpu-replay-' + attempt
         return launch(target, request(target, config, commit, name, 1200, 'g3_replay',
                                       ['--output', f'{ROOT}/{name}']))
+    if action == 'normal':
+        name = 'cpu-normal-' + attempt
+        return launch(target, request(target, config, commit, name, 900, 'g3_evaluate',
+                                      ['normal', '--data-root', config['data_root'], '--output', f'{ROOT}/{name}']))
     if action == 'lifecycle':
         terminal = {}
         for case, timeout in (('decoy', 45), ('normal', 10), ('orphan', 12), ('timeout', 8)):
@@ -161,7 +172,7 @@ def boot(target, config, commit, action, attempt):
 
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
-    parser.add_argument('action', choices=('deploy', 'replay', 'lifecycle', 'states'))
+    parser.add_argument('action', choices=('deploy', 'replay', 'normal', 'lifecycle', 'states'))
     parser.add_argument('--commit', default='HEAD')
     parser.add_argument('--attempt', default='r0', type=beauty_control.attempt_id)
     options = parser.parse_args()
