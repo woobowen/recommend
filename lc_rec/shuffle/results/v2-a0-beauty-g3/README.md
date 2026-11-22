@@ -4,7 +4,11 @@
 
 ## 网页二审
 
-第三组正式前验收已通过，状态为 `THIRD_GROUP_PREFLIGHT_COMPLETE_WEB_REVIEW_PASS`。审核覆盖研究实现、全量 CPU 输入、四模式真实 GPU 预跑、评价统计和正式计划。正式实验尚未启动，启动仍需用户另行授权。 [审核范围与 ZIP 导航问题](preflight/README.md#网页二审)
+第三组正式前验收已通过，状态为 `THIRD_GROUP_PREFLIGHT_COMPLETE_WEB_REVIEW_PASS`。审核覆盖研究实现、全量 CPU 输入、四模式真实 GPU 预跑、评价统计和正式计划。二审时正式实验尚未启动。 [审核范围与 ZIP 导航问题](preflight/README.md#网页二审)
+
+## 正式启动
+
+用户随后明确授权第三组正式运行。服务器父作业 `g3-beauty-v2-group-formal-r0` 已接管，首个 S2 子作业已开始生成。正式启动、30 分钟观察及完整组结果的待办范围见 [本阶段交付](launch-observation-r0/README.md)。
 
 ## 资产与干预
 
@@ -28,7 +32,7 @@
 - [g3_generate.py](../../../shuffle_v2/g3_generate.py) 派生原 G3 入口，经 generate_one → g3_transform → core.transform。验证原 FORMAL adapter 的训练来源，同时标明新 V2 运行 commit 和 PREFLIGHT 输出 scope。进模型前绑定 CPU manifest 的行、模式、输入及排列。装载核对 450 项 tensor、448 项 LoRA、288,571,392 个元素。基座、embedding、lm_head 为 BF16，LoRA 为 FP32。实际 active embedding 与 decoder prefill 核查全部 20 个 beam、input IDs、mask、position IDs 和空初始 cache，逐行检查参数身份、storage 和变更计数。
 - [g3_evaluate.py](../../../shuffle_v2/g3_evaluate.py) 复用冻结评价器和 CCE，对 16 个指标独立复算。SID Hit@1/5/10/20、NDCG 和 MRR@5/10/20，ItemHit 和 ItemNDCG@5/10/20。目录外和重复候选保留原位置，按原 CCE 碰撞展开和均匀 credit 计算。五项比较在配对用户轴上共享 PCG64 seed 20261113 的 5,000 次有放回抽样，95% 线性百分位区间。32 人预跑统计用于工程核验。
 - [g3_control.py](../../../shuffle_v2/g3_control.py) 固定独立 job、单 GPU 串行、预算、CUDA UUID 和服务器回执。派生 runner 仅修改既有已审 runner 的作业前缀，保留 uid、PID、进程创建时间、pidfd 和清收验证。
-- [g3_formal.py](../../../shuffle_v2/g3_formal.py) 构造本地正式计划。每个正式模式拟覆盖 22,363 用户和 447,260 个候选，按 S2→S3a→S3b→S4，每个 GPU 作业成功并清收后进入 CPU 核验及评价，最后运行五项配对。正式单项最多 8 小时，整组最多 36 GPU-device-hours。父作业及各子作业仍待用户另行授权。断线优先查原 ID。 [实际准备、回执与未提交计划](preflight/README.md)
+- [g3_formal.py](../../../shuffle_v2/g3_formal.py) 构造本地正式计划。每个正式模式拟覆盖 22,363 用户和 447,260 个候选，按 S2→S3a→S3b→S4，每个 GPU 作业成功并清收后进入 CPU 核验及评价，最后运行五项配对。正式单项最多 8 小时，整组最多 36 GPU-device-hours。断线优先查原 ID。 [历史准备回执与计划](preflight/README.md) · [正式启动回执](launch-observation-r0/README.md)
 
 ## 离线重算与权重获取
 

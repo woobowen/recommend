@@ -1,0 +1,654 @@
+{
+  "utc": "2026-11-22T15:35:22.688616+00:00",
+  "unix_ns": 1795361722688615691,
+  "host": "zwlab-01",
+  "parent": {
+    "exit_code": null,
+    "job_id": "g3-beauty-v2-group-formal-r0",
+    "received_at": "2026-11-22T15:29:56.719469+00:00",
+    "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-group-formal-r0/output",
+    "started_at": "2026-11-22T15:29:56.894808+00:00",
+    "status": "RUNNING",
+    "supervisor": {
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-S",
+        "-B",
+        "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-g3-beauty-v2-107b340e5ccfdc8a.py",
+        "supervise",
+        "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-group-formal-r0"
+      ],
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "pid": 3427705,
+      "start_ticks": "596673361",
+      "uid": 1005
+    },
+    "worker": {
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-B",
+        "-m",
+        "lc_rec.shuffle_v2.g3_formal",
+        "run",
+        "--plan",
+        "/home/bwwu/grid-audits/sid-extensions-p0/requests/g3-beauty-v2-group-formal-r0.plan.json",
+        "--approval",
+        "/home/bwwu/grid-audits/sid-extensions-p0/requests/g3-beauty-v2-formal-authorization-r0.json",
+        "--approval-sha256",
+        "9d3141ca396d764288624887d0de9c16bf0ee7714c886c55b1da664be52f283e",
+        "--output",
+        "/data/bwwu/lc-rec/g3-beauty-v2/group-formal-r0"
+      ],
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "pid": 3427707,
+      "start_ticks": "596673379",
+      "uid": 1005
+    },
+    "worker_group": {
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-group-formal-r0",
+      "job_id": "g3-beauty-v2-group-formal-r0",
+      "known_members": [
+        {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pgid": 3427707,
+          "pid": 3427707,
+          "session_id": 3427707,
+          "start_ticks": "596673379",
+          "uid": 1005
+        }
+      ],
+      "leader": {
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pgid": 3427707,
+        "pid": 3427707,
+        "session_id": 3427707,
+        "start_ticks": "596673379",
+        "uid": 1005
+      },
+      "ownership_schema": 1,
+      "pgid": 3427707,
+      "session_id": 3427707,
+      "source": "captured_at_launch",
+      "uid": 1005
+    },
+    "request_sha256": "7dcd0a18488176a0a316e20dd4e5547613c05c4c1a656d0172df6c0fef1cee54",
+    "supervisor_alive": true,
+    "worker_alive": true,
+    "workgroup_observation": {
+      "observed_at": "2026-11-22T15:35:22.771285+00:00",
+      "source": "captured_at_launch",
+      "boot_changed": false,
+      "owned_live": [
+        {
+          "pid": 3427707,
+          "start_ticks": "596673379",
+          "uid": 1005,
+          "pgid": 3427707,
+          "session_id": 3427707,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "TASK_MARKERS"
+        }
+      ],
+      "unconfirmed_live": [],
+      "unsupported_live": [],
+      "zombies": [],
+      "scan_errors": [],
+      "scan_complete": true,
+      "verified_empty": false
+    },
+    "workgroup_live": true,
+    "cleanup_verified": false,
+    "cleanup_evidence_level": "captured_at_launch"
+  },
+  "child": {
+    "exit_code": null,
+    "job_id": "g3-beauty-v2-gpu-formal-shuffle2-r0",
+    "received_at": "2026-11-22T15:29:58.545380+00:00",
+    "result_path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-gpu-formal-shuffle2-r0/output",
+    "started_at": "2026-11-22T15:29:58.798823+00:00",
+    "status": "RUNNING",
+    "supervisor": {
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-S",
+        "-B",
+        "/home/bwwu/grid-audits/sid-extensions-p0/scripts/runner-g3-beauty-v2-107b340e5ccfdc8a.py",
+        "supervise",
+        "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-gpu-formal-shuffle2-r0"
+      ],
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "pid": 3427748,
+      "start_ticks": "596673544",
+      "uid": 1005
+    },
+    "worker": {
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-B",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nnodes=1",
+        "--nproc_per_node=1",
+        "--module",
+        "lc_rec.shuffle_v2.g3_generate",
+        "--output",
+        "/data/bwwu/lc-rec/g3-beauty-v2/gpu-formal-shuffle2-r0",
+        "--cpu-audit",
+        "/data/bwwu/lc-rec/g3-beauty-v2/cpu-replay-r2/audit.json",
+        "--cpu-audit-sha256",
+        "98cd89fcc3440d3ac506483ff9daf223560c6eeca943cb3f267aeb65adee0798",
+        "--run-commit",
+        "86660be5a62c8325caf74cf2810581850ca12803",
+        "--mode",
+        "shuffle2",
+        "--scope",
+        "FORMAL",
+        "--max-seconds",
+        "28775",
+        "--authorization",
+        "/home/bwwu/grid-audits/sid-extensions-p0/requests/g3-beauty-v2-formal-authorization-r0.json",
+        "--authorization-sha256",
+        "9d3141ca396d764288624887d0de9c16bf0ee7714c886c55b1da664be52f283e"
+      ],
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "pid": 3427749,
+      "start_ticks": "596673569",
+      "uid": 1005
+    },
+    "worker_group": {
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "job_dir": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-gpu-formal-shuffle2-r0",
+      "job_id": "g3-beauty-v2-gpu-formal-shuffle2-r0",
+      "known_members": [
+        {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pgid": 3427749,
+          "pid": 3427749,
+          "session_id": 3427749,
+          "start_ticks": "596673569",
+          "uid": 1005
+        },
+        {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pgid": 3427779,
+          "pid": 3427779,
+          "session_id": 3427779,
+          "start_ticks": "596673758",
+          "uid": 1005
+        },
+        {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pgid": 3427779,
+          "pid": 3427887,
+          "session_id": 3427779,
+          "start_ticks": "596691009",
+          "uid": 1005
+        },
+        {
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "pgid": 3427779,
+          "pid": 3427888,
+          "session_id": 3427779,
+          "start_ticks": "596691014",
+          "uid": 1005
+        }
+      ],
+      "leader": {
+        "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+        "pgid": 3427749,
+        "pid": 3427749,
+        "session_id": 3427749,
+        "start_ticks": "596673569",
+        "uid": 1005
+      },
+      "ownership_schema": 1,
+      "pgid": 3427749,
+      "session_id": 3427749,
+      "source": "captured_at_launch",
+      "uid": 1005
+    },
+    "request_sha256": "b55ff5736ca45ccf6763f15dbdcd6235e047f5889d4eaccac6223972e3743372",
+    "supervisor_alive": true,
+    "worker_alive": true,
+    "workgroup_observation": {
+      "observed_at": "2026-11-22T15:35:22.892982+00:00",
+      "source": "captured_at_launch",
+      "boot_changed": false,
+      "owned_live": [
+        {
+          "pid": 3427749,
+          "start_ticks": "596673569",
+          "uid": 1005,
+          "pgid": 3427749,
+          "session_id": 3427749,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "TASK_MARKERS"
+        },
+        {
+          "pid": 3427779,
+          "start_ticks": "596673758",
+          "uid": 1005,
+          "pgid": 3427779,
+          "session_id": 3427779,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "BEAUTY_MARKED_WORKER_SESSION"
+        },
+        {
+          "pid": 3427887,
+          "start_ticks": "596691009",
+          "uid": 1005,
+          "pgid": 3427779,
+          "session_id": 3427779,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "BEAUTY_MARKED_WORKER_SESSION"
+        },
+        {
+          "pid": 3427888,
+          "start_ticks": "596691014",
+          "uid": 1005,
+          "pgid": 3427779,
+          "session_id": 3427779,
+          "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+          "proof": "BEAUTY_MARKED_WORKER_SESSION"
+        }
+      ],
+      "unconfirmed_live": [],
+      "unsupported_live": [],
+      "zombies": [],
+      "scan_errors": [],
+      "scan_complete": true,
+      "verified_empty": false
+    },
+    "workgroup_live": true,
+    "cleanup_verified": false,
+    "cleanup_evidence_level": "captured_at_launch"
+  },
+  "controller": {
+    "status": "RUNNING",
+    "stages": [
+      {
+        "job_id": "g3-beauty-v2-gpu-formal-shuffle2-r0",
+        "request_path": "/home/bwwu/grid-audits/sid-extensions-p0/requests/g3-beauty-v2-gpu-formal-shuffle2-r0.json",
+        "status": "REQUEST_SAVED"
+      }
+    ]
+  },
+  "gpu_rank_processes": [
+    {
+      "pid": 3427779,
+      "start_ticks": "596673758",
+      "uid": 1005,
+      "pgid": 3427779,
+      "session_id": 3427779,
+      "boot_id": "0b738489-caea-4a90-84fd-78747822038b",
+      "proof": "BEAUTY_MARKED_WORKER_SESSION",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-u",
+        "-m",
+        "lc_rec.shuffle_v2.g3_generate",
+        "--output",
+        "/data/bwwu/lc-rec/g3-beauty-v2/gpu-formal-shuffle2-r0",
+        "--cpu-audit",
+        "/data/bwwu/lc-rec/g3-beauty-v2/cpu-replay-r2/audit.json",
+        "--cpu-audit-sha256",
+        "98cd89fcc3440d3ac506483ff9daf223560c6eeca943cb3f267aeb65adee0798",
+        "--run-commit",
+        "86660be5a62c8325caf74cf2810581850ca12803",
+        "--mode",
+        "shuffle2",
+        "--scope",
+        "FORMAL",
+        "--max-seconds",
+        "28775",
+        "--authorization",
+        "/home/bwwu/grid-audits/sid-extensions-p0/requests/g3-beauty-v2-formal-authorization-r0.json",
+        "--authorization-sha256",
+        "9d3141ca396d764288624887d0de9c16bf0ee7714c886c55b1da664be52f283e"
+      ],
+      "rank_env": {
+        "CUDA_HOME": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4",
+        "CUDA_VISIBLE_DEVICES": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "DS_ACCELERATOR": "cuda",
+        "LD_LIBRARY_PATH": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib",
+        "TORCHINDUCTOR_COMPILE_THREADS": "1",
+        "GRID_JOB_ID": "g3-beauty-v2-gpu-formal-shuffle2-r0",
+        "GRID_JOB_DIR": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-gpu-formal-shuffle2-r0",
+        "LOCAL_RANK": "0",
+        "RANK": "0",
+        "WORLD_SIZE": "1",
+        "MASTER_PORT": "41519"
+      },
+      "proc_parent_pid": 3427749,
+      "cwd": "/home/bwwu/grid-audits/sid-extensions-p0/releases/g3-beauty-v2/86660be5a62c8325caf74cf2810581850ca12803",
+      "state": "R"
+    }
+  ],
+  "rank": {
+    "status": "RUNNING",
+    "scope": "FORMAL",
+    "rank": 0,
+    "world_size": 1,
+    "local_rank": 0,
+    "conditions": [
+      "shuffle2"
+    ],
+    "assigned_users": 22363,
+    "completed_users": 225,
+    "assignment_sha256": "22ee58fe9f948f50e5cbc92160b6dc7df7e2f633cb9e8bf3121da5fb35bcb088",
+    "model_load_and_strict_verification_seconds": 157.89927868917584,
+    "elapsed_generation_seconds": 141.1390985706821,
+    "model_identity_sha256": "3315622866cd97833741608ca21d82b72a10184ab8bff4dc688892146d0bf915",
+    "v2_model": {
+      "actual_parameter_tensor_counts": {
+        "base_embedding_or_head": 293,
+        "LoRA": 448
+      },
+      "base_dtype": "torch.bfloat16",
+      "lora_dtype": "torch.float32",
+      "adapter_embedding_and_head_dtype": "torch.bfloat16",
+      "all_parameters_on_logical_cuda_0": true,
+      "eval_mode": true,
+      "requires_grad_false": true,
+      "rank_environment": {
+        "CUDA_HOME": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4",
+        "DS_ACCELERATOR": "cuda",
+        "HF_HUB_OFFLINE": "1",
+        "LD_LIBRARY_PATH": "/data/bwwu/lc-rec/offload-20261108/cuda-12.4/lib64:/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/lib",
+        "OMP_NUM_THREADS": "4",
+        "OPENBLAS_NUM_THREADS": "2",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONOPTIMIZE": "0",
+        "PYTHONUNBUFFERED": "1",
+        "TOKENIZERS_PARALLELISM": "false",
+        "TRANSFORMERS_OFFLINE": "1",
+        "TORCHINDUCTOR_COMPILE_THREADS": "1",
+        "USE_TF": "0",
+        "USE_FLAX": "0",
+        "CUDA_VISIBLE_DEVICES": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "RANK": "0",
+        "WORLD_SIZE": "1",
+        "LOCAL_RANK": "0"
+      }
+    },
+    "RUN_COMMIT": "86660be5a62c8325caf74cf2810581850ca12803",
+    "MODEL_TRAINING_COMMIT": "21d495b0be5b606853ec7cec68a3eaa1b58acbd7",
+    "allowed_callback_sha256": "19b381838a03cc2273e6e2baf75606520ffe77f28e2525bc791578542d5bd93e",
+    "error": null
+  },
+  "prediction": {
+    "bytes": 5763095,
+    "mtime_utc": "2026-11-22T15:35:22.391712+00:00",
+    "mtime_ns": 1795361722391712183,
+    "inode": 78513579,
+    "device": 64512,
+    "path": "/data/bwwu/lc-rec/g3-beauty-v2/gpu-formal-shuffle2-r0/predictions.rank0.jsonl",
+    "complete_bytes": 5763095,
+    "complete_users": 238,
+    "delta_users": 238,
+    "delta_bytes": 5763095,
+    "delta_complete_bytes": 5763095,
+    "delta_offset_start": 0,
+    "delta_complete_sha256": "1b6c74cae950096b802e5cf0ef40b74cd48952d70f88ea23d92937ce73ceb295",
+    "buffered_suffix_bytes": 0,
+    "last_row_idx": 18923
+  },
+  "logs": {
+    "gpu_worker": {
+      "bytes": 2975,
+      "mtime_utc": "2026-11-22T15:35:14.212932+00:00",
+      "mtime_ns": 1795361714212931793,
+      "inode": 4491519,
+      "device": 66307,
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-gpu-formal-shuffle2-r0/work.log",
+      "offset_start": 0,
+      "offset_end": 2975,
+      "delta_bytes": 2975,
+      "excerpt_sha256": "29b829a42c765849dc22d0cd68f0629f6fae579b7879c822e3b3858d4b6f9bdd",
+      "excerpt": "[2026-11-22 15:30:05,626] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (override)\n2026-11-22 15:30:07.914928: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.\nTo enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.\nYou are using the legacy behaviour of the <class 'transformers.models.llama.tokenization_llama.LlamaTokenizer'>. This means that tokens that come after special tokens will not be properly handled. We recommend you to read the related pull request available at https://github.com/huggingface/transformers/pull/24565\n\rLoading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]\rLoading checkpoint shards:  50%|█████     | 1/2 [00:10<00:10, 10.28s/it]\rLoading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  6.41s/it]\rLoading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  6.99s/it]\n[rank0]:[W1122 15:32:52.680332469 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.\n{\"stage\": \"generation\", \"scope\": \"FORMAL\", \"rank\": 0, \"conditions\": [\"shuffle2\"], \"completed_users\": 25, \"assigned_users\": 22363, \"elapsed_seconds\": 16.870988765731454}\n{\"stage\": \"generation\", \"scope\": \"FORMAL\", \"rank\": 0, \"conditions\": [\"shuffle2\"], \"completed_users\": 50, \"assigned_users\": 22363, \"elapsed_seconds\": 32.44323938153684}\n{\"stage\": \"generation\", \"scope\": \"FORMAL\", \"rank\": 0, \"conditions\": [\"shuffle2\"], \"completed_users\": 75, \"assigned_users\": 22363, \"elapsed_seconds\": 47.72312029916793}\n{\"stage\": \"generation\", \"scope\": \"FORMAL\", \"rank\": 0, \"conditions\": [\"shuffle2\"], \"completed_users\": 100, \"assigned_users\": 22363, \"elapsed_seconds\": 62.97748477384448}\n{\"stage\": \"generation\", \"scope\": \"FORMAL\", \"rank\": 0, \"conditions\": [\"shuffle2\"], \"completed_users\": 125, \"assigned_users\": 22363, \"elapsed_seconds\": 78.77741171978414}\n{\"stage\": \"generation\", \"scope\": \"FORMAL\", \"rank\": 0, \"conditions\": [\"shuffle2\"], \"completed_users\": 150, \"assigned_users\": 22363, \"elapsed_seconds\": 94.32970953732729}\n{\"stage\": \"generation\", \"scope\": \"FORMAL\", \"rank\": 0, \"conditions\": [\"shuffle2\"], \"completed_users\": 175, \"assigned_users\": 22363, \"elapsed_seconds\": 110.13935094326735}\n{\"stage\": \"generation\", \"scope\": \"FORMAL\", \"rank\": 0, \"conditions\": [\"shuffle2\"], \"completed_users\": 200, \"assigned_users\": 22363, \"elapsed_seconds\": 125.34358783811331}\n{\"stage\": \"generation\", \"scope\": \"FORMAL\", \"rank\": 0, \"conditions\": [\"shuffle2\"], \"completed_users\": 225, \"assigned_users\": 22363, \"elapsed_seconds\": 141.1390985706821}\n"
+    },
+    "gpu_supervisor": {
+      "bytes": 0,
+      "mtime_utc": "2026-11-22T15:29:58.546300+00:00",
+      "mtime_ns": 1795361398546300379,
+      "inode": 4491518,
+      "device": 66307,
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-gpu-formal-shuffle2-r0/supervisor.log",
+      "offset_start": 0,
+      "offset_end": 0,
+      "delta_bytes": 0,
+      "excerpt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "excerpt": ""
+    },
+    "parent_worker": {
+      "bytes": 0,
+      "mtime_utc": "2026-11-22T15:29:56.896242+00:00",
+      "mtime_ns": 1795361396896242234,
+      "inode": 5780762,
+      "device": 66307,
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-group-formal-r0/work.log",
+      "offset_start": 0,
+      "offset_end": 0,
+      "delta_bytes": 0,
+      "excerpt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "excerpt": ""
+    },
+    "parent_supervisor": {
+      "bytes": 0,
+      "mtime_utc": "2026-11-22T15:29:56.720236+00:00",
+      "mtime_ns": 1795361396720236032,
+      "inode": 5780761,
+      "device": 66307,
+      "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/g3-beauty-v2-group-formal-r0/supervisor.log",
+      "offset_start": 0,
+      "offset_end": 0,
+      "delta_bytes": 0,
+      "excerpt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "excerpt": ""
+    }
+  },
+  "gpu": {
+    "physical_index": "1",
+    "uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+    "name": "NVIDIA GeForce RTX 4090",
+    "memory_used_mib": "21848",
+    "memory_total_mib": "24564",
+    "utilization_pct": "46"
+  },
+  "all_gpus": [
+    {
+      "physical_index": "0",
+      "uuid": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+      "name": "NVIDIA GeForce RTX 4090",
+      "memory_used_mib": "20638",
+      "memory_total_mib": "24564",
+      "utilization_pct": "0"
+    },
+    {
+      "physical_index": "1",
+      "uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "name": "NVIDIA GeForce RTX 4090",
+      "memory_used_mib": "21848",
+      "memory_total_mib": "24564",
+      "utilization_pct": "46"
+    }
+  ],
+  "compute_apps": [
+    {
+      "uuid": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae",
+      "pid": "3304681",
+      "memory_used_mib": "20628"
+    },
+    {
+      "uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "pid": "3427779",
+      "memory_used_mib": "21838"
+    }
+  ],
+  "output_free_bytes": 2698766725120,
+  "error_matches": [],
+  "budget": {
+    "formal_gpu": {
+      "used_seconds": 323.889793,
+      "limit_seconds": 129600,
+      "remaining_seconds": 129276.110207,
+      "jobs": {
+        "g3-beauty-v2-gpu-formal-shuffle2-r0": {
+          "status": "RUNNING",
+          "started_at": "2026-11-22T15:29:58.798823+00:00",
+          "ended_at": null,
+          "worker_seconds": 323.889793
+        }
+      }
+    },
+    "preflight_gpu": {
+      "used_seconds": 812.994045,
+      "limit_seconds": 10800,
+      "remaining_seconds": 9987.005955,
+      "jobs": {
+        "g3-beauty-v2-gpu-preflight-shuffle4-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:40:52.279881+00:00",
+          "ended_at": "2026-11-22T14:44:15.389364+00:00",
+          "worker_seconds": 203.109483
+        },
+        "g3-beauty-v2-gpu-preflight-shuffle2-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:30:14.433504+00:00",
+          "ended_at": "2026-11-22T14:33:38.337300+00:00",
+          "worker_seconds": 203.903796
+        },
+        "g3-beauty-v2-gpu-preflight-shuffle3a-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:33:48.799940+00:00",
+          "ended_at": "2026-11-22T14:37:10.947569+00:00",
+          "worker_seconds": 202.147629
+        },
+        "g3-beauty-v2-gpu-preflight-shuffle3b-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:37:18.865343+00:00",
+          "ended_at": "2026-11-22T14:40:42.698480+00:00",
+          "worker_seconds": 203.833137
+        }
+      }
+    },
+    "cpu": {
+      "used_seconds": 260.875971,
+      "limit_seconds": 28800,
+      "remaining_seconds": 28539.124029,
+      "jobs": {
+        "g3-beauty-v2-cpu-lifecycle-review-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:26:40.774982+00:00",
+          "ended_at": "2026-11-22T14:26:40.998076+00:00",
+          "worker_seconds": 0.223094
+        },
+        "g3-beauty-v2-cpu-paired-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:45:25.182995+00:00",
+          "ended_at": "2026-11-22T14:45:27.426242+00:00",
+          "worker_seconds": 2.243247
+        },
+        "g3-beauty-v2-cpu-replay-r0": {
+          "status": "FAILED",
+          "started_at": "2026-11-22T14:23:34.170518+00:00",
+          "ended_at": "2026-11-22T14:23:38.244918+00:00",
+          "worker_seconds": 4.0744
+        },
+        "g3-beauty-v2-cpu-eval-shuffle3a-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:44:35.487187+00:00",
+          "ended_at": "2026-11-22T14:44:37.687433+00:00",
+          "worker_seconds": 2.200246
+        },
+        "g3-beauty-v2-cpu-eval-shuffle2-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:44:26.921794+00:00",
+          "ended_at": "2026-11-22T14:44:29.172945+00:00",
+          "worker_seconds": 2.251151
+        },
+        "g3-beauty-v2-cpu-eval-shuffle4-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:44:57.005287+00:00",
+          "ended_at": "2026-11-22T14:44:59.310895+00:00",
+          "worker_seconds": 2.305608
+        },
+        "g3-beauty-v2-cpu-lifecycle-timeout-r0": {
+          "status": "TIMED_OUT",
+          "started_at": "2026-11-22T14:26:21.282878+00:00",
+          "ended_at": "2026-11-22T14:26:31.627894+00:00",
+          "worker_seconds": 10.345016
+        },
+        "g3-beauty-v2-cpu-review-export-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:45:38.053150+00:00",
+          "ended_at": "2026-11-22T14:45:39.539646+00:00",
+          "worker_seconds": 1.486496
+        },
+        "g3-beauty-v2-cpu-lifecycle-decoy-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:26:05.524738+00:00",
+          "ended_at": "2026-11-22T14:26:35.786886+00:00",
+          "worker_seconds": 30.262148
+        },
+        "g3-beauty-v2-cpu-replay-r2": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:28:32.195817+00:00",
+          "ended_at": "2026-11-22T14:30:05.248555+00:00",
+          "worker_seconds": 93.052738
+        },
+        "g3-beauty-v2-cpu-lifecycle-orphan-r0": {
+          "status": "WORKERS_TERMINATED",
+          "started_at": "2026-11-22T14:26:14.886427+00:00",
+          "ended_at": "2026-11-22T14:26:15.814351+00:00",
+          "worker_seconds": 0.927924
+        },
+        "g3-beauty-v2-cpu-lifecycle-normal-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:26:08.633100+00:00",
+          "ended_at": "2026-11-22T14:26:09.378073+00:00",
+          "worker_seconds": 0.744973
+        },
+        "g3-beauty-v2-cpu-normal-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:25:59.959988+00:00",
+          "ended_at": "2026-11-22T14:26:13.665067+00:00",
+          "worker_seconds": 13.705079
+        },
+        "g3-beauty-v2-cpu-eval-shuffle3b-r0": {
+          "status": "SUCCEEDED",
+          "started_at": "2026-11-22T14:44:47.839317+00:00",
+          "ended_at": "2026-11-22T14:44:50.086545+00:00",
+          "worker_seconds": 2.247228
+        },
+        "g3-beauty-v2-cpu-replay-r1": {
+          "status": "WORKERS_TERMINATED",
+          "started_at": "2026-11-22T14:25:56.423369+00:00",
+          "ended_at": "2026-11-22T14:27:31.229992+00:00",
+          "worker_seconds": 94.806623
+        }
+      }
+    },
+    "parent_wall": {
+      "used_seconds": 325.793808,
+      "limit_seconds": 126000,
+      "remaining_seconds": 125674.206192,
+      "jobs": {
+        "g3-beauty-v2-group-formal-r0": {
+          "status": "RUNNING",
+          "started_at": "2026-11-22T15:29:56.894808+00:00",
+          "ended_at": null,
+          "worker_seconds": 325.793808
+        }
+      }
+    }
+  },
+  "america_new_york": "2026-11-22T10:35:22.688616-05:00",
+  "label": "T05",
+  "elapsed_since_t0_seconds": 319.315600799,
+  "transport_retries": []
+}

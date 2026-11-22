@@ -2,7 +2,7 @@
 
 ## 网页二审
 
-用户确认第三组正式前验收通过，状态为 `THIRD_GROUP_PREFLIGHT_COMPLETE_WEB_REVIEW_PASS`。研究实现、全量 CPU 输入、四模式真实 GPU 预跑、评价统计和正式计划均通过。正式实验尚未启动。
+用户确认第三组正式前验收通过，状态为 `THIRD_GROUP_PREFLIGHT_COMPLETE_WEB_REVIEW_PASS`。研究实现、全量 CPU 输入、四模式真实 GPU 预跑、评价统计和正式计划均通过。二审时正式实验尚未启动。用户后续授权与实际作业见 [正式启动和观察记录](../launch-observation-r0/README.md)。
 
 审核 ZIP 的 `reports/experiment.md` 和 `reports/preflight.md` 保留了 GitHub 目录结构下的相对路径，分别有 10 条和 14 条链接在 ZIP 中失效。根 README 导航与离线核验命令可用。此问题不影响二审结论，后续打包时按包内路径修正。本次沿用原 ZIP 和计算结果。
 
