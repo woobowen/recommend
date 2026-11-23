@@ -1,5 +1,11 @@
 # 第三组 GRID G3 Beauty Shuffle V2 正式结果
 
+**网页最终二审已通过，状态为 `THIRD_GROUP_COMPLETE_WEB_REVIEW_PASS`。**网页 GPT 核对了最终审核 ZIP，并复核全量正式输入和候选、逐用户指标、5,000 次配对抽样及 GitHub 文件对应。必需验收项已全部通过。
+
+受审 ZIP 的 SHA-256 为 `16eb67d54e5bb178372f8738a46f35b28e8ffd954c91fa38e2dc5f5460df2159`。 [最终审核包交付回执](delivery-receipt.json)
+
+## 首次发布记录
+
 `THIRD_GROUP_COMPLETE_PENDING_WEB_REVIEW`。原正式父任务 `g3-beauty-v2-group-formal-r0` 于 2026-11-23 02:46:48 EST（07:46:48 UTC）达到 `PASS_G3_BEAUTY_V2_FORMAL`。S2、S3a、S3b、S4 四个 GPU 生成作业、四个对应 CPU 全量评价以及最终配对均为 `SUCCEEDED`、退出码 0。原父任务和九个子阶段的进程清收均已验证。正式链无重试。本阶段内部终审通过，网页终审待进行。 [终态、预算、固定身份与原件哈希](terminal.json) · [已审启动观察](https://github.com/woobowen/recommend/blob/6ae4e0d1f53c11d6062944db720ba560291794c0/lc_rec/shuffle/results/v2-a0-beauty-g3/launch-observation-r0/README.md)
 
 ## 冻结方案与执行
