@@ -43,8 +43,8 @@
 - 生产 CPU 及独立审核 A 从 A1 tokenizer 重放 24,772 人、99,088 条模式–用户记录、691,716 次组核验。显式 mask、组内完整 token、组外与冻结原输入及 OFF 不变性通过。A0 只用于共享出现轴和相对排列的交叉核验。 [CPU 全量结果](cpu-replay-audit.json)
 - 两个冻结 Normal 原分片完整复算，24,772×16 矩阵与全部 16 个均值均精确一致。原序、候选和碰撞绑定完整校验。 [Normal 复算](normal-recomputation.json)
 - S2 → S3a → S3b → S4 真实串行预跑，共 128 条模型边界记录、2,560 个候选。每候选四个合法码位 token 后真实 EOS，原精度和次序保留。S2 行 12005、17716 与各自冻结 Normal 输入、候选、原序、稳定排序和 40 个 FP32 分数逐项精确一致。预跑未执行 Normal 或强制恒等，四模式零正式样本。 [GPU 回执](gpu-preflight-summary.json)
-- 评价保留原候选、目录外占位与重复处理。ItemHit 和 ItemNDCG 由冻结 CCE 按碰撞组展开、对组内 item 给 uniform credit。SID Hit@1/5/10/20、NDCG@5/10/20、MRR@5/10/20、ItemHit 和 ItemNDCG 各 @5/10/20。五组比较共享同一用户轴及 5,000 次 PCG64 有放回抽样，统计 seed 20261113，95% 线性百分位，无多重比较调整。80 条工程结果及全部数组由独立 B 从原候选验证。比例差按右减左，百分点为差乘 100，相对改变为差除以基线，基线为零时不定义。 [工程评价](cpu-assess-summary.json) · [80 条工程记录](paired-engineering.csv)
-- 审核 A 直接核对实际源码和全部边界、独立 Prompt0、采样和模型证据。审核 B 直接从原候选重算 Normal 和预跑四条件、共享 bootstrap、全部区间，核对控制计划和服务器预算。独立统计求和顺序的最大 draw 偏差为 1.39e−17，80 个上下界均精确一致。 [审核 A](A_REVIEW.md) · [审核 B](B_REVIEW.md) · [审核 A 原始回执](A_recomputation.json) · [审核 B 原始回执](B_recomputation.json)
+- 评价保留原候选、目录外占位与重复处理。ItemHit 和 ItemNDCG 由冻结 CCE 按碰撞组展开、对组内 item 给 uniform credit。SID Hit@1/5/10/20、NDCG@5/10/20、MRR@5/10/20、ItemHit 和 ItemNDCG 各 @5/10/20。五组比较共享同一用户轴及 5,000 次 PCG64 有放回抽样，统计 seed 20261113，95% 线性百分位，无多重比较调整。80 条工程结果及全部数组由独立 B 从原候选验证。比例差按右减左，百分点为差乘 100，相对改变为差除以基线，基线为零时不定义。 [工程评价](cpu-assess-summary.json) · [80 条工程记录](paired-engineering.csv)。GitHub CSV 统一为 LF，ZIP 保留服务器原 CSV 字节
+- 审核 A 直接核对实际源码和全部边界、独立 Prompt0、采样和模型证据。审核 B 直接从原候选重算 Normal 和预跑四条件、共享 bootstrap、全部区间，核对控制计划和服务器预算。独立统计求和顺序的最大 draw 偏差为 1.39e−17，80 条记录的上下界均精确一致。 [审核 A](A_REVIEW.md) · [审核 B](B_REVIEW.md) · [审核 A 原始回执](A_recomputation.json) · [审核 B 原始回执](B_recomputation.json)
 
 ## 未提交的正式计划
 
