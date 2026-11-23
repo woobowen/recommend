@@ -1,0 +1,100 @@
+{
+  "time_beijing": "2026-11-21T18:30:15.043196+08:00",
+  "group": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_lc_rec_formal_20261121_123952",
+  "automatic_full_test": true,
+  "datasets": {
+    "Instruments": {
+      "pipeline": {
+        "time_unix": 1795236462.2529478,
+        "stage": "training_running",
+        "pid": 614080,
+        "micro": 8,
+        "global_gpus": "0,1",
+        "automatic_test": true
+      },
+      "training": {
+        "time_unix": 1795256997.6499832,
+        "stage": "train_log",
+        "global_step": 1007,
+        "max_steps": 8240,
+        "epoch": 0.4888349514563107,
+        "logs": {
+          "loss": 2.1298,
+          "grad_norm": 2.9919838905334473,
+          "learning_rate": 0.00019373437294513223,
+          "epoch": 0.4888349514563107
+        },
+        "elapsed_seconds": 20488.657964846818,
+        "repaired_long_prompt_rows": 0,
+        "max_allocated_mib": [
+          7845.4443359375,
+          9465.0322265625
+        ],
+        "scaler_scale": 128.0
+      },
+      "worker_alive": true,
+      "worker_cmdline": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/letter_lc_rec/bin/python /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_lc_rec_formal_20261121_123952/runner/train.py --dataset Instruments --out /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_lc_rec_formal_20261121_123952/Instruments/training --micro 8 ",
+      "config": {
+        "epochs": 4,
+        "micro_batch": 8,
+        "effective_batch": 64,
+        "gradient_accumulation_steps": 8,
+        "train_samples": 131837,
+        "validation_examples": 49544,
+        "test_users": 24772,
+        "tasks": [
+          "seqrec"
+        ],
+        "temperature": 0.8
+      }
+    },
+    "Beauty": {
+      "pipeline": {
+        "time_unix": 1795236462.2559562,
+        "stage": "training_running",
+        "pid": 614081,
+        "micro": 1,
+        "global_gpus": "2,3",
+        "automatic_test": true
+      },
+      "training": {
+        "time_unix": 1795257013.7527316,
+        "stage": "train_log",
+        "global_step": 621,
+        "max_steps": 19448,
+        "epoch": 0.12769977187289144,
+        "logs": {
+          "loss": 3.8308,
+          "grad_norm": 2.7395992279052734,
+          "learning_rate": 0.000199758499938739,
+          "epoch": 0.12769977187289144
+        },
+        "elapsed_seconds": 20504.73474445101,
+        "repaired_long_prompt_rows": 0,
+        "max_allocated_mib": [
+          7088.54638671875,
+          8445.1123046875
+        ],
+        "scaler_scale": 128.0
+      },
+      "worker_alive": true,
+      "worker_cmdline": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/letter_lc_rec/bin/python /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_lc_rec_formal_20261121_123952/runner/train.py --dataset Beauty --out /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_lc_rec_formal_20261121_123952/Beauty/training --micro 1 ",
+      "config": {
+        "epochs": 4,
+        "micro_batch": 1,
+        "effective_batch": 32,
+        "gradient_accumulation_steps": 32,
+        "train_samples": 155615,
+        "validation_examples": 44726,
+        "test_users": 22363,
+        "tasks": [
+          "seqrec",
+          "item2index",
+          "index2item"
+        ],
+        "temperature": 1.0
+      }
+    }
+  },
+  "gpu": "0, 8436, 0\n1, 10382, 71\n2, 7848, 21\n3, 9406, 29"
+}

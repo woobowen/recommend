@@ -1,0 +1,21 @@
+[2026-11-08 12:16:28,271][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.ItemDataModule>
+[2026-11-08 12:16:28,758][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.modules.clustering.residual_quantization.ResidualQuantization>
+[2026-11-08 12:16:28,877][root][INFO] - Device cpu: Verbose mode enabled
+[2026-11-08 12:16:28,883][root][INFO] - Device cpu: Using custom training loop function
+[2026-11-08 12:16:28,892][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2026-11-08 12:16:28,892][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2026-11-08 12:16:28,896][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2026-11-08 12:16:28,896][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2026-11-08 12:16:28,897][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2026-11-08 12:16:28,898][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2026-11-08 12:16:28,941][pytorch_lightning.utilities.rank_zero][INFO] - Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.
+[2026-11-08 12:16:28,955][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2026-11-08 12:16:28,955][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2026-11-08 12:16:28,955][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+[2026-11-08 12:16:28,956][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2026-11-08 12:16:29,416][root][WARNING] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+[2026-11-08 12:16:32,069][root][INFO] - Device cuda:0: Training layers one-at-a-time, each for 10 steps. Ensure that early stopping callbacks are disabled.
+[2026-11-08 12:17:19,755][root][INFO] - Device cuda:0: Finished training layer 0 of 3
+[2026-11-08 12:18:06,981][root][INFO] - Device cuda:0: Finished training layer 1 of 3
+[2026-11-08 12:18:53,697][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 30: 'train/loss' reached 4.27054 (best 4.27054), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/yelp_rkmeans_qwen_aligned_v1/quantizer_train/checkpoints/checkpoint_000_000030.ckpt' as top 1
+[2026-11-08 12:18:56,864][pytorch_lightning.utilities.rank_zero][INFO] - `Trainer.fit` stopped: `max_steps=30` reached.

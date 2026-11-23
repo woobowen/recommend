@@ -1,0 +1,36 @@
+{
+  "plan_version": "1.1",
+  "dataset": "yelp_aligned_v1",
+  "variant": "shuffle",
+  "train_seed": 43,
+  "eval_seed": 2026,
+  "gpu": 2,
+  "fit_ckpt_path": null,
+  "inputs": {
+    "text_vectors": {
+      "path": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/yelp_rkmeans_qwen_aligned_v1/item_embeddings.pt",
+      "sha256": "434368bc20df0ac134cbc4f00a264de00e39daa2ff7f882e6f775d26753335f0"
+    },
+    "quantizer": {
+      "path": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/yelp_rkmeans_qwen_aligned_v1/quantizer_train/checkpoints/checkpoint_000_000030.ckpt",
+      "sha256": "97cbc02a1734059b45c7f0f62de5a0b29441da6cd8e211c216f353a563eb1d6b"
+    },
+    "semantic_ids": {
+      "path": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/yelp_rkmeans_qwen_aligned_v1/semantic_ids.pt",
+      "sha256": "1c16d3be29308a81c21f8adbedf0df71a9dbe75b9ae05fe69690e99a890b574f"
+    }
+  },
+  "data_files": {
+    "/home/jcy/data/yelp_aligned_v1/evaluation/part-00000.tfrecord.gz": "731e8da2df4c47ca606302b1d413b6e439b45488e2a6f7b620bf8d6398b4b1a7",
+    "/home/jcy/data/yelp_aligned_v1/items/part-00000.tfrecord.gz": "96291a7d1952c47d2cf1f7da0131008ec912b19629f4500ecd6d625263f51d7e",
+    "/home/jcy/data/yelp_aligned_v1/testing/part-00000.tfrecord.gz": "da959e3bee9e4f05a4797a6b9a4461d82d14e53fc20af46b0893a107a625196d",
+    "/home/jcy/data/yelp_aligned_v1/training/part-00000.tfrecord.gz": "f7964f4c0b46b1737d13fcd9a2e078d260889d1480ef551ce1878a82182846ba"
+  },
+  "preflight_only": false,
+  "embedding_tables": "shared_encoder_decoder",
+  "train": true,
+  "test": true,
+  "full_test_attention_export": false,
+  "analysis_attention_export": true,
+  "source_sha256": "92500464c01cfbd1ac8b355897e8718085da2d88d900176cf2b0ae1ae55e993c"
+}

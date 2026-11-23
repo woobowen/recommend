@@ -1,0 +1,31 @@
+Seed set to 42
+[[36m2026-11-08 12:19:06,155[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.ItemDataModule>[0m
+[[36m2026-11-08 12:19:06,323[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating model <src.modules.clustering.residual_quantization.ResidualQuantization>[0m
+[[36m2026-11-08 12:19:06,432[0m][[34mroot[0m][[32mINFO[0m] - Device cpu: Verbose mode enabled[0m
+[[36m2026-11-08 12:19:06,437[0m][[34mroot[0m][[32mINFO[0m] - Device cpu: Using custom training loop function[0m
+[[36m2026-11-08 12:19:06,446[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating callbacks...[0m
+[[36m2026-11-08 12:19:06,446[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>[0m
+[[36m2026-11-08 12:19:06,449[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>[0m
+[[36m2026-11-08 12:19:06,451[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>[0m
+[[36m2026-11-08 12:19:06,451[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <src.utils.inference_utils.LocalPickleWriter>[0m
+[[36m2026-11-08 12:19:06,559[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating loggers...[0m
+[[36m2026-11-08 12:19:06,559[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>[0m
+[[36m2026-11-08 12:19:06,561[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>[0m
+[[36m2026-11-08 12:19:06,603[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.[0m
+[[36m2026-11-08 12:19:06,618[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - GPU available: True (cuda), used: True[0m
+[[36m2026-11-08 12:19:06,618[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - TPU available: False, using: 0 TPU cores[0m
+[[36m2026-11-08 12:19:06,618[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - HPU available: False, using: 0 HPUs[0m
+[[36m2026-11-08 12:19:06,618[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Logging hyperparameters![0m
+[[36m2026-11-08 12:19:06,759[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Rank 0 initialized for inference.[0m
+[[36m2026-11-08 12:19:06,760[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - Restoring states from the checkpoint path at /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/yelp_rkmeans_qwen_aligned_v1/quantizer_train/checkpoints/checkpoint_000_000030.ckpt[0m
+/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py:277: Be aware that when using `ckpt_path`, callbacks used to create the checkpoint need to be provided during `Trainer` instantiation. Please add the following callbacks: ["ModelCheckpoint{'monitor': 'train/loss', 'mode': 'min', 'every_n_train_steps': 30, 'every_n_epochs': 0, 'train_time_interval': None}"].
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[[36m2026-11-08 12:19:07,447[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - Loaded model weights from the checkpoint at /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/yelp_rkmeans_qwen_aligned_v1/quantizer_train/checkpoints/checkpoint_000_000030.ckpt[0m
+[[36m2026-11-08 12:19:07,448[0m][[34mroot[0m][[33mWARNING[0m] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0[0m
+/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'predict_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=55` in the `DataLoader` to improve performance.
+/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/lightning/pytorch/loops/prediction_loop.py:307: Couldn't infer the batch indices fetched from your dataloader: `DataloaderWithIterationRetry`
+[[36m2026-11-08 12:19:32,904[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Global Rank: 0 wrote 18775 rows to /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/yelp_rkmeans_qwen_aligned_v1/sid_generation/pickle/predictions_0_20261108T041932895.pkl.[0m
+[[36m2026-11-08 12:19:32,906[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Rank 0 finished writing predictions.[0m
+[[36m2026-11-08 12:19:32,906[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Merging pickle files on main process.[0m
+[[36m2026-11-08 12:19:32,920[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Merged 18775 rows into merged_predictions.pkl.[0m
+[[36m2026-11-08 12:19:33,071[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Merged 18775 rows into merged_predictions_tensor.pt. as pytorch tensor[0m

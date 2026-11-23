@@ -1,0 +1,61 @@
+--- original/run_task.py
++++ yelp_aligned_v1/run_task.py
+@@ -11,8 +11,8 @@
+ import traceback
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-BASELINES = {'beauty': 'beauty_rkmeans_qwen_20261010_012253',
+-             'toys': 'toys_rkmeans_qwen_20261010_093036'}
++BASELINES = {'yelp_aligned_v1': 'yelp_rkmeans_qwen_aligned_v1'}
++DATA_DIR = Path('/home/jcy/data/yelp_aligned_v1')
+ 
+ 
+ def digest(path):
+@@ -39,6 +39,7 @@
+     ap.add_argument('--output', type=Path, required=True)
+     ap.add_argument('--sample-dir', type=Path, required=True)
+     ap.add_argument('--preflight', action='store_true')
++    ap.add_argument('--prepare-only', action='store_true', help='Verify loaders/model/samples without fit or test')
+     args = ap.parse_args()
+     out = args.output.resolve()
+     if out.exists():
+@@ -78,12 +79,12 @@
+     assert torch.unique(ids.T, dim=0).size(0) == ids.size(1)
+     inputs = {name: {'path': str(path), 'sha256': digest(path)} for name, path in
+               [('text_vectors',vectors),('quantizer',quantizer),('semantic_ids',sid)]}
+-    raw_files = sorted((ROOT / f'original_assets/data/amazon_data/{args.dataset}').rglob('*.tfrecord*'))
++    raw_files = sorted((DATA_DIR).rglob('*.tfrecord*'))
+     assert raw_files
+-    raw_hashes = {str(path.relative_to(ROOT)): digest(path) for path in raw_files if path.is_file()}
++    raw_hashes = {str(path): digest(path) for path in raw_files if path.is_file()}
+     input_hashes = dict(sid=inputs['semantic_ids']['sha256'], data=raw_hashes)
+     source_paths = sorted(set(list((ROOT/'src').rglob('*.py')) + list((ROOT/'configs').rglob('*.yaml')) +
+-        list((ROOT/'codex/plan_v1_1').glob('*.py')) + list((ROOT/'codex/sid_order_launch').glob('*_model.py'))))
++        list((ROOT/'codex/plan_v1_1').glob('*.py')) + list((ROOT/'codex/yelp_aligned_v1').glob('*.py')) + list((ROOT/'codex/sid_order_launch').glob('*_model.py'))))
+     source_hashes = {str(path.relative_to(ROOT)): digest(path) for path in source_paths}
+     source_digest = hashlib.sha256(json.dumps(source_hashes, sort_keys=True).encode()).hexdigest()
+     for source in source_paths:
+@@ -98,7 +99,7 @@
+         full_test_attention_export=False, analysis_attention_export=True, source_sha256=source_digest))
+     del ids
+     overrides = ['experiment=tiger_train_flat',
+-        f'data_dir={ROOT}/original_assets/data/amazon_data/{args.dataset}', f'semantic_id_path={sid}',
++        f'data_dir={DATA_DIR}', f'semantic_id_path={sid}',
+         f'paths.root_dir={ROOT}', f'paths.output_dir={out}', f'paths.work_dir={ROOT}',
+         f'paths.profile_dir={out}/profile_output', f'paths.metadata_dir={out}/metadata',
+         'num_hierarchies=4','trainer.devices=1','++trainer.strategy=auto','trainer.precision=32-true',
+@@ -185,6 +186,14 @@
+             train_collate_cap=cfg.data_loading.train_dataloader_config.dataloader.collate_fn.max_batch_size,
+             full_test_attention_export=False,preflight_only=args.preflight))
+         assert cfg.train and cfg.test
++        if args.prepare_only:
++            from codex.yelp_aligned_v1.preflight import inspect_without_training
++            report = inspect_without_training(p, cfg, args.variant)
++            report.update(fit_called=False, test_called=False, formal_training_started=False,
++                          frozen_users=len(samples), sample_manifest_sha256=digest(out/'sample_manifest.json'))
++            write_json(out/'preparation_verified.json', report)
++            print(json.dumps(report, indent=2), flush=True)
++            return
+         p.trainer.fit(p.model,datamodule=p.datamodule,ckpt_path=None)
+         assert p.model.shuffle_calls==0,'Training or validation unexpectedly shuffled'
+         best=Path(p.trainer.checkpoint_callback.best_model_path).resolve()

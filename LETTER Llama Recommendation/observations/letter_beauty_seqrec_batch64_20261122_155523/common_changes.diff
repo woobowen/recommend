@@ -1,0 +1,37 @@
+--- old_three_task/common.py
++++ new_seqrec64/common.py
+@@ -60,7 +60,7 @@
+ 
+ 
+ def config(dataset,micro):
+-    return {'dataset':dataset,'tasks':['seqrec','item2index','index2item'] if dataset=='Beauty' else ['seqrec'],
++    return {'dataset':dataset,'tasks':['seqrec'],
+         'train_seed':42,'shuffle_seed':2026,'shuffle_protocol':'GRID-PLAN-V1_1','identity_allowed':True,
+         'temperature':1.0 if dataset=='Beauty' else .8,'epochs':4,'learning_rate':.0002,
+         'weight_decay':.01,'warmup_ratio':.01,'lr_scheduler_type':'cosine',
+@@ -68,12 +68,12 @@
+         'lora_targets':['q_proj','k_proj','v_proj','o_proj','gate_proj','down_proj','up_proj'],
+         'modules_to_save':['embed_tokens','lm_head'],'only_train_response':True,
+         'model_max_length':2048,'max_history':20,'micro_batch':micro,
+-        'effective_batch':32 if dataset=='Beauty' else 64,
+-        'gradient_accumulation_steps':(32 if dataset=='Beauty' else 64)//micro,
++        'effective_batch':64,
++        'gradient_accumulation_steps':64//micro,
+         'valid_prompt_samples_per_user':2,'select_best':'lowest eval_loss after epoch',
+         'train_backbone':'int8','compute_dtype':'float16','test_backbone':'unquantized float16',
+         'num_beams':20,'test_batch':1,'test_prompts':[0],'global_gpu_ids':os.environ.get('CUDA_VISIBLE_DEVICES'),
+-        'author_reference':'Issue19 author supplement, four-card effective batches 32/64',
++        'author_reference':'User 2026-11-22: Beauty seqrec only, effective batch64; other settings inherited, including temperature1.0',
+         'hardware_adaptations':['single-process two-GPU model parallelism',
+             'FP16 in place of unsupported BF16','native SDPA; no FastChat FlashAttention or DeepSpeed',
+             'per-device physical batch adapted; gradient accumulation preserves effective batch',
+@@ -91,8 +91,7 @@
+         sample_valid=True,valid_prompt_id=0,valid_prompt_sample_num=2)
+     seq=SeqRecDataset(args,mode='train',prompt_sample_num=1,sample_num=-1)
+     parts=[seq]
+-    if dataset=='Beauty':parts.extend(ItemFeatDataset(args,task=t,prompt_sample_num=1,sample_num=-1)
+-                                    for t in ['item2index','index2item'])
++    # User-authorized seqrec-only run; no auxiliary product-text training.
+     valid=SeqRecDataset(args,mode='valid',prompt_sample_num=2)
+     added=tokenizer.add_tokens(seq.get_new_tokens())
+     assert added==(965 if dataset=='Beauty' else 918)

@@ -1,0 +1,44 @@
+{
+  "group": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_beauty_seqrec_batch64_20261122_155523",
+  "time_beijing": "2026-11-22T15:55:23.970509+08:00",
+  "parent_run": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_lc_rec_formal_20261121_123952",
+  "changes": {
+    "tasks": [
+      "seqrec"
+    ],
+    "effective_batch": 64
+  },
+  "unchanged": {
+    "temperature": 1.0,
+    "epochs": 4,
+    "train_seed": 42,
+    "shuffle_seed": 2026,
+    "shuffle_identity_allowed": true,
+    "best_selection": "lowest eval_loss"
+  },
+  "gpus": "2,3",
+  "train_from_base": true,
+  "reuse_old_adapter_or_optimizer": false,
+  "source_sha256": {
+    "runner/hardware_compat.py": "489fcb62944cbbb1dcde0999565105536d9cc5e3475881ebe2b7986085c440de",
+    "runner/pipeline.py": "3a4c53c8d7ee726ec848816256c9bb83f6c568437b3a0ea607e215ba6a2019f4",
+    "runner/response_collator.py": "ce65d157efb50282e68cabd0983ae2b5ffbeebcb8793929a861db7a3c53ee282",
+    "runner/common.py": "41c53b6b79312ac220222185bfc9f14b353ee03169fb96d7b1dfba2d2c8b5a8b",
+    "runner/train.py": "3eef26b564184aff6bf1891895ab1138f5418c3c43968934fb6d147f272e565d",
+    "runner/test_recommendation.py": "07832bb9abbe7b4603a17ebc4e08ae7bd50ba572bc20e31f0443b941be0d3164",
+    "runner/shuffle_grid_protocol.py": "5329a4101c6c7a758c88de9b7e795a0095c122a508d169d3c2d9364739d1348a",
+    "runner/launch.py": "b16f88a76747b5898b27e71c34671dd622e5625dd78d4d9263a0a432fb8d7c12",
+    "supervise.py": "390d9a099a1007ace89786e35dcf5bc7fd1b21e8617d49c9b0de94db21a8542f"
+  },
+  "capacity_candidates": [
+    8,
+    4,
+    2,
+    1
+  ],
+  "post_training_tests": [
+    "unshuffle",
+    "shuffle_3",
+    "shuffle_4"
+  ]
+}

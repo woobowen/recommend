@@ -1,0 +1,93 @@
+--- verified_beauty/run_beauty.py
++++ official_instruments_yelp/run_dataset.py
+@@ -1,4 +1,4 @@
+-"""One fresh own-TIGER fit on official LETTER SIDs, then three inference modes."""
++"""Own TIGER on official LETTER Instruments/Yelp SID tables, then three tests."""
+ import argparse
+ import hashlib
+ import json
+@@ -10,7 +10,7 @@
+ import time
+ 
+ ROOT=Path('/home/jcy/GRID_wmh_Qwen_TIGER_20261009')
+-HERE=ROOT/'codex/letter_upstream_transformer_20261115'
++HERE=ROOT/'codex/letter_official_downstream_20261116'
+ 
+ 
+ def digest(path):
+@@ -28,6 +28,7 @@
+ 
+ def main():
+     ap=argparse.ArgumentParser()
++    ap.add_argument('--dataset',choices=['instruments','yelp'],required=True)
+     ap.add_argument('--output',type=Path,required=True)
+     ap.add_argument('--gpu',type=int,default=0)
+     ap.add_argument('--preflight',action='store_true')
+@@ -52,28 +53,28 @@
+     from src.utils.launcher_utils import pipeline_launcher
+ 
+     torch.use_deterministic_algorithms(True,warn_only=False)
+-    audit_path=HERE/'inputs/beauty/mapping_audit.json'
++    audit_path=HERE/'inputs'/args.dataset/'mapping_audit.json'
+     audit=json.loads(audit_path.read_text())
+-    assert audit['complete'] and audit['item_mapping_verified']
++    assert audit['complete'] and audit['item_mapping_verified'] and audit['dataset']==args.dataset
+     assert audit['all_split_sequences_exact_with_existing_history_policy']
+     sid=Path(audit['sid_path'])
+     assert digest(sid)==audit['sid_sha256']
+     ids=torch.load(sid,map_location='cpu',weights_only=False)
+-    assert list(ids.shape)==[4,12101]
++    assert list(ids.shape)==[4,audit['items']]
+     assert ids.min()>=0 and ids.max()<256
+-    assert len(torch.unique(ids.T,dim=0))==12088
++    assert len(torch.unique(ids.T,dim=0))==audit['unique_full_sids']
+     for path,checksum in audit['official_sources'].items():assert digest(path)==checksum
+     for path,checksum in audit['data_files'].items():assert digest(ROOT/path)==checksum
+     paths=sorted(set(list((ROOT/'src').rglob('*.py'))+list((ROOT/'configs').rglob('*.yaml'))+
+                      [ROOT/'codex/plan_v1_1/protocol.py',ROOT/'codex/sid_order_launch/sid_order_shuffle_model.py',
+-                      ROOT/'codex/sid_order_launch/sid_order_mlp_model.py',Path(__file__),HERE/'prepare_beauty.py']))
++                      ROOT/'codex/sid_order_launch/sid_order_mlp_model.py',Path(__file__),HERE/'prepare_data.py']))
+     hashes={str(p.relative_to(ROOT)):digest(p) for p in paths}
+     for p in paths:
+         target=out/'source_snapshot'/p.relative_to(ROOT)
+         target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,target)
+     write(out/'source_manifest.json',{'files':hashes})
+     shutil.copy2(audit_path,out/'mapping_audit.json')
+-    write(out/'input_provenance.json',dict(dataset='beauty',upstream='official_LETTER_released_SID',
++    write(out/'input_provenance.json',dict(dataset=args.dataset,upstream='official_LETTER_released_SID',
+         official_commit='8d0154e28de37dbb6e24871c508ad8ddb1921cda',
+         train_seed=42,eval_seed=2026,fit_checkpoint=None,preflight_only=args.preflight,
+         sid_path=str(sid),sid_sha256=digest(sid),mapping_audit_sha256=digest(audit_path),
+@@ -89,7 +90,7 @@
+         '++trainer.enable_progress_bar=false','train=true','test=true','ckpt_path=null',
+         '++callbacks.restart_job=null','++callbacks.model_summary=null','extras.print_config=false','seed=42',
+         '++model.top_k_for_generation=10','model._target_=codex.plan_v1_1.protocol.ShuffleModel',
+-        '++model.dataset_name=beauty','++model.eval_seed=2026','++model.shuffle_embedding_on_test=false',
++        f'++model.dataset_name={args.dataset}','++model.eval_seed=2026','++model.shuffle_embedding_on_test=false',
+         '++model.hierarchies_to_shuffle=3','++model.save_attentions_on_test=false',
+         '++model.save_attentions_on_predict=false']
+     for split in ['train','val','test']:
+@@ -150,7 +151,7 @@
+         assert p.model.get_embedding_table('encoder') is p.model.get_embedding_table('decoder')
+         assert torch.equal(p.model.codebooks.cpu(),ids.T)
+         # All architecture, optimizer and data settings must equal the user's latest Qwen run.
+-        old=ROOT/'experiments/sid_order_5seed_v1/beauty/shuffle/seed_42/.hydra/config.yaml'
++        old=ROOT/'experiments/letter_official_beauty_20261115_125008/formal/.hydra/config.yaml'
+         reference=OmegaConf.load(old)
+         keys=['model.huggingface_model.config','model.decoder.config','model.mlp_layers',
+               'model.weight_tying','optim','sequence_length','trainer.accumulate_grad_batches',
+@@ -174,11 +175,12 @@
+         best=Path(p.trainer.checkpoint_callback.best_model_path).resolve()
+         assert best.is_file() and best.is_relative_to(out)
+         best_hash=digest(best)
+-        result=dict(dataset='beauty',upstream='official_LETTER_SID',train_seed=42,eval_seed=2026,
++        result=dict(dataset=args.dataset,upstream='official_LETTER_SID',train_seed=42,eval_seed=2026,
+                     checkpoint=str(best),checkpoint_sha256=best_hash,trained_from_scratch=True,
+                     global_step=p.trainer.global_step,preflight_only=args.preflight,
+                     best_validation_recall5=float(p.trainer.checkpoint_callback.best_model_score),
+-                    test_metrics={},completed=False)
++                    test_metrics={},completed=False,users=audit['users'],items=audit['items'],
++                    sid_sha256=audit['sid_sha256'],official_sid_collisions=audit['extra_colliding_items'])
+         write(out/'stage_result.json',result)
+         for mode,enabled,count in [('unshuffle',False,3),('shuffle_3',True,3),('shuffle_4',True,4)]:
+             recorder.mode=mode

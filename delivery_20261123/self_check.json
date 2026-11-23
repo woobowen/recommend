@@ -1,0 +1,113 @@
+{
+  "scope": "CPU file/source/config checks; no model loading/inference",
+  "assembly_cases": [
+    {
+      "dataset": "beauty",
+      "all_sid_official_and_data_paths_exist": true,
+      "reference_config_exists": true,
+      "baseline_config_fields_equal": [
+        "model.huggingface_model.config",
+        "model.decoder.config",
+        "model.mlp_layers",
+        "model.weight_tying",
+        "optim",
+        "sequence_length",
+        "trainer.accumulate_grad_batches",
+        "trainer.val_check_interval",
+        "callbacks.early_stopping",
+        "eval",
+        "data_loading.train_dataloader_config.dataloader.batch_size_per_device",
+        "data_loading.train_dataloader_config.dataloader.collate_fn.max_batch_size"
+      ],
+      "assembly_receipt": {
+        "dataset": "beauty",
+        "historical_source_signature": "82e79f44edf1e4c584fef5fa60c83a170d6aa5925d6c4ad28510354a5a7e54c5",
+        "adaptations": [
+          {
+            "path": "codex\\letter_upstream_transformer_20261115\\run_beauty.py",
+            "before_sha256": "e9f782b8d2a27366013729d2bc60c918f8bc4f443d5c7b6aab787964390fba7c",
+            "diff": "--- historical\n+++ derived\n@@ -9,7 +9,7 @@\n import sys\n import time\n \n-ROOT=Path('/home/jcy/GRID_wmh_Qwen_TIGER_20261009')\n+ROOT=Path('//?/C:/Users/Justin Yin/Desktop/学长基线实验/codex/experiment_publication_20261123/assembled/beauty')\n HERE=ROOT/'codex/letter_upstream_transformer_20261115'\n \n \n"
+          }
+        ],
+        "mapping_audit": "historical input hashes retained; root paths mapped only",
+        "scope": "new derived runtime; no training/evaluation executed"
+      },
+      "model_constructed": false
+    },
+    {
+      "dataset": "instruments",
+      "all_sid_official_and_data_paths_exist": true,
+      "reference_config_exists": true,
+      "baseline_config_fields_equal": [
+        "model.huggingface_model.config",
+        "model.decoder.config",
+        "model.mlp_layers",
+        "model.weight_tying",
+        "optim",
+        "sequence_length",
+        "trainer.accumulate_grad_batches",
+        "trainer.val_check_interval",
+        "callbacks.early_stopping",
+        "eval",
+        "data_loading.train_dataloader_config.dataloader.batch_size_per_device",
+        "data_loading.train_dataloader_config.dataloader.collate_fn.max_batch_size"
+      ],
+      "assembly_receipt": {
+        "dataset": "instruments",
+        "historical_source_signature": "b04385629968f59accfb83607a7b481913704e9cca254a8deeca7c92a1cc97e8",
+        "adaptations": [
+          {
+            "path": "codex\\letter_official_downstream_20261116\\run_dataset.py",
+            "before_sha256": "f55ca61fbf09de108eab5480383a1b3630c8aaf41fea1320fd7519c83d144446",
+            "diff": "--- historical\n+++ derived\n@@ -9,7 +9,7 @@\n import sys\n import time\n \n-ROOT=Path('/home/jcy/GRID_wmh_Qwen_TIGER_20261009')\n+ROOT=Path('//?/C:/Users/Justin Yin/Desktop/学长基线实验/codex/experiment_publication_20261123/assembled/instruments')\n HERE=ROOT/'codex/letter_official_downstream_20261116'\n \n \n"
+          }
+        ],
+        "mapping_audit": "historical input hashes retained; root paths mapped only",
+        "scope": "new derived runtime; no training/evaluation executed"
+      },
+      "model_constructed": false
+    },
+    {
+      "dataset": "yelp",
+      "all_sid_official_and_data_paths_exist": true,
+      "reference_config_exists": true,
+      "baseline_config_fields_equal": [
+        "model.huggingface_model.config",
+        "model.decoder.config",
+        "model.mlp_layers",
+        "model.weight_tying",
+        "optim",
+        "sequence_length",
+        "trainer.accumulate_grad_batches",
+        "trainer.val_check_interval",
+        "callbacks.early_stopping",
+        "eval",
+        "data_loading.train_dataloader_config.dataloader.batch_size_per_device",
+        "data_loading.train_dataloader_config.dataloader.collate_fn.max_batch_size"
+      ],
+      "assembly_receipt": {
+        "dataset": "yelp",
+        "historical_source_signature": "b04385629968f59accfb83607a7b481913704e9cca254a8deeca7c92a1cc97e8",
+        "adaptations": [
+          {
+            "path": "codex\\letter_official_downstream_20261116\\run_dataset.py",
+            "before_sha256": "f55ca61fbf09de108eab5480383a1b3630c8aaf41fea1320fd7519c83d144446",
+            "diff": "--- historical\n+++ derived\n@@ -9,7 +9,7 @@\n import sys\n import time\n \n-ROOT=Path('/home/jcy/GRID_wmh_Qwen_TIGER_20261009')\n+ROOT=Path('//?/C:/Users/Justin Yin/Desktop/学长基线实验/codex/experiment_publication_20261123/assembled/yelp')\n HERE=ROOT/'codex/letter_official_downstream_20261116'\n \n \n"
+          }
+        ],
+        "mapping_audit": "historical input hashes retained; root paths mapped only",
+        "scope": "new derived runtime; no training/evaluation executed"
+      },
+      "model_constructed": false
+    }
+  ],
+  "saved_result_tests": 15,
+  "declared_paths_checked": 855,
+  "python_syntax_checked": 365,
+  "credentials_patterns": 0,
+  "correction_round": 1,
+  "resolved_review_findings": [
+    "R0-1 historical reference configs packaged and assembled",
+    "R0-2 explicit unshuffle key and condition-set check"
+  ]
+}

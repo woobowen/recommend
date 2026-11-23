@@ -1,0 +1,82 @@
+{
+  "complete": true,
+  "dataset": "yelp",
+  "items": 20033,
+  "users": 30431,
+  "interactions": 316354,
+  "sid_shape": [
+    4,
+    20033
+  ],
+  "unique_full_sids": 19201,
+  "extra_colliding_items": 832,
+  "collision_groups": 415,
+  "items_in_collision_groups": 1247,
+  "collision_size_distribution": {
+    "2": 292,
+    "4": 26,
+    "6": 8,
+    "8": 3,
+    "5": 16,
+    "3": 55,
+    "10": 1,
+    "7": 6,
+    "9": 2,
+    "11": 2,
+    "16": 1,
+    "56": 1,
+    "65": 1,
+    "13": 1
+  },
+  "duplicate_user_item_interactions": 11830,
+  "official_sources": {
+    "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/third_party/LETTER-8d0154e/data/Yelp/Yelp.index.json": "7468278b33ae2174c0d230d5e49d0c93e1dedd9cdc8c5f58c983574c14a62b2b",
+    "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/third_party/LETTER-8d0154e/data/Yelp/Yelp.inter.json": "22069fef8afd1d53fe9e0aaa385a6c93f7b43e43574fb10f5f5155fa2c869a97",
+    "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/third_party/LETTER-8d0154e/data/Yelp/Yelp.item.json": "8f58a9d54111fc10ccd675f99e6f2afe988cd0ee70b40f1e37d04f9aea764c2d"
+  },
+  "data_files": {
+    "codex/letter_official_downstream_20261116/inputs/yelp/data/evaluation/part-00000.tfrecord.gz": "e0f3ee602fc2b731965e4e32b9053224e729c6c88a4342e4798de3ac8edc4beb",
+    "codex/letter_official_downstream_20261116/inputs/yelp/data/testing/part-00000.tfrecord.gz": "8c0db8c939a08dfbf68546c1cd62bc3e047c7795f6b5bb079d0a7a40dc7e7a8d",
+    "codex/letter_official_downstream_20261116/inputs/yelp/data/training/part-00000.tfrecord.gz": "8c298d35dfd41ea5c77d7f4d7c98ee4ab7a319cde0b3f44512d3da33e584f90b"
+  },
+  "sid_path": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/codex/letter_official_downstream_20261116/inputs/yelp/semantic_ids.pt",
+  "sid_sha256": "11080ebeab3ba174cd47bbb6f9e23168f7b711b5b0a6278312ebb6ee3b7485d1",
+  "original_data_path": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/codex/letter_official_downstream_20261116/inputs/yelp/data",
+  "item_mapping_verified": true,
+  "all_split_sequences_exact_with_existing_history_policy": true,
+  "official_sid_values_unchanged": true,
+  "author_interaction_order_preserved": true,
+  "further_dedup_or_core_filtering": false,
+  "training_policy": "Author sequence S[:-2]; own causal-duplicate collator, sequence_length=120.",
+  "validation_policy": "S[:-1][-21:] (last 20 history items plus validation target).",
+  "test_policy": "S[-21:] (last 20 history items plus test target).",
+  "metric_semantics": "Existing evaluator matches complete SID; items in a collision group are indistinguishable.",
+  "official_commit": "8d0154e28de37dbb6e24871c508ad8ddb1921cda",
+  "splits": {
+    "training": {
+      "users": 30431,
+      "mismatched_sequences": 0,
+      "ambiguous_sid_targets": 1261,
+      "readback_all_records_exact": true,
+      "min_saved_sequence_length": 3,
+      "max_saved_sequence_length": 348
+    },
+    "evaluation": {
+      "users": 30431,
+      "mismatched_sequences": 0,
+      "ambiguous_sid_targets": 1267,
+      "readback_all_records_exact": true,
+      "min_saved_sequence_length": 4,
+      "max_saved_sequence_length": 21
+    },
+    "testing": {
+      "users": 30431,
+      "mismatched_sequences": 0,
+      "ambiguous_sid_targets": 1306,
+      "readback_all_records_exact": true,
+      "min_saved_sequence_length": 5,
+      "max_saved_sequence_length": 21
+    }
+  },
+  "preparation_source_sha256": "ecd8c9ab610caf831288dd92666ddb263f0dbcefbb3ddb2a405a6d26d5a494c6"
+}

@@ -1,0 +1,335 @@
+{
+  "observed_at": 1794886439.063431,
+  "group": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754",
+  "tasks": [
+    {
+      "dataset": "instruments",
+      "status": {
+        "state": "completed",
+        "dataset": "instruments",
+        "physical_gpu": 0,
+        "supervisor_pid": 537969,
+        "session_id": 537969,
+        "updated_utc": "2026-11-16T17:19:05.164293+00:00",
+        "stage": "formal",
+        "pid": 538985,
+        "output": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/instruments/formal",
+        "argv": [
+          "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/bin/python",
+          "-u",
+          "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/codex/letter_official_downstream_20261116/run_dataset.py",
+          "--dataset",
+          "instruments",
+          "--gpu",
+          "0",
+          "--output",
+          "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/instruments/formal"
+        ],
+        "metrics": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/instruments/formal/metrics.md",
+        "exit_code": 0
+      },
+      "supervisor_alive": false,
+      "child_alive": false,
+      "preflight_passed": true,
+      "preflight_modes": [
+        "unshuffle",
+        "shuffle_3",
+        "shuffle_4"
+      ],
+      "model_verified": {
+        "model": "codex.plan_v1_1.protocol.ShuffleModel",
+        "parameters": 13128064,
+        "shared_embedding": true,
+        "official_sid_tensor_exact": true,
+        "baseline_configuration_matches": true,
+        "compared_configuration_keys": [
+          "model.huggingface_model.config",
+          "model.decoder.config",
+          "model.mlp_layers",
+          "model.weight_tying",
+          "optim",
+          "sequence_length",
+          "trainer.accumulate_grad_batches",
+          "trainer.val_check_interval",
+          "callbacks.early_stopping",
+          "eval",
+          "data_loading.train_dataloader_config.dataloader.batch_size_per_device",
+          "data_loading.train_dataloader_config.dataloader.collate_fn.max_batch_size"
+        ],
+        "reference_config": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008/formal/.hydra/config.yaml",
+        "preflight_only": false,
+        "attention_export": false,
+        "max_steps": 320000,
+        "max_epochs": 10
+      },
+      "progress": {
+        "state": "completed",
+        "time": 1794849543.0415032,
+        "pid": 538985,
+        "physical_gpu": 0,
+        "global_step": 6400,
+        "epoch": 1,
+        "mode": "shuffle_4",
+        "peak_gpu_bytes": 2778301440
+      },
+      "result": {
+        "dataset": "instruments",
+        "upstream": "official_LETTER_SID",
+        "train_seed": 42,
+        "eval_seed": 2026,
+        "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/instruments/formal/checkpoints/checkpoint_epoch=000_step=005400.ckpt",
+        "checkpoint_sha256": "ae3d9c69e9b0a0205a021a4afa02d041487491e8e88c94dc597a243d0a91d3e9",
+        "trained_from_scratch": true,
+        "global_step": 6400,
+        "preflight_only": false,
+        "best_validation_recall5": 0.10241401940584183,
+        "test_metrics": {
+          "unshuffle": {
+            "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/instruments/formal/checkpoints/checkpoint_epoch=000_step=005400.ckpt",
+            "checkpoint_sha256": "ae3d9c69e9b0a0205a021a4afa02d041487491e8e88c94dc597a243d0a91d3e9",
+            "metrics": [
+              {
+                "test/loss": 8.461666107177734,
+                "test/ndcg@5": 0.0726066380739212,
+                "test/ndcg@10": 0.0783795714378357,
+                "test/recall@5": 0.0849749743938446,
+                "test/recall@10": 0.10277733206748962
+              }
+            ],
+            "full_test_set": true,
+            "evaluated_users": 24772,
+            "shuffle_calls": 0,
+            "shuffle_enabled": false,
+            "hierarchies_to_shuffle": 3,
+            "eval_seed": 2026,
+            "ambiguous_official_sid_test_targets": 122
+          },
+          "shuffle_3": {
+            "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/instruments/formal/checkpoints/checkpoint_epoch=000_step=005400.ckpt",
+            "checkpoint_sha256": "ae3d9c69e9b0a0205a021a4afa02d041487491e8e88c94dc597a243d0a91d3e9",
+            "metrics": [
+              {
+                "test/loss": 8.473020553588867,
+                "test/ndcg@5": 0.07032349705696106,
+                "test/ndcg@10": 0.07633491605520248,
+                "test/recall@5": 0.0825125128030777,
+                "test/recall@10": 0.10096076130867004
+              }
+            ],
+            "full_test_set": true,
+            "evaluated_users": 24772,
+            "shuffle_calls": 6194,
+            "shuffle_enabled": true,
+            "hierarchies_to_shuffle": 3,
+            "eval_seed": 2026,
+            "ambiguous_official_sid_test_targets": 122
+          },
+          "shuffle_4": {
+            "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/instruments/formal/checkpoints/checkpoint_epoch=000_step=005400.ckpt",
+            "checkpoint_sha256": "ae3d9c69e9b0a0205a021a4afa02d041487491e8e88c94dc597a243d0a91d3e9",
+            "metrics": [
+              {
+                "test/loss": 8.484830856323242,
+                "test/ndcg@5": 0.06988701969385147,
+                "test/ndcg@10": 0.07521457225084305,
+                "test/recall@5": 0.08331988006830215,
+                "test/recall@10": 0.09979008883237839
+              }
+            ],
+            "full_test_set": true,
+            "evaluated_users": 24772,
+            "shuffle_calls": 6194,
+            "shuffle_enabled": true,
+            "hierarchies_to_shuffle": 4,
+            "eval_seed": 2026,
+            "ambiguous_official_sid_test_targets": 122
+          }
+        },
+        "completed": true,
+        "users": 24772,
+        "items": 9922,
+        "sid_sha256": "271f7fb478540414b5d65f4424092ddf9537ad92fbcd68b8cb09b19c090921dd",
+        "official_sid_collisions": 25
+      },
+      "log_tail": [
+        "      \"shuffle_enabled\": true,",
+        "      \"hierarchies_to_shuffle\": 4,",
+        "      \"eval_seed\": 2026,",
+        "      \"ambiguous_official_sid_test_targets\": 122",
+        "    }",
+        "  },",
+        "  \"completed\": true,",
+        "  \"users\": 24772,",
+        "  \"items\": 9922,",
+        "  \"sid_sha256\": \"271f7fb478540414b5d65f4424092ddf9537ad92fbcd68b8cb09b19c090921dd\",",
+        "  \"official_sid_collisions\": 25",
+        "}"
+      ]
+    },
+    {
+      "dataset": "yelp",
+      "status": {
+        "state": "completed",
+        "dataset": "yelp",
+        "physical_gpu": 1,
+        "supervisor_pid": 537970,
+        "session_id": 537970,
+        "updated_utc": "2026-11-16T21:32:01.459592+00:00",
+        "stage": "formal",
+        "pid": 538989,
+        "output": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/yelp/formal",
+        "argv": [
+          "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/bin/python",
+          "-u",
+          "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/codex/letter_official_downstream_20261116/run_dataset.py",
+          "--dataset",
+          "yelp",
+          "--gpu",
+          "1",
+          "--output",
+          "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/yelp/formal"
+        ],
+        "metrics": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/yelp/formal/metrics.md",
+        "exit_code": 0
+      },
+      "supervisor_alive": false,
+      "child_alive": false,
+      "preflight_passed": true,
+      "preflight_modes": [
+        "unshuffle",
+        "shuffle_3",
+        "shuffle_4"
+      ],
+      "model_verified": {
+        "model": "codex.plan_v1_1.protocol.ShuffleModel",
+        "parameters": 13128064,
+        "shared_embedding": true,
+        "official_sid_tensor_exact": true,
+        "baseline_configuration_matches": true,
+        "compared_configuration_keys": [
+          "model.huggingface_model.config",
+          "model.decoder.config",
+          "model.mlp_layers",
+          "model.weight_tying",
+          "optim",
+          "sequence_length",
+          "trainer.accumulate_grad_batches",
+          "trainer.val_check_interval",
+          "callbacks.early_stopping",
+          "eval",
+          "data_loading.train_dataloader_config.dataloader.batch_size_per_device",
+          "data_loading.train_dataloader_config.dataloader.collate_fn.max_batch_size"
+        ],
+        "reference_config": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008/formal/.hydra/config.yaml",
+        "preflight_only": false,
+        "attention_export": false,
+        "max_steps": 320000,
+        "max_epochs": 10
+      },
+      "progress": {
+        "state": "completed",
+        "time": 1794864719.3251987,
+        "pid": 538989,
+        "physical_gpu": 1,
+        "global_step": 7500,
+        "epoch": 1,
+        "mode": "shuffle_4",
+        "peak_gpu_bytes": 2778825728
+      },
+      "result": {
+        "dataset": "yelp",
+        "upstream": "official_LETTER_SID",
+        "train_seed": 42,
+        "eval_seed": 2026,
+        "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/yelp/formal/checkpoints/checkpoint_epoch=000_step=006500.ckpt",
+        "checkpoint_sha256": "f3acd843f3165ce80ab18eaa9b622f908f848d401f87f286815cfd20ed46db92",
+        "trained_from_scratch": true,
+        "global_step": 7500,
+        "preflight_only": false,
+        "best_validation_recall5": 0.01863231509923935,
+        "test_metrics": {
+          "unshuffle": {
+            "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/yelp/formal/checkpoints/checkpoint_epoch=000_step=006500.ckpt",
+            "checkpoint_sha256": "f3acd843f3165ce80ab18eaa9b622f908f848d401f87f286815cfd20ed46db92",
+            "metrics": [
+              {
+                "test/loss": 9.045635223388672,
+                "test/ndcg@5": 0.011551928706467152,
+                "test/ndcg@10": 0.014990069903433323,
+                "test/recall@5": 0.018040813505649567,
+                "test/recall@10": 0.028720712289214134
+              }
+            ],
+            "full_test_set": true,
+            "evaluated_users": 30431,
+            "shuffle_calls": 0,
+            "shuffle_enabled": false,
+            "hierarchies_to_shuffle": 3,
+            "eval_seed": 2026,
+            "ambiguous_official_sid_test_targets": 1306
+          },
+          "shuffle_3": {
+            "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/yelp/formal/checkpoints/checkpoint_epoch=000_step=006500.ckpt",
+            "checkpoint_sha256": "f3acd843f3165ce80ab18eaa9b622f908f848d401f87f286815cfd20ed46db92",
+            "metrics": [
+              {
+                "test/loss": 9.04673957824707,
+                "test/ndcg@5": 0.01171374972909689,
+                "test/ndcg@10": 0.015000329352915287,
+                "test/recall@5": 0.01820511929690838,
+                "test/recall@10": 0.028424961492419243
+              }
+            ],
+            "full_test_set": true,
+            "evaluated_users": 30431,
+            "shuffle_calls": 7608,
+            "shuffle_enabled": true,
+            "hierarchies_to_shuffle": 3,
+            "eval_seed": 2026,
+            "ambiguous_official_sid_test_targets": 1306
+          },
+          "shuffle_4": {
+            "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/yelp/formal/checkpoints/checkpoint_epoch=000_step=006500.ckpt",
+            "checkpoint_sha256": "f3acd843f3165ce80ab18eaa9b622f908f848d401f87f286815cfd20ed46db92",
+            "metrics": [
+              {
+                "test/loss": 9.048823356628418,
+                "test/ndcg@5": 0.011718127876520157,
+                "test/ndcg@10": 0.0151320556178689,
+                "test/recall@5": 0.01810653693974018,
+                "test/recall@10": 0.028720712289214134
+              }
+            ],
+            "full_test_set": true,
+            "evaluated_users": 30431,
+            "shuffle_calls": 7608,
+            "shuffle_enabled": true,
+            "hierarchies_to_shuffle": 4,
+            "eval_seed": 2026,
+            "ambiguous_official_sid_test_targets": 1306
+          }
+        },
+        "completed": true,
+        "users": 30431,
+        "items": 20033,
+        "sid_sha256": "11080ebeab3ba174cd47bbb6f9e23168f7b711b5b0a6278312ebb6ee3b7485d1",
+        "official_sid_collisions": 832
+      },
+      "log_tail": [
+        "      \"shuffle_enabled\": true,",
+        "      \"hierarchies_to_shuffle\": 4,",
+        "      \"eval_seed\": 2026,",
+        "      \"ambiguous_official_sid_test_targets\": 1306",
+        "    }",
+        "  },",
+        "  \"completed\": true,",
+        "  \"users\": 30431,",
+        "  \"items\": 20033,",
+        "  \"sid_sha256\": \"11080ebeab3ba174cd47bbb6f9e23168f7b711b5b0a6278312ebb6ee3b7485d1\",",
+        "  \"official_sid_collisions\": 832",
+        "}"
+      ]
+    }
+  ],
+  "gpu": "index, memory.used [MiB], utilization.gpu [%]\n0, 6 MiB, 0 %\n1, 6 MiB, 0 %\n2, 6 MiB, 0 %\n3, 6 MiB, 0 %\n"
+}

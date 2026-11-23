@@ -1,0 +1,34 @@
+Seed set to 42
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+Seed set to 42
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+WARNING:root:num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=55` in the `DataLoader` to improve performance.
+WARNING:root:num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'val_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=55` in the `DataLoader` to improve performance.
+Metric val/recall@5 improved. New best score: 0.000
+Epoch 0, global step 2: 'val/recall@5' reached 0.00000 (best 0.00000), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_124859/preflight/checkpoints/checkpoint_epoch=000_step=000002.ckpt' as top 1
+`Trainer.fit` stopped: `max_steps=2` reached.
+Seed set to 2026
+Restoring states from the checkpoint path at /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_124859/preflight/checkpoints/checkpoint_epoch=000_step=000002.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_124859/preflight/checkpoints/checkpoint_epoch=000_step=000002.ckpt
+WARNING:root:num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'test_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=55` in the `DataLoader` to improve performance.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│         test/loss         │     22.19744110107422     │
+│       test/ndcg@10        │            0.0            │
+│        test/ndcg@5        │            0.0            │
+│      test/recall@10       │            0.0            │
+│       test/recall@5       │            0.0            │
+└───────────────────────────┴───────────────────────────┘
+Traceback (most recent call last):
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/codex/letter_upstream_transformer_20261115/run_beauty.py", line 205, in <module>
+    if __name__=='__main__':main()
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/codex/letter_upstream_transformer_20261115/run_beauty.py", line 185, in main
+    assert all(n==expected for n in totals.values()),totals
+AssertionError: {'ndcg@5': 0, 'ndcg@10': 0, 'recall@5': 0, 'recall@10': 0}

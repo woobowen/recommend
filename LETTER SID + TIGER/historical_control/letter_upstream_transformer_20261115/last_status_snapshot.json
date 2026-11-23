@@ -1,0 +1,176 @@
+{
+  "observed_at": 1794809191.171816,
+  "launch": {
+    "group": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008",
+    "supervisor_pid": 518565,
+    "physical_gpu": 0,
+    "train_seed": 42,
+    "eval_seed": 2026,
+    "experiments": [
+      "unshuffle",
+      "shuffle_3",
+      "shuffle_4"
+    ],
+    "upstream": "official_LETTER_Beauty_SID",
+    "one_shared_best_checkpoint": true,
+    "train_once": true,
+    "automatic_preflight_then_formal": true,
+    "automatic_restart": false,
+    "started_at": "2026-11-15T12:50:08.922114"
+  },
+  "status": {
+    "state": "completed",
+    "time": 1794756726.7616942,
+    "physical_gpu": 0,
+    "supervisor_pid": 518565,
+    "session_id": 518565,
+    "group": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008",
+    "stage": "formal",
+    "pid": 519239,
+    "output": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008/formal",
+    "argv": [
+      "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/bin/python",
+      "-u",
+      "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/codex/letter_upstream_transformer_20261115/run_beauty.py",
+      "--output",
+      "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008/formal",
+      "--gpu",
+      "0"
+    ],
+    "metrics": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008/formal/metrics.md"
+  },
+  "supervisor_alive": false,
+  "child_alive": false,
+  "preflight_passed": true,
+  "preflight_modes": [
+    "unshuffle",
+    "shuffle_3",
+    "shuffle_4"
+  ],
+  "formal_model_verified": {
+    "model": "codex.plan_v1_1.protocol.ShuffleModel",
+    "parameters": 13128064,
+    "shared_embedding": true,
+    "official_sid_tensor_exact": true,
+    "baseline_configuration_matches": true,
+    "compared_configuration_keys": [
+      "model.huggingface_model.config",
+      "model.decoder.config",
+      "model.mlp_layers",
+      "model.weight_tying",
+      "optim",
+      "sequence_length",
+      "trainer.accumulate_grad_batches",
+      "trainer.val_check_interval",
+      "callbacks.early_stopping",
+      "eval",
+      "data_loading.train_dataloader_config.dataloader.batch_size_per_device",
+      "data_loading.train_dataloader_config.dataloader.collate_fn.max_batch_size"
+    ],
+    "reference_config": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/sid_order_5seed_v1/beauty/shuffle/seed_42/.hydra/config.yaml",
+    "preflight_only": false,
+    "attention_export": false,
+    "max_steps": 320000,
+    "max_epochs": 10
+  },
+  "formal_progress": {
+    "state": "completed",
+    "time": 1794756724.747472,
+    "pid": 519239,
+    "physical_gpu": 0,
+    "global_step": 6200,
+    "epoch": 1,
+    "mode": "shuffle_4",
+    "peak_gpu_bytes": 2775436288
+  },
+  "formal_result": {
+    "dataset": "beauty",
+    "upstream": "official_LETTER_SID",
+    "train_seed": 42,
+    "eval_seed": 2026,
+    "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008/formal/checkpoints/checkpoint_epoch=000_step=005200.ckpt",
+    "checkpoint_sha256": "00008c81962552c9ee2b92d4495c1ace658c410d281a6a54356c0466be9f767f",
+    "trained_from_scratch": true,
+    "global_step": 6200,
+    "preflight_only": false,
+    "best_validation_recall5": 0.05620891600847244,
+    "test_metrics": {
+      "unshuffle": {
+        "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008/formal/checkpoints/checkpoint_epoch=000_step=005200.ckpt",
+        "checkpoint_sha256": "00008c81962552c9ee2b92d4495c1ace658c410d281a6a54356c0466be9f767f",
+        "metrics": [
+          {
+            "test/loss": 9.210402488708496,
+            "test/ndcg@5": 0.025803787633776665,
+            "test/ndcg@10": 0.031925566494464874,
+            "test/recall@5": 0.04100523144006729,
+            "test/recall@10": 0.06005455553531647
+          }
+        ],
+        "full_test_set": true,
+        "evaluated_users": 22363,
+        "shuffle_calls": 0,
+        "shuffle_enabled": false,
+        "hierarchies_to_shuffle": 3,
+        "eval_seed": 2026,
+        "ambiguous_official_sid_test_targets": 46
+      },
+      "shuffle_3": {
+        "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008/formal/checkpoints/checkpoint_epoch=000_step=005200.ckpt",
+        "checkpoint_sha256": "00008c81962552c9ee2b92d4495c1ace658c410d281a6a54356c0466be9f767f",
+        "metrics": [
+          {
+            "test/loss": 9.219123840332031,
+            "test/ndcg@5": 0.025238854810595512,
+            "test/ndcg@10": 0.031397316604852676,
+            "test/recall@5": 0.039663732051849365,
+            "test/recall@10": 0.058668337762355804
+          }
+        ],
+        "full_test_set": true,
+        "evaluated_users": 22363,
+        "shuffle_calls": 5592,
+        "shuffle_enabled": true,
+        "hierarchies_to_shuffle": 3,
+        "eval_seed": 2026,
+        "ambiguous_official_sid_test_targets": 46
+      },
+      "shuffle_4": {
+        "checkpoint": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_beauty_20261115_125008/formal/checkpoints/checkpoint_epoch=000_step=005200.ckpt",
+        "checkpoint_sha256": "00008c81962552c9ee2b92d4495c1ace658c410d281a6a54356c0466be9f767f",
+        "metrics": [
+          {
+            "test/loss": 9.224468231201172,
+            "test/ndcg@5": 0.024905463680624962,
+            "test/ndcg@10": 0.03112586960196495,
+            "test/recall@5": 0.03926128149032593,
+            "test/recall@10": 0.058489467948675156
+          }
+        ],
+        "full_test_set": true,
+        "evaluated_users": 22363,
+        "shuffle_calls": 5592,
+        "shuffle_enabled": true,
+        "hierarchies_to_shuffle": 4,
+        "eval_seed": 2026,
+        "ambiguous_official_sid_test_targets": 46
+      }
+    },
+    "completed": true
+  },
+  "gpu": "index, memory.used [MiB], utilization.gpu [%]\n0, 6 MiB, 0 %\n1, 6 MiB, 0 %\n2, 6 MiB, 0 %\n3, 6 MiB, 0 %\n",
+  "formal_log_tail": [
+    "      ],",
+    "      \"full_test_set\": true,",
+    "      \"evaluated_users\": 22363,",
+    "      \"shuffle_calls\": 5592,",
+    "      \"shuffle_enabled\": true,",
+    "      \"hierarchies_to_shuffle\": 4,",
+    "      \"eval_seed\": 2026,",
+    "      \"ambiguous_official_sid_test_targets\": 46",
+    "    }",
+    "  },",
+    "  \"completed\": true",
+    "}"
+  ]
+}

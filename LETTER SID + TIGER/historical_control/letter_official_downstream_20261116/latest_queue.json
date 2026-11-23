@@ -1,0 +1,42 @@
+{
+  "group": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754",
+  "created_utc": "2026-11-16T06:27:54.132128+00:00",
+  "tasks": [
+    {
+      "dataset": "instruments",
+      "physical_gpu": 0,
+      "items": 9922,
+      "users": 24772,
+      "output": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/instruments/formal",
+      "supervisor_pid": 537969
+    },
+    {
+      "dataset": "yelp",
+      "physical_gpu": 1,
+      "items": 20033,
+      "users": 30431,
+      "output": "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/letter_official_instruments_yelp_20261116_142754/yelp/formal",
+      "supervisor_pid": 537970
+    }
+  ],
+  "official_repository_commit": "8d0154e28de37dbb6e24871c508ad8ddb1921cda",
+  "train_seed": 42,
+  "eval_seed": 2026,
+  "metrics": [
+    "recall@5",
+    "recall@10",
+    "ndcg@5",
+    "ndcg@10"
+  ],
+  "one_fresh_fit_per_dataset": true,
+  "modes": [
+    "unshuffle",
+    "shuffle_3",
+    "shuffle_4"
+  ],
+  "same_best_checkpoint_for_three_tests": true,
+  "automatic_preflight_then_formal": true,
+  "detached": true,
+  "automatic_restart": false,
+  "failure_scope": "Stop only the failed dataset lane."
+}
