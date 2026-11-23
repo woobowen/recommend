@@ -16,7 +16,7 @@
 
 ## 第四组 Instruments A1 Qwen3-0.6B-Base
 
-第四组已完成正式前准备及内部审核，正式未提交，等待网页二审及用户单独的正式启动授权。 [方案、四模式预跑、双向审核和未提交计划](../shuffle/results/v2-a1-instruments/README.md)
+第四组网页二审通过，正式尚未提交，等待用户单独启动授权。状态为 `FOURTH_GROUP_PREFLIGHT_COMPLETE_WEB_REVIEW_PASS`。 [方案、四模式预跑、双向审核和未提交计划](../shuffle/results/v2-a1-instruments/README.md)
 
 ## 历史只读观测
 
