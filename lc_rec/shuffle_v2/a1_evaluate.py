@@ -8,6 +8,7 @@ import math
 from pathlib import Path
 import struct
 import time
+from types import SimpleNamespace
 
 from lc_rec.a1_qwen3_06b.scripts import offline_metrics as metrics
 from lc_rec.shuffle_v2 import a1_replay as replay, core
@@ -159,9 +160,11 @@ def mode_predictions(test, assignment, mode, preflight, config, audit, single, c
     assert report['formal_assignment_sha256'] == single['assignment_sha256']
     if preflight:
         assert report['preflight_assignment'] == assignment
-    expected_identity = config['baseline']['rank_identity']
-    for key in ('adapter_files', 'versions', 'strict_adapter_reload'):
+    baseline = config['baseline']
+    expected_identity = baseline['rank_identity']
+    for key in ('adapter_files', 'versions'):
         assert report[key] == expected_identity[key]
+    assert core.canonical_sha256(report['strict_adapter_reload']) == baseline['strict_reload_sha256']
     info = report['shuffle']
     assert info['parameter_versions_unchanged'] is True and info['generate_calls'] == len(assignment)
     assert info['parameter_sha256_before'] == info['parameter_sha256_after']
@@ -381,6 +384,46 @@ def paired(args, config):
     print(json.dumps({k: summary[k] for k in ('status', 'preflight', 'users', 'elapsed_seconds')}))
 
 
+def assess(args, config):
+    started = time.monotonic()
+    generation_report = args.preflight_dir / 'summary.json'
+    generated = replay.load(generation_report)
+    assert generated['status'] == 'PASS' and not generated['identity_discrepancies']
+    assert list(generated['stages']) == list(core.MODES)
+    run = generated['run_commit']
+    assert len(run) == 40 and all(c in '0123456789abcdef' for c in run)
+    for stage in generated['stages'].values():
+        assert stage['users'] == 32 and stage['exit_code'] == 0
+    out = args.output.resolve()
+    for source in (args.normal, args.preflight_dir, args.cpu_manifest):
+        source = source.resolve()
+        assert out != source and source not in out.parents
+    out.mkdir(parents=True, exist_ok=False)
+    evaluation_roots = []
+    for mode in core.MODES:
+        root = out / mode
+        request = SimpleNamespace(action='mode', mode=mode, preflight=True, test=args.preflight_dir / mode,
+                                  output=root, cpu_manifest=args.cpu_manifest, run_commit=run)
+        evaluate(request, config)
+        evaluation_roots.append(root)
+    paired(SimpleNamespace(output=out / 'paired', preflight=True, condition_roots=[args.normal, *evaluation_roots]),
+           config)
+    stages = {mode: replay.load((out / mode / 'summary.json')) for mode in core.MODES}
+    assert sum(stage['users'] for stage in stages.values()) == 128
+    assert sum(stage['candidate_anomalies']['candidate_count'] for stage in stages.values()) == 2560
+    identity = {mode: stage['natural_identity'] for mode, stage in stages.items()}
+    assert all(v['natural_whole_input_identity_users'] == v['candidate_exact_users'] for v in identity.values())
+    summary = {'status': 'PASS_A1_V2_PREFLIGHT_ASSESSMENT', 'run_commit': run, 'users_per_mode': 32,
+               'mode_user_records': 128, 'candidates': 2560, 'paired_records': 80,
+               'scope': 'Engineering verification on the fixed preflight users',
+               'generation_report_sha256': replay.frozen.sha(generation_report), 'natural_identity': identity,
+               'condition_summaries': {mode: replay.frozen.sha(out / mode / 'summary.json') for mode in core.MODES},
+               'paired_summary_sha256': replay.frozen.sha(out / 'paired/summary.json'),
+               'elapsed_seconds': time.monotonic() - started}
+    replay.dump(out / 'summary.json', summary)
+    print(json.dumps({k: summary[k] for k in ('status', 'users_per_mode', 'candidates', 'paired_records', 'elapsed_seconds')}))
+
+
 def main():
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__)
     commands = parser.add_subparsers(dest='action', required=True)
@@ -399,11 +442,16 @@ def main():
         if action == 'paired':
             sub.add_argument('condition_roots', type=Path, nargs=len(CONDITIONS),
                              metavar='EVALUATION_DIR', help='Normal, S2, S3a, S3b, S4')
+    assessment = commands.add_parser('assess', allow_abbrev=False)
+    for key in ('config', 'cpu-manifest', 'output', 'normal', 'preflight-dir'):
+        assessment.add_argument('--' + key, type=Path, required=True)
     args = parser.parse_args()
     replay.cpu_only()
     config = replay.load(args.config)
     if args.action == 'paired':
         paired(args, config)
+    elif args.action == 'assess':
+        assess(args, config)
     else:
         evaluate(args, config)
 

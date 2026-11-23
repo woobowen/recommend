@@ -29,7 +29,7 @@ CORE_FILES = (
     'lc_rec/letter/review/final_audit_20261113/external/official_cce.py',
     'lc_rec/letter/review/final_audit_20261113/statistics_verify.py',
 )
-MODULES = ('a1_generate', 'a1_replay', 'a1_evaluate', 'a1_tasks',
+MODULES = ('a1_generate', 'a1_replay', 'a1_evaluate', 'a1_tasks', 'a1_formal', 'a1_export',
            'core', 'reference', 'runtime', 'replay', 'generate', 'statistics')
 STAGES = {
     'cpu-replay': 1800, 'cpu-normal': 900, 'gpu-preflight': 2200,
@@ -71,7 +71,7 @@ def deploy(commit):
     files = (*CORE_FILES, CONFIG, *(f'lc_rec/shuffle_v2/{m}.py' for m in MODULES))
     available = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', commit, *files],
                                          cwd=control.REPO, text=True).splitlines()
-    assert set(files) - set(available) <= {'lc_rec/shuffle_v2/a1_evaluate.py'}
+    assert set(files) - set(available) <= {'lc_rec/shuffle_v2/a1_formal.py', 'lc_rec/shuffle_v2/a1_export.py'}
     return control.deploy(target, commit, namespace=NAMESPACE, support=SUPPORT, paths=available)
 
 
@@ -163,7 +163,15 @@ def launch(target, config, args):
                 inputs += bound_inputs(target, preflight, ('summary.json', *(
                     f'{mode}/predictions.rank0.jsonl' for mode in core.MODES)))
             else:
-                raise ValueError('Export does not use the submission interface')
+                assert args.stage == 'cpu-export'
+                module = 'a1_export'
+                argv = ['--output', out, '--root', ROOT,
+                        '--jobs', target.profile['job_root']]
+                for job_id, state in states.items():
+                    assert state.get('ended_at') and state.get('cleanup', {}).get('verified')
+                    short = job_id.removeprefix(PREFIX)
+                    assert not short.startswith('formal-')
+                    argv += ['--include', short]
         request = payload(target, commit, config, name, module, argv, ttl, card=card, input_files=inputs)
         path = SUPPORT / (PREFIX + name + '.request.json')
         beauty_control.immutable(path, request)
@@ -194,7 +202,7 @@ def main():
     deploy_parser = subs.add_parser('deploy')
     deploy_parser.add_argument('commit')
     job = subs.add_parser('launch')
-    job.add_argument('stage', choices=tuple(stage for stage in STAGES if stage != 'cpu-export'))
+    job.add_argument('stage', choices=STAGES)
     job.add_argument('attempt', choices=('r0', 'r1', 'r2', 'r3'))
     job.add_argument('--commit', required=True)
     for key in ('replay', 'normal', 'gpu'):
