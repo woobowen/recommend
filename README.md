@@ -16,5 +16,4 @@
 维护负责人：Jingchen Yin（Justin-hub-coder）。[本轮上传清单与验收](delivery_20261123/README.md)关联完整原件、历史结果、失败/停止及本轮验证。
 
 - [LETTER公开SID＋自有TIGER：Beauty / Instruments / Yelp](LETTER%20SID%20%2B%20TIGER/README.md)：三个正式单种子模型及每域三组全测试；不等同LETTER-LC-Rec大模型推荐。
-- [Qwen Yelp aligned_v1](Yelp%20Qwen%20SID/README.md)：上游、原patience10完成种子、patience40诊断与未完成队列。
 - [LETTER-LC-Rec Llama推荐](LETTER%20Llama%20Recommendation/README.md)：当前活动配置/固定时点观察与Beauty三任务停止历史，尚无正式全测试结果。
