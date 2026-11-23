@@ -10,6 +10,10 @@
 
 用户随后明确授权第三组正式运行。服务器父作业 `g3-beauty-v2-group-formal-r0` 已接管，首个 S2 子作业已开始生成。正式启动、30 分钟观察及完整组结果的待办范围见 [本阶段交付](launch-observation-r0/README.md)。
 
+## 正式结果
+
+原正式父任务与九个子阶段均已成功并清收，正式全量结果与内部终审已完成，等待网页终审。 [四条件正式结果、五项配对及终审](final-r0/README.md)
+
 ## 资产与干预
 
 固定上游采用 GRID 的三位量化码与原第四位去重位，沿已审商品桥接转换为 LETTER-LC-Rec Beauty index。测试集 22,363 人、商品与唯一 SID 各 12,101、碰撞组 0。词表 32,786，含 786 个新增 token。下游沿用原 SeqRec Prompt0、最近至多 20 件历史和原 LLaMA-7B revision 4782ad278652c7c71b72204d462d6d01eaaf7549。G3 原四 epoch、8,214 次更新，根据验证 loss 选中 checkpoint-6160。冻结 Normal 使用同一 G3 权重，单 rank 22,363 条、447,260 个原始候选。 [原 G3 生成入口](https://github.com/woobowen/recommend/blob/21d495b0be5b606853ec7cec68a3eaa1b58acbd7/lc_rec/a0_beauty/formal_evaluate.py) · [原 CPU 收尾](https://github.com/woobowen/recommend/blob/7368d301d0d928f77d50551c3b53a5b30c23d63f/lc_rec/a0_beauty/grid_sid_preparation/g3_conversion/production_preparation/cpu_closure/results/README.md)
