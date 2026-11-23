@@ -14,6 +14,10 @@
 
 [G3 Beauty Shuffle V2](../shuffle/results/v2-a0-beauty-g3/README.md) 复用 G3 自己的单 rank 冻结 Normal、tokenizer 和最佳 adapter。该入口保存本轮准备、实际审核证据及未提交的正式计划。
 
+## 第四组 Instruments A1 Qwen3-0.6B-Base
+
+第四组已完成正式前准备及内部审核，正式未提交，等待网页二审及用户单独的正式启动授权。 [方案、四模式预跑、双向审核和未提交计划](../shuffle/results/v2-a1-instruments/README.md)
+
 ## 历史只读观测
 
 截至 `2026-11-21T07:22:39.422045+00:00`，服务器保存的父 job `letter-a0-20261112-v2-20261120-group-series-r0` 仍为 `RUNNING`，正式运行源 `e2f54ebd2d7709821de1071693f91644f5ed9a30`。S2、S3a、S3b 各完成 24,772 人，三组 GPU 生成和对应的 CPU 评价均退出 0 并完成清收；S4 仍运行，rank0 实际记录 5,725／24,772 人。四条件全量评价和配对未见终态。此处是带时间的观测，文末历史观测及原运行提交保留各自时点。[只读观察依据](../shuffle/results/v2-a0-instruments/repository-delivery-20261120/FINAL_CLOSEOUT_OBSERVATION.json)
