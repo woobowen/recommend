@@ -1,6 +1,6 @@
 # 第四组 Instruments A1 Qwen Shuffle V2
 
-**网页二审通过，正式尚未提交，等待用户单独启动授权。** 状态为 `FOURTH_GROUP_PREFLIGHT_COMPLETE_WEB_REVIEW_PASS`。2026-11-23，美国东部时间。正式父任务和正式子任务均未提交，正式 GPU 用量为 0。32 人指标只用于核验工程链。
+**正式启动与 30 分钟观察通过。** 状态为 `FOURTH_GROUP_FORMAL_RUNNING_30MIN_OBSERVATION_PASS`。2026-11-23，观测结束时 S2 已生成 4,758／24,772 人。服务器接管并继续原父任务。 [本轮正式启动与独立审核](formal-launch-observation-r0/README.md)
 
 ## 研究方案
 
@@ -46,9 +46,9 @@
 - 评价保留原候选、目录外占位与重复处理。ItemHit 和 ItemNDCG 由冻结 CCE 按碰撞组展开、对组内 item 给 uniform credit。SID Hit@1/5/10/20、NDCG@5/10/20、MRR@5/10/20、ItemHit 和 ItemNDCG 各 @5/10/20。五组比较共享同一用户轴及 5,000 次 PCG64 有放回抽样，统计 seed 20261113，95% 线性百分位，无多重比较调整。80 条工程结果及全部数组由独立 B 从原候选验证。比例差按右减左，百分点为差乘 100，相对改变为差除以基线，基线为零时不定义。 [工程评价](cpu-assess-summary.json) · [80 条工程记录](paired-engineering.csv)。GitHub CSV 统一为 LF，ZIP 保留服务器原 CSV 字节
 - 审核 A 直接核对实际源码和全部边界、独立 Prompt0、采样和模型证据。审核 B 直接从原候选重算 Normal 和预跑四条件、共享 bootstrap、全部区间，核对控制计划和服务器预算。独立统计求和顺序的最大 draw 偏差为 1.39e−17，80 条记录的上下界均精确一致。 [审核 A](A_REVIEW.md) · [审核 B](B_REVIEW.md) · [审核 A 原始回执](A_recomputation.json) · [审核 B 原始回执](B_recomputation.json)
 
-## 未提交的正式计划
+## 已审正式计划与准备阶段记录
 
-未来九个阶段依次为 S2 GPU → S2 CPU → S3a GPU → S3a CPU → S3b GPU → S3b CPU → S4 GPU → S4 CPU → paired。每个 GPU 条件覆盖 24,772 人、495,440 个候选。依赖阶段在上一步产生验证产物并实际清收后推进。运行失败保留原 ID 与输出，按原 ID 查询并审核后处理接续。CPU 读取已清收的单分片预测。正式父监督程序对网页二审与独立用户授权有硬门槛。
+九个阶段依次为 S2 GPU → S2 CPU → S3a GPU → S3a CPU → S3b GPU → S3b CPU → S4 GPU → S4 CPU → paired。每个 GPU 条件覆盖 24,772 人、495,440 个候选。依赖阶段在上一步产生验证产物并实际清收后推进。运行失败保留原 ID 与输出，按原 ID 查询并审核后处理接续。CPU 读取已清收的单分片预测。正式父监督程序对网页二审与独立用户授权有硬门槛。
 
 - 预算与实际用量。GPU 预跑 167.244 / 10,800 device-seconds；CPU 144.011 / 28,800 worker wall-seconds（含监督清收的保守上界）。六项实际任务退出 0，另一个生命周期夹具按设计超时退出 −15，证明清收归属内的独立 session，七项都已验证清收。实验 r0 首试通过，修正轮次 0。 [预算与终态](budget.json)
 - 正式估时。 32 人预跑按全量历史长度重加权的四模式点估计约 2.57、3.33、2.61、2.61 小时，合计 11.13 小时，规划波动约 10.41–12.80 小时。单模式上限 8 小时，整组计划上限 36 GPU-device-hours。严格装载 15.79–15.93 秒/次，峰值 allocated 约 2.00 GiB，reserved 约 2.32 GiB。估计保留了首次生成的计时影响和较长历史过采样的限制。
@@ -73,4 +73,4 @@ python3 -B -m lc_rec.shuffle_v2.a1_formal dry-run \
   --plan lc_rec/shuffle/results/v2-a1-instruments/formal-plan.json
 ```
 
-本组已验证的是固定资产上的工程行为及指定 32 人的生成。自然恒等证据只覆盖两名 S2 用户。正式推荐差异、全量单卡与历史双卡的数值轨迹及跨训练 seed 的变动仍待相应实验或证据。正式启动等待用户单独授权。涉及研究的三个既有组及 V1 历史冻结材料均保留。
+本组已验证的是固定资产上的工程行为及指定 32 人的生成。自然恒等证据只覆盖两名 S2 用户。正式推荐差异、全量单卡与历史双卡的数值轨迹及跨训练 seed 的变动仍待相应实验或证据。[正式阶段现场记录](formal-launch-observation-r0/README.md)涉及研究的三个既有组及 V1 历史冻结材料均保留。
