@@ -36,7 +36,9 @@ def main():
                 assert member.is_file()
                 previous = member.stat()
                 digest = sha(member)
-                assert member.stat() == previous
+                current = member.stat()
+                assert (current.st_dev, current.st_ino, current.st_size, current.st_mtime_ns, current.st_ctime_ns) == (
+                    previous.st_dev, previous.st_ino, previous.st_size, previous.st_mtime_ns, previous.st_ctime_ns)
                 members.append({'archive_path': f'{label}/{name}/{member.relative_to(root).as_posix()}',
                                 'server_path': str(member), 'bytes': previous.st_size, 'sha256': digest})
     dump(args.output / 'manifest.json', {'status': 'PASS_TERMINAL_EVIDENCE_INDEX', 'members': members,
