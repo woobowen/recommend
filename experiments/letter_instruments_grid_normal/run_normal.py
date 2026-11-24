@@ -82,7 +82,12 @@ def configure(assets, output, preflight):
         additions = ["trainer.max_steps=100", "trainer.max_epochs=1", "++trainer.limit_train_batches=1600",
                      "++trainer.limit_val_batches=24",
                      f"data_loading.test_dataloader_config.dataloader.data_folder={prepared / 'preflight_testing'}"]
-        cfg = OmegaConf.merge(cfg, OmegaConf.from_dotlist([v.removeprefix("++") for v in additions]))
+        cfg.trainer.max_steps = 100
+        cfg.trainer.max_epochs = 1
+        with open_dict(cfg.trainer):
+            cfg.trainer.limit_train_batches = PREFLIGHT_TRAIN
+            cfg.trainer.limit_val_batches = PREFLIGHT_VAL
+        cfg.data_loading.test_dataloader_config.dataloader.data_folder = str(prepared / "preflight_testing")
         overrides.extend(additions)
     return cfg, overrides
 
