@@ -1,14 +1,16 @@
 # LETTER Instruments → GRID 原生 Normal
 
-**正式前预跑通过，等待网页二审及用户正式启动授权。** 单卡完成 1,600 个 microbatch、100 次更新和 24 批验证，严格重载 best 后完成两遍固定 20 人 Normal。正式未提交。[验收状态和资源方案](evidence/STATUS.md)。
+**正式作业已启动，已结束 30 分钟主动观察。** 阶段状态、七点证据和接续入口见 [正式启动与过程审核](evidence/formal-launch-30min/)。
 
-本次准备采用 LETTER 发布的 Musical Instruments 四位 SID 与对应交互。正式执行拟在单张 RTX 4090 上以 seed 42 从随机初始化训练一次，再从本轮验证选出的最佳 checkpoint 测试一次 Normal。测试随机种子为 2026。正式提交需网页二审及用户明确启动授权。
+准备阶段已完成单卡 1,600 个 microbatch、100 次更新和 24 批验证，严格重载 best 后完成两遍固定 20 人 Normal。[准备阶段历史记录](evidence/STATUS.md)
+
+正式作业采用 LETTER Musical Instruments 四位 SID 与对应交互，在单张 RTX 4090 上以 seed 42 从随机初始化训练一次。训练结束后严格重载本轮 best，并以 seed 2026 对完整测试集运行一次 Normal。
 
 ## 固定依据
 
 - 学弟历史运行的实际源码、配置、选模与资产对应均固定到发布 (74911e3ce668e265a8c3e7bc9a3929ae9247f11a)。[来源目录](https://github.com/woobowen/recommend/tree/74911e3ce668e265a8c3e7bc9a3929ae9247f11a/LETTER%20SID%20%2B%20TIGER)
 - [历史有效配置](historical/config.yaml)、[Hydra overrides](historical/overrides.json)、[源码文件哈希](historical/source_manifest.json)、[划分审计](historical/mapping_audit.json)与[选模记录](historical/stage_result.json)用于对照。历史 best step 5400，结束 step 6400。
-- [LETTER 固定上游](https://github.com/HonghuiBao2000/LETTER/tree/8d0154e28de37dbb6e24871c508ad8ddb1921cda/data/Instruments)提供 index、inter、item。本轮数据入口在服务器 `/data/bwwu/grid-letter-instruments-normal-20261124/assets`。复核时三份原 JSON 与派生资产在审核 ZIP 的 `assets/`，也可从固定上游取得 JSON 并用准备脚本从空输出目录重建。
+- [LETTER 固定上游](https://github.com/HonghuiBao2000/LETTER/tree/8d0154e28de37dbb6e24871c508ad8ddb1921cda/data/Instruments)提供 index、inter、item。本轮数据入口在服务器 `/data/bwwu/grid-letter-instruments-normal-20261124/assets`。三份原 JSON 与派生资产在准备阶段审核 ZIP 的 `assets/`，也可从固定上游取得 JSON 并用准备脚本从空输出目录重建。
 - 统一 SID 评价复用 [A1 冻结评价源码](https://github.com/woobowen/recommend/blob/851425db7de3c70c6c4925740ecc20d38bae3686/lc_rec/a1_qwen3_06b/scripts/offline_metrics.py)的稳定排序、Hit、NDCG、MRR 定义及 CCE 对照公式。CCE Item 调用 [冻结 CCE 实现](https://github.com/woobowen/recommend/blob/1706a9eb145cf58b42ffa4e80aed58e962a2b864/lc_rec/letter/review/final_audit_20261113/external/official_cce.py)中的 `compute_cce_metrics`。两份来源原文见 [frozen_eval](frozen_eval/)。
 
 ## 数据与调用链
@@ -34,4 +36,4 @@
 ## 审核入口
 
 - `evidence/` 含本轮结果、独立审核、正式 dry-run、资源估计、版本和 runner 终态。[成功预跑](evidence/success/)包含真实候选和复算。完整审核 ZIP 另附数据、实际 best checkpoint、请求与日志。
-- 在审核 ZIP 根目录运行 `python3 -B verify_delivery.py .` 可复算离线数据、候选和评价。服务器 GPU 预跑和正式启动使用已部署的 P0 runner。正式计划文件仅供后续授权后提交，需先核对应代码资产与 GPU 占用。
+- 在审核 ZIP 根目录运行 `python3 -B verify_delivery.py .` 可复算离线数据、候选和评价。服务器 GPU 预跑和正式启动使用已部署的 P0 runner。正式模板作为准备阶段历史保留。实际请求和现场验证见 [正式阶段证据](evidence/formal-launch-30min/)。
