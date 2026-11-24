@@ -7,6 +7,7 @@ import fcntl
 import json
 import math
 import os
+import random
 from pathlib import Path
 import shutil
 import statistics
@@ -108,6 +109,7 @@ def gpu_admission():
 
 def train_and_test(cfg, assets, output, preflight):
     import lightning as L
+    import numpy as np
     from lightning.pytorch.callbacks import Callback
     import torch
     from src.utils.launcher_utils import pipeline_launcher
@@ -314,8 +316,10 @@ def train_and_test(cfg, assets, output, preflight):
                 assert sink.generation_calls == (3 if preflight else 3097)
             if preflight:
                 assert cache_checks[0] == len(fingerprints) == 3
+                numpy_rng = np.random.get_state()
                 signatures.append((fingerprints, metrics, torch.random.get_rng_state().tolist(),
-                                   torch.cuda.get_rng_state().tolist()))
+                                   torch.cuda.get_rng_state().tolist(), random.getstate(),
+                                   (numpy_rng[0], numpy_rng[1].tolist(), *numpy_rng[2:])))
             return metrics, elapsed
 
         metrics, result["test_seconds"] = testing(True)

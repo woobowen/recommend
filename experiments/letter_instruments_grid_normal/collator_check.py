@@ -12,6 +12,7 @@ sys.path.insert(0, str(HERE / "native"))
 
 def check(root):
     import torch
+    import src.utils  # Preserve the native launcher's package import order.
     from src.data.loading.components.collate_functions import collate_fn_train, collate_with_sid_causal_duplicate
     from src.data.loading.components.label_function import NextKTokenMasking
 
