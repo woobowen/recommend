@@ -1,6 +1,6 @@
 # LETTER Instruments → GRID 原生 Normal
 
-**正式前准备为 PARTIAL / BLOCKED。** CPU 全轴与模型核验完成，GPU 预跑在首个 microbatch 的新增审计回调处失败。正式未提交。证据和修正范围见[验收状态](evidence/STATUS.md)。
+**正式前预跑通过，等待网页二审及用户正式启动授权。** 单卡完成 1,600 个 microbatch、100 次更新和 24 批验证，严格重载 best 后完成两遍固定 20 人 Normal。正式未提交。[验收状态和资源方案](evidence/STATUS.md)。
 
 本次准备采用 LETTER 发布的 Musical Instruments 四位 SID 与对应交互。正式执行拟在单张 RTX 4090 上以 seed 42 从随机初始化训练一次，再从本轮验证选出的最佳 checkpoint 测试一次 Normal。测试随机种子为 2026。正式提交需网页二审及用户明确启动授权。
 
@@ -14,6 +14,8 @@
 ## 数据与调用链
 
 `data_assets.py prepare` 调用 [原转换脚本](native/codex/letter_official_downstream_20261116/prepare_data.py)，验证 24,772 人、9,922 件商品、206,153 条交互。四个码位转换成 `[4,9922]` 的 int64 tensor。每码位保留 256 槽，模型映射到共享表的四段。9,897 个完整 SID，23 个碰撞组、48 件商品，122 名测试用户的目标落在碰撞组中。
+
+本轮使用的固定 LETTER index、inter、item 与历史 A0 双 rank 及 A1 正式 Normal 绑定的文件逐项同哈希。上轮比较的另一份 index 位于通用 LC-Rec 目录。[资产绑定与原始出处](evidence/historical_asset_binding.json)
 
 每个划分覆盖同一用户数字轴。训练保存 `S[:-2]`，验证保存 `S[:-1][-21:]`，测试保存 `S[-21:]`。独立读回全量 TFRecord 并逐行比对用户、商品序列和 SID 存储。三份分片和 SID tensor 的内容哈希与历史一致。
 
@@ -31,5 +33,5 @@
 
 ## 审核入口
 
-- `evidence/` 含本轮结果、独立审核、正式 dry-run、资源估计、版本和 runner 终态。完整审核 ZIP 另附全量数据、预跑 checkpoint、请求与日志。
-- 在审核 ZIP 根目录运行 `python3 verify_delivery.py <解包根目录>` 可复算离线数据、候选和评价。服务器 GPU 预跑和正式启动使用已部署的 P0 runner。正式计划文件仅供后续授权后提交，需先核对应代码资产与 GPU 占用。
+- `evidence/` 含本轮结果、独立审核、正式 dry-run、资源估计、版本和 runner 终态。[成功预跑](evidence/success/)包含真实候选和复算。完整审核 ZIP 另附数据、实际 best checkpoint、请求与日志。
+- 在审核 ZIP 根目录运行 `python3 -B verify_delivery.py .` 可复算离线数据、候选和评价。服务器 GPU 预跑和正式启动使用已部署的 P0 runner。正式计划文件仅供后续授权后提交，需先核对应代码资产与 GPU 占用。
