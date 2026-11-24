@@ -114,6 +114,36 @@ def gpu_admission():
     return dict(zip(("index", "name", "uuid", "memory_total_mib", "memory_used_at_admission_mib"), fields))
 
 
+def model_identity(model, codes):
+    import torch
+
+    table = model.get_embedding_table("encoder")
+    sid_match = torch.equal(model.codebooks.cpu(), torch.tensor(codes))
+    heads = [list(head.weight.shape) for head in model.decoder.decoder_mlp]
+    initial = hashlib.sha256()
+    for name, param in model.named_parameters():
+        initial.update(name.encode() + b"\x00")
+        initial.update(param.detach().cpu().contiguous().numpy().tobytes())
+    info = {"initial_parameters_sha256": initial.hexdigest(),
+            "parameters": sum(t.numel() for t in model.parameters()),
+            "trainable_parameters": sum(t.numel() for t in model.parameters() if t.requires_grad),
+            "dtype_counts": dict(Counter(str(t.dtype) for t in model.parameters())),
+            "encoder_layers": len(model.encoder.encoder.encoder.block),
+            "decoder_layers": len(model.decoder.decoder.block),
+            "heads": heads, "bos": list(model.decoder.bos_token.shape),
+            "sep": list(model.sep_token.shape), "uses_user_embedding": model.user_embedding is not None,
+            "sid_slots": table.num_embeddings, "embedding_width": table.embedding_dim,
+            "shared": table is model.get_embedding_table("decoder"), "sid_matches_official": sid_match,
+            "beam": model.top_k_for_generation, "prefix_filter": model.should_check_prefix,
+            "matmul_precision": torch.get_float32_matmul_precision(),
+            "deterministic": torch.are_deterministic_algorithms_enabled(),
+            "cublas_workspace_config": os.environ["CUBLAS_WORKSPACE_CONFIG"]}
+    assert info["parameters"] == info["trainable_parameters"] == 13128064
+    assert info["shared"] and sid_match and heads == [[256, 128]] * 4 and table.num_embeddings == 1024
+    assert not info["prefix_filter"] and not info["uses_user_embedding"] and info["beam"] == 10
+    return info
+
+
 def train_and_test(cfg, assets, output, preflight):
     import lightning as L
     import numpy as np
@@ -232,30 +262,7 @@ def train_and_test(cfg, assets, output, preflight):
     with pipeline_launcher(cfg) as p:
         model, trainer = p.model, p.trainer
         trainer.callbacks.append(recorder)
-        table = model.get_embedding_table("encoder")
-        sid_match = torch.equal(model.codebooks.cpu(), torch.tensor(codes))
-        heads = [list(head.weight.shape) for head in model.decoder.decoder_mlp]
-        initial = hashlib.sha256()
-        for name, param in model.named_parameters():
-            initial.update(name.encode() + b"\x00")
-            initial.update(param.detach().cpu().contiguous().numpy().tobytes())
-        info = {"initial_parameters_sha256": initial.hexdigest(),
-                "parameters": sum(t.numel() for t in model.parameters()),
-                "trainable_parameters": sum(t.numel() for t in model.parameters() if t.requires_grad),
-                "dtype_counts": dict(Counter(str(t.dtype) for t in model.parameters())),
-                "encoder_layers": len(model.encoder.encoder.block),
-                "decoder_layers": len(model.decoder.decoder.block),
-                "heads": heads, "bos": list(model.decoder.bos_token.shape),
-                "sep": list(model.sep_token.shape), "uses_user_embedding": model.user_embedding is not None,
-                "sid_slots": table.num_embeddings, "embedding_width": table.embedding_dim,
-                "shared": table is model.get_embedding_table("decoder"), "sid_matches_official": sid_match,
-                "beam": model.top_k_for_generation, "prefix_filter": model.should_check_prefix,
-                "matmul_precision": torch.get_float32_matmul_precision(),
-                "deterministic": torch.are_deterministic_algorithms_enabled(),
-                "cublas_workspace_config": os.environ["CUBLAS_WORKSPACE_CONFIG"]}
-        assert info["parameters"] == info["trainable_parameters"] == 13128064
-        assert info["shared"] and sid_match and heads == [[256, 128]] * 4 and table.num_embeddings == 1024
-        assert not info["prefix_filter"] and not info["uses_user_embedding"] and info["beam"] == 10
+        info = model_identity(model, codes)
         write(output / "model.json", info)
         # pipeline_launcher seeds before instantiation. Preserve the source's reseeding before fit.
         L.seed_everything(SEED, workers=True)
