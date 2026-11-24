@@ -1,6 +1,6 @@
 # 第四组 Instruments A1 Qwen Shuffle V2
 
-**正式启动与 30 分钟观察通过。** 状态为 `FOURTH_GROUP_FORMAL_RUNNING_30MIN_OBSERVATION_PASS`。2026-11-23，观测结束时 S2 已生成 4,758／24,772 人。服务器接管并继续原父任务。 [本轮正式启动与独立审核](formal-launch-observation-r0/README.md)
+**整组正式计算完成，两项非作者终审通过。** 状态为 FOURTH_GROUP_COMPLETE_PENDING_WEB_REVIEW。原 r0 四个 GPU、四个 CPU 评价及 paired 均完成。 [正式结果及终审](final-r0/README.md) · [启动观察](formal-launch-observation-r0/README.md)
 
 ## 研究方案
 

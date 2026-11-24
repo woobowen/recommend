@@ -16,7 +16,7 @@
 
 ## 第四组 Instruments A1 Qwen3-0.6B-Base
 
-第四组正式启动及 30 分钟观察通过，原父任务继续。 [方案与预跑](../shuffle/results/v2-a1-instruments/README.md) · [本轮正式启动](../shuffle/results/v2-a1-instruments/formal-launch-observation-r0/README.md)
+第四组整组完成，非作者终审通过，等待网页 GPT 最终二审。 [正式结果](../shuffle/results/v2-a1-instruments/final-r0/README.md) · [方案与预跑](../shuffle/results/v2-a1-instruments/README.md) · [正式启动观察](../shuffle/results/v2-a1-instruments/formal-launch-observation-r0/README.md)
 
 ## 历史只读观测
 
