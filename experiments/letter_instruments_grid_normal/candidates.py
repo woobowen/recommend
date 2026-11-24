@@ -2,9 +2,7 @@
 import json
 from pathlib import Path
 import struct
-
-from data_assets import load
-
+import time
 
 def score_words(scores):
     return struct.pack("<10f", *scores).hex()
@@ -18,6 +16,7 @@ class CandidateSink:
         self.ranks = {}
         self.users = []
         self.generation_calls = 0
+        self.write_seconds = 0.0
 
     def __enter__(self):
         if self.stream is not None:
@@ -47,6 +46,7 @@ class CandidateSink:
         assert tuple(scores.shape) == (len(user_ids), 10) and str(scores.dtype) == "torch.float32"
         candidates, probabilities = ids.detach().cpu().tolist(), scores.detach().cpu().tolist()
         assert set(self.ranks) == {"recall@5", "recall@10", "ndcg@5", "ndcg@10"}
+        started = time.monotonic()
         for i, uid in enumerate(user_ids):
             sequence = self.axes[uid]
             record = {
@@ -58,6 +58,7 @@ class CandidateSink:
             }
             self.stream.write(json.dumps(record, separators=(",", ":"), allow_nan=False) + "\n")
         self.stream.flush()
+        self.write_seconds += time.monotonic() - started
         self.ranks.clear()
         self.users.extend(user_ids)
         self.generation_calls += 1

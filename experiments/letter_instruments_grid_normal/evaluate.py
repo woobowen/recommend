@@ -36,8 +36,7 @@ def native(record, values):
     for name, order in record["native_topk"].items():
         k = int(name.split("@")[1])
         assert len(order) == len(set(order)) == k and all(0 <= i < 10 for i in order)
-        assert all(values[a] >= values[b] for a, b in zip(order, order[1:]))
-        assert values[order[-1]] == sorted(values, reverse=True)[k - 1]
+        assert [values[i] for i in order] == sorted(values, reverse=True)[:k], (name, order)
         total = min(k, sum(flags))
         relevance = [flags[i] for i in order]
         if name.startswith("recall"):
@@ -124,6 +123,17 @@ def fixtures():
     assert native(record, scores_)["recall@5"] == 0.5
     record["native_topk"]["recall@5"] = [0, 2, 1, 3, 4]
     assert native(record, scores_)["recall@5"] == 0.5
+    cutoff = [.9, .8, .7, .6, .5, .5, .4, .3, .2, .1]
+    record["native_topk"]["recall@5"] = [0, 2, 3, 4, 5]
+    try:
+        native(record, cutoff)
+    except AssertionError:
+        pass
+    else:
+        raise AssertionError("Top-k omitted a higher-scoring candidate")
+    record["native_topk"]["recall@5"] = [0, 1, 2, 3, 5]
+    record["native_topk"]["recall@10"] = [0, 1, 2, 3, 5, 4, 6, 7, 8, 9]
+    assert native(record, cutoff)["recall@5"] == 0.5
     coverage(list(range(20)), list(range(20)))
     for got in (list(range(16)), list(range(19)), list(range(19)) + [18]):
         try:
@@ -133,6 +143,7 @@ def fixtures():
         raise AssertionError("Incomplete or duplicated axis was accepted")
     return {"cases": ["miss", "ranks 1/5/6/10", "out-of-catalog", "stable tie and allowed native tie-order",
                       "target collision", "earlier collision rank shift", "duplicate target",
+                      "malformed cutoff top-k rejected", "legal cutoff tie accepted",
                       "four-row tail", "missing/duplicate users"]}
 
 

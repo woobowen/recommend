@@ -33,7 +33,7 @@ TOTAL_USERS = 24772
 RUNNER_PREFIX = "grid-letter-instruments-normal-20261124"
 
 
-def configure(assets, output, preflight):
+def configure(assets, output, preflight, boundary=False):
     from hydra import compose, initialize_config_dir
     from omegaconf import OmegaConf, open_dict
     import src.utils.custom_hydra_resolvers  # registers the native YAML resolvers
@@ -89,6 +89,14 @@ def configure(assets, output, preflight):
             cfg.trainer.limit_val_batches = PREFLIGHT_VAL
         cfg.data_loading.test_dataloader_config.dataloader.data_folder = str(prepared / "preflight_testing")
         overrides.extend(additions)
+    if boundary:
+        # A CPU framework contract fixture exercises the exact same callbacks,
+        # best-save and test interfaces with two updates before GPU admission.
+        limits = {"accelerator": "cpu", "accumulate_grad_batches": 2, "max_steps": 2,
+                  "val_check_interval": 4, "limit_train_batches": 4, "limit_val_batches": 2}
+        for field, value in limits.items():
+            cfg.trainer[field] = value
+        overrides.extend(f"boundary: trainer.{k}={v}" for k, v in limits.items())
     return cfg, overrides
 
 
@@ -144,12 +152,37 @@ def model_identity(model, codes):
     return info
 
 
-def train_and_test(cfg, assets, output, preflight):
+def tensor_digest(tensor):
+    return hashlib.sha256(tensor.detach().cpu().contiguous().numpy().tobytes()).hexdigest()
+
+
+def state_digest(state):
+    digest = hashlib.sha256()
+    for name, tensor in sorted(state.items()):
+        digest.update(json.dumps([name, str(tensor.dtype), list(tensor.shape)]).encode() + b"\x00")
+        digest.update(tensor.detach().cpu().contiguous().numpy().tobytes())
+    return digest.hexdigest()
+
+
+def train_and_test(cfg, assets, output, mode):
+    preflight = mode != "formal"
+    on_gpu = mode != "boundary"
     import lightning as L
     import numpy as np
     from lightning.pytorch.callbacks import Callback
     import torch
     from src.utils.launcher_utils import pipeline_launcher
+    from src.data.loading.components.interfaces import SequentialModelInputData, SequentialModuleLabelData
+
+    def batch_size(batch):
+        inputs, labels = batch
+        assert isinstance(inputs, SequentialModelInputData) and isinstance(labels, SequentialModuleLabelData)
+        size, width = inputs.mask.shape
+        assert width == 120 and labels.labels["sequence_data"].numel() == size * 4
+        return size
+
+    def batch_contract(batch):
+        return [type(batch).__name__, [type(part).__name__ for part in batch]]
 
     class Recorder(Callback):
         def __init__(self):
@@ -162,6 +195,7 @@ def train_and_test(cfg, assets, output, preflight):
             self.evaluations = 0
             self.update_probes = []
             self.pending = None
+            self.validation_checks = 0
 
         def event(self, trainer, phase, **extra):
             with (output / "events.jsonl").open("a", encoding="utf-8") as stream:
@@ -179,14 +213,26 @@ def train_and_test(cfg, assets, output, preflight):
                 loss = outputs["loss"] if isinstance(outputs, dict) else outputs
                 loss_value = float(loss.detach())
                 assert math.isfinite(loss_value)
-                self.expanded.append(int(batch[0].mask.shape[0]))
+                (training_pair,) = batch
+                self.expanded.append(batch_size(training_pair))
                 assert 0 < self.expanded[-1] <= 128
+                if batch_idx == 0:
+                    self.event(t, "train_contract", outer=batch_contract(batch), inner=batch_contract(training_pair),
+                               loss_accumulation_scaled=loss_value)
                 if self.pending is not None:
-                    old, gradient_norms = self.pending
-                    changes = {k: not torch.equal(v, dict(m.named_parameters())[k].detach()) for k, v in old.items()}
-                    assert all(changes.values())
-                    probe = {"step": t.global_step, "loss_accumulation_scaled": loss_value,
-                             "gradient_l2": gradient_norms, "changed": changes}
+                    old, gradient_norms, adam_before = self.pending
+                    params = dict(m.named_parameters())
+                    after = {name: tensor_digest(params[name]) for name in old}
+                    adam = t.optimizers[0]
+                    adam_after = {name: int(adam.state[params[name]]["step"]) for name in old}
+                    assert all(after[name] != value for name, value in old.items())
+                    assert set(adam_before.values()) == {t.global_step - 1}
+                    assert set(adam_after.values()) == {t.global_step}
+                    probe = {"step": t.global_step, "microbatch": batch_idx + 1,
+                             "loss_accumulation_scaled": loss_value, "gradient_l2": gradient_norms,
+                             "parameter_before_sha256": old, "parameter_after_sha256": after,
+                             "adam_before": adam_before, "adam_after": adam_after,
+                             "optimizer_state_entries_after": len(adam.state)}
                     self.update_probes.append(probe)
                     self.event(t, "optimizer_probe", **{k: v for k, v in probe.items() if k != "step"})
                     self.pending = None
@@ -194,9 +240,10 @@ def train_and_test(cfg, assets, output, preflight):
                 self.event(t, "train_batch", microbatch=batch_idx + 1, shuffle_calls=m.shuffle_calls)
 
         def on_before_optimizer_step(self, t, m, optimizer):
-            if preflight and t.global_step in (0, 99):
+            if preflight and t.global_step in (0, cfg.trainer.max_steps - 1):
                 selected = {}
                 gradients = {}
+                adam_before = {}
                 for name, param in m.named_parameters():
                     if param.grad is None:
                         assert name.endswith(("shared.weight", "embed_tokens.weight")), name
@@ -207,12 +254,14 @@ def train_and_test(cfg, assets, output, preflight):
                     if name in ("sep_token", "decoder.bos_token", "item_sid_embedding_table_encoder.weight") or (
                             "decoder_mlp" in name or name.endswith("block.0.layer.0.SelfAttention.q.weight")):
                         assert gradients[name] and gradients[name] > 0, name
-                        selected[name] = param.detach().clone()
+                        selected[name] = tensor_digest(param)
+                        adam_before[name] = int(optimizer.state.get(param, {}).get("step", 0))
                 assert len(selected) == 9, selected.keys()
-                self.pending = (selected, gradients)
+                self.pending = (selected, gradients, adam_before)
 
         def on_validation_start(self, t, m):
-            torch.cuda.synchronize()
+            if on_gpu:
+                torch.cuda.synchronize()
             self.validation_start = time.monotonic()
             self.val_batches = 0
             assert not m.shuffle_embedding_on_test and m.shuffle_calls == 0
@@ -220,27 +269,44 @@ def train_and_test(cfg, assets, output, preflight):
                        train_seconds_since_validation=self.validation_start - self.training_window)
 
         def on_validation_batch_end(self, t, m, outputs, batch, batch_idx, dataloader_idx=0):
+            size = batch_size(batch)
+            if batch_idx == 0:
+                self.first_validation_batch_seconds = time.monotonic() - self.validation_start
+                self.event(t, "validation_contract", pair=batch_contract(batch), size=size)
+            self.last_validation_batch_seconds = time.monotonic() - self.validation_start
             self.val_batches += 1
 
         def on_validation_end(self, t, m):
-            torch.cuda.synchronize()
+            if on_gpu:
+                torch.cuda.synchronize()
             self.training_window = time.monotonic()
             duration = self.training_window - self.validation_start
             self.validation_seconds.append(duration)
-            self.event(t, "validation_end", seconds=duration, batches=self.val_batches,
-                       monitor=float(t.callback_metrics["val/recall@5"]))
+            self.validation_checks += 1
+            monitor = float(t.callback_metrics["val/recall@5"])
+            assert math.isfinite(monitor)
+            self.event(t, "validation_end", seconds=duration, batches=self.val_batches, monitor=monitor,
+                       first_batch_seconds=self.first_validation_batch_seconds,
+                       last_batch_seconds=self.last_validation_batch_seconds)
             if preflight:
-                assert t.global_step == 100 and len(self.expanded) == 1600 and self.val_batches == 24
+                assert t.global_step == cfg.trainer.max_steps
+                assert len(self.expanded) == cfg.trainer.val_check_interval
+                assert self.val_batches == cfg.trainer.limit_val_batches
 
         def on_test_start(self, t, m):
             assert m.shuffle_calls == 0 and not m.shuffle_embedding_on_test
             self.evaluations += 1
             self.test_batch_sizes = Counter()
             self.test_metric_counts = {}
+            self.test_loop_start = time.monotonic()
             self.event(t, "test_start", evaluation=self.evaluations)
 
         def on_test_batch_end(self, t, m, outputs, batch, batch_idx, dataloader_idx=0):
-            self.test_batch_sizes[int(batch[0].mask.shape[0])] += 1
+            size = batch_size(batch)
+            self.test_batch_sizes[size] += 1
+            if preflight:
+                self.event(t, "test_batch", evaluation=self.evaluations, index=batch_idx, size=size,
+                           pair=batch_contract(batch), loop_elapsed_seconds=time.monotonic() - self.test_loop_start)
             self.test_metric_counts = {k: v.total_values for k, v in m.evaluator.metrics.items()}
 
         def on_test_end(self, t, m):
@@ -257,7 +323,7 @@ def train_and_test(cfg, assets, output, preflight):
     codes, sequences, _ = official(assets)
     axes = [seq[-21:] for seq in sequences]
     recorder = Recorder()
-    result = {"mode": "preflight" if preflight else "formal", "test": "Normal",
+    result = {"mode": mode, "test": "Normal",
               "train_seed": SEED, "eval_seed": EVAL_SEED}
     with pipeline_launcher(cfg) as p:
         model, trainer = p.model, p.trainer
@@ -273,12 +339,14 @@ def train_and_test(cfg, assets, output, preflight):
         result["fit_seconds"] = time.monotonic() - recorder.training_start
         result["validation_seconds"] = recorder.validation_seconds
         if preflight:
-            assert trainer.global_step == 100 and recorder.val_batches == 24 and len(recorder.update_probes) == 2
+            assert trainer.global_step == cfg.trainer.max_steps
+            assert recorder.validation_checks == 1 and len(recorder.update_probes) == 2
             result["expanded_microbatch"] = {"min": min(recorder.expanded), "max": max(recorder.expanded),
                                               "mean": statistics.mean(recorder.expanded),
                                               "distribution": dict(Counter(recorder.expanded))}
         best = Path(trainer.checkpoint_callback.best_model_path).resolve()
         assert best.is_file() and best.is_relative_to(output)
+        checkpoint_begin = time.monotonic()
         best_state = torch.load(best, map_location="cpu", weights_only=False)
         assert set(best_state["state_dict"]) == set(model.state_dict()) and best_state["optimizer_states"]
         assert best_state["optimizer_states"][0]["state"]
@@ -287,6 +355,12 @@ def train_and_test(cfg, assets, output, preflight):
                                 "score": float(trainer.checkpoint_callback.best_model_score),
                                 "optimizer_state_entries": len(best_state["optimizer_states"][0]["state"]),
                                 "callbacks": list(best_state["callbacks"])}
+        expected_state_sha = state_digest(best_state["state_dict"])
+        result["checkpoint"]["model_state_sha256"] = expected_state_sha
+        assert trainer.checkpoint_callback.monitor == "val/recall@5"
+        assert any(key.startswith("ModelCheckpoint") for key in best_state["callbacks"])
+        assert any(key.startswith("EarlyStopping") for key in best_state["callbacks"])
+        result["checkpoint"]["read_hash_and_inspect_seconds"] = time.monotonic() - checkpoint_begin
         model.strict_loading = True
         offline_stop = next(c for c in trainer.callbacks if type(c).__name__ == "EarlyStopping")
         if preflight:
@@ -311,28 +385,52 @@ def train_and_test(cfg, assets, output, preflight):
             fingerprints = []
             generate = model.generate
             decoder = model.decoder_forward_pass
-            cache_checks = [0]
+            decoder_calls = []
+            strict_loads = []
+            load_state = model.load_state_dict
+
+            def observe_load(state, strict=True, **kwargs):
+                start_load = time.monotonic()
+                assert strict is True and set(state) == set(model.state_dict())
+                assert state_digest(state) == expected_state_sha
+                receipt = load_state(state, strict=strict, **kwargs)
+                assert not receipt.missing_keys and not receipt.unexpected_keys
+                actual_state_sha = state_digest(model.state_dict())
+                assert actual_state_sha == expected_state_sha
+                strict_loads.append({"strict": strict, "keys": len(state), "missing": receipt.missing_keys,
+                                     "unexpected": receipt.unexpected_keys, "model_state_sha256": actual_state_sha,
+                                     "seconds": time.monotonic() - start_load})
+                return receipt
 
             def observe_generate(*args, **kwargs):
                 assert not args and set(kwargs) == {"attention_mask", "output_attentions", "input_ids", "user_id"}
                 assert kwargs["output_attentions"] is False
-                initial = cache_checks[0]
+                start = len(decoder_calls)
                 ids, scores = generate(*args, **kwargs)
-                assert cache_checks[0] == initial + 1
-                if preflight:
-                    fingerprints.append((ids.cpu().tolist(), [score_words(v) for v in scores.cpu().tolist()]))
+                trace = decoder_calls[start:]
+                assert len(trace) == 4 and [c["prefix_width"] for c in trace] == [0, 1, 2, 3]
+                assert trace[0]["cache_layers_before"] == [0, 0]
+                fingerprints.append({"user_ids": kwargs["user_id"][:, 0].cpu().tolist(),
+                                     "input_ids": kwargs["input_ids"].cpu().tolist(),
+                                     "input_mask": kwargs["attention_mask"].cpu().tolist(),
+                                     "ids": ids.cpu().tolist(),
+                                     "scores_f32le": [score_words(v) for v in scores.cpu().tolist()],
+                                     "decoder": trace})
                 return ids, scores
 
             def observe_decoder(*args, **kwargs):
-                if kwargs.get("use_cache") and kwargs.get("future_ids") is None:
+                if kwargs.get("use_cache"):
                     cache = kwargs["past_key_values"]
-                    assert len(cache.self_attention_cache) == len(cache.cross_attention_cache) == 0
-                    cache_checks[0] += 1
+                    prefix = kwargs["future_ids"]
+                    decoder_calls.append({"prefix_width": 0 if prefix is None else prefix.shape[-1],
+                                          "cache_layers_before": [len(cache.self_attention_cache),
+                                                                  len(cache.cross_attention_cache)]})
                 return decoder(*args, **kwargs)
 
             start = time.monotonic()
             with ExitStack() as stack:
                 sink = stack.enter_context(CandidateSink(output_file, model, axes, active=active))
+                stack.enter_context(patch.object(model, "load_state_dict", observe_load))
                 if preflight:
                     stack.enter_context(patch.object(model, "generate", observe_generate))
                     stack.enter_context(patch.object(model, "decoder_forward_pass", observe_decoder))
@@ -343,27 +441,39 @@ def train_and_test(cfg, assets, output, preflight):
             if active:
                 assert len(sink.users) == (20 if preflight else TOTAL_USERS)
                 assert sink.generation_calls == (3 if preflight else 3097)
+            assert len(strict_loads) == 1
+            load_receipt = strict_loads[0]
+            load_receipt["checkpoint_sha256"] = result["checkpoint"]["sha256"]
+            phase = "enabled" if active else "disabled"
+            write(output / f"reload_{phase}.json", load_receipt)
             if preflight:
-                assert cache_checks[0] == len(fingerprints) == 3
+                assert len(fingerprints) == 3 and len(decoder_calls) == 12
                 numpy_rng = np.random.get_state()
-                signatures.append((fingerprints, metrics, torch.random.get_rng_state().tolist(),
-                                   torch.cuda.get_rng_state().tolist(), random.getstate(),
-                                   (numpy_rng[0], numpy_rng[1].tolist(), *numpy_rng[2:])))
-            return metrics, elapsed
+                signature = {"batches": fingerprints, "metrics": metrics,
+                             "rng": {"torch_cpu": torch.random.get_rng_state().tolist(),
+                                     "torch_cuda": torch.cuda.get_rng_state().tolist() if on_gpu else None,
+                                     "python": random.getstate(),
+                                     "numpy": (numpy_rng[0], numpy_rng[1].tolist(), *numpy_rng[2:])}}
+                write(output / f"observer_{phase}.json", signature)
+                signatures.append(signature)
+            return metrics, elapsed, sink.write_seconds
 
-        metrics, result["test_seconds"] = testing(True)
+        metrics, result["test_seconds"], result["candidate_write_seconds"] = testing(True)
         if preflight:
-            _, result["shadow_test_seconds"] = testing(False)
+            _, result["shadow_test_seconds"], _ = testing(False)
             assert signatures[0] == signatures[1], "Observer affected native output or RNG"
-            result["observer_equivalence"] = {"batches": len(signatures[0][0]), "directions": 2,
+            result["observer_equivalence"] = {"batches": len(signatures[0]["batches"]), "directions": 2,
                                               "candidate_values_float32_bits_metrics_rng_equal": True,
                                               "fresh_cache_starts_from_bos": True}
         result["shuffle_calls"] = model.shuffle_calls
-        result["peak_gpu_bytes"] = torch.cuda.max_memory_allocated()
+        if on_gpu:
+            result["peak_gpu_bytes"] = torch.cuda.max_memory_allocated()
+            result["peak_gpu_reserved_bytes"] = torch.cuda.max_memory_reserved()
     write(output / "native_metrics.json", metrics)
     cpu_t0 = time.monotonic()
     with (output / "per_user_metrics.jsonl").open("x", encoding="utf-8") as stream:
-        evaluation = evaluate(assets, output / "candidates.jsonl", result["mode"], metrics[0], stream)
+        evaluation = evaluate(assets, output / "candidates.jsonl", "preflight" if preflight else "formal",
+                              metrics[0], stream)
     write(output / "offline_evaluation.json", {"replay": evaluation, "fixtures": fixtures()})
     result["offline_seconds"] = time.monotonic() - cpu_t0
     write(output / "stage_result.json", result)
@@ -372,7 +482,7 @@ def train_and_test(cfg, assets, output, preflight):
 def main():
     started = time.monotonic()
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=("plan", "preflight", "formal"))
+    parser.add_argument("mode", choices=("plan", "boundary", "preflight", "formal"))
     parser.add_argument("--assets", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--plan-dir", type=Path)
@@ -394,7 +504,7 @@ def main():
     from omegaconf import OmegaConf
     asset_report = verify_assets(assets)
     sources = verify_sources()
-    cfg, overrides = configure(assets, output, args.mode == "preflight")
+    cfg, overrides = configure(assets, output, args.mode in ("boundary", "preflight"), args.mode == "boundary")
     receipt_dir = args.plan_dir if is_plan else output
     receipt_dir.mkdir(parents=True)
     OmegaConf.save(cfg, receipt_dir / "effective_config.yaml", resolve=True)
@@ -404,16 +514,20 @@ def main():
                                            "formal_output_path": str(output), "coverage": asset_report,
                                            "source": sources, "argv": sys.argv})
         return
+    if args.mode == "boundary":
+        assert os.environ["CUDA_VISIBLE_DEVICES"] == ""
+        compute(cfg, assets, output, args.mode, asset_report, sources, started)
+        return
     # The file is shared by this experiment's deployments and attempts.
     with (assets.parent / "gpu.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        compute(cfg, assets, output, args.mode == "preflight", asset_report, sources, started)
+        compute(cfg, assets, output, args.mode, asset_report, sources, started)
 
 
-def compute(cfg, assets, output, preflight, asset_report, sources, started):
-    gpu = gpu_admission()
+def compute(cfg, assets, output, mode, asset_report, sources, started):
+    gpu = None if mode == "boundary" else gpu_admission()
     import torch
-    assert torch.cuda.device_count() == 1
+    assert torch.cuda.device_count() == int(gpu is not None)
     torch.use_deterministic_algorithms(True, warn_only=False)
     torch.set_float32_matmul_precision("medium")
     keys = ("numpy", "tensorflow-cpu", "lightning", "torchmetrics", "transformers", "pyarrow", "hydra-core")
@@ -422,7 +536,7 @@ def compute(cfg, assets, output, preflight, asset_report, sources, started):
                                     "dependencies": {k: importlib.metadata.version(k) for k in keys},
                                     "gpu": gpu, "asset_coverage": asset_report, "source": sources,
                                     "initial_checks_seconds": time.monotonic() - started})
-    train_and_test(cfg, assets, output, preflight)
+    train_and_test(cfg, assets, output, mode)
 
 
 if __name__ == "__main__":
