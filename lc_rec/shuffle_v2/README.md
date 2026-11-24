@@ -2,6 +2,8 @@
 
 `wbw-lc-rec-shuffle-v2` 将历史 LETTER V1 的干预扩展为包含恒等项的组内排列，研究同一固定模型及完整测试用户轴上不同码位扰动的结果。GitHub activity 在 2026-11-20T16:15:35Z 记录 `woobowen` 创建该研究分支，研究交付 `692cd94d6acd17292c2bdef7fabc6bb50ec9ba5d` 含启动和七次初始观察。整理前远端版本 `50507089981cb0b9d36e8977bd1d94cd9085f031` 属于之前的规范发布。分支继承 G3 Beauty 结束时的 V1 历史。Instruments A0 和原 LETTER Beauty 的正式系列均已完成。[仓库活动](https://github.com/woobowen/recommend/activity)
 
+本轮 Shuffle V2 四组正式实验的结果均已通过网页审核。各组入口保留各自的运行记录与历史审核版本。
+
 ## 第一组正式结果
 
 第一组研究及原结果交付已通过网页二审，状态为 `FIRST_GROUP_COMPLETE_WEB_REVIEW_PASS`。本轮说明和新审核包待网页差异复核。 [整组结果、五项配对、原作业与复现入口](../shuffle/results/v2-a0-instruments/final-20261121/README.md) · [本轮收尾记录](../shuffle/results/v2-a0-instruments/final-20261121/closeout/README.md)
@@ -16,7 +18,7 @@
 
 ## 第四组 Instruments A1 Qwen3-0.6B-Base
 
-第四组整组完成，非作者终审通过，等待网页 GPT 最终二审。 [正式结果](../shuffle/results/v2-a1-instruments/final-r0/README.md) · [方案与预跑](../shuffle/results/v2-a1-instruments/README.md) · [正式启动观察](../shuffle/results/v2-a1-instruments/formal-launch-observation-r0/README.md)
+第四组整组完成，两向非作者终审及网页 GPT 最终二审通过，状态为 `FOURTH_GROUP_COMPLETE_WEB_REVIEW_PASS`。 [正式结果](../shuffle/results/v2-a1-instruments/final-r0/README.md) · [方案与预跑](../shuffle/results/v2-a1-instruments/README.md) · [正式启动观察](../shuffle/results/v2-a1-instruments/formal-launch-observation-r0/README.md)
 
 ## 历史只读观测
 

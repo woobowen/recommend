@@ -1,8 +1,14 @@
 # 第四组 Instruments A1 Qwen Shuffle V2 正式结果
 
-**FOURTH_GROUP_COMPLETE_PENDING_WEB_REVIEW**
+**FOURTH_GROUP_COMPLETE_WEB_REVIEW_PASS**
 
-原父作业 a1-instruments-v2-formal-parent-r0 于 2026-11-23 23:26:12 EST（2026-11-24 04:26:12 UTC）结束。四个 GPU、四个 CPU 评价和最终 paired 均以原 r0 串行执行、退出 0，并经原 runner 清收。两方向非作者终审通过，等候网页 GPT 最终二审。 [九阶段终态](terminal-chain.json)
+原父作业 a1-instruments-v2-formal-parent-r0 于 2026-11-23 23:26:12 EST（2026-11-24 04:26:12 UTC）结束。四个 GPU、四个 CPU 评价和最终 paired 均以原 r0 串行执行、退出 0，并经原 runner 清收。两方向非作者终审和网页 GPT 最终二审均已通过。 [九阶段终态](terminal-chain.json)
+
+## 网页最终二审
+
+2026-11-24，网页 GPT 核验了最终 ZIP 的 423 个逻辑文件、全量正式输入、2,477,200 个原始候选、全部逐用户指标、123,860,000 个共享抽样索引、80 条配对记录和 37 项 GitHub 固定文件。四份正式结果文件离线再生后逐字节一致。至此，Shuffle V2 四组正式实验的结果均已通过网页审核。 [二审前固定交付版本](https://github.com/woobowen/recommend/blob/335d860f2a0c072c46058e6625164bf2babd0e67/lc_rec/shuffle/results/v2-a1-instruments/final-r0/README.md)
+
+离线复核工具需要 Python 3.11 或更高版本。包内 `verify-offline.sh` 最后的完整统计审核 JSON 相等断言对不同 NumPy／BLAS 环境过严。网页二审在 NumPy 2.3.5 下独立复算，draws 最大绝对差为 1.596e−16，CI 端点最大绝对差为 7.980e−17，均满足原 1e−13 容差。全部确定性字段精确一致，正式发布结果逐字节一致。此兼容性问题不影响终审结论。
 
 ## 固定方案与来源
 

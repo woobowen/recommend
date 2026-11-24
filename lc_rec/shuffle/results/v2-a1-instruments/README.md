@@ -1,6 +1,6 @@
 # 第四组 Instruments A1 Qwen Shuffle V2
 
-**整组正式计算完成，两项非作者终审通过。** 状态为 FOURTH_GROUP_COMPLETE_PENDING_WEB_REVIEW。原 r0 四个 GPU、四个 CPU 评价及 paired 均完成。 [正式结果及终审](final-r0/README.md) · [启动观察](formal-launch-observation-r0/README.md)
+**整组正式计算完成，两向非作者终审及网页 GPT 最终二审通过。** 状态为 `FOURTH_GROUP_COMPLETE_WEB_REVIEW_PASS`。原 r0 四个 GPU、四个 CPU 评价及 paired 均完成。 [正式结果及终审](final-r0/README.md) · [启动观察](formal-launch-observation-r0/README.md)
 
 ## 研究方案
 
