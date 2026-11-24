@@ -3,7 +3,7 @@
 **PARTIAL / BLOCKED**。独立审核者直接读取历史协议、观测 diff、原生 evaluator、导出实现、两份冻结评价与 runner 原始证据。冻结 SID 与 CCE 文件和固定 Git 对象逐字节相同，GPU r2 请求校验的 104 份源码和 10 份资产匹配部署。五个作业的导出 manifest 成员均逐项核对。
 
 - 源码中 teacher-forcing loss 后只调用一次 Normal `generate`。原 ids/scores 先送原生 evaluator，观察钩子读取同一次输出。原生实际 `torch.topk` 的四项索引可保存。统一按分数稳定降序，重复或目录外 SID 保留位置。分数存储保留原 float32 位模式。
-- 独立运行 [合成复算](independent-metrics-fixtures.txt)，含 1,024 个原生目标位掩码、1,000 组 Beam10 并列、无效、重复与碰撞输入、10,000 个 FP32 位模式，以及固定 20 人轴上的合成输入。异常轴检查覆盖缺漏、重复及乱序。独立代码在 ZIP 的 `independent-review/review_b_check.py`。
+- 独立运行 [合成复算](independent-metrics-fixtures.txt)，含 1,024 个原生目标位掩码、1,000 组 Beam10 无效、重复与碰撞输入、分数并列检查、10,000 个 FP32 位模式，以及固定 20 人轴上的合成输入。异常轴检查覆盖缺漏、重复及乱序。独立代码在 ZIP 的 `independent-review/review_b_check.py`。
 - 通过新 SSH 直接核对两个 CPU、三个单卡预跑的请求与作业，三个单卡 worker 均非零退出并验证清收。审核现场没有本轮正式请求或作业，4090 GPU1 空闲，独立核查时间为 2026-11-24 11:30:36 ET。GPU 请求 worker 墙钟累计 37.265162 秒，含启动和失败处置。
 - GPU 未到 Normal 生成，真实候选、分数位级等价、实际尾批、原生与统一真实指标均待补测。正式计划处于未提交状态。
 
