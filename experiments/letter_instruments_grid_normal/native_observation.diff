@@ -1,0 +1,46 @@
+--- frozen/codex/plan_v1_1/protocol.py
++++ native/codex/plan_v1_1/protocol.py
+@@ -44,6 +44,9 @@
+                        labels=list(labels.labels.values())[0].to(scores.device))
+         loss_to_aggregate(loss)
+         if self.is_testing:
++            sink = getattr(self, 'normal_candidate_sink', None)
++            if sink is not None:
++                sink(inputs, labels, ids, scores)
+             for i, uid in enumerate(user_ids(inputs)):
+                 if uid in self.protocol_sample_ids and uid not in self.protocol_references:
+                     self.protocol_references[uid] = {
+--- frozen/src/components/eval_metrics.py
++++ native/src/components/eval_metrics.py
+@@ -91,6 +91,13 @@
+         self.metric_values += metric.sum().item()
+         self.total_values += batch_size
+ 
++    def _rank_indices(self, preds, k):
++        indices = torch.topk(preds, k)[1]
++        sink = getattr(self, 'normal_rank_sink', None)
++        if sink is not None:
++            sink(indices)
++        return indices
++
+     def _metric(self, preds: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+         raise NotImplementedError
+ 
+@@ -103,7 +110,7 @@
+     def _metric(self, preds: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+         # 确保top_k不超过预测结果的数量
+         actual_k = min(self.top_k, preds.size(-1))
+-        topk_indices = torch.topk(preds, actual_k)[1]
++        topk_indices = self._rank_indices(preds, actual_k)
+         topk_true = target.gather(1, topk_indices)
+ 
+         # Compute DCG
+@@ -138,7 +145,7 @@
+     def _metric(self, preds: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+         # 确保top_k不超过预测结果的数量
+         actual_k = min(self.top_k, preds.size(-1))
+-        topk_indices = torch.topk(preds, actual_k)[1]
++        topk_indices = self._rank_indices(preds, actual_k)
+         topk_true = target.gather(1, topk_indices)
+ 
+         true_positives = topk_true.sum(dim=1)
