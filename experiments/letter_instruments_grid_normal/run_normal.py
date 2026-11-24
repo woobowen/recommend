@@ -4,6 +4,7 @@ from collections import Counter
 from contextlib import ExitStack
 import importlib.metadata
 import fcntl
+import hashlib
 import json
 import math
 import os
@@ -76,6 +77,7 @@ def configure(assets, output, preflight):
     assert cfg.ckpt_path is None and cfg.seed == SEED and cfg.model.eval_seed == EVAL_SEED
     assert cfg.trainer.accumulate_grad_batches == 16 and cfg.trainer.val_check_interval == 1600
     assert cfg.model.top_k_for_generation == 10 and not cfg.model.shuffle_embedding_on_test
+    cfg.id = output.parents[1].name
     if preflight:
         additions = ["trainer.max_steps=100", "trainer.max_epochs=1", "++trainer.limit_train_batches=1600",
                      "++trainer.limit_val_batches=24",
@@ -198,10 +200,20 @@ def train_and_test(cfg, assets, output, preflight):
         def on_test_start(self, t, m):
             assert m.shuffle_calls == 0 and not m.shuffle_embedding_on_test
             self.evaluations += 1
+            self.test_batch_sizes = Counter()
+            self.test_metric_counts = {}
             self.event(t, "test_start", evaluation=self.evaluations)
 
+        def on_test_batch_end(self, t, m, outputs, batch, batch_idx, dataloader_idx=0):
+            self.test_batch_sizes[int(batch[0].mask.shape[0])] += 1
+            self.test_metric_counts = {k: v.total_values for k, v in m.evaluator.metrics.items()}
+
         def on_test_end(self, t, m):
-            self.event(t, "test_end", evaluation=self.evaluations, shuffle_calls=m.shuffle_calls)
+            expected = 20 if preflight else TOTAL_USERS
+            assert self.test_batch_sizes == {8: expected // 8, 4: 1}
+            assert set(self.test_metric_counts.values()) == {expected}
+            self.event(t, "test_end", evaluation=self.evaluations, shuffle_calls=m.shuffle_calls,
+                       batch_sizes=dict(self.test_batch_sizes), metric_denominators=self.test_metric_counts)
 
         def on_exception(self, t, m, exc):
             self.event(t, "error", error=repr(exc))
@@ -218,7 +230,12 @@ def train_and_test(cfg, assets, output, preflight):
         table = model.get_embedding_table("encoder")
         sid_match = torch.equal(model.codebooks.cpu(), torch.tensor(codes))
         heads = [list(head.weight.shape) for head in model.decoder.decoder_mlp]
-        info = {"parameters": sum(t.numel() for t in model.parameters()),
+        initial = hashlib.sha256()
+        for name, param in model.named_parameters():
+            initial.update(name.encode() + b"\x00")
+            initial.update(param.detach().cpu().contiguous().numpy().tobytes())
+        info = {"initial_parameters_sha256": initial.hexdigest(),
+                "parameters": sum(t.numel() for t in model.parameters()),
                 "trainable_parameters": sum(t.numel() for t in model.parameters() if t.requires_grad),
                 "dtype_counts": dict(Counter(str(t.dtype) for t in model.parameters())),
                 "encoder_layers": len(model.encoder.encoder.block),
