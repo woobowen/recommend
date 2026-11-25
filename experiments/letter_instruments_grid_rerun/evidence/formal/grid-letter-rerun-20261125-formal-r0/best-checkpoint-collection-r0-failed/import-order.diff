@@ -1,0 +1,12 @@
+--- checkpoint_remote.before.py
++++ checkpoint_remote.py
+@@ -90,6 +90,9 @@
+     # The run is our own pinned source. Its Lightning checkpoint serializes native config classes.
+     baseline = Path(request["argv"][2]).parents[1] / "letter_instruments_grid_normal"
+     sys.path[:0] = [str(baseline), str(baseline / "native")]
++    # Initialize native modules in the same order as downstream.fit.
++    from src.utils.launcher_utils import pipeline_launcher  # registers native imports
++
+     full = torch.load(io.BytesIO(blob), map_location="cpu", weights_only=False)
+     choices = []
+     for key, cb in full["callbacks"].items():

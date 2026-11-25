@@ -1,0 +1,283 @@
+{
+  "launch": {
+    "canonical_request_sha256": "bf0226675093e04ff777a76077cdd8173b627f977e6153a175b969faafae4eb1",
+    "snapshot_files_verified": 208,
+    "source_commit": "b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e",
+    "input_scope_entries": 10,
+    "started_at": "2026-11-25T18:36:38.616311+00:00",
+    "independent_connection_confirmed_at": "2026-11-25T18:37:12.354664+00:00",
+    "supervisor_pid": 3526583,
+    "worker_pid": 3526585,
+    "initial_gpu_pid": 3526781,
+    "gpu_uuid": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+    "timeout_seconds": 86400
+  },
+  "receipts": {
+    "quantizer": {
+      "seconds": 131.89475818537176,
+      "files_verified": 17,
+      "receipt_paths_not_replayed": [
+        "quantizer_train/checkpoints/checkpoint_000_000030.ckpt"
+      ]
+    },
+    "sid": {
+      "seconds": 31.076955799013376,
+      "files_verified": 34,
+      "receipt_paths_not_replayed": [
+        "quantizer_train/checkpoints/checkpoint_000_000030.ckpt"
+      ]
+    },
+    "bound": {
+      "seconds": 47.27367028221488,
+      "files_verified": 7,
+      "receipt_paths_not_replayed": []
+    }
+  },
+  "fit": {
+    "fit_raw_batches": 36,
+    "fit_rows_with_repeats": 73728,
+    "distinct_rows": 9922,
+    "lightning_updates": 30,
+    "per_layer_changed_updates": {
+      "0": 10,
+      "1": 10,
+      "2": 10
+    },
+    "initialization_batches_per_layer": 2,
+    "checkpoint_sha256_from_receipt": "864abd1e2028b6144f9300782c3f9bcea522ee106560dba21881cad84c21a6a0"
+  },
+  "catalogue": {
+    "sha256": "e1cc4d2b0fddb7a48d9a26f5e99d338965590657ddaa18ec90fa3814806e948e",
+    "prefixes": 8625,
+    "unique_full_codes": 9922,
+    "fourth_max": 16,
+    "colliding_prefixes": 784,
+    "items_in_colliding_prefixes": 2081,
+    "all_predicted_center_ids_equal_sid_prefix": 29766,
+    "all_upstream_record_rows": 9922,
+    "users": 24772,
+    "splits": {
+      "training": {
+        "users": 24772,
+        "stored_items": 156609,
+        "sha256": "6d1c8a523f9469d4e518ac1b79be599b02543c3671d73219a0ab4d52cd4a5dfc"
+      },
+      "evaluation": {
+        "users": 24772,
+        "stored_items": 173699,
+        "sha256": "bbe15f89bfdb6d164930c01125a70f7b69ebecb5b309e73d1f5d6bc5fe012167"
+      },
+      "testing": {
+        "users": 24772,
+        "stored_items": 197701,
+        "sha256": "b96a5883cfb18358b39fbf4c5eaa5d04fb36de152b2e2a33d8e43515703b2d75"
+      }
+    }
+  },
+  "cutoff_capture": {
+    "started_utc": "2026-11-25T19:07:15.995537+00:00",
+    "ended_utc": "2026-11-25T19:07:16.123044+00:00",
+    "bounded_entries_verified": 17,
+    "entries_changed_during_read": []
+  },
+  "training": {
+    "complete_validation_records": [
+      {
+        "step": 100,
+        "batches": 3097,
+        "recall_at_5": 0.060108184814453125,
+        "seconds": 360.62511143740267,
+        "train_seconds_since_validation": 225.0007205605507
+      },
+      {
+        "step": 200,
+        "batches": 3097,
+        "recall_at_5": 0.05869530141353607,
+        "seconds": 368.5779284937307,
+        "train_seconds_since_validation": 214.2264756122604
+      }
+    ],
+    "validation_csv_records": [
+      {
+        "epoch": "0",
+        "step": "99",
+        "train/loss_step": "",
+        "val/loss": "13.089644432067871",
+        "val/ndcg@10": "0.04017835855484009",
+        "val/ndcg@5": "0.03632291406393051",
+        "val/recall@10": "0.0720975324511528",
+        "val/recall@5": "0.060108184814453125"
+      },
+      {
+        "epoch": "0",
+        "step": "199",
+        "train/loss_step": "",
+        "val/loss": "11.213273048400879",
+        "val/ndcg@10": "0.047757215797901154",
+        "val/ndcg@5": "0.04362117499113083",
+        "val/recall@10": "0.07149200886487961",
+        "val/recall@5": "0.05869530141353607"
+      }
+    ],
+    "last_train_loss_step_csv_record": {
+      "epoch": "0",
+      "step": "299",
+      "train/loss_step": "9.923819541931152",
+      "val/loss": "",
+      "val/ndcg@10": "",
+      "val/ndcg@5": "",
+      "val/recall@10": "",
+      "val/recall@5": ""
+    },
+    "train_loss_step_records": 30,
+    "largest_observed_validation_recall_at_5": 0.060108184814453125,
+    "full_validation_users_from_verified_bound_split": 24772,
+    "model": {
+      "initial_parameters_sha256": "12f42b216ea887553dbedfcf4efd46d4d52fd6149aa91bcd007dbb270ff7ebd3",
+      "parameters": 13128064,
+      "trainable_parameters": 13128064,
+      "dtype_counts": {
+        "torch.float32": 127
+      },
+      "encoder_layers": 4,
+      "decoder_layers": 4,
+      "heads": [
+        [
+          256,
+          128
+        ],
+        [
+          256,
+          128
+        ],
+        [
+          256,
+          128
+        ],
+        [
+          256,
+          128
+        ]
+      ],
+      "bos": [
+        1,
+        128
+      ],
+      "sep": [
+        1,
+        128
+      ],
+      "uses_user_embedding": false,
+      "sid_slots": 1024,
+      "embedding_width": 128,
+      "shared": true,
+      "sid_matches_official": true,
+      "beam": 10,
+      "prefix_filter": false,
+      "matmul_precision": "medium",
+      "deterministic": true,
+      "cublas_workspace_config": ":4096:8"
+    }
+  },
+  "observations": [
+    {
+      "point": "T10",
+      "sample_started_utc": "2026-11-25T18:47:16.190845+00:00",
+      "sample_ended_utc": "2026-11-25T18:47:16.304544+00:00",
+      "seconds_since_start_confirm": 603.836181,
+      "work_log_end_byte_exclusive": 3632,
+      "gpu_pids_in_workgroup": [
+        3528228
+      ],
+      "gpu_used_memory": "4006 MiB",
+      "gpu_utilization": "7 %",
+      "free_bytes": {
+        "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0": 545999736832,
+        "/data/bwwu/grid-letter-rerun-20261125": 2693278863360
+      }
+    },
+    {
+      "point": "T20",
+      "sample_started_utc": "2026-11-25T18:57:14.913739+00:00",
+      "sample_ended_utc": "2026-11-25T18:57:15.026739+00:00",
+      "seconds_since_start_confirm": 1202.559075,
+      "work_log_end_byte_exclusive": 3937,
+      "gpu_pids_in_workgroup": [
+        3528228
+      ],
+      "gpu_used_memory": "4008 MiB",
+      "gpu_utilization": "7 %",
+      "free_bytes": {
+        "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0": 545840685056,
+        "/data/bwwu/grid-letter-rerun-20261125": 2693278863360
+      }
+    },
+    {
+      "point": "T30",
+      "sample_started_utc": "2026-11-25T19:07:15.995579+00:00",
+      "sample_ended_utc": "2026-11-25T19:07:16.107155+00:00",
+      "seconds_since_start_confirm": 1803.640915,
+      "work_log_end_byte_exclusive": 3995,
+      "gpu_pids_in_workgroup": [
+        3528228
+      ],
+      "gpu_used_memory": "4008 MiB",
+      "gpu_utilization": "9 %",
+      "free_bytes": {
+        "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0": 545840648192,
+        "/data/bwwu/grid-letter-rerun-20261125": 2693278863360
+      }
+    }
+  ],
+  "best_at_cutoff": {
+    "path": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training/checkpoints/checkpoint_epoch=000_step=000100.ckpt",
+    "sha256": "798010e851fc8588339d59ab59bda61562858c6f655a9e20a9d56fc1f9070502",
+    "global_step": 100,
+    "epoch": 0,
+    "monitor": "val/recall@5",
+    "score": 0.060108184814453125,
+    "adam_parameter_state_entries": 127,
+    "adam_step_values": [
+      100
+    ]
+  },
+  "resolved_runtime_config": [
+    {
+      "stage": "quantizer_train",
+      "actual_sha256": "0839699901a00f5095ff4b48f8fbb552ff70e92e931c5d22e5383ba17a0538f4",
+      "resolved_plan_sha256": "24e44c13627a40a41048ce904e70188b8f3a18474eb45811bed12ae9b360dabd",
+      "runtime_id": "2026-11-25/18-36-52",
+      "planned_id": "2026-11-25/17-40-17",
+      "path_substitutions": {
+        "/data/bwwu/grid-letter-rerun-20261125/formal-runtime-plan/upstream": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream",
+        "/data/bwwu/grid-letter-rerun-20261125/formal-runtime-plan/bound": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/bound",
+        "/data/bwwu/grid-letter-rerun-20261125/formal-runtime-plan/downstream": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training"
+      }
+    },
+    {
+      "stage": "sid_generation",
+      "actual_sha256": "35171a355d23536af0d7cb947ca80c86f7956d0c4b3d01922e5cd288dc6d14ba",
+      "resolved_plan_sha256": "0160f3d63c44667996210573e3be1de60f036089229f0386f9142cceeebca4b6",
+      "runtime_id": "2026-11-25/18-39-01",
+      "planned_id": "2026-11-25/17-40-25",
+      "path_substitutions": {
+        "/data/bwwu/grid-letter-rerun-20261125/formal-runtime-plan/upstream": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream",
+        "/data/bwwu/grid-letter-rerun-20261125/formal-runtime-plan/bound": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/bound",
+        "/data/bwwu/grid-letter-rerun-20261125/formal-runtime-plan/downstream": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training"
+      }
+    },
+    {
+      "stage": "training",
+      "actual_sha256": "223e2e629a301b33bc72b1c75a2d07115abfa8d4d521bf9bc06ec0825fe4a9e8",
+      "resolved_plan_sha256": "5fff070ce0d5c67d8bff3cd1109067eb727f7cb70592a0bdb1b0e7430199f519",
+      "runtime_id": "output",
+      "planned_id": "grid-letter-rerun-20261125",
+      "path_substitutions": {
+        "/data/bwwu/grid-letter-rerun-20261125/formal-runtime-plan/upstream": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream",
+        "/data/bwwu/grid-letter-rerun-20261125/formal-runtime-plan/bound": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/bound",
+        "/data/bwwu/grid-letter-rerun-20261125/formal-runtime-plan/downstream": "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training"
+      }
+    }
+  ],
+  "reviewed_at": "2026-11-25T14:08:19.520465-05:00"
+}
