@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005511/runner/run_experiment.py", line 89, in <module>
+    if __name__=='__main__':main()
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005511/runner/run_experiment.py", line 68, in main
+    if args.worker:worker(args.worker);return
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005511/runner/run_experiment.py", line 47, in worker
+    write(run/'environment.json',dict(python=sys.version,packages={n:__import__('importlib.metadata',fromlist=['version']).version(n) for n in ['torch','lightning','transformers','tensorflow','hydra-core']},gpu=0))
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005511/runner/run_experiment.py", line 47, in <dictcomp>
+    write(run/'environment.json',dict(python=sys.version,packages={n:__import__('importlib.metadata',fromlist=['version']).version(n) for n in ['torch','lightning','transformers','tensorflow','hydra-core']},gpu=0))
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/importlib/metadata/__init__.py", line 996, in version
+    return distribution(distribution_name).version
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/importlib/metadata/__init__.py", line 969, in distribution
+    return Distribution.from_name(distribution_name)
+  File "/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/importlib/metadata/__init__.py", line 548, in from_name
+    raise PackageNotFoundError(name)
+importlib.metadata.PackageNotFoundError: No package metadata was found for tensorflow

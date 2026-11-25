@@ -41,3 +41,14 @@ Beauty 在最佳 checkpoint（12,500 步）上恢复全训练状态继续训练�
 原始阶段结果、CSV、Hydra 配置和 checkpoint 均保存在相邻的 `GRID baseline/experiments` 中。`GRID baseline/reconfigurations` 保存重启前后配置和 Beauty 保护备份。历史记录中的绝对路径保留作为证据，不应在其他机器直接执行原 job.json。
 
 JSON 提供完整精度结果及对应 checkpoint 路径，CSV 包含三组参照的全部相对增减。
+
+
+## Instruments GRID基线（2026-11-25新增）
+
+[完整实验、源码、配置和资产](Instruments%20GRID%20Qwen/README.md)：Qwen → RQ-KMeans SID → 自有GRID/TIGER，训练seed42，27,530用户、10,611商品，正常顺序全测试完成；与LETTER公开SID实验区分。
+
+| 数据集 | Recall@5 | Recall@10 | NDCG@5 | NDCG@10 |
+|---|---:|---:|---:|---:|
+| Instruments | 0.090374 | 0.106793 | 0.076403 | 0.081714 |
+
+原始全精度结果见[run/result.json](Instruments%20GRID%20Qwen/run/result.json)，可复算表见[metrics.csv](Instruments%20GRID%20Qwen/metrics.csv)。没有补填未经核实的论文比较值或shuffle结果。旧三数据集表的核查时间和结果保持原历史含义。

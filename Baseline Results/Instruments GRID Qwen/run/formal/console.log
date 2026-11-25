@@ -1,0 +1,389 @@
+Seed set to 42
+[2026-11-25 00:56:28,091][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.SequenceDataModule>
+[2026-11-25 00:56:28,152][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.models.modules.semantic_id.tiger_generation_model.SemanticIDEncoderDecoder>
+[2026-11-25 00:56:28,385][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2026-11-25 00:56:28,385][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2026-11-25 00:56:28,388][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>
+[2026-11-25 00:56:28,391][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2026-11-25 00:56:28,391][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2026-11-25 00:56:28,391][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2026-11-25 00:56:28,393][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+[2026-11-25 00:56:28,451][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━┳━┳┓
+┃ ┃ Name                                                                  ┃ ┃ ┃┃
+┡━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━╇━╇┩
+│ │ model                                                                 │ │ ││
+│ │ model.encoder                                                         │ │ ││
+│ │ model.encoder.block                                                   │ │ ││
+│ │ model.encoder.block.0                                                 │ │ ││
+│ │ model.encoder.block.0.layer                                           │ │ ││
+│ │ model.encoder.block.0.layer.0                                         │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention                           │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention.q                         │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention.k                         │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention.v                         │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention.o                         │ │ ││
+│ │ model.encoder.block.0.layer.0.SelfAttention.relative_attention_bias   │ │ ││
+│ │ model.encoder.block.0.layer.0.layer_norm                              │ │ ││
+│ │ model.encoder.block.0.layer.0.dropout                                 │ │ ││
+│ │ model.encoder.block.0.layer.1                                         │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp                                     │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model                               │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.0                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.1                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.2                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.3                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.4                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.5                             │ │ ││
+│ │ model.encoder.block.0.layer.1.mlp.model.6                             │ │ ││
+│ │ model.encoder.block.0.layer.1.layer_norm                              │ │ ││
+│ │ model.encoder.block.0.layer.1.dropout                                 │ │ ││
+│ │ model.encoder.block.1                                                 │ │ ││
+│ │ model.encoder.block.1.layer                                           │ │ ││
+│ │ model.encoder.block.1.layer.0                                         │ │ ││
+│ │ model.encoder.block.1.layer.0.SelfAttention                           │ │ ││
+│ │ model.encoder.block.1.layer.0.SelfAttention.q                         │ │ ││
+│ │ model.encoder.block.1.layer.0.SelfAttention.k                         │ │ ││
+│ │ model.encoder.block.1.layer.0.SelfAttention.v                         │ │ ││
+│ │ model.encoder.block.1.layer.0.SelfAttention.o                         │ │ ││
+│ │ model.encoder.block.1.layer.0.layer_norm                              │ │ ││
+│ │ model.encoder.block.1.layer.0.dropout                                 │ │ ││
+│ │ model.encoder.block.1.layer.1                                         │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp                                     │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model                               │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.0                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.1                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.2                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.3                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.4                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.5                             │ │ ││
+│ │ model.encoder.block.1.layer.1.mlp.model.6                             │ │ ││
+│ │ model.encoder.block.1.layer.1.layer_norm                              │ │ ││
+│ │ model.encoder.block.1.layer.1.dropout                                 │ │ ││
+│ │ model.encoder.block.2                                                 │ │ ││
+│ │ model.encoder.block.2.layer                                           │ │ ││
+│ │ model.encoder.block.2.layer.0                                         │ │ ││
+│ │ model.encoder.block.2.layer.0.SelfAttention                           │ │ ││
+│ │ model.encoder.block.2.layer.0.SelfAttention.q                         │ │ ││
+│ │ model.encoder.block.2.layer.0.SelfAttention.k                         │ │ ││
+│ │ model.encoder.block.2.layer.0.SelfAttention.v                         │ │ ││
+│ │ model.encoder.block.2.layer.0.SelfAttention.o                         │ │ ││
+│ │ model.encoder.block.2.layer.0.layer_norm                              │ │ ││
+│ │ model.encoder.block.2.layer.0.dropout                                 │ │ ││
+│ │ model.encoder.block.2.layer.1                                         │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp                                     │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model                               │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.0                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.1                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.2                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.3                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.4                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.5                             │ │ ││
+│ │ model.encoder.block.2.layer.1.mlp.model.6                             │ │ ││
+│ │ model.encoder.block.2.layer.1.layer_norm                              │ │ ││
+│ │ model.encoder.block.2.layer.1.dropout                                 │ │ ││
+│ │ model.encoder.block.3                                                 │ │ ││
+│ │ model.encoder.block.3.layer                                           │ │ ││
+│ │ model.encoder.block.3.layer.0                                         │ │ ││
+│ │ model.encoder.block.3.layer.0.SelfAttention                           │ │ ││
+│ │ model.encoder.block.3.layer.0.SelfAttention.q                         │ │ ││
+│ │ model.encoder.block.3.layer.0.SelfAttention.k                         │ │ ││
+│ │ model.encoder.block.3.layer.0.SelfAttention.v                         │ │ ││
+│ │ model.encoder.block.3.layer.0.SelfAttention.o                         │ │ ││
+│ │ model.encoder.block.3.layer.0.layer_norm                              │ │ ││
+│ │ model.encoder.block.3.layer.0.dropout                                 │ │ ││
+│ │ model.encoder.block.3.layer.1                                         │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp                                     │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model                               │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.0                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.1                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.2                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.3                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.4                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.5                             │ │ ││
+│ │ model.encoder.block.3.layer.1.mlp.model.6                             │ │ ││
+│ │ model.encoder.block.3.layer.1.layer_norm                              │ │ ││
+│ │ model.encoder.block.3.layer.1.dropout                                 │ │ ││
+│ │ model.encoder.final_layer_norm                                        │ │ ││
+│ │ model.encoder.dropout                                                 │ │ ││
+│ │ loss_function                                                         │ │ ││
+│ │ ndcg@5                                                                │ │ ││
+│ │ ndcg@10                                                               │ │ ││
+│ │ recall@5                                                              │ │ ││
+│ │ recall@10                                                             │ │ ││
+│ │ train_loss                                                            │ │ ││
+│ │ val_loss                                                              │ │ ││
+│ │ test_loss                                                             │ │ ││
+│ │ encoder                                                               │ │ ││
+│ │ decoder                                                               │ │ ││
+│ │ decoder.decoder                                                       │ │ ││
+│ │ decoder.decoder.block                                                 │ │ ││
+│ │ decoder.decoder.block.0                                               │ │ ││
+│ │ decoder.decoder.block.0.layer                                         │ │ ││
+│ │ decoder.decoder.block.0.layer.0                                       │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention                         │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention.q                       │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention.k                       │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention.v                       │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention.o                       │ │ ││
+│ │ decoder.decoder.block.0.layer.0.SelfAttention.relative_attention_bias │ │ ││
+│ │ decoder.decoder.block.0.layer.0.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.0.layer.0.dropout                               │ │ ││
+│ │ decoder.decoder.block.0.layer.1                                       │ │ ││
+│ │ decoder.decoder.block.0.layer.1.EncDecAttention                       │ │ ││
+│ │ decoder.decoder.block.0.layer.1.EncDecAttention.q                     │ │ ││
+│ │ decoder.decoder.block.0.layer.1.EncDecAttention.k                     │ │ ││
+│ │ decoder.decoder.block.0.layer.1.EncDecAttention.v                     │ │ ││
+│ │ decoder.decoder.block.0.layer.1.EncDecAttention.o                     │ │ ││
+│ │ decoder.decoder.block.0.layer.1.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.0.layer.1.dropout                               │ │ ││
+│ │ decoder.decoder.block.0.layer.2                                       │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp                                   │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model                             │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.0                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.1                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.2                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.3                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.4                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.5                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.mlp.model.6                           │ │ ││
+│ │ decoder.decoder.block.0.layer.2.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.0.layer.2.dropout                               │ │ ││
+│ │ decoder.decoder.block.1                                               │ │ ││
+│ │ decoder.decoder.block.1.layer                                         │ │ ││
+│ │ decoder.decoder.block.1.layer.0                                       │ │ ││
+│ │ decoder.decoder.block.1.layer.0.SelfAttention                         │ │ ││
+│ │ decoder.decoder.block.1.layer.0.SelfAttention.q                       │ │ ││
+│ │ decoder.decoder.block.1.layer.0.SelfAttention.k                       │ │ ││
+│ │ decoder.decoder.block.1.layer.0.SelfAttention.v                       │ │ ││
+│ │ decoder.decoder.block.1.layer.0.SelfAttention.o                       │ │ ││
+│ │ decoder.decoder.block.1.layer.0.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.1.layer.0.dropout                               │ │ ││
+│ │ decoder.decoder.block.1.layer.1                                       │ │ ││
+│ │ decoder.decoder.block.1.layer.1.EncDecAttention                       │ │ ││
+│ │ decoder.decoder.block.1.layer.1.EncDecAttention.q                     │ │ ││
+│ │ decoder.decoder.block.1.layer.1.EncDecAttention.k                     │ │ ││
+│ │ decoder.decoder.block.1.layer.1.EncDecAttention.v                     │ │ ││
+│ │ decoder.decoder.block.1.layer.1.EncDecAttention.o                     │ │ ││
+│ │ decoder.decoder.block.1.layer.1.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.1.layer.1.dropout                               │ │ ││
+│ │ decoder.decoder.block.1.layer.2                                       │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp                                   │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model                             │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.0                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.1                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.2                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.3                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.4                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.5                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.mlp.model.6                           │ │ ││
+│ │ decoder.decoder.block.1.layer.2.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.1.layer.2.dropout                               │ │ ││
+│ │ decoder.decoder.block.2                                               │ │ ││
+│ │ decoder.decoder.block.2.layer                                         │ │ ││
+│ │ decoder.decoder.block.2.layer.0                                       │ │ ││
+│ │ decoder.decoder.block.2.layer.0.SelfAttention                         │ │ ││
+│ │ decoder.decoder.block.2.layer.0.SelfAttention.q                       │ │ ││
+│ │ decoder.decoder.block.2.layer.0.SelfAttention.k                       │ │ ││
+│ │ decoder.decoder.block.2.layer.0.SelfAttention.v                       │ │ ││
+│ │ decoder.decoder.block.2.layer.0.SelfAttention.o                       │ │ ││
+│ │ decoder.decoder.block.2.layer.0.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.2.layer.0.dropout                               │ │ ││
+│ │ decoder.decoder.block.2.layer.1                                       │ │ ││
+│ │ decoder.decoder.block.2.layer.1.EncDecAttention                       │ │ ││
+│ │ decoder.decoder.block.2.layer.1.EncDecAttention.q                     │ │ ││
+│ │ decoder.decoder.block.2.layer.1.EncDecAttention.k                     │ │ ││
+│ │ decoder.decoder.block.2.layer.1.EncDecAttention.v                     │ │ ││
+│ │ decoder.decoder.block.2.layer.1.EncDecAttention.o                     │ │ ││
+│ │ decoder.decoder.block.2.layer.1.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.2.layer.1.dropout                               │ │ ││
+│ │ decoder.decoder.block.2.layer.2                                       │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp                                   │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model                             │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.0                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.1                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.2                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.3                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.4                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.5                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.mlp.model.6                           │ │ ││
+│ │ decoder.decoder.block.2.layer.2.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.2.layer.2.dropout                               │ │ ││
+│ │ decoder.decoder.block.3                                               │ │ ││
+│ │ decoder.decoder.block.3.layer                                         │ │ ││
+│ │ decoder.decoder.block.3.layer.0                                       │ │ ││
+│ │ decoder.decoder.block.3.layer.0.SelfAttention                         │ │ ││
+│ │ decoder.decoder.block.3.layer.0.SelfAttention.q                       │ │ ││
+│ │ decoder.decoder.block.3.layer.0.SelfAttention.k                       │ │ ││
+│ │ decoder.decoder.block.3.layer.0.SelfAttention.v                       │ │ ││
+│ │ decoder.decoder.block.3.layer.0.SelfAttention.o                       │ │ ││
+│ │ decoder.decoder.block.3.layer.0.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.3.layer.0.dropout                               │ │ ││
+│ │ decoder.decoder.block.3.layer.1                                       │ │ ││
+│ │ decoder.decoder.block.3.layer.1.EncDecAttention                       │ │ ││
+│ │ decoder.decoder.block.3.layer.1.EncDecAttention.q                     │ │ ││
+│ │ decoder.decoder.block.3.layer.1.EncDecAttention.k                     │ │ ││
+│ │ decoder.decoder.block.3.layer.1.EncDecAttention.v                     │ │ ││
+│ │ decoder.decoder.block.3.layer.1.EncDecAttention.o                     │ │ ││
+│ │ decoder.decoder.block.3.layer.1.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.3.layer.1.dropout                               │ │ ││
+│ │ decoder.decoder.block.3.layer.2                                       │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp                                   │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model                             │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.0                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.1                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.2                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.3                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.4                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.5                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.mlp.model.6                           │ │ ││
+│ │ decoder.decoder.block.3.layer.2.layer_norm                            │ │ ││
+│ │ decoder.decoder.block.3.layer.2.dropout                               │ │ ││
+│ │ decoder.decoder.final_layer_norm                                      │ │ ││
+│ │ decoder.decoder.dropout                                               │ │ ││
+│ │ decoder.decoder_mlp                                                   │ │ ││
+│ │ decoder.decoder_mlp.0                                                 │ │ ││
+│ │ decoder.decoder_mlp.1                                                 │ │ ││
+│ │ decoder.decoder_mlp.2                                                 │ │ ││
+│ │ decoder.decoder_mlp.3                                                 │ │ ││
+│ │ item_sid_embedding_table_encoder                                      │ │ ││
+└─┴───────────────────────────────────────────────────────────────────────┴─┴─┴┘
+Trainable params: 13.1 M                                                        
+Non-trainable params: 0                                                         
+Total params: 13.1 M                                                            
+Total estimated model params size (MB): 52                                      
+Modules in train mode: 235                                                      
+Modules in eval mode: 0                                                         
+[2026-11-25 00:56:29,038][root][WARNING] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=55` in the `DataLoader` to improve performance.
+[2026-11-25 00:56:29,144][root][WARNING] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'val_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=55` in the `DataLoader` to improve performance.
+Metric val/recall@5 improved. New best score: 0.038
+Epoch 0, global step 100: 'val/recall@5' reached 0.03799 (best 0.03799), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=000100.ckpt' as top 1
+Metric val/recall@5 improved by 0.018 >= min_delta = 0.0. New best score: 0.056
+Epoch 0, global step 200: 'val/recall@5' reached 0.05634 (best 0.05634), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=000200.ckpt' as top 1
+Metric val/recall@5 improved by 0.010 >= min_delta = 0.0. New best score: 0.066
+Epoch 0, global step 300: 'val/recall@5' reached 0.06618 (best 0.06618), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=000300.ckpt' as top 1
+Metric val/recall@5 improved by 0.003 >= min_delta = 0.0. New best score: 0.069
+Epoch 0, global step 400: 'val/recall@5' reached 0.06938 (best 0.06938), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=000400.ckpt' as top 1
+Metric val/recall@5 improved by 0.002 >= min_delta = 0.0. New best score: 0.071
+Epoch 0, global step 500: 'val/recall@5' reached 0.07090 (best 0.07090), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=000500.ckpt' as top 1
+Metric val/recall@5 improved by 0.010 >= min_delta = 0.0. New best score: 0.081
+Epoch 0, global step 600: 'val/recall@5' reached 0.08104 (best 0.08104), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=000600.ckpt' as top 1
+Metric val/recall@5 improved by 0.003 >= min_delta = 0.0. New best score: 0.084
+Epoch 0, global step 700: 'val/recall@5' reached 0.08380 (best 0.08380), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=000700.ckpt' as top 1
+Metric val/recall@5 improved by 0.007 >= min_delta = 0.0. New best score: 0.091
+Epoch 0, global step 800: 'val/recall@5' reached 0.09052 (best 0.09052), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=000800.ckpt' as top 1
+Metric val/recall@5 improved by 0.003 >= min_delta = 0.0. New best score: 0.093
+Epoch 0, global step 900: 'val/recall@5' reached 0.09335 (best 0.09335), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=000900.ckpt' as top 1
+Metric val/recall@5 improved by 0.002 >= min_delta = 0.0. New best score: 0.096
+Epoch 0, global step 1000: 'val/recall@5' reached 0.09564 (best 0.09564), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=001000.ckpt' as top 1
+Metric val/recall@5 improved by 0.002 >= min_delta = 0.0. New best score: 0.097
+Epoch 0, global step 1100: 'val/recall@5' reached 0.09735 (best 0.09735), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=001100.ckpt' as top 1
+Epoch 0, global step 1200: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.007 >= min_delta = 0.0. New best score: 0.104
+Epoch 0, global step 1300: 'val/recall@5' reached 0.10429 (best 0.10429), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=001300.ckpt' as top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.105
+Epoch 0, global step 1400: 'val/recall@5' reached 0.10483 (best 0.10483), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=001400.ckpt' as top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.105
+Epoch 0, global step 1500: 'val/recall@5' reached 0.10548 (best 0.10548), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=001500.ckpt' as top 1
+Epoch 0, global step 1600: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.002 >= min_delta = 0.0. New best score: 0.108
+Epoch 0, global step 1700: 'val/recall@5' reached 0.10763 (best 0.10763), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=001700.ckpt' as top 1
+Metric val/recall@5 improved by 0.002 >= min_delta = 0.0. New best score: 0.110
+Epoch 0, global step 1800: 'val/recall@5' reached 0.10999 (best 0.10999), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=001800.ckpt' as top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.110
+Epoch 0, global step 1900: 'val/recall@5' reached 0.11050 (best 0.11050), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=001900.ckpt' as top 1
+Metric val/recall@5 improved by 0.002 >= min_delta = 0.0. New best score: 0.113
+Epoch 0, global step 2000: 'val/recall@5' reached 0.11275 (best 0.11275), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=002000.ckpt' as top 1
+Epoch 0, global step 2100: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.114
+Epoch 0, global step 2200: 'val/recall@5' reached 0.11395 (best 0.11395), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=002200.ckpt' as top 1
+Epoch 0, global step 2300: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.002 >= min_delta = 0.0. New best score: 0.116
+Epoch 0, global step 2400: 'val/recall@5' reached 0.11562 (best 0.11562), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=002400.ckpt' as top 1
+Epoch 0, global step 2500: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.002 >= min_delta = 0.0. New best score: 0.117
+Epoch 0, global step 2600: 'val/recall@5' reached 0.11725 (best 0.11725), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=002600.ckpt' as top 1
+Metric val/recall@5 improved by 0.000 >= min_delta = 0.0. New best score: 0.118
+Epoch 0, global step 2700: 'val/recall@5' reached 0.11765 (best 0.11765), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=002700.ckpt' as top 1
+Metric val/recall@5 improved by 0.000 >= min_delta = 0.0. New best score: 0.118
+Epoch 0, global step 2800: 'val/recall@5' reached 0.11794 (best 0.11794), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=002800.ckpt' as top 1
+Metric val/recall@5 improved by 0.002 >= min_delta = 0.0. New best score: 0.120
+Epoch 0, global step 2900: 'val/recall@5' reached 0.11961 (best 0.11961), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=002900.ckpt' as top 1
+Epoch 0, global step 3000: 'val/recall@5' was not in top 1
+Epoch 0, global step 3100: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.003 >= min_delta = 0.0. New best score: 0.122
+Epoch 0, global step 3200: 'val/recall@5' reached 0.12219 (best 0.12219), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=003200.ckpt' as top 1
+Epoch 0, global step 3300: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.000 >= min_delta = 0.0. New best score: 0.123
+Epoch 0, global step 3400: 'val/recall@5' reached 0.12263 (best 0.12263), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=003400.ckpt' as top 1
+Epoch 0, global step 3500: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.124
+Epoch 0, global step 3600: 'val/recall@5' reached 0.12386 (best 0.12386), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=003600.ckpt' as top 1
+Epoch 0, global step 3700: 'val/recall@5' was not in top 1
+Epoch 0, global step 3800: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.125
+Epoch 0, global step 3900: 'val/recall@5' reached 0.12485 (best 0.12485), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=003900.ckpt' as top 1
+Epoch 0, global step 4000: 'val/recall@5' was not in top 1
+Epoch 0, global step 4100: 'val/recall@5' was not in top 1
+Epoch 0, global step 4200: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.002 >= min_delta = 0.0. New best score: 0.126
+Epoch 0, global step 4300: 'val/recall@5' reached 0.12641 (best 0.12641), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=004300.ckpt' as top 1
+Epoch 0, global step 4400: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.000 >= min_delta = 0.0. New best score: 0.126
+Epoch 0, global step 4500: 'val/recall@5' reached 0.12648 (best 0.12648), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=004500.ckpt' as top 1
+Metric val/recall@5 improved by 0.000 >= min_delta = 0.0. New best score: 0.127
+Epoch 0, global step 4600: 'val/recall@5' reached 0.12663 (best 0.12663), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=004600.ckpt' as top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.127
+Epoch 0, global step 4700: 'val/recall@5' reached 0.12728 (best 0.12728), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=004700.ckpt' as top 1
+Metric val/recall@5 improved by 0.000 >= min_delta = 0.0. New best score: 0.127
+Epoch 0, global step 4800: 'val/recall@5' reached 0.12746 (best 0.12746), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=004800.ckpt' as top 1
+Metric val/recall@5 improved by 0.000 >= min_delta = 0.0. New best score: 0.128
+Epoch 0, global step 4900: 'val/recall@5' reached 0.12793 (best 0.12793), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=004900.ckpt' as top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.129
+Epoch 0, global step 5000: 'val/recall@5' reached 0.12855 (best 0.12855), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=005000.ckpt' as top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.130
+Epoch 0, global step 5100: 'val/recall@5' reached 0.12997 (best 0.12997), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=005100.ckpt' as top 1
+Epoch 0, global step 5200: 'val/recall@5' was not in top 1
+Epoch 0, global step 5300: 'val/recall@5' was not in top 1
+Epoch 0, global step 5400: 'val/recall@5' was not in top 1
+Epoch 0, global step 5500: 'val/recall@5' was not in top 1
+Epoch 0, global step 5600: 'val/recall@5' was not in top 1
+Epoch 0, global step 5700: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.131
+Epoch 0, global step 5800: 'val/recall@5' reached 0.13102 (best 0.13102), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=005800.ckpt' as top 1
+Epoch 0, global step 5900: 'val/recall@5' was not in top 1
+Epoch 0, global step 6000: 'val/recall@5' was not in top 1
+Metric val/recall@5 improved by 0.001 >= min_delta = 0.0. New best score: 0.132
+Epoch 0, global step 6100: 'val/recall@5' reached 0.13175 (best 0.13175), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=006100.ckpt' as top 1
+Epoch 0, global step 6200: 'val/recall@5' was not in top 1
+Epoch 0, global step 6300: 'val/recall@5' was not in top 1
+Epoch 0, global step 6400: 'val/recall@5' was not in top 1
+Epoch 0, global step 6500: 'val/recall@5' was not in top 1
+Epoch 0, global step 6600: 'val/recall@5' was not in top 1
+Epoch 0, global step 6700: 'val/recall@5' was not in top 1
+Epoch 0, global step 6800: 'val/recall@5' was not in top 1
+Epoch 0, global step 6900: 'val/recall@5' was not in top 1
+Epoch 0, global step 7000: 'val/recall@5' was not in top 1
+Monitored metric val/recall@5 did not improve in the last 10 records. Best score: 0.132. Signaling Trainer to stop.
+Epoch 0, global step 7100: 'val/recall@5' was not in top 1
+Restoring states from the checkpoint path at /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=006100.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /home/jcy/GRID_wmh_Qwen_TIGER_20261009/experiments/instruments_grid_qwen_20261125_005542/formal/checkpoints/checkpoint_epoch=000_step=006100.ckpt
+[2026-11-25 10:36:51,873][root][WARNING] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'test_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=55` in the `DataLoader` to improve performance.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│         test/loss         │     8.611322402954102     │
+│       test/ndcg@10        │    0.08171436935663223    │
+│        test/ndcg@5        │    0.07640282809734344    │
+│      test/recall@10       │    0.10679259151220322    │
+│       test/recall@5       │    0.09037413448095322    │
+└───────────────────────────┴───────────────────────────┘
