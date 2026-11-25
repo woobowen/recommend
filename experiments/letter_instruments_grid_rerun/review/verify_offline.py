@@ -7,6 +7,7 @@ from itertools import permutations
 import json
 import math
 from pathlib import Path
+import pickletools
 import struct
 from zipfile import ZipFile
 
@@ -28,12 +29,18 @@ def sha(path):
     return digest.hexdigest()
 
 
-def archive_i64(path, count):
-    """Read the inspected contiguous little-endian integer storage without loading pickle."""
+def archive_i64(path, shape, strides):
+    """Read the inspected little-endian integer storage without executing pickle."""
     with ZipFile(path) as archive:
         (name,) = [n for n in archive.namelist() if n.endswith("/data/0")]
-        assert archive.read(name.split("/")[0] + "/byteorder") == b"little"
-        return struct.unpack(f"<{count}q", archive.read(name))
+        root = name.split("/")[0]
+        assert archive.read(root + "/byteorder") == b"little"
+        operators = [(op.name, arg) for op, arg, _ in pickletools.genops(archive.read(root + "/data.pkl"))]
+        assert ("GLOBAL", "torch LongStorage") in operators
+        offset = operators.index(("BINPERSID", None))
+        integers = [arg for op, arg in operators[offset + 1:] if op in ("BININT", "BININT1", "BININT2")]
+        assert integers == [0, *shape, *strides]
+        return struct.unpack(f"<{math.prod(shape)}q", archive.read(name))
 
 
 def canonical_catalog(run):
@@ -44,9 +51,9 @@ def canonical_catalog(run):
     assert all(len(row) == 4 and all(type(x) is int and 0 <= x < 256 for x in row) for row in codes)
     assert len(set(map(tuple, codes))) == 9922
     sid_file = upper / "semantic_ids.pt"
-    assert archive_i64(sid_file, 4 * 9922) == tuple(x for level in zip(*codes) for x in level)
+    assert archive_i64(sid_file, (4, 9922), (1, 4)) == tuple(x for row in codes for x in row)
     predicted = upper / "sid_generation/predicted_codes_by_item.pt"
-    assert archive_i64(predicted, 3 * 9922) == tuple(x for sid in codes for x in sid[:3])
+    assert archive_i64(predicted, (9922, 3), (3, 1)) == tuple(x for sid in codes for x in sid[:3])
     groups = defaultdict(list)
     for item, sid in enumerate(codes):
         groups[tuple(sid[:3])].append(item)

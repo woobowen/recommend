@@ -1,6 +1,6 @@
 # 正式启动前证据
 
-本轮在 new-server 完成隔离预跑，正式 request 只保存在本地和本目录。其绑定的执行快照为 b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e，服务器副本在 /data/bwwu/grid-letter-rerun-20261125/source-b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e。共同输入在同一目录下的 inputs。GitHub 的运行证据提交是该执行提交的后续提交。冻结执行用文件保持同一字节。
+本轮在 new-server 完成隔离预跑，正式 request 只保存在本地和本目录。其绑定的执行快照为 b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e，服务器副本在 /data/bwwu/grid-letter-rerun-20261125/source-b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e。共同输入在 /data/bwwu/grid-letter-rerun-20261125/inputs。GitHub 的运行证据提交是该执行提交的后续提交。冻结执行用文件保持同一字节。
 
 ## 数据和运行
 
