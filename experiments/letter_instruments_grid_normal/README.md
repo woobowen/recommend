@@ -1,6 +1,8 @@
 # LETTER Instruments → GRID 原生 Normal
 
-**正式作业已启动，已结束 30 分钟主动观察。** 阶段状态、七点证据和接续入口见 [正式启动与过程审核](evidence/formal-launch-30min/)。
+**正式作业已正常早停，最终结果经内部与非作者核验通过，待网页 GPT 最终二审。** 原 job 在 step 6200 结束训练，由 step 5200 的 best 完成一次全量 Normal。
+
+[正式结果、候选、预算和复算](evidence/formal-final/) · [正式启动与七点过程审核](evidence/formal-launch-30min/)
 
 准备阶段已完成单卡 1,600 个 microbatch、100 次更新和 24 批验证，严格重载 best 后完成两遍固定 20 人 Normal。[准备阶段历史记录](evidence/STATUS.md)
 
