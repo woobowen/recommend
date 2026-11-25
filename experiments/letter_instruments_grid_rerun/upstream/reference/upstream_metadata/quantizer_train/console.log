@@ -1,0 +1,78 @@
+Seed set to 42
+[[36m2026-11-15 10:55:17,109[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.ItemDataModule>[0m
+[[36m2026-11-15 10:55:17,415[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating model <src.modules.clustering.residual_quantization.ResidualQuantization>[0m
+[[36m2026-11-15 10:55:17,531[0m][[34mroot[0m][[32mINFO[0m] - Device cpu: Verbose mode enabled[0m
+[[36m2026-11-15 10:55:17,537[0m][[34mroot[0m][[32mINFO[0m] - Device cpu: Using custom training loop function[0m
+[[36m2026-11-15 10:55:17,546[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating callbacks...[0m
+[[36m2026-11-15 10:55:17,546[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>[0m
+[[36m2026-11-15 10:55:17,550[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>[0m
+[[36m2026-11-15 10:55:17,550[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating loggers...[0m
+[[36m2026-11-15 10:55:17,550[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>[0m
+[[36m2026-11-15 10:55:17,552[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>[0m
+[[36m2026-11-15 10:55:17,595[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.[0m
+[[36m2026-11-15 10:55:17,609[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - GPU available: True (cuda), used: True[0m
+[[36m2026-11-15 10:55:17,609[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - TPU available: False, using: 0 TPU cores[0m
+[[36m2026-11-15 10:55:17,609[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - HPU available: False, using: 0 HPUs[0m
+[[36m2026-11-15 10:55:17,610[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Logging hyperparameters![0m
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃    ┃ Name                                         ┃ Type    ┃ Params ┃ Mode  ┃
+┡━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 0  │ normalization_layer                          │ Identi… │      0 │ train │
+│ 1  │ encoder                                      │ Identi… │      0 │ train │
+│ 2  │ decoder                                      │ Identi… │      0 │ train │
+│ 3  │ quantization_layer_list                      │ Module… │  2.8 M │ train │
+│ 4  │ quantization_layer_list.0                    │ MiniBa… │  917 K │ train │
+│ 5  │ quantization_layer_list.0.loss_function      │ Weight… │      0 │ train │
+│ 6  │ quantization_layer_list.0.initializer        │ KMeans… │      0 │ train │
+│ 7  │ quantization_layer_list.0.init_loss_function │ Weight… │      0 │ train │
+│ 8  │ quantization_layer_list.0.train_loss         │ MeanMe… │      0 │ train │
+│ 9  │ quantization_layer_list.1                    │ MiniBa… │  917 K │ train │
+│ 10 │ quantization_layer_list.1.loss_function      │ Weight… │      0 │ train │
+│ 11 │ quantization_layer_list.1.initializer        │ KMeans… │      0 │ train │
+│ 12 │ quantization_layer_list.1.init_loss_function │ Weight… │      0 │ train │
+│ 13 │ quantization_layer_list.1.train_loss         │ MeanMe… │      0 │ train │
+│ 14 │ quantization_layer_list.2                    │ MiniBa… │  917 K │ train │
+│ 15 │ quantization_layer_list.2.loss_function      │ Weight… │      0 │ train │
+│ 16 │ quantization_layer_list.2.initializer        │ KMeans… │      0 │ train │
+│ 17 │ quantization_layer_list.2.init_loss_function │ Weight… │      0 │ train │
+│ 18 │ quantization_layer_list.2.train_loss         │ MeanMe… │      0 │ train │
+│ 19 │ train_loss                                   │ MeanMe… │      0 │ train │
+│ 20 │ train_quantization_loss                      │ MeanMe… │      0 │ train │
+│ 21 │ train_reconstruction_loss                    │ MeanMe… │      0 │ train │
+│ 22 │ train_first_residuals_norm_ratio             │ MeanMe… │      0 │ train │
+│ 23 │ train_last_residuals_norm_ratio              │ MeanMe… │      0 │ train │
+│ 24 │ first_centroids_norm                         │ MeanMe… │      0 │ train │
+│ 25 │ last_centroids_norm                          │ MeanMe… │      0 │ train │
+│ 26 │ train_frac_unique_ids                        │ MeanMe… │      0 │ train │
+│ 27 │ train_mse                                    │ MeanMe… │      0 │ train │
+│ 28 │ train_layer_coverages_0                      │ MeanMe… │      0 │ train │
+│ 29 │ train_layer_id_entropy_0                     │ MeanMe… │      0 │ train │
+│ 30 │ train_layer_coverages_1                      │ MeanMe… │      0 │ train │
+│ 31 │ train_layer_id_entropy_1                     │ MeanMe… │      0 │ train │
+│ 32 │ train_layer_coverages_2                      │ MeanMe… │      0 │ train │
+│ 33 │ train_layer_id_entropy_2                     │ MeanMe… │      0 │ train │
+│ 34 │ val_loss                                     │ MeanMe… │      0 │ train │
+│ 35 │ val_first_residuals_norm_ratio               │ MeanMe… │      0 │ train │
+│ 36 │ val_last_residuals_norm_ratio                │ MeanMe… │      0 │ train │
+│ 37 │ val_mse                                      │ MeanMe… │      0 │ train │
+│ 38 │ val_frac_unique_ids                          │ MeanMe… │      0 │ train │
+│ 39 │ test_loss                                    │ MeanMe… │      0 │ train │
+│ 40 │ test_first_residuals_norm_ratio              │ MeanMe… │      0 │ train │
+│ 41 │ test_last_residuals_norm_ratio               │ MeanMe… │      0 │ train │
+│ 42 │ test_mse                                     │ MeanMe… │      0 │ train │
+│ 43 │ test_frac_unique_ids                         │ MeanMe… │      0 │ train │
+└────┴──────────────────────────────────────────────┴─────────┴────────┴───────┘
+Trainable params: 2.8 M                                                         
+Non-trainable params: 0                                                         
+Total params: 2.8 M                                                             
+Total estimated model params size (MB): 11                                      
+Modules in train mode: 44                                                       
+Modules in eval mode: 0                                                         
+[[36m2026-11-15 10:55:18,090[0m][[34mroot[0m][[33mWARNING[0m] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0[0m
+/home/jcy/GRID_wmh_Qwen_TIGER_20261009/environments/grid/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=55` in the `DataLoader` to improve performance.
+[[36m2026-11-15 10:55:20,721[0m][[34mroot[0m][[32mINFO[0m] - Device cuda:0: Training layers one-at-a-time, each for 10 steps. Ensure that early stopping callbacks are disabled.[0m
+[[36m2026-11-15 10:56:08,019[0m][[34mroot[0m][[32mINFO[0m] - Device cuda:0: Finished training layer 0 of 3[0m
+[[36m2026-11-15 10:56:54,284[0m][[34mroot[0m][[32mINFO[0m] - Device cuda:0: Finished training layer 1 of 3[0m
+[[36m2026-11-15 10:57:39,738[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - Epoch 0, global step 30: 'train/loss' reached 4.16058 (best 4.16058), saving model to '/home/jcy/GRID_wmh_Qwen_TIGER_20261009/codex/instrument_semantic_hierarchy_20261115/runs/20261115_104723/quantizer_train/checkpoints/checkpoint_000_000030.ckpt' as top 1[0m
+[[36m2026-11-15 10:57:41,561[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - `Trainer.fit` stopped: `max_steps=30` reached.[0m
