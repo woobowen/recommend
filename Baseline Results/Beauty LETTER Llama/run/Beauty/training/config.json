@@ -1,0 +1,69 @@
+{
+  "dataset": "Beauty",
+  "tasks": [
+    "seqrec"
+  ],
+  "train_seed": 42,
+  "shuffle_seed": 2026,
+  "shuffle_protocol": "GRID-PLAN-V1_1",
+  "identity_allowed": true,
+  "temperature": 1.0,
+  "epochs": 4,
+  "learning_rate": 0.0002,
+  "weight_decay": 0.01,
+  "warmup_ratio": 0.01,
+  "lr_scheduler_type": "cosine",
+  "lora_r": 8,
+  "lora_alpha": 16,
+  "lora_dropout": 0.05,
+  "lora_targets": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "gate_proj",
+    "down_proj",
+    "up_proj"
+  ],
+  "modules_to_save": [
+    "embed_tokens",
+    "lm_head"
+  ],
+  "only_train_response": true,
+  "model_max_length": 2048,
+  "max_history": 20,
+  "micro_batch": 8,
+  "effective_batch": 64,
+  "gradient_accumulation_steps": 8,
+  "valid_prompt_samples_per_user": 2,
+  "select_best": "lowest eval_loss after epoch",
+  "train_backbone": "int8",
+  "compute_dtype": "float16",
+  "test_backbone": "unquantized float16",
+  "num_beams": 20,
+  "test_batch": 1,
+  "test_prompts": [
+    0
+  ],
+  "global_gpu_ids": "2,3",
+  "author_reference": "User 2026-11-22: Beauty seqrec only, effective batch64; other settings inherited, including temperature1.0",
+  "hardware_adaptations": [
+    "single-process two-GPU model parallelism",
+    "FP16 in place of unsupported BF16",
+    "native SDPA; no FastChat FlashAttention or DeepSpeed",
+    "per-device physical batch adapted; gradient accumulation preserves effective batch",
+    "compilerless optional-package import guards",
+    "Accelerate GradScaler initial scale128"
+  ],
+  "checkpoint_policy": "each epoch plus recovery checkpoints; retain best and latest, choose by epoch validation",
+  "long_prompt_policy": "Only zero-target rows: trim prompt head/tail to keep response supervision within2048; other author batches unchanged",
+  "full_test": true,
+  "train_from_base": true,
+  "train_samples": 131413,
+  "train_task_samples": {
+    "seqrec": 131413
+  },
+  "validation_examples": 44726,
+  "test_users": 22363,
+  "added_tokens": 965
+}

@@ -4,3 +4,5 @@
 - [Baseline Results](Baseline%20Results/README.md)：三个数据集的最终测试指标，以及与 TIGER 原论文、GRID 默认配置和 GRID 各项最高指标的数值及相对百分比对比。
 
 大文件通过 Git LFS 保存。使用前请运行 `git lfs pull`。Qwen 原始权重超过 GitHub 的单文件上限，下载后执行 `python "GRID baseline/codex/restore_qwen_weights.py"` 合并并校验。复用已生成 SID 或测试推荐模型时无需重新加载 Qwen。
+
+- [Beauty：LETTER SID＋Llama推荐与三种shuffle](Baseline%20Results/Beauty%20LETTER%20Llama/README.md)：GPU2/3正式训练及三组完整测试、原始候选、最优adapter与复现材料。

@@ -52,3 +52,7 @@ JSON 提供完整精度结果及对应 checkpoint 路径，CSV 包含三组参�
 | Instruments | 0.090374 | 0.106793 | 0.076403 | 0.081714 |
 
 原始全精度结果见[run/result.json](Instruments%20GRID%20Qwen/run/result.json)，可复算表见[metrics.csv](Instruments%20GRID%20Qwen/metrics.csv)。没有补填未经核实的论文比较值或shuffle结果。旧三数据集表的核查时间和结果保持原历史含义。
+
+## LETTER-LC-Rec 下游实验
+
+[Beauty完整结果与复现](Beauty%20LETTER%20Llama/README.md)：单独列示，未并入上方Qwen＋TIGER基线表。
