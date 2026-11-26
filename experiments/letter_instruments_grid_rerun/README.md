@@ -36,6 +36,7 @@ shuffle.py 对 ["GRID-LETTER-SHUFFLE-V2",42,m,global_row_idx,visible_item_idx,re
 
 ## 运行、复核与接续
 
+- [正式完成结果与全量复算](evidence/formal/grid-letter-rerun-20261125-formal-r0/completion/)记录正式 r0 终态、最终 best、三条件指标、证据与复核。
 - [正式启动与 30 分钟观察](evidence/formal/grid-letter-rerun-20261125-formal-r0/)记录固定作业、进展、实测验证和接续入口。准备阶段的正式模板及预跑回执见[运行证据](evidence/)。
 - pipeline.py request 组装已有 P0 runner 的 immutable request。正式和预跑分别固定 formal.json、preview.json，要求不同的 job ID。它核对冻结提交和文件输入哈希、当前 GPU 对应与空间。用户另行批准正式计算后才提交已固定的正式模板。
 - pipeline.py execute 仅在 runner 的独立作业根运行。量化、SID、SID 准入、数据重建、Normal 训练、三项同 best 评测和离线汇总按依赖顺序执行。关卡捕获源码版本、资产、状态和产物 SHA-256。

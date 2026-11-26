@@ -1,0 +1,585 @@
+{
+  "terminal": {
+    "stages": {
+      "quantizer": {
+        "seconds": 131.89475818537176,
+        "files": 18,
+        "argv": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "/data/bwwu/grid-letter-rerun-20261125/source-b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e/experiments/letter_instruments_grid_rerun/upstream.py",
+          "fit",
+          "--mode",
+          "formal",
+          "--embedding",
+          "/data/bwwu/grid-letter-rerun-20261125/inputs/item_embeddings.pt",
+          "--identity",
+          "/data/bwwu/grid-letter-rerun-20261125/inputs/item_identity.jsonl",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream"
+        ]
+      },
+      "sid": {
+        "seconds": 31.076955799013376,
+        "files": 35,
+        "argv": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "/data/bwwu/grid-letter-rerun-20261125/source-b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e/experiments/letter_instruments_grid_rerun/upstream.py",
+          "sid",
+          "--mode",
+          "formal",
+          "--embedding",
+          "/data/bwwu/grid-letter-rerun-20261125/inputs/item_embeddings.pt",
+          "--identity",
+          "/data/bwwu/grid-letter-rerun-20261125/inputs/item_identity.jsonl",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream"
+        ]
+      },
+      "bound": {
+        "seconds": 47.27367028221488,
+        "files": 7,
+        "argv": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "/data/bwwu/grid-letter-rerun-20261125/source-b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e/experiments/letter_instruments_grid_rerun/downstream.py",
+          "prepare",
+          "--mode",
+          "formal",
+          "--inputs",
+          "/data/bwwu/grid-letter-rerun-20261125/inputs",
+          "--sid",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream",
+          "--bound",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/bound",
+          "--training",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/evaluation/bound"
+        ]
+      },
+      "training": {
+        "seconds": 36412.72376637813,
+        "files": 9,
+        "argv": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "/data/bwwu/grid-letter-rerun-20261125/source-b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e/experiments/letter_instruments_grid_rerun/downstream.py",
+          "fit",
+          "--mode",
+          "formal",
+          "--inputs",
+          "/data/bwwu/grid-letter-rerun-20261125/inputs",
+          "--sid",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream",
+          "--bound",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/bound",
+          "--training",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training"
+        ]
+      },
+      "Normal": {
+        "seconds": 332.67520515527576,
+        "files": 8,
+        "argv": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "/data/bwwu/grid-letter-rerun-20261125/source-b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e/experiments/letter_instruments_grid_rerun/downstream.py",
+          "evaluate",
+          "--mode",
+          "formal",
+          "--inputs",
+          "/data/bwwu/grid-letter-rerun-20261125/inputs",
+          "--sid",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream",
+          "--bound",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/bound",
+          "--training",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/evaluation/Normal",
+          "--condition",
+          "Normal"
+        ]
+      },
+      "Shuffle3a": {
+        "seconds": 334.493417407386,
+        "files": 8,
+        "argv": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "/data/bwwu/grid-letter-rerun-20261125/source-b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e/experiments/letter_instruments_grid_rerun/downstream.py",
+          "evaluate",
+          "--mode",
+          "formal",
+          "--inputs",
+          "/data/bwwu/grid-letter-rerun-20261125/inputs",
+          "--sid",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream",
+          "--bound",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/bound",
+          "--training",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/evaluation/Shuffle3a",
+          "--condition",
+          "Shuffle3a"
+        ]
+      },
+      "Shuffle4": {
+        "seconds": 349.9506065938622,
+        "files": 8,
+        "argv": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "/data/bwwu/grid-letter-rerun-20261125/source-b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e/experiments/letter_instruments_grid_rerun/downstream.py",
+          "evaluate",
+          "--mode",
+          "formal",
+          "--inputs",
+          "/data/bwwu/grid-letter-rerun-20261125/inputs",
+          "--sid",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream",
+          "--bound",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/bound",
+          "--training",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/evaluation/Shuffle4",
+          "--condition",
+          "Shuffle4"
+        ]
+      },
+      "summary": {
+        "seconds": 5.6078499760478735,
+        "files": 1,
+        "argv": [
+          "/data/bwwu/envs/grid-20261009-e61baf3/bin/python",
+          "-B",
+          "/data/bwwu/grid-letter-rerun-20261125/source-b08c63940f5351dce63dc4cb8a0f9c6f1d8ac86e/experiments/letter_instruments_grid_rerun/downstream.py",
+          "summarize",
+          "--mode",
+          "formal",
+          "--inputs",
+          "/data/bwwu/grid-letter-rerun-20261125/inputs",
+          "--sid",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream",
+          "--bound",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/bound",
+          "--training",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/training",
+          "--output",
+          "/home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/evaluation"
+        ]
+      }
+    },
+    "runner_artifacts": 85,
+    "rehashed_artifacts": 84,
+    "unchanged_launch_artifacts": 45,
+    "runner_artifacts_without_raw_checkpoint_copy": [
+      "output/run/upstream/quantizer_train/checkpoints/checkpoint_000_000030.ckpt"
+    ],
+    "request_sha256": "bf0226675093e04ff777a76077cdd8173b627f977e6153a175b969faafae4eb1",
+    "started_at": "2026-11-25T18:36:38.616311+00:00",
+    "ended_at": "2026-11-26T05:04:05.614412+00:00"
+  },
+  "training": {
+    "updates": 6700,
+    "training_microbatches": 107200,
+    "complete_validations": 67,
+    "validation_users_each": 24772,
+    "best": {
+      "file": "checkpoints/checkpoint_epoch=000_step=005700.ckpt",
+      "sha256": "64817119df777563fc8ca84f246099c96d35854d7de0620e38932d5221192087",
+      "state_sha256": "6ddd392a517717d51a0a875d2bf35aa2d456553fa9aa32bfff971fc4bce09883",
+      "mode": "formal",
+      "binding_sha256": "d3faa51f4335510ba20259070157e4e8789b470bb1d46f26156cd80ea6ab03be",
+      "sid_sha256": "e1cc4d2b0fddb7a48d9a26f5e99d338965590657ddaa18ec90fa3814806e948e",
+      "best_step": 5700,
+      "score": 0.10083965957164764
+    },
+    "last_validation": {
+      "step": 6700,
+      "batches": 3097,
+      "recall_at_5": 0.10047634690999985,
+      "seconds": 314.63696991093457,
+      "train_seconds_since_validation": 206.60755637660623
+    },
+    "last_validation_csv": {
+      "epoch": "0",
+      "step": "6699",
+      "train/loss_epoch": "",
+      "train/loss_step": "",
+      "val/loss": "7.939756870269775",
+      "val/ndcg@10": "0.08868332207202911",
+      "val/ndcg@5": "0.08261608332395554",
+      "val/recall@10": "0.11932827532291412",
+      "val/recall@5": "0.10047634690999985"
+    },
+    "patience_count": 10,
+    "training_seconds": 36403.456050290726,
+    "best_checkpoint_state_keys": 177,
+    "best_checkpoint_adam": {
+      "state_entries": 127,
+      "step_values": [
+        5700
+      ],
+      "param_groups": [
+        {
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "betas": [
+            0.9,
+            0.999
+          ]
+        }
+      ]
+    }
+  },
+  "evaluation": {
+    "conditions": {
+      "Normal": {
+        "all_per_user_ledgers_equal": 24772,
+        "native_abs_delta": {
+          "ndcg@5": 2.38814082398342e-09,
+          "ndcg@10": 2.3737141835455944e-09,
+          "recall@5": 2.528842302229606e-09,
+          "recall@10": 1.5832333360998874e-09
+        },
+        "counts": {
+          "candidates": 247720,
+          "out_of_catalog": 34,
+          "duplicate_sids": 0,
+          "tied_score_rows": 0,
+          "native_stable_order_differences": 0,
+          "collision_target_rows": 0
+        },
+        "actual_draw_indices": {
+          "0": 172929
+        },
+        "actual_intervention": {
+          "history_groups": 172929,
+          "nonidentity_draws": 0,
+          "changed_token_groups": 0
+        },
+        "metrics": {
+          "native": {
+            "ndcg@5": 0.06859260558686528,
+            "ndcg@10": 0.07387236268375423,
+            "recall@5": 0.08388503148716292,
+            "recall@10": 0.10019376715646698
+          },
+          "unified": {
+            "hit@1": 0.05183271435491684,
+            "hit@5": 0.08388503148716292,
+            "mrr@5": 0.06353207922923731,
+            "ndcg@5": 0.06859260558686528,
+            "ItemHit@5": 0.08388503148716292,
+            "ItemNDCG@5": 0.06859260558686528,
+            "hit@10": 0.10019376715646698,
+            "mrr@10": 0.065714010185591,
+            "ndcg@10": 0.07387236268375423,
+            "ItemHit@10": 0.10019376715646698,
+            "ItemNDCG@10": 0.07387236268375423
+          }
+        },
+        "native_metrics": {
+          "test/loss": 8.4265775680542,
+          "test/ndcg@5": 0.0685926079750061,
+          "test/ndcg@10": 0.07387236505746841,
+          "test/recall@5": 0.08388502895832062,
+          "test/recall@10": 0.10019376873970032
+        },
+        "total_seconds": 315.47320275753736
+      },
+      "Shuffle3a": {
+        "all_per_user_ledgers_equal": 24772,
+        "native_abs_delta": {
+          "ndcg@5": 3.731774125825815e-09,
+          "ndcg@10": 1.0314369081054764e-09,
+          "recall@5": 3.0786429378037994e-09,
+          "recall@10": 3.5430259698321365e-09
+        },
+        "counts": {
+          "candidates": 247720,
+          "out_of_catalog": 28,
+          "duplicate_sids": 0,
+          "tied_score_rows": 0,
+          "native_stable_order_differences": 0,
+          "collision_target_rows": 0
+        },
+        "actual_draw_indices": {
+          "5": 29100,
+          "0": 28935,
+          "1": 28856,
+          "4": 28681,
+          "3": 28760,
+          "2": 28597
+        },
+        "actual_intervention": {
+          "history_groups": 172929,
+          "nonidentity_draws": 143994,
+          "changed_token_groups": 143994
+        },
+        "metrics": {
+          "native": {
+            "ndcg@5": 0.06688050552554246,
+            "ndcg@10": 0.07223326070932387,
+            "recall@5": 0.08198772808009043,
+            "recall@10": 0.09845793637978363
+          },
+          "unified": {
+            "hit@1": 0.05009688357823349,
+            "hit@5": 0.08198772808009043,
+            "mrr@5": 0.06187362075461543,
+            "ndcg@5": 0.06688050552554246,
+            "ItemHit@5": 0.08198772808009043,
+            "ItemNDCG@5": 0.06688050552554246,
+            "hit@10": 0.09845793637978363,
+            "mrr@10": 0.06409782614267516,
+            "ndcg@10": 0.07223326070932387,
+            "ItemHit@10": 0.09845793637978363,
+            "ItemNDCG@10": 0.07223326070932387
+          }
+        },
+        "native_metrics": {
+          "test/loss": 8.438202857971191,
+          "test/ndcg@5": 0.06688050925731659,
+          "test/ndcg@10": 0.07223325967788696,
+          "test/recall@5": 0.08198773115873337,
+          "test/recall@10": 0.0984579399228096
+        },
+        "total_seconds": 315.9772339472547
+      },
+      "Shuffle4": {
+        "all_per_user_ledgers_equal": 24772,
+        "native_abs_delta": {
+          "ndcg@5": 4.6290262872838994e-09,
+          "ndcg@10": 1.6624719378910413e-09,
+          "recall@5": 1.8767812304254505e-10,
+          "recall@10": 6.520611411930943e-10
+        },
+        "counts": {
+          "candidates": 247720,
+          "out_of_catalog": 29,
+          "duplicate_sids": 0,
+          "tied_score_rows": 0,
+          "native_stable_order_differences": 0,
+          "collision_target_rows": 0
+        },
+        "actual_draw_indices": {
+          "11": 7094,
+          "8": 7021,
+          "13": 7115,
+          "7": 7207,
+          "9": 7185,
+          "10": 7323,
+          "15": 7199,
+          "23": 7181,
+          "17": 7247,
+          "3": 7226,
+          "16": 7270,
+          "2": 7109,
+          "14": 7272,
+          "19": 7118,
+          "20": 7229,
+          "6": 7108,
+          "1": 7258,
+          "18": 7355,
+          "5": 7194,
+          "12": 7283,
+          "0": 7147,
+          "22": 7180,
+          "4": 7366,
+          "21": 7242
+        },
+        "actual_intervention": {
+          "history_groups": 172929,
+          "nonidentity_draws": 165782,
+          "changed_token_groups": 165782
+        },
+        "metrics": {
+          "native": {
+            "ndcg@5": 0.06623678191529668,
+            "ndcg@10": 0.07159392369439299,
+            "recall@5": 0.08178588729210398,
+            "recall@10": 0.0982560955917972
+          },
+          "unified": {
+            "hit@1": 0.049289520426287745,
+            "hit@5": 0.08178588729210398,
+            "mrr@5": 0.061096533720867645,
+            "ndcg@5": 0.06623678191529668,
+            "ItemHit@5": 0.08178588729210398,
+            "ItemNDCG@5": 0.06623678191529668,
+            "hit@10": 0.0982560955917972,
+            "mrr@10": 0.06332554484197468,
+            "ndcg@10": 0.07159392369439299,
+            "ItemHit@10": 0.0982560955917972,
+            "ItemNDCG@10": 0.07159392369439299
+          }
+        },
+        "native_metrics": {
+          "test/loss": 8.443690299987793,
+          "test/ndcg@5": 0.06623678654432297,
+          "test/ndcg@10": 0.07159392535686493,
+          "test/recall@5": 0.0817858874797821,
+          "test/recall@10": 0.09825609624385834
+        },
+        "total_seconds": 331.15918501093984
+      }
+    },
+    "relative_to_normal": {
+      "Shuffle3a": {
+        "metrics": {
+          "native": {
+            "ndcg@5": {
+              "absolute": -0.001712100061322816,
+              "relative": -0.024960417331786913
+            },
+            "ndcg@10": {
+              "absolute": -0.0016391019744303598,
+              "relative": -0.02218829769188939
+            },
+            "recall@5": {
+              "absolute": -0.0018973034070724898,
+              "relative": -0.02261790182868129
+            },
+            "recall@10": {
+              "absolute": -0.0017358307766833503,
+              "relative": -0.01732473811442383
+            }
+          },
+          "unified": {
+            "hit@1": {
+              "absolute": -0.0017358307766833503,
+              "relative": -0.033489096573208685
+            },
+            "hit@5": {
+              "absolute": -0.0018973034070724898,
+              "relative": -0.02261790182868129
+            },
+            "mrr@5": {
+              "absolute": -0.001658458474621885,
+              "relative": -0.02610426881572398
+            },
+            "ndcg@5": {
+              "absolute": -0.001712100061322816,
+              "relative": -0.024960417331786913
+            },
+            "ItemHit@5": {
+              "absolute": -0.0018973034070724898,
+              "relative": -0.02261790182868129
+            },
+            "ItemNDCG@5": {
+              "absolute": -0.001712100061322816,
+              "relative": -0.024960417331786913
+            },
+            "hit@10": {
+              "absolute": -0.0017358307766833503,
+              "relative": -0.01732473811442383
+            },
+            "mrr@10": {
+              "absolute": -0.0016161840429158442,
+              "relative": -0.024594208120176816
+            },
+            "ndcg@10": {
+              "absolute": -0.0016391019744303598,
+              "relative": -0.02218829769188939
+            },
+            "ItemHit@10": {
+              "absolute": -0.0017358307766833503,
+              "relative": -0.01732473811442383
+            },
+            "ItemNDCG@10": {
+              "absolute": -0.0016391019744303598,
+              "relative": -0.02218829769188939
+            }
+          }
+        },
+        "candidate_id_rows_changed": 23873,
+        "candidate_score_rows_changed": 24766
+      },
+      "Shuffle4": {
+        "metrics": {
+          "native": {
+            "ndcg@5": {
+              "absolute": -0.0023558236715685993,
+              "relative": -0.034345155012156486
+            },
+            "ndcg@10": {
+              "absolute": -0.0022784389893612395,
+              "relative": -0.030842914813963385
+            },
+            "recall@5": {
+              "absolute": -0.0020991441950589385,
+              "relative": -0.0250240615976901
+            },
+            "recall@10": {
+              "absolute": -0.001937671564669785,
+              "relative": -0.019339242546333568
+            }
+          },
+          "unified": {
+            "hit@1": {
+              "absolute": -0.0025431939286290964,
+              "relative": -0.04906542056074765
+            },
+            "hit@5": {
+              "absolute": -0.0020991441950589385,
+              "relative": -0.0250240615976901
+            },
+            "mrr@5": {
+              "absolute": -0.00243554550836967,
+              "relative": -0.03833568077603287
+            },
+            "ndcg@5": {
+              "absolute": -0.0023558236715685993,
+              "relative": -0.034345155012156486
+            },
+            "ItemHit@5": {
+              "absolute": -0.0020991441950589385,
+              "relative": -0.0250240615976901
+            },
+            "ItemNDCG@5": {
+              "absolute": -0.0023558236715685993,
+              "relative": -0.034345155012156486
+            },
+            "hit@10": {
+              "absolute": -0.001937671564669785,
+              "relative": -0.019339242546333568
+            },
+            "mrr@10": {
+              "absolute": -0.0023884653436163222,
+              "relative": -0.036346364144735105
+            },
+            "ndcg@10": {
+              "absolute": -0.0022784389893612395,
+              "relative": -0.030842914813963385
+            },
+            "ItemHit@10": {
+              "absolute": -0.001937671564669785,
+              "relative": -0.019339242546333568
+            },
+            "ItemNDCG@10": {
+              "absolute": -0.0022784389893612395,
+              "relative": -0.030842914813963385
+            }
+          }
+        },
+        "candidate_id_rows_changed": 24107,
+        "candidate_score_rows_changed": 24772
+      }
+    }
+  },
+  "effective_config_hashes": {
+    "training": "223e2e629a301b33bc72b1c75a2d07115abfa8d4d521bf9bc06ec0825fe4a9e8",
+    "Normal": "6d02de91e19a37db85533303e9a8cfff9347c746a1e86753f68db04448c8d757",
+    "Shuffle3a": "9b0884656f7f8471a20e7215f3b35f4303581be3c41509468cebfa8c2059d5a0",
+    "Shuffle4": "fbe497905d03d8c189b4bb99ecfb62117d89b379c443c094c6bcd09277dce3c1"
+  },
+  "verified_at": "2026-11-26T15:53:20.496172+00:00"
+}

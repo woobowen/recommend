@@ -1,0 +1,26 @@
+[2026-11-25 18:39:01,274][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.ItemDataModule>
+[2026-11-25 18:39:01,392][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating model <src.modules.clustering.residual_quantization.ResidualQuantization>
+[2026-11-25 18:39:01,507][root][INFO] - Device cpu: Verbose mode enabled
+[2026-11-25 18:39:01,513][root][INFO] - Device cpu: Using custom training loop function
+[2026-11-25 18:39:01,521][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating callbacks...
+[2026-11-25 18:39:01,521][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2026-11-25 18:39:01,525][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>
+[2026-11-25 18:39:01,526][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2026-11-25 18:39:01,527][src.utils.instantiators][INFO] - [rank: 0] Instantiating callback <src.utils.inference_utils.LocalPickleWriter>
+[2026-11-25 18:39:01,903][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating loggers...
+[2026-11-25 18:39:01,903][src.utils.instantiators][INFO] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>
+[2026-11-25 18:39:01,905][src.utils.launcher_utils][INFO] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2026-11-25 18:39:01,951][pytorch_lightning.utilities.rank_zero][INFO] - Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.
+[2026-11-25 18:39:01,964][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2026-11-25 18:39:01,965][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2026-11-25 18:39:01,965][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+[2026-11-25 18:39:01,965][src.utils.launcher_utils][INFO] - [rank: 0] Logging hyperparameters!
+[2026-11-25 18:39:02,077][src.utils.inference_utils][INFO] - Rank 0 initialized for inference.
+[2026-11-25 18:39:02,077][pytorch_lightning.utilities.rank_zero][INFO] - Restoring states from the checkpoint path at /home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream/quantizer_train/checkpoints/checkpoint_000_000030.ckpt
+[2026-11-25 18:39:02,533][pytorch_lightning.utilities.rank_zero][INFO] - Loaded model weights from the checkpoint at /home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream/quantizer_train/checkpoints/checkpoint_000_000030.ckpt
+[2026-11-25 18:39:02,534][root][WARNING] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0
+[2026-11-25 18:39:14,547][src.utils.inference_utils][INFO] - Global Rank: 0 wrote 9922 rows to /home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream/sid_generation/pickle/predictions_0_20261125T183914542.pkl.
+[2026-11-25 18:39:14,548][src.utils.inference_utils][INFO] - Rank 0 finished writing predictions.
+[2026-11-25 18:39:14,549][src.utils.inference_utils][INFO] - Merging pickle files on main process.
+[2026-11-25 18:39:14,557][src.utils.inference_utils][INFO] - Merged 9922 rows into merged_predictions.pkl.
+[2026-11-25 18:39:14,640][src.utils.inference_utils][INFO] - Merged 9922 rows into merged_predictions_tensor.pt. as pytorch tensor

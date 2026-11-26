@@ -1,0 +1,33 @@
+Seed set to 42
+[[36m2026-11-25 18:39:01,274[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating datamodule <src.data.loading.datamodules.sequence_datamodule.ItemDataModule>[0m
+[[36m2026-11-25 18:39:01,392[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating model <src.modules.clustering.residual_quantization.ResidualQuantization>[0m
+[[36m2026-11-25 18:39:01,507[0m][[34mroot[0m][[32mINFO[0m] - Device cpu: Verbose mode enabled[0m
+[[36m2026-11-25 18:39:01,513[0m][[34mroot[0m][[32mINFO[0m] - Device cpu: Using custom training loop function[0m
+[[36m2026-11-25 18:39:01,521[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating callbacks...[0m
+[[36m2026-11-25 18:39:01,521[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>[0m
+[[36m2026-11-25 18:39:01,525[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.EarlyStopping>[0m
+[[36m2026-11-25 18:39:01,526[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>[0m
+[[36m2026-11-25 18:39:01,527[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating callback <src.utils.inference_utils.LocalPickleWriter>[0m
+/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/google/api_core/_python_version_support.py:223: FutureWarning: You are using a non-supported Python version (3.10.22). Google will not post any further updates to google.api_core supporting this Python version. Please upgrade to the latest Python version, or at least Python 3.11, and then update google.api_core.
+  warnings.warn(message, FutureWarning)
+[[36m2026-11-25 18:39:01,903[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating loggers...[0m
+[[36m2026-11-25 18:39:01,903[0m][[34msrc.utils.instantiators[0m][[32mINFO[0m] - [rank: 0] Instantiating logger <lightning.pytorch.loggers.csv_logs.CSVLogger>[0m
+[[36m2026-11-25 18:39:01,905[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Instantiating trainer <lightning.pytorch.trainer.Trainer>[0m
+[[36m2026-11-25 18:39:01,951[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.[0m
+[[36m2026-11-25 18:39:01,964[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - GPU available: True (cuda), used: True[0m
+[[36m2026-11-25 18:39:01,965[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - TPU available: False, using: 0 TPU cores[0m
+[[36m2026-11-25 18:39:01,965[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - HPU available: False, using: 0 HPUs[0m
+[[36m2026-11-25 18:39:01,965[0m][[34msrc.utils.launcher_utils[0m][[32mINFO[0m] - [rank: 0] Logging hyperparameters![0m
+[[36m2026-11-25 18:39:02,077[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Rank 0 initialized for inference.[0m
+[[36m2026-11-25 18:39:02,077[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - Restoring states from the checkpoint path at /home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream/quantizer_train/checkpoints/checkpoint_000_000030.ckpt[0m
+/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py:277: Be aware that when using `ckpt_path`, callbacks used to create the checkpoint need to be provided during `Trainer` instantiation. Please add the following callbacks: ["ModelCheckpoint{'monitor': 'train/loss', 'mode': 'min', 'every_n_train_steps': 30, 'every_n_epochs': 0, 'train_time_interval': None}"].
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [GPU-59cac3bd-3645-668b-79c8-839e0d878893]
+[[36m2026-11-25 18:39:02,533[0m][[34mpytorch_lightning.utilities.rank_zero[0m][[32mINFO[0m] - Loaded model weights from the checkpoint at /home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream/quantizer_train/checkpoints/checkpoint_000_000030.ckpt[0m
+[[36m2026-11-25 18:39:02,534[0m][[34mroot[0m][[33mWARNING[0m] - num_workers is set to 0, persistent_workers will be set to False as persistent workers require num_workers > 0[0m
+/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:425: The 'predict_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=79` in the `DataLoader` to improve performance.
+/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/lightning/pytorch/loops/prediction_loop.py:307: Couldn't infer the batch indices fetched from your dataloader: `DataloaderWithIterationRetry`
+[[36m2026-11-25 18:39:14,547[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Global Rank: 0 wrote 9922 rows to /home/bwwu/grid-audits/sid-extensions-p0/jobs/grid-letter-rerun-20261125-formal-r0/output/run/upstream/sid_generation/pickle/predictions_0_20261125T183914542.pkl.[0m
+[[36m2026-11-25 18:39:14,548[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Rank 0 finished writing predictions.[0m
+[[36m2026-11-25 18:39:14,549[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Merging pickle files on main process.[0m
+[[36m2026-11-25 18:39:14,557[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Merged 9922 rows into merged_predictions.pkl.[0m
+[[36m2026-11-25 18:39:14,640[0m][[34msrc.utils.inference_utils[0m][[32mINFO[0m] - Merged 9922 rows into merged_predictions_tensor.pt. as pytorch tensor[0m
