@@ -1,7 +1,7 @@
 """Compare eager causal inference, experimental causal, and history attention on old A weights."""
 
 import argparse
-from contextlib import nullcontext
+from contextlib import ExitStack, nullcontext
 import json
 from pathlib import Path
 import time
@@ -10,7 +10,7 @@ import re
 
 import torch
 
-from lc_rec.beauty_history_attention.attention import install_attention
+from lc_rec.beauty_history_attention.attention import allowed_edges, install_attention, reference_attention
 from lc_rec.beauty_history_attention.evaluate import (
     REPLAY_DIR, load_inference, paired_inputs, read_replay, predict, generation_settings,
 )
@@ -26,6 +26,48 @@ def absolute_errors(reference, actual):
             "ref_rms": reference.square().mean().sqrt().item(),
             "reference_max_abs": reference.abs().max().item(),
             "same_argmax": bool(torch.equal(reference.argmax(-1), actual.argmax(-1)))}
+
+
+
+def compare_real_contexts(base, ids, valid, h):
+    """Record fused output against explicit score/softmax/V at the first and last layer."""
+    from transformers.models.llama.modeling_llama import apply_rotary_pos_emb, repeat_kv
+
+    observations = {}
+    edges = allowed_edges(valid.bool(), h, ids.shape[1], "bidirectional").unsqueeze(1)
+    with ExitStack() as stack:
+        for index in (0, len(base.model.layers) - 1):
+            target = base.model.layers[index].self_attn
+            expected = {}
+
+            def collect(module, args, kwargs, slot=expected):
+                hidden = args[0]
+                batch, length, _ = hidden.shape
+
+                def heads(projection, count):
+                    return projection(hidden).view(batch, length, count, module.head_dim).transpose(1, 2)
+
+                q = heads(module.q_proj, module.num_heads)
+                k = heads(module.k_proj, module.num_key_value_heads)
+                v = heads(module.v_proj, module.num_key_value_heads)
+                cos, sin = module.rotary_emb(v, seq_len=length)
+                q, k = apply_rotary_pos_emb(q, k, cos, sin, kwargs["position_ids"])
+                ref = reference_attention(q, repeat_kv(k, module.num_key_value_groups),
+                                          repeat_kv(v, module.num_key_value_groups), edges)
+                slot["context"] = ref.transpose(1, 2).reshape(batch, length, -1)
+
+            def compare(module, args, slot=expected, layer_index=index):
+                observations[str(layer_index)] = absolute_errors(slot.pop("context"), args[0])
+
+            stack.callback(target.register_forward_pre_hook(collect, with_kwargs=True).remove)
+            stack.callback(target.o_proj.register_forward_pre_hook(compare).remove)
+
+        base(ids, attention_mask=valid, history_sid_mask=h, use_cache=False)
+    assert len(observations) == 2
+    # BF16 rounding of the fused reduction is allowed. A wrong mask produces
+    # substantially larger aggregate error than several rounding units.
+    assert all(row["rms"] / max(row["ref_rms"], 1e-8) < .015 for row in observations.values())
+    return observations
 
 
 def original_beam(model, tokenizer, source, allowed, ids, mask, settings):
@@ -169,6 +211,7 @@ def main():
                                                             if "attention" in event.name.lower()
                                                             or "fmha" in event.name.lower()})
         del pre, no_cache, step
+        report["fused_vs_explicit_fp32_contexts"] = compare_real_contexts(base, ids, valid, h)
         first = base(train_ids, attention_mask=train_valid, history_sid_mask=training_h,
                      output_hidden_states=True, use_cache=False)
         changed = train_ids.clone()
@@ -187,9 +230,11 @@ def main():
                       past_key_values=true_prefill.past_key_values, use_cache=True).logits[:, -1]
         uncached = base(train_ids[:, :ids.shape[1] + 1], attention_mask=next_mask,
                         history_sid_mask=h, use_cache=False).logits[:, -1]
+        cache_error = absolute_errors(uncached, cached)
+        assert cache_error["rms"] / max(cache_error["ref_rms"], 1e-8) < .03
         report["bidirectional"] = {"earlier_logits_equal": earlier_logits_equal,
                                    "history_equal_each_layer": history_equal,
-                                   "cached_vs_uncached_next_logits": absolute_errors(uncached, cached),
+                                   "cached_vs_uncached_next_logits": cache_error,
                                    "attention": b_report}
     report["seconds"] = time.monotonic() - stamp
     report["peak_allocated_bytes"] = torch.cuda.max_memory_allocated()
