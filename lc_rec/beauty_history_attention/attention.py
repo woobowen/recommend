@@ -39,13 +39,15 @@ class HistoryCache(tuple):
         return result
 
 
-def install_attention(model, mode):
+def install_attention(model, mode, *, inference_backend=None):
     """Install after model construction, without replacing parameter modules."""
     import transformers
     from transformers.models.llama.modeling_llama import (
         LlamaAttention, LlamaForCausalLM, LlamaModel, apply_rotary_pos_emb, repeat_kv,
     )
 
+    if inference_backend not in (None, "native_eager"):
+        raise ValueError(f"unknown inference backend {inference_backend!r}")
     if mode not in ("bidirectional", "causal"):
         raise ValueError(f"unknown history attention mode {mode!r}")
     if transformers.__version__ != "4.31.0" or not isinstance(model, LlamaForCausalLM):
@@ -182,11 +184,18 @@ def install_attention(model, mode):
             raise ValueError("beam search received a foreign KV cache")
         layers = original_reorder(past_key_values, beam_idx)
         prefix = past_key_values.prefix
+        if inference_backend == "native_eager":
+            report["cache_reorders"] += 1
         return HistoryCache(layers, owner, prefix.index_select(0, beam_idx.to(prefix.device)))
 
-    model.model._prepare_decoder_attention_mask = MethodType(prepare_mask, model.model)
-    for layer in model.model.layers:
-        layer.self_attn.forward = MethodType(attention_forward, layer.self_attn)
+    if inference_backend == "native_eager":
+        from .inference_attention import bind_native_eager
+
+        bind_native_eager(model.model, mode, report)
+    else:
+        model.model._prepare_decoder_attention_mask = MethodType(prepare_mask, model.model)
+        for layer in model.model.layers:
+            layer.self_attn.forward = MethodType(attention_forward, layer.self_attn)
     model.forward = MethodType(forward, model)
     model.prepare_inputs_for_generation = MethodType(prepare_generation, model)
     model._reorder_cache = MethodType(reorder_cache, model)
