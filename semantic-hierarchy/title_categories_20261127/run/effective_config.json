@@ -1,0 +1,43 @@
+{
+  "encoding": {
+    "seed": 20261113,
+    "max_length": 256,
+    "doc_max_length": 224,
+    "batch_size": 2,
+    "output_dimension": 4096,
+    "instruction": "Represent this product for semantic similarity:",
+    "dtype": "float16",
+    "pooling": "mean",
+    "skip_instruction": true,
+    "field_l2_before_average": false,
+    "final_l2": true
+  },
+  "analysis": {
+    "epsilon": 1e-06,
+    "minimum_group_size": 2,
+    "permutations": 999,
+    "bootstrap_repetitions": 2000,
+    "primary": "fusion_complete",
+    "supplementary": [
+      "fusion_all_available",
+      "title_complete"
+    ],
+    "primary_holm_tests": 4,
+    "top_paths": "proper both edges; rank by level3 distinct item count",
+    "sid_depths": [
+      1,
+      2,
+      3
+    ]
+  },
+  "gpus": {
+    "beauty": [
+      0,
+      1
+    ],
+    "instruments": [
+      2,
+      3
+    ]
+  }
+}

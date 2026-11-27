@@ -10,3 +10,5 @@
 - [自动分类主结果](results/classification/summary.json)
 
 本目录只新增语义实验专用代码及统计，共用上游沿用已有 GRID 基线。归档的历史GPU入口含原服务器路径；可移植CPU入口位于 `scripts/evaluate_embeddings.py`，使用已归一化向量与SID即可重新统计。
+
+- [Title＋Categories：Qwen/LETTER共同商品轴实验](title_categories_20261127/README.md)（2026-11-27，4主＋8补充分析）

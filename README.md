@@ -177,3 +177,7 @@ semantic-hierarchy/
 维护负责人：Jingchen Yin（Justin-hub-coder）。[2026-11-21 H1–H4补件](semantic-hierarchy/delivery/README.md)补齐六组原向量/ID的下载、全量最终标签、readiness与原始请求/重试记录；CPU从原向量重算全部合格节点，与发布统计一致。未重新分类、编码或训练。
 
 2026-11-22收尾：验证器分类/SID分组实算与向量回执检查已明确分开，详见[覆盖说明](semantic-hierarchy/delivery/README.md)。本轮未重新编码或计算六组向量余弦。
+
+## 2026-11-27 Title＋Categories 语义层级实验
+
+[完整实验与结果](semantic-hierarchy/title_categories_20261127/README.md)：Beauty及对齐9922商品的Instruments，Qwen/LETTER共用向量；12组分析、原始向量、身份映射、配置和复现材料。
