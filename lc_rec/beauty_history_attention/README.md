@@ -16,7 +16,7 @@
 
 ### 正式链与授权
 
-正式技术快照为 `81d4dc00f84426c77b48b7beb57b57903e97c20d`，路径在 `new-server:/data/bwwu/lc-rec/beauty-history-attention-final-20261127/releases/` 下。实际旧 A 与 B mask GPU 诊断快照是 `5a1a7297aa4078b46aa800f70ab15a649304cd67`，五条件预跑快照是 `d43787a43a64c175ff6edbf3d1820e5fd0c2baa2`。后两者对应的 attention 与测量实现已和正式候选逐文件核对，正式链代码由正式候选独立验证。
+正式技术快照为 `f35a06132c9a969b04b782f8d98f32de966da947`，路径在 `new-server:/data/bwwu/lc-rec/beauty-history-attention-final-20261127/releases/` 下。实际旧 A 与 B mask GPU 诊断快照是 `5a1a7297aa4078b46aa800f70ab15a649304cd67`，五条件预跑快照是 `d43787a43a64c175ff6edbf3d1820e5fd0c2baa2`。后两者对应的 attention 与测量实现已和正式候选逐文件核对，正式链代码由正式候选独立验证。
 
 `formal.py` 使用既有 Beauty runner，请求绑定冻结源码 manifest、有效配置、固定物理 RTX 4090 UUID 和单独的授权证据。授权门禁要求两份真实文件，网页二审和用户启动授权。二审记录包含 `review_kind=WEB_SECOND_REVIEW`、实际 `status`、`plan_sha256`、`run_commit`、`config_sha256`、`train_sha256`、`mode`、`backend`、`snapshot_manifest_sha256`。单独的用户授权记录包括相同绑定字段、`formal_run_authorized`、`external_review_status` 和实际二审文件的 `web_review_path`、`web_review_sha256`。工具校验记录和文件身份，记录内容须由操作方按照真实审批留档。缺少授权时，正式提交、直接训练及直接全量生成均拒绝。
 
@@ -50,11 +50,11 @@ B 作业由同一服务器 runner 监督。训练 65,712 个八样本 micro-batc
 
 ### 本轮证据和启动状态
 
-门禁在正式冻结快照、CUDA 隐藏的条件下做了 9 个真实负向检查，涵盖正式提交、worker、直接训练、试图用短程写正式输出和直接全量生成。正式 runner 目录、训练输出目录均未创建。第一次门禁收集器的预期报错文本过窄，修改匹配后在独立路径复验，前后记录均保存。25 个本地 CPU 测试通过，非作者也使用固定服务器解释器复核了核心 controller 和预测接续测试。正式全长作业及真实 step 8214 后故障恢复未执行。后者由独立控制流测试、真实严格 adapter 加载及已验证训练 checkpoint 规则覆盖。
+门禁在正式冻结快照、CUDA 隐藏的条件下做了 11 个真实负向检查，涵盖正式提交、worker、直接训练、试图用短程写正式输出和直接全量生成。正式 runner 目录、训练输出目录均未创建。第一次门禁收集器的预期报错文本过窄，修改匹配后在独立路径复验，前后记录均保存。正式候选经非作者复查后，给有界生成及 CPU 评价补上了正式目录拒写。GPU 计算及指标实现保持相同。在最终快照尝试用不同的评价 SHA 读取既有 d437 配对产物时，生效的同运行身份检查拒绝，留下原命令和日志。实际五条件结果与 CPU 数值核验来自相同 d437 快照。26 个本地 CPU 测试通过，非作者也使用固定服务器解释器复核了核心 controller 和预测接续测试。正式全长作业及真实 step 8214 后故障恢复未执行。后者由独立控制流测试、真实严格 adapter 加载及已验证训练 checkpoint 规则覆盖。
 
-实际未授权计划的 SHA-256 为 `8cf577a1d7d11fa1228996f634395544a24e3848117a482b1b48de5b85418e20`，服务器路径为 `/data/bwwu/lc-rec/beauty-history-attention-final-20261127/inputs/formal-gate-check-81d4dc00f844-verified/b-formal-plan.unsigned.json`。实际解释器是 `/data/bwwu/envs/letter-20261110/bin/python`。本轮未创建有效正式授权记录，也未安装依赖或改变持久环境配置。
+实际未授权计划的 SHA-256 为 `664694b681b92c9c46c90aa85c4123467233e86c31f087fa74d2b349e9ee9091`，服务器路径为 `/data/bwwu/lc-rec/beauty-history-attention-final-20261127/inputs/formal-gate-check-f35a06132c9a-verified/b-formal-plan.unsigned.json`。实际解释器是 `/data/bwwu/envs/letter-20261110/bin/python`。本轮未创建有效正式授权记录，也未安装依赖或改变持久环境配置。
 
-[未授权计划与门禁证据](evidence/final-preparation/formal/) · [本轮真实原始结果](evidence/final-preparation/actual/) · [独立非作者签署](evidence/final-preparation/nonauthor/FINAL.md)
+[未授权计划与门禁证据](evidence/final-preparation/formal-final/) · [本轮真实原始结果](evidence/final-preparation/actual/) · [独立非作者签署](evidence/final-preparation/nonauthor/FINAL.md) · [最终门禁复核](evidence/final-preparation/nonauthor/ADDENDUM.md)
 
 ## 上一轮受审技术预跑记录
 

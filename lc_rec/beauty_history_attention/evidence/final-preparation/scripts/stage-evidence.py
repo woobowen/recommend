@@ -32,8 +32,9 @@ for folder in sorted((SUPPORT / "collected").glob("*")):
     elif folder.is_dir():
         copy(folder, Path("actual", folder.name), {".json", ".jsonl", ".log", ".txt"})
 copy(SUPPORT / "evidence/formal", Path("formal"), {".json", ".txt", ".log", ".sh"})
+copy(SUPPORT / "evidence/formal-final", Path("formal-final"), {".json", ".txt", ".log", ".sh"})
 copy(REVIEW, Path("nonauthor"), {".py", ".sh", ".json", ".txt", ".log", ".md"})
-for name in ("resources.json", "combined-cpu-tests.log", "prediction-store-tests.log",
+for name in ("resources.json", "combined-cpu-tests.log", "combined-cpu-tests-final.log", "prediction-store-tests.log",
              "generation-store-cpu.log", "runtime-dependency-origins.json",
              "first-chunk-before-resume.sha256", "first-chunk-after-resume.sha256",
              "first-chunk-after-duplicate.sha256"):
@@ -42,7 +43,8 @@ for name in ("resources.json", "combined-cpu-tests.log", "prediction-store-tests
         put(file, Path("verification", name))
 for ver in ("5a1a7297aa4078b46aa800f70ab15a649304cd67",
             "d43787a43a64c175ff6edbf3d1820e5fd0c2baa2",
-            "81d4dc00f84426c77b48b7beb57b57903e97c20d"):
+            "81d4dc00f84426c77b48b7beb57b57903e97c20d",
+            (SUPPORT / "formal-commit-final").read_text().strip()):
     put(SUPPORT / f"export-{ver}/SOURCE.sha256", Path("deployment", ver, "SOURCE.sha256"))
     put(SUPPORT / f"evidence/deploy-{ver}.log", Path("deployment", ver, "remote-verification.log"))
 for name in ("deploy.sh", "submit.sh", "query.sh", "collect.sh", "pilot-sequence.sh",

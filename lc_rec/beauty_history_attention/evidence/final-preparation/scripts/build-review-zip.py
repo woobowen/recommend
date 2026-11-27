@@ -197,6 +197,8 @@ def validate(path):
             "actual/pilot/final/completion.json", "actual/metrics-r0/metrics/bounded-paired.json",
             "transport/github-readback.json", "transport/formal/b-formal-plan.unsigned.json",
             "transport/formal/gate-results.txt", "independent/FINAL.md",
+            "transport/formal-final/b-formal-plan.unsigned.json", "transport/formal-final/gate-results.txt",
+            "independent/ADDENDUM.md", "actual/letter-beauty-v2-history-attn-final-metrics-final-r0/work.log",
             "actual/pilot/chunks/000000/chunk.json",
             "actual/letter-beauty-v2-history-attn-final-generate-resume-duplicate-r0/work.log",
             *[f"actual/pilot/final/{mode}/predictions.rank0.jsonl"

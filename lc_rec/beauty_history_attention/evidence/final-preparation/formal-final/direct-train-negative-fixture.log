@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/bwwu/lc-rec/beauty-history-attention-final-20261127/releases/f35a06132c9a969b04b782f8d98f32de966da947/lc_rec/beauty_history_attention/train.py", line 890, in <module>
+    try:main()
+  File "/data/bwwu/lc-rec/beauty-history-attention-final-20261127/releases/f35a06132c9a969b04b782f8d98f32de966da947/lc_rec/beauty_history_attention/train.py", line 170, in main
+    authorization = verify_training_launch(a, mode)
+  File "/data/bwwu/lc-rec/beauty-history-attention-final-20261127/releases/f35a06132c9a969b04b782f8d98f32de966da947/lc_rec/beauty_history_attention/formal.py", line 188, in verify_training_launch
+    plan, digest, _, _ = gate_records(args.formal_plan, args.formal_authorization,
+  File "/data/bwwu/lc-rec/beauty-history-attention-final-20261127/releases/f35a06132c9a969b04b782f8d98f32de966da947/lc_rec/beauty_history_attention/formal.py", line 167, in gate_records
+    require(auth.get("formal_run_authorized") is True and auth.get("external_review_status") == "PASS"
+  File "/data/bwwu/lc-rec/beauty-history-attention-final-20261127/releases/f35a06132c9a969b04b782f8d98f32de966da947/lc_rec/beauty_history_attention/identity.py", line 59, in require
+    raise ValueError(reason)
+ValueError: user authorization does not cover the exact B plan, snapshot, backend, and training configuration

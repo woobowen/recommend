@@ -27,6 +27,10 @@ required_modules = (
 for name in required_modules:
     data=subprocess.check_output(["git","-C",str(args.repo),"show",args.source_commit+":"+base+name])
     need[name]=digest(data)
+source_dir = Path(__file__).parent
+for name in ("FINAL.md", "ADDENDUM.md", "real_eager_independent.json", "real_resumable_generation_audit.json",
+             "preflight_namespace_review-fixed.json"):
+    need[name] = digest((source_dir / name).read_bytes())
 by_digest=defaultdict(list)
 with zipfile.ZipFile(args.archive) as z:
     members=z.infolist()
@@ -45,6 +49,17 @@ with zipfile.ZipFile(args.archive) as z:
                 while block:=stream.read(1<<20):
                     h.update(block)
             by_digest[h.hexdigest()].append(info.filename)
+    manifest = json.loads(z.read("MEMBERS.json"))
+    assert manifest["formal_snapshot"] == args.source_commit, "archive declares a different formal snapshot"
+    for name, entry in manifest["files"].items():
+        source = entry.get("duplicate_of", name)
+        assert source in by_digest[entry["sha256"]] and z.getinfo(source).file_size == entry["bytes"]
+    final_plan = manifest["files"]["transport/formal-final/b-formal-plan.unsigned.json"]
+    assert final_plan["sha256"] == "664694b681b92c9c46c90aa85c4123467233e86c31f087fa74d2b349e9ee9091"
+    gate = manifest["files"]["transport/formal-final/gate-results.txt"]
+    gate_text = z.read(gate.get("duplicate_of", "transport/formal-final/gate-results.txt")).decode()
+    gate_result, _ = json.JSONDecoder().raw_decode(gate_text)
+    assert not gate_result["formal_run_started"] and len(gate_result["negative_exit_codes"]) == 11
     found={label:by_digest[hash] for label,hash in need.items()}
     missing=[name for name,entry in found.items() if not entry]
     assert not missing, f"missing exact archive bytes: {missing}"
