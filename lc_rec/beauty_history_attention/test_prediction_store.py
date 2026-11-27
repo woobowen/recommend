@@ -8,7 +8,8 @@ import sys
 import tempfile
 import unittest
 
-from lc_rec.beauty_history_attention.evaluate import preflight_paired, preflight_rows
+from types import SimpleNamespace
+from lc_rec.beauty_history_attention.evaluate import _formal_generation_guard, metrics, preflight_paired, preflight_rows
 from lc_rec.beauty_history_attention.prediction_store import (
     CONDITIONS, PREDICTIONS, SPEC, open_store, verify_final,
 )
@@ -44,6 +45,13 @@ class StoreTest(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name) / "predictions"
+
+    def test_bounded_generation_and_metrics_cannot_write_a_formal_root(self):
+        output = self.root / "formal-b-example" / "preflight-output"
+        for entry in (_formal_generation_guard, metrics):
+            with self.subTest(entry=entry.__name__), self.assertRaisesRegex(ValueError, "formal B output"):
+                entry(SimpleNamespace(purpose="preflight", output=output))
+        self.assertFalse(output.exists())
 
     def store(self, binding=BINDING):
         return open_store(self.root, binding, AXIS, 2)

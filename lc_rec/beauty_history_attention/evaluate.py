@@ -249,8 +249,14 @@ def predict(model, base, tokenizer, source, allowed, ids, mask, history, setting
     return candidates, sorted(range(20), key=scores.__getitem__, reverse=True), elapsed, boundary
 
 
+def _require_preflight_destination(output):
+    require(not any(part.startswith("formal-b-") for part in output.resolve().parts),
+            "bounded preflight cannot write a formal B output")
+
+
 def _formal_generation_guard(args):
     if args.purpose == "preflight":
+        _require_preflight_destination(args.output)
         require(args.plan is None and args.formal_authorization is None
                 and args.formal_authorization_sha256 is None, "formal gate arguments are only used for formal B")
         require(args.sample_budget is None or 1 <= args.sample_budget <= MAX_PREFLIGHT_USERS,
@@ -604,6 +610,8 @@ def verify_completed_metrics(root, generation_root, run_commit):
 
 
 def metrics(args):
+    if args.purpose == "preflight":
+        _require_preflight_destination(args.output)
     """Verify saved preflight output or compute the full frozen metrics and paired statistics."""
     require(not sys.flags.optimize, "Python optimization disables verified evaluation guards")
     assert os.environ.get("CUDA_VISIBLE_DEVICES") == ""
