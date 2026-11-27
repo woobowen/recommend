@@ -4,6 +4,7 @@ import argparse
 from contextlib import contextmanager
 import fcntl
 import json
+import shutil
 import os
 from pathlib import Path
 import subprocess
@@ -25,7 +26,7 @@ def record_nvidia(output, name):
         ["--query-compute-apps=gpu_uuid,pid,process_name,used_memory", "--format=csv,noheader,nounits"],
     ]
     devices, work = [subprocess.check_output(["nvidia-smi", *query], text=True) for query in queries]
-    schedulers = [tool for tool in ("squeue", "qstat", "bjobs") if __import__("shutil").which(tool)]
+    schedulers = [tool for tool in ("squeue", "qstat", "bjobs") if shutil.which(tool)]
     output.joinpath(name + ".json").write_text(json.dumps({
         "devices_csv": devices, "compute_csv": work, "visible": os.environ.get("CUDA_VISIBLE_DEVICES"),
         "matching_scheduler_cli": schedulers,
@@ -56,7 +57,7 @@ def run(module, *args, launch=(), env=None, output):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--stage", choices=("cpu", "cuda-check", "train", "generate", "metrics", "regression"),
+    parser.add_argument("--stage", choices=("cpu", "cuda-check", "train", "generate", "metrics", "regression", "training-regression"),
                         required=True)
     parser.add_argument("--commit", required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -101,6 +102,10 @@ def main():
             run("evaluate", "generate", "--adapter", args.training / "preflight_adapter", "--run-commit",
                 args.commit, "--output", output / "predictions", "--purpose", "preflight",
                 "--max-seconds", 720, output=output)
+        elif args.stage == "training-regression":
+            run("training_regression", "--data-root", DATA, "--model", MODEL,
+                "--output", output / "training-regression.json", "--run-commit", args.commit,
+                "--profile", output=output)
         else:
             run("regression", "--output", output / "regression", "--profile", output=output)
 

@@ -269,7 +269,7 @@ def generate(args):
     try:
         guard()
         source_file = Path(baseline['entry'])
-        source = beauty.frozen_module(source_file)
+        source = beauty.frozen_dependency(config, source_file)
         author = source.author_source(baseline['source-root'])
         for item in [*baseline['author_sources'].values(), next(
                 item for item in config['files'] if item['path'] == str(author / 'utils.py'))]:

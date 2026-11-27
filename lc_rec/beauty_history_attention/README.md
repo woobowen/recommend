@@ -23,10 +23,10 @@
 | 真实 7B 回归 | 旧 A 权重，一条 20 物品真 prompt，原 eager／新 causal 的 logits、旧温度和位移 CE、两端 LoRA 梯度与 20 beam；双向 prefill/cache、未来目标变化、kernel 采样 | 720 秒 |
 | 真实 7B 五条件 | 短/长、整条 S2 和 S3a/S3b 恒等行，固定 4 用户 ×5 条件 ×20 beam。随后复算 16 项指标，范围只覆盖预跑 | GPU 720 秒，CPU 300 秒 |
 
-单卡 GPU 总墙钟上限为 3,420 秒，单设备 24 GiB。训练按实际 observed phase 估计正式成本。任何 OOM、NaN、身份冲突、设备占用或超时由该阶段返回失败，保留原日志和状态。正式 4 epoch、全量五条件以及正式 A′ 在本轮均不启动。
+另用真实 8-bit/BF16 LETTER 历史首批对比旧 FastChat FA2 deterministic backward 与新 causal 的训练 logits、loss 和梯度，独立阶段上限 720 秒。单卡 GPU 总墙钟上限为 4,140 秒，单设备 24 GiB。训练按实际 observed phase 估计正式成本。任何 OOM、NaN、身份冲突、设备占用或超时由该阶段返回失败，保留原日志和状态。正式 4 epoch、全量五条件以及正式 A′ 在本轮均不启动。
 
 ## 后续正式入口
 
 训练使用 `python -m lc_rec.beauty_history_attention.train`，world size 为 1，输入当前快照的 LETTER vendor、固定 Beauty 数据和基座，选择 `config_bidirectional.json` 或 `config_causal.json`。正式训练需要固定代码/config/mode 的用户授权与网页二次审核材料，详见入口参数。八个连续的八样本 micro-batch 对应旧基线四个双 rank 更新片段。单卡保留各虚拟 rank Python 提示流、独立采样 RNG、原 NumPy 验证抽取以及跨 epoch 累积；最低验证 loss 选择模型，同分保留较早者。
 
-用 `evaluate.py generate` 对新 adapter 执行五条件，`evaluate.py metrics` 从相同预测回读计算。模型和数据条件及分行范围由校验清单和快照保存。全量分析需后续明确启动。 
+用 `evaluate.py generate` 对新 adapter 执行五条件，`evaluate.py metrics` 从相同预测回读计算。模型和数据条件及分行范围由校验清单和快照保存。全量分析需后续明确启动。

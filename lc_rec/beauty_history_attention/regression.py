@@ -80,7 +80,7 @@ def main():
     cfg = json.loads(Path("lc_rec/shuffle_v2/a0_beauty_letter.json").read_text())
     _, rows, _ = read_replay(REPLAY_DIR, cfg)
     baseline = cfg["baseline"]
-    source = beauty.frozen_module(Path(baseline["entry"]))
+    source = beauty.frozen_dependency(cfg, Path(baseline["entry"]))
     author = source.author_source(baseline["source-root"])
     index, _, _, _ = source.catalog_and_users(baseline["data-root"])
     old_adapter = Path(baseline["adapter"])
@@ -150,6 +150,7 @@ def main():
     del base._beauty_history_attention
     b_report = install_attention(base, "bidirectional")
     model.base_model_prepare_inputs_for_generation = base.prepare_inputs_for_generation
+    args.output.joinpath("partial-causal.json").write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
     with torch.no_grad():
         profile = (torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,
                                                      torch.profiler.ProfilerActivity.CUDA])
