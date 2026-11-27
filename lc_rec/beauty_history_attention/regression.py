@@ -41,7 +41,7 @@ def compare_real_contexts(base, ids, valid, h):
             expected = {}
 
             def collect(module, args, kwargs, slot=expected):
-                hidden = args[0]
+                hidden = kwargs["hidden_states"]
                 batch, length, _ = hidden.shape
 
                 def heads(projection, count):
