@@ -48,6 +48,7 @@ HISTORICAL_VERSIONS = {
     "deepspeed": "0.16.9", "peft": "0.5.0", "bitsandbytes": "0.45.5",
     "fschat": "0.2.31", "flash-attn": "2.7.4.post1",
 }
+FAILURE_OUTPUT = None
 sys.path.append(str(ROOT / "letter/scripts"))
 sys.path.append(str(ROOT / "a0_beauty"))
 
@@ -77,20 +78,6 @@ def load_config(path):
     expected.pop("flash_backward_deterministic")
     require(cfg == expected, "unexpected change from the historical LETTER Beauty train config")
     return cfg
-
-
-def verify_formal_authorization(path, expected_sha256, run_commit, config_sha256, mode):
-    if path is None:
-        raise ValueError("formal training requires separate user authorization after webpage GPT review")
-    record = approval_json(path, expected_sha256)
-    identity = {
-        "formal_run_authorized": True, "external_review_status": "PASS",
-        "run_commit": run_commit, "config_sha256": config_sha256,
-        "train_sha256": sha(__file__), "mode": mode,
-    }
-    require(all(record.get(key) == value for key, value in identity.items()),
-            "authorization does not cover this source, mode and configuration")
-    return record
 
 
 def checkpoint_required_files(step):
@@ -146,6 +133,8 @@ def nosync_source_identity(callable_):
 
 
 def main():
+    global FAILURE_OUTPUT
+    require(not sys.flags.optimize, "training requires all runtime checks")
     p = argparse.ArgumentParser(description=__doc__)
     for name in ['source-root', 'data-root', 'model', 'output', 'config', 'run-commit']:
         p.add_argument('--' + name, required=True)
@@ -154,11 +143,10 @@ def main():
                    help='Four short 20-microbatch epochs, using only 32 validation inputs')
     p.add_argument('--stop-after-epoch', type=int, default=0, choices=[0,1,3],
                    help='Preflight-only early stop at a partial accumulation boundary')
+    p.add_argument('--formal-plan')
     p.add_argument('--formal-authorization')
     p.add_argument('--formal-authorization-sha256')
     a = p.parse_args()
-    rank = int(os.environ['RANK']); local = int(os.environ['LOCAL_RANK'])
-    assert int(os.environ['WORLD_SIZE']) == 1
     require(re.fullmatch(r"[a-f0-9]{40}", a.run_commit), "full code commit required")
     require(Path(a.source_root).resolve() == VENDOR, "use the fixed LETTER vendor tree in this snapshot")
     cfg = load_config(a.config)
@@ -171,16 +159,24 @@ def main():
     config_sha256 = sha(a.config)
     evidence_scope = "PREFLIGHT" if a.boundary_preflight else "FORMAL"
     authorization = None
-    if not a.boundary_preflight:
-        authorization = verify_formal_authorization(
-            a.formal_authorization, a.formal_authorization_sha256, a.run_commit, config_sha256, mode
-        )
+    if a.boundary_preflight:
+        require(not (a.formal_plan or a.formal_authorization or a.formal_authorization_sha256),
+                "the bounded preflight has a separate output scope and no formal gate")
+        require(not any(part.startswith("formal-b-") for part in Path(a.output).resolve().parts),
+                "the bounded preflight cannot write a formal B output")
+    else:
+        from .formal import verify_training_launch
+
+        authorization = verify_training_launch(a, mode)
+    rank = int(os.environ['RANK']); local = int(os.environ['LOCAL_RANK'])
+    assert int(os.environ['WORLD_SIZE']) == 1
     require(not a.stop_after_epoch or a.boundary_preflight, "early stop is preflight-only")
     schedule = execution_schedule(131413, preflight=a.boundary_preflight)
     gas = EXECUTION_PROFILE['gradient_accumulation_steps']
     approval = approval_json(PRECISION_APPROVAL, PRECISION_APPROVAL_SHA)
     require(approval['formal_a_only_bf16_authorized'] is True, "historical precision adaptation identity")
     out = Path(a.output); out.mkdir(parents=True, exist_ok=True)
+    FAILURE_OUTPUT = out
     started = time.monotonic()
     import torch
     import torch.distributed as dist
@@ -894,8 +890,7 @@ if __name__=='__main__':
     try:main()
     except BaseException as error:
         import traceback
-        if '--output' in sys.argv:
-            output=Path(sys.argv[sys.argv.index('--output')+1])
-            write(output/('failure.rank%s.json'%os.environ.get('RANK','unknown')),
+        if FAILURE_OUTPUT is not None:
+            write(FAILURE_OUTPUT/('failure.rank%s.json'%os.environ.get('RANK','unknown')),
                   {'status':'FAILED','error':repr(error),'traceback':traceback.format_exc(),'argv':sys.argv})
         raise
