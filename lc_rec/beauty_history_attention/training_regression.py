@@ -205,50 +205,52 @@ def run(args, report):
     new_batch = {name: value.cuda(0) for name, value in history_batch.items()}
     old_batch_gpu = {name: value.cuda(0) for name, value in old_batch.items()}
 
-    raw = LETTER.from_pretrained(args.model, load_in_8bit=True, device_map={"": 0}, local_files_only=True)
-    raw.set_hyper(cfg.temperature)
-    raw.resize_token_embeddings(len(tok))
-    raw = peft.prepare_model_for_int8_training(raw)
-    report["bnb_compat"] = restore_legacy_bnb_state_field(raw)
-    model = get_peft_model(raw, LoraConfig(
-        r=cfg.lora_r, lora_alpha=cfg.lora_alpha, lora_dropout=cfg.lora_dropout,
-        target_modules=cfg.lora_target_modules.split(","), modules_to_save=["embed_tokens", "lm_head"],
-        bias="none", inference_mode=False, task_type=TaskType.CAUSAL_LM,
-    ))
-    report["out_of_place"] = install_peft05_out_of_place(model)
-    for name, value in model.named_parameters():
-        if "original_module" in name and any(s in name for s in ("embed_tokens", "lm_head")):
-            value.requires_grad = False
-    model.config.use_cache = False
-    # DeepSpeed 0.16.9 DeepSpeedEngine._configure_distributed_model also casts
-    # this already placed 8-bit module by calling self.module.bfloat16().
-    model.bfloat16()
-    report["precision_adaptation"] = install_peft05_lora_a_bf16_autocast(model, {
-        "matched_dtype_conflict": True, "source": "fixed historical 6e1b211 LETTER Beauty precision adaptation",
-    })
-    active = {name: value for name, value in model.named_parameters() if value.requires_grad}
-    require(len(active) == 450 and sum(value.numel() for value in active.values()) == TRAINABLE_PARAMETERS,
-            "historical trainable set mismatch")
-    require(all(value.dtype == torch.bfloat16 for value in active.values()), "historical DeepSpeed BF16 trainable cast")
-    require(raw.model.gradient_checkpointing, "historical gradient checkpointing not enabled")
-    require(all(torch.count_nonzero(value) == 0 for name, value in active.items() if ".lora_B." in name),
-            "fresh initialization does not have zero LoRA B")
-    before = {name: weight_sha(value) for name, value in active.items()}
-    report["initialized_trainable_sha256"] = before
-    report["execution_limits"] = [
-        "Single training microbatch under each backend, with native LETTER loss and gradient checkpointing.",
-        "DeepSpeed BF16 cast replicated from installed engine; raw gradients observed before ZeRO-2 reduction.",
-        "No optimizer step or checkpoint load. The two paths share the very same parameter objects.",
-        "Initial LoRA B is zero, so both paths should initially have zero LoRA A gradients.",
-        "Kernel-level fusions and BF16 rounding can differ; the output reports measured errors rather than hiding them behind one tolerance.",
-    ]
     events = []
     def record(kind, **info):
         events.append({"event": kind, **info})
 
-    model.train()
-    rng = {"cpu": torch.get_rng_state(), "cuda": torch.cuda.get_rng_state()}
+    # Accelerate captures the attention forward when loading device_map.
+    # Install the old class patch before loading, as the old trainer did.
     with original_attention(historical_config, record) as old_report:
+        raw = LETTER.from_pretrained(args.model, load_in_8bit=True, device_map={"": 0}, local_files_only=True)
+        raw.set_hyper(cfg.temperature)
+        raw.resize_token_embeddings(len(tok))
+        raw = peft.prepare_model_for_int8_training(raw)
+        report["bnb_compat"] = restore_legacy_bnb_state_field(raw)
+        model = get_peft_model(raw, LoraConfig(
+            r=cfg.lora_r, lora_alpha=cfg.lora_alpha, lora_dropout=cfg.lora_dropout,
+            target_modules=cfg.lora_target_modules.split(","), modules_to_save=["embed_tokens", "lm_head"],
+            bias="none", inference_mode=False, task_type=TaskType.CAUSAL_LM,
+        ))
+        report["out_of_place"] = install_peft05_out_of_place(model)
+        for name, value in model.named_parameters():
+            if "original_module" in name and any(s in name for s in ("embed_tokens", "lm_head")):
+                value.requires_grad = False
+        model.config.use_cache = False
+        # DeepSpeed 0.16.9 DeepSpeedEngine._configure_distributed_model also casts
+        # this already placed 8-bit module by calling self.module.bfloat16().
+        model.bfloat16()
+        report["precision_adaptation"] = install_peft05_lora_a_bf16_autocast(model, {
+            "matched_dtype_conflict": True, "source": "fixed historical 6e1b211 LETTER Beauty precision adaptation",
+        })
+        active = {name: value for name, value in model.named_parameters() if value.requires_grad}
+        require(len(active) == 450 and sum(value.numel() for value in active.values()) == TRAINABLE_PARAMETERS,
+                "historical trainable set mismatch")
+        require(all(value.dtype == torch.bfloat16 for value in active.values()), "historical DeepSpeed BF16 trainable cast")
+        require(raw.model.gradient_checkpointing, "historical gradient checkpointing not enabled")
+        require(all(torch.count_nonzero(value) == 0 for name, value in active.items() if ".lora_B." in name),
+                "fresh initialization does not have zero LoRA B")
+        before = {name: weight_sha(value) for name, value in active.items()}
+        report["initialized_trainable_sha256"] = before
+        report["execution_limits"] = [
+            "Single training microbatch under each backend, with native LETTER loss and gradient checkpointing.",
+            "DeepSpeed BF16 cast replicated from installed engine; raw gradients observed before ZeRO-2 reduction.",
+            "No optimizer step or checkpoint load. The two paths share the very same parameter objects.",
+            "Initial LoRA B is zero, so both paths should initially have zero LoRA A gradients.",
+            "Kernel-level fusions and BF16 rounding can differ; the output reports measured errors rather than hiding them behind one tolerance.",
+        ]
+        model.train()
+        rng = {"cpu": torch.get_rng_state(), "cuda": torch.cuda.get_rng_state()}
         old_logits, old_summary = run_pass(model, old_batch_gpu, rng, profile=args.profile)
         assert_active(old_report)
         old_gradients = {}
