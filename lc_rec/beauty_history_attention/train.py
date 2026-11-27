@@ -1,0 +1,901 @@
+#!/usr/bin/env python3
+"""Single-GPU training for LETTER Beauty history bidirectionality.
+
+Derived from the repository's single-GPU Beauty Trainer. The original LETTER
+model, optimizer behavior and virtual two-rank sample stream are reused.
+"""
+from __future__ import annotations
+import argparse
+import datetime as dt
+import hashlib
+import inspect
+import importlib.metadata
+import json
+import math
+import os
+from pathlib import Path
+import random
+import re
+import sys
+import time
+from types import SimpleNamespace
+
+from .identity import (
+    ASSETS, EXPERIMENT_ID, HISTORICAL_COMMIT, HISTORICAL_CONFIG_SHA, IDENTITY_FILE,
+    MODES, NEW_TOKEN_COUNT, VOCAB_SIZE, TRAINABLE_PARAMETERS, EXECUTION_TOPOLOGY,
+    EXECUTION_PROFILE, atomic_json as write, sha, require, verify_assets,
+    tokenizer_identity, verify_base_model, source_identity, write_adapter_identity,
+    verify_adapter_identity, verify_execution_profile,
+)
+from ..a0_beauty.single_gpu_training import (
+    execution_schedule, build_serial_sampler, reconstruct_serial_epoch, audit_serial_epoch,
+)
+
+ROOT = Path(__file__).resolve().parents[1]
+VENDOR = ROOT / "letter/vendor/LETTER/LETTER-LC-Rec"
+PRECISION_APPROVAL = ROOT / "letter/evidence/formal_20261111/precision_approval.json"
+PRECISION_APPROVAL_SHA = "b44e910f4fb9bf08aa0f2fb574dfedc475d1f3eed96e039c2808befdea2312f3"
+VENDOR_HASHES = {
+    "modeling_letter.py": "c4798e82bfd0c5a16acebb551e08d0e421765d028981288ee6680cdc7f49c9fc",
+    "data.py": "cfd7733325670792c0da32393752c49116cd2b0ce097ffd629cda1c224bddecc",
+    "collator.py": "e1ec6dec9aadf3c123ea45656fe2c58dc102ac075ca78bf9dff7df47cb5c29b8",
+    "prompt.py": "2415f1a2bece1fd27f961efd5beb3a52e0e997ba39c1f3825fec1292bf84f7d7",
+    "utils.py": "8c1139a496cd74479e862472a57dd5c5eccb3870e17fb64b2f4d02063fd252e5",
+    "config/ds_z2_bf16.json": "031f5d7fdcda395fa7fd2ba0c78f0cbeae92580764502bfd85b733c70374ada1",
+}
+HISTORICAL_VERSIONS = {
+    "torch": "2.6.0", "transformers": "4.31.0", "accelerate": "0.21.0",
+    "deepspeed": "0.16.9", "peft": "0.5.0", "bitsandbytes": "0.45.5",
+    "fschat": "0.2.31", "flash-attn": "2.7.4.post1",
+}
+sys.path.append(str(ROOT / "letter/scripts"))
+sys.path.append(str(ROOT / "a0_beauty"))
+
+
+def approval_json(path, expected_sha256):
+    """Read and verify the same approval bytes before importing training code."""
+    import stat
+    fd=os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    with os.fdopen(fd, 'rb') as stream:
+        if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+            raise ValueError('regular approval file required')
+        raw=stream.read()
+    if not expected_sha256 or hashlib.sha256(raw).hexdigest()!=expected_sha256:
+        raise ValueError('formal approval content identity mismatch')
+    return json.loads(raw)
+
+
+def load_config(path):
+    cfg = json.loads(Path(path).read_text())
+    original_path = Path(__file__).with_name("historical_train_config.json")
+    require(sha(original_path) == HISTORICAL_CONFIG_SHA, "archived LETTER Beauty train config identity")
+    expected = json.loads(original_path.read_text())
+    mode = cfg.get("mode")
+    require(mode in MODES, "invalid attention mode")
+    expected.update(recipe_identity="LETTER Beauty LLaMA-7B LoRA / serialized logical ranks",
+                    mode=mode, world_size=1, gradient_accumulation_steps=8, attention_backend="sdpa")
+    expected.pop("flash_backward_deterministic")
+    require(cfg == expected, "unexpected change from the historical LETTER Beauty train config")
+    return cfg
+
+
+def verify_formal_authorization(path, expected_sha256, run_commit, config_sha256, mode):
+    if path is None:
+        raise ValueError("formal training requires separate user authorization after webpage GPT review")
+    record = approval_json(path, expected_sha256)
+    identity = {
+        "formal_run_authorized": True, "external_review_status": "PASS",
+        "run_commit": run_commit, "config_sha256": config_sha256,
+        "train_sha256": sha(__file__), "mode": mode,
+    }
+    require(all(record.get(key) == value for key, value in identity.items()),
+            "authorization does not cover this source, mode and configuration")
+    return record
+
+
+def checkpoint_required_files(step):
+    prefix='global_step%d/'%step
+    return {'adapter_model.bin','adapter_config.json','trainer_state.json','training_args.bin',
+            IDENTITY_FILE,'external_scheduler.pth','latest','tokenizer.model','tokenizer_config.json',
+            'added_tokens.json','special_tokens_map.json',
+            'loader_state_0.pth','rng_state.pth','partial_rank0.pt',
+            prefix+'mp_rank_00_model_states.pt',
+            prefix+'bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt'}
+
+
+def verify_checkpoint(path, run_commit, config_sha256, mode):
+    path=Path(path)
+    meta=json.loads((path/'complete.json').read_text())
+    assert meta['run_commit']==run_commit, 'checkpoint source commit mismatch'
+    assert meta['config_sha256']==config_sha256, 'checkpoint effective config mismatch'
+    assert meta['experiment_id']==EXPERIMENT_ID and meta['mode']==mode, 'checkpoint experiment or mode mismatch'
+    assert meta['scope'] in ('PREFLIGHT','FORMAL'), 'checkpoint evidence scope mismatch'
+    assert meta['assets']==ASSETS, 'checkpoint LETTER Beauty assets mismatch'
+    assert meta['collective_ranks']==1, 'checkpoint collective rank completion mismatch'
+    assert meta['world_size']==1, 'checkpoint world size mismatch'
+    assert meta['execution_topology']==EXECUTION_TOPOLOGY, 'checkpoint execution topology mismatch'
+    verify_execution_profile(meta['execution_profile'])
+    assert len(meta['files'])==len({r['path'] for r in meta['files']}), 'duplicate checkpoint member'
+    assert checkpoint_required_files(meta['global_step']) <= {r['path'] for r in meta['files']}, 'checkpoint missing required rank/member'
+    for row in meta['files']:
+        member=row['path']
+        ranks=re.findall(r'(?:loader_state_|partial_rank|zero_pp_rank_)([0-9]+)',member)
+        assert all(int(value)==0 for value in ranks) and not re.search(r'rng_state_[0-9]+\.pth$',member), 'checkpoint foreign rank member in single GPU execution'
+    for row in meta['files']:
+        relative=Path(row['path'])
+        assert not relative.is_absolute() and '..' not in relative.parts
+        f=path/relative
+        assert f.is_file() and not f.is_symlink() and f.stat().st_size==row['bytes']>0
+        assert isinstance(row['sha256'],str) and len(row['sha256'])==64
+        assert sha(f)==row['sha256'], 'checkpoint file identity mismatch: '+str(relative)
+    assert (path/'latest').read_text().strip()=='global_step%d'%meta['global_step']
+    assert json.loads((path/'trainer_state.json').read_text())['global_step']==meta['global_step']
+    adapter_identity=verify_adapter_identity(path,scope=meta['scope'],mode=mode,run_commit=run_commit)
+    assert adapter_identity['config_sha256']==config_sha256
+    return meta
+
+
+def nosync_source_identity(callable_):
+    # contextmanager's outer wrapper is defined in contextlib.py. Inspect the
+    # original decorated Accelerator method, retaining the full-file guard.
+    original=inspect.unwrap(callable_)
+    path=inspect.getsourcefile(original)
+    return {'source_file':path,'file_sha256':sha(path),
+            'method_sha256':hashlib.sha256(inspect.getsource(original).encode()).hexdigest(),
+            'signature':str(inspect.signature(original))}
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__)
+    for name in ['source-root', 'data-root', 'model', 'output', 'config', 'run-commit']:
+        p.add_argument('--' + name, required=True)
+    p.add_argument('--resume')
+    p.add_argument('--boundary-preflight', action='store_true',
+                   help='Four short 20-microbatch epochs, using only 32 validation inputs')
+    p.add_argument('--stop-after-epoch', type=int, default=0, choices=[0,1,3],
+                   help='Preflight-only early stop at a partial accumulation boundary')
+    p.add_argument('--formal-authorization')
+    p.add_argument('--formal-authorization-sha256')
+    a = p.parse_args()
+    rank = int(os.environ['RANK']); local = int(os.environ['LOCAL_RANK'])
+    assert int(os.environ['WORLD_SIZE']) == 1
+    require(re.fullmatch(r"[a-f0-9]{40}", a.run_commit), "full code commit required")
+    require(Path(a.source_root).resolve() == VENDOR, "use the fixed LETTER vendor tree in this snapshot")
+    cfg = load_config(a.config)
+    mode = cfg["mode"]
+    vendor_identity = dict(zip(VENDOR_HASHES, source_identity([VENDOR / name for name in VENDOR_HASHES])))
+    require({name: row["sha256"] for name, row in vendor_identity.items()} == VENDOR_HASHES,
+            "vendor tree differs from original fixed LETTER Beauty source")
+    versions = {name: importlib.metadata.version(name) for name in HISTORICAL_VERSIONS}
+    require(versions == HISTORICAL_VERSIONS, "historical LETTER Beauty package versions differ")
+    config_sha256 = sha(a.config)
+    evidence_scope = "PREFLIGHT" if a.boundary_preflight else "FORMAL"
+    authorization = None
+    if not a.boundary_preflight:
+        authorization = verify_formal_authorization(
+            a.formal_authorization, a.formal_authorization_sha256, a.run_commit, config_sha256, mode
+        )
+    require(not a.stop_after_epoch or a.boundary_preflight, "early stop is preflight-only")
+    schedule = execution_schedule(131413, preflight=a.boundary_preflight)
+    gas = EXECUTION_PROFILE['gradient_accumulation_steps']
+    approval = approval_json(PRECISION_APPROVAL, PRECISION_APPROVAL_SHA)
+    require(approval['formal_a_only_bf16_authorized'] is True, "historical precision adaptation identity")
+    out = Path(a.output); out.mkdir(parents=True, exist_ok=True)
+    started = time.monotonic()
+    import torch
+    import torch.distributed as dist
+    import numpy as np
+    from transformers import Trainer, TrainingArguments, TrainerCallback, LlamaTokenizer
+    import transformers.trainer as trainer_module
+    import peft
+    from peft import LoraConfig, TaskType, get_peft_model
+    from peft import get_peft_model_state_dict
+    torch.cuda.set_device(local)
+    dist.init_process_group('nccl', timeout=dt.timedelta(minutes=15))
+    sys.path.insert(0, str(Path(a.source_root).resolve()))
+    from modeling_letter import LETTER
+    from .attention import install_attention
+    from .inputs import HistoryCollator
+    from compat import (restore_legacy_bnb_state_field, install_peft05_out_of_place,
+                        install_peft05_lora_a_bf16_autocast)
+    from utils import load_datasets, set_seed
+    from collator import Collator
+    from training_rows import IndexedDataset, IndexedCollator, take_indices
+    from zero2_partial_state import snapshot as partial_snapshot, save_exclusive, restore as restore_partial
+    from trainer_loop_patch import build as build_trainer_loop
+    set_seed(42)
+    data_identity = verify_assets(a.data_root)
+    report = {'status': 'INITIALIZING', 'run_commit': a.run_commit, 'rank': rank,
+              'argv': sys.argv, 'cwd': os.getcwd(), 'python': sys.executable,
+              'started_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
+              'config_sha256': config_sha256, 'precision_approval': approval,
+              'historical_commit': HISTORICAL_COMMIT, 'formal_authorization': authorization,
+              'mode': mode,
+              'versions': versions, 'vendor_identity': vendor_identity, 'probe': a.boundary_preflight}
+    report.update(scope=evidence_scope,experiment_id=EXPERIMENT_ID,world_size=1,
+        execution_topology=EXECUTION_TOPOLOGY,execution_profile=dict(EXECUTION_PROFILE),
+        sample_flow=schedule,gpu_memory_stages=[])
+    report['data_identity']=data_identity
+    report['base_model_identity']=verify_base_model(a.model)
+    actual_imports=[Path(__file__),Path(__file__).with_name('identity.py'),
+                   inspect.getsourcefile(LETTER),inspect.getsourcefile(load_datasets),
+                   inspect.getsourcefile(Collator),inspect.getsourcefile(IndexedDataset),
+                   inspect.getsourcefile(partial_snapshot),inspect.getsourcefile(build_trainer_loop),
+                   inspect.getsourcefile(Trainer),inspect.getsourcefile(peft),
+                   inspect.getsourcefile(get_peft_model),inspect.getsourcefile(LoraConfig),
+                   inspect.getsourcefile(peft.prepare_model_for_int8_training),
+                   Path(inspect.getsourcefile(peft)).parent/'tuners/lora.py',
+                   inspect.getsourcefile(build_serial_sampler), ROOT / 'a0_beauty/g3_identity.py',
+                   ROOT / 'a0_beauty/checkpoint_receipt.py', PRECISION_APPROVAL]
+    rp = out / ('rank%d.json' % rank)
+    if rp.exists():
+        assert a.resume, 'existing formal training output requires explicit full resume'
+        previous=out/'attempt_reports'/('%s-rank%d.json'%(sha(rp)[:16],rank))
+        previous.parent.mkdir(exist_ok=True)
+        if previous.exists():assert previous.read_bytes()==rp.read_bytes()
+        else:previous.write_bytes(rp.read_bytes())
+    events = (out / ('events.rank%d.jsonl' % rank)).open('a', buffering=1)
+    write(rp,report)
+
+    def event(kind, **kw):
+        record = {'utc': dt.datetime.now(dt.timezone.utc).isoformat(),
+                  'elapsed_seconds': time.monotonic()-started, 'event': kind,
+                  'attempt_job_id':os.environ.get('GRID_JOB_ID'), **kw}
+        events.write(json.dumps(record, ensure_ascii=False) + '\n')
+        if kind != 'batch': print(json.dumps({'rank': rank, **record}), flush=True)
+
+    def gpu_memory(stage):
+        torch.cuda.synchronize(local)
+        free,total=torch.cuda.mem_get_info(local)
+        row={'stage':stage,'local_rank':local,'visible_devices':os.environ.get('CUDA_VISIBLE_DEVICES'),
+             'allocated_bytes':torch.cuda.memory_allocated(local),
+             'reserved_bytes':torch.cuda.memory_reserved(local),
+             'lifecycle_peak_allocated_bytes':torch.cuda.max_memory_allocated(local),
+             'lifecycle_peak_reserved_bytes':torch.cuda.max_memory_reserved(local),
+             'device_free_bytes':free,'device_total_bytes':total,
+             'scope':'torch allocator current/peak is this process; device free includes other use'}
+        report['gpu_memory_stages'].append(row)
+        event('gpu_memory',**row)
+        write(rp,report)
+
+    torch.cuda.reset_peak_memory_stats(local)
+    gpu_memory('before_model_load')
+
+    da = SimpleNamespace(**cfg)
+    da.data_path = str(Path(a.data_root).resolve())
+    train, valid = load_datasets(da)
+    assert (len(train), len(valid)) == (131413, 44726)
+    actual_imports += [inspect.getsourcefile(type(train)),inspect.getsourcefile(type(train.datasets[0])),
+                       inspect.getsourcefile(restore_legacy_bnb_state_field),
+                       inspect.getsourcefile(install_attention), inspect.getsourcefile(HistoryCollator),
+                       Path(__file__).resolve().parents[1]/'letter/scripts/formal_bnb_reload.py']
+    report['source_identity']=source_identity(sorted(set(map(str,actual_imports))))
+    if a.boundary_preflight:
+        from torch.utils.data import Subset
+        valid=Subset(valid,list(range(32)))
+    tok = LlamaTokenizer.from_pretrained(a.model, model_max_length=2048, padding_side='right', local_files_only=True)
+    tok.pad_token_id = 0
+    sid_tokens = train.datasets[0].get_new_tokens()
+    added = tok.add_tokens(sid_tokens)
+    assert added == NEW_TOKEN_COUNT and len(tok) == VOCAB_SIZE
+    report['tokenizer_identity']=tokenizer_identity(tok, sid_tokens)
+    if rank == 0: tok.save_pretrained(out)
+    dist.barrier()
+    reloaded_tok=LlamaTokenizer.from_pretrained(out,model_max_length=2048,padding_side='right',local_files_only=True)
+    assert tokenizer_identity(reloaded_tok, sid_tokens)==report['tokenizer_identity'], 'saved tokenizer mapping changed'
+    del reloaded_tok
+    collator = HistoryCollator(Collator(da, tok), tok, sid_tokens)
+    model = LETTER.from_pretrained(a.model, load_in_8bit=True, device_map={'':local}, local_files_only=True)
+    model.set_hyper(cfg['temperature']); model.resize_token_embeddings(len(tok))
+    report['attention'] = install_attention(model, mode)
+    gpu_memory('base_model_loaded_and_resized')
+    model = peft.prepare_model_for_int8_training(model)
+    report['bnb_compat'] = restore_legacy_bnb_state_field(model)
+    model = get_peft_model(model, LoraConfig(r=8,lora_alpha=16,lora_dropout=.05,
+                  target_modules=cfg['lora_target_modules'].split(','),
+                  modules_to_save=['embed_tokens','lm_head'],bias='none',
+                  inference_mode=False,task_type=TaskType.CAUSAL_LM))
+    report['out_of_place'] = install_peft05_out_of_place(model)
+    assert report['out_of_place']['target_count']==224
+    for n, v in model.named_parameters():
+        if 'original_module' in n and any(s in n for s in ['embed_tokens','lm_head']): v.requires_grad=False
+    model.config.use_cache=False
+    inventory = {n:{'shape':list(v.shape),'dtype_before_ds':str(v.dtype),'requires_grad':v.requires_grad}
+                 for n,v in model.named_parameters()}
+    names = [n for n,v in model.named_parameters() if v.requires_grad]
+    assert len(names)==450 and sum(v.numel() for v in model.parameters() if v.requires_grad)==TRAINABLE_PARAMETERS
+    assert all(v.requires_grad == ('lora_' in n or 'modules_to_save.default' in n) for n,v in model.named_parameters())
+    for name,value in model.named_parameters():
+        if ('embed_tokens' in name or 'lm_head' in name) and ('original_module' in name or 'modules_to_save.default' in name):
+            assert tuple(value.shape)==(VOCAB_SIZE,4096), 'LETTER Beauty embedding/head shape: '+name
+    report['parameter_inventory'] = inventory
+    require(all(inventory[name]["dtype_before_ds"] == "torch.float32" for name in names),
+            "historical pre-ZeRO trainable precision mismatch")
+    lora_b = [value for name, value in model.named_parameters() if ".lora_B." in name]
+    require(len(lora_b) == 224, "LoRA-B module count differs from historical initialization")
+    if not a.resume:
+        require(torch.stack([torch.count_nonzero(weight) for weight in lora_b]).sum().item() == 0,
+                "LoRA-B tensors must start at the original zero initialization")
+    report["initialization"] = {
+        "starts_from_old_adapter": False, "base_revision": cfg["model_revision"],
+        "checkpoint_resume": a.resume, "seed": cfg["seed"], "lora_b_zero_before_resume": not bool(a.resume),
+    }
+    gpu_memory('adapter_initialized_inventory_verified')
+    report['data']={'train_rows':len(train),'valid_rows':len(valid),'author_valid_rows':44726,
+                    'validation_subset_preflight_only':a.boundary_preflight,'tokenizer_vocab':len(tok),
+              'validation_weighting': 'Historical token-mean loss per eight-row batch, replicated per true row; last batch is padded with initial examples as in the historical rank sampler.'}
+    ds=json.loads((Path(a.source_root)/'config/ds_z2_bf16.json').read_text())
+    ds['flops_profiler']['enabled']=False
+    ds['zero_allow_untested_optimizer']=True
+    # Resolve the same auto fields through the native HF integration.
+    ta=TrainingArguments(output_dir=str(out),seed=42,per_device_train_batch_size=8,
+         per_device_eval_batch_size=8,gradient_accumulation_steps=gas,warmup_ratio=.01,
+         num_train_epochs=4,max_steps=schedule['max_steps'],learning_rate=2e-4,weight_decay=.01,lr_scheduler_type='cosine',
+         report_to=[],fp16=False,bf16=True,logging_steps=10,optim='adamw_torch',
+         adam_beta1=.9,adam_beta2=.999,adam_epsilon=1e-8,max_grad_norm=1.0,
+         remove_unused_columns=False,
+         gradient_checkpointing=True,evaluation_strategy='epoch',save_strategy='epoch',
+         eval_steps=1309,save_steps=1309,save_total_limit=cfg['storage_save_total_limit'],load_best_model_at_end=True,
+         deepspeed=ds,ddp_find_unused_parameters=False,eval_delay=1,dataloader_num_workers=0,
+         local_rank=local,disable_tqdm=True)
+    assert ta.metric_for_best_model=='loss' and ta.greater_is_better is False
+    report['training_arguments']=ta.to_dict()
+    report['checkpoint_storage_adaptation']={'author_save_total_limit':1,'effective_save_total_limit':2,
+          'reason':'retain best and latest complete recovery point; rotate only after collective complete marker'}
+    assert ta.save_total_limit==2
+    report['deepspeed_requested']=ds
+    update_probe={}
+
+    def parameter_digests(trainable):
+        """Hash one CPU tensor at a time; never clone an entire base model."""
+        torch.cuda.synchronize(local)
+        result={}
+        for name,value in model.named_parameters():
+            if value.requires_grad is trainable:
+                raw=value.detach().cpu().contiguous().view(torch.uint8).numpy()
+                result[name]=hashlib.sha256(memoryview(raw)).hexdigest()
+        return result
+
+    def verify_parameter_updates():
+        if not a.boundary_preflight:return
+        assert 'frozen_after_initial_forward' in update_probe
+        frozen=parameter_digests(False)
+        assert frozen==update_probe['frozen_after_initial_forward'], 'frozen parameter changed during optimizer updates'
+        before=update_probe['trainable_before_updates'];after=parameter_digests(True)
+        assert set(before)==set(after)==set(names)
+        changed=[name for name in names if before[name]!=after[name]]
+        groups={group:[name for name in changed if group in name]
+                for group in ('lora_A','lora_B','embed_tokens.modules_to_save.default','lm_head.modules_to_save.default')}
+        # With the original zero-initialized B and one warmup update at lr0,
+        # the two-update early checkpoint need not visibly move BF16 A yet.
+        # The complete ten-update continuous/resumed trajectories still must
+        # demonstrate all four trainable families changing.
+        deferred=['lora_A'] if a.stop_after_epoch==1 else []
+        required=[name for name in groups if name not in deferred]
+        report['parameter_update_validation']={
+            'status':'CHECKING','scope':'actual boundary preflight optimizer trajectory before best reload',
+            'trainable_tensors':len(names),'trainable_parameters':TRAINABLE_PARAMETERS,
+            'optimizer_membership_exact':report['optimizer_membership_exact'],
+            'frozen_tensors':len(frozen),'all_frozen_tensor_bytes_unchanged':True,
+            'frozen_baseline':'after first real forward/backward microbatch, before first optimizer update',
+            'changed_trainable_tensors':changed,'changed_families':{key:len(value) for key,value in groups.items()},
+            'required_changed_families':required,'deferred_changed_families':deferred,
+            'early_boundary_only':bool(deferred),
+            'A_defer_reason':('Original zero B and lr0 warmup can leave BF16 A unchanged after only two updates; full10-update continuous/resume must prove A changes.' if deferred else None),
+            'before_sha256':before,'after_sha256':after,'frozen_sha256':frozen}
+        write(rp,report)
+        missing=[name for name in required if not groups[name]]
+        assert not missing, 'expected trainable parameter families never updated: '+','.join(missing)
+        report['parameter_update_validation']['status']='PASS'
+        write(rp,report)
+
+    def record_adapter(path, checkpoint_source=None):
+        return write_adapter_identity(
+            path, mode=mode, scope=evidence_scope, run_commit=a.run_commit,
+            config_sha256=config_sha256, data_identity=data_identity,
+            tokenizer_record=report['tokenizer_identity'], base_model_identity=report['base_model_identity'],
+            source_identity=report['source_identity'], checkpoint_source=checkpoint_source,
+        )
+
+    class VirtualRankDataset(IndexedDataset):
+        """Native template draws with one historical Python RNG stream per logical rank.
+
+        The loader has zero workers and calls this dataset serially in eight-row
+        blocks. Isolate the temporary RNG substitution from the rest of training.
+        """
+        def __init__(self, dataset):
+            super().__init__(dataset)
+            self.rows_fetched = 0
+            seed_state = random.Random(cfg["seed"]).getstate()
+            self.prompt_states = [seed_state, seed_state]
+
+        def __getitem__(self, index):
+            rank = (self.rows_fetched // EXECUTION_PROFILE["per_device_train_batch_size"]) % 2
+            original_state = random.getstate()
+            random.setstate(self.prompt_states[rank])
+            try:
+                result = super().__getitem__(index)
+                self.prompt_states[rank] = random.getstate()
+                self.rows_fetched += 1
+                return result
+            finally:
+                random.setstate(original_state)
+
+    train_inputs = VirtualRankDataset(train)
+    report["rng_scope"] = {
+        "data_python": "native dynamic SeqRec template draw with independent seed-42 Python streams per virtual rank",
+        "validation_numpy": "native seed-42 NumPy selection once before model initialization",
+        "sampler_torch": "native default Generator (67280421310721), advanced by serialized rank-0 sampler",
+        "model_torch": "native init order and seed; single-process CUDA dropout and ZeRO reduction trajectories can differ",
+        "preflight_loader": "20 yielded batches; underlying DataLoaderShard may prefetch one extra batch",
+    }
+
+    def rng_capture(loader=None):
+        result={'python':random.getstate(),'numpy':np.random.get_state(),
+                'cpu':torch.get_rng_state(),'cuda':torch.cuda.get_rng_state_all(),
+                'virtual_prompt_states': train_inputs.prompt_states.copy(),
+                'training_rows_fetched_this_epoch': train_inputs.rows_fetched}
+        gen=getattr(loader,'synchronized_generator',None)
+        if gen is not None: result['loader_generator']=gen.get_state()
+        return result
+
+    def rng_restore(state, loader=None):
+        random.setstate(state['python']);np.random.set_state(state['numpy'])
+        torch.set_rng_state(state['cpu']);torch.cuda.set_rng_state_all(state['cuda'])
+        train_inputs.prompt_states = state['virtual_prompt_states'].copy()
+        train_inputs.rows_fetched = state['training_rows_fetched_this_epoch']
+        if 'loader_generator' in state:
+            gen=getattr(loader,'synchronized_generator',None)
+            assert gen is not None
+            gen.set_state(state['loader_generator'])
+
+    class ReplayLoader:
+        """Replay CPU input construction to the saved yield, including prefetch.
+
+        Restore epoch-start global AND sampler-generator RNG before replay; then
+        restore checkpoint RNG before requesting the next yield. The original
+        DataLoaderShard retains its prefetch and batching behavior. Only resume
+        performs CPU replay; it never runs a forward/backward for skipped rows.
+        """
+        def __init__(self, loader, saved):
+            self.loader=loader;self.saved=saved
+            self.counter=saved['resume_epoch'] if saved else 0
+            self.yielded=0;self.rows=[]
+            self.consumed_total=saved['consumed_total'] if saved else 0
+            self.epoch_start=None;self.epoch_index=-1
+        def __getattr__(self,key): return getattr(self.loader,key)
+        def __len__(self): return min(len(self.loader),schedule['per_epoch_microbatches']) if a.boundary_preflight else len(self.loader)
+        def __iter__(self):
+            epoch=self.counter;self.counter+=1;self.epoch_index=epoch;self.yielded=0;self.rows=[]
+            saved=self.saved
+            active=saved is not None and epoch==saved['resume_epoch']
+            skip=0
+            if active:
+                if saved['yielded'] < len(self):
+                    rng_restore(saved['epoch_start'], self.loader)
+                    skip=saved['yielded']
+                else:
+                    rng_restore(saved['checkpoint_rng'], self.loader)
+            if not skip:
+                train_inputs.rows_fetched = 0
+            self.epoch_start=rng_capture(self.loader)
+            iterator=iter(self.loader)
+            if active:
+                for _ in range(skip):
+                    replay_batch=next(iterator)
+                    self.rows.extend(take_indices(replay_batch))
+                if skip:
+                    assert self.rows==saved['consumed_rows'], 'replayed data order changed'
+                if skip:
+                    rng_restore(saved['checkpoint_rng'], self.loader)
+                self.yielded=skip
+                event('loader_replayed',epoch=epoch,replayed_batches=skip,
+                      checkpoint_step=saved['global_step'])
+                self.saved=None
+            import itertools
+            for batch in itertools.islice(iterator,len(self)-self.yielded):
+                self.rows.extend(take_indices(batch))
+                self.yielded+=1
+                self.consumed_total+=1
+                yield batch
+        def checkpoint(self,step):
+            resume_epoch=self.epoch_index+(self.yielded==len(self))
+            return {'schema':1,'epoch_index':self.epoch_index,'yielded':self.yielded,
+                    'resume_epoch':resume_epoch,'epoch_start':self.epoch_start,
+                    'checkpoint_rng':rng_capture(self.loader),'global_step':step,
+                    'consumed_total':self.consumed_total,'consumed_rows':self.rows.copy()}
+
+    old_skip=trainer_module.skip_first_batches
+    def checkpoint_skip(loader, num_batches=0):
+        if isinstance(loader,ReplayLoader):
+            assert loader.saved and loader.saved['yielded']==num_batches
+            return loader
+        return old_skip(loader,num_batches)
+    trainer_module.skip_first_batches=checkpoint_skip
+
+    # Make the native HF/DS strict module load explicit and verify its step.
+    def strict_ds_load(engine, path):
+        gpu_memory('before_strict_checkpoint_reload')
+        cp_identity=verify_checkpoint(path,a.run_commit,config_sha256,mode)
+        assert cp_identity['scope']==evidence_scope, 'checkpoint scope mismatch'
+        assert cp_identity['tokenizer_identity']==report['tokenizer_identity'], 'checkpoint tokenizer mismatch'
+        assert cp_identity['source_identity']==report['source_identity'], 'checkpoint source mismatch'
+        saved=json.loads((Path(path)/'trainer_state.json').read_text())
+        from formal_bnb_reload import hot_scb_alias
+        with hot_scb_alias(engine.module,event):
+            loaded,client=engine.load_checkpoint(path,load_module_strict=True,
+                     load_optimizer_states=True,load_lr_scheduler_states=True)
+        assert loaded and engine.global_steps==saved['global_step']
+        # HF4.31/Accelerate0.21 keeps LambdaLR outside the DS engine. Persist it
+        # separately rather than attaching it to engine.step (which double-steps
+        # the scheduler). This also covers native best-checkpoint restoration.
+        scheduler_path=Path(path)/'external_scheduler.pth'
+        assert scheduler_path.is_file()
+        trainer.lr_scheduler.load_state_dict(torch.load(scheduler_path,weights_only=False,map_location='cpu'))
+        event('strict_ds_restored',path=str(path),global_step=engine.global_steps,
+              scheduler=trainer.lr_scheduler.state_dict(),client_keys=sorted(client))
+        gpu_memory('after_strict_checkpoint_reload')
+    trainer_module.deepspeed_load_checkpoint=strict_ds_load
+
+    saved_loader=None;saved_partial=None
+    if a.resume:
+        cp=Path(a.resume)
+        meta=verify_checkpoint(cp,a.run_commit,config_sha256,mode)
+        assert meta['scope']==evidence_scope, 'resume evidence scope mismatch'
+        assert meta['tokenizer_identity']==report['tokenizer_identity'], 'resume tokenizer mismatch'
+        assert meta['source_identity']==report['source_identity'], 'resume source mismatch'
+        saved_loader=torch.load(cp/('loader_state_%d.pth'%rank),weights_only=False,map_location='cpu')
+        saved_partial=torch.load(cp/('partial_rank%d.pt'%rank),weights_only=False,map_location='cpu')
+        assert saved_partial['loader_state']['consumed_total']==saved_loader['consumed_total']
+        assert saved_partial['loader_state']['consumed_rows']==saved_loader['consumed_rows']
+
+    class AuditTrainer(Trainer):
+        _writing_checkpoint = False
+        _before_epoch_validation = None
+        def _beauty_capture_pre_best(self):
+            engine=self.model_wrapped
+            verify_parameter_updates()
+            event('before_best_restore',global_step=self.state.global_step,
+                  micro_steps=engine.micro_steps,epoch=self.state.epoch)
+        def _restore_beauty_state_after_zero_grad(self):
+            assert self._beauty_resume_state is not None
+            restore_partial(self.model_wrapped,self.lr_scheduler,self.accelerator,self._beauty_resume_state,
+                            run_commit=a.run_commit,config_sha256=config_sha256)
+            restored=partial_snapshot(self.model_wrapped,self.lr_scheduler,self.accelerator,
+                self._beauty_resume_state['loader_state'],run_commit=a.run_commit,config_sha256=config_sha256)
+            def exact(left,right):
+                if isinstance(left,torch.Tensor):
+                    return isinstance(right,torch.Tensor) and left.dtype==right.dtype and left.shape==right.shape and torch.equal(left,right)
+                if isinstance(left,np.ndarray):
+                    return isinstance(right,np.ndarray) and left.dtype==right.dtype and np.array_equal(left,right)
+                if isinstance(left,dict):
+                    return isinstance(right,dict) and set(left)==set(right) and all(exact(left[k],right[k]) for k in left)
+                if isinstance(left,(list,tuple)):
+                    return type(left) is type(right) and len(left)==len(right) and all(exact(x,y) for x,y in zip(left,right))
+                return left==right
+            assert exact(self._beauty_resume_state,restored), 'partial checkpoint state differs immediately after restore'
+            event('partial_restore_exact',micro_steps=restored['micro_steps'],global_steps=restored['global_steps'],
+                  optimizer_micro_step_id=restored['optimizer_micro_step_id'])
+        def _rotate_checkpoints(self, use_mtime=False, output_dir=None):
+            if self._writing_checkpoint:
+                return
+            return super()._rotate_checkpoints(use_mtime=use_mtime,output_dir=output_dir)
+        def _get_train_sampler(self):
+            assert not self.args.group_by_length
+            self.serial_sampler=build_serial_sampler(self.train_dataset)
+            return self.serial_sampler
+        def get_train_dataloader(self):
+            native=super().get_train_dataloader()
+            from accelerate.data_loader import DataLoaderShard
+            assert isinstance(native,DataLoaderShard)
+            assert self.accelerator.num_processes==1 and dist.get_world_size()==1
+            assert native.batch_sampler.sampler is self.serial_sampler
+            assert native.synchronized_generator is None, 'unexpected native single-process generator handling'
+            native.synchronized_generator=self.serial_sampler.generator
+            native.rng_types=[kind for kind in (native.rng_types or []) if kind!='generator']+['generator']
+            report['single_gpu_loader_binding']={
+                'native_loader_class':'accelerate.data_loader.DataLoaderShard',
+                'native_source':source_identity([inspect.getsourcefile(DataLoaderShard)])[0],
+                'single_process_native_omits_sync_generator':True,
+                'sampler_generator_explicitly_bound':True,'rng_types':list(native.rng_types),
+                'sampling':'native historical two logical shards serialized by eight-row blocks',
+                'numerical_equivalence_claimed':False}
+            result=ReplayLoader(native, saved_loader)
+            self.replay_loader=result
+            assert len(result)==schedule['per_epoch_microbatches']
+            event('loader',length=len(result),batch_sampler=type(result.batch_sampler).__name__,
+                  sampler_generator=type(result.synchronized_generator).__name__)
+            return result
+        def get_eval_dataloader(self, eval_dataset=None):
+            # Validation yields native LETTER dictionaries, whereas training
+            # yields (row index, sample) pairs. Preserve Trainer's own loader
+            # construction and distributed evaluation; only select its collator.
+            indexed=self.data_collator
+            assert isinstance(indexed, IndexedCollator)
+            dataset = self.eval_dataset if eval_dataset is None else eval_dataset
+            batch_size = self.args.eval_batch_size
+
+            def historical_tail(batch):
+                # In two ranks, Accelerate's even-batches handling fills the
+                # final partial batch with initial examples. Trainer repeats
+                # its scalar loss across rows and gather_for_metrics keeps only
+                # the genuine rows. The dataset length remains unchanged here
+                # so the one-rank gather applies the same final-row weighting.
+                missing = batch_size - len(batch)
+                if missing:
+                    batch = batch + [dataset[i % len(dataset)] for i in range(missing)]
+                return indexed.collator(batch)
+
+            self.data_collator=historical_tail
+            try:
+                return super().get_eval_dataloader(dataset)
+            finally:
+                self.data_collator=indexed
+        def _load_rng_state(self, checkpoint):
+            # ReplayLoader restores before resumed input is consumed. Native HF
+            # restores after fetching the first resumed input, which is too late.
+            if checkpoint: event('native_late_rng_restore_suppressed',checkpoint=str(checkpoint))
+        def training_step(self, current, inputs):
+            step=self.state.global_step
+            before=current.global_steps
+            assert self.accelerator.step==current.micro_steps+1
+            assert self.accelerator.sync_gradients==current.is_gradient_accumulation_boundary()
+            boundary=current.is_gradient_accumulation_boundary()
+            if a.boundary_preflight or step<3 or step%250==0 or (step+1) in schedule['epoch_steps']:
+                event('batch',step=step,epoch_index=self.replay_loader.epoch_index,loader_yielded=self.replay_loader.yielded,
+                      input_sha256=hashlib.sha256(inputs['input_ids'].cpu().numpy().tobytes()).hexdigest(),
+                      label_sha256=hashlib.sha256(inputs['labels'].cpu().numpy().tobytes()).hexdigest(),
+                      history_sid_mask_sha256=hashlib.sha256(inputs['history_sid_mask'].cpu().numpy().tobytes()).hexdigest(),
+                      history_tokens_per_row=inputs['history_sid_mask'].sum(dim=1).tolist(),
+                      shape=list(inputs['input_ids'].shape))
+            loss=super().training_step(current,inputs)
+            assert model.base_model.model.temperature == cfg["temperature"]
+            if a.boundary_preflight:
+                assert all(value.grad is None for value in model.parameters() if not value.requires_grad)
+                if 'frozen_after_initial_forward' not in update_probe:
+                    assert current.global_steps==report['initial_global_step'], 'frozen baseline must precede optimizer update'
+                    update_probe['frozen_after_initial_forward']=parameter_digests(False)
+                    event('frozen_baseline',tensors=len(update_probe['frozen_after_initial_forward']),
+                          consumed_microbatches=self.replay_loader.consumed_total,
+                          global_step=current.global_steps)
+            assert current.micro_steps==self.replay_loader.consumed_total
+            if not torch.isfinite(loss).all(): raise FloatingPointError('nonfinite training loss')
+            if self.replay_loader.consumed_total==1:
+                gpu_memory('after_first_real_forward_backward')
+            if a.boundary_preflight:
+                assert current.global_steps==before+int(boundary)
+                event('micro_loss',step=step,epoch_index=self.replay_loader.epoch_index,loss=float(loss),ds_global_step_before=before,
+                      ds_global_step_after=current.global_steps,ds_accumulation_boundary=boundary,
+                      scheduler_last_epoch=self.lr_scheduler.state_dict()['last_epoch'])
+            return loss
+        def _save_checkpoint(self,current,trial,metrics=None):
+            gpu_memory('before_checkpoint_save_step%d'%self.state.global_step)
+            if metrics is not None and 'eval_loss' in metrics:
+                assert math.isfinite(float(metrics['eval_loss'])), 'nonfinite validation loss'
+            checkpoint_started=time.monotonic()
+            self._writing_checkpoint=True
+            try:super()._save_checkpoint(current,trial,metrics)
+            finally:self._writing_checkpoint=False
+            cp=out/('checkpoint-%d'%self.state.global_step)
+            # Native _save_checkpoint ran collectively, including DS optimizer,
+            # scheduler, module states and rank-specific RNG. Add loader state.
+            loader_state=self.replay_loader.checkpoint(self.state.global_step)
+            torch.save(loader_state,cp/('loader_state_%d.pth'%rank))
+            if rank==0:torch.save(self.lr_scheduler.state_dict(),cp/'external_scheduler.pth')
+            partial=partial_snapshot(self.model_wrapped,self.lr_scheduler,self.accelerator,loader_state,
+                                     run_commit=a.run_commit,config_sha256=config_sha256)
+            if self._before_epoch_validation is not None:
+                def equal_tree(left,right):
+                    if isinstance(left,torch.Tensor):
+                        return isinstance(right,torch.Tensor) and left.shape==right.shape and left.dtype==right.dtype and torch.equal(left,right)
+                    if isinstance(left,dict):
+                        return isinstance(right,dict) and set(left)==set(right) and all(equal_tree(left[k],right[k]) for k in left)
+                    if isinstance(left,(list,tuple)):
+                        return type(left) is type(right) and len(left)==len(right) and all(equal_tree(x,y) for x,y in zip(left,right))
+                    return left==right
+                for key in ('averaged_gradients','parameter_gradients','micro_steps','global_steps','optimizer_micro_step_id'):
+                    assert equal_tree(self._before_epoch_validation[key],partial[key]), 'Validation altered pending state: '+key
+                self._before_epoch_validation=None
+            save_exclusive(cp/('partial_rank%d.pt'%rank),partial)
+            dist.barrier()
+            if rank==0:
+                record_adapter(cp)
+                rows=[]
+                for f in sorted(cp.rglob('*')):
+                    if f.is_file() and f.name!='complete.json':
+                        rows.append({'path':str(f.relative_to(cp)),'bytes':f.stat().st_size,'sha256':sha(f)})
+                assert checkpoint_required_files(self.state.global_step) <= {r['path'] for r in rows}
+                assert all(r['bytes']>0 for r in rows)
+                complete={'run_commit':a.run_commit,'config_sha256':config_sha256,
+                     'scope':evidence_scope,'experiment_id':EXPERIMENT_ID,'assets':ASSETS,'mode':mode,
+                     'tokenizer_identity':report['tokenizer_identity'],'source_identity':report['source_identity'],
+                     'execution_topology':EXECUTION_TOPOLOGY,'execution_profile':dict(EXECUTION_PROFILE),
+                     'world_size':1,'global_step':self.state.global_step,'files':rows,'collective_ranks':1}
+                write(cp/'complete.json',complete)
+                if not a.boundary_preflight:
+                    from checkpoint_receipt import write_receipt
+                    if metrics is None or 'eval_loss' not in metrics:
+                        raise ValueError('formal checkpoint lacks validation loss')
+                    write_receipt(cp, out, run_commit=a.run_commit, config_sha256=config_sha256,
+                        data_identity=data_identity, epoch=self.state.epoch, step=self.state.global_step,
+                        eval_loss=metrics['eval_loss'], best_checkpoint=self.state.best_model_checkpoint,
+                        best_metric=self.state.best_metric, attempt=os.environ.get('GRID_JOB_ID'),
+                        required_files=checkpoint_required_files(self.state.global_step), expected_manifest=complete)
+            dist.barrier()
+            if rank==0:self._rotate_checkpoints(use_mtime=False,output_dir=str(out))
+            dist.barrier()
+            event('checkpoint_complete',path=str(cp),step=self.state.global_step,
+                  best=self.state.best_model_checkpoint,best_metric=self.state.best_metric,
+                  elapsed_seconds_checkpoint=time.monotonic()-checkpoint_started)
+            gpu_memory('after_checkpoint_save_step%d'%self.state.global_step)
+
+    class Callback(TrainerCallback):
+        def on_train_begin(self,args,state,control,**kw):
+            engine=trainer.model_wrapped
+            assert state.max_steps==schedule['max_steps']
+            named=dict(model.named_parameters());ids={id(v) for v in named.values() if v.requires_grad}
+            original=engine.optimizer.bit16_groups
+            assert {id(v) for g in original for v in g}==ids
+            assert sum(len(g) for g in original)==450
+            # Historical original failure is preserved and pinned, not retried
+            # with a partially executed forward before the formal first batch.
+            proof={'matched_dtype_conflict':True,'source':'prior audited A0 FP32/BF16 error',
+                   'historical_evidence':'lc_rec/letter/evidence/jobs/letter-20261110-gpu-r1'}
+            report['a_only_bf16']=install_peft05_lora_a_bf16_autocast(model,proof)
+            assert len(report['a_only_bf16']['targets'])==224
+            assert not torch.is_autocast_enabled()
+            report['status']='TRAINING'
+            report['effective_ds']=engine._config._param_dict
+            report['optimizer_membership_exact']=True
+            report['initial_global_step']=state.global_step
+            report['optimizer_parameter_names']=sorted(names)
+            report['optimizer_parameter_count']=sum(v.numel() for v in named.values() if v.requires_grad)
+            if a.boundary_preflight:update_probe['trainable_before_updates']=parameter_digests(True)
+            write(rp,report)
+            event('train_begin',global_step=state.global_step,max_steps=state.max_steps,
+                  optimizer=type(engine.optimizer).__name__,scheduler=trainer.lr_scheduler.state_dict(),
+                  deepspeed_owns_scheduler=engine.lr_scheduler is not None)
+            gpu_memory('optimizer_initialized_training_begin')
+        def on_step_end(self,args,state,control,**kw):
+            engine=trainer.model_wrapped
+            assert engine.global_steps==state.global_step
+            assert trainer.lr_scheduler.last_epoch == state.global_step
+            if state.global_step==report['initial_global_step']+1:
+                require(report["attention"]["layer_calls"] > 0, "training did not use installed attention")
+                if a.boundary_preflight:
+                    assert parameter_digests(False)==update_probe['frozen_after_initial_forward'], 'first optimizer update changed frozen weights'
+                    event('frozen_after_first_optimizer_update',all_frozen_tensor_bytes_unchanged=True)
+                gpu_memory('after_first_optimizer_update_this_process')
+                write(rp,report)
+            norm=engine.get_global_grad_norm()
+            if norm is not None and not math.isfinite(float(norm)):raise FloatingPointError('nonfinite gradient norm')
+            if a.boundary_preflight or state.global_step%10==0:
+                event('optimizer_step',step=state.global_step,epoch=state.epoch,
+                      lr=engine.get_lr(),grad_norm=None if norm is None else float(norm))
+            return control
+        def on_epoch_end(self,args,state,control,**kw):
+            loader=trainer.replay_loader
+            assert loader.yielded==len(loader) and loader.epoch_index in range(4)
+            expected=schedule['epoch_steps'][loader.epoch_index]
+            assert state.global_step==expected and trainer.model_wrapped.micro_steps==(loader.epoch_index+1)*len(loader)
+            trainer._before_epoch_validation=partial_snapshot(trainer.model_wrapped,trainer.lr_scheduler,
+                trainer.accelerator,loader.checkpoint(state.global_step),run_commit=a.run_commit,
+                config_sha256=config_sha256)
+            gathered=[None]
+            dist.all_gather_object(gathered,loader.rows)
+            generator_states=[None]
+            assert 'loader_generator' in loader.epoch_start
+            dist.all_gather_object(generator_states,loader.epoch_start['loader_generator'])
+            reconstructed=reconstruct_serial_epoch(len(train),generator_states[0],len(loader))
+            assert reconstructed==gathered[0], 'serialized historical sampler reconstruction mismatch'
+            identity=audit_serial_epoch(gathered[0],len(train),preflight=a.boundary_preflight)
+            identity['native_sampler_reconstruction']='exact'
+            identity['numpy_torch_python_rng_scope'] = report['rng_scope']
+            identity['rows_fetched_including_prefetch'] = train_inputs.rows_fetched
+            if rank==0:
+                target=out/('epoch%d_rows.json'%(loader.epoch_index+1))
+                payload={'ranks':gathered,'audit':identity}
+                if target.exists():assert json.loads(target.read_text())==payload
+                else:
+                    with target.open('x') as f:json.dump(payload,f)
+            if a.stop_after_epoch==loader.epoch_index+1:control.should_training_stop=True
+            event('epoch_end',step=state.global_step,epoch=state.epoch)
+            gpu_memory('training_epoch%d_complete_before_validation'%(trainer.replay_loader.epoch_index+1))
+            return control
+        def on_evaluate(self,args,state,control,metrics=None,**kw):
+            gpu_memory('validation_epoch%s_complete'%state.epoch)
+        def on_log(self,args,state,control,logs=None,**kw):
+            if logs: event('log',step=state.global_step,epoch=state.epoch,values=logs)
+
+    collator=IndexedCollator(collator)
+    trainer=AuditTrainer(model=model,args=ta,train_dataset=train_inputs,eval_dataset=valid,
+                         tokenizer=tok,data_collator=collator,callbacks=[Callback()])
+    trainer.accelerator.gradient_state.plugin_kwargs['sync_with_dataloader']=False
+    assert trainer.accelerator.gradient_state.sync_with_dataloader is False
+    AuditTrainer._inner_training_loop,report['trainer_loop_patch_sha256']=build_trainer_loop(trainer_module)
+    trainer._beauty_epochs=4;trainer._beauty_resume_state=saved_partial
+    # Accelerate 0.21 predates DS 0.16's explicit prohibition of no_sync for
+    # partitioned gradients. Match official Accelerate's stage>=2 nullcontext
+    # behavior on this one engine; DS retains its native loss scaling/steps.
+    from contextlib import contextmanager
+    from deepspeed import DeepSpeedEngine
+    from accelerate import Accelerator
+    from accelerate.utils import DistributedType
+    original_no_sync=trainer.accelerator.no_sync
+    assert report['versions']['accelerate']=='0.21.0' and report['versions']['deepspeed']=='0.16.9'
+    assert original_no_sync.__func__ is Accelerator.no_sync
+    nosync_identity=nosync_source_identity(original_no_sync)
+    assert nosync_identity['file_sha256']=='933a19cd7411a44e46d23c54dbfc8c2ab94b3f29225e66aceed429e51dd43f8a'
+    report['zero2_no_sync_compat']={'scope':'current Trainer accelerator instance and exact stage2 engine only',
+               'upstream_reference_blob':'e666b8d7a07c789245bed88c9e68f220a81eb3e7',
+               'calls':0,'source_identity':nosync_identity}
+    @contextmanager
+    def zero2_native_accumulation(current):
+        if current is trainer.model_wrapped and type(current) is DeepSpeedEngine:
+            assert trainer.accelerator.distributed_type==DistributedType.DEEPSPEED
+            assert current.zero_optimization_stage()==2 and current.gradient_accumulation_steps()==gas
+            assert current.train_micro_batch_size_per_gpu()==8 and current.train_batch_size()==64 and dist.get_world_size()==1
+            assert not current.inside_no_sync_ctxt and current.enable_backward_allreduce
+            assert current._is_gradient_accumulation_boundary is None
+            report['zero2_no_sync_compat']['calls']+=1
+            yield
+        else:
+            with original_no_sync(current):yield
+    trainer.accelerator.no_sync=zero2_native_accumulation
+    # Same storage policy in the bounded preflight and formal four-epoch path.
+    assert trainer.args.save_total_limit==cfg['storage_save_total_limit']==2
+    try:
+        result = trainer.train(resume_from_checkpoint=a.resume)
+        expected = schedule['epoch_steps'][a.stop_after_epoch-1] if a.stop_after_epoch else schedule['max_steps']
+        assert trainer.state.global_step == expected
+        if not a.stop_after_epoch:
+            assert trainer.state.epoch == 4.0
+            assert trainer.state.best_model_checkpoint and math.isfinite(float(trainer.state.best_metric))
+            selected = Path(trainer.state.best_model_checkpoint)
+            adapter = out / ('preflight_adapter' if a.boundary_preflight else 'best_adapter')
+            trainer.save_model(str(adapter))
+            trainer.save_state()
+            weights = torch.load(adapter/'adapter_model.bin', map_location='cpu', weights_only=False)
+            active = get_peft_model_state_dict(model)
+            selected_weights = torch.load(selected/'adapter_model.bin', map_location='cpu', weights_only=False)
+            assert set(active) == set(weights) == set(selected_weights) and len(weights) == 450
+            assert all(torch.equal(v.detach().cpu(), weights[n]) and torch.equal(v.detach().cpu(), selected_weights[n])
+                       for n, v in active.items())
+            checkpoint_source = {'path': str(selected), 'complete_sha256': sha(selected/'complete.json'),
+                                 'global_step': int(selected.name.split('-')[-1])}
+            record = record_adapter(adapter, checkpoint_source=checkpoint_source)
+            verify_adapter_identity(adapter, scope=evidence_scope, mode=mode, run_commit=a.run_commit)
+            write(out/'best_selection.json', {
+                'scope': evidence_scope, 'mode': mode, 'checkpoint': str(selected),
+                'metric': 'eval_loss', 'greater_is_better': False, 'value': trainer.state.best_metric,
+                'adapter_sha256': record['adapter_sha256'], 'run_commit': a.run_commit,
+                'completed_training_step': trainer.state.global_step,
+                'loaded_best_checkpoint_step': trainer.model_wrapped.global_steps,
+                'export_matches_selected_checkpoint_tensors': True,
+            })
+            event('selected_adapter_saved', checkpoint=str(selected), adapter=str(adapter), scope=evidence_scope)
+        report.update(status=('BOUNDARY_PREFLIGHT_COMPLETE' if a.boundary_preflight else 'TRAINING_COMPLETE'),
+                      global_step=trainer.state.global_step, epoch=trainer.state.epoch,
+                      best_checkpoint=trainer.state.best_model_checkpoint, best_metric=trainer.state.best_metric,
+                      metrics=result.metrics, elapsed_seconds=time.monotonic()-started,
+                      peak_allocated_bytes=torch.cuda.max_memory_allocated(),
+                      peak_reserved_bytes=torch.cuda.max_memory_reserved())
+        gpu_memory('training_process_complete')
+        write(rp,report)
+    except BaseException as e:
+        import traceback
+        report.update(status='FAILED',error=repr(e),traceback=traceback.format_exc(),elapsed_seconds=time.monotonic()-started)
+        write(rp,report);raise
+    finally: events.close()
+    dist.destroy_process_group()
+
+
+if __name__=='__main__':
+    try:main()
+    except BaseException as error:
+        import traceback
+        if '--output' in sys.argv:
+            output=Path(sys.argv[sys.argv.index('--output')+1])
+            write(output/('failure.rank%s.json'%os.environ.get('RANK','unknown')),
+                  {'status':'FAILED','error':repr(error),'traceback':traceback.format_exc(),'argv':sys.argv})
+        raise
