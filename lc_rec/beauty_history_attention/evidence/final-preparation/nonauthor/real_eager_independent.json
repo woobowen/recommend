@@ -1,0 +1,106 @@
+{
+  "same_weight_original_A": [
+    {
+      "row_idx": 0,
+      "n_beams": 20,
+      "native_scores_and_order_exact": true,
+      "logits_max_abs": 0.0
+    },
+    {
+      "row_idx": 8,
+      "n_beams": 20,
+      "native_scores_and_order_exact": true,
+      "logits_max_abs": 0.0
+    },
+    {
+      "row_idx": 734,
+      "n_beams": 20,
+      "native_scores_and_order_exact": true,
+      "logits_max_abs": 0.0
+    }
+  ],
+  "old_A_native_source_sha256": "2abf84a5dd3644330f93c88e036831578e407de7a9812b5454ef1bb8a18c3422",
+  "old_A_launch": {
+    "stage": "old-causal",
+    "run_commit": "5a1a7297aa4078b46aa800f70ab15a649304cd67",
+    "argv": [
+      "/data/bwwu/envs/letter-20261110/bin/python",
+      "-B",
+      "-m",
+      "lc_rec.beauty_history_attention.inference_probe",
+      "--kind",
+      "old-causal",
+      "--output",
+      "/data/bwwu/lc-rec/beauty-history-attention-final-20261127/old-causal-r0/result.json"
+    ],
+    "cwd": "/data/bwwu/lc-rec/beauty-history-attention-final-20261127/releases/5a1a7297aa4078b46aa800f70ab15a649304cd67",
+    "runner_job_id": "letter-beauty-v2-history-attn-final-old-causal-r0",
+    "resources_before": {
+      "gpu": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564, 20638\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564, 1\n",
+      "compute": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 3304681, VLLM::EngineCore, 20628\n",
+      "visible": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "disk_free_bytes": 2654736809984
+    },
+    "returncode": 0,
+    "resources_after": {
+      "gpu": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564, 20638\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564, 1\n",
+      "compute": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 3304681, VLLM::EngineCore, 20628\n",
+      "visible": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+      "disk_free_bytes": 2654736510976
+    },
+    "wall_seconds": 147.3688622508198
+  },
+  "old_A_cuda_peak_reserved_bytes": 21422407680,
+  "bidirectional_actual": {
+    "row_idx": 8,
+    "history_tokens": 80,
+    "added_edges": 3160,
+    "layers_checked": 32,
+    "position_and_cache_reorder_checks": true,
+    "cache_abs": 0.1875,
+    "cache_relative_rms": 0.007016907925305451,
+    "reference_relative_rms": {
+      "0": 0.0037439239712643547,
+      "31": 0.0026300923556992683
+    },
+    "operators": [
+      "aten::_softmax",
+      "aten::bmm",
+      "aten::softmax",
+      "void (anonymous namespace)::softmax_warp_forward<float, float, float, 8, false, false>(float*, float const*, int, int, int, bool const*, int, bool)"
+    ],
+    "launch": {
+      "stage": "b-mask",
+      "run_commit": "5a1a7297aa4078b46aa800f70ab15a649304cd67",
+      "argv": [
+        "/data/bwwu/envs/letter-20261110/bin/python",
+        "-B",
+        "-m",
+        "lc_rec.beauty_history_attention.inference_probe",
+        "--kind",
+        "b-mask",
+        "--output",
+        "/data/bwwu/lc-rec/beauty-history-attention-final-20261127/b-mask-r0/result.json",
+        "--adapter",
+        "/data/bwwu/lc-rec/beauty-history-attention-20261127/train-r1/training/preflight_adapter"
+      ],
+      "cwd": "/data/bwwu/lc-rec/beauty-history-attention-final-20261127/releases/5a1a7297aa4078b46aa800f70ab15a649304cd67",
+      "runner_job_id": "letter-beauty-v2-history-attn-final-b-mask-r0",
+      "resources_before": {
+        "gpu": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564, 20638\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564, 1\n",
+        "compute": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 3304681, VLLM::EngineCore, 20628\n",
+        "visible": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "disk_free_bytes": 2654736400384
+      },
+      "returncode": 0,
+      "resources_after": {
+        "gpu": "0, GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, NVIDIA GeForce RTX 4090, 24564, 20638\n1, GPU-59cac3bd-3645-668b-79c8-839e0d878893, NVIDIA GeForce RTX 4090, 24564, 1\n",
+        "compute": "GPU-dfff0e95-1db6-e2f4-3431-55bb852fa0ae, 3304681, VLLM::EngineCore, 20628\n",
+        "visible": "GPU-59cac3bd-3645-668b-79c8-839e0d878893",
+        "disk_free_bytes": 2654733574144
+      },
+      "wall_seconds": 148.76535668130964
+    },
+    "peak_reserved_bytes": 19893583872
+  }
+}

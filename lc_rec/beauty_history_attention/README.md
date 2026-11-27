@@ -1,5 +1,63 @@
 # LETTER Beauty 历史 SID 双向注意力
 
+## 最后一轮正式前准备
+
+正式计划只运行 B。旧 A 的已发布结果作为历史参考。A′ 配置留作以后独立讨论，正式链没有 A′ 阶段，也不以 A′ 作为 B 的执行条件。B 的 Normal 和四种 Shuffle 使用同一个按完整验证 loss 选中的 B adapter。研究目标是测量历史 SID 双向可见性对推荐和扰动敏感性的影响。Normal 与旧 A 的距离只作为结果和诊断线索。
+
+### 最终计算路径
+
+训练沿用已经验证的 BF16 efficient SDPA 选择性 mask。旧训练调用的 FastChat FA2 接受因果开关和 padding 边界，本任务需要表达仅历史 SID 之间的附加双向边，单卡部署与这个表达需求是两回事。新一轮的 `train.py` 修改限于正式入口门禁。共享 `attention.py` 增加 inference-only 分支，默认仍进入相同的 SDPA 实现。在固定上一轮训练快照与当前默认实现之间，CPU 小模型使用相同参数及 gradient checkpointing，logits、loss 和 21 个梯度张量逐位一致。训练的真实 7B、80 个 micro-batch、10 次更新、部分梯度恢复、原样本和提示流、四次验证及严格重载，继承上一轮原始实测。
+
+推理采用首选方案 **原生 eager**。继续使用固定 Transformers 4.31 的 `LlamaAttention.forward`。`inference_attention.py` 调原生 mask builder，针对有效历史 SID 的交集将相应 bias 置零。普通提示、标点、目标和有效 padding 屏蔽沿用原计算。原生 eager 的无效 query 行处理保留，生成和有效位置均受有效 key 屏蔽。原生 Q/K/V、RoPE、FP32 softmax、context matmul、位置处理、20 beam 扩展与重排都沿用。公共包装只携带 history bits 并校验 KV cache 归属和前缀。attention 源文件 SHA-256 在安装时核对，GPU profile 在实际 B 上捕获 `aten::bmm` 和 `aten::_softmax`。
+
+旧 A 同权重对照用真实样本 0、8、734。原始加载、BF16 基座与 embedding/head、FP32 LoRA、tokenizer、候选约束、原分数和稳定排序相同。带左右 padding 的 logits 逐位相同，60 个候选及分数、稳定顺序逐项相同。真实 B 样本 8 的 3,160 条附加逆序边仅连接历史 SID，32 层都观察到跨物品新边上的正权重，有效 query 的禁止边权重为零。改写未来目标后，各层历史状态和此前 logits 逐位相同。与显式 FP32 参考比较，首末层 context 相对 RMS 约 0.374%／0.263%。B cached 与 uncached 下一 token logits 相对 RMS 约 0.702%，top-1 相同。
+
+推理统一回到旧 A 的原生 eager 数值算子，因此消除了上一轮 SDPA 推理造成的额外对照差异。原训练 FlashAttention 与 B 训练的 SDPA 舍入和归约差异、双卡转单卡的梯度累加顺序以及 CUDA dropout 轨迹仍存在，不能单独归因于 mask。CPU 全量 V2 输入流的冻结哈希和旧 A 的单条件历史结果继续沿用。预跑输出仅用于技术验收和成本估算。
+
+### 正式链与授权
+
+正式技术快照为 `81d4dc00f84426c77b48b7beb57b57903e97c20d`，路径在 `new-server:/data/bwwu/lc-rec/beauty-history-attention-final-20261127/releases/` 下。实际旧 A 与 B mask GPU 诊断快照是 `5a1a7297aa4078b46aa800f70ab15a649304cd67`，五条件预跑快照是 `d43787a43a64c175ff6edbf3d1820e5fd0c2baa2`。后两者对应的 attention 与测量实现已和正式候选逐文件核对，正式链代码由正式候选独立验证。
+
+`formal.py` 使用既有 Beauty runner，请求绑定冻结源码 manifest、有效配置、固定物理 RTX 4090 UUID 和单独的授权证据。授权门禁要求两份真实文件，网页二审和用户启动授权。二审记录包含 `review_kind=WEB_SECOND_REVIEW`、实际 `status`、`plan_sha256`、`run_commit`、`config_sha256`、`train_sha256`、`mode`、`backend`、`snapshot_manifest_sha256`。单独的用户授权记录包括相同绑定字段、`formal_run_authorized`、`external_review_status` 和实际二审文件的 `web_review_path`、`web_review_sha256`。工具校验记录和文件身份，记录内容须由操作方按照真实审批留档。缺少授权时，正式提交、直接训练及直接全量生成均拒绝。
+
+B 作业由同一服务器 runner 监督。训练 65,712 个八样本 micro-batches、四次正式验证、8,214 次 optimizer update，保存并核验原选模最优点，严格重载后发布 adapter。失败后先用原 ID 查询。只能在先前 attempt 已确认终止并完成进程清收后递增 attempt。训练从同一 lineage 内最近的可验证 epoch 完整 checkpoint 恢复 optimizer、scheduler、RNG、样本与提示流及部分梯度。没有完整 checkpoint 时使用独立训练目录，从初始状态重来。若 step 8214 已完整落盘但尚未导出，核对四次完整验证与最佳点后严格重载对应 PEFT adapter 并恢复输出。这条兜底路径只恢复导出。
+
+五条件预测以 32 用户为正式提交单位，每个单位同时保存五种条件。重开后验证计划、后端、权重、输入和每块身份、完整覆盖及哈希，只复用连续的完整前缀。失败 attempt 的私有块保留，半行或部分条件不纳入聚合。最终单独原子发布五条件完整结果，每条件覆盖同轴 22,363 用户。完成入口重开时只校验已提交结果，无重复 Normal 生成。随后在禁用 CUDA 的阶段执行原 16 项指标和同用户 5,000 次配对 bootstrap，保留结果及完工清单。
+
+获授权后从上文正式快照目录调用 `python -B -m lc_rec.beauty_history_attention.formal submit --plan ABS_PLAN --formal-authorization ABS_AUTH --formal-authorization-sha256 SHA256`。启动后和约 30 分钟时调用 `formal observe --plan ABS_PLAN --attempt 1 --output ABS_OBSERVATION`。观察实际 worker、step、loss、梯度 norm、LR、更新与 micro-batch 速率、GPU/空间、阶段、runner 尾日志和产物。评价尚未产出时标记“尚未产生”。已完成作业可用 `observe --verify-completion` 复核产物身份。一个尚未授权的固定计划以及实际否定门禁检查进入本轮证明材料。
+
+
+
+### 真实五条件接续与性能
+
+本轮 GPU 占用墙钟合计 641.86 秒，即 10.70 单卡分钟，含严格加载、诊断和重复请求的校验。GPU 使用之前重新核对了实际空闲设备，物理卡 1、逻辑 CUDA 0。未发现本机可直接查询的队列工具。冻结计划仍需按实验室排期取得使用授权。
+
+20 名技术预跑用户由极短、极长、整输入恒等案例与原输入长度分层选出，分值未参与选择。B 使用同一个已严格加载的旧预跑 adapter，先提交含 8 名用户的五条件完整块并退出，重连后只计算剩余 12 名。首块六个文件的 SHA-256 在接续和重复提交后全部一致。最终 8／8／4 三块共 2,000 个候选，各条件用户轴无重复无漏行。重复运行实测只返回 `verified_complete`，未再次加载或生成。5 个整输入恒等案例的候选、分数、顺序逐项一致，S2、S3a、S3b、S4 分别为 3、1、1、0。实际 CPU 阶段输出了 1,600 个指标值以及 80 个配对差值和置信区间。独立非作者复算的最大绝对差为 0。另一项真实 CPU 子进程强制退出检查覆盖尚未提交的半行，确保读取只接受完整块。
+
+采用冻结 22,363 个测试 prompt 长度分布重加权。技术样本覆盖 79–159 token，与冻结测试集最短、最长相同。将两个进程各自第一个用户作为预热，约 118 秒／次的严格加载分开计时。正式估算来源见 [资源原始计算](evidence/final-preparation/verification/resources.json)。
+
+| 阶段 | 单卡或 CPU 耗时粗估 |
+| --- | ---: |
+| 65,712 个正式训练 micro-batch | 16.42 小时 |
+| 四次全量验证及 checkpoint 写入 | 1.86 小时＋0.11 小时 |
+| B Normal | 3.67 小时 |
+| Shuffle2／3a／3b／4 | 3.58／3.58／3.58／3.60 小时 |
+| CPU 指标、配对、I/O 与收尾 | 约 10–25 分钟，参考历史完整 CPU 运行和本轮有界流程 |
+
+合计约 36.4 单卡小时的训练、验证、保存及五条件生成。计划按约 42–46 小时预留连续资源，仍保留每阶段及整链上限。checkpoint 单次最大实测 19.26 GB，三个可短时共存。预测块与最终输出可能暂时双存，按带详尽诊断字段的预跑粗估合计约 4.50 GB，另留日志、adapter、CPU 产物和恢复空间。正式计划启动时需 72 GiB 可用工作盘。
+
+真实五条件 eager 的峰值 allocated 为 19,664,529,408 字节，reserved 为 24,744,296,448 字节，CUDA 可见总显存为 25,252,724,736 字节。分配量低于预留量，预留峰值距总额约 0.47 GiB，本轮样本全部完成。正式运行需要独占预留设备并观察显存余量。若发生显存中断，保留日志，只从校验通过的完整用户块恢复，必要时先排查资源。已提交的块不会因恢复重复生成。
+
+### 本轮证据和启动状态
+
+门禁在正式冻结快照、CUDA 隐藏的条件下做了 9 个真实负向检查，涵盖正式提交、worker、直接训练、试图用短程写正式输出和直接全量生成。正式 runner 目录、训练输出目录均未创建。第一次门禁收集器的预期报错文本过窄，修改匹配后在独立路径复验，前后记录均保存。25 个本地 CPU 测试通过，非作者也使用固定服务器解释器复核了核心 controller 和预测接续测试。正式全长作业及真实 step 8214 后故障恢复未执行。后者由独立控制流测试、真实严格 adapter 加载及已验证训练 checkpoint 规则覆盖。
+
+实际未授权计划的 SHA-256 为 `8cf577a1d7d11fa1228996f634395544a24e3848117a482b1b48de5b85418e20`，服务器路径为 `/data/bwwu/lc-rec/beauty-history-attention-final-20261127/inputs/formal-gate-check-81d4dc00f844-verified/b-formal-plan.unsigned.json`。实际解释器是 `/data/bwwu/envs/letter-20261110/bin/python`。本轮未创建有效正式授权记录，也未安装依赖或改变持久环境配置。
+
+[未授权计划与门禁证据](evidence/final-preparation/formal/) · [本轮真实原始结果](evidence/final-preparation/actual/) · [独立非作者签署](evidence/final-preparation/nonauthor/FINAL.md)
+
+## 上一轮受审技术预跑记录
+
 本实验沿用 LETTER Beauty SID 和原 LLaMA-7B revision，检验正常推荐与历史物品内 Shuffle V2 的敏感性。旧 A 为已结束的双卡 causal 训练与五条件结果。B 使用同一预训练基座，单卡执行，在每层 causal self-attention 上增加任意两个有效历史 SID token 之间的边。匹配 causal 配置 A′ 使用同一套单卡代码与 CUDA efficient SDPA。B 与 A′ 共享词表、原模型结构、训练目标和评价协议。
 
 ## 实施与依据

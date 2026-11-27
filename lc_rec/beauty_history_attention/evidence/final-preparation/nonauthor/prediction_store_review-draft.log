@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/addaswsw/recommend-support/letter-beauty-history-attention-formal-prep-independent-20261127/prediction_store_review.py", line 118, in <module>
+    with ps.open_store(pre,binding,assignment,2) as clean:
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/addaswsw/recommend-worktrees/shuffle-v2/lc_rec/beauty_history_attention/prediction_store.py", line 70, in open_store
+    yield PredictionStore(root, binding, assignment, chunk_users, metadata=metadata)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/addaswsw/recommend-worktrees/shuffle-v2/lc_rec/beauty_history_attention/prediction_store.py", line 119, in __init__
+    require({item.name for item in root.iterdir()} <= {".prediction.lock"},
+  File "/home/addaswsw/recommend-worktrees/shuffle-v2/lc_rec/beauty_history_attention/identity.py", line 59, in require
+    raise ValueError(reason)
+ValueError: refusing to adopt nonempty output without its specification

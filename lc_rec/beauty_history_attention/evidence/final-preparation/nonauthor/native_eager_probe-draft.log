@@ -1,0 +1,113 @@
+The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers, 8-bit multiplication, and GPU quantization are unavailable.
+[2026-11-27 20:49:15,547] [WARNING] [real_accelerator.py:209:get_accelerator] Setting accelerator to CPU. If you have GPU or other accelerator, we were unable to detect it.
+[2026-11-27 20:49:15,560] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cpu (auto detect)
+{
+  "status": "PASS",
+  "installed_llama_sha256": "2abf84a5dd3644330f93c88e036831578e407de7a9812b5454ef1bb8a18c3422",
+  "subject_source_sha256": {
+    "attention": "4d63487a6f995cd4288c58a5ee194c24344d826e9611401e5ad487861898a917",
+    "inference_attention": "356602a9c50147f76b193d74c57256608f24fa4f020cb7694f841e7b1df5846e"
+  },
+  "torch": "2.6.0+cu124",
+  "cuda_visible": 0,
+  "result": [
+    {
+      "dtype": "torch.float32",
+      "valid_causal_and_oracle_valid_B_exact": true,
+      "future_answer_invariance_each_layer_exact": true,
+      "cross_item_earlier_H_delta": 0.2413090467453003,
+      "cached_uncached_next_logit_max_abs": 1.7881393432617188e-07,
+      "causal_native_20beam_scores_and_ids_exact": true,
+      "two_sample_b_repeat_20beam_scores_and_ids_exact": true,
+      "native_backend_reports": [
+        {
+          "mode": "causal",
+          "cuda_backend": "Transformers native eager",
+          "cpu_backend": "Transformers native eager",
+          "layer_calls": 21,
+          "q1_calls": 12,
+          "prefill_calls": 3,
+          "cached_calls": 4,
+          "layer_count": 3,
+          "backend": "native_eager",
+          "native_source_sha256": "2abf84a5dd3644330f93c88e036831578e407de7a9812b5454ef1bb8a18c3422",
+          "native_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py",
+          "mask_calls": 7,
+          "bidirectional_mask_calls": 0,
+          "cache_reorders": 5,
+          "native_mask_dtypes": {
+            "torch.float32": 7
+          }
+        },
+        {
+          "mode": "bidirectional",
+          "cuda_backend": "Transformers native eager",
+          "cpu_backend": "Transformers native eager",
+          "layer_calls": 60,
+          "q1_calls": 33,
+          "prefill_calls": 9,
+          "cached_calls": 11,
+          "layer_count": 3,
+          "backend": "native_eager",
+          "native_source_sha256": "2abf84a5dd3644330f93c88e036831578e407de7a9812b5454ef1bb8a18c3422",
+          "native_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py",
+          "mask_calls": 20,
+          "bidirectional_mask_calls": 9,
+          "cache_reorders": 10,
+          "native_mask_dtypes": {
+            "torch.float32": 20
+          }
+        }
+      ]
+    },
+    {
+      "dtype": "torch.bfloat16",
+      "valid_causal_and_oracle_valid_B_exact": true,
+      "future_answer_invariance_each_layer_exact": true,
+      "cross_item_earlier_H_delta": 0.134765625,
+      "cached_uncached_next_logit_max_abs": 0.0,
+      "causal_native_20beam_scores_and_ids_exact": true,
+      "two_sample_b_repeat_20beam_scores_and_ids_exact": true,
+      "native_backend_reports": [
+        {
+          "mode": "causal",
+          "cuda_backend": "Transformers native eager",
+          "cpu_backend": "Transformers native eager",
+          "layer_calls": 21,
+          "q1_calls": 12,
+          "prefill_calls": 3,
+          "cached_calls": 4,
+          "layer_count": 3,
+          "backend": "native_eager",
+          "native_source_sha256": "2abf84a5dd3644330f93c88e036831578e407de7a9812b5454ef1bb8a18c3422",
+          "native_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py",
+          "mask_calls": 7,
+          "bidirectional_mask_calls": 0,
+          "cache_reorders": 5,
+          "native_mask_dtypes": {
+            "torch.bfloat16": 7
+          }
+        },
+        {
+          "mode": "bidirectional",
+          "cuda_backend": "Transformers native eager",
+          "cpu_backend": "Transformers native eager",
+          "layer_calls": 60,
+          "q1_calls": 33,
+          "prefill_calls": 9,
+          "cached_calls": 11,
+          "layer_count": 3,
+          "backend": "native_eager",
+          "native_source_sha256": "2abf84a5dd3644330f93c88e036831578e407de7a9812b5454ef1bb8a18c3422",
+          "native_source": "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py",
+          "mask_calls": 20,
+          "bidirectional_mask_calls": 9,
+          "cache_reorders": 10,
+          "native_mask_dtypes": {
+            "torch.bfloat16": 20
+          }
+        }
+      ]
+    }
+  ]
+}

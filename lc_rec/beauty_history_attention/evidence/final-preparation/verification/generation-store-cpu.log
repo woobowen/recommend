@@ -1,0 +1,39 @@
+Committed generation implementation d43787a43a64c175ff6edbf3d1820e5fd0c2baa2
+29a18f96f782b86793d63c5afeb27a320b8c4b204c625a51c20e13859634d135  lc_rec/beauty_history_attention/evaluate.py
+0b6f30cca462703bd0d115fdb10c61d00d828d582b6b13bb96b90583db93c5c0  lc_rec/beauty_history_attention/prediction_store.py
+b8f634511c95c83dd786faf4780af692f3eec4332ada03d6a4602b1a4fa7360e  lc_rec/beauty_history_attention/test_prediction_store.py
+Local CPU implementation and existing protocol tests
+test_rank_order_and_python_hash_independence (lc_rec.shuffle.test_core.Tests.test_rank_order_and_python_hash_independence) ... ok
+test_realistic_boundaries_conservation_padding_and_replay (lc_rec.shuffle.test_core.Tests.test_realistic_boundaries_conservation_padding_and_replay) ... ok
+test_reference_and_rejection (lc_rec.shuffle.test_core.Tests.test_reference_and_rejection) ... ok
+test_boundaries (lc_rec.shuffle_v2.test_protocol.Protocol.test_boundaries) ... ok
+test_permutations_and_mapping (lc_rec.shuffle_v2.test_protocol.Protocol.test_permutations_and_mapping) ... ok
+test_reference_and_rejection (lc_rec.shuffle_v2.test_protocol.Protocol.test_reference_and_rejection) ... ok
+test_shared_relative_permutation_and_reordered_occurrences (lc_rec.shuffle_v2.test_protocol.Protocol.test_shared_relative_permutation_and_reordered_occurrences) ... ok
+test_row_length_strata_and_paired_identity (lc_rec.beauty_history_attention.test_prediction_store.BoundedSampleTest.test_row_length_strata_and_paired_identity) ... ok
+test_concurrent_writer_refused_and_wrong_binding_cannot_resume (lc_rec.beauty_history_attention.test_prediction_store.StoreTest.test_concurrent_writer_refused_and_wrong_binding_cannot_resume) ... ok
+test_interrupted_initial_spec_can_retry_without_removing_failed_attempt (lc_rec.beauty_history_attention.test_prediction_store.StoreTest.test_interrupted_initial_spec_can_retry_without_removing_failed_attempt) ... ok
+test_process_exit_without_callback_preserves_private_files_and_reuses_only_committed (lc_rec.beauty_history_attention.test_prediction_store.StoreTest.test_process_exit_without_callback_preserves_private_files_and_reuses_only_committed) ... ok
+test_tampered_committed_chunk_fails_closed (lc_rec.beauty_history_attention.test_prediction_store.StoreTest.test_tampered_committed_chunk_fails_closed) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.540s
+
+OK
+Direct formal generation without authorization or review
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/addaswsw/recommend-worktrees/shuffle-v2/lc_rec/beauty_history_attention/evaluate.py", line 784, in <module>
+    main()
+  File "/home/addaswsw/recommend-worktrees/shuffle-v2/lc_rec/beauty_history_attention/evaluate.py", line 780, in main
+    (generate if args.command == 'generate' else metrics)(args)
+  File "/home/addaswsw/recommend-worktrees/shuffle-v2/lc_rec/beauty_history_attention/evaluate.py", line 308, in generate
+    plan_sha = _formal_generation_guard(args)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/addaswsw/recommend-worktrees/shuffle-v2/lc_rec/beauty_history_attention/evaluate.py", line 260, in _formal_generation_guard
+    require(args.plan is not None and args.formal_authorization is not None
+  File "/home/addaswsw/recommend-worktrees/shuffle-v2/lc_rec/beauty_history_attention/identity.py", line 59, in require
+    raise ValueError(reason)
+ValueError: formal B generation requires the reviewed plan and distinct user authorization
+No output root created
