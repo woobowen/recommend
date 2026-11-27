@@ -51,6 +51,10 @@ with zipfile.ZipFile(args.archive) as z:
             by_digest[h.hexdigest()].append(info.filename)
     manifest = json.loads(z.read("MEMBERS.json"))
     assert manifest["formal_snapshot"] == args.source_commit, "archive declares a different formal snapshot"
+    assert all("inherited/" + name in manifest["files"] for name in (
+        "eval-cpu/axis-parity.stdout", "eval-cpu/check_inputs.py", "actual-run/cpu-r1/cpu.json",
+        "actual-run/train-r1/train-argv.json", "actual-run/letter-beauty-v2-history-attn-train-resume-r1/work.log",
+    )), "a reused original evidence record is absent"
     for name, entry in manifest["files"].items():
         source = entry.get("duplicate_of", name)
         assert source in by_digest[entry["sha256"]] and z.getinfo(source).file_size == entry["bytes"]
@@ -60,6 +64,13 @@ with zipfile.ZipFile(args.archive) as z:
     gate_text = z.read(gate.get("duplicate_of", "transport/formal-final/gate-results.txt")).decode()
     gate_result, _ = json.JSONDecoder().raw_decode(gate_text)
     assert not gate_result["formal_run_started"] and len(gate_result["negative_exit_codes"]) == 11
+    readback = manifest["files"]["transport/github-readback.json"]
+    release = json.loads(z.read(readback.get("duplicate_of", "transport/github-readback.json")))
+    assert release["live_head"] == manifest["published_commit"] and len(release["readback"]) >= 10
+    for file in release["readback"]:
+        remote = subprocess.check_output(
+            ["git", "-C", str(args.repo), "show", release["live_head"] + ":" + file["path"]])
+        assert digest(remote) == file["sha256"] and len(remote) == file["bytes"]
     found={label:by_digest[hash] for label,hash in need.items()}
     missing=[name for name,entry in found.items() if not entry]
     assert not missing, f"missing exact archive bytes: {missing}"
