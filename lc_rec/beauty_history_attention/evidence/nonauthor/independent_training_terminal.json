@@ -1,0 +1,120 @@
+{
+  "training": {
+    "run_commit": "b9dfa8f8adad6ee89c15bda9d978c5465ac7e772",
+    "optimizer_updates": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "epoch_boundary_updates": [
+      2,
+      5,
+      7,
+      10
+    ],
+    "gradient_norms": [
+      49.478206634521484,
+      57.25975036621094,
+      61.12241744995117,
+      46.42102813720703,
+      47.033851623535156,
+      34.14357376098633,
+      32.1403694152832,
+      37.45211410522461,
+      47.46289825439453,
+      23.552091598510742
+    ],
+    "checkpoint_selection": {
+      "scope": "PREFLIGHT",
+      "mode": "bidirectional",
+      "checkpoint": "/data/bwwu/lc-rec/beauty-history-attention-20261127/train-r1/training/checkpoint-10",
+      "metric": "eval_loss",
+      "greater_is_better": false,
+      "value": 8.086517333984375,
+      "adapter_sha256": "a9ce5337e30d0ffe6917755455c18f6544ad9a73c4a29cf6e656e6872ccb3665",
+      "run_commit": "b9dfa8f8adad6ee89c15bda9d978c5465ac7e772",
+      "completed_training_step": 10,
+      "loaded_best_checkpoint_step": 10,
+      "export_matches_selected_checkpoint_tensors": true
+    },
+    "validation_losses": [
+      [
+        12.78091049194336,
+        2
+      ],
+      [
+        8.512457847595215,
+        5
+      ],
+      [
+        8.239721298217773,
+        7
+      ],
+      [
+        8.086517333984375,
+        10
+      ]
+    ],
+    "restored": [
+      {
+        "utc": "2026-11-27T19:00:11.579624+00:00",
+        "elapsed_seconds": 220.25365242827684,
+        "event": "partial_restore_exact",
+        "attempt_job_id": "letter-beauty-v2-history-attn-train-resume-r1",
+        "micro_steps": 20,
+        "global_steps": 2,
+        "optimizer_micro_step_id": 3
+      }
+    ],
+    "parameter_changes": {
+      "lora_A": 224,
+      "lora_B": 224,
+      "embed_tokens.modules_to_save.default": 1,
+      "lm_head.modules_to_save.default": 1
+    },
+    "elapsed_seconds": 733.7344056107104,
+    "peak_allocated_bytes": 14777927168,
+    "peak_reserved_bytes": 20206059520
+  },
+  "jobs": {
+    "letter-beauty-v2-history-attn-cpu-r1": {
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "started": "2026-11-27T18:49:47.740715+00:00",
+      "ended": "2026-11-27T18:49:59.887913+00:00",
+      "cleanup_reason": "NORMAL_EXIT_CHECK",
+      "clean": true
+    },
+    "letter-beauty-v2-history-attn-cuda-check-r1": {
+      "status": "WORKERS_TERMINATED",
+      "exit_code": 0,
+      "started": "2026-11-27T18:49:47.731391+00:00",
+      "ended": "2026-11-27T18:50:01.723698+00:00",
+      "cleanup_reason": "LEADER_EXITED_WITH_MEMBERS",
+      "clean": true
+    },
+    "letter-beauty-v2-history-attn-train-r1": {
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "started": "2026-11-27T18:50:15.013718+00:00",
+      "ended": "2026-11-27T18:56:18.573256+00:00",
+      "cleanup_reason": "NORMAL_EXIT_CHECK",
+      "clean": true
+    },
+    "letter-beauty-v2-history-attn-train-resume-r1": {
+      "status": "SUCCEEDED",
+      "exit_code": 0,
+      "started": "2026-11-27T18:56:31.014559+00:00",
+      "ended": "2026-11-27T19:08:50.718897+00:00",
+      "cleanup_reason": "NORMAL_EXIT_CHECK",
+      "clean": true
+    }
+  }
+}

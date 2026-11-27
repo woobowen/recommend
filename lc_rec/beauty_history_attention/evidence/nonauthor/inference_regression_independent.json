@@ -1,0 +1,91 @@
+{
+  "operators": [
+    "aten::_efficient_attention_forward",
+    "aten::_scaled_dot_product_efficient_attention",
+    "aten::scaled_dot_product_attention",
+    "fmha_cutlassF_bf16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::bfloat16_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)"
+  ],
+  "shared_candidates": 19,
+  "same_ordinal": 7,
+  "max_shared_rank_shift": 4,
+  "old_only": [
+    [
+      32017,
+      32257,
+      32511,
+      32945,
+      2
+    ]
+  ],
+  "new_only": [
+    [
+      32024,
+      32369,
+      32689,
+      32865,
+      2
+    ]
+  ],
+  "all_logits": {
+    "max_abs": 0.875,
+    "mean_abs": 0.06749808043241501,
+    "rms": 0.09477616101503372,
+    "ref_rms": 8.279985427856445,
+    "reference_max_abs": 39.5,
+    "same_argmax": false
+  },
+  "supervised_logits": {
+    "max_abs": 0.46875,
+    "mean_abs": 0.057027850300073624,
+    "rms": 0.08105836063623428,
+    "ref_rms": 6.934213161468506,
+    "reference_max_abs": 31.625,
+    "same_argmax": true
+  },
+  "grad": {
+    "layers.0.self_attn.q_proj.lora_B.default.weight": {
+      "max_abs": 0.00023325555957853794,
+      "mean_abs": 4.570593773678411e-06,
+      "rms": 8.53784331411589e-06,
+      "ref_rms": 0.00015817330859135836,
+      "reference_max_abs": 0.003837577300146222,
+      "same_argmax": false
+    },
+    "layers.31.self_attn.q_proj.lora_B.default.weight": {
+      "max_abs": 0.0002612057141959667,
+      "mean_abs": 8.733035429031588e-06,
+      "rms": 1.669028279138729e-05,
+      "ref_rms": 0.0005282392958179116,
+      "reference_max_abs": 0.008605693466961384,
+      "same_argmax": false
+    }
+  },
+  "eager_loss": 1.5834109783172607,
+  "causal_loss": 1.584939956665039,
+  "cache_error": {
+    "max_abs": 0.09375,
+    "mean_abs": 0.013223771937191486,
+    "rms": 0.025599585846066475,
+    "ref_rms": 7.9765119552612305,
+    "reference_max_abs": 9.5625,
+    "same_argmax": true
+  },
+  "context_errors": {
+    "0": {
+      "max_abs": 0.001953125,
+      "mean_abs": 4.72159717901377e-06,
+      "rms": 1.927239827637095e-05,
+      "ref_rms": 0.013041938655078411,
+      "reference_max_abs": 1.0546875,
+      "same_argmax": true
+    },
+    "31": {
+      "max_abs": 0.015625,
+      "mean_abs": 5.649937884300016e-05,
+      "rms": 0.00032739073503762484,
+      "ref_rms": 0.2982015609741211,
+      "reference_max_abs": 4.625,
+      "same_argmax": true
+    }
+  }
+}

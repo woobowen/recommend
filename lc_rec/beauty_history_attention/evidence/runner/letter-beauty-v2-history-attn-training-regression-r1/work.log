@@ -1,0 +1,91 @@
+[2026-11-27 19:14:41,359] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+2026-11-27 19:14:43.279440: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+You are using the legacy behaviour of the <class 'transformers.models.llama.tokenization_llama.LlamaTokenizer'>. This means that tokens that come after special tokens will not be properly handled. We recommend you to read the related pull request available at https://github.com/huggingface/transformers/pull/24565
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.75s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.41s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.61s/it]
+/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/utils/other.py:122: FutureWarning: prepare_model_for_int8_training is deprecated and will be removed in a future version. Use prepare_model_for_kbit_training instead.
+  warnings.warn(
+/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py:745: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.5 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  return fn(*args, **kwargs)
+/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/bitsandbytes/autograd/_functions.py:315: UserWarning: MatMul8bitLt: inputs will be cast from torch.bfloat16 to float16 during quantization
+  warnings.warn(f"MatMul8bitLt: inputs will be cast from {A.dtype} to float16 during quantization")
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/releases/a26a9e9698fb5c66f04e93dd062f8beef8bade8b/lc_rec/beauty_history_attention/training_regression.py", line 339, in <module>
+    main()
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/releases/a26a9e9698fb5c66f04e93dd062f8beef8bade8b/lc_rec/beauty_history_attention/training_regression.py", line 327, in main
+    run(args, report)
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/releases/a26a9e9698fb5c66f04e93dd062f8beef8bade8b/lc_rec/beauty_history_attention/training_regression.py", line 252, in run
+    old_logits, old_summary = run_pass(model, old_batch_gpu, rng, profile=args.profile)
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/releases/a26a9e9698fb5c66f04e93dd062f8beef8bade8b/lc_rec/beauty_history_attention/training_regression.py", line 129, in run_pass
+    outputs = model(**batch, use_cache=False)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/peft_model.py", line 918, in forward
+    return self.base_model(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bwwu/envs/letter-20261110/lib/python3.10/site-packages/peft/tuners/tuners_utils.py", line 94, in forward
+    return self.model.forward(*args, **kwargs)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+    output = old_forward(*args, **kwargs)
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/releases/a26a9e9698fb5c66f04e93dd062f8beef8bade8b/lc_rec/letter/vendor/LETTER/LETTER-LC-Rec/modeling_letter.py", line 94, in forward
+    outputs = self.model(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+    output = old_forward(*args, **kwargs)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 685, in forward
+    layer_outputs = torch.utils.checkpoint.checkpoint(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/_compile.py", line 32, in inner
+    return disable_fn(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py", line 745, in _fn
+    return fn(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 489, in checkpoint
+    return CheckpointFunction.apply(function, preserve, *args)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/autograd/function.py", line 575, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 264, in forward
+    outputs = run_function(*args)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 681, in custom_forward
+    return module(*inputs, output_attentions, None)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+    output = old_forward(*args, **kwargs)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 408, in forward
+    hidden_states, self_attn_weights, present_key_value = self.self_attn(
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+    output = old_forward(*args, **kwargs)
+  File "/data/bwwu/envs/lc-rec-offload-20261108/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 340, in forward
+    raise ValueError(
+ValueError: Attention mask should be of size (8, 1, 165, 165), but is torch.Size([8, 165])
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/releases/a26a9e9698fb5c66f04e93dd062f8beef8bade8b/lc_rec/beauty_history_attention/preflight.py", line 114, in <module>
+    main()
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/releases/a26a9e9698fb5c66f04e93dd062f8beef8bade8b/lc_rec/beauty_history_attention/preflight.py", line 106, in main
+    run("training_regression", "--data-root", DATA, "--model", MODEL,
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/releases/a26a9e9698fb5c66f04e93dd062f8beef8bade8b/lc_rec/beauty_history_attention/preflight.py", line 55, in run
+    subprocess.run(command, check=True, env=env)
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/subprocess.py", line 526, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/data/bwwu/envs/letter-20261110/bin/python', '-B', '-m', 'lc_rec.beauty_history_attention.training_regression', '--data-root', '/home/bwwu/grid-audits/sid-extensions-p0/transfers/letter-a0-beauty-author-8d0154e28de3', '--model', '/data/bwwu/lc-rec/assets/llama-7b/4782ad278652c7c71b72204d462d6d01eaaf7549', '--output', '/data/bwwu/lc-rec/beauty-history-attention-20261127/training-regression-r1/training-regression.json', '--run-commit', 'a26a9e9698fb5c66f04e93dd062f8beef8bade8b', '--profile']' returned non-zero exit status 1.

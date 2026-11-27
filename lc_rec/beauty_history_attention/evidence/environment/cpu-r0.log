@@ -1,0 +1,19 @@
+39303531ff20d4c983a301d71505d60cd5c65c3e772c858a48f80a0c8961b949  /data/bwwu/lc-rec/beauty-history-attention-20261127/inputs/check-r0.tar
+The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers, 8-bit multiplication, and GPU quantization are unavailable.
+[2026-11-27 18:45:40,983] [WARNING] [real_accelerator.py:209:get_accelerator] Setting accelerator to CPU. If you have GPU or other accelerator, we were unable to detect it.
+[2026-11-27 18:45:40,997] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cpu (auto detect)
+2026-11-27 18:45:42.939502: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+You are using the legacy behaviour of the <class 'transformers.models.llama.tokenization_llama.LlamaTokenizer'>. This means that tokens that come after special tokens will not be properly handled. We recommend you to read the related pull request available at https://github.com/huggingface/transformers/pull/24565
+Traceback (most recent call last):
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bwwu/envs/grid-20261009-e61baf3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/diagnostic-check-r0/lc_rec/beauty_history_attention/check.py", line 193, in <module>
+    main()
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/diagnostic-check-r0/lc_rec/beauty_history_attention/check.py", line 188, in main
+    result = {"real_inputs": real_inputs(args), "model_checks": model_checks(args.device)}
+  File "/data/bwwu/lc-rec/beauty-history-attention-20261127/diagnostic-check-r0/lc_rec/beauty_history_attention/check.py", line 74, in real_inputs
+    assert torch.equal(actual["history_sid_mask"], expected)
+AssertionError

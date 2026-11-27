@@ -12,6 +12,8 @@
 
 原 LETTER Beauty 的四项正式生成、四项 CPU 评价和五项配对已通过网页 GPT 二审，状态为 `SECOND_GROUP_COMPLETE_WEB_REVIEW_PASS`。每个条件覆盖 22,363 名用户。 [正式结果](../shuffle/results/v2-a0-beauty-letter/final-r0/README.md) · [第二组总入口](../shuffle/results/v2-a0-beauty-letter/README.md) · [正式启动观察历史](../shuffle/results/v2-a0-beauty-letter/launch-observation-r0/README.md)
 
+LETTER Beauty 历史 SID 双向注意力的实现、单卡预跑和正式前审核见 [实验入口](../beauty_history_attention/README.md)。
+
 ## 第三组 GRID G3 Beauty
 
 [G3 Beauty Shuffle V2](../shuffle/results/v2-a0-beauty-g3/README.md) 复用 G3 自己的单 rank 冻结 Normal、tokenizer 和最佳 adapter。该入口保存本轮准备、实际审核证据及未提交的正式计划。

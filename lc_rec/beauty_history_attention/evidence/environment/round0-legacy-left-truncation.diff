@@ -1,0 +1,14 @@
+--- /home/addaswsw/recommend-support/beauty-history-attention-20261127/evidence/round0-source/lc_rec/beauty_history_attention/check.py	2026-11-27 13:45:21.000000000 -0500
++++ lc_rec/beauty_history_attention/check.py	2026-11-27 13:46:04.509685453 -0500
+@@ -70,7 +70,10 @@
+         actual = history_collator(examples[:1])
+         legacy = collator(examples[:1])
+         assert all(torch.equal(legacy[field], actual[field]) for field in legacy)
+-        expected = full["history_sid_mask"][:, :limit] if side == "right" else full["history_sid_mask"][:, -limit:]
++        # The tokenizer truncates ordinary tokens and then adds BOS.
++        indices = list(range(limit)) if side == "right" else [0, *range(full["input_ids"].shape[1] - limit + 1, full["input_ids"].shape[1])]
++        assert torch.equal(actual["input_ids"], full["input_ids"][:, indices])
++        expected = full["history_sid_mask"][:, indices]
+         assert torch.equal(actual["history_sid_mask"], expected)
+         truncated.append({"truncation_side": side, "cap": limit, "retained_history": int(expected.sum())})
+     tokenizer.truncation_side = "right"
